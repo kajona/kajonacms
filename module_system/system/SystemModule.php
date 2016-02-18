@@ -341,14 +341,17 @@ class SystemModule extends Model implements ModelInterface, AdminListableInterfa
      *
      * @return AdminInterface|AdminController
      */
-    public function getAdminInstanceOfConcreteModule($strSystemid = "") {
+    public function getAdminInstanceOfConcreteModule($strSystemid = "", $bitXml = false) {
 
         /** @var \Kajona\System\System\ObjectBuilder $objBuilder */
         $objBuilder = Carrier::getInstance()->getContainer()->offsetGet("object_builder");
 
-        $strClassname = $this->getStrNameAdmin();
+        $strClassname = $bitXml ? $this->getStrXmlNameAdmin() : $this->getStrNameAdmin();
         if(uniStrpos($strClassname, ".php") !== false) {
             $strFullpath = Resourceloader::getInstance()->getPathForFile("/admin/".$strClassname);
+            if($strFullpath == "") {
+                $strFullpath = Resourceloader::getInstance()->getPathForFile("/legacy/".$strClassname);
+            }
             $strClassname = Classloader::getInstance()->getClassnameFromFilename($strFullpath);
         }
 
@@ -374,14 +377,17 @@ class SystemModule extends Model implements ModelInterface, AdminListableInterfa
      *
      * @return PortalInterface
      */
-    public function getPortalInstanceOfConcreteModule($arrElementData = null) {
+    public function getPortalInstanceOfConcreteModule($arrElementData = null, $bitXml = false) {
 
         /** @var \Kajona\System\System\ObjectBuilder $objBuilder */
         $objBuilder = Carrier::getInstance()->getContainer()->offsetGet("object_builder");
 
-        $strClassname = $this->getStrNamePortal();
+        $strClassname = $bitXml ? $this->getStrXmlNamePortal() : $this->getStrNamePortal();
         if(uniStrpos($strClassname, ".php") !== false) {
             $strFullpath = Resourceloader::getInstance()->getPathForFile("/portal/".$strClassname);
+            if($strFullpath == "") {
+                $strFullpath = Resourceloader::getInstance()->getPathForFile("/legacy/".$strClassname);
+            }
             $strClassname = Classloader::getInstance()->getClassnameFromFilename($strFullpath);
         }
 

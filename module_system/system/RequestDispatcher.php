@@ -20,7 +20,8 @@ use Kajona\System\Admin\LoginAdmin;
  * @author sidler@mulchprod.de
  * @since 3.4.1
  */
-class RequestDispatcher {
+class RequestDispatcher
+{
 
     private $arrTimestampStart;
 
@@ -46,7 +47,8 @@ class RequestDispatcher {
      *
      * @return RequestDispatcher
      */
-    public function __construct(ResponseObject $objResponse, \Kajona\System\System\ObjectBuilder $objBuilder) {
+    public function __construct(ResponseObject $objResponse, \Kajona\System\System\ObjectBuilder $objBuilder)
+    {
         $this->arrTimestampStart = gettimeofday();
         $this->objSession = Carrier::getInstance()->getObjSession();
         $this->objResponse = $objResponse;
@@ -63,11 +65,12 @@ class RequestDispatcher {
      *
      * @return string
      */
-    public function processRequest($bitAdmin, $strModule, $strAction, $strLanguageParam) {
+    public function processRequest($bitAdmin, $strModule, $strAction, $strLanguageParam)
+    {
 
         CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_REQUEST_STARTPROCESSING, array($bitAdmin, $strModule, $strAction, $strLanguageParam));
 
-        if($bitAdmin) {
+        if ($bitAdmin) {
             $strReturn = $this->processAdminRequest($strModule, $strAction, $strLanguageParam);
             $strReturn = $this->callScriptlets($strReturn, ScriptletInterface::BIT_CONTEXT_ADMIN);
         }
@@ -98,37 +101,38 @@ class RequestDispatcher {
      * @throws Exception
      * @return string
      */
-    private function processAdminRequest($strModule, $strAction, $strLanguageParam) {
+    private function processAdminRequest($strModule, $strAction, $strLanguageParam)
+    {
         $strReturn = "";
         $bitLogin = false;
 
         //validate https status
-        if(SystemSetting::getConfigValue("_admin_only_https_") == "true") {
+        if (SystemSetting::getConfigValue("_admin_only_https_") == "true") {
             //check which headers to compare
             $strHeaderName = Carrier::getInstance()->getObjConfig()->getConfig("https_header");
             $strHeaderValue = strtolower(Carrier::getInstance()->getObjConfig()->getConfig("https_header_value"));
 
             //header itself given?
-            if(!issetServer($strHeaderName)) {
+            if (!issetServer($strHeaderName)) {
                 //reload to https
-                if(_xmlLoader_ === true) {
-                    ResponseObject::getInstance()->setStrRedirectUrl(uniStrReplace("http:", "https:", _xmlpath_) . "?" . getServer("QUERY_STRING"));
+                if (_xmlLoader_ === true) {
+                    ResponseObject::getInstance()->setStrRedirectUrl(uniStrReplace("http:", "https:", _xmlpath_)."?".getServer("QUERY_STRING"));
                 }
                 else {
-                    ResponseObject::getInstance()->setStrRedirectUrl(uniStrReplace("http:", "https:", _indexpath_) . "?" . getServer("QUERY_STRING"));
+                    ResponseObject::getInstance()->setStrRedirectUrl(uniStrReplace("http:", "https:", _indexpath_)."?".getServer("QUERY_STRING"));
                 }
 
                 ResponseObject::getInstance()->sendHeaders();
                 die("Reloading using https...");
             }
             //value of header correct?
-            elseif($strHeaderValue != "" && $strHeaderValue != strtolower(getServer($strHeaderName))) {
+            elseif ($strHeaderValue != "" && $strHeaderValue != strtolower(getServer($strHeaderName))) {
                 //reload to https
-                if(_xmlLoader_ === true) {
-                    ResponseObject::getInstance()->setStrRedirectUrl(uniStrReplace("http:", "https:", _xmlpath_) . "?" . getServer("QUERY_STRING"));
+                if (_xmlLoader_ === true) {
+                    ResponseObject::getInstance()->setStrRedirectUrl(uniStrReplace("http:", "https:", _xmlpath_)."?".getServer("QUERY_STRING"));
                 }
                 else {
-                    ResponseObject::getInstance()->setStrRedirectUrl(uniStrReplace("http:", "https:", _indexpath_) . "?" . getServer("QUERY_STRING"));
+                    ResponseObject::getInstance()->setStrRedirectUrl(uniStrReplace("http:", "https:", _indexpath_)."?".getServer("QUERY_STRING"));
                 }
 
                 ResponseObject::getInstance()->sendHeaders();
@@ -144,26 +148,26 @@ class RequestDispatcher {
         AdminskinHelper::defineSkinWebpath();
 
         //validate login-status / process login-request
-        if($strModule != "login" && $this->objSession->isLoggedin()) {
-            if($this->objSession->isAdmin()) {
+        if ($strModule != "login" && $this->objSession->isLoggedin()) {
+            if ($this->objSession->isAdmin()) {
                 //try to load the module
                 $objModuleRequested = SystemModule::getModuleByName($strModule);
-                if($objModuleRequested != null) {
+                if ($objModuleRequested != null) {
 
                     //see if there is data from a previous, failed request
-                    if(Carrier::getInstance()->getObjSession()->getSession(LoginAdmin::SESSION_LOAD_FROM_PARAMS) === "true") {
-                        foreach(Carrier::getInstance()->getObjSession()->getSession(LoginAdmin::SESSION_PARAMS) as $strOneKey => $strOneVal)
+                    if (Carrier::getInstance()->getObjSession()->getSession(LoginAdmin::SESSION_LOAD_FROM_PARAMS) === "true") {
+                        foreach (Carrier::getInstance()->getObjSession()->getSession(LoginAdmin::SESSION_PARAMS) as $strOneKey => $strOneVal) {
                             Carrier::getInstance()->setParam($strOneKey, $strOneVal);
+                        }
 
                         Carrier::getInstance()->getObjSession()->sessionUnset(LoginAdmin::SESSION_LOAD_FROM_PARAMS);
                         Carrier::getInstance()->getObjSession()->sessionUnset(LoginAdmin::SESSION_PARAMS);
                     }
 
 
-                    if(_xmlLoader_) {
-                        if($objModuleRequested->getStrXmlNameAdmin() != "") {
-                            $strClassname = str_replace(".php", "", $objModuleRequested->getStrXmlNameAdmin());
-                            $objConcreteModule = $this->objBuilder->factory($strClassname);
+                    if (_xmlLoader_) {
+                        if ($objModuleRequested->getStrXmlNameAdmin() != "") {
+                            $objConcreteModule = $objModuleRequested->getAdminInstanceOfConcreteModule("", true);
                             $strReturn = $objConcreteModule->action($strAction);
                         }
                         else {
@@ -177,22 +181,22 @@ class RequestDispatcher {
                         //fill the history array to track actions
                         $objHistory = new History();
                         //Writing to the history
-                        if(Carrier::getInstance()->getParam("folderview") == "") {
+                        if (Carrier::getInstance()->getParam("folderview") == "") {
                             $objHistory->setAdminHistory();
                         }
 
                         $objConcreteModule = $objModuleRequested->getAdminInstanceOfConcreteModule();
 
-                        if(Carrier::getInstance()->getParam("blockAction") != "1") {
+                        if (Carrier::getInstance()->getParam("blockAction") != "1") {
                             $objConcreteModule->action();
                             $strReturn = $objConcreteModule->getModuleOutput();
                         }
 
                         //React, if admin was opened by the portaleditor
-                        if(Carrier::getInstance()->getParam("peClose") == "1") {
+                        if (Carrier::getInstance()->getParam("peClose") == "1") {
 
-                            if(getGet("peRefreshPage") != "") {
-                                $strReturn = "<html><head></head><body onload=\"parent.location = '" . urldecode(getGet("peRefreshPage")) . "';\"></body></html>";
+                            if (getGet("peRefreshPage") != "") {
+                                $strReturn = "<html><head></head><body onload=\"parent.location = '".urldecode(getGet("peRefreshPage"))."';\"></body></html>";
                             }
                             else {
                                 $strReturn = "<html><head></head><body onload=\"parent.location.reload();\"></body></html>";
@@ -203,7 +207,7 @@ class RequestDispatcher {
 
                 }
                 else {
-                    throw new Exception("Requested module " . $strModule . " not existing", Exception::$level_FATALERROR);
+                    throw new Exception("Requested module ".$strModule." not existing", Exception::$level_FATALERROR);
                 }
             }
             else {
@@ -213,20 +217,20 @@ class RequestDispatcher {
         else {
             $bitLogin = true;
 
-            if($strModule != "login") {
+            if ($strModule != "login") {
                 $strAction = "";
             }
         }
 
-        if($bitLogin) {
-            if(_xmlLoader_) {
+        if ($bitLogin) {
+            if (_xmlLoader_) {
                 $objLogin = $this->objBuilder->factory("class_module_login_admin_xml");
                 $strReturn = $objLogin->action($strAction);
             }
             else {
 
-                if(count(Carrier::getInstance()->getObjDB()->getTables()) == 0 && file_exists(_realpath_ . "/installer.php")) {
-                    ResponseObject::getInstance()->setStrRedirectUrl(_webpath_ . "/installer.php");
+                if (count(Carrier::getInstance()->getObjDB()->getTables()) == 0 && file_exists(_realpath_."/installer.php")) {
+                    ResponseObject::getInstance()->setStrRedirectUrl(_webpath_."/installer.php");
                     return "";
                 }
 
@@ -252,11 +256,12 @@ class RequestDispatcher {
      * @throws Exception
      * @return string
      */
-    private function processPortalRequest($strModule, $strAction, $strLanguageParam) {
+    private function processPortalRequest($strModule, $strAction, $strLanguageParam)
+    {
         $strReturn = "";
 
         //process language-param
-        if(SystemModule::getModuleByName("languages") != null) {
+        if (SystemModule::getModuleByName("languages") != null) {
             $objLanguage = new LanguagesLanguage();
             $objLanguage->setStrPortalLanguage($strLanguageParam);
         }
@@ -264,12 +269,11 @@ class RequestDispatcher {
 
         //Load the portal parts
         $objModule = SystemModule::getModuleByName($strModule);
-        if($objModule != null) {
+        if ($objModule != null) {
 
-            if(_xmlLoader_) {
-                if($objModule->getStrXmlNamePortal() != "") {
-                    $strClassname = str_replace(".php", "", $objModule->getStrXmlNamePortal());
-                    $objModuleRequested = $this->objBuilder->factory($strClassname);
+            if (_xmlLoader_) {
+                if ($objModule->getStrXmlNamePortal() != "") {
+                    $objModuleRequested = $objModule->getPortalInstanceOfConcreteModule(null, true);
                     $strReturn = $objModuleRequested->action($strAction);
                 }
                 else {
@@ -278,7 +282,7 @@ class RequestDispatcher {
                 }
             }
             else {
-                if($strModule == "pages") {
+                if ($strModule == "pages") {
                     $strAction = "";
                 }
 
@@ -293,15 +297,15 @@ class RequestDispatcher {
         }
         else {
 
-            if(_xmlLoader_ === false) {
-                if(count(Carrier::getInstance()->getObjDB()->getTables()) == 0 && file_exists(_realpath_ . "/installer.php")) {
-                    ResponseObject::getInstance()->setStrRedirectUrl(_webpath_ . "/installer.php");
+            if (_xmlLoader_ === false) {
+                if (count(Carrier::getInstance()->getObjDB()->getTables()) == 0 && file_exists(_realpath_."/installer.php")) {
+                    ResponseObject::getInstance()->setStrRedirectUrl(_webpath_."/installer.php");
                     return "";
                     //throw new class_exception("Module Pages not installed, redirect to installer", class_exception::$level_ERROR);
                 }
             }
 
-            throw new Exception("module " . $strModule . " not installed!", Exception::$level_FATALERROR);
+            throw new Exception("module ".$strModule." not installed!", Exception::$level_FATALERROR);
         }
 
 
@@ -315,7 +319,8 @@ class RequestDispatcher {
      *
      * @return string
      */
-    private function cleanupOutput($strContent) {
+    private function cleanupOutput($strContent)
+    {
         $objTemplate = Carrier::getInstance()->getObjTemplate();
         $objTemplate->setTemplate($strContent);
         $objTemplate->deletePlaceholder();
@@ -333,7 +338,8 @@ class RequestDispatcher {
      *
      * @return string
      */
-    private function callScriptlets($strContent, $intContext) {
+    private function callScriptlets($strContent, $intContext)
+    {
         $objScriptlet = new ScriptletHelper();
         return $objScriptlet->processString($strContent, $intContext);
     }
@@ -343,21 +349,23 @@ class RequestDispatcher {
      * Sends conditional get headers and tries to match sent ones.
      *
      * @param string $strContent
+     *
      * @return void
      */
-    private function sendConditionalGetHeaders($strContent) {
+    private function sendConditionalGetHeaders($strContent)
+    {
 
         //check headers, maybe execution could be terminated right here
         //yes, this doesn't save us from generating the page, but the traffic towards the client can be reduced
-        if(checkConditionalGetHeaders(md5($_SERVER["REQUEST_URI"] . $this->objSession->getSessionId() . $strContent))) {
+        if (checkConditionalGetHeaders(md5($_SERVER["REQUEST_URI"].$this->objSession->getSessionId().$strContent))) {
             ResponseObject::getInstance()->sendHeaders();
             flush();
             die();
         }
 
         //send headers if not an ie
-        if(strpos(getServer("HTTP_USER_AGENT"), "IE") === false) {
-            setConditionalGetHeaders(md5($_SERVER["REQUEST_URI"] . $this->objSession->getSessionId() . $strContent));
+        if (strpos(getServer("HTTP_USER_AGENT"), "IE") === false) {
+            setConditionalGetHeaders(md5($_SERVER["REQUEST_URI"].$this->objSession->getSessionId().$strContent));
         }
     }
 
@@ -369,58 +377,59 @@ class RequestDispatcher {
      *
      * @return string
      */
-    private function getDebugInfo($strReturn) {
+    private function getDebugInfo($strReturn)
+    {
         $strDebug = "";
-        if(_timedebug_ || _dbnumber_ || _templatenr_ || _memory_) {
+        if (_timedebug_ || _dbnumber_ || _templatenr_ || _memory_) {
 
             //Maybe we need the time used to generate this page
-            if(_timedebug_ === true) {
+            if (_timedebug_ === true) {
                 $arrTimestampEnde = gettimeofday();
                 $intTimeUsed = (($arrTimestampEnde['sec'] * 1000000 + $arrTimestampEnde['usec'])
-                    - ($this->arrTimestampStart['sec'] * 1000000 + $this->arrTimestampStart['usec'])) / 1000000;
+                        - ($this->arrTimestampStart['sec'] * 1000000 + $this->arrTimestampStart['usec'])) / 1000000;
 
-                $strDebug .= "<b>PHP-Time:</b> " . number_format($intTimeUsed, 6) . " sec ";
+                $strDebug .= "<b>PHP-Time:</b> ".number_format($intTimeUsed, 6)." sec ";
             }
 
             //Hows about the queries?
-            if(_dbnumber_ === true) {
-                $strDebug .= "<b>Queries db/cachesize/cached/fired:</b> " . Carrier::getInstance()->getObjDB()->getNumber() . "/" .
-                    Carrier::getInstance()->getObjDB()->getCacheSize() . "/" .
-                    Carrier::getInstance()->getObjDB()->getNumberCache() . "/" .
-                    (Carrier::getInstance()->getObjDB()->getNumber() - Carrier::getInstance()->getObjDB()->getNumberCache()) . " ";
+            if (_dbnumber_ === true) {
+                $strDebug .= "<b>Queries db/cachesize/cached/fired:</b> ".Carrier::getInstance()->getObjDB()->getNumber()."/".
+                    Carrier::getInstance()->getObjDB()->getCacheSize()."/".
+                    Carrier::getInstance()->getObjDB()->getNumberCache()."/".
+                    (Carrier::getInstance()->getObjDB()->getNumber() - Carrier::getInstance()->getObjDB()->getNumberCache())." ";
             }
 
             //anything to say about the templates?
-            if(_templatenr_ === true) {
-                $strDebug .= "<b>Templates cached:</b> " . Carrier::getInstance()->getObjTemplate()->getNumberCacheSize() . " ";
+            if (_templatenr_ === true) {
+                $strDebug .= "<b>Templates cached:</b> ".Carrier::getInstance()->getObjTemplate()->getNumberCacheSize()." ";
             }
 
             //memory
-            if(_memory_ === true) {
-                $strDebug .= "<b>Memory/Max Memory:</b> " . bytesToString(memory_get_usage()) . "/" . bytesToString(memory_get_peak_usage()) . " ";
-                $strDebug .= "<b>Classes Loaded:</b> " . Classloader::getInstance()->getIntNumberOfClassesLoaded() . " ";
+            if (_memory_ === true) {
+                $strDebug .= "<b>Memory/Max Memory:</b> ".bytesToString(memory_get_usage())."/".bytesToString(memory_get_peak_usage())." ";
+                $strDebug .= "<b>Classes Loaded:</b> ".Classloader::getInstance()->getIntNumberOfClassesLoaded()." ";
             }
 
             //and check the cache-stats
-            if(_cache_ === true) {
-                $strDebug .= "<b>Cache requests/hits/saves/cachesize:</b> " .
-                    Cache::getIntRequests() . "/" . Cache::getIntHits() . "/" . Cache::getIntSaves() . "/" . Cache::getIntCachesize() . " ";
+            if (_cache_ === true) {
+                $strDebug .= "<b>Cache requests/hits/saves/cachesize:</b> ".
+                    Cache::getIntRequests()."/".Cache::getIntHits()."/".Cache::getIntSaves()."/".Cache::getIntCachesize()." ";
             }
 
-            if(_xmlLoader_ === true) {
+            if (_xmlLoader_ === true) {
                 ResponseObject::getInstance()->addHeader("Kajona Debug: ".$strDebug);
             }
             else {
-                $strDebug = "<pre style='z-index: 2000000; position: fixed; background-color: white; width: 100%; top: 0; font-size: 10px; padding: 0; margin: 0;'>Kajona Debug: " . $strDebug . "</pre>";
+                $strDebug = "<pre style='z-index: 2000000; position: fixed; background-color: white; width: 100%; top: 0; font-size: 10px; padding: 0; margin: 0;'>Kajona Debug: ".$strDebug."</pre>";
 
                 $intBodyPos = uniStrpos($strReturn, "</body>");
-                if($intBodyPos !== false) {
+                if ($intBodyPos !== false) {
                     $strReturn = uniSubstr($strReturn, 0, $intBodyPos).$strDebug.uniSubstr($strReturn, $intBodyPos);
                 }
-                else
+                else {
                     $strReturn = $strDebug.$strReturn;
+                }
             }
-
 
         }
 

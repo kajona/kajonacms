@@ -118,12 +118,13 @@ class TemplateMapper
      */
     private function getMapperInstance($strName)
     {
-        $strClassname = "class_".$strName."_templatemapper";
-        if (Resourceloader::getInstance()->getPathForFile("/portal/templatemapper/".$strClassname.".php")) {
-            return new $strClassname();
+        $strClassname = ucfirst($strName)."Templatemapper";
+        $strPath = Resourceloader::getInstance()->getPathForFile("/portal/templatemapper/".$strClassname.".php");
+        if ($strPath != null) {
+            return Classloader::getInstance()->getInstanceFromFilename($strPath, "", "Kajona\\System\\Portal\\TemplatemapperInterface");
         }
         else {
-            throw new Exception("failed to load validator of type ".$strClassname, Exception::$level_ERROR);
+            throw new Exception("failed to load mapper of type ".$strClassname, Exception::$level_ERROR);
         }
     }
 

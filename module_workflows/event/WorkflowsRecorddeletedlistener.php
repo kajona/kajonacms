@@ -49,7 +49,7 @@ class WorkflowsRecorddeletedlistener implements GenericeventListenerInterface
         $objORM = new OrmObjectlist();
         $objORM->setObjHandleLogicalDeleted(OrmDeletedhandlingEnum::INCLUDED);
         $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND workflows_systemid = ?", $strSystemid));
-        if ($objORM->getObjectCount("Kajona\\Workflows\\System\\WorkflowWorkflow") == 0) {
+        if ($objORM->getObjectCount("Kajona\\Workflows\\System\\WorkflowsWorkflow") == 0) {
             return true;
         }
 
