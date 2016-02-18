@@ -7,6 +7,9 @@
 *   $Id$                                     *
 ********************************************************************************************************/
 
+namespace Kajona\Pdf\System;
+
+
 /**
  * Interface for a single pdf footer element
  *
@@ -14,13 +17,13 @@
  * @package module_pdf
  * @since 3.3.0
  */
-interface interface_pdf_footer {
+interface PdfFooterInterface {
 
     /**
      * Writes the footer for a single page.
      * Use the passed $objPdf to access the pdf.
      *
-     * @param class_pdf_tcpdf $objPdf the target pdf-object
+     * @param PdfTcpdf $objPdf the target pdf-object
      * @return void
      */
     public function writeFooter($objPdf);

@@ -4,25 +4,42 @@
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*   $Id$                                     *
+*	$Id$                                   *
 ********************************************************************************************************/
 
+namespace Kajona\Pdf\System;
+
+
+
 /**
- * Interface for a single pdf header element
+ * Sample implementation of a footer.
  *
  * @author sidler
  * @package module_pdf
  * @since 3.3.0
  */
-interface interface_pdf_header {
-    
+class PdfHeader implements PdfHeaderInterface {
+
+
     /**
      * Writes the header for a single page.
      * Use the passed $objPdf to access the pdf.
-     * 
-     * @param class_pdf_tcpdf $objPdf the source pdf-object
-     * @return void
+     *
+     * @param PdfTcpdf $objPdf
      */
-    public function writeHeader($objPdf);
-    
+    public function writeHeader($objPdf) {
+
+        $objPdf->SetY(3);
+
+        $objPdf->SetFont('helvetica', '', 8);
+
+        // Title
+        $objPdf->MultiCell(0, 0, $objPdf->getTitle(), "B", "C");
+
+
+        // Line break
+        $objPdf->Ln(30);
+
+    }
+
 }
