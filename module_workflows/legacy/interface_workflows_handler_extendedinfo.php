@@ -7,7 +7,7 @@
 /**
  * @deprecated
  */
-class interface_workflows_handler_extendedinfo extends Kajona\Workflows\System\WorkflowsHandlerExtendedinfoInterface
+interface interface_workflows_handler_extendedinfo extends Kajona\Workflows\System\WorkflowsHandlerExtendedinfoInterface
 {
 
 }

@@ -7,7 +7,7 @@
 /**
  * @deprecated
  */
-class interface_packagemanager_contentprovider extends Kajona\Packagemanager\System\PackagemanagerContentproviderInterface
+interface interface_packagemanager_contentprovider extends Kajona\Packagemanager\System\PackagemanagerContentproviderInterface
 {
 
 }

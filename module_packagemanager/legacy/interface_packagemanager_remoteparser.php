@@ -7,7 +7,7 @@
 /**
  * @deprecated
  */
-class interface_packagemanager_remoteparser extends Kajona\Packagemanager\System\PackagemanagerRemoteparserInterface
+interface interface_packagemanager_remoteparser extends Kajona\Packagemanager\System\PackagemanagerRemoteparserInterface
 {
 
 }

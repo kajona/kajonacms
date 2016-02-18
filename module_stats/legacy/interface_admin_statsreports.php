@@ -7,7 +7,7 @@
 /**
  * @deprecated
  */
-class interface_admin_statsreports extends Kajona\Stats\Admin\AdminStatsreportsInterface
+interface interface_admin_statsreports extends Kajona\Stats\Admin\AdminStatsreportsInterface
 {
 
 }
