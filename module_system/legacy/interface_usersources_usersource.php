@@ -11,6 +11,6 @@
 /**
  * @deprecated
  */
-interface interface_usersources_usersource  extends \Kajona\System\System\Usersources\UsersourcesUserInterface {
+interface interface_usersources_usersource  extends \Kajona\System\System\Usersources\UsersourcesUsersourceInterface {
 
 }
