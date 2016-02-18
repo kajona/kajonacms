@@ -3,7 +3,7 @@
 use Kajona\Pchart\System\GraphPchart;
 use Kajona\System\System\Testbase;
 
-class class_test_charts_pchart extends Testbase  {
+class ChartsPchartTest extends Testbase  {
 
     public function testCharts() {
         echo "test pchart...\n";
