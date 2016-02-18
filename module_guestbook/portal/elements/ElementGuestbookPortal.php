@@ -5,6 +5,13 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Guestbook\Portal\Elements;
+
+use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\Portal\PortalElementInterface;
+use Kajona\System\System\SystemModule;
+
+
 /**
  * Portal-part of the guestbook-element
  *
@@ -12,17 +19,19 @@
  * @author sidler@mulchprod.de
  * @targetTable element_guestbook.content_id
  */
-class class_element_guestbook_portal extends class_element_portal implements interface_portal_element {
+class ElementGuestbookPortal extends ElementPortal implements PortalElementInterface
+{
 
     /**
      * Contructor
      *
      * @param $objElementData
      */
-    public function __construct($objElementData) {
+    public function __construct($objElementData)
+    {
         parent::__construct($objElementData);
 
-        if($this->getParam("action") == "saveGuestbook") {
+        if ($this->getParam("action") == "saveGuestbook") {
             $this->setStrCacheAddon(generateSystemid());
         }
     }
@@ -32,11 +41,12 @@ class class_element_guestbook_portal extends class_element_portal implements int
      *
      * @return string
      */
-    public function loadData() {
+    public function loadData()
+    {
         $strReturn = "";
 
-        $objGBModule = class_module_system_module::getModuleByName("guestbook");
-        if($objGBModule != null) {
+        $objGBModule = SystemModule::getModuleByName("guestbook");
+        if ($objGBModule != null) {
             $objGuestbook = $objGBModule->getPortalInstanceOfConcreteModule($this->arrElementData);
             $strReturn = $objGuestbook->action();
         }

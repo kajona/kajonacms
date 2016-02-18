@@ -5,46 +5,57 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Guestbook\Admin;
+
+use Kajona\Guestbook\System\GuestbookGuestbook;
+use Kajona\System\Admin\AdminEvensimpler;
+use Kajona\System\Admin\AdminInterface;
+
+
 /**
  * Admin class to handle all guestbook-stuff like creating guestbook, deleting posts, ...
  *
  * @package module_guestbook
  * @author sidler@mulchprod.de
  *
- * @objectList class_module_guestbook_guestbook
- * @objectNew class_module_guestbook_guestbook
- * @objectEdit class_module_guestbook_guestbook
+ * @objectList Kajona\\Guestbook\\System\\GuestbookGuestbook
+ * @objectNew Kajona\\Guestbook\\System\\GuestbookGuestbook
+ * @objectEdit Kajona\\Guestbook\\System\\GuestbookGuestbook
  *
- * @objectListPost class_module_guestbook_post
- * @objectEditPost class_module_guestbook_post
+ * @objectListPost Kajona\\Guestbook\\System\\GuestbookPost
+ * @objectEditPost Kajona\\Guestbook\\System\\GuestbookPost
  *
  * @autoTestable list,new
  *
  * @module guestbook
  * @moduleId _guestbook_module_id_
  */
-class class_module_guestbook_admin extends class_admin_evensimpler implements interface_admin {
+class GuestbookAdmin extends AdminEvensimpler implements AdminInterface
+{
 
 
-    public function getOutputModuleNavi() {
+    public function getOutputModuleNavi()
+    {
         $arrReturn = array();
         $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
         return $arrReturn;
     }
 
 
-    protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
-        if($this->getObjModule()->rightEdit() && $this->getStrCurObjectTypeName() != "Post") {
+    protected function getNewEntryAction($strListIdentifier, $bitDialog = false)
+    {
+        if ($this->getObjModule()->rightEdit() && $this->getStrCurObjectTypeName() != "Post") {
             return parent::getNewEntryAction($strListIdentifier, $bitDialog);
         }
         return "";
     }
 
-    protected function renderAdditionalActions(\Kajona\System\System\Model $objListEntry) {
-        if($objListEntry instanceof class_module_guestbook_guestbook) {
+    protected function renderAdditionalActions(\Kajona\System\System\Model $objListEntry)
+    {
+        if ($objListEntry instanceof GuestbookGuestbook) {
             return array(
                 $this->objToolkit->listButton(
-                    getLinkAdmin($this->arrModule["modul"], "listPost", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_view_guestbook"), "icon_bookLens")
+                    getLinkAdmin($this->arrModule["modul"], "listPost", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("action_view_guestbook"), "icon_bookLens")
                 )
             );
         }

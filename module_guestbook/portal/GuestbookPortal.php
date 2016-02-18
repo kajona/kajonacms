@@ -4,6 +4,21 @@
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
+
+namespace Kajona\Guestbook\Portal;
+
+use Kajona\Guestbook\System\GuestbookGuestbook;
+use Kajona\Guestbook\System\GuestbookPost;
+use Kajona\Guestbook\System\Messageproviders\MessageproviderGuestbook;
+use Kajona\System\Portal\PortalController;
+use Kajona\System\Portal\PortalInterface;
+use Kajona\System\System\ArraySectionIterator;
+use Kajona\System\System\Exception;
+use Kajona\System\System\MessagingMessagehandler;
+use Kajona\System\System\Rights;
+use Kajona\System\System\UserGroup;
+use Kajona\System\System\Validators\EmailValidator;
+
 /**
  * Portal-class of the guestbook. Handles postings
  *
@@ -13,7 +28,8 @@
  * @module guestbook
  * @moduleId _guestbook_module_id_
  */
-class class_module_guestbook_portal extends class_portal_controller implements interface_portal {
+class GuestbookPortal extends PortalController implements PortalInterface
+{
 
     private $arrErrors = array();
 
@@ -24,24 +40,25 @@ class class_module_guestbook_portal extends class_portal_controller implements i
      * @return string
      * @permissions view
      */
-    protected function actionList() {
+    protected function actionList()
+    {
         $strReturn = "";
         $arrTemplate = array();
         $arrTemplate["liste_posts"] = "";
         //Load all posts
-        $objArraySectionIterator = new class_array_section_iterator(class_module_guestbook_post::getPostsCount($this->arrElementData["guestbook_id"], true));
+        $objArraySectionIterator = new ArraySectionIterator(GuestbookPost::getPostsCount($this->arrElementData["guestbook_id"], true));
         $objArraySectionIterator->setIntElementsPerPage($this->arrElementData["guestbook_amount"]);
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(
-            class_module_guestbook_post::getPosts($this->arrElementData["guestbook_id"], true, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos())
+            GuestbookPost::getPosts($this->arrElementData["guestbook_id"], true, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos())
         );
 
         $arrObjPosts = $this->objToolkit->simplePager($objArraySectionIterator, $this->getLang("commons_next"), $this->getLang("commons_back"), "", $this->getPagename());
 
         //and put posts into a template
-        /** @var class_module_guestbook_post $objOnePost */
-        foreach($objArraySectionIterator as $objOnePost) {
-            if($objOnePost->rightView()) {
+        /** @var GuestbookPost $objOnePost */
+        foreach ($objArraySectionIterator as $objOnePost) {
+            if ($objOnePost->rightView()) {
                 $strTemplatePostID = $this->objTemplate->readTemplate("/module_guestbook/".$this->arrElementData["guestbook_template"], "post");
                 $arrTemplatePost = array();
                 $arrTemplatePost["post_name"] = "<a href=\"mailto:".$objOnePost->getStrGuestbookPostEmail()."\">".$objOnePost->getStrGuestbookPostName()."</a>";
@@ -75,14 +92,15 @@ class class_module_guestbook_portal extends class_portal_controller implements i
      * @internal param mixed $arrTemplate values to fill in
      * @return string
      */
-    protected function actionInsertGuestbook($arrTemplateOld = array()) {
+    protected function actionInsertGuestbook($arrTemplateOld = array())
+    {
         $strReturn = "";
         $strTemplateID = $this->objTemplate->readTemplate("/module_guestbook/".$this->arrElementData["guestbook_template"], "entry_form");
 
         $strErrors = "";
-        if(count($this->arrErrors) > 0) {
+        if (count($this->arrErrors) > 0) {
             $strErrorTemplateID = $this->objTemplate->readTemplate("/module_guestbook/".$this->arrElementData["guestbook_template"], "error_row");
-            foreach($this->arrErrors as $strOneError) {
+            foreach ($this->arrErrors as $strOneError) {
                 $strErrors .= $this->fillTemplate(array("error" => $strOneError), $strErrorTemplateID);
             }
         }
@@ -95,8 +113,8 @@ class class_module_guestbook_portal extends class_portal_controller implements i
         $arrTemplate["gb_post_text"] = $this->getParam("gb_post_text");
         $arrTemplate["gb_post_page"] = $this->getParam("gb_post_page");
 
-        foreach($arrTemplate as $strKey => $strValue) {
-            if(uniStrpos($strKey, "gb_post_") !== false) {
+        foreach ($arrTemplate as $strKey => $strValue) {
+            if (uniStrpos($strKey, "gb_post_") !== false) {
                 $arrTemplate[$strKey] = htmlspecialchars($strValue, ENT_QUOTES, "UTF-8", false);
             }
         }
@@ -110,23 +128,24 @@ class class_module_guestbook_portal extends class_portal_controller implements i
     /**
      * Saves the passed values to db
      *
-     * @throws class_exception
+     * @throws Exception
      * @return string "" in case of success
      */
-    protected function actionSaveGuestbook() {
+    protected function actionSaveGuestbook()
+    {
         $strReturn = "";
 
-        if(!$this->validateData()) {
+        if (!$this->validateData()) {
             $this->setParam("eintragen_fehler", $this->getLang("eintragen_fehler"));
             return $this->actionInsertGuestbook($this->getAllParams());
         }
 
-        $objBook = new class_module_guestbook_guestbook($this->arrElementData["guestbook_id"]);
+        $objBook = new GuestbookGuestbook($this->arrElementData["guestbook_id"]);
 
         //check rights
-        if($objBook->rightRight1()) {
+        if ($objBook->rightRight1()) {
             //create a post-object
-            $objPost = new class_module_guestbook_post();
+            $objPost = new GuestbookPost();
             $objPost->setStrGuestbookPostName($this->getParam("gb_post_name"));
             $objPost->setStrGuestbookPostEmail($this->getParam("gb_post_email"));
             $objPost->setStrGuestbookPostPage($this->getParam("gb_post_page"));
@@ -134,27 +153,27 @@ class class_module_guestbook_portal extends class_portal_controller implements i
             $objPost->setIntGuestbookPostDate(time());
 
             //save obj to db
-            if(!$objPost->updateObjectToDb($objBook->getSystemid())) {
-                throw new class_exception("Error saving entry", class_exception::$level_ERROR);
+            if (!$objPost->updateObjectToDb($objBook->getSystemid())) {
+                throw new Exception("Error saving entry", Exception::$level_ERROR);
             }
 
 
             $strMailtext = $this->getLang("new_post_mail");
             $strMailtext .= getLinkAdminHref("guestbook", "edit", "&systemid=".$objPost->getSystemid(), false);
-            $objMessageHandler = new class_module_messaging_messagehandler();
+            $objMessageHandler = new MessagingMessagehandler();
 
             $arrGroups = array();
-            $allGroups = class_module_user_group::getObjectList();
-            foreach($allGroups as $objOneGroup) {
-                if(class_rights::getInstance()->checkPermissionForGroup($objOneGroup->getSystemid(), class_rights::$STR_RIGHT_EDIT, $this->getObjModule()->getSystemid())) {
+            $allGroups = UserGroup::getObjectList();
+            foreach ($allGroups as $objOneGroup) {
+                if (Rights::getInstance()->checkPermissionForGroup($objOneGroup->getSystemid(), Rights::$STR_RIGHT_EDIT, $this->getObjModule()->getSystemid())) {
                     $arrGroups[] = $objOneGroup;
                 }
             }
 
-            $objMessageHandler->sendMessage($strMailtext, $arrGroups, new class_messageprovider_guestbook());
+            $objMessageHandler->sendMessage($strMailtext, $arrGroups, new MessageproviderGuestbook());
 
             //Flush the page from cache
-            $this->flushPageFromPagesCache($this->getPagename());
+            $this->flushCompletePagesCache();
             $this->portalReload(getLinkPortalHref($this->getPagename()));
 
         }
@@ -170,33 +189,34 @@ class class_module_guestbook_portal extends class_portal_controller implements i
      *
      * @return bool
      */
-    private function validateData() {
+    private function validateData()
+    {
         $bitReturn = true;
 
         //Check captachcode
-        if($this->getParam("gb_post_captcha") != $this->objSession->getCaptchaCode() || $this->getParam("gb_post_captcha") == "") {
+        if ($this->getParam("gb_post_captcha") != $this->objSession->getCaptchaCode() || $this->getParam("gb_post_captcha") == "") {
             $bitReturn = false;
         }
 
         //Check mailaddress
-        $objMailValidator = new class_email_validator();
-        if(!$objMailValidator->validate($this->getParam("gb_post_email"))) {
+        $objMailValidator = new EmailValidator();
+        if (!$objMailValidator->validate($this->getParam("gb_post_email"))) {
             $this->arrErrors[] = $this->getLang("insert_error_email");
             $bitReturn = false;
         }
 
-        if(uniStrlen($this->getParam("gb_post_name")) == 0) {
+        if (uniStrlen($this->getParam("gb_post_name")) == 0) {
             $this->arrErrors[] = $this->getLang("insert_error_name");
             $bitReturn = false;
         }
 
-        if(uniStrlen($this->getParam("gb_post_text")) == 0) {
+        if (uniStrlen($this->getParam("gb_post_text")) == 0) {
             $this->arrErrors[] = $this->getLang("insert_error_post");
             $bitReturn = false;
         }
 
         //if there ain't any errors, update texts
-        if($bitReturn) {
+        if ($bitReturn) {
             $this->setParam("gb_post_name", htmlToString($this->getParam("gb_post_name")));
             $this->setParam("gb_post_email", htmlToString($this->getParam("gb_post_email")));
             $this->setParam("gb_post_text", htmlToString($this->getParam("gb_post_text")));

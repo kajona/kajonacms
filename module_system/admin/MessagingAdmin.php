@@ -38,9 +38,9 @@ use Kajona\System\System\UserUser;
  * @module messaging
  * @moduleId _messaging_module_id_
  *
- * @objectList class_module_messaging_message
- * @objectNew class_module_messaging_message
- * @objectEdit class_module_messaging_message
+ * @objectList Kajona\\System\\System\\MessagingMessage
+ * @objectNew Kajona\\System\\System\\MessagingMessage
+ * @objectEdit Kajona\\System\\System\\MessagingMessage
  */
 class MessagingAdmin extends AdminEvensimpler implements AdminInterface {
 

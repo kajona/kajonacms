@@ -6,6 +6,7 @@
 ********************************************************************************************************/
 
 namespace Kajona\Guestbook\Installer;
+
 use class_db;
 use class_module_guestbook_guestbook;
 use interface_sc_installer;
@@ -19,7 +20,8 @@ use Kajona\Pages\System\PagesPageelement;
  * Installer of the guestbook samplecontent
  *
  */
-class InstallerSamplecontentGuestbook implements interface_sc_installer  {
+class InstallerSamplecontentGuestbook implements interface_sc_installer
+{
 
     /**
      * @var class_db
@@ -32,15 +34,18 @@ class InstallerSamplecontentGuestbook implements interface_sc_installer  {
      *
      * @return string
      */
-    public function install() {
+    public function install()
+    {
         $strReturn = "";
 
         //fetch navifolder-id
         $strNaviFolderId = "";
         $arrFolder = PagesFolder::getFolderList();
-        foreach($arrFolder as $objOneFolder)
-            if($objOneFolder->getStrName() == "mainnavigation")
+        foreach ($arrFolder as $objOneFolder) {
+            if ($objOneFolder->getStrName() == "mainnavigation") {
                 $strNaviFolderId = $objOneFolder->getSystemid();
+            }
+        }
 
         $strReturn .= "Creating new guestbook...\n";
         $objGuestbook = new class_module_guestbook_guestbook();
@@ -62,8 +67,8 @@ class InstallerSamplecontentGuestbook implements interface_sc_installer  {
         $strGuestbookpageID = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strGuestbookpageID."\n";
         $strReturn .= "Adding pagelement to new page\n";
-        
-        if(PagesElement::getElement("guestbook") != null) {
+
+        if (PagesElement::getElement("guestbook") != null) {
             $objPagelement = new PagesPageelement();
             $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
             $objPagelement->setStrName("special");
@@ -75,16 +80,18 @@ class InstallerSamplecontentGuestbook implements interface_sc_installer  {
                                 guestbook_template = ?,
                                 guestbook_amount = ?
                             WHERE content_id = ?";
-            if($this->objDB->_pQuery($strQuery, array($strGuestbookID, "guestbook.tpl", 5, $strElementId)))
+            if ($this->objDB->_pQuery($strQuery, array($strGuestbookID, "guestbook.tpl", 5, $strElementId))) {
                 $strReturn .= "Guestbookelement created.\n";
-            else
+            }
+            else {
                 $strReturn .= "Error creating Guestbookelement.\n";
-        
+            }
+
         }
 
         $strReturn .= "Adding headline-element to new page\n";
-        
-        if(PagesElement::getElement("row") != null) {
+
+        if (PagesElement::getElement("row") != null) {
             $objPagelement = new PagesPageelement();
             $objPagelement->setStrPlaceholder("headline_row");
             $objPagelement->setStrName("headline");
@@ -94,25 +101,30 @@ class InstallerSamplecontentGuestbook implements interface_sc_installer  {
             $strQuery = "UPDATE "._dbprefix_."element_paragraph
                                 SET paragraph_title = ?
                                 WHERE content_id = ?";
-            if($this->objDB->_pQuery($strQuery, array("Guestbook", $strElementId)))
+            if ($this->objDB->_pQuery($strQuery, array("Guestbook", $strElementId))) {
                 $strReturn .= "Headline element created.\n";
-            else
+            }
+            else {
                 $strReturn .= "Error creating headline element.\n";
+            }
         }
 
 
         return $strReturn;
     }
 
-    public function setObjDb($objDb) {
+    public function setObjDb($objDb)
+    {
         $this->objDB = $objDb;
     }
 
-    public function setStrContentlanguage($strContentlanguage) {
+    public function setStrContentlanguage($strContentlanguage)
+    {
         $this->strContentLanguage = $strContentlanguage;
     }
 
-    public function getCorrespondingModule() {
+    public function getCorrespondingModule()
+    {
         return "guestbook";
     }
 

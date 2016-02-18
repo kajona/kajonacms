@@ -5,6 +5,12 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Guestbook\System;
+
+use Kajona\System\System\AdminListableInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\SystemSetting;
+
 
 /**
  * Class to represent a guestbook book
@@ -17,7 +23,8 @@
  * @module guestbook
  * @moduleId _guestbook_module_id_
  */
-class class_module_guestbook_guestbook extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_admin_listable  {
+class GuestbookGuestbook extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, AdminListableInterface
+{
 
     /**
      * @var string
@@ -51,31 +58,38 @@ class class_module_guestbook_guestbook extends \Kajona\System\System\Model imple
      *
      * @return string the name of the icon, not yet wrapped by getImageAdmin()
      */
-    public function getStrIcon() {
+    public function getStrIcon()
+    {
         return "icon_book";
     }
 
     /**
      * In nearly all cases, the additional info is rendered left to the action-icons.
+     *
      * @return string
      */
-    public function getStrAdditionalInfo() {
+    public function getStrAdditionalInfo()
+    {
         return "";
     }
 
     /**
      * If not empty, the returned string is rendered below the common title.
+     *
      * @return string
      */
-    public function getStrLongDescription() {
+    public function getStrLongDescription()
+    {
         return "";
     }
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     *
      * @return string
      */
-    public function getStrDisplayName() {
+    public function getStrDisplayName()
+    {
         return $this->getStrGuestbookTitle();
     }
 
@@ -85,18 +99,21 @@ class class_module_guestbook_guestbook extends \Kajona\System\System\Model imple
      *
      * @return bool
      */
-    protected function onInsertToDb() {
-        return class_carrier::getInstance()->getObjRights()->addGroupToRight(class_module_system_setting::getConfigValue("_guests_group_id_"), $this->getSystemid(), "right1");
+    protected function onInsertToDb()
+    {
+        return Carrier::getInstance()->getObjRights()->addGroupToRight(SystemSetting::getConfigValue("_guests_group_id_"), $this->getSystemid(), "right1");
     }
 
     /**
      * @param string $strGuestbookTitle
      */
-    public function setStrGuestbookTitle($strGuestbookTitle) {
+    public function setStrGuestbookTitle($strGuestbookTitle)
+    {
         $this->strGuestbookTitle = $strGuestbookTitle;
     }
 
-    public function getStrGuestbookTitle() {
+    public function getStrGuestbookTitle()
+    {
         return $this->strGuestbookTitle;
     }
 
@@ -104,15 +121,15 @@ class class_module_guestbook_guestbook extends \Kajona\System\System\Model imple
      *
      * @param string $intGuestbookModerated
      */
-    public function setIntGuestbookModerated($intGuestbookModerated) {
+    public function setIntGuestbookModerated($intGuestbookModerated)
+    {
         $this->intGuestbookModerated = $intGuestbookModerated;
     }
 
-    public function getIntGuestbookModerated() {
+    public function getIntGuestbookModerated()
+    {
         return $this->intGuestbookModerated;
     }
-
-
 
 
 }

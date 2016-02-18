@@ -5,6 +5,13 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Guestbook\Admin\Elements;
+
+use Kajona\Guestbook\System\GuestbookGuestbook;
+use Kajona\Pages\Admin\AdminElementInterface;
+use Kajona\Pages\Admin\ElementAdmin;
+use Kajona\System\Admin\AdminFormgenerator;
+
 
 /**
  * Class representing the admin-part of the guestbook element
@@ -13,7 +20,8 @@
  * @author sidler@mulchprod.de
  * @targetTable element_guestbook.content_id
  */
-class class_element_guestbook_admin extends class_element_admin implements interface_admin_element {
+class ElementGuestbookAdmin extends ElementAdmin implements AdminElementInterface
+{
 
     /**
      * @var string
@@ -48,15 +56,17 @@ class class_element_guestbook_admin extends class_element_admin implements inter
     private $intAmount;
 
     /**
-     * @return class_admin_formgenerator|null
+     * @return AdminFormgenerator|null
      */
-    public function getAdminForm() {
+    public function getAdminForm()
+    {
         $objForm = parent::getAdminForm();
 
-        $objGuestbooks = class_module_guestbook_guestbook::getObjectList();
+        $objGuestbooks = GuestbookGuestbook::getObjectList();
         $arrGuestbooks = array();
-        foreach ($objGuestbooks as $objOneGuestbook)
+        foreach ($objGuestbooks as $objOneGuestbook) {
             $arrGuestbooks[$objOneGuestbook->getSystemid()] = $objOneGuestbook->getStrDisplayName();
+        }
 
         $objForm->getField("guestbook")->setArrKeyValues($arrGuestbooks);
         return $objForm;
@@ -64,50 +74,57 @@ class class_element_guestbook_admin extends class_element_admin implements inter
 
     /**
      * @param string $strTemplate
+     *
      * @return void
      */
-    public function setStrTemplate($strTemplate) {
+    public function setStrTemplate($strTemplate)
+    {
         $this->strTemplate = $strTemplate;
     }
 
     /**
      * @return string
      */
-    public function getStrTemplate() {
+    public function getStrTemplate()
+    {
         return $this->strTemplate;
     }
 
     /**
      * @param string $strGuestbook
+     *
      * @return void
      */
-    public function setStrGuestbook($strGuestbook) {
+    public function setStrGuestbook($strGuestbook)
+    {
         $this->strGuestbook = $strGuestbook;
     }
 
     /**
      * @return string
      */
-    public function getStrGuestbook() {
+    public function getStrGuestbook()
+    {
         return $this->strGuestbook;
     }
 
     /**
      * @param int $intAmount
+     *
      * @return void
      */
-    public function setIntAmount($intAmount) {
+    public function setIntAmount($intAmount)
+    {
         $this->intAmount = $intAmount;
     }
 
     /**
      * @return int
      */
-    public function getIntAmount() {
+    public function getIntAmount()
+    {
         return $this->intAmount;
     }
-
-
 
 
 }

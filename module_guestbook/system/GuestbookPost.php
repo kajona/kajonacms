@@ -5,6 +5,18 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Guestbook\System;
+
+use class_search_result;
+use Kajona\System\System\AdminListableInterface;
+use Kajona\System\System\Link;
+use Kajona\System\System\OrmComparatorEnum;
+use Kajona\System\System\OrmObjectlist;
+use Kajona\System\System\OrmObjectlistOrderby;
+use Kajona\System\System\OrmObjectlistSystemstatusRestriction;
+use Kajona\System\System\SearchPortalobjectInterface;
+
+
 /**
  * Class to represent a guestbook post
  *
@@ -15,7 +27,8 @@
  * @module guestbook
  * @moduleId _guestbook_module_id_
  */
-class class_module_guestbook_post extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_admin_listable, interface_search_portalobject {
+class GuestbookPost extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, AdminListableInterface, SearchPortalobjectInterface
+{
 
     /**
      * @var string
@@ -70,7 +83,6 @@ class class_module_guestbook_post extends \Kajona\System\System\Model implements
     private $intGuestbookPostDate = 0;
 
 
-
     /**
      * Returns the icon the be used in lists.
      * Please be aware, that only the filename should be returned, the wrapping by getImageAdmin() is
@@ -78,7 +90,8 @@ class class_module_guestbook_post extends \Kajona\System\System\Model implements
      *
      * @return string the name of the icon, not yet wrapped by getImageAdmin()
      */
-    public function getStrIcon() {
+    public function getStrIcon()
+    {
         return "icon_book";
     }
 
@@ -87,8 +100,9 @@ class class_module_guestbook_post extends \Kajona\System\System\Model implements
      *
      * @return string
      */
-    public function getStrAdditionalInfo() {
-        return timeToString($this->getIntGuestbookPostDate(), false) . " " . $this->getStrGuestbookPostEmail();
+    public function getStrAdditionalInfo()
+    {
+        return timeToString($this->getIntGuestbookPostDate(), false)." ".$this->getStrGuestbookPostEmail();
     }
 
     /**
@@ -96,7 +110,8 @@ class class_module_guestbook_post extends \Kajona\System\System\Model implements
      *
      * @return string
      */
-    public function getStrLongDescription() {
+    public function getStrLongDescription()
+    {
         return uniStrTrim($this->getStrGuestbookPostText(), 70);
     }
 
@@ -105,7 +120,8 @@ class class_module_guestbook_post extends \Kajona\System\System\Model implements
      *
      * @return string
      */
-    public function getStrDisplayName() {
+    public function getStrDisplayName()
+    {
         return $this->getStrGuestbookPostName();
     }
 
@@ -115,9 +131,10 @@ class class_module_guestbook_post extends \Kajona\System\System\Model implements
      *
      * @return bool
      */
-    protected function onInsertToDb() {
-        $objGuestbook = new class_module_guestbook_guestbook($this->getPrevId());
-        if($objGuestbook->getIntGuestbookModerated() == "1") {
+    protected function onInsertToDb()
+    {
+        $objGuestbook = new GuestbookGuestbook($this->getPrevId());
+        if ($objGuestbook->getIntGuestbookModerated() == "1") {
             $this->setIntRecordStatus(0);
         }
 
@@ -133,14 +150,16 @@ class class_module_guestbook_post extends \Kajona\System\System\Model implements
      * @param null $intStart
      * @param null $intEnd
      *
-     * @return class_module_guestbook_post[]
+     * @return GuestbookPost[]
      * @static
      */
-    public static function getPosts($strPrevId = "", $bitJustActive = false, $intStart = null, $intEnd = null) {
-        $objORM = new class_orm_objectlist();
-        if($bitJustActive)
-            $objORM->addWhereRestriction(new class_orm_objectlist_systemstatus_restriction(class_orm_comparator_enum::Equal(), 1));
-        $objORM->addOrderBy(new class_orm_objectlist_orderby("guestbook_post_date DESC"));
+    public static function getPosts($strPrevId = "", $bitJustActive = false, $intStart = null, $intEnd = null)
+    {
+        $objORM = new OrmObjectlist();
+        if ($bitJustActive) {
+            $objORM->addWhereRestriction(new OrmObjectlistSystemstatusRestriction(OrmComparatorEnum::Equal(), 1));
+        }
+        $objORM->addOrderBy(new OrmObjectlistOrderby("guestbook_post_date DESC"));
         return $objORM->getObjectList(get_called_class(), $strPrevId, $intStart, $intEnd);
     }
 
@@ -153,10 +172,12 @@ class class_module_guestbook_post extends \Kajona\System\System\Model implements
      * @return int
      * @static
      */
-    public static function getPostsCount($strPrevID = "", $bitJustActive = false) {
-        $objORM = new class_orm_objectlist();
-        if($bitJustActive)
-            $objORM->addWhereRestriction(new class_orm_objectlist_systemstatus_restriction(class_orm_comparator_enum::Equal(), 1));
+    public static function getPostsCount($strPrevID = "", $bitJustActive = false)
+    {
+        $objORM = new OrmObjectlist();
+        if ($bitJustActive) {
+            $objORM->addWhereRestriction(new OrmObjectlistSystemstatusRestriction(OrmComparatorEnum::Equal(), 1));
+        }
         return $objORM->getObjectCount(get_called_class(), $strPrevID);
     }
 
@@ -175,9 +196,10 @@ class class_module_guestbook_post extends \Kajona\System\System\Model implements
      * @see getLinkPortalHref()
      * @return mixed
      */
-    public function updateSearchResult(class_search_result $objResult) {
-        $objORM = new class_orm_objectlist();
-        $strQuery =  "SELECT page_name, guestbook_amount, page_id
+    public function updateSearchResult(class_search_result $objResult)
+    {
+        $objORM = new OrmObjectlist();
+        $strQuery = "SELECT page_name, guestbook_amount, page_id
                        FROM "._dbprefix_."element_guestbook,
                             "._dbprefix_."page_element,
                             "._dbprefix_."page,
@@ -188,30 +210,32 @@ class class_module_guestbook_post extends \Kajona\System\System\Model implements
                         AND system_prev_id = page_id
                         AND system_status = 1
                         ".$objORM->getDeletedWhereRestriction()."
-                        AND page_element_ph_language = ? " ;
+                        AND page_element_ph_language = ? ";
 
         $arrRows = $this->objDB->getPArray($strQuery, array($this->getPrevId(), $objResult->getObjSearch()->getStrPortalLangFilter()));
         $arrReturn = array();
-        foreach($arrRows as $arrOnePage) {
+        foreach ($arrRows as $arrOnePage) {
 
             //check, if the post is available on a page using the current language
-            if(!isset($arrOnePage["page_name"]) || $arrOnePage["page_name"] == "")
+            if (!isset($arrOnePage["page_name"]) || $arrOnePage["page_name"] == "") {
                 continue;
+            }
 
             //search pv position
             $intAmount = $arrOnePage["guestbook_amount"];
-            $arrPostsInGB = class_module_guestbook_post::getPosts($this->getPrevId(), true);
+            $arrPostsInGB = GuestbookPost::getPosts($this->getPrevId(), true);
             $intCounter = 0;
-            foreach($arrPostsInGB as $objOnePostInGb) {
+            foreach ($arrPostsInGB as $objOnePostInGb) {
                 $intCounter++;
-                if($objOnePostInGb->getSystemid() == $this->getSystemid())
+                if ($objOnePostInGb->getSystemid() == $this->getSystemid()) {
                     break;
+                }
             }
             //calculate pv
-            $intPvPos = ceil($intCounter/$intAmount);
+            $intPvPos = ceil($intCounter / $intAmount);
 
             $objNewResult = clone $objResult;
-            $objNewResult->setStrPagelink(class_link::getLinkPortal($arrOnePage["page_name"], "", "_self", $arrOnePage["page_name"], "", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8"))."&pv=".$intPvPos));
+            $objNewResult->setStrPagelink(Link::getLinkPortal($arrOnePage["page_name"], "", "_self", $arrOnePage["page_name"], "", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8"))."&pv=".$intPvPos));
             $objNewResult->setStrPagename($arrOnePage["page_name"]);
             $objNewResult->setStrDescription($this->getStrGuestbookPostText());
 
@@ -222,7 +246,6 @@ class class_module_guestbook_post extends \Kajona\System\System\Model implements
     }
 
 
-
     /**
      * Since the portal may be split in different languages,
      * return the content lang of the current record using the common
@@ -231,7 +254,8 @@ class class_module_guestbook_post extends \Kajona\System\System\Model implements
      *
      * @return mixed
      */
-    public function getContentLang() {
+    public function getContentLang()
+    {
         return "";
     }
 
@@ -242,51 +266,62 @@ class class_module_guestbook_post extends \Kajona\System\System\Model implements
      * @see getLinkAdminHref()
      * @return mixed
      */
-    public function getSearchAdminLinkForObject() {
+    public function getSearchAdminLinkForObject()
+    {
         return "";
     }
 
 
-    public function setIntGuestbookPostDate($intGuestbookPostDate) {
+    public function setIntGuestbookPostDate($intGuestbookPostDate)
+    {
         $this->intGuestbookPostDate = $intGuestbookPostDate;
     }
 
-    public function getIntGuestbookPostDate() {
+    public function getIntGuestbookPostDate()
+    {
         return $this->intGuestbookPostDate;
     }
 
-    public function setStrGuestbookPostEmail($strGuestbookPostEmail) {
+    public function setStrGuestbookPostEmail($strGuestbookPostEmail)
+    {
         $this->strGuestbookPostEmail = $strGuestbookPostEmail;
     }
 
-    public function getStrGuestbookPostEmail() {
+    public function getStrGuestbookPostEmail()
+    {
         return $this->strGuestbookPostEmail;
     }
 
-    public function setStrGuestbookPostName($strGuestbookPostName) {
+    public function setStrGuestbookPostName($strGuestbookPostName)
+    {
         $this->strGuestbookPostName = $strGuestbookPostName;
     }
 
-    public function getStrGuestbookPostName() {
+    public function getStrGuestbookPostName()
+    {
         return $this->strGuestbookPostName;
     }
 
-    public function setStrGuestbookPostPage($strGuestbookPostPage) {
+    public function setStrGuestbookPostPage($strGuestbookPostPage)
+    {
         //Remove protocol-prefixes
         $strGuestbookPostPage = str_replace("http://", "", $strGuestbookPostPage);
         $strGuestbookPostPage = str_replace("https://", "", $strGuestbookPostPage);
         $this->strGuestbookPostPage = $strGuestbookPostPage;
     }
 
-    public function getStrGuestbookPostPage() {
+    public function getStrGuestbookPostPage()
+    {
         return $this->strGuestbookPostPage;
     }
 
-    public function setStrGuestbookPostText($strGuestbookPostText) {
+    public function setStrGuestbookPostText($strGuestbookPostText)
+    {
         $this->strGuestbookPostText = $strGuestbookPostText;
     }
 
-    public function getStrGuestbookPostText() {
+    public function getStrGuestbookPostText()
+    {
         return $this->strGuestbookPostText;
     }
 
