@@ -6,6 +6,13 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                            *
 ********************************************************************************************************/
+use Kajona\System\System\Config;
+use Kajona\System\System\DbDatatypes;
+use Kajona\System\System\InstallerBase;
+use Kajona\System\System\InstallerRemovableInterface;
+use Kajona\System\System\SystemModule;
+use Kajona\System\System\UserGroup;
+use Kajona\System\System\UserUser;
 
 /**
  * Class providing an installer for the monita module
@@ -14,28 +21,28 @@
  * @author sidler@mulchprod.de
  * @moduleId _ldap_module_id_
  */
-class class_installer_ldap extends class_installer_base implements interface_installer_removable {
+class InstallerLdap extends InstallerBase implements InstallerRemovableInterface {
 
     public function install() {
 		$strReturn = "";
 
         $strReturn .= "Installing table group_ldap...\n";
 		$arrFields = array();
-        $arrFields["group_ldap_id"]                                     = array(class_db_datatypes::STR_TYPE_CHAR20, false);
-		$arrFields["group_ldap_dn"]                                     = array(class_db_datatypes::STR_TYPE_TEXT, true);
-		$arrFields["group_ldap_cfg"]                                    = array(class_db_datatypes::STR_TYPE_INT, true);
+        $arrFields["group_ldap_id"]                                     = array(DbDatatypes::STR_TYPE_CHAR20, false);
+		$arrFields["group_ldap_dn"]                                     = array(DbDatatypes::STR_TYPE_TEXT, true);
+		$arrFields["group_ldap_cfg"]                                    = array(DbDatatypes::STR_TYPE_INT, true);
 
 		if(!$this->objDB->createTable("user_group_ldap", $arrFields, array("group_ldap_id")))
 			$strReturn .= "An error occurred! ...\n";
         
         $strReturn .= "Installing table user_ldap...\n";
 		$arrFields = array();
-        $arrFields["user_ldap_id"]                                     = array(class_db_datatypes::STR_TYPE_CHAR20, false);
-		$arrFields["user_ldap_email"]                                  = array(class_db_datatypes::STR_TYPE_CHAR254, true);
-		$arrFields["user_ldap_familyname"]                             = array(class_db_datatypes::STR_TYPE_CHAR254, true);
-		$arrFields["user_ldap_givenname"]                              = array(class_db_datatypes::STR_TYPE_CHAR254, true);
-		$arrFields["user_ldap_dn"]                                     = array(class_db_datatypes::STR_TYPE_TEXT, true);
-		$arrFields["user_ldap_cfg"]                                    = array(class_db_datatypes::STR_TYPE_INT, true);
+        $arrFields["user_ldap_id"]                                     = array(DbDatatypes::STR_TYPE_CHAR20, false);
+		$arrFields["user_ldap_email"]                                  = array(DbDatatypes::STR_TYPE_CHAR254, true);
+		$arrFields["user_ldap_familyname"]                             = array(DbDatatypes::STR_TYPE_CHAR254, true);
+		$arrFields["user_ldap_givenname"]                              = array(DbDatatypes::STR_TYPE_CHAR254, true);
+		$arrFields["user_ldap_dn"]                                     = array(DbDatatypes::STR_TYPE_TEXT, true);
+		$arrFields["user_ldap_cfg"]                                    = array(DbDatatypes::STR_TYPE_INT, true);
 
 		if(!$this->objDB->createTable("user_ldap", $arrFields, array("user_ldap_id")))
 			$strReturn .= "An error occurred! ...\n";
@@ -55,7 +62,7 @@ class class_installer_ldap extends class_installer_base implements interface_ins
      * @return bool
      */
     public function isRemovable() {
-        return uniStrpos(class_config::getInstance()->getConfig("loginproviders"), "ldap") === false;
+        return uniStrpos(Config::getInstance()->getConfig("loginproviders"), "ldap") === false;
     }
 
     /**
@@ -69,15 +76,15 @@ class class_installer_ldap extends class_installer_base implements interface_ins
     public function remove(&$strReturn) {
 
         //remove the workflow
-        if(class_module_system_module::getModuleByName("workflows") !== null) {
-            foreach(class_module_workflows_workflow::getWorkflowsForClass("class_workflow_ldap_sync") as $objOneWorkflow) {
+        if(SystemModule::getModuleByName("workflows") !== null) {
+            foreach(class_module_workflows_workflow::getWorkflowsForClass("Kajona\\Ldap\\System\\Workflows\\WorkflowLdapSync") as $objOneWorkflow) {
                 if(!$objOneWorkflow->deleteObjectFromDatabase()) {
                     $strReturn .= "Error deleting workflow, aborting.\n";
                     return false;
                 }
             }
 
-            $objHandler = class_module_workflows_handler::getHandlerByClass("class_workflow_ldap_sync");
+            $objHandler = class_module_workflows_handler::getHandlerByClass("Kajona\\Ldap\\System\\Workflows\\WorkflowLdapSync");
             if(!$objHandler->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting workflow handler, aborting.\n";
                 return false;
@@ -86,21 +93,21 @@ class class_installer_ldap extends class_installer_base implements interface_ins
 
         //fetch associated users
         foreach($this->objDB->getPArray("SELECT * FROM "._dbprefix_."user_ldap", array()) as $arrOneRow) {
-            $objOneUser = new class_module_user_user($arrOneRow["user_ldap_id"]);
+            $objOneUser = new UserUser($arrOneRow["user_ldap_id"]);
             echo "Deleting ldap user ".$objOneUser->getStrDisplayName()."...\n";
             $objOneUser->deleteObjectFromDatabase();
         }
 
         //fetch associated groups
         foreach($this->objDB->getPArray("SELECT * FROM "._dbprefix_."user_group_ldap", array()) as $arrOneRow) {
-            $objOneUser = new class_module_user_group($arrOneRow["group_ldap_id"]);
+            $objOneUser = new UserGroup($arrOneRow["group_ldap_id"]);
             echo "Deleting ldap group ".$objOneUser->getStrDisplayName()."...\n";
             $objOneUser->deleteObjectFromDatabase();
         }
 
         //delete the module-node
         $strReturn .= "Deleting the module-registration...\n";
-        $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
+        $objModule = SystemModule::getModuleByName($this->objMetadata->getStrTitle(), true);
         if(!$objModule->deleteObjectFromDatabase()) {
             $strReturn .= "Error deleting module, aborting.\n";
             return false;
@@ -123,55 +130,55 @@ class class_installer_ldap extends class_installer_base implements interface_ins
     public function update() {
 	    $strReturn = "";
         //check installed version and to which version we can update
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.0") {
             $strReturn .= "Updating 4.0 to 4.1...\n";
             $strReturn .= "Updating module-versions...\n";
             $this->updateModuleVersion("ldap", "4.1");
         }
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.1") {
             $strReturn .= "Updating 4.1 to 4.2...\n";
             $strReturn .= "Updating module-versions...\n";
             $this->updateModuleVersion("ldap", "4.2");
         }
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.2") {
             $strReturn .= "Updating 4.2 to 4.3...\n";
             $strReturn .= "Updating module-versions...\n";
             $this->updateModuleVersion("ldap", "4.3");
         }
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.3") {
             $strReturn .= "Updating 4.3 to 4.4...\n";
             $this->updateModuleVersion("ldap", "4.4");
         }
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.4") {
             $strReturn .= "Updating 4.4 to 4.5...\n";
             $this->updateModuleVersion("ldap", "4.5");
         }
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.5") {
             $strReturn .= "Updating 4.5 to 4.6...\n";
             $this->updateModuleVersion("ldap", "4.6");
         }
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.6") {
             $strReturn .= "Updating to 4.7...\n";
             $this->updateModuleVersion("ldap", "4.7");
         }
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.7") {
             $strReturn .= $this->update_47_471();
         }
@@ -183,8 +190,8 @@ class class_installer_ldap extends class_installer_base implements interface_ins
         $strReturn = "Updating to 4.7.1...\n";
 
         $strReturn .= "Updating schema\n";
-        $this->objDB->addColumn("user_group_ldap", "group_ldap_cfg", class_db_datatypes::STR_TYPE_INT);
-        $this->objDB->addColumn("user_ldap", "user_ldap_cfg", class_db_datatypes::STR_TYPE_INT);
+        $this->objDB->addColumn("user_group_ldap", "group_ldap_cfg", DbDatatypes::STR_TYPE_INT);
+        $this->objDB->addColumn("user_ldap", "user_ldap_cfg", DbDatatypes::STR_TYPE_INT);
 
         $strReturn .= "Updating existing entries...\n";
         $this->objDB->_pQuery("UPDATE ".$this->objDB->encloseTableName(_dbprefix_."user_group_ldap")." SET group_ldap_cfg = 0", array());
