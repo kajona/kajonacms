@@ -1,8 +1,17 @@
 <?php
 
+namespace Kajona\Navigation\Tests;
+
+use Kajona\Navigation\System\NavigationTree;
+use Kajona\Pages\System\PagesFolder;
+use Kajona\Pages\System\PagesPage;
+use Kajona\Pages\System\PagesPageelement;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Testbase;
+
 require_once (__DIR__."/../../module_system/system/class_testbase.php");
 
-class class_test_autonavigationtest extends class_testbase  {
+class AutoNavigationTest extends Testbase {
 
     private static $strFolderSystemid;
     private static $strPage1Systemid;
@@ -11,20 +20,20 @@ class class_test_autonavigationtest extends class_testbase  {
 
     public function setUp() {
         //creating a new page-node structure
-        $objFolder = new class_module_pages_folder();
+        $objFolder = new PagesFolder();
         $objFolder->setStrName("naviautotest");
         $objFolder->updateObjectToDb();
         self::$strFolderSystemid = $objFolder->getSystemid();
 
-        $objPage1 = new class_module_pages_page();
+        $objPage1 = new PagesPage();
         $objPage1->setStrName("testpage1");
         $objPage1->setStrBrowsername("testpage1");
-        $objPage1->setIntType(class_module_pages_page::$INT_TYPE_PAGE);
+        $objPage1->setIntType(PagesPage::$INT_TYPE_PAGE);
         $objPage1->setStrTemplate("standard.tpl");
         $objPage1->updateObjectToDb($objFolder->getSystemid());
         self::$strPage1Systemid = $objPage1->getSystemid();
 
-        $objPagelement = new class_module_pages_pageelement();
+        $objPagelement = new PagesPageelement();
         $objPagelement->setStrPlaceholder("headline_row");
         $objPagelement->setStrName("headline");
         $objPagelement->setStrElement("row");
@@ -32,15 +41,15 @@ class class_test_autonavigationtest extends class_testbase  {
         $objPagelement->updateObjectToDb($objPage1->getSystemid());
 
 
-        $objPage2 = new class_module_pages_page();
+        $objPage2 = new PagesPage();
         $objPage2->setStrName("testpage2");
         $objPage2->setStrBrowsername("testpage2");
-        $objPage2->setIntType(class_module_pages_page::$INT_TYPE_ALIAS);
+        $objPage2->setIntType(PagesPage::$INT_TYPE_ALIAS);
         $objPage2->setStrAlias("testpage2a");
         $objPage2->updateObjectToDb($objFolder->getSystemid());
         self::$strPage2Systemid = $objPage2->getSystemid();
 
-        $objPagelement = new class_module_pages_pageelement();
+        $objPagelement = new PagesPageelement();
         $objPagelement->setStrPlaceholder("headline_row");
         $objPagelement->setStrName("headline");
         $objPagelement->setStrElement("row");
@@ -48,22 +57,22 @@ class class_test_autonavigationtest extends class_testbase  {
         $objPagelement->updateObjectToDb($objPage2->getSystemid());
 
 
-        $objPage3 = new class_module_pages_page();
+        $objPage3 = new PagesPage();
         $objPage3->setStrName("testpage2a");
         $objPage3->setStrBrowsername("testpage2a");
-        $objPage3->setIntType(class_module_pages_page::$INT_TYPE_PAGE);
+        $objPage3->setIntType(PagesPage::$INT_TYPE_PAGE);
         $objPage3->setStrTemplate("standard.tpl");
         $objPage3->updateObjectToDb($objPage2->getSystemid());
         self::$strPage2aSystemid = $objPage3->getSystemid();
 
-        $objPagelement = new class_module_pages_pageelement();
+        $objPagelement = new PagesPageelement();
         $objPagelement->setStrPlaceholder("headline_row");
         $objPagelement->setStrName("headline");
         $objPagelement->setStrElement("row");
         $objPagelement->setStrLanguage($objPage3->getStrAdminLanguageToWorkOn());
         $objPagelement->updateObjectToDb($objPage3->getSystemid());
 
-        class_carrier::getInstance()->getObjDB()->flushQueryCache();
+        Carrier::getInstance()->getObjDB()->flushQueryCache();
 
         parent::setUp();
     }
@@ -72,9 +81,9 @@ class class_test_autonavigationtest extends class_testbase  {
 
         echo "test auto navigation...\n";
 
-        class_carrier::getInstance()->getObjDB()->flushQueryCache();
+        Carrier::getInstance()->getObjDB()->flushQueryCache();
 
-        $objTestNavigation = new class_module_navigation_tree();
+        $objTestNavigation = new NavigationTree();
         $objTestNavigation->setStrName("autotest");
 
         $objTestNavigation->setStrFolderId(self::$strFolderSystemid);
@@ -108,19 +117,19 @@ class class_test_autonavigationtest extends class_testbase  {
 
 
     public function tearDown() {
-        class_carrier::getInstance()->getObjDB()->flushQueryCache();
+        Carrier::getInstance()->getObjDB()->flushQueryCache();
         //delete pages and folders created
 
-        $objPage = new class_module_pages_page(self::$strPage2aSystemid);
+        $objPage = new PagesPage(self::$strPage2aSystemid);
         $objPage->deleteObjectFromDatabase();
 
-        $objPage = new class_module_pages_page(self::$strPage2Systemid);
+        $objPage = new PagesPage(self::$strPage2Systemid);
         $objPage->deleteObjectFromDatabase();
 
-        $objPage = new class_module_pages_page(self::$strPage1Systemid);
+        $objPage = new PagesPage(self::$strPage1Systemid);
         $objPage->deleteObjectFromDatabase();
 
-        $objFolder = new class_module_pages_folder(self::$strFolderSystemid);
+        $objFolder = new PagesFolder(self::$strFolderSystemid);
         $objFolder->deleteObjectFromDatabase();
 
         parent::tearDown();

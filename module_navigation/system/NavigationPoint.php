@@ -4,8 +4,22 @@
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
+
+namespace Kajona\Navigation\System;
+
+use Kajona\Pages\Portal\ElementPortal;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
+use Kajona\Pages\System\PagesPageelement;
+use Kajona\System\System\AdminListableInterface;
+use Kajona\System\System\Classloader;
+use Kajona\System\System\LanguagesLanguage;
+use Kajona\System\System\Model;
+use Kajona\System\System\ModelInterface;
+use Kajona\System\System\Objectfactory;
+use Kajona\System\System\OrmObjectlist;
+use Kajona\System\System\OrmObjectlistRestriction;
+use Kajona\System\System\Resourceloader;
 
 /**
  * Model for a navigation point itself
@@ -18,7 +32,7 @@ use Kajona\Pages\System\PagesPage;
  * @module navigation
  * @moduleId _navigation_modul_id_
  */
-class class_module_navigation_point extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_admin_listable {
+class NavigationPoint extends Model implements ModelInterface, AdminListableInterface {
 
     /**
      * @var string
@@ -162,13 +176,13 @@ class class_module_navigation_point extends \Kajona\System\System\Model implemen
      * @param null $intEnd
      *
      * @internal param $bool
-     * @return class_module_navigation_point[]
+     * @return NavigationPoint[]
      * @static
      */
     public static function getNaviLayer($strSystemid, $bitJustActive = false, $intStart = null, $intEnd = null) {
-        $objOrm = new class_orm_objectlist();
+        $objOrm = new OrmObjectlist();
         if($bitJustActive)
-            $objOrm->addWhereRestriction(new class_orm_objectlist_restriction(" AND system_status = 1 ", array()));
+            $objOrm->addWhereRestriction(new OrmObjectlistRestriction(" AND system_status = 1 ", array()));
         return $objOrm->getObjectList(get_called_class(), $strSystemid, $intStart, $intEnd);
     }
 
@@ -182,7 +196,7 @@ class class_module_navigation_point extends \Kajona\System\System\Model implemen
      *
      * @param string $strSystemid
      *
-     * @return class_module_navigation_point
+     * @return NavigationPoint
      */
     public static function getDynamicNaviLayer($strSystemid) {
 
@@ -190,14 +204,14 @@ class class_module_navigation_point extends \Kajona\System\System\Model implemen
 
         //split modes  - regular navigation or generated out of the pages / folders
 
-        /** @var $objNode class_module_navigation_point|class_module_navigation_tree */
-        $objNode = class_objectfactory::getInstance()->getObject($strSystemid);
+        /** @var $objNode NavigationPoint|NavigationTree */
+        $objNode = Objectfactory::getInstance()->getObject($strSystemid);
 
         //current node is a navigation-node
-        if($objNode instanceof class_module_navigation_point || $objNode instanceof class_module_navigation_tree) {
+        if($objNode instanceof NavigationPoint || $objNode instanceof NavigationTree) {
 
             //check where the point links to - navigation-point or pages-entry
-            if($objNode instanceof class_module_navigation_tree && validateSystemid($objNode->getStrFolderId())) {
+            if($objNode instanceof NavigationTree && validateSystemid($objNode->getStrFolderId())) {
                 $arrReturn = self::loadPageLevelToNavigationNodes($objNode->getStrFolderId());
             }
             else
@@ -220,12 +234,12 @@ class class_module_navigation_point extends \Kajona\System\System\Model implemen
      * @param string $strPagename
      *
      * @static
-     * @return class_module_navigation_point[]
+     * @return NavigationPoint[]
      */
     public static function loadPagePoint($strPagename) {
-        $objOrm = new class_orm_objectlist();
-        $objOrm->addWhereRestriction(new class_orm_objectlist_restriction(" AND system_status = 1 ", array()));
-        $objOrm->addWhereRestriction(new class_orm_objectlist_restriction(" AND navigation_page_i = ? ", array($strPagename)));
+        $objOrm = new OrmObjectlist();
+        $objOrm->addWhereRestriction(new OrmObjectlistRestriction(" AND system_status = 1 ", array()));
+        $objOrm->addWhereRestriction(new OrmObjectlistRestriction(" AND navigation_page_i = ? ", array($strPagename)));
         return $objOrm->getObjectList(get_called_class());
     }
 
@@ -237,7 +251,7 @@ class class_module_navigation_point extends \Kajona\System\System\Model implemen
      *
      * @param string $strSourceId
      *
-     * @return class_module_navigation_point[]|array
+     * @return NavigationPoint[]|array
      * @since 3.4
      */
     private static function loadPageLevelToNavigationNodes($strSourceId) {
@@ -251,16 +265,16 @@ class class_module_navigation_point extends \Kajona\System\System\Model implemen
             if($objOneEntry->getIntRecordStatus() == 0 || !$objOneEntry->rightView())
                 continue;
 
-            $objLanguage = new class_module_languages_language();
+            $objLanguage = new LanguagesLanguage();
 
             if($objOneEntry instanceof PagesPage) {
 
                 //validate if the page to be linked has a template assigned and at least a single element created
                 if($objOneEntry->getIntType() == PagesPage::$INT_TYPE_ALIAS
-                    || ($objOneEntry->getStrTemplate() != "" && count(class_module_pages_pageelement::getPlainElementsOnPage($objOneEntry->getSystemid(), true, $objLanguage->getStrPortalLanguage())) > 0)
+                    || ($objOneEntry->getStrTemplate() != "" && count(PagesPageelement::getPlainElementsOnPage($objOneEntry->getSystemid(), true, $objLanguage->getStrPortalLanguage())) > 0)
                 ) {
 
-                    $objPoint = new class_module_navigation_point();
+                    $objPoint = new NavigationPoint();
                     $objPoint->setStrName($objOneEntry->getStrBrowsername() != "" ? $objOneEntry->getStrBrowsername() : $objOneEntry->getStrName());
                     $objPoint->setIntRecordStatus(1);
 
@@ -289,7 +303,7 @@ class class_module_navigation_point extends \Kajona\System\System\Model implemen
 
         //merge with elements on the page - if given
         /** @var $objInstance PagesPage */
-        $objInstance = class_objectfactory::getInstance()->getObject($strSourceId);
+        $objInstance = Objectfactory::getInstance()->getObject($strSourceId);
         if($objInstance instanceof PagesPage) {
 
             if($objInstance->getIntType() != PagesPage::$INT_TYPE_ALIAS)
@@ -309,26 +323,26 @@ class class_module_navigation_point extends \Kajona\System\System\Model implemen
      *
      * @param PagesPage $objPage
      *
-     * @see class_element_portal::getNavigationEntries()
-     * @return class_module_navigation_point[]|array
+     * @see ElementPortal::getNavigationEntries()
+     * @return NavigationPoint[]|array
      * @since 4.0
      */
     private static function getAdditionalEntriesForPage(PagesPage $objPage) {
         $arrReturn = array();
-        $objLanguage = new class_module_languages_language();
-        $arrPlainElements = class_module_pages_pageelement::getPlainElementsOnPage($objPage->getSystemid(), true, $objLanguage->getStrPortalLanguage());
+        $objLanguage = new LanguagesLanguage();
+        $arrPlainElements = PagesPageelement::getPlainElementsOnPage($objPage->getSystemid(), true, $objLanguage->getStrPortalLanguage());
 
         $strOldPageName = $objPage->getParam("page");
 
         foreach($arrPlainElements as $arrOneElementOnPage) {
             //Build the class-name for the object
 
-            $strFilename = \class_resourceloader::getInstance()->getPathForFile("/portal/elements/".$arrOneElementOnPage["element_class_portal"]);
-            $objInstance = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Portal\\ElementPortal", null, array(new class_module_pages_pageelement($arrOneElementOnPage["system_id"])), true);
+            $strFilename = Resourceloader::getInstance()->getPathForFile("/portal/elements/".$arrOneElementOnPage["element_class_portal"]);
+            $objInstance = Classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Portal\\ElementPortal", null, array(new PagesPageelement($arrOneElementOnPage["system_id"])), true);
 
             if($objInstance::providesNavigationEntries()) {
 
-                /** @var  class_element_portal $objInstance */
+                /** @var  ElementPortal $objInstance */
                 $objInstance->setParam("page", $objPage->getStrName());
 
                 $arrNavigationPoints = $objInstance->getNavigationEntries();

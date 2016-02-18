@@ -7,6 +7,13 @@
 *   $Id$                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Navigation\Admin\Elements;
+
+use Kajona\Navigation\System\NavigationTree;
+use Kajona\Pages\Admin\AdminElementInterface;
+use Kajona\Pages\Admin\ElementAdmin;
+use Kajona\System\Admin\AdminFormgenerator;
+
 /**
  * Admin class of the navigation element
  *
@@ -15,7 +22,7 @@
  *
  * @targetTable element_navigation.content_id
  */
-class class_element_navigation_admin extends class_element_admin implements interface_admin_element {
+class ElementNavigationAdmin extends ElementAdmin implements AdminElementInterface {
 
     /**
      * Legacy support
@@ -57,13 +64,13 @@ class class_element_navigation_admin extends class_element_admin implements inte
 
 
     /**
-     * @return class_admin_formgenerator|null
+     * @return AdminFormgenerator|null
      */
     public function getAdminForm() {
         $objForm = parent::getAdminForm();
 
         $arrNavigationsDropdown = array();
-        foreach(class_module_navigation_tree::getObjectList() as $objOneNavigation)
+        foreach(NavigationTree::getObjectList() as $objOneNavigation)
             $arrNavigationsDropdown[$objOneNavigation->getSystemid()] = $objOneNavigation->getStrDisplayName();
         $objForm->getField("repo")->setArrKeyValues($arrNavigationsDropdown);
 

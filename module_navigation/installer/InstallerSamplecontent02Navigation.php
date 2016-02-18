@@ -6,23 +6,24 @@
 ********************************************************************************************************/
 
 namespace Kajona\Navigation\Installer;
-use class_db;
-use class_module_navigation_point;
-use class_module_navigation_tree;
-use interface_sc_installer;
+
+use Kajona\Navigation\System\NavigationPoint;
+use Kajona\Navigation\System\NavigationTree;
 use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
+use Kajona\System\System\Database;
+use Kajona\System\System\SamplecontentInstallerInterface;
 
 /**
  * Installer of the navigation samplecontent
  *
  */
-class InstallerSamplecontent02Navigation implements interface_sc_installer  {
+class InstallerSamplecontent02Navigation implements SamplecontentInstallerInterface {
 
     /**
-     * @var class_db
+     * @var Database
      */
     private $objDB;
     private $strContentLanguage;
@@ -51,7 +52,7 @@ class InstallerSamplecontent02Navigation implements interface_sc_installer  {
 
         $strReturn = "";
         $strReturn .= "Creating new mainnavigation-tree\n";
-        $objNaviTree = new class_module_navigation_tree();
+        $objNaviTree = new NavigationTree();
         $objNaviTree->setStrName("mainnavigation");
         $objNaviTree->setStrFolderId($strNaviFolderId);
         $objNaviTree->updateObjectToDb();
@@ -60,14 +61,14 @@ class InstallerSamplecontent02Navigation implements interface_sc_installer  {
 
 
         $strReturn .= "Creating new portalnavigation-tree\n";
-        $objNaviTree = new class_module_navigation_tree();
+        $objNaviTree = new NavigationTree();
         $objNaviTree->setStrName("portalnavigation");
         $objNaviTree->updateObjectToDb();
         $strTreePortalId = $objNaviTree->getSystemid();
         $strReturn .= "ID of new navigation-tree: ".$strTreePortalId."\n";
 
         $strReturn .= "Creating navigation points\n";
-        $objNaviPoint = new class_module_navigation_point();
+        $objNaviPoint = new NavigationPoint();
         $objNaviPoint->setStrName("Home");
         $objNaviPoint->setStrPageI("index");
         $objNaviPoint->updateObjectToDb($strTreePortalId);
@@ -184,13 +185,13 @@ class InstallerSamplecontent02Navigation implements interface_sc_installer  {
         }
 
         $strReturn .= "Creating navigation points\n";
-        $objNaviPoint = new class_module_navigation_point();
+        $objNaviPoint = new NavigationPoint();
         $objNaviPoint->setStrName("Sitemap");
         $objNaviPoint->setStrPageI("sitemap");
         $objNaviPoint->updateObjectToDb($strTreePortalId);
         $strReturn .= "ID of new navigation point ".$objNaviPoint->getSystemid().".\n";
 
-        $objNaviPoint = new class_module_navigation_point();
+        $objNaviPoint = new NavigationPoint();
         if($this->strContentLanguage == "de")
             $objNaviPoint->setStrName("Impressum");
         else

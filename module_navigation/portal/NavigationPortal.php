@@ -4,19 +4,26 @@
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
+
+namespace Kajona\Navigation\Portal;
+
+use Kajona\Navigation\System\NavigationPoint;
+use Kajona\Navigation\System\NavigationTree;
 use Kajona\Pages\Portal\PagesPortaleditor;
-use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
 use Kajona\Pages\System\PagesPortaleditorActionEnum;
 use Kajona\Pages\System\PagesPortaleditorSystemidAction;
-
+use Kajona\System\Portal\PortalController;
+use Kajona\System\Portal\PortalInterface;
+use Kajona\System\System\Link;
+use Kajona\System\System\Objectfactory;
 
 /**
  * Portal-part of the navigation. Creates the different navigation-views as sitemap or tree.
  * This class was refactored for Kajona 3.4. Since 3.4 it's possible to mix regular navigation and
  * page/folder structures within a single tree.
- * Therefore only the nodes in $arrTempNodes may be used. A instantiation via new class_module_navigation_point()
+ * Therefore only the nodes in $arrTempNodes may be used. A instantiation via new NavigationPoint()
  * is not recommend since a node created out of the pages will fail to load this way!
  *
  * @package module_navigation
@@ -25,7 +32,7 @@ use Kajona\Pages\System\PagesPortaleditorSystemidAction;
  * @module navigation
  * @moduleId _navigation_modul_id_
  */
-class class_module_navigation_portal extends class_portal_controller implements interface_portal
+class NavigationPortal extends PortalController implements PortalInterface
 {
 
     private $strCurrentSite = "";
@@ -64,8 +71,8 @@ class class_module_navigation_portal extends class_portal_controller implements 
         if (isset($this->arrElementData["navigation_id"])) {
 
             if (!isset(self::$arrStaticNodes[$this->arrElementData["navigation_id"]])) {
-                /** @var class_module_navigation_tree $objNavigation */
-                $objNavigation = class_objectfactory::getInstance()->getObject($this->arrElementData["navigation_id"]);
+                /** @var NavigationTree $objNavigation */
+                $objNavigation = Objectfactory::getInstance()->getObject($this->arrElementData["navigation_id"]);
                 self::$arrStaticNodes[$this->arrElementData["navigation_id"]] = $objNavigation->getCompleteNaviStructure();
             }
 
@@ -90,17 +97,17 @@ class class_module_navigation_portal extends class_portal_controller implements 
     private function addPortaleditorCode($strReturn)
     {
 
-        $objNavigation = new class_module_navigation_tree($this->arrElementData["navigation_id"]);
+        $objNavigation = new NavigationTree($this->arrElementData["navigation_id"]);
 
         //only add the code, if not auto-generated
         if (!validateSystemid($objNavigation->getStrFolderId())) {
             PagesPortaleditor::getInstance()->registerAction(
-                new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), class_link::getLinkAdminHref($this->getArrModule("module"), "list", "&systemid={$this->arrElementData['navigation_id']}"), $this->arrElementData["navigation_id"])
+                new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), Link::getLinkAdminHref($this->getArrModule("module"), "list", "&systemid={$this->arrElementData['navigation_id']}"), $this->arrElementData["navigation_id"])
             );
         }
         else {
             PagesPortaleditor::getInstance()->registerAction(
-                new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), class_link::getLinkAdminHref("pages", "list", "&systemid={$objNavigation->getStrFolderId()}"), $objNavigation->getStrFolderId())
+                new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), Link::getLinkAdminHref("pages", "list", "&systemid={$objNavigation->getStrFolderId()}"), $objNavigation->getStrFolderId())
             );
         }
 
@@ -121,7 +128,7 @@ class class_module_navigation_portal extends class_portal_controller implements 
 
         $strReturn = "";
         //check rights on the navigation
-        $objNavi = new class_module_navigation_tree($this->arrElementData["navigation_id"]);
+        $objNavi = new NavigationTree($this->arrElementData["navigation_id"]);
         if ($objNavi->rightView() && $objNavi->getIntRecordStatus() == 1) {
             //create a stack to highlight the points being active
             $objActivePoint = $this->searchPageInNavigationTree($this->strCurrentSite, $this->arrElementData["navigation_id"], $this->getParam("systemid"), $this->getParam("action"));
@@ -218,7 +225,7 @@ class class_module_navigation_portal extends class_portal_controller implements 
      * the last one is the last parent being active, so in most cases the node on the
      * first level of the navigation
      *
-     * @param class_module_navigation_point $objActivePoint
+     * @param NavigationPoint $objActivePoint
      *
      * @return string
      */
@@ -255,7 +262,7 @@ class class_module_navigation_portal extends class_portal_controller implements 
     /**
      * Traverses the internal node-structure in order to build a stack of active nodes
      *
-     * @param class_module_navigation_point $objNodeToSearch
+     * @param NavigationPoint $objNodeToSearch
      * @param array $arrNodes
      *
      * @return string
@@ -291,7 +298,7 @@ class class_module_navigation_portal extends class_portal_controller implements 
      * @param string $strCheckId systemid to check, only used to get active id stack
      * @param string $strCheckAction action to check, only used to get active id stack
      *
-     * @return class_module_navigation_point or null
+     * @return NavigationPoint or null
      */
     private function searchPageInNavigationTree($strPagename, $strNavigationId, $strCheckId = "", $strCheckAction = "")
     {
@@ -300,7 +307,7 @@ class class_module_navigation_portal extends class_portal_controller implements 
 
         //nodestructure given?
         if (!isset($this->arrTempNodes[$strNavigationId])) {
-            $objNavigation = new class_module_navigation_tree($strNavigationId);
+            $objNavigation = new NavigationTree($strNavigationId);
             $this->arrTempNodes[$strNavigationId] = $objNavigation->getCompleteNaviStructure();
         }
 
@@ -433,7 +440,7 @@ class class_module_navigation_portal extends class_portal_controller implements 
                                     //wohooooo, an element was found.
                                     //check, if the current point is in the tree linked by the navigation - if it's a different navigation....
                                     //load the real-pageelement
-                                    $objRealElement = new class_element_navigation_portal($objElement);
+                                    $objRealElement = new NavigationPortal($objElement);
                                     $arrContent = $objRealElement->getElementContent($objElement->getSystemid());
                                     if (count($arrContent) == 0) {
                                         continue;
@@ -441,7 +448,7 @@ class class_module_navigation_portal extends class_portal_controller implements 
 
                                     //navigation found. trigger loading of nodes if not yet happend
                                     if (!isset($this->arrTempNodes[$arrContent["navigation_id"]])) {
-                                        $objNavigation = new class_module_navigation_tree($arrContent["navigation_id"]);
+                                        $objNavigation = new NavigationTree($arrContent["navigation_id"]);
 
                                         if ($objNavigation->getStatus() == 0) {
                                             $this->arrTempNodes[$arrContent["navigation_id"]] = array("node" => null, "subnodes" => array());
@@ -484,7 +491,7 @@ class class_module_navigation_portal extends class_portal_controller implements 
     /**
      * Creates the html-code for one single navigationpoint. The check if the user has the needed rights should have been made before!
      *
-     * @param class_module_navigation_point $objPointData
+     * @param NavigationPoint $objPointData
      * @param bool $bitActive
      * @param int $intLevel
      * @param bool $bitFirst
@@ -492,7 +499,7 @@ class class_module_navigation_portal extends class_portal_controller implements 
      *
      * @return string
      */
-    private function createNavigationPoint(class_module_navigation_point $objPointData, $bitActive, $intLevel, $bitFirst = false, $bitLast = false, $bitHasChildEntries = false)
+    private function createNavigationPoint(NavigationPoint $objPointData, $bitActive, $intLevel, $bitFirst = false, $bitLast = false, $bitHasChildEntries = false)
     {
         //and start to create a link and all needed stuff
         $arrTemp = array();
@@ -500,11 +507,11 @@ class class_module_navigation_portal extends class_portal_controller implements 
         $arrTemp["page_extern"] = $objPointData->getStrPageE();
         $arrTemp["systemid"] = $objPointData->getSystemid();
         $arrTemp["text"] = $objPointData->getStrName();
-        $arrTemp["link"] = getLinkPortal($arrTemp["page_intern"], $arrTemp["page_extern"], $objPointData->getStrTarget(), $arrTemp["text"], $objPointData->getStrLinkAction(), "", $objPointData->getStrLinkSystemid());
-        $arrTemp["href"] = getLinkPortalHref($arrTemp["page_intern"], $arrTemp["page_extern"], $objPointData->getStrLinkAction(), "", $objPointData->getStrLinkSystemid());
+        $arrTemp["link"] = Link::getLinkPortal($arrTemp["page_intern"], $arrTemp["page_extern"], $objPointData->getStrTarget(), $arrTemp["text"], $objPointData->getStrLinkAction(), "", $objPointData->getStrLinkSystemid());
+        $arrTemp["href"] = Link::getLinkPortalHref($arrTemp["page_intern"], $arrTemp["page_extern"], $objPointData->getStrLinkAction(), "", $objPointData->getStrLinkSystemid());
         $arrTemp["target"] = $objPointData->getStrTarget();
         if ($objPointData->getStrImage() != "") {
-            $arrTemp["image"] = getLinkPortal(
+            $arrTemp["image"] = Link::getLinkPortal(
                 $arrTemp["page_intern"],
                 $arrTemp["page_extern"],
                 $objPointData->getStrTarget(),
