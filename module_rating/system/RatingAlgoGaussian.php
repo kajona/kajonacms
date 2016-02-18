@@ -7,13 +7,16 @@
 *   $Id$                        *
 ********************************************************************************************************/
 
+namespace Kajona\Rating\System;
+
 
 /**
  * Does an assessed rating based on the current rating-value using the concept of the normal distribution by Gauss
  *
  * @package module_rating
  */
-class class_module_rating_algo_gaussian implements interface_module_rating_algo {
+class RatingAlgoGaussian implements ModuleRatingAlgoInterface
+{
 
     /**
      * A factor used to assess ratings depending on the number of already existing ratings.
@@ -34,18 +37,19 @@ class class_module_rating_algo_gaussian implements interface_module_rating_algo 
     /**
      * Calculates the new rating
      *
-     * @param class_module_rating_rate $objSourceRate The rating-record to update
+     * @param RatingRate $objSourceRate The rating-record to update
      * @param float $floatNewRating The rating fired by the user
      *
      * @return float the new rating
      */
-    public function doRating(class_module_rating_rate $objSourceRate, $floatNewRating) {
+    public function doRating(RatingRate $objSourceRate, $floatNewRating)
+    {
 
         //calc the rating's midpoint depending on the maximum rating value
-        $floatRatingMidpoint = (class_module_rating_rate::$intMaxRatingValue + 1) / 2;
+        $floatRatingMidpoint = (RatingRate::$intMaxRatingValue + 1) / 2;
 
         $floatAssessedRating = 0;
-        if($floatNewRating == $floatRatingMidpoint) {
+        if ($floatNewRating == $floatRatingMidpoint) {
             //the rating exactly matches the average rating value
             //it doesn't need to be assessed
             $floatAssessedRating = $floatNewRating;
@@ -60,14 +64,14 @@ class class_module_rating_algo_gaussian implements interface_module_rating_algo 
 
             //add or subtract a bonus depending on the number of already existing ratings
             $intAdditionSign = 1;
-            if($floatNewRating < $floatRatingMidpoint) {
+            if ($floatNewRating < $floatRatingMidpoint) {
                 $intAdditionSign = -1;
             }
-            $floatAssessedRating = $floatAssessedRating + $intAdditionSign * ($objSourceRate->getIntHits() / class_module_rating_algo_gaussian::$intAssessmentSoftenerFactor * 2);
+            $floatAssessedRating = $floatAssessedRating + $intAdditionSign * ($objSourceRate->getIntHits() / RatingAlgoGaussian::$intAssessmentSoftenerFactor * 2);
 
             //reset the final assessed ratings if they should exceed the user's rating
             //this could only happen with a high number of ratings on an object
-            if(($floatNewRating < $floatRatingMidpoint && $floatAssessedRating < $floatNewRating)
+            if (($floatNewRating < $floatRatingMidpoint && $floatAssessedRating < $floatNewRating)
                 || ($floatNewRating > $floatRatingMidpoint && $floatAssessedRating > $floatNewRating)
             ) {
                 $floatAssessedRating = $floatNewRating;

@@ -4,31 +4,36 @@
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*   $Id$                        *
+*   $Id$                         *
 ********************************************************************************************************/
 
+namespace Kajona\Rating\System;
+
+
 /**
- * Does an absolute, linear rating based on the current rating-value
+ * Interface to be implemented by all rating-sort-algorithms designed to calculate the lists
  *
  * @package module_rating
  */
-class class_module_rating_algo_absolute implements interface_module_rating_algo {
-
+interface ModuleRatingSortalgoInterface
+{
 
     /**
-     * Calculates the new rating
+     * Sets an array of elements to be sorted.
+     * Elements have to be an instance of interface_sortable_rating.
      *
-     * @param class_module_rating_rate $objSourceRate The rating-record to update
-     * @param float $floatNewRating The rating fired by the user
+     * @param array $arrElements
      *
-     * @return float the new rating
+     * @return void
      */
-    public function doRating(class_module_rating_rate $objSourceRate, $floatNewRating) {
-        //calc the new rating
-        $floatNewRating = (($objSourceRate->getFloatRating() * $objSourceRate->getIntHits()) + $floatNewRating) / ($objSourceRate->getIntHits() + 1);
+    public function setElementsArray($arrElements);
 
-        return $floatNewRating;
-    }
+    /**
+     * Does the sorting and returns the sorted array of elements.
+     *
+     * @return array
+     */
+    public function doSorting();
+
 
 }
-

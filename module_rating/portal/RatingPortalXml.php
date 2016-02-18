@@ -7,6 +7,13 @@
 *   $Id$                           *
 ********************************************************************************************************/
 
+namespace Kajona\Rating\Portal;
+
+use Kajona\Rating\System\RatingRate;
+use Kajona\System\Portal\PortalController;
+use Kajona\System\Portal\XmlPortalInterface;
+
+
 /**
  * Portal-class of the rating-module
  * Serves xml-requests, e.g. saves a sent rating
@@ -16,7 +23,7 @@
  * @module rating
  * @moduleId _rating_modul_id_
  */
-class class_module_rating_portal_xml extends class_portal_controller implements interface_xml_portal {
+class RatingPortalXml extends PortalController implements XmlPortalInterface {
 
 
     /**
@@ -28,9 +35,9 @@ class class_module_rating_portal_xml extends class_portal_controller implements 
     protected function actionSaveRating() {
 
         //rating already existing?
-        $objRating = class_module_rating_rate::getRating($this->getSystemid());
+        $objRating = RatingRate::getRating($this->getSystemid());
         if($objRating == null) {
-            $objRating = new class_module_rating_rate();
+            $objRating = new RatingRate();
             $objRating->setStrRatingSystemid($this->getSystemid());
             $objRating->updateObjectToDb();
         }

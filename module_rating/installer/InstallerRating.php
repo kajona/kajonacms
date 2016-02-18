@@ -7,20 +7,30 @@
 *	$Id$                                        *
 ********************************************************************************************************/
 
+namespace Kajona\Rating\Installer;
+
+use Kajona\Rating\System\RatingRate;
+use Kajona\System\System\InstallerBase;
+use Kajona\System\System\InstallerRemovableInterface;
+use Kajona\System\System\OrmSchemamanager;
+use Kajona\System\System\SystemAspect;
+use Kajona\System\System\SystemModule;
+
+
 /**
  * Class providing an installer for the rating module
  *
  * @package module_rating
  * @moduleId _rating_modul_id_
  */
-class class_installer_rating extends class_installer_base implements interface_installer_removable {
+class InstallerRating extends InstallerBase implements InstallerRemovableInterface {
 
     public function install() {
 		$strReturn = "";
-        $objManager = new class_orm_schemamanager();
+        $objManager = new OrmSchemamanager();
 
 		$strReturn .= "Installing table rating...\n";
-        $objManager->createTable("class_module_rating_rate");
+        $objManager->createTable("Kajona\\Rating\\System\\RatingRate");
 
 		$strReturn .= "Installing table rating_history...\n";
 
@@ -39,19 +49,19 @@ class class_installer_rating extends class_installer_base implements interface_i
 		$strSystemID = $this->registerModule(
             "rating",
              _rating_modul_id_,
-             "class_module_rating_portal.php",
+             "RatingPortal.php",
              "",
             $this->objMetadata->getStrVersion(),
              false,
-             "class_module_rating_portal_xml.php"
+             "RatingPortalXml.php"
         );
 
         $strReturn .= "Module registered. Module-ID: ".$strSystemID." \n";
 
         $strReturn .= "Setting aspect assignments...\n";
-        if(class_module_system_aspect::getAspectByName("content") != null) {
-            $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
-            $objModule->setStrAspect(class_module_system_aspect::getAspectByName("content")->getSystemid());
+        if(SystemAspect::getAspectByName("content") != null) {
+            $objModule = SystemModule::getModuleByName($this->objMetadata->getStrTitle());
+            $objModule->setStrAspect(SystemAspect::getAspectByName("content")->getSystemid());
             $objModule->updateObjectToDb();
         }
 
@@ -80,8 +90,8 @@ class class_installer_rating extends class_installer_base implements interface_i
      */
     public function remove(&$strReturn) {
 
-        /** @var class_module_rating_rate $objOneObject */
-        foreach(class_module_rating_rate::getObjectList() as $objOneObject) {
+        /** @var RatingRate $objOneObject */
+        foreach(RatingRate::getObjectList() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
             if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";
@@ -91,7 +101,7 @@ class class_installer_rating extends class_installer_base implements interface_i
 
         //delete the module-node
         $strReturn .= "Deleting the module-registration...\n";
-        $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
+        $objModule = SystemModule::getModuleByName($this->objMetadata->getStrTitle(), true);
         if(!$objModule->deleteObjectFromDatabase()) {
             $strReturn .= "Error deleting module, aborting.\n";
             return false;
@@ -114,50 +124,19 @@ class class_installer_rating extends class_installer_base implements interface_i
     public function update() {
 	    $strReturn = "";
         //check installed version and to which version we can update
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
 
         $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.0") {
-            $strReturn .= "Updating 4.0 to 4.1...\n";
-            $strReturn .= "Updating module-versions...\n";
-            $this->updateModuleVersion("rating", "4.1");
-        }
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.1") {
-            $strReturn .= "Updating 4.1 to 4.2...\n";
-            $strReturn .= "Updating module-versions...\n";
-            $this->updateModuleVersion("rating", "4.2");
-        }
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.2") {
-            $strReturn .= "Updating 4.2 to 4.3...\n";
-            $strReturn .= "Updating module-versions...\n";
-            $this->updateModuleVersion("rating", "4.3");
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.3") {
-            $strReturn .= "Updating 4.3 to 4.4...\n";
-            $this->updateModuleVersion("rating", "4.4");
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.4") {
-            $strReturn .= "Updating 4.4 to 4.5...\n";
-            $this->updateModuleVersion("rating", "4.5");
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.5") {
             $strReturn .= "Updating 4.5 to 4.6...\n";
             $this->updateModuleVersion("rating", "4.6");
         }
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.6") {
             $strReturn .= "Updating to 4.7...\n";
             $this->updateModuleVersion("rating", "4.7");

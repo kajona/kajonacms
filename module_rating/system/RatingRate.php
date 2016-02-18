@@ -5,6 +5,14 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Rating\System;
+
+use Kajona\System\System\Cookie;
+use Kajona\System\System\Logger;
+use Kajona\System\System\OrmObjectlist;
+use Kajona\System\System\OrmObjectlistRestriction;
+
+
 /**
  * Model for rating itself
  *
@@ -15,7 +23,8 @@
  * @module rating
  * @moduleId _rating_modul_id_
  */
-class class_module_rating_rate extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface {
+class RatingRate extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface
+{
 
     const RATING_COOKIE = "kj_ratingHistory";
 
@@ -61,7 +70,8 @@ class class_module_rating_rate extends \Kajona\System\System\Model implements \K
      *
      * @return string
      */
-    public function getStrDisplayName() {
+    public function getStrDisplayName()
+    {
         return "rating for ".$this->getStrRatingSystemid();
     }
 
@@ -73,16 +83,18 @@ class class_module_rating_rate extends \Kajona\System\System\Model implements \K
      *
      * @return bool
      */
-    public function saveRating($floatRating) {
-        if($floatRating < 0 || !$this->isRateableByCurrentUser() || $floatRating > class_module_rating_rate::$intMaxRatingValue)
+    public function saveRating($floatRating)
+    {
+        if ($floatRating < 0 || !$this->isRateableByCurrentUser() || $floatRating > RatingRate::$intMaxRatingValue) {
             return false;
+        }
 
         $floatRatingOriginal = $floatRating;
 
-        $objRatingAlgo = new class_module_rating_algo_gaussian();
+        $objRatingAlgo = new RatingAlgoGaussian();
         $floatRating = $objRatingAlgo->doRating($this, $floatRating);
 
-        class_logger::getInstance()->addLogRow("updated rating of record ".$this->getSystemid().", added ".$floatRating, class_logger::$levelInfo);
+        Logger::getInstance()->addLogRow("updated rating of record ".$this->getSystemid().", added ".$floatRating, Logger::$levelInfo);
 
         //update the values to remain consistent
         $this->setFloatRating($floatRating);
@@ -97,8 +109,8 @@ class class_module_rating_rate extends \Kajona\System\System\Model implements \K
         //}
 
         //and save it in a cookie
-        $objCookie = new class_cookie();
-        $objCookie->setCookie(class_module_rating_rate::RATING_COOKIE, getCookie(class_module_rating_rate::RATING_COOKIE).$this->getSystemid().",");
+        $objCookie = new Cookie();
+        $objCookie->setCookie(RatingRate::RATING_COOKIE, getCookie(RatingRate::RATING_COOKIE).$this->getSystemid().",");
 
         //flush the page-cache to have all pages rendered using the correct values
         $this->flushCompletePagesCache();
@@ -111,14 +123,15 @@ class class_module_rating_rate extends \Kajona\System\System\Model implements \K
      *
      * @return bool
      */
-    public function isRateableByCurrentUser() {
+    public function isRateableByCurrentUser()
+    {
         $bitReturn = true;
 
         //sql-check - only if user is not a guest
         $arrRow = array();
         $arrRow["COUNT(*)"] = 0;
 
-        if($this->objSession->getUserID() != "") {
+        if ($this->objSession->getUserID() != "") {
             $strQuery = "SELECT COUNT(*) FROM ".$this->objDB->encloseTableName(_dbprefix_."rating_history")."
 	    	               WHERE rating_history_rating = ?
 	    	                 AND rating_history_user = ?";
@@ -126,18 +139,19 @@ class class_module_rating_rate extends \Kajona\System\System\Model implements \K
             $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid(), $this->objSession->getUserID()));
         }
 
-        if($arrRow["COUNT(*)"] == 0) {
+        if ($arrRow["COUNT(*)"] == 0) {
             //cookie available?
-            $objCookie = new class_cookie();
-            if($objCookie->getCookie(class_module_rating_rate::RATING_COOKIE) != "") {
-                $strRatingCookie = $objCookie->getCookie(class_module_rating_rate::RATING_COOKIE);
-                if(uniStrpos($strRatingCookie, $this->getSystemid()) !== false) {
+            $objCookie = new Cookie();
+            if ($objCookie->getCookie(RatingRate::RATING_COOKIE) != "") {
+                $strRatingCookie = $objCookie->getCookie(RatingRate::RATING_COOKIE);
+                if (uniStrpos($strRatingCookie, $this->getSystemid()) !== false) {
                     $bitReturn = false;
                 }
             }
         }
-        else
+        else {
             $bitReturn = false;
+        }
 
         return $bitReturn;
     }
@@ -150,13 +164,15 @@ class class_module_rating_rate extends \Kajona\System\System\Model implements \K
      * @param string $strChecksum
      *
      * @static
-     * @return class_module_rating_rate
+     * @return RatingRate
      */
-    public static function getRating($strSystemid, $strChecksum = "") {
-        $objORM = new class_orm_objectlist();
-        $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND rating_systemid = ?", $strSystemid));
-        if($strChecksum != "")
-            $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND rating_checksum = ?"), $strChecksum);
+    public static function getRating($strSystemid, $strChecksum = "")
+    {
+        $objORM = new OrmObjectlist();
+        $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND rating_systemid = ?", $strSystemid));
+        if ($strChecksum != "") {
+            $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND rating_checksum = ?", $strChecksum));
+        }
 
         return $objORM->getSingleObject(get_called_class());
     }
@@ -172,7 +188,8 @@ class class_module_rating_rate extends \Kajona\System\System\Model implements \K
      *
      * @return array
      */
-    public function getRatingHistoryAsArray() {
+    public function getRatingHistoryAsArray()
+    {
         $strQuery = "SELECT * FROM ".$this->objDB->encloseTableName(_dbprefix_."rating_history")."
     	             WHERE ".$this->objDB->encloseColumnName("rating_history_rating")." = ?
     	             ORDER BY ".$this->objDB->encloseColumnName("rating_history_timestamp")." ASC";
@@ -184,14 +201,16 @@ class class_module_rating_rate extends \Kajona\System\System\Model implements \K
     /**
      * @return string
      */
-    public function getStrRatingSystemid() {
+    public function getStrRatingSystemid()
+    {
         return $this->strRatingSystemid;
     }
 
     /**
      * @return string
      */
-    public function getStrRatingChecksum() {
+    public function getStrRatingChecksum()
+    {
         return $this->strRatingChecksum;
     }
 
@@ -200,9 +219,11 @@ class class_module_rating_rate extends \Kajona\System\System\Model implements \K
      *
      * @return float
      */
-    public function getFloatRating($bitRound = true) {
-        if($this->floatRating == "")
+    public function getFloatRating($bitRound = true)
+    {
+        if ($this->floatRating == "") {
             return 0.0;
+        }
 
         return $this->floatRating;
     }
@@ -210,9 +231,11 @@ class class_module_rating_rate extends \Kajona\System\System\Model implements \K
     /**
      * @return int
      */
-    public function getIntHits() {
-        if($this->intHits == "")
+    public function getIntHits()
+    {
+        if ($this->intHits == "") {
             return 0;
+        }
 
         return $this->intHits;
     }
@@ -220,39 +243,48 @@ class class_module_rating_rate extends \Kajona\System\System\Model implements \K
 
     /**
      * @param string $strRatingSystemid
+     *
      * @return void
      */
-    public function setStrRatingSystemid($strRatingSystemid) {
+    public function setStrRatingSystemid($strRatingSystemid)
+    {
         $this->strRatingSystemid = $strRatingSystemid;
     }
 
     /**
      * @param string $strRatingChecksum
+     *
      * @return void
      */
-    public function setStrRatingChecksum($strRatingChecksum) {
+    public function setStrRatingChecksum($strRatingChecksum)
+    {
         $this->strRatingChecksum = $strRatingChecksum;
     }
 
     /**
      * @param float $floatRating
+     *
      * @return void
      */
-    public function setFloatRating($floatRating) {
-        if($floatRating > class_module_rating_rate::$intMaxRatingValue) {
-            $floatRating = class_module_rating_rate::$intMaxRatingValue;
+    public function setFloatRating($floatRating)
+    {
+        if ($floatRating > RatingRate::$intMaxRatingValue) {
+            $floatRating = RatingRate::$intMaxRatingValue;
         }
-        if($floatRating < 0)
+        if ($floatRating < 0) {
             $floatRating = 0;
+        }
 
         $this->floatRating = $floatRating;
     }
 
     /**
      * @param int $intHits
+     *
      * @return void
      */
-    public function setIntHits($intHits) {
+    public function setIntHits($intHits)
+    {
         $this->intHits = $intHits;
     }
 
