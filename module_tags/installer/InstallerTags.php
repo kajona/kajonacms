@@ -33,7 +33,7 @@ class InstallerTags extends InstallerBase implements InstallerRemovableInterface
 
 		//tags_tag --------------------------------------------------------------------------------------
 		$strReturn .= "Installing table tags_tag...\n";
-        $objManager->createTable("class_module_tags_tag");
+        $objManager->createTable("Kajona\\Tags\\System\\TagsTag");
 
 		$strReturn .= "Installing table tags_member...\n";
         $arrFields = array();
@@ -47,7 +47,7 @@ class InstallerTags extends InstallerBase implements InstallerRemovableInterface
 			$strReturn .= "An error occurred! ...\n";
 
         $strReturn .= "Installing table tags_favorite...\n";
-        $objManager->createTable("class_module_tags_favorite");
+        $objManager->createTable("Kajona\\Tags\\System\\TagsFavorite");
 
 		//register the module
 		$this->registerModule(

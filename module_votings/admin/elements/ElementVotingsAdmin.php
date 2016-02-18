@@ -7,6 +7,12 @@
 *	$Id$                                       *
 ********************************************************************************************************/
 
+namespace Kajona\Votings\Admin\Elements;
+
+use Kajona\Pages\Admin\AdminElementInterface;
+use Kajona\Pages\Admin\ElementAdmin;
+use Kajona\Votings\System\VotingsVoting;
+
 /**
  * Class representing the admin-part of the votings element
  *
@@ -15,7 +21,7 @@
  *
  * @targetTable element_universal.content_id
  */
-class class_element_votings_admin extends class_element_admin implements interface_admin_element {
+class ElementVotingsAdmin extends ElementAdmin implements AdminElementInterface {
 
     /**
      * @var string
@@ -53,7 +59,7 @@ class class_element_votings_admin extends class_element_admin implements interfa
     public function getAdminForm() {
         $objForm = parent::getAdminForm();
 
-        $arrRawVotings = class_module_votings_voting::getObjectList(true);
+        $arrRawVotings = VotingsVoting::getObjectList(true);
         $arrVotings = array();
 
         foreach ($arrRawVotings as $objOneVoting)

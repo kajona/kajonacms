@@ -28,10 +28,10 @@ class class_installer_dashboard extends InstallerBase implements InstallerInterf
 
         $objManager = new OrmSchemamanager();
 		$strReturn .= "Installing table dashboard...\n";
-        $objManager->createTable("class_module_dashboard_widget");
+        $objManager->createTable("Kajona\\Dashboard\\System\\DashboardWidget");
 
         //the dashboard
-        $this->registerModule("dashboard", _dashboard_module_id_, "", "class_module_dashboard_admin.php", $this->objMetadata->getStrVersion(), true, "", "class_module_dashboard_admin_xml.php");
+        $this->registerModule("dashboard", _dashboard_module_id_, "", "DashboardAdmin.php", $this->objMetadata->getStrVersion(), true, "", "DashboardAdminXml.php");
 
         $strReturn .= "Setting dashboard to pos 1 in navigation.../n";
         $objModule = SystemModule::getModuleByName("dashboard");

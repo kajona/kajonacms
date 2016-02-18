@@ -7,6 +7,17 @@
 *	$Id$                                *
 ********************************************************************************************************/
 
+namespace Kajona\Votings\System;
+
+use Kajona\System\System\AdminListableInterface;
+use Kajona\System\System\Link;
+use Kajona\System\System\Model;
+use Kajona\System\System\ModelInterface;
+use Kajona\System\System\OrmComparatorEnum;
+use Kajona\System\System\OrmObjectlist;
+use Kajona\System\System\OrmObjectlistSystemstatusRestriction;
+use Kajona\System\System\SearchResultobjectInterface;
+
 /**
  * Model for a single voting, so the entry to a voting.
  * Represents the title
@@ -18,7 +29,7 @@
  * @module votings
  * @moduleId _votings_module_id_
  */
-class class_module_votings_voting extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_admin_listable, interface_search_resultobject {
+class VotingsVoting extends Model implements ModelInterface, AdminListableInterface, SearchResultobjectInterface {
 
     /**
      * @var string
@@ -56,7 +67,7 @@ class class_module_votings_voting extends \Kajona\System\System\Model implements
      * @return mixed
      */
     public function getSearchAdminLinkForObject() {
-        return getLinkAdminHref("votings", "listAnswers", "&systemid=".$this->getSystemid());
+        return Link::getLinkAdminHref("votings", "listAnswers", "&systemid=".$this->getSystemid());
     }
 
 
@@ -108,13 +119,13 @@ class class_module_votings_voting extends \Kajona\System\System\Model implements
      * @param bool $intStart
      * @param bool $intEnd
      *
-     * @return class_module_votings_voting[]
+     * @return VotingsVoting[]
      * @static
      */
     public static function getObjectList($bitOnlyActive = false, $intStart = false, $intEnd = false) {
-        $objOrm = new class_orm_objectlist();
+        $objOrm = new OrmObjectlist();
         if($bitOnlyActive) {
-            $objOrm->addWhereRestriction(new class_orm_objectlist_systemstatus_restriction(class_orm_comparator_enum::NotEqual(), 0));
+            $objOrm->addWhereRestriction(new OrmObjectlistSystemstatusRestriction(OrmComparatorEnum::NotEqual(), 0));
         }
         return $objOrm->getObjectList(__CLASS__, "", $intStart, $intEnd);
     }
@@ -128,9 +139,9 @@ class class_module_votings_voting extends \Kajona\System\System\Model implements
      */
     public function getAllAnswersCount($bitOnlyActive = false) {
 
-        $objOrm = new class_orm_objectlist();
+        $objOrm = new OrmObjectlist();
         if($bitOnlyActive) {
-            $objOrm->addWhereRestriction(new class_orm_objectlist_systemstatus_restriction(class_orm_comparator_enum::NotEqual(), 0));
+            $objOrm->addWhereRestriction(new OrmObjectlistSystemstatusRestriction(OrmComparatorEnum::NotEqual(), 0));
         }
         return $objOrm->getObjectCount(__CLASS__);
     }

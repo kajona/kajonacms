@@ -34,13 +34,13 @@ class InstallerNews extends InstallerBase implements InstallerRemovableInterface
         $objManager = new OrmSchemamanager();
 
 		$strReturn .= "Installing table news_category...\n";
-        $objManager->createTable("class_module_news_category");
+        $objManager->createTable("Kajona\\News\\System\\NewsCategory");
 
 		$strReturn .= "Installing table news...\n";
-        $objManager->createTable("class_module_news_news");
+        $objManager->createTable("Kajona\\News\\System\\NewsNews");
 
 		$strReturn .= "Installing table news_feed...\n";
-        $objManager->createTable("class_module_news_feed");
+        $objManager->createTable("Kajona\\News\\System\\NewsFeed");
 
 		//register the module
 		$this->registerModule(

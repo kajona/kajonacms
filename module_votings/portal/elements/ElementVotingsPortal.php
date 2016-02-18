@@ -7,6 +7,12 @@
 *	$Id$						               	*
 ********************************************************************************************************/
 
+namespace Kajona\Votings\Portal\Elements;
+
+use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\Portal\PortalElementInterface;
+use Kajona\System\System\SystemModule;
+
 /**
  * Portal-part of the votings-element
  *
@@ -14,7 +20,7 @@
  * @author sidler@mulchprod.de
  * @targetTable element_universal.content_id
  */
-class class_element_votings_portal extends class_element_portal implements interface_portal_element {
+class ElementVotingsPortal extends ElementPortal implements PortalElementInterface {
 
 
     /**
@@ -25,7 +31,7 @@ class class_element_votings_portal extends class_element_portal implements inter
     public function loadData() {
         $strReturn = "";
         //Load the data
-        $objvotingsModule = class_module_system_module::getModuleByName("votings");
+        $objvotingsModule = SystemModule::getModuleByName("votings");
         if($objvotingsModule != null) {
             $objVotings = $objvotingsModule->getPortalInstanceOfConcreteModule($this->arrElementData);
             $strReturn = $objVotings->action();
