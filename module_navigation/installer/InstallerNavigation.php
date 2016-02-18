@@ -24,7 +24,7 @@ use Kajona\System\System\SystemModule;
  * @package module_navigation
  * @moduleId _navigation_modul_id_
  */
-class class_installer_navigation extends InstallerBase implements InstallerRemovableInterface {
+class InstallerNavigation extends InstallerBase implements InstallerRemovableInterface {
 
     public function install() {
 
@@ -32,13 +32,13 @@ class class_installer_navigation extends InstallerBase implements InstallerRemov
         $objManager = new OrmSchemamanager();
 
 		$strReturn .= "Installing table navigation...\n";
-        $objManager->createTable("class_module_navigation_point");
+        $objManager->createTable("Kajona\\Navigation\\System\\NavigationPoint");
 
 		//register the module
 		$this->registerModule("navigation", _navigation_modul_id_, "NavigationPortal.php", "NavigationAdmin.php", $this->objMetadata->getStrVersion() , true);
 
         $strReturn .= "Installing navigation-element table...\n";
-        $objManager->createTable("class_element_navigation_admin");
+        $objManager->createTable("Kajona\\Navigation\\Admin\\Elements\\ElementNavigationAdmin");
 
         //Register the element
         $strReturn .= "Registering navigation-element...\n";

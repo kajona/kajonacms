@@ -5,6 +5,12 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Votings\System;
+
+use Kajona\System\System\AdminListableInterface;
+use Kajona\System\System\Model;
+use Kajona\System\System\ModelInterface;
+
 /**
  * Model for a voting answer itself
  *
@@ -16,7 +22,7 @@
  * @module votings
  * @moduleId _votings_module_id_
  */
-class class_module_votings_answer extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_admin_listable  {
+class VotingsAnswer extends Model implements ModelInterface, AdminListableInterface  {
 
     /**
      * @var string

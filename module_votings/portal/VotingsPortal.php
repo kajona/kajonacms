@@ -7,6 +7,15 @@
 *	$Id$									*
 ********************************************************************************************************/
 
+namespace Kajona\Votings\Portal;
+
+use Kajona\System\Portal\PortalController;
+use Kajona\System\Portal\PortalInterface;
+use Kajona\System\System\Cookie;
+use Kajona\System\System\Link;
+use Kajona\Votings\System\VotingsAnswer;
+use Kajona\Votings\System\VotingsVoting;
+
 /**
  * Portal-class of the votings. Handles the printing of votings lists / detail
  *
@@ -16,7 +25,7 @@
  * @module votings
  * @moduleId _votings_module_id_
  */
-class class_module_votings_portal extends class_portal_controller implements interface_portal {
+class VotingsPortal extends PortalController implements PortalInterface {
 
     private $STR_COOKIE_NAME = "kajona_voting";
     private $arrCookieValues = array();
@@ -30,7 +39,7 @@ class class_module_votings_portal extends class_portal_controller implements int
         parent::__construct($arrElementData, $strSystemid);
 
         // save a cookie to store the voting
-        $objCookie = new class_cookie();
+        $objCookie = new Cookie();
         $this->arrCookieValues = explode(",", $objCookie->getCookie($this->STR_COOKIE_NAME));
 
         //any actions to perform before? e.g. voting...
@@ -53,7 +62,7 @@ class class_module_votings_portal extends class_portal_controller implements int
         $strReturn = "";
 
         //load the associated voting
-        $objVoting = new class_module_votings_voting($this->arrElementData["char1"]);
+        $objVoting = new VotingsVoting($this->arrElementData["char1"]);
 
         //view-permissions given?
         if($objVoting->rightView()) {
@@ -90,8 +99,8 @@ class class_module_votings_portal extends class_portal_controller implements int
                         $strAnswers = "";
                         $strAnswerTemplateID = $strListTemplateID = $this->objTemplate->readTemplate("/module_votings/" . $this->arrElementData["char2"], "voting_voting_option");
                         //load the list of answers
-                        /** @var class_module_votings_answer $objOneAnswer */
-                        foreach(class_module_votings_answer::getObjectList($objVoting->getSystemid()) as $objOneAnswer) {
+                        /** @var VotingsAnswer $objOneAnswer */
+                        foreach(VotingsAnswer::getObjectList($objVoting->getSystemid()) as $objOneAnswer) {
                             if($objOneAnswer->getIntRecordStatus() == 0)
                                 continue;
 
@@ -109,7 +118,7 @@ class class_module_votings_portal extends class_portal_controller implements int
                         $arrTemplate = array();
                         $arrTemplate["voting_answers"] = $strAnswers;
                         $arrTemplate["voting_systemid"] = $objVoting->getSystemid();
-                        $arrTemplate["voting_action"] = class_link::getLinkPortalHref($this->getPagename(), "", "submitVoting");
+                        $arrTemplate["voting_action"] = Link::getLinkPortalHref($this->getPagename(), "", "submitVoting");
 
                         $strVotingContent .= $this->fillTemplate($arrTemplate, $strFormTemplateID);
                     }
@@ -128,15 +137,15 @@ class class_module_votings_portal extends class_portal_controller implements int
                 $strAnswerTemplateID = $this->objTemplate->readTemplate("/module_votings/" . $this->arrElementData["char2"], "voting_result_answer");
 
                 //first run to sum up
-                /** @var class_module_votings_answer $objOneAnswer */
-                foreach(class_module_votings_answer::getObjectList($objVoting->getSystemid()) as $objOneAnswer) {
+                /** @var VotingsAnswer $objOneAnswer */
+                foreach(VotingsAnswer::getObjectList($objVoting->getSystemid()) as $objOneAnswer) {
                     if($objOneAnswer->getIntRecordStatus() == 0)
                         continue;
                     $intTotalVotes += $objOneAnswer->getIntHits();
                 }
 
-                /** @var class_module_votings_answer $objOneAnswer */
-                foreach(class_module_votings_answer::getObjectList($objVoting->getSystemid()) as $objOneAnswer) {
+                /** @var VotingsAnswer $objOneAnswer */
+                foreach(VotingsAnswer::getObjectList($objVoting->getSystemid()) as $objOneAnswer) {
                     if($objOneAnswer->getIntRecordStatus() == 0)
                         continue;
                     $arrTemplate = array();
@@ -184,7 +193,7 @@ class class_module_votings_portal extends class_portal_controller implements int
      */
     private function actionSubmitVoting() {
         //load the current voting
-        $objVoting = new class_module_votings_voting($this->arrElementData["char1"]);
+        $objVoting = new VotingsVoting($this->arrElementData["char1"]);
         // check if the submitted vote matches the current one -> multiple votings per page
         if($objVoting->getSystemid() == $this->getParam("systemid")) {
 
@@ -193,13 +202,13 @@ class class_module_votings_portal extends class_portal_controller implements int
                 //load the submitted answer
                 $strAnswerID = $this->getParam("voting_" . $objVoting->getSystemid());
                 if(validateSystemid($strAnswerID)) {
-                    $objAnswer = new class_module_votings_answer($strAnswerID);
+                    $objAnswer = new VotingsAnswer($strAnswerID);
                     $objAnswer->setIntHits($objAnswer->getIntHits() + 1);
                     $objAnswer->updateObjectToDb();
 
                     $this->arrCookieValues[] = $objVoting->getSystemid();
 
-                    $objCookie = new class_cookie();
+                    $objCookie = new Cookie();
                     $objCookie->setCookie($this->STR_COOKIE_NAME, implode(",", $this->arrCookieValues));
 
                 }

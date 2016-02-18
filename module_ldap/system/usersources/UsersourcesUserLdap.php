@@ -7,10 +7,20 @@
 *	$Id$                                            *
 ********************************************************************************************************/
 
+namespace Kajona\Ldap\System\Usersources;
+
+use Kajona\Ldap\System\Ldap;
+use Kajona\System\Admin\AdminFormgenerator;
+use Kajona\System\System\CoreEventdispatcher;
+use Kajona\System\System\Logger;
+use Kajona\System\System\SystemEventidentifier;
+use Kajona\System\System\Usersources\UsersourcesUserInterface;
+
+
 /**
- * User-part of the ldap-connector. Tries to load the user-details provided by the ldap-directory and 
+ * User-part of the ldap-connector. Tries to load the user-details provided by the ldap-directory and
  * takes care of authentication.
- * 
+ *
  * @author sidler@mulchprod.de
  * @since 3.4.1
  * @package module_ldap
@@ -18,8 +28,9 @@
  * @module ldap
  * @moduleId _ldap_module_id_
  */
-class class_usersources_user_ldap extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_usersources_user {
-    
+class UsersourcesUserLdap extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, UsersourcesUserInterface
+{
+
     private $strEmail = "";
     private $strFamilyname = "";
     private $strGivenname = "";
@@ -30,18 +41,20 @@ class class_usersources_user_ldap extends \Kajona\System\System\Model implements
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
      * @return string
      */
-    public function getStrDisplayName() {
+    public function getStrDisplayName()
+    {
         return $this->getStrEmail();
     }
 
     /**
      * Initialises the current object, if a systemid was given
      */
-    public function initObjectInternal() {
-        $strQuery = "SELECT * FROM ".$this->objDB->dbsafeString(_dbprefix_."user_ldap")." WHERE user_ldap_id=?";
+    public function initObjectInternal()
+    {
+        $strQuery = "SELECT * FROM " . $this->objDB->dbsafeString(_dbprefix_ . "user_ldap") . " WHERE user_ldap_id=?";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 
-        if(count($arrRow) > 0) {
+        if (count($arrRow) > 0) {
             $this->setStrEmail($arrRow["user_ldap_email"]);
             $this->setStrFamilyname($arrRow["user_ldap_familyname"]);
             $this->setStrGivenname($arrRow["user_ldap_givenname"]);
@@ -49,25 +62,27 @@ class class_usersources_user_ldap extends \Kajona\System\System\Model implements
             $this->setIntCfg($arrRow["user_ldap_cfg"]);
         }
     }
-    
+
     /**
      * Indicates if the current users' password may be reset, e.g. via a password-forgotten mail
      */
-    public function isPasswordResettable() {
+    public function isPasswordResettable()
+    {
         return false;
     }
-    
+
     /**
      * Passes a new system-id to the object.
      * This id has to be used for newly created objects,
      * otherwise the mapping of kajona-users to users in the
      * subsystem may fail.
-     * 
+     *
      * @param string $strId
      * @return void
      */
-    public function setNewRecordId($strId) {
-        $strQuery = "UPDATE "._dbprefix_."user_ldap SET user_ldap_id = ? WHERE user_ldap_id = ?";
+    public function setNewRecordId($strId)
+    {
+        $strQuery = "UPDATE " . _dbprefix_ . "user_ldap SET user_ldap_id = ? WHERE user_ldap_id = ?";
         $this->objDB->_pQuery($strQuery, array($strId, $this->getSystemid()));
         $this->setSystemid($strId);
     }
@@ -79,18 +94,19 @@ class class_usersources_user_ldap extends \Kajona\System\System\Model implements
      *
      * @return bool
      */
-    public function updateObjectToDb($strPrevId = false) {
-        if($this->getSystemid() == "") {
+    public function updateObjectToDb($strPrevId = false)
+    {
+        if ($this->getSystemid() == "") {
             $strUserid = generateSystemid();
             $this->setSystemid($strUserid);
-            $strQuery = "INSERT INTO "._dbprefix_."user_ldap (
+            $strQuery = "INSERT INTO " . _dbprefix_ . "user_ldap (
                         user_ldap_id, 
                         user_ldap_email, user_ldap_familyname,
                         user_ldap_givenname, user_ldap_dn, user_ldap_cfg
 
                         ) VALUES (?,?,?,?,?,?)";
 
-            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("new ldap user: ".$this->getStrDN(), class_logger::$levelInfo);
+            Logger::getInstance(Logger::USERSOURCES)->addLogRow("new ldap user: " . $this->getStrDN(), Logger::$levelInfo);
 
             return $this->objDB->_pQuery($strQuery, array(
                 $strUserid,
@@ -100,17 +116,16 @@ class class_usersources_user_ldap extends \Kajona\System\System\Model implements
                 $this->getStrDN(),
                 $this->getIntCfg()
             ));
-        }
-        else {
-                $strQuery = "UPDATE "._dbprefix_."user_ldap SET
+        } else {
+            $strQuery = "UPDATE " . _dbprefix_ . "user_ldap SET
                         user_ldap_email=?, user_ldap_familyname=?, user_ldap_givenname=?, user_ldap_dn=?, user_ldap_cfg=? WHERE user_ldap_id = ?";
 
-                $arrParams = array(
-                        $this->getStrEmail(), $this->getStrFamilyname(), $this->getStrGivenname(), $this->getStrDN(), $this->getIntCfg(), $this->getSystemid()
-                   );
-                   
+            $arrParams = array(
+                $this->getStrEmail(), $this->getStrFamilyname(), $this->getStrGivenname(), $this->getStrDN(), $this->getIntCfg(), $this->getSystemid()
+            );
 
-            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("updated user ".$this->getStrDN(), class_logger::$levelInfo);
+
+            Logger::getInstance(Logger::USERSOURCES)->addLogRow("updated user " . $this->getStrDN(), Logger::$levelInfo);
 
             return $this->objDB->_pQuery($strQuery, $arrParams);
         }
@@ -123,7 +138,8 @@ class class_usersources_user_ldap extends \Kajona\System\System\Model implements
      *
      * @return bool
      */
-    protected function updateStateToDb() {
+    protected function updateStateToDb()
+    {
         return true;
     }
 
@@ -132,12 +148,13 @@ class class_usersources_user_ldap extends \Kajona\System\System\Model implements
      *
      * @return bool
      */
-    public function deleteUser() {
-        class_logger::getInstance()->addLogRow("deleted ldap user with dn ".$this->getStrDN(), class_logger::$levelInfo);
-        $strQuery = "DELETE FROM "._dbprefix_."user_ldap WHERE user_ldap_id=?";
+    public function deleteUser()
+    {
+        Logger::getInstance()->addLogRow("deleted ldap user with dn " . $this->getStrDN(), Logger::$levelInfo);
+        $strQuery = "DELETE FROM " . _dbprefix_ . "user_ldap WHERE user_ldap_id=?";
         //call other models that may be interested
         $bitDelete = $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
-        class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, array($this->getSystemid(), get_class($this)));
+        CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_RECORDDELETED, array($this->getSystemid(), get_class($this)));
         return $bitDelete;
     }
 
@@ -145,7 +162,8 @@ class class_usersources_user_ldap extends \Kajona\System\System\Model implements
      * Deletes the current object from the system
      * @return bool
      */
-    public function deleteObjectFromDatabase() {
+    public function deleteObjectFromDatabase()
+    {
         return $this->deleteUser();
     }
 
@@ -153,94 +171,110 @@ class class_usersources_user_ldap extends \Kajona\System\System\Model implements
      * Returns the list of group-ids the current user is assigned to
      * @return array
      */
-	public function getGroupIdsForUser() {
+    public function getGroupIdsForUser()
+    {
 
-		$arrReturn = array();
-        
-        $objLdap = class_ldap::getInstance($this->intCfg);
-        $objLdapSource = new class_usersources_source_ldap();
+        $arrReturn = array();
+
+        $objLdap = Ldap::getInstance($this->intCfg);
+        $objLdapSource = new UsersourcesSourceLdap();
         $arrLdapGroups = $objLdapSource->getAllGroupIds();
-        
-        foreach($arrLdapGroups as $strOneGroupId) {
-            $objGroup = new class_usersources_group_ldap($strOneGroupId);
-            
-            if($objGroup->getIntCfg() == $this->intCfg && $objLdap->isUserMemberOfGroup($this->getStrDN(), $objGroup->getStrDn()))
+
+        foreach ($arrLdapGroups as $strOneGroupId) {
+            $objGroup = new UsersourcesGroupLdap($strOneGroupId);
+
+            if ($objGroup->getIntCfg() == $this->intCfg && $objLdap->isUserMemberOfGroup($this->getStrDN(), $objGroup->getStrDn())) {
                 $arrReturn[] = $strOneGroupId;
+            }
         }
-        
-        
+
+
         return $arrReturn;
     }
 
     /**
      * Hook to update the admin-form when editing / creating a single user
-     * @param class_admin_formgenerator $objForm
+     * @param AdminFormgenerator $objForm
      *
      * @return mixed
      */
-    public function updateAdminForm(class_admin_formgenerator $objForm) {
+    public function updateAdminForm(AdminFormgenerator $objForm)
+    {
         $objForm->getField("user_username")->setBitReadonly(true);
     }
-    
+
     /**
      * Indicates if the current user is editable or read-only
      * @return bool
      */
-	public function isEditable() {
+    public function isEditable()
+    {
         return false;
     }
 
-    public function getStrForename() {
+    public function getStrForename()
+    {
         return $this->strGivenname;
     }
-    
-    public function getStrName() {
+
+    public function getStrName()
+    {
         return $this->strFamilyname;
     }
-    
-    public function getStrEmail() {
+
+    public function getStrEmail()
+    {
         return $this->strEmail;
     }
 
-    public function setStrEmail($strEmail) {
+    public function setStrEmail($strEmail)
+    {
         $this->strEmail = $strEmail;
     }
 
-    public function getStrFamilyname() {
+    public function getStrFamilyname()
+    {
         return $this->strFamilyname;
     }
 
-    public function setStrFamilyname($strFamilyname) {
+    public function setStrFamilyname($strFamilyname)
+    {
         $this->strFamilyname = $strFamilyname;
     }
 
-    public function getStrGivenname() {
+    public function getStrGivenname()
+    {
         return $this->strGivenname;
     }
 
-    public function setStrGivenname($strGivenname) {
+    public function setStrGivenname($strGivenname)
+    {
         $this->strGivenname = $strGivenname;
     }
 
-    public function getStrDN() {
+    public function getStrDN()
+    {
         return $this->strDN;
     }
 
-    public function setStrDN($strDN) {
+    public function setStrDN($strDN)
+    {
         $this->strDN = $strDN;
     }
 
     /**
      * @return int
      */
-    public function getIntCfg() {
+    public function getIntCfg()
+    {
         return $this->intCfg;
     }
 
     /**
      * @param int $intCfg
      */
-    public function setIntCfg($intCfg) {
+    public function setIntCfg($intCfg)
+    {
         $this->intCfg = $intCfg;
     }
 
