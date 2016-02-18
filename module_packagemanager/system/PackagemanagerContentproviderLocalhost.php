@@ -6,6 +6,9 @@
 *	$Id$                                  *
 ********************************************************************************************************/
 
+namespace Kajona\Packagemanager\System;
+
+
 /**
  * A simple content-provider used to upload archives from the official kajona-repo.
  * Provides both, a search and a download-part.
@@ -15,17 +18,17 @@
  * @author flo@mediaskills.org
  * @since 4.0
  */
-class class_module_packagemanager_contentprovider_kajona extends class_module_packagemanager_contentprovider_remote_base {
+class PackagemanagerContentproviderLocalhost extends PackagemanagerContentproviderRemoteBase {
 
     function __construct() {
         parent::__construct(
-            "provider_kajona",
-            "www.kajona.de",
-            "/xml.php?module=packageserver&action=list",
-            "/download.php",
+            "provider_localhost",
+            $_SERVER["HTTP_HOST"],
+            dirname($_SERVER["REQUEST_URI"])."/xml.php?module=packageserver&action=list",
+            dirname($_SERVER["REQUEST_URI"])."/download.php",
             __CLASS__,
-            "https://",
-            443
+            "http://",
+            80
         );
     }
 }

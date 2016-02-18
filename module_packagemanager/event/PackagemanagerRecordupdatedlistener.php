@@ -4,13 +4,26 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Packagemanager\Event;
+
+use Kajona\Packagemanager\System\PackagemanagerTemplate;
+use Kajona\System\System\Cache;
+use Kajona\System\System\CoreEventdispatcher;
+use Kajona\System\System\GenericeventListenerInterface;
+use Kajona\System\System\OrmComparatorEnum;
+use Kajona\System\System\OrmObjectlist;
+use Kajona\System\System\OrmObjectlistSystemstatusRestriction;
+use Kajona\System\System\SystemEventidentifier;
+use Kajona\System\System\SystemSetting;
+
+
 /**
  * Updates the default templatepack
  *
  * @package module_packagemanager
  * @author sidler@mulchprod.de
  */
-class class_module_packagemanager_recordupdatedlistener implements interface_genericevent_listener {
+class PackagemanagerRecordupdatedlistener implements GenericeventListenerInterface {
 
 
     /**
@@ -25,12 +38,12 @@ class class_module_packagemanager_recordupdatedlistener implements interface_gen
 
         $objRecord = $arrArguments[0];
 
-        if($objRecord instanceof class_module_packagemanager_template) {
+        if($objRecord instanceof PackagemanagerTemplate) {
 
             if($objRecord->getIntRecordStatus() == 1) {
 
-                $objOrm = new class_orm_objectlist();
-                $objOrm->addWhereRestriction(new class_orm_objectlist_systemstatus_restriction(\Kajona\System\System\OrmComparatorEnum::Equal(), 1));
+                $objOrm = new OrmObjectlist();
+                $objOrm->addWhereRestriction(new OrmObjectlistSystemstatusRestriction(OrmComparatorEnum::Equal(), 1));
                 $arrPacks = $objOrm->getObjectList("class_module_packagemanager_template");
 
                 foreach($arrPacks as $objPack) {
@@ -41,13 +54,13 @@ class class_module_packagemanager_recordupdatedlistener implements interface_gen
                 }
 
                 //update the active-pack constant
-                $objSetting = class_module_system_setting::getConfigByName("_packagemanager_defaulttemplate_");
+                $objSetting = SystemSetting::getConfigByName("_packagemanager_defaulttemplate_");
                 if($objSetting !== null) {
                     $objSetting->setStrValue($objRecord->getStrName());
                     $objSetting->updateObjectToDb();
                 }
 
-                class_cache::flushCache("class_element_portal");
+                Cache::flushCache();
             }
         }
 
@@ -59,11 +72,11 @@ class class_module_packagemanager_recordupdatedlistener implements interface_gen
      * @return void
      */
     public static function staticConstruct() {
-        class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_RECORDUPDATED, new class_module_packagemanager_recordupdatedlistener());
+        CoreEventdispatcher::getInstance()->removeAndAddListener(SystemEventidentifier::EVENT_SYSTEM_RECORDUPDATED, new PackagemanagerRecordupdatedlistener());
     }
 
 
 }
 
 //register the listener
-class_module_packagemanager_recordupdatedlistener::staticConstruct();
+PackagemanagerRecordupdatedlistener::staticConstruct();

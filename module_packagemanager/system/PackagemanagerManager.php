@@ -6,6 +6,23 @@
 *	$Id$                                  *
 ********************************************************************************************************/
 
+namespace Kajona\Packagemanager\System;
+
+use Kajona\Packagemanager\System\Messageproviders\MessageproviderPackageupdate;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Config;
+use Kajona\System\System\Exception;
+use Kajona\System\System\Logger;
+use Kajona\System\System\MessagingMessage;
+use Kajona\System\System\MessagingMessagehandler;
+use Kajona\System\System\OrmBase;
+use Kajona\System\System\OrmDeletedhandlingEnum;
+use Kajona\System\System\Resourceloader;
+use Kajona\System\System\SystemSetting;
+use Kajona\System\System\UserGroup;
+use Kajona\System\System\Zip;
+
+
 /**
  * Central class to access the package-management subsystem.
  *
@@ -13,7 +30,8 @@
  * @since 4.0
  * @package module_packagemanager
  */
-class class_module_packagemanager_manager {
+class PackagemanagerManager
+{
 
     const STR_TYPE_MODULE = "MODULE";
     const STR_TYPE_TEMPLATE = "TEMPLATE";
@@ -28,19 +46,22 @@ class class_module_packagemanager_manager {
      *
      * @param string $strFilterText
      *
-     * @return class_module_packagemanager_metadata[]
+     * @return PackagemanagerMetadata[]
      */
-    public function getAvailablePackages($strFilterText = "") {
+    public function getAvailablePackages($strFilterText = "")
+    {
         $arrReturn = array();
 
-        $objModuleProvider = new class_module_packagemanager_packagemanager_module();
+        $objModuleProvider = new PackagemanagerPackagemanagerModule();
         $arrReturn = array_merge($arrReturn, $objModuleProvider->getInstalledPackages());
 
-        $objPackageProvider = new class_module_packagemanager_packagemanager_template();
+        $objPackageProvider = new PackagemanagerPackagemanagerTemplate();
         $arrReturn = array_merge($objPackageProvider->getInstalledPackages(), $arrReturn);
 
-        if($strFilterText != "") {
-            $arrReturn = array_filter($arrReturn, function($objOneMetadata) use ($strFilterText) {return uniStrpos($objOneMetadata->getStrTitle(), $strFilterText) !== false; });
+        if ($strFilterText != "") {
+            $arrReturn = array_filter($arrReturn, function ($objOneMetadata) use ($strFilterText) {
+                return uniStrpos($objOneMetadata->getStrTitle(), $strFilterText) !== false;
+            });
         }
 
         return $arrReturn;
@@ -49,36 +70,39 @@ class class_module_packagemanager_manager {
     /**
      * Sorts the array of packages ordered by the installation state, the type and the title
      *
-     * @param class_module_packagemanager_metadata[] $arrPackages
+     * @param PackagemanagerMetadata[] $arrPackages
      * @param bool $bitByNameOnly
      *
-     * @return class_module_packagemanager_metadata[]
+     * @return PackagemanagerMetadata[]
      */
-    public function sortPackages(array $arrPackages, $bitByNameOnly = false) {
-        $objManager = new class_module_packagemanager_manager();
-        usort($arrPackages, function(class_module_packagemanager_metadata $objA, class_module_packagemanager_metadata $objB) use ($bitByNameOnly, $objManager) {
+    public function sortPackages(array $arrPackages, $bitByNameOnly = false)
+    {
+        $objManager = new PackagemanagerManager();
+        usort($arrPackages, function (PackagemanagerMetadata $objA, PackagemanagerMetadata $objB) use ($bitByNameOnly, $objManager) {
 
             $objHandlerA = $objManager->getPackageManagerForPath($objA->getStrPath());
             $objHandlerB = $objManager->getPackageManagerForPath($objB->getStrPath());
 
-            if($bitByNameOnly) {
+            if ($bitByNameOnly) {
                 return strcmp($objA->getStrTitle(), $objB->getStrTitle());
             }
 
-            if($objA->getStrType() == class_module_packagemanager_manager::STR_TYPE_TEMPLATE && $objB->getStrType() != class_module_packagemanager_manager::STR_TYPE_TEMPLATE)
+            if ($objA->getStrType() == PackagemanagerManager::STR_TYPE_TEMPLATE && $objB->getStrType() != PackagemanagerManager::STR_TYPE_TEMPLATE) {
                 return -1;
-            else if($objA->getStrType() != class_module_packagemanager_manager::STR_TYPE_TEMPLATE && $objB->getStrType() == class_module_packagemanager_manager::STR_TYPE_TEMPLATE)
+            }
+            elseif ($objA->getStrType() != PackagemanagerManager::STR_TYPE_TEMPLATE && $objB->getStrType() == PackagemanagerManager::STR_TYPE_TEMPLATE) {
                 return 1;
+            }
 
-            if($objHandlerA->isInstallable() && $objHandlerB->isInstallable()) {
+            if ($objHandlerA->isInstallable() && $objHandlerB->isInstallable()) {
                 return strcmp($objA->getStrTitle(), $objB->getStrTitle());
             }
 
-            if($objHandlerA->isInstallable() && !$objHandlerB->isInstallable()) {
+            if ($objHandlerA->isInstallable() && !$objHandlerB->isInstallable()) {
                 return -1;
             }
 
-            if(!$objHandlerA->isInstallable() && $objHandlerB->isInstallable()) {
+            if (!$objHandlerA->isInstallable() && $objHandlerB->isInstallable()) {
                 return 1;
             }
 
@@ -94,13 +118,15 @@ class class_module_packagemanager_manager {
      *
      * @param string $strName
      *
-     * @return class_module_packagemanager_metadata|null
+     * @return PackagemanagerMetadata|null
      */
-    public function getPackage($strName) {
+    public function getPackage($strName)
+    {
         $arrAvailable = $this->getAvailablePackages();
-        foreach($arrAvailable as $objOnePackage) {
-            if($objOnePackage->getStrTitle() == $strName)
+        foreach ($arrAvailable as $objOnePackage) {
+            if ($objOnePackage->getStrTitle() == $strName) {
                 return $objOnePackage;
+            }
         }
 
         return null;
@@ -111,27 +137,28 @@ class class_module_packagemanager_manager {
      *
      * @param string $strPath
      *
-     * @return interface_packagemanager_packagemanager|null
+     * @return PackagemanagerPackagemanagerInterface|null
      */
-    public function getPackageManagerForPath($strPath) {
-        $objMetadata = new class_module_packagemanager_metadata();
+    public function getPackageManagerForPath($strPath)
+    {
+        $objMetadata = new PackagemanagerMetadata();
         $objMetadata->autoInit($strPath);
 
         $objManager = null;
 
-        if($objMetadata->getStrType() == self::STR_TYPE_MODULE) {
-            if($objMetadata->getBitIsPhar()) {
-                $objManager = new class_module_packagemanager_packagemanager_pharmodule();
+        if ($objMetadata->getStrType() == self::STR_TYPE_MODULE) {
+            if ($objMetadata->getBitIsPhar()) {
+                $objManager = new PackagemanagerPackagemanagerPharmodule();
             }
             else {
-                $objManager = new class_module_packagemanager_packagemanager_module();
+                $objManager = new PackagemanagerPackagemanagerModule();
             }
 
             $objManager->setObjMetadata($objMetadata);
         }
 
-        if($objMetadata->getStrType() == self::STR_TYPE_TEMPLATE) {
-            $objManager = new class_module_packagemanager_packagemanager_template();
+        if ($objMetadata->getStrType() == self::STR_TYPE_TEMPLATE) {
+            $objManager = new PackagemanagerPackagemanagerTemplate();
             $objManager->setObjMetadata($objMetadata);
         }
 
@@ -144,16 +171,18 @@ class class_module_packagemanager_manager {
      * The matching packagemanager is returned.
      *
      * @param string $strPackagePath
+     *
      * @deprecated
      *
-     * @return interface_packagemanager_packagemanager
+     * @return PackagemanagerPackagemanagerInterface
      */
-    public function extractPackage($strPackagePath) {
+    public function extractPackage($strPackagePath)
+    {
         $strTargetFolder = generateSystemid();
 
-        class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("extracting package ".$strPackagePath." to "._projectpath_."/temp/".$strTargetFolder, class_logger::$levelInfo);
+        Logger::getInstance(Logger::PACKAGEMANAGEMENT)->addLogRow("extracting package ".$strPackagePath." to "._projectpath_."/temp/".$strTargetFolder, Logger::$levelInfo);
 
-        $objZip = new class_zip();
+        $objZip = new Zip();
         $objZip->extractArchive($strPackagePath, _projectpath_."/temp/".$strTargetFolder);
 
         return $this->getPackageManagerForPath(_projectpath_."/temp/".$strTargetFolder);
@@ -162,18 +191,19 @@ class class_module_packagemanager_manager {
     /**
      * Returns all content-providers as configured in the /config/packagemanager.php file.
      *
-     * @return interface_packagemanager_contentprovider[]
+     * @return PackagemanagerContentproviderInterface[]
      */
-    public function getContentproviders() {
-        $objConfig = class_config::getInstance("packagemanager.php");
+    public function getContentproviders()
+    {
+        $objConfig = Config::getInstance("packagemanager.php");
 
         $strProvider = $objConfig->getConfig("contentproviders");
 
         $arrProviders = explode(",", $strProvider);
         $arrReturn = array();
-        foreach($arrProviders as $strOneProvider) {
+        foreach ($arrProviders as $strOneProvider) {
             $strOneProvider = trim($strOneProvider);
-            if($strOneProvider != "") {
+            if ($strOneProvider != "") {
                 $arrReturn[] = new $strOneProvider();
             }
         }
@@ -188,13 +218,14 @@ class class_module_packagemanager_manager {
      *
      * @return bool
      */
-    public function validatePackage($strPath) {
+    public function validatePackage($strPath)
+    {
         try {
-            $objMetadata = new class_module_packagemanager_metadata();
+            $objMetadata = new PackagemanagerMetadata();
             $objMetadata->autoInit($strPath);
             return true;
         }
-        catch(class_exception $objEx) {
+        catch (Exception $objEx) {
 
         }
 
@@ -210,14 +241,15 @@ class class_module_packagemanager_manager {
      *
      * @return array
      */
-    public function scanForUpdates() {
+    public function scanForUpdates()
+    {
 
-        $objManager = new class_module_packagemanager_manager();
+        $objManager = new PackagemanagerManager();
         $arrVersions = $objManager->getArrLatestVersion();
 
-        foreach($arrVersions as $strOneModule => $strOneVersion) {
+        foreach ($arrVersions as $strOneModule => $strOneVersion) {
             $objMetadata = $objManager->getPackage($strOneModule);
-            if($objMetadata != null) {
+            if ($objMetadata != null) {
                 $objManager->updateAvailable($objManager->getPackageManagerForPath($objMetadata->getStrPath()), $strOneVersion);
             }
         }
@@ -232,23 +264,25 @@ class class_module_packagemanager_manager {
      *
      * @return array array( array("title" => "version") )
      */
-    private function getArrLatestVersion() {
+    private function getArrLatestVersion()
+    {
         $arrPackages = $this->getAvailablePackages();
 
         $arrQueries = array();
-        foreach($arrPackages as $objOneMetadata) {
+        foreach ($arrPackages as $objOneMetadata) {
             $arrQueries[$objOneMetadata->getStrTitle()] = $objOneMetadata;
         }
 
         $arrResult = array();
         $arrProvider = $this->getContentproviders();
 
-        foreach($arrProvider as $objOneProvider) {
+        foreach ($arrProvider as $objOneProvider) {
             $arrRemoteVersions = $objOneProvider->searchPackage(implode(",", array_keys($arrQueries)));
-            if(!is_array($arrRemoteVersions))
+            if (!is_array($arrRemoteVersions)) {
                 continue;
+            }
 
-            foreach($arrRemoteVersions as $arrOneRemotePackage) {
+            foreach ($arrRemoteVersions as $arrOneRemotePackage) {
                 $arrResult[$arrOneRemotePackage["title"]] = $arrOneRemotePackage["version"];
                 unset($arrQueries[$arrOneRemotePackage["title"]]);
             }
@@ -263,16 +297,18 @@ class class_module_packagemanager_manager {
      * passed package are returned, but the packages depending on the passed package.
      * Useful for consistency checks, e.g. before deleting a package.
      *
-     * @param class_module_packagemanager_metadata $objMetadata
+     * @param PackagemanagerMetadata $objMetadata
      *
      * @return string[]
      */
-    public function getArrRequiredBy(class_module_packagemanager_metadata $objMetadata) {
+    public function getArrRequiredBy(PackagemanagerMetadata $objMetadata)
+    {
         $arrReturn = array();
-        foreach($this->getAvailablePackages() as $objOnePackage) {
-            foreach($objOnePackage->getArrRequiredModules() as $strModule => $strVersion) {
-                if($strModule == $objMetadata->getStrTitle())
+        foreach ($this->getAvailablePackages() as $objOnePackage) {
+            foreach ($objOnePackage->getArrRequiredModules() as $strModule => $strVersion) {
+                if ($strModule == $objMetadata->getStrTitle()) {
                     $arrReturn[] = $objOnePackage->getStrTitle();
+                }
             }
         }
 
@@ -284,62 +320,69 @@ class class_module_packagemanager_manager {
      * Validates a packages' latest version and compares it to the version currently installed.
      * Optionally, a version to compare may be passed.
      *
-     * @param interface_packagemanager_packagemanager $objPackage
+     * @param PackagemanagerPackagemanagerInterface $objPackage
      * @param string $strVersionToCompare
      *
      * @return bool or null of the package could not be found
      */
-    public function updateAvailable(interface_packagemanager_packagemanager $objPackage, $strVersionToCompare = "") {
+    public function updateAvailable(PackagemanagerPackagemanagerInterface $objPackage, $strVersionToCompare = "")
+    {
 
-        if($strVersionToCompare === "") {
+        if ($strVersionToCompare === "") {
             $arrRemotePackages = $this->getArrLatestVersion();
-            if(isset($arrRemotePackages[$objPackage->getObjMetadata()->getStrTitle()]))
+            if (isset($arrRemotePackages[$objPackage->getObjMetadata()->getStrTitle()])) {
                 $strLatestVersion = $arrRemotePackages[$objPackage->getObjMetadata()->getStrTitle()];
-            else
+            }
+            else {
                 $strLatestVersion = null;
+            }
         }
-        else
+        else {
             $strLatestVersion = $strVersionToCompare;
+        }
 
-        if($strLatestVersion !== null) {
-            if($strLatestVersion != null && version_compare($strLatestVersion, $objPackage->getObjMetadata()->getStrVersion(), ">")) {
-                class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow(
-                    "found update for package ".$objPackage->getObjMetadata()->getStrTitle().", installed: ".$objPackage->getObjMetadata()->getStrVersion()." available: ".$strLatestVersion, class_logger::$levelInfo
+        if ($strLatestVersion !== null) {
+            if ($strLatestVersion != null && version_compare($strLatestVersion, $objPackage->getObjMetadata()->getStrVersion(), ">")) {
+                Logger::getInstance(Logger::PACKAGEMANAGEMENT)->addLogRow(
+                    "found update for package ".$objPackage->getObjMetadata()->getStrTitle().", installed: ".$objPackage->getObjMetadata()->getStrVersion()." available: ".$strLatestVersion, Logger::$levelInfo
                 );
 
                 $this->sendUpdateAvailableMessage($objPackage, $strLatestVersion);
 
                 return true;
             }
-            else
+            else {
                 return false;
+            }
         }
 
         return null;
     }
 
     /**
-     * @param interface_packagemanager_packagemanager $objPackage
+     * @param PackagemanagerPackagemanagerInterface $objPackage
      * @param string $strLatestVersion
+     *
      * @return void
      */
-    private function sendUpdateAvailableMessage(interface_packagemanager_packagemanager $objPackage, $strLatestVersion) {
+    private function sendUpdateAvailableMessage(PackagemanagerPackagemanagerInterface $objPackage, $strLatestVersion)
+    {
         //check, if not already sent
         $strIdentifier = sha1(__CLASS__.$objPackage->getObjMetadata()->getStrTitle().$strLatestVersion);
 
-        if(count(class_module_messaging_message::getMessagesByIdentifier($strIdentifier)) == 0) {
+        if (count(MessagingMessage::getMessagesByIdentifier($strIdentifier)) == 0) {
 
-            $strMailtext = class_carrier::getInstance()->getObjLang()->getLang("update_notification_package", "packagemanager")." ".$objPackage->getObjMetadata()->getStrTitle()."\n";
-            $strMailtext .= class_carrier::getInstance()->getObjLang()->getLang("update_notification_verinst", "packagemanager")." ".$objPackage->getObjMetadata()->getStrVersion()."\n";
-            $strMailtext .= class_carrier::getInstance()->getObjLang()->getLang("update_notification_verav", "packagemanager")." ".$strLatestVersion."\n";
+            $strMailtext = Carrier::getInstance()->getObjLang()->getLang("update_notification_package", "packagemanager")." ".$objPackage->getObjMetadata()->getStrTitle()."\n";
+            $strMailtext .= Carrier::getInstance()->getObjLang()->getLang("update_notification_verinst", "packagemanager")." ".$objPackage->getObjMetadata()->getStrVersion()."\n";
+            $strMailtext .= Carrier::getInstance()->getObjLang()->getLang("update_notification_verav", "packagemanager")." ".$strLatestVersion."\n";
 
-            $objMessageHandler = new class_module_messaging_messagehandler();
-            $objMessage = new class_module_messaging_message();
-            $objMessage->setStrTitle(class_carrier::getInstance()->getObjLang()->getLang("update_notification_intro", "packagemanager"));
+            $objMessageHandler = new MessagingMessagehandler();
+            $objMessage = new MessagingMessage();
+            $objMessage->setStrTitle(Carrier::getInstance()->getObjLang()->getLang("update_notification_intro", "packagemanager"));
             $objMessage->setStrBody($strMailtext);
-            $objMessage->setObjMessageProvider(new class_messageprovider_packageupdate());
+            $objMessage->setObjMessageProvider(new MessageproviderPackageupdate());
             $objMessage->setStrInternalIdentifier($strIdentifier);
-            $objMessageHandler->sendMessageObject($objMessage, new class_module_user_group(class_module_system_setting::getConfigValue("_admins_group_id_")));
+            $objMessageHandler->sendMessageObject($objMessage, new UserGroup(SystemSetting::getConfigValue("_admins_group_id_")));
         }
     }
 
@@ -349,22 +392,24 @@ class class_module_packagemanager_manager {
      * The provider itself is called via initPackageUpdate, so it's to providers choice
      * to decide what action to take.
      *
-     * @param interface_packagemanager_packagemanager $objPackage
+     * @param PackagemanagerPackagemanagerInterface $objPackage
      *
-     * @throws class_exception
+     * @throws Exception
      * @return mixed
      */
-    public function updatePackage(interface_packagemanager_packagemanager $objPackage) {
+    public function updatePackage(PackagemanagerPackagemanagerInterface $objPackage)
+    {
         $arrProvider = $this->getContentproviders();
 
-        foreach($arrProvider as $objOneProvider) {
+        foreach ($arrProvider as $objOneProvider) {
             $arrModule = $objOneProvider->searchPackage($objPackage->getObjMetadata()->getStrTitle());
 
-            if(count($arrModule) == 1)
+            if (count($arrModule) == 1) {
                 $arrModule = $arrModule[0];
+            }
 
 
-            if($arrModule != null && isset($arrModule["title"]) && $arrModule["title"] == $objPackage->getObjMetadata()->getStrTitle()) {
+            if ($arrModule != null && isset($arrModule["title"]) && $arrModule["title"] == $objPackage->getObjMetadata()->getStrTitle()) {
                 $objOneProvider->initPackageUpdate($arrModule["title"]);
                 break;
             }
@@ -375,30 +420,29 @@ class class_module_packagemanager_manager {
     }
 
 
-
-
     /**
-     * @param class_module_packagemanager_metadata $objMetadata
+     * @param PackagemanagerMetadata $objMetadata
      *
-     * @throws class_exception
+     * @throws Exception
      * @return string
      */
-    public function removePackage(class_module_packagemanager_metadata $objMetadata) {
+    public function removePackage(PackagemanagerMetadata $objMetadata)
+    {
 
         $strLog = "";
 
-        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::INCLUDED);
+        OrmBase::setObjHandleLogicalDeletedGlobal(OrmDeletedhandlingEnum::INCLUDED);
         $objHandler = $this->getPackageManagerForPath($objMetadata->getStrPath());
-        if($objHandler->isRemovable())
+        if ($objHandler->isRemovable()) {
             $objHandler->remove($strLog);
+        }
 
-        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::EXCLUDED);
+        OrmBase::setObjHandleLogicalDeletedGlobal(OrmDeletedhandlingEnum::EXCLUDED);
 
-        class_resourceloader::getInstance()->flushCache();
+        Resourceloader::getInstance()->flushCache();
 
         return $strLog;
     }
-
 
 
 }

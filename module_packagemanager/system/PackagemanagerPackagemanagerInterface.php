@@ -6,6 +6,8 @@
 *	$Id$                                  *
 ********************************************************************************************************/
 
+namespace Kajona\Packagemanager\System;
+
 
 /**
  * A packagemanager handles a single package or a list of packages installed locally.
@@ -15,14 +17,15 @@
  * @since 4.0
  * @package module_packagemanager
  */
-interface interface_packagemanager_packagemanager {
+interface PackagemanagerPackagemanagerInterface
+{
 
     /**
      * Returns a list of installed packages, so a single metadata-entry
      * for each package.
      *
      * @abstract
-     * @return class_module_packagemanager_metadata[]
+     * @return PackagemanagerMetadata[]
      */
     public function getInstalledPackages();
 
@@ -49,7 +52,7 @@ interface interface_packagemanager_packagemanager {
      * Returns the metadata currently set.
      *
      * @abstract
-     * @return class_module_packagemanager_metadata
+     * @return PackagemanagerMetadata
      */
     public function getObjMetadata();
 
@@ -84,12 +87,14 @@ interface interface_packagemanager_packagemanager {
     /**
      * This method is called during the installation of a package.
      * Depending on the current manager, the default-template may be updated.
+     *
      * @return bool
      */
     public function updateDefaultTemplate();
 
     /**
      * Validates if the current package is removable or not.
+     *
      * @return bool
      */
     public function isRemovable();

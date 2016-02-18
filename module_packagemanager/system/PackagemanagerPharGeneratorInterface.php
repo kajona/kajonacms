@@ -15,7 +15,8 @@ namespace Kajona\Packagemanager\System;
  * @since 4.0
  * @package module_packagemanager
  */
-interface PackagemanagerPharGeneratorInterface {
+interface PackagemanagerPharGeneratorInterface
+{
 
     /**
      * @param $strSourceDir string the directory to be included in the phar, absolute paths
@@ -25,6 +26,7 @@ interface PackagemanagerPharGeneratorInterface {
 
     /**
      * Generates a phar and streams is directly to the client
+     *
      * @param $strSourceDir string the directory to be included in the phar, absolute paths
      *
      * @return mixed

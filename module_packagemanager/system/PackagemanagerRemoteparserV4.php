@@ -6,6 +6,12 @@
 *	$Id$             *
 ********************************************************************************************************/
 
+namespace Kajona\Packagemanager\System;
+
+use Kajona\System\System\ArraySectionIterator;
+use Kajona\System\System\Carrier;
+
+
 /**
  * A remote parser which handles results of Kajona's package manager API provided by version 4.x.
  *
@@ -13,7 +19,7 @@
  * @author flo@mediaskills.org
  * @since 4.0
  */
-class class_module_packagemanager_remoteparser_v4 implements interface_packagemanager_remoteparser {
+class PackagemanagerRemoteparserV4 implements PackagemanagerRemoteparserInterface {
 
     private $arrPageViews = array();
 
@@ -21,11 +27,11 @@ class class_module_packagemanager_remoteparser_v4 implements interface_packagema
         $intNumberOfTotalItems = (int) $arrRemoteResponse['numberOfTotalItems'];
         $arrPackages = $arrRemoteResponse['items'];
 
-        $objIterator = new class_array_section_iterator($intNumberOfTotalItems);
+        $objIterator = new ArraySectionIterator($intNumberOfTotalItems);
         $objIterator->setPageNumber($intPageNumber);
-        $objIterator->setArraySection($arrPackages, $intStart, $intEnd);
+        $objIterator->setArraySection($arrPackages);
 
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
 
         $this->arrPageViews["pageview"] = $objToolkit->getPageview(
             $objIterator,

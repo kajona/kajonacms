@@ -6,6 +6,15 @@
 *	$Id$                                    *
 ********************************************************************************************************/
 
+namespace Kajona\Packagemanager\System;
+
+use Kajona\System\System\AdminListableInterface;
+use Kajona\System\System\Exception;
+use Kajona\System\System\Filesystem;
+use Kajona\System\System\Model;
+use Kajona\System\System\ModelInterface;
+
+
 /**
  * A model-class for template-packs.
  *
@@ -17,7 +26,8 @@
  * @module packagemanager
  * @moduleId _packagemanager_module_id_
  */
-class class_module_packagemanager_template extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_admin_listable {
+class PackagemanagerTemplate extends Model implements ModelInterface, AdminListableInterface
+{
 
     /**
      * @var string
@@ -30,14 +40,15 @@ class class_module_packagemanager_template extends \Kajona\System\System\Model i
     private $strName = "";
 
     /**
-     * @var class_module_packagemanager_metadata
+     * @var PackagemanagerMetadata
      */
     private $objMetadata = null;
 
     /**
      * @return string
      */
-    public function getStrDisplayName() {
+    public function getStrDisplayName()
+    {
         return $this->getStrName();
     }
 
@@ -48,7 +59,8 @@ class class_module_packagemanager_template extends \Kajona\System\System\Model i
      *
      * @return string the name of the icon, not yet wrapped by getImageAdmin()
      */
-    public function getStrIcon() {
+    public function getStrIcon()
+    {
         return "icon_dot";
     }
 
@@ -57,16 +69,20 @@ class class_module_packagemanager_template extends \Kajona\System\System\Model i
      *
      * @return string
      */
-    public function getStrAdditionalInfo() {
+    public function getStrAdditionalInfo()
+    {
         $strReturn = "";
-        if($this->objMetadata == null)
+        if ($this->objMetadata == null) {
             return "";
+        }
 
-        if($this->objMetadata->getStrVersion() != "")
+        if ($this->objMetadata->getStrVersion() != "") {
             $strReturn .= $this->getLang("pack_version")." ".$this->objMetadata->getStrVersion();
+        }
 
-        if($this->objMetadata->getStrAuthor() != "")
+        if ($this->objMetadata->getStrAuthor() != "") {
             $strReturn .= " ".$this->getLang("pack_author")." ".$this->objMetadata->getStrAuthor();
+        }
 
         return $strReturn;
     }
@@ -76,17 +92,21 @@ class class_module_packagemanager_template extends \Kajona\System\System\Model i
      *
      * @return string
      */
-    public function getStrLongDescription() {
-        if($this->objMetadata == null)
+    public function getStrLongDescription()
+    {
+        if ($this->objMetadata == null) {
             return "";
+        }
         return $this->objMetadata->getStrDescription();
     }
 
     /**
      * Initialises the current object, if a systemid was given
+     *
      * @return void
      */
-    protected function initObjectInternal() {
+    protected function initObjectInternal()
+    {
         parent::initObjectInternal();
         $this->objMetadata = $this->getMetadata();
     }
@@ -96,10 +116,11 @@ class class_module_packagemanager_template extends \Kajona\System\System\Model i
      *
      * @return bool
      */
-    public function deleteObjectFromDatabase() {
+    public function deleteObjectFromDatabase()
+    {
 
         //delete all files from the filesystem
-        $objFilesystem = new class_filesystem();
+        $objFilesystem = new Filesystem();
         $objFilesystem->folderDeleteRecursive(_templatepath_."/".$this->getStrName());
 
         return parent::deleteObjectFromDatabase();
@@ -112,26 +133,27 @@ class class_module_packagemanager_template extends \Kajona\System\System\Model i
      * @return void
      * @static
      */
-    public static function syncTemplatepacks() {
+    public static function syncTemplatepacks()
+    {
         //scan the list of packs available in the filesystem
-        $objFilesystem = new class_filesystem();
+        $objFilesystem = new Filesystem();
         $arrFolders = $objFilesystem->getCompleteList("/templates");
 
         //scan packs installed
-        /** @var class_module_packagemanager_template[] $arrPacksInstalled */
+        /** @var PackagemanagerTemplate[] $arrPacksInstalled */
         $arrPacksInstalled = self::getObjectList();
 
-        foreach($arrFolders["folders"] as $strOneFolder) {
+        foreach ($arrFolders["folders"] as $strOneFolder) {
             $bitFolderFound = false;
             //search the pack in the list of available ones
-            foreach($arrPacksInstalled as $objOnePack) {
-                if($objOnePack->getStrName() == $strOneFolder) {
+            foreach ($arrPacksInstalled as $objOnePack) {
+                if ($objOnePack->getStrName() == $strOneFolder) {
                     $bitFolderFound = true;
                     break;
                 }
             }
-            if(!$bitFolderFound) {
-                $objPack = new class_module_packagemanager_template();
+            if (!$bitFolderFound) {
+                $objPack = new PackagemanagerTemplate();
                 $objPack->setStrName($strOneFolder);
                 $objPack->setIntRecordStatus(0);
                 $objPack->updateObjectToDb();
@@ -139,23 +161,25 @@ class class_module_packagemanager_template extends \Kajona\System\System\Model i
         }
 
         //scan folders not existing any more
-        foreach($arrPacksInstalled as $objOnePack) {
-            if(!in_array($objOnePack->getStrName(), $arrFolders["folders"]))
+        foreach ($arrPacksInstalled as $objOnePack) {
+            if (!in_array($objOnePack->getStrName(), $arrFolders["folders"])) {
                 $objOnePack->deleteObjectFromDatabase();
+            }
         }
     }
 
     /**
-     * @return class_module_packagemanager_metadata|null
+     * @return PackagemanagerMetadata|null
      */
-    private function getMetadata() {
+    private function getMetadata()
+    {
 
-        $objMetadata = new class_module_packagemanager_metadata();
+        $objMetadata = new PackagemanagerMetadata();
         try {
             $objMetadata->autoInit(_templatepath_."/".$this->strName);
             return $objMetadata;
         }
-        catch(class_exception $objEx) {
+        catch (Exception $objEx) {
 
         }
 
@@ -164,16 +188,19 @@ class class_module_packagemanager_template extends \Kajona\System\System\Model i
 
     /**
      * @param string $strName
+     *
      * @return void
      */
-    public function setStrName($strName) {
+    public function setStrName($strName)
+    {
         $this->strName = $strName;
     }
 
     /**
      * @return string
      */
-    public function getStrName() {
+    public function getStrName()
+    {
         return $this->strName;
     }
 }

@@ -6,6 +6,17 @@
 *	$Id$                                  *
 ********************************************************************************************************/
 
+namespace Kajona\Packagemanager\System;
+
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Classloader;
+use Kajona\System\System\Exception;
+use Kajona\System\System\Filesystem;
+use Kajona\System\System\Logger;
+use Kajona\System\System\Reflection;
+use Kajona\System\System\Resourceloader;
+
+
 /**
  * A simple content-provider used to upload archives to the local filesytem.
  *
@@ -13,8 +24,8 @@
  * @author sidler@mulchprod.de
  * @since 4.0
  */
-class class_module_packagemanager_contentprovider_local implements interface_packagemanager_contentprovider {
-
+class PackagemanagerContentproviderLocal implements PackagemanagerContentproviderInterface
+{
 
 
     /**
@@ -22,8 +33,9 @@ class class_module_packagemanager_contentprovider_local implements interface_pac
      *
      * @return mixed
      */
-    public function getDisplayTitle() {
-        return class_carrier::getInstance()->getObjLang()->getLang("provider_local", "packagemanager");
+    public function getDisplayTitle()
+    {
+        return Carrier::getInstance()->getObjLang()->getLang("provider_local", "packagemanager");
     }
 
     /**
@@ -40,9 +52,10 @@ class class_module_packagemanager_contentprovider_local implements interface_pac
      *
      * @return string
      */
-    public function renderPackageList() {
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
-        $objLang = class_carrier::getInstance()->getObjLang();
+    public function renderPackageList()
+    {
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
+        $objLang = Carrier::getInstance()->getObjLang();
         $strReturn = "";
 
         $strReturn .= $objToolkit->getTextRow($objLang->getLang("provider_local_uploadhint", "packagemanager"));
@@ -63,27 +76,28 @@ class class_module_packagemanager_contentprovider_local implements interface_pac
      *
      * @return string the filename of the package downloaded
      */
-    public function processPackageUpload() {
+    public function processPackageUpload()
+    {
 
         //fetch the upload, validate a few settings and copy the package to /project/temp
-        $arrSource = class_carrier::getInstance()->getParam("provider_local_file");
+        $arrSource = Carrier::getInstance()->getParam("provider_local_file");
 
         $strTarget = "/project/temp/".$arrSource["name"];
-        $objFilesystem = new class_filesystem();
+        $objFilesystem = new Filesystem();
 
         //Check file for correct filters
         $strSuffix = uniStrtolower(uniSubstr($arrSource["name"], uniStrrpos($arrSource["name"], ".")));
-        if(in_array($strSuffix, array(".phar"))) {
-            if($objFilesystem->copyUpload($strTarget, $arrSource["tmp_name"])) {
-                class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("uploaded package ".$arrSource["name"]." to ".$strTarget, class_logger::$levelInfo);
-                class_resourceloader::getInstance()->flushCache();
-                class_classloader::getInstance()->flushCache();
-                class_reflection::flushCache();
+        if (in_array($strSuffix, array(".phar"))) {
+            if ($objFilesystem->copyUpload($strTarget, $arrSource["tmp_name"])) {
+                Logger::getInstance(Logger::PACKAGEMANAGEMENT)->addLogRow("uploaded package ".$arrSource["name"]." to ".$strTarget, Logger::$levelInfo);
+                Resourceloader::getInstance()->flushCache();
+                Classloader::getInstance()->flushCache();
+                Reflection::flushCache();
 
                 return $strTarget;
             }
         }
-        class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("error in uploaded package ".$arrSource["name"]." either wrong format or not writeable target folder", class_logger::$levelInfo);
+        Logger::getInstance(Logger::PACKAGEMANAGEMENT)->addLogRow("error in uploaded package ".$arrSource["name"]." either wrong format or not writeable target folder", Logger::$levelInfo);
         @unlink($arrSource["tmp_name"]);
 
         return null;
@@ -99,7 +113,8 @@ class class_module_packagemanager_contentprovider_local implements interface_pac
      *
      * @return array
      */
-    public function searchPackage($strTitle) {
+    public function searchPackage($strTitle)
+    {
         return array();
     }
 
@@ -110,10 +125,11 @@ class class_module_packagemanager_contentprovider_local implements interface_pac
      *
      * @param $strTitle
      *
-     * @throws class_exception
+     * @throws Exception
      * @return mixed
      */
-    public function initPackageUpdate($strTitle) {
-        throw new class_exception("method not supported", class_exception::$level_ERROR);
+    public function initPackageUpdate($strTitle)
+    {
+        throw new Exception("method not supported", Exception::$level_ERROR);
     }
 }

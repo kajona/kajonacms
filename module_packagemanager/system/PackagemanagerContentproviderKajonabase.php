@@ -6,6 +6,9 @@
 *	$Id$ *
 ********************************************************************************************************/
 
+namespace Kajona\Packagemanager\System;
+
+
 /**
  * A simple content-provider used to upload archives from the kajonabase-repo.
  * Provides both, a search and a download-part.
@@ -15,9 +18,11 @@
  * @author flo@mediaskills.org
  * @since 4.0
  */
-class class_module_packagemanager_contentprovider_kajonabase extends class_module_packagemanager_contentprovider_remote_base {
+class PackagemanagerContentproviderKajonabase extends PackagemanagerContentproviderRemoteBase
+{
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct(
             "provider_kajonabase",
             "www.kajonabase.net",
