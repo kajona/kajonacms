@@ -5,6 +5,15 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Postacomment\Admin;
+
+use Kajona\Pages\System\PagesPage;
+use Kajona\Postacomment\System\PostacommentPost;
+use Kajona\System\Admin\AdminEvensimpler;
+use Kajona\System\Admin\AdminInterface;
+use Kajona\System\System\ArraySectionIterator;
+use Kajona\System\System\Exception;
+
 
 /**
  * Admin class of the postacomment-module. Responsible for listing posts and organizing them
@@ -12,15 +21,17 @@
  * @package module_postacomment
  * @author sidler@mulchprod.de
  *
- * @objectList class_module_postacomment_post
- * @objectEdit class_module_postacomment_post
+ * @objectList Kajona\\Postacomment\\System\\PostacommentPost
+ * @objectEdit Kajona\\Postacomment\\System\\PostacommentPost
  *
  * @module postacomment
  * @moduleId _postacomment_modul_id_
  */
-class class_module_postacomment_admin extends class_admin_evensimpler implements interface_admin {
+class PostacommentAdmin extends AdminEvensimpler implements AdminInterface
+{
 
-    public function getOutputModuleNavi() {
+    public function getOutputModuleNavi()
+    {
         $arrReturn = array();
         $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
         return $arrReturn;
@@ -35,14 +46,15 @@ class class_module_postacomment_admin extends class_admin_evensimpler implements
      * @permissions view
      * @autoTestable
      */
-    protected function actionList() {
+    protected function actionList()
+    {
 
         //a small filter would be nice...
         $strReturn = $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "list"));
 
         $arrPages = array();
         $arrPages[""] = "---";
-        foreach(class_module_pages_page::getAllPages() as $objOnePage) {
+        foreach (PagesPage::getAllPages() as $objOnePage) {
             $arrPages[$objOnePage->getSystemid()] = $objOnePage->getStrName();
         }
 
@@ -52,16 +64,17 @@ class class_module_postacomment_admin extends class_admin_evensimpler implements
 
         $strReturn .= $this->objToolkit->divider();
 
-        $objArraySectionIterator = new class_array_section_iterator(class_module_postacomment_post::getNumberOfPostsAvailable(false, $this->getParam("filterId")));
+        $objArraySectionIterator = new ArraySectionIterator(PostacommentPost::getNumberOfPostsAvailable(false, $this->getParam("filterId")));
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-        $objArraySectionIterator->setArraySection(class_module_postacomment_post::loadPostList(false, $this->getParam("filterId"), false, "", $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+        $objArraySectionIterator->setArraySection(PostacommentPost::loadPostList(false, $this->getParam("filterId"), false, "", $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
         $strReturn .= $this->renderList($objArraySectionIterator);
         return $strReturn;
 
     }
 
-    protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
+    protected function getNewEntryAction($strListIdentifier, $bitDialog = false)
+    {
         return "";
     }
 
@@ -69,15 +82,14 @@ class class_module_postacomment_admin extends class_admin_evensimpler implements
     /**
      * Renders the form to create a new entry
      *
-     * @throws class_exception
+     * @throws Exception
      * @return string
      * @permissions edit
      */
-    protected function actionNew() {
-        throw new class_exception("actioNew not supported by module postacomment", class_exception::$level_ERROR);
+    protected function actionNew()
+    {
+        throw new Exception("actioNew not supported by module postacomment", Exception::$level_ERROR);
     }
-
-
 
 
 }

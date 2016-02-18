@@ -7,6 +7,17 @@
 *	$Id$                           *
 ********************************************************************************************************/
 
+namespace Kajona\Postacomment\Event;
+
+use Kajona\System\System\CoreEventdispatcher;
+use Kajona\System\System\GenericeventListenerInterface;
+use Kajona\System\System\OrmDeletedhandlingEnum;
+use Kajona\System\System\OrmObjectlist;
+use Kajona\System\System\OrmObjectlistRestriction;
+use Kajona\System\System\SystemEventidentifier;
+use Kajona\System\System\SystemModule;
+
+
 /**
  * Removes comments added to the passed systemid
  *
@@ -14,7 +25,8 @@
  * @author sidler@mulchprod.de
  *
  */
-class class_module_postacomment_recorddeletedlistener implements interface_genericevent_listener {
+class PostacommentRecorddeletedlistener implements GenericeventListenerInterface
+{
 
 
     /**
@@ -29,27 +41,31 @@ class class_module_postacomment_recorddeletedlistener implements interface_gener
      *
      * @return bool
      */
-    public function handleEvent($strEventName, array $arrArguments) {
+    public function handleEvent($strEventName, array $arrArguments)
+    {
         //unwrap arguments
         list($strSystemid, $strSourceClass) = $arrArguments;
 
         $bitReturn = true;
         //module installed?
-        if($strSourceClass == "class_module_postacomment_post" || class_module_system_module::getModuleByName("postacomment") == null)
+        if ($strSourceClass == "Kajona\\Postacomment\\System\\PostacommentPost" || SystemModule::getModuleByName("postacomment") == null) {
             return true;
+        }
 
-        $objOrm = new class_orm_objectlist();
-        $objOrm->setObjHandleLogicalDeleted(class_orm_deletedhandling_enum::INCLUDED);
-        $objOrm->addWhereRestriction(new class_orm_objectlist_restriction(" AND (postacomment_page = ? OR  postacomment_systemid = ? ) ", array($strSystemid, $strSystemid)));
-        $arrComments = $objOrm->getObjectList("class_module_postacomment_post");
+        $objOrm = new OrmObjectlist();
+        $objOrm->setObjHandleLogicalDeleted(OrmDeletedhandlingEnum::INCLUDED);
+        $objOrm->addWhereRestriction(new OrmObjectlistRestriction(" AND (postacomment_page = ? OR  postacomment_systemid = ? ) ", array($strSystemid, $strSystemid)));
+        $arrComments = $objOrm->getObjectList("Kajona\\Postacomment\\System\\PostacommentPost");
 
-        foreach($arrComments as $objPost) {
+        foreach ($arrComments as $objPost) {
 
-            if($strEventName == class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED_LOGICALLY)
+            if ($strEventName == SystemEventidentifier::EVENT_SYSTEM_RECORDDELETED_LOGICALLY) {
                 $objPost->deleteObject();
+            }
 
-            if($strEventName == class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED)
+            if ($strEventName == SystemEventidentifier::EVENT_SYSTEM_RECORDDELETED) {
                 $objPost->deleteObjectFromDatabase();
+            }
 
         }
 
@@ -58,13 +74,15 @@ class class_module_postacomment_recorddeletedlistener implements interface_gener
 
     /**
      * Internal init to register the event listener, called on file-inclusion, e.g. by the class-loader
+     *
      * @return void
      */
-    public static function staticConstruct() {
-        class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, new class_module_postacomment_recorddeletedlistener());
-        class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED_LOGICALLY, new class_module_postacomment_recorddeletedlistener());
+    public static function staticConstruct()
+    {
+        CoreEventdispatcher::getInstance()->removeAndAddListener(SystemEventidentifier::EVENT_SYSTEM_RECORDDELETED, new PostacommentRecorddeletedlistener());
+        CoreEventdispatcher::getInstance()->removeAndAddListener(SystemEventidentifier::EVENT_SYSTEM_RECORDDELETED_LOGICALLY, new PostacommentRecorddeletedlistener());
     }
 
 }
 
-class_module_postacomment_recorddeletedlistener::staticConstruct();
+PostacommentRecorddeletedlistener::staticConstruct();

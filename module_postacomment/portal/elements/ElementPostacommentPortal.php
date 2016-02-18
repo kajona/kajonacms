@@ -7,6 +7,14 @@
 *	$Id$						        *
 ********************************************************************************************************/
 
+namespace Kajona\Postacomment\Portal\Elements;
+
+use class_module_rating_rate;
+use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\Portal\PortalElementInterface;
+use Kajona\System\System\SystemModule;
+
+
 /**
  * Portal-part of the postacomment-element
  *
@@ -15,18 +23,21 @@
  *
  * @targetTable element_universal.content_id
  */
-class class_element_postacomment_portal extends class_element_portal implements interface_portal_element {
+class ElementPostacommentPortal extends ElementPortal implements PortalElementInterface
+{
 
     /**
      * Constructor
+     *
      * @param $objElementData
      */
-    public function __construct($objElementData) {
+    public function __construct($objElementData)
+    {
         parent::__construct($objElementData);
 
         //we support ratings, so add cache-busters
-        $objRatingModule = class_module_system_module::getModuleByName("rating");
-        if($objRatingModule != null) {
+        $objRatingModule = SystemModule::getModuleByName("rating");
+        if ($objRatingModule != null) {
             $this->setStrCacheAddon(getCookie(class_module_rating_rate::RATING_COOKIE));
         }
     }
@@ -37,15 +48,16 @@ class class_element_postacomment_portal extends class_element_portal implements 
      *
      * @return string
      */
-    public function loadData() {
+    public function loadData()
+    {
         $strReturn = "";
         //Load the data
-        $objPostacommentModule = class_module_system_module::getModuleByName("postacomment");
-        if($objPostacommentModule != null) {
+        $objPostacommentModule = SystemModule::getModuleByName("postacomment");
+        if ($objPostacommentModule != null) {
 
             //action-filter set within the element?
-            if(trim($this->arrElementData["char2"]) != "") {
-                if($this->getParam("action") != $this->arrElementData["char2"]) {
+            if (trim($this->arrElementData["char2"]) != "") {
+                if ($this->getParam("action") != $this->arrElementData["char2"]) {
                     return "";
                 }
             }

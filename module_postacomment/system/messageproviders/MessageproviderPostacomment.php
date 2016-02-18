@@ -9,6 +9,8 @@ namespace Kajona\Postacomment\System\Messageproviders;
 
 use class_carrier;
 use interface_messageprovider;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Messageproviders\MessageproviderInterface;
 
 /**
  * The postacomment message-provider is able to send mails as soon as a new comment is available.
@@ -17,7 +19,7 @@ use interface_messageprovider;
  * @author sidler@mulchprod.de
  * @since 4.0
  */
-class MessageproviderPostacomment implements interface_messageprovider
+class MessageproviderPostacomment implements MessageproviderInterface
 {
 
 
@@ -28,7 +30,7 @@ class MessageproviderPostacomment implements interface_messageprovider
      */
     public function getStrName()
     {
-        return class_carrier::getInstance()->getObjLang()->getLang("messageprovider_postacomment_name", "postacomment");
+        return Carrier::getInstance()->getObjLang()->getLang("messageprovider_postacomment_name", "postacomment");
     }
 
     /**
