@@ -31,11 +31,11 @@ use Kajona\System\System\Resourceloader;
  * @package module_mediamanager
  * @author sidler@mulchprod.de
  *
- * @objectList Kajona\\Mediamanager\\System\\MediamanagerRepo
- * @objectEdit Kajona\\Mediamanager\\System\\MediamanagerRepo
- * @objectNew Kajona\\Mediamanager\\System\\MediamanagerRepo
+ * @objectList Kajona\Mediamanager\System\MediamanagerRepo
+ * @objectEdit Kajona\Mediamanager\System\MediamanagerRepo
+ * @objectNew Kajona\Mediamanager\System\MediamanagerRepo
  *
- * @objectEditFile Kajona\\Mediamanager\\System\\MediamanagerFile
+ * @objectEditFile Kajona\Mediamanager\System\MediamanagerFile
  *
  * @autoTestable list,new
  *

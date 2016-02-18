@@ -37,9 +37,11 @@ use Kajona\Tags\System\TagsTag;
  * @module tags
  * @moduleId _tags_modul_id_
  */
-class TagsAdmin extends AdminEvensimpler implements AdminInterface {
+class TagsAdmin extends AdminEvensimpler implements AdminInterface
+{
 
-    public function getOutputModuleNavi() {
+    public function getOutputModuleNavi()
+    {
         $arrReturn = array();
         $arrReturn[] = array("view", Link::getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
         $arrReturn[] = array("right1", Link::getLinkAdmin($this->getArrModule("modul"), "listFavorites", "", $this->getLang("action_list_favorites"), "", "", true, "adminnavi"));
@@ -48,26 +50,27 @@ class TagsAdmin extends AdminEvensimpler implements AdminInterface {
     }
 
 
-
-    protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
+    protected function getNewEntryAction($strListIdentifier, $bitDialog = false)
+    {
         return "";
     }
 
-    protected function renderAdditionalActions(\Kajona\System\System\Model $objListEntry) {
-        if($objListEntry instanceof TagsTag) {
+    protected function renderAdditionalActions(\Kajona\System\System\Model $objListEntry)
+    {
+        if ($objListEntry instanceof TagsTag) {
             $arrButtons = array();
             $arrButtons[] = $this->objToolkit->listButton(
                 Link::getLinkAdmin(
                     $this->getArrModule("modul"),
                     "showAssignedRecords",
-                    "&systemid=" . $objListEntry->getSystemid(),
+                    "&systemid=".$objListEntry->getSystemid(),
                     $this->getLang("action_show_assigned_records"),
                     $this->getLang("action_show_assigned_records"),
                     "icon_folderActionOpen"
                 )
             );
 
-            if($objListEntry->rightRight1()) {
+            if ($objListEntry->rightRight1()) {
 
                 $strJs = "<script type='text/javascript'>KAJONA.admin.loader.loadFile('".Resourceloader::getInstance()->getCorePathForModule("module_tags")."/module_tags/admin/scripts/tags.js', function() {
                     KAJONA.admin.tags.createFavoriteEnabledIcon = '".addslashes(AdminskinHelper::getAdminImage("icon_favorite", $this->getLang("tag_favorite_remove")))."';
@@ -95,18 +98,20 @@ class TagsAdmin extends AdminEvensimpler implements AdminInterface {
      *
      * @return string
      */
-    protected function renderDeleteAction(\Kajona\System\System\ModelInterface $objListEntry) {
-        if($objListEntry instanceof TagsFavorite) {
-            if($objListEntry->rightDelete()) {
+    protected function renderDeleteAction(\Kajona\System\System\ModelInterface $objListEntry)
+    {
+        if ($objListEntry instanceof TagsFavorite) {
+            if ($objListEntry->rightDelete()) {
                 return $this->objToolkit->listDeleteButton(
                     $objListEntry->getStrDisplayName(),
                     $this->getLang("delete_question_fav", $objListEntry->getArrModule("modul")),
-                    Link::getLinkAdminHref($objListEntry->getArrModule("modul"), "delete", "&systemid=" . $objListEntry->getSystemid())
+                    Link::getLinkAdminHref($objListEntry->getArrModule("modul"), "delete", "&systemid=".$objListEntry->getSystemid())
                 );
             }
         }
-        else
+        else {
             return parent::renderDeleteAction($objListEntry);
+        }
 
 
         return "";
@@ -117,7 +122,8 @@ class TagsAdmin extends AdminEvensimpler implements AdminInterface {
      * @permissions view
      * @return string
      */
-    protected function actionShowAssignedRecords() {
+    protected function actionShowAssignedRecords()
+    {
         //load tag
         $objTag = new TagsTag($this->getSystemid());
         //get assigned record-ids
@@ -129,11 +135,12 @@ class TagsAdmin extends AdminEvensimpler implements AdminInterface {
         return $this->renderList($objArraySectionIterator, false, "assignedTagList");
     }
 
-    public function getActionIcons($objOneIterable, $strListIdentifier = "") {
-        if($strListIdentifier == "assignedTagList") {
+    public function getActionIcons($objOneIterable, $strListIdentifier = "")
+    {
+        if ($strListIdentifier == "assignedTagList") {
             //call the original module to render the action-icons
             $objAdminInstance = SystemModule::getModuleByName($objOneIterable->getArrModule("modul"))->getAdminInstanceOfConcreteModule();
-            if($objAdminInstance != null && $objAdminInstance instanceof AdminSimple) {
+            if ($objAdminInstance != null && $objAdminInstance instanceof AdminSimple) {
                 return $objAdminInstance->getActionIcons($objOneIterable);
             }
         }
@@ -150,7 +157,8 @@ class TagsAdmin extends AdminEvensimpler implements AdminInterface {
      * @return string
      * @permissions view
      */
-    protected function actionGenericTagForm() {
+    protected function actionGenericTagForm()
+    {
         $this->setArrModuleEntry("template", "/folderview.tpl");
         return $this->getTagForm($this->getSystemid(), $this->getParam("attribute"));
     }
@@ -166,13 +174,14 @@ class TagsAdmin extends AdminEvensimpler implements AdminInterface {
      * @return string
      * @permissions view
      */
-    public function getTagForm($strTargetSystemid, $strAttribute = null) {
+    public function getTagForm($strTargetSystemid, $strAttribute = null)
+    {
         $strTagContent = "";
 
         $strTagsWrapperId = generateSystemid();
 
         $strTagContent .= $this->objToolkit->formHeader(
-            Link::getLinkAdminHref($this->getArrModule("modul"), "saveTags"), "", "", "KAJONA.admin.tags.saveTag(document.getElementById('tagname').value+'', '" . $strTargetSystemid . "', '" . $strAttribute . "');return false;"
+            Link::getLinkAdminHref($this->getArrModule("modul"), "saveTags"), "", "", "KAJONA.admin.tags.saveTag(document.getElementById('tagname').value+'', '".$strTargetSystemid."', '".$strAttribute."');return false;"
         );
         $strTagContent .= $this->objToolkit->formTextRow($this->getLang("tag_name_hint"));
         $strTagContent .= $this->objToolkit->formInputTagSelector("tagname", $this->getLang("form_tags_name"));
@@ -185,9 +194,11 @@ class TagsAdmin extends AdminEvensimpler implements AdminInterface {
         return $strTagContent;
     }
 
-    protected function getOutputNaviEntry(ModelInterface $objInstance) {
-        if($objInstance instanceof TagsTag)
-            return Link::getLinkAdmin($this->getArrModule("modul"), "showAssignedRecords", "&systemid=" . $objInstance->getSystemid(), $objInstance->getStrName());
+    protected function getOutputNaviEntry(ModelInterface $objInstance)
+    {
+        if ($objInstance instanceof TagsTag) {
+            return Link::getLinkAdmin($this->getArrModule("modul"), "showAssignedRecords", "&systemid=".$objInstance->getSystemid(), $objInstance->getStrName());
+        }
 
         return null;
     }
@@ -200,7 +211,8 @@ class TagsAdmin extends AdminEvensimpler implements AdminInterface {
      * @autoTestable
      * @permissions right1
      */
-    protected function actionListFavorites() {
+    protected function actionListFavorites()
+    {
 
         $objArraySectionIterator = new ArraySectionIterator(TagsFavorite::getNumberOfFavoritesForUser($this->objSession->getUserID()));
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
