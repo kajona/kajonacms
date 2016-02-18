@@ -7,6 +7,17 @@
 *	$Id$                                *
 ********************************************************************************************************/
 
+namespace Kajona\Tags\Installer;
+
+use Kajona\Pages\System\PagesElement;
+use Kajona\System\System\InstallerBase;
+use Kajona\System\System\InstallerRemovableInterface;
+use Kajona\System\System\OrmSchemamanager;
+use Kajona\System\System\SystemModule;
+use Kajona\System\System\SystemSetting;
+use Kajona\Tags\System\TagsFavorite;
+use Kajona\Tags\System\TagsTag;
+
 /**
  * Class providing an install for the tags module
  *
@@ -14,11 +25,11 @@
  * @author sidler@mulchprod.de
  * @moduleId _tags_modul_id_
  */
-class class_installer_tags extends class_installer_base implements interface_installer_removable {
+class InstallerTags extends InstallerBase implements InstallerRemovableInterface {
 
     public function install() {
 		$strReturn = "";
-        $objManager = new class_orm_schemamanager();
+        $objManager = new OrmSchemamanager();
 
 		//tags_tag --------------------------------------------------------------------------------------
 		$strReturn .= "Installing table tags_tag...\n";
@@ -43,25 +54,25 @@ class class_installer_tags extends class_installer_base implements interface_ins
             "tags",
             _tags_modul_id_,
             "",
-            "class_module_tags_admin.php",
+            "TagsAdmin.php",
             $this->objMetadata->getStrVersion(),
             true,
             "",
-            "class_module_tags_admin_xml.php"
+            "TagsAdminXml.php"
         );
 
 		$strReturn .= "Registering system-constants...\n";
-        $this->registerConstant("_tags_defaultprivate_", "false", class_module_system_setting::$int_TYPE_BOOL, _tags_modul_id_);
+        $this->registerConstant("_tags_defaultprivate_", "false", SystemSetting::$int_TYPE_BOOL, _tags_modul_id_);
 
         //Register the element
         $strReturn .= "Registering tags-element...\n";
 
         //check, if not already existing
-        if(class_module_system_module::getModuleByName("pages") !== null && class_module_pages_element::getElement("tags") == null) {
-            $objElement = new class_module_pages_element();
+        if(SystemModule::getModuleByName("pages") !== null && PagesElement::getElement("tags") == null) {
+            $objElement = new PagesElement();
             $objElement->setStrName("tags");
-            $objElement->setStrClassAdmin("class_element_tags_admin.php");
-            $objElement->setStrClassPortal("class_element_tags_portal.php");
+            $objElement->setStrClassAdmin("ElementTagsAdmin.php");
+            $objElement->setStrClassPortal("ElementTagsPortal.php");
             $objElement->setIntCachetime(3600*24*30);
             $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->objMetadata->getStrVersion());
@@ -98,12 +109,12 @@ class class_installer_tags extends class_installer_base implements interface_ins
     public function remove(&$strReturn) {
 
         $strReturn .= "Removing settings...\n";
-        if(class_module_system_setting::getConfigByName("_tags_defaultprivate_") != null)
-            class_module_system_setting::getConfigByName("_tags_defaultprivate_")->deleteObjectFromDatabase();
+        if(SystemSetting::getConfigByName("_tags_defaultprivate_") != null)
+            SystemSetting::getConfigByName("_tags_defaultprivate_")->deleteObjectFromDatabase();
 
         //delete the page-element
-        if(class_module_system_module::getModuleByName("pages") !== null && class_module_pages_element::getElement("tags") != null) {
-            $objElement = class_module_pages_element::getElement("tags");
+        if(SystemModule::getModuleByName("pages") !== null && PagesElement::getElement("tags") != null) {
+            $objElement = PagesElement::getElement("tags");
             if($objElement != null) {
                 $strReturn .= "Deleting page-element 'tags'...\n";
                 $objElement->deleteObjectFromDatabase();
@@ -114,8 +125,8 @@ class class_installer_tags extends class_installer_base implements interface_ins
             }
         }
 
-        /** @var class_module_tags_favorite $objOneObject */
-        foreach(class_module_tags_favorite::getObjectList() as $objOneObject) {
+        /** @var TagsFavorite $objOneObject */
+        foreach(TagsFavorite::getObjectList() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
             if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";
@@ -123,8 +134,8 @@ class class_installer_tags extends class_installer_base implements interface_ins
             }
         }
 
-        /** @var class_module_tags_tag $objOneObject */
-        foreach(class_module_tags_tag::getObjectList() as $objOneObject) {
+        /** @var TagsTag $objOneObject */
+        foreach(TagsTag::getObjectList() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
             if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";
@@ -134,7 +145,7 @@ class class_installer_tags extends class_installer_base implements interface_ins
 
         //delete the module-node
         $strReturn .= "Deleting the module-registration...\n";
-        $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
+        $objModule = SystemModule::getModuleByName($this->objMetadata->getStrTitle(), true);
         if(!$objModule->deleteObjectFromDatabase()) {
             $strReturn .= "Error deleting module, aborting.\n";
             return false;
@@ -157,23 +168,23 @@ class class_installer_tags extends class_installer_base implements interface_ins
     public function update() {
 	    $strReturn = "";
         //check installed version and to which version we can update
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.0") {
             $strReturn .= $this->update_40_41();
             $this->objDB->flushQueryCache();
         }
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.1") {
             $strReturn .= $this->update_41_42();
             $this->objDB->flushQueryCache();
         }
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.2") {
             $strReturn .= "Updating 4.2 to 4.3...\n";
             $strReturn .= "Updating module-versions...\n";
@@ -183,7 +194,7 @@ class class_installer_tags extends class_installer_base implements interface_ins
             $this->objDB->flushQueryCache();
         }
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.3") {
             $strReturn .= "Updating 4.3 to 4.4...\n";
             $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.4");
@@ -191,7 +202,7 @@ class class_installer_tags extends class_installer_base implements interface_ins
             $this->objDB->flushQueryCache();
         }
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.4") {
             $strReturn .= "Updating 4.4 to 4.5...\n";
             $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.5");
@@ -199,7 +210,7 @@ class class_installer_tags extends class_installer_base implements interface_ins
             $this->objDB->flushQueryCache();
         }
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.5") {
             $strReturn .= "Updating 4.5 to 4.6...\n";
             $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.6");
@@ -207,7 +218,7 @@ class class_installer_tags extends class_installer_base implements interface_ins
             $this->objDB->flushQueryCache();
         }
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.6") {
             $strReturn .= "Updating to 4.7...\n";
             $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7");
@@ -232,7 +243,7 @@ class class_installer_tags extends class_installer_base implements interface_ins
         $strReturn = "Updating 4.1 to 4.2...\n";
 
         $strReturn .= "Registering tags private mode setting\n";
-        $this->registerConstant("_tags_defaultprivate_", "false", class_module_system_setting::$int_TYPE_BOOL, _tags_modul_id_);
+        $this->registerConstant("_tags_defaultprivate_", "false", SystemSetting::$int_TYPE_BOOL, _tags_modul_id_);
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.2");

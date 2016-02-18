@@ -7,6 +7,14 @@
 *	$Id$                                    *
 ********************************************************************************************************/
 
+namespace Kajona\Tags\System;
+
+use Kajona\System\System\AdminListableInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Model;
+use Kajona\System\System\ModelInterface;
+use Kajona\System\System\OrmObjectlist;
+
 /**
  * Model-Class for tags-favorites
  *
@@ -19,7 +27,7 @@
  * @module tags
  * @moduleId _tags_modul_id_
  */
-class class_module_tags_favorite extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_admin_listable  {
+class TagsFavorite extends Model implements ModelInterface, AdminListableInterface {
 
     /**
      * @var string
@@ -44,7 +52,7 @@ class class_module_tags_favorite extends \Kajona\System\System\Model implements 
      */
     public function __construct($strSystemid = "") {
         parent::__construct($strSystemid);
-        $this->objTag = new class_module_tags_tag($this->getStrTagId());
+        $this->objTag = new TagsTag($this->getStrTagId());
     }
 
     public function getStrDisplayName() {
@@ -86,11 +94,11 @@ class class_module_tags_favorite extends \Kajona\System\System\Model implements 
      * @param int|null $intStart
      * @param int|null $intEnd
      *
-     * @return class_module_tags_favorite[]
+     * @return TagsFavorite[]
      */
     public static function getAllFavoritesForUserAndTag($strUserid, $strTagId, $intStart = null, $intEnd = null) {
 
-        $objORM = new class_orm_objectlist();
+        $objORM = new OrmObjectlist();
         $strQuery = "SELECT tags_fav_id
                        FROM "._dbprefix_."tags_favorite,
                             "._dbprefix_."tags_tag,
@@ -102,10 +110,10 @@ class class_module_tags_favorite extends \Kajona\System\System\Model implements 
                        ".$objORM->getDeletedWhereRestriction()."
                   ORDER BY tags_tag_name ASC";
 
-        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strUserid, $strTagId), $intStart, $intEnd);
+        $arrRows = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strUserid, $strTagId), $intStart, $intEnd);
         $arrReturn = array();
         foreach($arrRows as $arrSingleRow) {
-            $arrReturn[] = new class_module_tags_favorite($arrSingleRow["tags_fav_id"]);
+            $arrReturn[] = new TagsFavorite($arrSingleRow["tags_fav_id"]);
         }
 
         return $arrReturn;
@@ -116,10 +124,10 @@ class class_module_tags_favorite extends \Kajona\System\System\Model implements 
      *
      * @param $strTagid
      *
-     * @return class_module_tags_favorite[]
+     * @return TagsFavorite[]
      */
     public static function getAllFavoritesForTag($strTagid) {
-        $objORM = new class_orm_objectlist();
+        $objORM = new OrmObjectlist();
         $strQuery = "SELECT tags_fav_id
                        FROM "._dbprefix_."tags_favorite,
                             "._dbprefix_."tags_tag,
@@ -130,10 +138,10 @@ class class_module_tags_favorite extends \Kajona\System\System\Model implements 
                        ".$objORM->getDeletedWhereRestriction()."
                   ORDER BY tags_tag_name ASC";
 
-        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strTagid));
+        $arrRows = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strTagid));
         $arrReturn = array();
         foreach($arrRows as $arrSingleRow) {
-            $arrReturn[] = new class_module_tags_favorite($arrSingleRow["tags_fav_id"]);
+            $arrReturn[] = new TagsFavorite($arrSingleRow["tags_fav_id"]);
         }
 
         return $arrReturn;
@@ -146,10 +154,10 @@ class class_module_tags_favorite extends \Kajona\System\System\Model implements 
      * @param int|null $intStart
      * @param int|null $intEnd
      *
-     * @return class_module_tags_favorite[]
+     * @return TagsFavorite[]
      */
     public static function getAllFavoritesForUser($strUserid, $intStart = null, $intEnd = null) {
-        $objORM = new class_orm_objectlist();
+        $objORM = new OrmObjectlist();
         $strQuery = "SELECT tags_fav_id
                        FROM "._dbprefix_."tags_favorite,
                             "._dbprefix_."tags_tag,
@@ -160,10 +168,10 @@ class class_module_tags_favorite extends \Kajona\System\System\Model implements 
                        ".$objORM->getDeletedWhereRestriction()."
                   ORDER BY tags_tag_name ASC";
 
-        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strUserid), $intStart, $intEnd);
+        $arrRows = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strUserid), $intStart, $intEnd);
         $arrReturn = array();
         foreach($arrRows as $arrSingleRow) {
-            $arrReturn[] = new class_module_tags_favorite($arrSingleRow["tags_fav_id"]);
+            $arrReturn[] = new TagsFavorite($arrSingleRow["tags_fav_id"]);
         }
 
         return $arrReturn;
@@ -178,7 +186,7 @@ class class_module_tags_favorite extends \Kajona\System\System\Model implements 
      */
     public static function getNumberOfFavoritesForUser($strUserid) {
 
-        $objORM = new class_orm_objectlist();
+        $objORM = new OrmObjectlist();
         $strQuery = "SELECT COUNT(*)
                        FROM "._dbprefix_."tags_favorite,
                             "._dbprefix_."tags_tag,
@@ -189,7 +197,7 @@ class class_module_tags_favorite extends \Kajona\System\System\Model implements 
                        ".$objORM->getDeletedWhereRestriction()."
                   ";
 
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strUserid));
+        $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strUserid));
         return $arrRow["COUNT(*)"];
     }
 

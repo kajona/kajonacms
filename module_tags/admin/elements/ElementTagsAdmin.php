@@ -7,6 +7,10 @@
 *	$Id$                                  *
 ********************************************************************************************************/
 
+namespace Kajona\Tags\Admin\Elements;
+
+use Kajona\Pages\Admin\AdminElementInterface;
+use Kajona\Pages\Admin\ElementAdmin;
 
 /**
  * Class to handle the admin-stuff of the tags-element
@@ -16,7 +20,7 @@
  *
  * @targetTable element_universal.content_id
  */
-class class_element_tags_admin extends class_element_admin implements interface_admin_element {
+class ElementTagsAdmin extends ElementAdmin implements AdminElementInterface {
 
 
     /**

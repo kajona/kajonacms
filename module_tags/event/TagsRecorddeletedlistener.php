@@ -7,6 +7,17 @@
 *	$Id$                                    *
 ********************************************************************************************************/
 
+namespace Kajona\Tags\Event;
+
+use Kajona\System\System\Carrier;
+use Kajona\System\System\CoreEventdispatcher;
+use Kajona\System\System\GenericeventListenerInterface;
+use Kajona\System\System\OrmBase;
+use Kajona\System\System\OrmDeletedhandlingEnum;
+use Kajona\System\System\SystemEventidentifier;
+use Kajona\System\System\SystemModule;
+use Kajona\Tags\System\TagsFavorite;
+
 /**
  * Removes tag-assignments on record-deletions
  *
@@ -14,7 +25,7 @@
  * @author sidler@mulchprod.de
  *
  */
-class class_module_tags_recorddeletedlistener implements interface_genericevent_listener {
+class TagsRecorddeletedlistener implements GenericeventListenerInterface {
 
 
     /**
@@ -31,29 +42,29 @@ class class_module_tags_recorddeletedlistener implements interface_genericevent_
 
         $bitReturn = true;
 
-        if($strSourceClass == "class_module_tags_tag" && class_module_system_module::getModuleByName("tags") != null) {
+        if($strSourceClass == "Kajona\\System\\TagsTag" && SystemModule::getModuleByName("tags") != null) {
             //delete matching favorites
-            class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::INCLUDED);
-            $arrFavorites = class_module_tags_favorite::getAllFavoritesForTag($strSystemid);
+            OrmBase::setObjHandleLogicalDeletedGlobal(OrmDeletedhandlingEnum::INCLUDED);
+            $arrFavorites = TagsFavorite::getAllFavoritesForTag($strSystemid);
             foreach($arrFavorites as $objOneFavorite) {
 
-                if($strEventName == class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED_LOGICALLY)
+                if($strEventName == SystemEventidentifier::EVENT_SYSTEM_RECORDDELETED_LOGICALLY)
                     $bitReturn = $bitReturn && $objOneFavorite->deleteObject();
 
-                if($strEventName == class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED) {
+                if($strEventName == SystemEventidentifier::EVENT_SYSTEM_RECORDDELETED) {
                     $bitReturn = $bitReturn && $objOneFavorite->deleteObjectFromDatabase();
 
-                    $bitReturn = $bitReturn && class_carrier::getInstance()->getObjDB()->_pQuery("DELETE FROM "._dbprefix_."tags_member WHERE tags_tagid=?", array($strSystemid));
+                    $bitReturn = $bitReturn && Carrier::getInstance()->getObjDB()->_pQuery("DELETE FROM "._dbprefix_."tags_member WHERE tags_tagid=?", array($strSystemid));
                 }
 
             }
-            class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::EXCLUDED);
+            OrmBase::setObjHandleLogicalDeletedGlobal(OrmDeletedhandlingEnum::EXCLUDED);
         }
 
 
         //delete memberships. Fire a plain query, faster then searching.
-        if($strEventName == class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED)
-            $bitReturn = $bitReturn && class_carrier::getInstance()->getObjDB()->_pQuery("DELETE FROM "._dbprefix_."tags_member WHERE tags_systemid=?", array($strSystemid));
+        if($strEventName == SystemEventidentifier::EVENT_SYSTEM_RECORDDELETED)
+            $bitReturn = $bitReturn && Carrier::getInstance()->getObjDB()->_pQuery("DELETE FROM "._dbprefix_."tags_member WHERE tags_systemid=?", array($strSystemid));
 
         return $bitReturn;
     }
@@ -65,11 +76,11 @@ class class_module_tags_recorddeletedlistener implements interface_genericevent_
      * @return void
      */
     public static function staticConstruct() {
-        class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, new class_module_tags_recorddeletedlistener());
-        class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED_LOGICALLY, new class_module_tags_recorddeletedlistener());
+        CoreEventdispatcher::getInstance()->removeAndAddListener(SystemEventidentifier::EVENT_SYSTEM_RECORDDELETED, new TagsRecorddeletedlistener());
+        CoreEventdispatcher::getInstance()->removeAndAddListener(SystemEventidentifier::EVENT_SYSTEM_RECORDDELETED_LOGICALLY, new TagsRecorddeletedlistener());
     }
 
 
 }
 
-class_module_tags_recorddeletedlistener::staticConstruct();
+TagsRecorddeletedlistener::staticConstruct();

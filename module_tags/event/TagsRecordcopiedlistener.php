@@ -7,6 +7,13 @@
 *	$Id$                                    *
 ********************************************************************************************************/
 
+namespace Kajona\Tags\Event;
+
+use Kajona\System\System\Carrier;
+use Kajona\System\System\CoreEventdispatcher;
+use Kajona\System\System\GenericeventListenerInterface;
+use Kajona\System\System\SystemEventidentifier;
+
 /**
  * Copies assigned tags from one record to another
  *
@@ -14,7 +21,7 @@
  * @author sidler@mulchprod.de
  *
  */
-class class_module_tags_recordcopiedlistener implements interface_genericevent_listener {
+class TagsRecordcopiedlistener implements GenericeventListenerInterface {
 
     /**
      * Called whenever a record was copied.
@@ -34,11 +41,11 @@ class class_module_tags_recordcopiedlistener implements interface_genericevent_l
         $strQuery = "SELECT tags_tagid, tags_attribute, tags_owner
                        FROM "._dbprefix_."tags_member
                       WHERE tags_systemid = ?";
-        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strOldSystemid));
+        $arrRows = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strOldSystemid));
 
         foreach($arrRows as $arrSingleRow) {
             $strQuery = "INSERT INTO "._dbprefix_."tags_member (tags_memberid, tags_tagid, tags_systemid, tags_attribute, tags_owner) VALUES (?, ?, ?, ?, ?)";
-            class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array(generateSystemid(), $arrSingleRow["tags_tagid"], $strNewSystemid, $arrSingleRow["tags_attribute"], $arrSingleRow["tags_owner"]));
+            Carrier::getInstance()->getObjDB()->_pQuery($strQuery, array(generateSystemid(), $arrSingleRow["tags_tagid"], $strNewSystemid, $arrSingleRow["tags_attribute"], $arrSingleRow["tags_owner"]));
         }
 
         return true;
@@ -50,10 +57,10 @@ class class_module_tags_recordcopiedlistener implements interface_genericevent_l
      * @return void
      */
     public static function staticConstruct() {
-        class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_RECORDCOPIED, new class_module_tags_recordcopiedlistener());
+        CoreEventdispatcher::getInstance()->removeAndAddListener(SystemEventidentifier::EVENT_SYSTEM_RECORDCOPIED, new TagsRecordcopiedlistener());
     }
 
 }
 
 //static init
-class_module_tags_recordcopiedlistener::staticConstruct();
+TagsRecordcopiedlistener::staticConstruct();

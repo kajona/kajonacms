@@ -7,6 +7,14 @@
 *	$Id$                                    *
 ********************************************************************************************************/
 
+namespace Kajona\Tags\Event;
+
+use class_module_search_document;
+use Kajona\System\System\CoreEventdispatcher;
+use Kajona\System\System\GenericeventListenerInterface;
+use Kajona\System\System\SystemModule;
+use Kajona\Tags\System\TagsTag;
+
 /**
  * Takes care of adding assigned tags to the objects' index
  *
@@ -15,7 +23,7 @@
  * @since 4.4
  *
  */
-class class_module_tags_objectindexedlistener  implements interface_genericevent_listener {
+class TagsObjectindexedlistener  implements GenericeventListenerInterface {
 
 
     /**
@@ -35,11 +43,11 @@ class class_module_tags_objectindexedlistener  implements interface_genericevent
         /** @var class_module_search_document $objSearchDocument */
         $objSearchDocument = $arrArguments[1];
 
-        if(class_module_system_module::getModuleByName("tags") == null)
+        if(SystemModule::getModuleByName("tags") == null)
             return true;
 
         //load tags for the object
-        $objTags = class_module_tags_tag::getTagsForSystemid($objObject->getSystemid());
+        $objTags = TagsTag::getTagsForSystemid($objObject->getSystemid());
 
         foreach($objTags as $objOneTag)
             $objSearchDocument->addContent("tag", $objOneTag->getStrName());
@@ -54,10 +62,10 @@ class class_module_tags_objectindexedlistener  implements interface_genericevent
      * @return void
      */
     public static function staticConstruct() {
-        class_core_eventdispatcher::getInstance()->removeAndAddListener("core.search.objectindexed", new class_module_tags_objectindexedlistener());
+        CoreEventdispatcher::getInstance()->removeAndAddListener("core.search.objectindexed", new TagsObjectindexedlistener());
     }
 
 }
 
 //static init block on include
-class_module_tags_objectindexedlistener::staticConstruct();
+TagsObjectindexedlistener::staticConstruct();

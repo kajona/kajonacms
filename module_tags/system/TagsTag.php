@@ -7,6 +7,21 @@
 *	$Id$                                    *
 ********************************************************************************************************/
 
+namespace Kajona\Tags\System;
+
+use Kajona\System\System\AdminListableInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Link;
+use Kajona\System\System\Model;
+use Kajona\System\System\ModelInterface;
+use Kajona\System\System\Objectfactory;
+use Kajona\System\System\OrmComparatorEnum;
+use Kajona\System\System\OrmObjectlist;
+use Kajona\System\System\OrmObjectlistOrderby;
+use Kajona\System\System\OrmObjectlistPropertyRestriction;
+use Kajona\System\System\SearchResultobjectInterface;
+use Kajona\System\System\SystemSetting;
+
 /**
  * Model-Class for tags.
  * There are two main purposes for this class:
@@ -21,7 +36,7 @@
  * @module tags
  * @moduleId _tags_modul_id_
  */
-class class_module_tags_tag extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_admin_listable, interface_search_resultobject {
+class TagsTag extends Model implements ModelInterface, AdminListableInterface, SearchResultobjectInterface {
 
     /**
      * @var string
@@ -50,7 +65,7 @@ class class_module_tags_tag extends \Kajona\System\System\Model implements \Kajo
      */
     public function __construct($strSystemid = "") {
 
-        if(class_module_system_setting::getConfigValue("_tags_defaultprivate_") == "true")
+        if(SystemSetting::getConfigValue("_tags_defaultprivate_") == "true")
             $this->intPrivate = 1;
 
         parent::__construct($strSystemid);
@@ -65,7 +80,7 @@ class class_module_tags_tag extends \Kajona\System\System\Model implements \Kajo
      * @return mixed
      */
     public function getSearchAdminLinkForObject() {
-        return class_link::getLinkAdminHref($this->getArrModule("modul"), "showAssignedRecords", "&systemid=".$this->getSystemid());
+        return Link::getLinkAdminHref($this->getArrModule("modul"), "showAssignedRecords", "&systemid=".$this->getSystemid());
     }
 
 
@@ -114,12 +129,12 @@ class class_module_tags_tag extends \Kajona\System\System\Model implements \Kajo
      *
      * @param string $strSystemid
      * @param string $strAttribute
-     * @return class_module_tags_tag[]
+     * @return TagsTag[]
      */
     public static function getTagsForSystemid($strSystemid, $strAttribute = null) {
 
-        $objORM = new class_orm_objectlist();
-        $arrParams = array($strSystemid, class_carrier::getInstance()->getObjSession()->getUserID());
+        $objORM = new OrmObjectlist();
+        $arrParams = array($strSystemid, Carrier::getInstance()->getObjSession()->getUserID());
 
         $strWhere = "";
         if($strAttribute != null) {
@@ -139,10 +154,10 @@ class class_module_tags_tag extends \Kajona\System\System\Model implements \Kajo
                           ".$objORM->getDeletedWhereRestriction()."
                    ORDER BY tags_tag_name ASC";
 
-        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
+        $arrRows = Carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
         $arrReturn = array();
         foreach($arrRows as $arrSingleRow) {
-            $arrReturn[] = new class_module_tags_tag($arrSingleRow["tags_tagid"]);
+            $arrReturn[] = new TagsTag($arrSingleRow["tags_tagid"]);
         }
 
         return $arrReturn;
@@ -152,11 +167,11 @@ class class_module_tags_tag extends \Kajona\System\System\Model implements \Kajo
      * Returns a tag for a given tag-name - if present. Otherwise null.
      *
      * @param string $strName
-     * @return class_module_tags_tag
+     * @return TagsTag
      */
     public static function getTagByName($strName) {
-        $objORM = new class_orm_objectlist();
-        $objORM->addWhereRestriction(new class_orm_objectlist_property_restriction("strName", class_orm_comparator_enum::Like(), trim($strName)));
+        $objORM = new OrmObjectlist();
+        $objORM->addWhereRestriction(new OrmObjectlistPropertyRestriction("strName", OrmComparatorEnum::Like(), trim($strName)));
         return $objORM->getSingleObject(get_called_class());
     }
 
@@ -164,22 +179,22 @@ class class_module_tags_tag extends \Kajona\System\System\Model implements \Kajo
      * Creates a list of tags matching the passed filter.
      *
      * @param string $strFilter
-     * @return class_module_tags_tag[]
+     * @return TagsTag[]
      */
     public static function getTagsByFilter($strFilter) {
-        $objORM = new class_orm_objectlist();
-        $objORM->addWhereRestriction(new class_orm_objectlist_property_restriction("strName", class_orm_comparator_enum::Like(), trim($strFilter."%")));
-        $objORM->addOrderBy(new class_orm_objectlist_orderby("tags_tag_name ASC"));
+        $objORM = new OrmObjectlist();
+        $objORM->addWhereRestriction(new OrmObjectlistPropertyRestriction("strName", OrmComparatorEnum::Like(), trim($strFilter."%")));
+        $objORM->addOrderBy(new OrmObjectlistOrderby("tags_tag_name ASC"));
         return $objORM->getObjectList(get_called_class());
     }
 
     /**
      * Loads all tags having at least one assigned systemrecord
      * and being active
-     * @return class_module_tags_tag[]
+     * @return TagsTag[]
      */
     public static function getTagsWithAssignments() {
-        $objORM = new class_orm_objectlist();
+        $objORM = new OrmObjectlist();
         $strQuery = "SELECT DISTINCT(tags_tagid)
                        FROM "._dbprefix_."tags_member,
                             "._dbprefix_."tags_tag,
@@ -190,16 +205,16 @@ class class_module_tags_tag extends \Kajona\System\System\Model implements \Kajo
                         ".$objORM->getDeletedWhereRestriction()."
                         AND system_status = 1";
 
-        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(class_carrier::getInstance()->getObjSession()->getUserID()));
+        $arrRows = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array(Carrier::getInstance()->getObjSession()->getUserID()));
         $arrReturn = array();
         foreach($arrRows as $arrSingleRow) {
-            $arrReturn[] = new class_module_tags_tag($arrSingleRow["tags_tagid"]);
+            $arrReturn[] = new TagsTag($arrSingleRow["tags_tagid"]);
         }
 
         //search them by name
         usort(
             $arrReturn,
-            function (class_module_tags_tag $objA, class_module_tags_tag $objB) {
+            function (TagsTag $objA, TagsTag $objB) {
                 return strcmp($objA->getStrName(), $objB->getStrName());
             }
         );
@@ -214,7 +229,7 @@ class class_module_tags_tag extends \Kajona\System\System\Model implements \Kajo
      * @return array
      */
     public function getListOfAssignments() {
-        $objORM = new class_orm_objectlist();
+        $objORM = new OrmObjectlist();
         $strQuery = "SELECT member.*
                        FROM "._dbprefix_."tags_member as member,
                             "._dbprefix_."system as system,
@@ -235,7 +250,7 @@ class class_module_tags_tag extends \Kajona\System\System\Model implements \Kajo
      * @return int
      */
     public function getIntAssignments() {
-        $objORM = new class_orm_objectlist();
+        $objORM = new OrmObjectlist();
         $strQuery = "SELECT COUNT(*)
                        FROM "._dbprefix_."tags_member as member,
                             "._dbprefix_."tags_tag as tag,
@@ -258,7 +273,7 @@ class class_module_tags_tag extends \Kajona\System\System\Model implements \Kajo
      * @return \Kajona\System\System\Model[]
      */
     public function getArrAssignedRecords($intStart = null, $intEnd = null) {
-        $objORM = new class_orm_objectlist();
+        $objORM = new OrmObjectlist();
         $strQuery = "SELECT system.system_id
                        FROM "._dbprefix_."tags_member as member,
                             "._dbprefix_."tags_tag,
@@ -274,7 +289,7 @@ class class_module_tags_tag extends \Kajona\System\System\Model implements \Kajo
 
         $arrReturn = array();
         foreach($arrRecords as $arrOneRecord)
-            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneRecord["system_id"]);
+            $arrReturn[] = Objectfactory::getInstance()->getObject($arrOneRecord["system_id"]);
 
         return $arrReturn;
     }
@@ -319,7 +334,7 @@ class class_module_tags_tag extends \Kajona\System\System\Model implements \Kajo
         $bitReturn = $this->objDB->_pQuery($strQuery, array(generateSystemid(), $strTargetSystemid, $this->getSystemid(), $strAttribute, $this->objSession->getUserID()));
 
         //trigger an object update
-        class_objectfactory::getInstance()->getObject($strTargetSystemid)->updateObjectToDb();
+        Objectfactory::getInstance()->getObject($strTargetSystemid)->updateObjectToDb();
 
         return $bitReturn;
     }
@@ -356,7 +371,7 @@ class class_module_tags_tag extends \Kajona\System\System\Model implements \Kajo
         $bitReturn = $this->objDB->_pQuery($strQuery, $arrParams);
 
         //trigger an object update
-        class_objectfactory::getInstance()->getObject($strTargetSystemid)->updateObjectToDb();
+        Objectfactory::getInstance()->getObject($strTargetSystemid)->updateObjectToDb();
 
         return $bitReturn;
     }

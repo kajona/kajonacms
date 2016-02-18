@@ -7,6 +7,20 @@
 *   $Id$                             *
 ********************************************************************************************************/
 
+namespace Kajona\Tags\Admin;
+
+use Kajona\System\Admin\AdminController;
+use Kajona\System\Admin\XmlAdminInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Exception;
+use Kajona\System\System\HttpResponsetypes;
+use Kajona\System\System\Link;
+use Kajona\System\System\Objectfactory;
+use Kajona\System\System\ResponseObject;
+use Kajona\System\System\Session;
+use Kajona\System\System\SystemChangelog;
+use Kajona\Tags\System\TagsFavorite;
+use Kajona\Tags\System\TagsTag;
 
 /**
  * The admin-xml-class of the module tags.
@@ -21,33 +35,33 @@
  * @module tags
  * @moduleId _tags_modul_id_
  */
-class class_module_tags_admin_xml extends class_admin_controller implements interface_xml_admin {
+class TagsAdminXml extends AdminController implements XmlAdminInterface {
 
 
     /**
      * @return string
-     * @throws class_exception
+     * @throws Exception
      * @permissions right1
      */
     protected function actionAddFavorite() {
 
-        $objTags = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        $objTags = Objectfactory::getInstance()->getObject($this->getSystemid());
 
-        class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_XML);
+        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_XML);
         $strError = "<message>".$this->getLang("favorite_save_error")."</message>";
         $strSuccess = "<message>".$this->getLang("favorite_save_success").": ".$objTags->getStrDisplayName()."</message>";
         $strExisting = "<message>".$this->getLang("favorite_save_remove").": ".$objTags->getStrDisplayName()."</message>";
 
         //already added before?
-        if(count(class_module_tags_favorite::getAllFavoritesForUserAndTag($this->objSession->getUserID(), $this->getSystemid())) > 0) {
-            $arrFavorites = class_module_tags_favorite::getAllFavoritesForUserAndTag($this->objSession->getUserID(), $this->getSystemid());
+        if(count(TagsFavorite::getAllFavoritesForUserAndTag($this->objSession->getUserID(), $this->getSystemid())) > 0) {
+            $arrFavorites = TagsFavorite::getAllFavoritesForUserAndTag($this->objSession->getUserID(), $this->getSystemid());
             foreach($arrFavorites as $objOneFavorite)
                 $objOneFavorite->deleteObjectFromDatabase();
 
             return $strExisting;
         }
 
-        $objFavorite = new class_module_tags_favorite();
+        $objFavorite = new TagsFavorite();
         $objFavorite->setStrUserId($this->objSession->getUserID());
         $objFavorite->setStrTagId($objTags->getSystemid());
 
@@ -77,9 +91,9 @@ class class_module_tags_admin_xml extends class_admin_controller implements inte
                 continue;
 
             //load the tag itself
-            $objTag = class_module_tags_tag::getTagByName($strOneTag);
+            $objTag = TagsTag::getTagByName($strOneTag);
             if($objTag == null) {
-                $objTag = new class_module_tags_tag();
+                $objTag = new TagsTag();
                 $objTag->setStrName($strOneTag);
                 $objTag->updateObjectToDb();
             }
@@ -88,7 +102,7 @@ class class_module_tags_admin_xml extends class_admin_controller implements inte
             if(!$objTag->assignToSystemrecord($strSystemid, $strAttribute))
                 $bitError = true;
 
-            class_carrier::getInstance()->getObjDB()->flushQueryCache();
+            Carrier::getInstance()->getObjDB()->flushQueryCache();
         }
 
         if(!$bitError)
@@ -111,7 +125,7 @@ class class_module_tags_admin_xml extends class_admin_controller implements inte
         $strAttribute = $this->getParam("attribute");
         $bitDelete = $this->getParam("delete") != "false";
 
-        $arrTags = class_module_tags_tag::getTagsForSystemid($strSystemid, $strAttribute);
+        $arrTags = TagsTag::getTagsForSystemid($strSystemid, $strAttribute);
 
         $strReturn .=" <tags>";
         foreach($arrTags as $objOneTag) {
@@ -137,7 +151,7 @@ class class_module_tags_admin_xml extends class_admin_controller implements inte
         $strAttribute = $this->getParam("attribute");
 
         //load the tag itself
-        $objTag = new class_module_tags_tag($this->getSystemid());
+        $objTag = new TagsTag($this->getSystemid());
 
         //add the connection itself
         if($objTag->removeFromSystemrecord($strTargetSystemid, $strAttribute != '' ? $strAttribute : null))
@@ -159,12 +173,12 @@ class class_module_tags_admin_xml extends class_admin_controller implements inte
         $arrReturn = array();
         $strFilter = $this->getParam("filter");
 
-        $arrTags = class_module_tags_tag::getTagsByFilter($strFilter);
+        $arrTags = TagsTag::getTagsByFilter($strFilter);
         foreach($arrTags as $objOneTag) {
             $arrReturn[] = $objOneTag->getStrName();
         }
 
-        class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JSON);
+        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
         return json_encode($arrReturn);
     }
 
@@ -176,22 +190,22 @@ class class_module_tags_admin_xml extends class_admin_controller implements inte
      * @permissions view
      */
     protected function actionGetFavoriteTags() {
-        class_session::getInstance()->sessionClose();
-        class_carrier::getInstance()->getObjSession()->setBitBlockDbUpdate(true);
-        class_module_system_changelog::$bitChangelogEnabled = false;
+        Session::getInstance()->sessionClose();
+        Carrier::getInstance()->getObjSession()->setBitBlockDbUpdate(true);
+        SystemChangelog::$bitChangelogEnabled = false;
         $arrReturn = array();
 
-        $arrFavorites = class_module_tags_favorite::getAllFavoritesForUser(class_carrier::getInstance()->getObjSession()->getUserID(), 0, 10);
+        $arrFavorites = TagsFavorite::getAllFavoritesForUser(Carrier::getInstance()->getObjSession()->getUserID(), 0, 10);
 
         foreach($arrFavorites as $objOneFavorite) {
             $arrReturn[] = array(
                 "name" => $objOneFavorite->getStrDisplayName(),
-                "onclick" => "location.href='".getLinkAdminHref("tags", "showAssignedRecords", "&systemid=".$objOneFavorite->getMappedTagSystemid(), false)."'",
-                "url" => getLinkAdminHref("tags", "showAssignedRecords", "&systemid=".$objOneFavorite->getMappedTagSystemid(), false)
+                "onclick" => "location.href='".Link::getLinkAdminHref("tags", "showAssignedRecords", "&systemid=".$objOneFavorite->getMappedTagSystemid(), false)."'",
+                "url" => Link::getLinkAdminHref("tags", "showAssignedRecords", "&systemid=".$objOneFavorite->getMappedTagSystemid(), false)
             );
         }
 
-        class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JSON);
+        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
         return json_encode($arrReturn);
     }
 
