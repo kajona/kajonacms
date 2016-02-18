@@ -4,6 +4,12 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Qrcode\System\Scriptlets;
+
+use Kajona\Qrcode\System\Qrcode;
+use Kajona\System\System\ScriptletInterface;
+
+
 /**
  * The qrcode scriptlet generates a qrcode based on the passed url.
  * The second, optional param is a size-value, ranging from 1 to 3
@@ -15,7 +21,8 @@
  * @since 4.0
  * @author sidler@mulchprod.de
  */
-class class_scriptlet_qrcode implements interface_scriptlet {
+class class_scriptlet_qrcode implements ScriptletInterface
+{
 
     /**
      * Processes the content.
@@ -25,26 +32,27 @@ class class_scriptlet_qrcode implements interface_scriptlet {
      *
      * @return string
      */
-    public function processContent($strContent) {
+    public function processContent($strContent)
+    {
 
         $arrTemp = array();
         preg_match_all("#\[qrcode,([ \?\&\-=:+%;A-Za-z0-9_\./\\\]+)(,[1-3])\]#i", $strContent, $arrTemp);
 
-        foreach($arrTemp[0] as $intKey => $strSearchString) {
+        foreach ($arrTemp[0] as $intKey => $strSearchString) {
 
             $intSize = 1;
             $strSubstr = isset($arrTemp[2][$intKey]) ? (int)substr($arrTemp[2][$intKey], 1) : 1;
-            if($strSubstr >= 1 && $strSubstr <=3 ) {
+            if ($strSubstr >= 1 && $strSubstr <= 3) {
                 $intSize = $strSubstr;
             }
 
-            $objQrCode = new class_qrcode();
+            $objQrCode = new Qrcode();
             $objQrCode->setIntSize($intSize);
             $strImage = $objQrCode->getImageForString($arrTemp[1][$intKey]);
 
             $strContent = uniStrReplace(
                 $strSearchString,
-                _webpath_."/".$strImage,
+                _webpath_ . "/" . $strImage,
                 $strContent
             );
 
@@ -57,13 +65,14 @@ class class_scriptlet_qrcode implements interface_scriptlet {
      * Define the context the scriptlet is applied to.
      * A combination of contexts is allowed using an or-concatenation.
      * Examples:
-     *   return interface_scriptlet::BIT_CONTEXT_ADMIN
-     *   return interface_scriptlet::BIT_CONTEXT_ADMIN | BIT_CONTEXT_ADMIN::BIT_CONTEXT_PORTAL_ELEMENT
+     *   return ScriptletInterface::BIT_CONTEXT_ADMIN
+     *   return ScriptletInterface::BIT_CONTEXT_ADMIN | BIT_CONTEXT_ADMIN::BIT_CONTEXT_PORTAL_ELEMENT
      *
      * @return mixed
      */
-    public function getProcessingContext() {
-        return interface_scriptlet::BIT_CONTEXT_PORTAL_ELEMENT;
+    public function getProcessingContext()
+    {
+        return ScriptletInterface::BIT_CONTEXT_PORTAL_ELEMENT;
     }
 
 }

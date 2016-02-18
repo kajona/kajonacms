@@ -5,6 +5,9 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Pdf\System;
+
+
 /**
  * This class provides access to a rudimentary pdf-generation.
  *
@@ -12,7 +15,7 @@
  * @since 3.3.0
  * @package module_pdf
  */
-class class_pdf {
+class Pdf {
 
     public static $PAGE_ORIENTATION_PORTRAIT = "P";
     public static $PAGE_ORIENTATION_LANDSCAPE = "L";
@@ -35,7 +38,7 @@ class class_pdf {
     public static $PDF_MARGIN_RIGHT = 10;
 
     /**
-     * @var class_pdf_tcpdf
+     * @var PdfTcpdf
      */
     private $objPdf;
 
@@ -44,7 +47,7 @@ class class_pdf {
      */
     public function __construct() {
 
-        $this->objPdf = new class_pdf_tcpdf(self::$PAGE_ORIENTATION_PORTRAIT, self::$PDF_UNIT, self::$PAGE_FORMAT_A4);
+        $this->objPdf = new PdfTcpdf(self::$PAGE_ORIENTATION_PORTRAIT, self::$PDF_UNIT, self::$PAGE_FORMAT_A4);
 
         //document meta data
         $this->objPdf->SetCreator("Kajona V4");
@@ -58,8 +61,8 @@ class class_pdf {
         //this is the default, so not set excplicitly
         //$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 
-        $this->setHeader(new class_pdf_header());
-        $this->setFooter(new class_pdf_footer());
+        $this->setHeader(new PdfHeader());
+        $this->setFooter(new PdfFooter());
 
         mb_internal_encoding('UTF-8');
     }
@@ -120,7 +123,7 @@ class class_pdf {
     }
 
     /**
-     * @param class_pdf_header $objHeader
+     * @param PdfHeader $objHeader
      * @return void
      */
     public function setHeader($objHeader) {
@@ -128,7 +131,7 @@ class class_pdf {
     }
 
     /**
-     * @param class_pdf_footer $objFooter
+     * @param PdfFooter $objFooter
      * @return void
      */
     public function setFooter($objFooter) {
@@ -202,7 +205,7 @@ class class_pdf {
      * @param string $strAlign one of self::$TEXT_ALIGN_CENTER, self::$TEXT_ALIGN_RIGHT, self::$TEXT_ALIGN_LEFT
      * @param int $bitFill fill the cell with the color set before via setFillColor()
      *
-     * @see class_pdf::addMultiCell()
+     * @see Pdf::addMultiCell()
      * @return void
      */
     public function addCell($strContent = '', $intWidth = 0, $intHeight = 0, $bitBorders = array(false, false, false, false), $strAlign = "L", $bitFill = 0) {
@@ -287,7 +290,7 @@ class class_pdf {
      * @param string $strTitle
      * @param int $intTargetPage
      *
-     * @see class_pdf::addBookmark()
+     * @see Pdf::addBookmark()
      * @return void
      */
     public function addTableOfContents($strTitle, $intTargetPage = 2) {
@@ -410,7 +413,7 @@ class class_pdf {
      * Returns the current instance of the internal PDF-engine. Use this method
      * only if really really required.
      *
-     * @return class_pdf_tcpdf
+     * @return PdfTcpdf
      */
     public function getObjPdf() {
         return $this->objPdf;

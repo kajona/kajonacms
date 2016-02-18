@@ -6,6 +6,13 @@
 *	$Id$                                            *
 ********************************************************************************************************/
 
+namespace Kajona\Rating\Portal;
+
+use Kajona\Rating\System\RatingRate;
+use Kajona\System\Portal\PortalController;
+use Kajona\System\Portal\PortalInterface;
+
+
 /**
  * Rating Portal. Helper to render a rating bar.
  *
@@ -14,7 +21,8 @@
  * @module rating
  * @moduleId _rating_modul_id_
  */
-class class_module_rating_portal extends class_portal_controller implements interface_portal {
+class RatingPortal extends PortalController implements PortalInterface
+{
 
 
     /**
@@ -31,19 +39,20 @@ class class_module_rating_portal extends class_portal_controller implements inte
      *
      * @return string
      */
-    public function buildRatingBar($floatRating, $intRatings, $strSystemid, $bitRatingAllowed = true, $bitPermissions = true, $strTemplate = "rating.tpl") {
+    public function buildRatingBar($floatRating, $intRatings, $strSystemid, $bitRatingAllowed = true, $bitPermissions = true, $strTemplate = "rating.tpl")
+    {
         $strIcons = "";
         $strRatingBarTitle = "";
 
-        $intNumberOfIcons = class_module_rating_rate::$intMaxRatingValue;
+        $intNumberOfIcons = RatingRate::$intMaxRatingValue;
 
         //read the templates
         $strTemplateBarId = $this->objTemplate->readTemplate("/module_rating/".$strTemplate, "rating_bar");
 
-        if($bitRatingAllowed && $bitPermissions) {
+        if ($bitRatingAllowed && $bitPermissions) {
             $strTemplateIconId = $this->objTemplate->readTemplate("/module_rating/".$strTemplate, "rating_icon");
 
-            for($intI = 1; $intI <= $intNumberOfIcons; $intI++) {
+            for ($intI = 1; $intI <= $intNumberOfIcons; $intI++) {
                 $arrTemplate = array();
                 $arrTemplate["rating_icon_number"] = $intI;
 
@@ -54,7 +63,7 @@ class class_module_rating_portal extends class_portal_controller implements inte
             }
         }
         else {
-            if(!$bitRatingAllowed) {
+            if (!$bitRatingAllowed) {
                 $strRatingBarTitle = $this->getLang("rating_voted");
             }
             else {

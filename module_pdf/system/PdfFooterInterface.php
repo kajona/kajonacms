@@ -4,31 +4,28 @@
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*   $Id$                         *
+*   $Id$                                     *
 ********************************************************************************************************/
 
-/**
- * Interface to be implemented by all rating-sort-algorithms designed to calculate the lists 
- *
- * @package module_rating
- */
-interface interface_module_rating_sortalgo {
+namespace Kajona\Pdf\System;
 
-	/**
-     * Sets an array of elements to be sorted.
-     * Elements have to be an instance of interface_sortable_rating.
+
+/**
+ * Interface for a single pdf footer element
+ *
+ * @author sidler
+ * @package module_pdf
+ * @since 3.3.0
+ */
+interface PdfFooterInterface {
+
+    /**
+     * Writes the footer for a single page.
+     * Use the passed $objPdf to access the pdf.
      *
-     * @param array $arrElements
+     * @param PdfTcpdf $objPdf the target pdf-object
      * @return void
      */
-    public function setElementsArray($arrElements);
-    
-    /**
-     * Does the sorting and returns the sorted array of elements.
-     *
-     * @return array
-     */
-    public function doSorting();
-		
-    
+    public function writeFooter($objPdf);
+
 }

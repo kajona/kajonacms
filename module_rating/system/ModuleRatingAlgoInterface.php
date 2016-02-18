@@ -4,39 +4,28 @@
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                   *
+*   $Id$                             *
 ********************************************************************************************************/
+
+namespace Kajona\Rating\System;
 
 
 /**
- * Sample implementation of a footer.
+ * Interface to be implemented by all rating-algorithms designed to calculate ratings
  *
- * @author sidler
- * @package module_pdf
- * @since 3.3.0
+ * @package module_rating
  */
-class class_pdf_header implements interface_pdf_header {
-
+interface ModuleRatingAlgoInterface
+{
 
     /**
-     * Writes the header for a single page.
-     * Use the passed $objPdf to access the pdf.
+     * Calculates the new rating
      *
-     * @param class_pdf_tcpdf $objPdf
+     * @param RatingRate $objSourceRate The rating-record to update
+     * @param float $floatNewRating The rating fired by the user
+     *
+     * @return float the new rating
      */
-    public function writeHeader($objPdf) {
-
-        $objPdf->SetY(3);
-
-        $objPdf->SetFont('helvetica', '', 8);
-
-        // Title
-        $objPdf->MultiCell(0, 0, $objPdf->getTitle(), "B", "C");
-
-
-        // Line break
-        $objPdf->Ln(30);
-
-    }
+    public function doRating(RatingRate $objSourceRate, $floatNewRating);
 
 }

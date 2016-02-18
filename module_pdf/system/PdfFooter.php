@@ -7,6 +7,9 @@
 *	$Id$                                   *
 ********************************************************************************************************/
 
+namespace Kajona\Pdf\System;
+
+
 /**
  * Sample implementation of a footer.
  *
@@ -14,7 +17,7 @@
  * @package module_pdf
  * @since 3.3.0
  */
-class class_pdf_footer implements interface_pdf_footer {
+class PdfFooter implements PdfFooterInterface {
 
     private $strFooterAddon = "";
 
@@ -22,7 +25,7 @@ class class_pdf_footer implements interface_pdf_footer {
      * Writes the footer for a single page.
      * Use the passed $objPdf to access the pdf.
      *
-     * @param class_pdf_tcpdf $objPdf
+     * @param PdfTcpdf $objPdf
      * @return void
      */
     public function writeFooter($objPdf) {

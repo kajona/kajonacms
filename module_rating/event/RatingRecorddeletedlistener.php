@@ -5,13 +5,23 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Rating\Event;
+
+use Kajona\System\System\Carrier;
+use Kajona\System\System\CoreEventdispatcher;
+use Kajona\System\System\GenericeventListenerInterface;
+use Kajona\System\System\OrmObjectlist;
+use Kajona\System\System\OrmObjectlistPropertyRestriction;
+use Kajona\System\System\SystemEventidentifier;
+
+
 /**
  * Listener to remove ratings from deleted records
  *
  * @package module_rating
  * @author sidler@mulchprod.de
  */
-class class_module_rating_recorddeletedlistener implements interface_genericevent_listener {
+class RatingRecorddeletedlistener implements GenericeventListenerInterface {
 
 
     /**
@@ -30,15 +40,15 @@ class class_module_rating_recorddeletedlistener implements interface_genericeven
         $bitReturn = true;
 
         //ratings installed as a module?
-        if($strSourceClass == "class_module_rating_rate") {
+        if($strSourceClass == "Kajona\\Rating\\System\\RatingRate") {
             //delete history entries of the current rating
-            return class_carrier::getInstance()->getObjDB()->_pQuery("DELETE FROM "._dbprefix_."rating_history"." WHERE rating_history_rating=? ", array($strSystemid));
+            return Carrier::getInstance()->getObjDB()->_pQuery("DELETE FROM "._dbprefix_."rating_history"." WHERE rating_history_rating=? ", array($strSystemid));
         }
 
         //if another record was deleted, remove the ratings alltogether
-        $objOrmList = new class_orm_objectlist();
-        $objOrmList->addWhereRestriction(new class_orm_objectlist_property_restriction("strRatingSystemid", \Kajona\System\System\OrmComparatorEnum::Equal(), $strSystemid));
-        $arrRatings = $objOrmList->getObjectList("class_module_rating_rate");
+        $objOrmList = new OrmObjectlist();
+        $objOrmList->addWhereRestriction(new OrmObjectlistPropertyRestriction("strRatingSystemid", \Kajona\System\System\OrmComparatorEnum::Equal(), $strSystemid));
+        $arrRatings = $objOrmList->getObjectList("Kajona\\Rating\\System\\RatingRate");
 
         foreach($arrRatings as $objRating) {
             $bitReturn = $bitReturn && $objRating->deleteObjectFromDatabase();
@@ -52,9 +62,9 @@ class class_module_rating_recorddeletedlistener implements interface_genericeven
      * @return void
      */
     public static function staticConstruct() {
-        class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, new class_module_rating_recorddeletedlistener());
+        CoreEventdispatcher::getInstance()->removeAndAddListener(SystemEventidentifier::EVENT_SYSTEM_RECORDDELETED, new RatingRecorddeletedlistener());
     }
 
 }
 
-class_module_rating_recorddeletedlistener::staticConstruct();
+RatingRecorddeletedlistener::staticConstruct();
