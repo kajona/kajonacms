@@ -1,7 +1,6 @@
 <?php
 
-require_once(__DIR__ . "/../../module_system/system/class_testbase.php");
-
+require_once __DIR__."../../../core/module_system/system/Testbase.php";
 class class_test_sort extends class_testbase {
 
 

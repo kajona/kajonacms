@@ -1,7 +1,7 @@
 <?php
 
 namespace Kajona\Search\Tests;
-
+require_once __DIR__."../../../core/module_system/system/Testbase.php";
 use Kajona\Search\System\SearchBooleanQuery;
 use Kajona\Search\System\SearchDocument;
 use Kajona\Search\System\SearchIndexwriter;

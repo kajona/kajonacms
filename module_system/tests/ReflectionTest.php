@@ -1,6 +1,7 @@
 <?php
 
 namespace Kajona\System\System;
+require_once __DIR__."../../../core/module_system/system/Testbase.php";
 
 class ReflectionTest extends Testbase  {
 

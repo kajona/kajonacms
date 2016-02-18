@@ -1,8 +1,8 @@
 <?php
-
+namespace Kajona\Pchart\Tests;
 use Kajona\Pchart\System\GraphPchart;
 use Kajona\System\System\Testbase;
-
+require_once __DIR__."../../../core/module_system/system/Testbase.php";
 class ChartsPchartTest extends Testbase  {
 
     public function testCharts() {

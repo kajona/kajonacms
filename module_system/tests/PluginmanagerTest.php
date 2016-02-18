@@ -1,6 +1,7 @@
 <?php
 
 namespace Kajona\System\Tests;
+require_once __DIR__."../../../core/module_system/system/Testbase.php";
 use Kajona\System\System\Classloader;
 use Kajona\System\System\Pluginmanager;
 use Kajona\System\System\Resourceloader;

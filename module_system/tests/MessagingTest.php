@@ -1,6 +1,7 @@
 <?php
 
 namespace Kajona\System\Tests;
+require_once __DIR__."../../../core/module_system/system/Testbase.php";
 use Kajona\System\System\Messageproviders\MessageproviderExceptions;
 use Kajona\System\System\MessagingMessage;
 use Kajona\System\System\MessagingMessagehandler;

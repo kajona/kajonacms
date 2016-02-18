@@ -1,6 +1,7 @@
 <?php
 
 namespace Kajona\System\Tests;
+require_once __DIR__."../../../core/module_system/system/Testbase.php";
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Filesystem;
 use Kajona\System\System\Logger;

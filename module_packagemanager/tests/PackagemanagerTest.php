@@ -8,7 +8,7 @@ use Kajona\System\System\Filesystem;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\Testbase;
 use Kajona\System\System\Zip;
-
+require_once __DIR__."../../../core/module_system/system/Testbase.php";
 class PackagemanagerTest extends Testbase  {
 
 

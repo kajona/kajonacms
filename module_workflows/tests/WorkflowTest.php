@@ -6,7 +6,7 @@
 
 
 namespace Kajona\Workflows\Test;
-
+require_once __DIR__."../../../core/module_system/system/Testbase.php";
 use Kajona\System\System\Testbase;
 use Kajona\Workflows\System\WorkflowsWorkflow;
 

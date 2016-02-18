@@ -14,7 +14,7 @@ use Kajona\System\System\Filesystem;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\Testbase;
 use Phar;
-
+require_once __DIR__."../../../core/module_system/system/Testbase.php";
 class PackageserverTest extends Testbase  {
 
 
