@@ -1,15 +1,19 @@
 <?php
 
 namespace Kajona\System\Tests;
-require_once __DIR__."/../../../core/module_system/system/Testbase.php";
-use class_module_news_news;
+
+require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
+
+use Kajona\News\System\NewsNews;
 use Kajona\System\Admin\AdminFormgenerator;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\Testbase;
 
-class ObjectValidatorTest extends Testbase  {
+class ObjectValidatorTest extends Testbase
+{
 
-    protected function setUp() {
+    protected function setUp()
+    {
         parent::setUp();
     }
 
@@ -17,13 +21,14 @@ class ObjectValidatorTest extends Testbase  {
     /**
      * Checks if the references of the source object is correctly set after validation
      */
-    public function testObjectValidator() {
+    public function testObjectValidator()
+    {
         $objModule = SystemModule::getModuleByName("news");
-        if($objModule == null) {
+        if ($objModule == null) {
             return;
         }
 
-        $objNews = new class_module_news_news();
+        $objNews = new NewsNews();
         $objForm = new AdminFormgenerator("news", $objNews);
         $objForm->generateFieldsFromObject();
 
@@ -35,16 +40,16 @@ class ObjectValidatorTest extends Testbase  {
 
 
         //Now check if the reference to the source object before validation is the same as after
-        foreach($objForm->getArrFields() as $intIndex => $objField) {
-            if($arrFieldsAfter != null) {
+        foreach ($objForm->getArrFields() as $intIndex => $objField) {
+            if ($arrFieldsAfter != null) {
                 $this->assertTrue($arrFieldsBefore[$intIndex]->getObjSourceObject() === $arrFieldsAfter[$intIndex]->getObjSourceObject());
 
-                if($arrFieldsBefore[$intIndex]->getObjSourceObject() != null) {
+                if ($arrFieldsBefore[$intIndex]->getObjSourceObject() != null) {
                     $this->assertTrue($arrFieldsBefore[$intIndex]->getObjSourceObject() === $objSourceObjectBefore);
                     $this->assertTrue($arrFieldsBefore[$intIndex]->getObjSourceObject() === $objSourceObjectAfter);
                 }
 
-                if($arrFieldsAfter[$intIndex]->getObjSourceObject() != null) {
+                if ($arrFieldsAfter[$intIndex]->getObjSourceObject() != null) {
                     $this->assertTrue($arrFieldsAfter[$intIndex]->getObjSourceObject() === $objSourceObjectBefore);
                     $this->assertTrue($arrFieldsAfter[$intIndex]->getObjSourceObject() === $objSourceObjectAfter);
                 }
@@ -54,7 +59,8 @@ class ObjectValidatorTest extends Testbase  {
     }
 
 
-    protected function tearDown() {
+    protected function tearDown()
+    {
         parent::tearDown();
     }
 }

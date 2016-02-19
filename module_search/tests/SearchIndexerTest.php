@@ -1,7 +1,9 @@
 <?php
 
 namespace Kajona\Search\Tests;
-require_once __DIR__."/../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
+
 use Kajona\News\System\NewsNews;
 use Kajona\Search\System\SearchContent;
 use Kajona\Search\System\SearchDocument;
@@ -15,9 +17,11 @@ use Kajona\System\System\SystemChangelog;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\Testbase;
 
-class SearchIndexerTest extends Testbase {
+class SearchIndexerTest extends Testbase
+{
 
-    public function testUnicodeIndexer() {
+    public function testUnicodeIndexer()
+    {
         $strText = "Hänsel und Gretel verirrten sich schließlich im Wald";
 
         $objAnalyzer = new SearchStandardAnalyzer();
@@ -35,7 +39,8 @@ class SearchIndexerTest extends Testbase {
     }
 
 
-    public function testNumericIndexer() {
+    public function testNumericIndexer()
+    {
         $strText = "Hänsel und 2 Gretel verirrten sich schließlich 23 mal im 1000 Wald";
 
         $objAnalyzer = new SearchStandardAnalyzer();
@@ -56,8 +61,8 @@ class SearchIndexerTest extends Testbase {
     }
 
 
-
-    public function testIndexCounter() {
+    public function testIndexCounter()
+    {
         $strText = "aaa aaa aaa bbb aaa ccc ccc ddd";
 
         $objAnalyzer = new SearchStandardAnalyzer();
@@ -77,7 +82,8 @@ class SearchIndexerTest extends Testbase {
     }
 
 
-    public function testIndexCreate() {
+    public function testIndexCreate()
+    {
 
         $objSearchDocument = new SearchDocument();
         $objSearchDocument->setDocumentId(1);
@@ -129,8 +135,8 @@ class SearchIndexerTest extends Testbase {
     }
 
 
-
-    public function testStandardAnalyzer() {
+    public function testStandardAnalyzer()
+    {
         $objAnalyzer = new SearchStandardAnalyzer();
         $arrResults = $objAnalyzer->analyze("bl");
         $this->assertEquals(count($arrResults), 0);
@@ -142,10 +148,11 @@ class SearchIndexerTest extends Testbase {
     }
 
 
-
-    public function testFullIndexWriter() {
-        if(@ini_get("max_execution_time") < 300 && @ini_get("max_execution_time") > 0)
+    public function testFullIndexWriter()
+    {
+        if (@ini_get("max_execution_time") < 300 && @ini_get("max_execution_time") > 0) {
             @ini_set("max_execution_time", 300);
+        }
 
         $indexWriter = new SearchIndexwriter();
 
@@ -154,16 +161,18 @@ class SearchIndexerTest extends Testbase {
         $indexWriter->indexRebuild();
         $intTimeEnd = microtime(true);
         $time = $intTimeEnd - $intTimeStart;
-        echo "Index erstellt in ". sprintf('%f', $time). " sec.\n";
-        echo "Index erstellt mit ".(Database::getInstance()->getNumber()-$intQueriesStart). " queries.\n";
+        echo "Index erstellt in " . sprintf('%f', $time) . " sec.\n";
+        echo "Index erstellt mit " . (Database::getInstance()->getNumber() - $intQueriesStart) . " queries.\n";
 
     }
 
 
-    public function testObjectIndexerPerformance() {
-        if(SystemModule::getModuleByName("news") === null)
+    public function testObjectIndexerPerformance()
+    {
+        if (SystemModule::getModuleByName("news") === null) {
             return;
-        
+        }
+
         $objNews = new NewsNews();
         $objNews->setStrTitle("demo 1");
         $objNews->setStrIntro("intro demo news");
@@ -176,7 +185,7 @@ class SearchIndexerTest extends Testbase {
         $intTimeStart = microtime(true);
         $intQueriesStart = Database::getInstance()->getNumber();
 
-        for($intI = 0; $intI < 150; $intI++) {
+        for ($intI = 0; $intI < 150; $intI++) {
             $objNews->setIntRecordStatus($intI % 2);
             $objNews->updateObjectToDb();
         }
@@ -184,7 +193,7 @@ class SearchIndexerTest extends Testbase {
         $intTimeEnd = microtime(true);
         $time = $intTimeEnd - $intTimeStart;
         echo "Object updates: ", sprintf('%f', $time), " sec.\n";
-        echo "Queries: ", Database::getInstance()->getNumber() - $intQueriesStart. " \n";
+        echo "Queries: ", Database::getInstance()->getNumber() - $intQueriesStart . " \n";
 
 
         echo "Status changes with enabled changelog indexer integration...\n";
@@ -192,7 +201,7 @@ class SearchIndexerTest extends Testbase {
         $intTimeStart = microtime(true);
         $intQueriesStart = Database::getInstance()->getNumber();
 
-        for($intI = 0; $intI < 150; $intI++) {
+        for ($intI = 0; $intI < 150; $intI++) {
             $objNews->setIntRecordStatus($intI % 2);
             $objNews->updateObjectToDb();
         }
@@ -200,7 +209,7 @@ class SearchIndexerTest extends Testbase {
         $intTimeEnd = microtime(true);
         $time = $intTimeEnd - $intTimeStart;
         echo "Object updates: ", sprintf('%f', $time), " sec.\n";
-        echo "Queries: ", Database::getInstance()->getNumber() - $intQueriesStart. " \n";
+        echo "Queries: ", Database::getInstance()->getNumber() - $intQueriesStart . " \n";
 
 
         Objectfactory::getInstance()->getObject($strNewsId)->deleteObjectFromDatabase();
@@ -210,8 +219,9 @@ class SearchIndexerTest extends Testbase {
 
     public function testIndexRemoval()
     {
-        if(SystemModule::getModuleByName("messaging") === null)
+        if (SystemModule::getModuleByName("messaging") === null) {
             return;
+        }
 
         $objMessage = new MessagingMessage();
         $objMessage->setStrTitle("unittest demo message");
@@ -222,22 +232,22 @@ class SearchIndexerTest extends Testbase {
         $objIndexWriter = new SearchIndexwriter();
         $objIndexWriter->indexObject($objMessage);
 
-        $arrRow = Database::getInstance()->getPRow("SELECT COUNT(*) as anz FROM "._dbprefix_."search_ix_document WHERE search_ix_system_id = ?", array($objMessage->getSystemid()));
+        $arrRow = Database::getInstance()->getPRow("SELECT COUNT(*) as anz FROM " . _dbprefix_ . "search_ix_document WHERE search_ix_system_id = ?", array($objMessage->getSystemid()));
         $this->assertEquals(1, $arrRow["anz"]);
 
-        $arrRow = Database::getInstance()->getPRow("SELECT search_ix_document_id FROM "._dbprefix_."search_ix_document WHERE search_ix_system_id = ?", array($objMessage->getSystemid()));
+        $arrRow = Database::getInstance()->getPRow("SELECT search_ix_document_id FROM " . _dbprefix_ . "search_ix_document WHERE search_ix_system_id = ?", array($objMessage->getSystemid()));
         $strDocumentId = $arrRow["search_ix_document_id"];
 
 //        $arrRow = Database::getInstance()->getPArray("SELECT * FROM "._dbprefix_."search_ix_content WHERE search_ix_content_document_id = ?", array($strDocumentId));
-        $arrRow = Database::getInstance()->getPRow("SELECT COUNT(*) as anz FROM "._dbprefix_."search_ix_content WHERE search_ix_content_document_id = ?", array($strDocumentId));
+        $arrRow = Database::getInstance()->getPRow("SELECT COUNT(*) as anz FROM " . _dbprefix_ . "search_ix_content WHERE search_ix_content_document_id = ?", array($strDocumentId));
         $this->assertEquals(7, $arrRow["anz"]);
 
         Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBQUERIES);
         $objIndexWriter->removeRecordFromIndex($objMessage->getSystemid());
-        $arrRow = Database::getInstance()->getPRow("SELECT COUNT(*) as anz FROM "._dbprefix_."search_ix_document WHERE search_ix_system_id = ?", array($objMessage->getSystemid()));
+        $arrRow = Database::getInstance()->getPRow("SELECT COUNT(*) as anz FROM " . _dbprefix_ . "search_ix_document WHERE search_ix_system_id = ?", array($objMessage->getSystemid()));
         $this->assertEquals(0, $arrRow["anz"]);
 
-        $arrRow = Database::getInstance()->getPRow("SELECT COUNT(*) as anz FROM "._dbprefix_."search_ix_content WHERE search_ix_content_document_id = ?", array($strDocumentId));
+        $arrRow = Database::getInstance()->getPRow("SELECT COUNT(*) as anz FROM " . _dbprefix_ . "search_ix_content WHERE search_ix_content_document_id = ?", array($strDocumentId));
         $this->assertEquals(0, $arrRow["anz"]);
 
 

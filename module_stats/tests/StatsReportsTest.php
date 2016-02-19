@@ -1,7 +1,8 @@
 <?php
 
 namespace Kajona\Stats\Tests;
-require_once __DIR__."/../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
 
 use Kajona\Stats\Admin\AdminStatsreportsInterface;
 use Kajona\System\System\Carrier;
@@ -53,7 +54,7 @@ class StatsReportTest extends Testbase
         /** @var AdminStatsreportsInterface $objReport */
         foreach ($arrReports as $objReport) {
             ob_start();
-            echo "processing report ".$objReport->getTitle()."\n";
+            echo "processing report " . $objReport->getTitle() . "\n";
 
             $objReport->getReport();
             $objReport->getReportGraph();

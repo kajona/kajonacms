@@ -1,7 +1,8 @@
 <?php
 
 namespace Kajona\System\Tests;
-require_once __DIR__."/../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
 
 use Kajona\System\System\CoreEventdispatcher;
 use Kajona\System\System\GenericeventListenerInterface;
@@ -9,11 +10,13 @@ use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemEventidentifier;
 use Kajona\System\System\Testbase;
 
-class StatuschangedeventTest extends Testbase  {
+class StatuschangedeventTest extends Testbase
+{
 
     public static $bitHandled = false;
 
-    public function testEventHandler() {
+    public function testEventHandler()
+    {
         self::$bitHandled = false;
 
 
@@ -33,7 +36,8 @@ class StatuschangedeventTest extends Testbase  {
     }
 
 
-    public function assertData($intOldStatus, $intNewStatus, $objObject) {
+    public function assertData($intOldStatus, $intNewStatus, $objObject)
+    {
         $this->assertEquals($intOldStatus, 1);
         $this->assertEquals($intNewStatus, 0);
         $this->assertTrue($objObject instanceof SystemAspect);
@@ -42,13 +46,15 @@ class StatuschangedeventTest extends Testbase  {
 
 }
 
-class StatuchangedhandlerTestModel implements GenericeventListenerInterface {
+class StatuchangedhandlerTestModel implements GenericeventListenerInterface
+{
 
     private $strSystemid;
     /** @var  StatuschangedeventTest */
     private $objSourceTest;
 
-    function __construct($strSystemid, StatuschangedeventTest $objTest) {
+    function __construct($strSystemid, StatuschangedeventTest $objTest)
+    {
         $this->strSystemid = $strSystemid;
         $this->objSourceTest = $objTest;
     }
@@ -66,11 +72,12 @@ class StatuchangedhandlerTestModel implements GenericeventListenerInterface {
      *
      * @return bool
      */
-    public function handleEvent($strEventIdentifier, array $arrArguments) {
+    public function handleEvent($strEventIdentifier, array $arrArguments)
+    {
 
         list($strSystemid, $objObject, $intOldStatus, $intNewStatus) = $arrArguments;
 
-        if($strSystemid == $this->strSystemid) {
+        if ($strSystemid == $this->strSystemid) {
             StatuschangedeventTest::$bitHandled = true;
             $this->objSourceTest->assertData($intOldStatus, $intNewStatus, $objObject);
 

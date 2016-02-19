@@ -1,7 +1,8 @@
 <?php
 
 namespace Kajona\Tags\Tests;
-require_once __DIR__."/../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
 
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
@@ -10,10 +11,11 @@ use Kajona\System\System\SystemModule;
 use Kajona\System\System\Testbase;
 use Kajona\Tags\System\TagsTag;
 
-require_once __DIR__."/../../../core/module_system/system/Testbase.php";
-class TagsTest extends Testbase {
+class TagsTest extends Testbase
+{
 
-    public function testCopyRecordWithTag() {
+    public function testCopyRecordWithTag()
+    {
 
         $objAspect = new SystemAspect();
         $objAspect->setStrName("autotest");
@@ -47,8 +49,8 @@ class TagsTest extends Testbase {
     }
 
 
-
-    public function testTagAssignmentRemoval() {
+    public function testTagAssignmentRemoval()
+    {
         //related to checkin #6111
 
         $objTag = new TagsTag();
@@ -78,29 +80,32 @@ class TagsTest extends Testbase {
     }
 
 
-    public function testTagAssignment() {
+    public function testTagAssignment()
+    {
 
-        if(SystemModule::getModuleByName("pages") === null)
+        if (SystemModule::getModuleByName("pages") === null) {
             return true;
+        }
 
         $strName = generateSystemid();
         $arrPages = PagesPage::getAllPages();
 
-        if(count($arrPages) == 0)
+        if (count($arrPages) == 0) {
             return;
+        }
 
         $objTag = new TagsTag();
         $objTag->setStrName($strName);
         $objTag->updateObjectToDb();
 
 
-        foreach($arrPages as $objOnePage) {
+        foreach ($arrPages as $objOnePage) {
             $objTag->assignToSystemrecord($objOnePage->getSystemid());
             break;
         }
 
         $arrFolder = PagesFolder::getFolderList();
-        foreach($arrFolder as $objOneFolder) {
+        foreach ($arrFolder as $objOneFolder) {
             $objTag->assignToSystemrecord($objOneFolder->getSystemid());
             break;
         }
@@ -125,7 +130,7 @@ class TagsTest extends Testbase {
         $objTag->copyObject();
 
         $this->assertNotEquals($strOldSysid, $objTag->getSystemid());
-        $this->assertEquals($objTag->getStrName(), $strName."_1");
+        $this->assertEquals($objTag->getStrName(), $strName . "_1");
 
         $this->assertEquals($objTag->getIntAssignments(), 2);
         $arrAssignment = $objTag->getArrAssignedRecords();

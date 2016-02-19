@@ -42,7 +42,7 @@ class InstallerPostacomment extends InstallerBase implements InstallerRemovableI
 		    "PostacommentAdmin.php",
             $this->objMetadata->getStrVersion(),
 		    true,
-		    "class_module_postacomment_portal_xml.php");
+		    "PostacommentPortalXml.php");
 
 		//modify default rights to allow guests to post
 		$strReturn .= "Modifying modules' rights node...\n";

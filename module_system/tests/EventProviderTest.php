@@ -1,8 +1,10 @@
 <?php
 
 namespace Kajona\System\Tests;
-require_once __DIR__."/../../../core/module_system/system/Testbase.php";
-use interface_event_provider;
+
+require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
+
+use Kajona\Dashboard\System\EventProviderInterface;
 use Kajona\System\System\Date;
 use Kajona\System\System\Pluginmanager;
 use Kajona\System\System\Testbase;
@@ -11,7 +13,7 @@ class EventProviderTest extends Testbase
 {
     public function testProvider()
     {
-        $objPluginManager = new Pluginmanager(interface_event_provider::EXTENSION_POINT);
+        $objPluginManager = new Pluginmanager(EventProviderInterface::EXTENSION_POINT);
         $arrPlugins = $objPluginManager->getPlugins();
         $arrNames = array();
 
@@ -23,7 +25,7 @@ class EventProviderTest extends Testbase
             $arrCategories = $objPlugin->getCategories();
             $arrNames[] = $objPlugin->getName();
 
-            $this->assertInstanceOf('interface_event_provider', $objPlugin);
+            $this->assertInstanceOf('EventProviderInterface', $objPlugin);
             $this->assertTrue($objPlugin->getName() != "");
             $this->assertTrue(is_array($arrCategories));
 

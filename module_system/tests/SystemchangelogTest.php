@@ -1,7 +1,8 @@
 <?php
 
 namespace Kajona\System\Tests;
-require_once __DIR__."/../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
 
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Date;
@@ -15,23 +16,27 @@ use Kajona\System\System\VersionableInterface;
  * @author sidler@mulchprod.de
  * @package module_system
  */
-class SystemchangelogTest extends Testbase {
-    
-    protected function setUp() {
+class SystemchangelogTest extends Testbase
+{
+
+    protected function setUp()
+    {
         parent::setUp();
         SystemChangelog::$bitChangelogEnabled = true;
     }
 
-    protected function tearDown() {
+    protected function tearDown()
+    {
         parent::tearDown();
         SystemChangelog::$bitChangelogEnabled = null;
     }
 
 
-    public function testChangelogArrayHandling() {
+    public function testChangelogArrayHandling()
+    {
 
         $arrOld = array(1, 2, 3, 4, 5);
-        $arrNew = array(      3, 4, 5, 6, 7);
+        $arrNew = array(3, 4, 5, 6, 7);
 
         $arrChanges = array(
             array("property" => "testArray", "oldvalue" => $arrOld, "newvalue" => $arrNew)
@@ -51,18 +56,19 @@ class SystemchangelogTest extends Testbase {
         $arrChanges = SystemChangelog::getSpecificEntries($strSystemid, "arrayTest", "testArray");
         $this->assertEquals(4, count($arrChanges));
 
-        foreach($arrChanges as $objOneChangeSet) {
-            if($objOneChangeSet->getStrOldValue() != "") {
+        foreach ($arrChanges as $objOneChangeSet) {
+            if ($objOneChangeSet->getStrOldValue() != "") {
                 $this->assertTrue(in_array($objOneChangeSet->getStrOldValue(), array(1, 2)));
             }
 
-            if($objOneChangeSet->getStrNewValue() != "") {
+            if ($objOneChangeSet->getStrNewValue() != "") {
                 $this->assertTrue(in_array($objOneChangeSet->getStrNewValue(), array(6, 7)));
             }
         }
     }
 
-    public function testChangelog() {
+    public function testChangelog()
+    {
 
         $this->flushDBCache();
 
@@ -95,13 +101,13 @@ class SystemchangelogTest extends Testbase {
         $this->assertEquals(2, count(SystemChangelog::getLogEntries($strSystemid)));
 
         $arrLogs = SystemChangelog::getLogEntries($strSystemid);
-        foreach($arrLogs as $objOneChangelog) {
-            if($objOneChangelog->getStrProperty() == "strTest") {
+        foreach ($arrLogs as $objOneChangelog) {
+            if ($objOneChangelog->getStrProperty() == "strTest") {
                 $this->assertEquals($objOneChangelog->getStrOldValue(), "old");
                 $this->assertEquals($objOneChangelog->getStrNewValue(), "new test 1");
             }
 
-            if($objOneChangelog->getStrProperty() == "strSecondTest") {
+            if ($objOneChangelog->getStrProperty() == "strSecondTest") {
                 $this->assertEquals($objOneChangelog->getStrOldValue(), "second old");
                 $this->assertEquals($objOneChangelog->getStrNewValue(), "new val 2");
             }
@@ -117,7 +123,8 @@ class SystemchangelogTest extends Testbase {
 
     }
 
-    public function testChangelogIntervalChanges() {
+    public function testChangelogIntervalChanges()
+    {
         $strSystemid = generateSystemid();
 
         $objStartDate = new Date();
@@ -131,7 +138,7 @@ class SystemchangelogTest extends Testbase {
         $objChanges->createLogEntry(new DummyObject($strSystemid), 1);
         $objChanges->processCachedInserts();
 
-        $strQuery = "INSERT INTO "._dbprefix_."changelog
+        $strQuery = "INSERT INTO " . _dbprefix_ . "changelog
                      (change_id,
                       change_date,
                       change_systemid,
@@ -196,7 +203,8 @@ class SystemchangelogTest extends Testbase {
     }
 
 
-    public function testChangeDetection() {
+    public function testChangeDetection()
+    {
         $objChangelog = new SystemChangelog();
 
         $objOne = new DummyObject(generateSystemid());
@@ -219,13 +227,14 @@ class SystemchangelogTest extends Testbase {
     }
 
 
-    public function testPerformance() {
+    public function testPerformance()
+    {
 
         $objChanges = new SystemChangelog();
         $objChanges->processCachedInserts();
         $intFired = (Carrier::getInstance()->getObjDB()->getNumber() - Carrier::getInstance()->getObjDB()->getNumberCache());
 
-        for($intI = 0; $intI < 100; $intI++) {
+        for ($intI = 0; $intI < 100; $intI++) {
             $objChanges->createLogEntry(new DummyObject(generateSystemid()), "1");
             $objChanges->processCachedInserts();
         }
@@ -233,14 +242,13 @@ class SystemchangelogTest extends Testbase {
 
         $this->assertTrue(($intFiredAfter - $intFired) >= 100);
 
-        echo "Queries: ".($intFiredAfter-$intFired)."\n";
-
+        echo "Queries: " . ($intFiredAfter - $intFired) . "\n";
 
 
         $intFired = (Carrier::getInstance()->getObjDB()->getNumber() - Carrier::getInstance()->getObjDB()->getNumberCache());
 
         $objChanges = new SystemChangelog();
-        for($intI = 0; $intI < 100; $intI++) {
+        for ($intI = 0; $intI < 100; $intI++) {
             $objChanges->createLogEntry(new DummyObject(generateSystemid()), "1");
         }
         $objChanges->processCachedInserts();
@@ -248,12 +256,13 @@ class SystemchangelogTest extends Testbase {
 
         $this->assertTrue(($intFiredAfter - $intFired) < 10);
 
-        echo "Queries: ".($intFiredAfter-$intFired)."\n";
+        echo "Queries: " . ($intFiredAfter - $intFired) . "\n";
 
 
     }
 
-    public function testArrayHandling() {
+    public function testArrayHandling()
+    {
         $objChangelog = new SystemChangelog();
 
         $objOne = new DummyObject2(generateSystemid());
@@ -281,7 +290,8 @@ class SystemchangelogTest extends Testbase {
 }
 
 
-class DummyObject implements VersionableInterface {
+class DummyObject implements VersionableInterface
+{
 
     /**
      * @var
@@ -296,116 +306,141 @@ class DummyObject implements VersionableInterface {
     private $strSecondTest = "second old";
 
     private $strSystemid;
-    function __construct($strSystemid) {
+
+    function __construct($strSystemid)
+    {
         $this->strSystemid = $strSystemid;
     }
 
-    public function getSystemid() {
+    public function getSystemid()
+    {
         return $this->strSystemid;
     }
 
-    public function getPrevid() {
+    public function getPrevid()
+    {
         return "";
     }
 
-    public function setStrSystemid($strSystemid) {
+    public function setStrSystemid($strSystemid)
+    {
         $this->strSystemid = $strSystemid;
     }
 
-    public function renderVersionValue($strProperty, $strValue) {
+    public function renderVersionValue($strProperty, $strValue)
+    {
         return $strValue;
     }
 
-    public function getVersionActionName($strAction) {
+    public function getVersionActionName($strAction)
+    {
         return "dummy";
     }
 
-    public function getArrModule($strKey) {
+    public function getArrModule($strKey)
+    {
         return "dummy";
     }
 
-    public function getVersionPropertyName($strProperty) {
+    public function getVersionPropertyName($strProperty)
+    {
         return $strProperty;
     }
 
-    public function getVersionRecordName() {
+    public function getVersionRecordName()
+    {
         return "dummy";
     }
 
-    public function setStrSecondTest($strSecondTest) {
+    public function setStrSecondTest($strSecondTest)
+    {
         $this->strSecondTest = $strSecondTest;
     }
 
-    public function getStrSecondTest() {
+    public function getStrSecondTest()
+    {
         return $this->strSecondTest;
     }
 
-    public function setStrTest($strTest) {
+    public function setStrTest($strTest)
+    {
         $this->strTest = $strTest;
     }
 
-    public function getStrTest() {
+    public function getStrTest()
+    {
         return $this->strTest;
     }
 
 }
 
 
+class DummyObject2 implements VersionableInterface
+{
 
-class DummyObject2 implements VersionableInterface {
-
-       /**
+    /**
      * @var
      * @versionable
      */
     private $arrValues = array("b", "c", "d");
 
     private $strSystemid;
-    function __construct($strSystemid) {
+
+    function __construct($strSystemid)
+    {
         $this->strSystemid = $strSystemid;
     }
 
-    public function getSystemid() {
+    public function getSystemid()
+    {
         return $this->strSystemid;
     }
 
-    public function getPrevid() {
+    public function getPrevid()
+    {
         return "";
     }
 
-    public function setStrSystemid($strSystemid) {
+    public function setStrSystemid($strSystemid)
+    {
         $this->strSystemid = $strSystemid;
     }
 
-    public function renderVersionValue($strProperty, $strValue) {
+    public function renderVersionValue($strProperty, $strValue)
+    {
         return $strValue;
     }
 
-    public function getVersionActionName($strAction) {
+    public function getVersionActionName($strAction)
+    {
         return "dummy";
     }
 
-    public function getArrModule($strKey) {
+    public function getArrModule($strKey)
+    {
         return "dummy";
     }
 
-    public function getVersionPropertyName($strProperty) {
+    public function getVersionPropertyName($strProperty)
+    {
         return $strProperty;
     }
 
-    public function getVersionRecordName() {
+    public function getVersionRecordName()
+    {
         return "dummy";
     }
 
 
-    public function getArrValues() {
+    public function getArrValues()
+    {
         return $this->arrValues;
     }
 
-    public function setArrValues($arrValues) {
+    public function setArrValues($arrValues)
+    {
         $this->arrValues = $arrValues;
     }
-
 
 
 }

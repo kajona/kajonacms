@@ -1,18 +1,22 @@
 <?php
 
 namespace Kajona\System\Tests;
-require_once __DIR__."/../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
 
 use Kajona\System\System\Date;
 use Kajona\System\System\StringUtil;
 use Kajona\System\System\Testbase;
 
-class StringTest extends Testbase  {
+class StringTest extends Testbase
+{
 
-   public function testStringTest() {
-   }
+    public function testStringTest()
+    {
+    }
 
-    public function testStrToDate() {
+    public function testStrToDate()
+    {
         $strString = "";
         $objResult = StringUtil::toDate($strString);
         $this->assertNull($objResult);
@@ -26,7 +30,8 @@ class StringTest extends Testbase  {
         $this->assertTrue($objResult instanceof Date);
     }
 
-    public function testStrToInt() {
+    public function testStrToInt()
+    {
         $strString = "";
         $intResult = StringUtil::toInt($strString);
         $this->assertNull($intResult);
@@ -40,7 +45,8 @@ class StringTest extends Testbase  {
         $this->assertEquals(0, $intResult);
     }
 
-    public function testStrToArray() {
+    public function testStrToArray()
+    {
         $strString = "";
         $arrResult = StringUtil::toArray($strString);
         $this->assertNull($arrResult);

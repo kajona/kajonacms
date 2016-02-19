@@ -33,8 +33,8 @@ class InstallerUserlist extends class_installer_base implements interface_instal
         if($objElement == null) {
             $objElement = new PagesElement();
             $objElement->setStrName("userlist");
-            $objElement->setStrClassAdmin("class_element_userlist_admin.php");
-            $objElement->setStrClassPortal("class_element_userlist_portal.php");
+            $objElement->setStrClassAdmin("ElementUserlistAdmin.php");
+            $objElement->setStrClassPortal("ElementUserlistPortal.php");
             $objElement->setIntCachetime(-1);
             $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->objMetadata->getStrVersion());

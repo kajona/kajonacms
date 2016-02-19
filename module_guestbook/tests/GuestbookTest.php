@@ -7,9 +7,11 @@ use Kajona\Guestbook\System\GuestbookPost;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Testbase;
 
-class GuestbookTest extends Testbase  {
+class GuestbookTest extends Testbase
+{
 
-    public function test() {
+    public function test()
+    {
 
         $objDB = Carrier::getInstance()->getObjDB();
 
@@ -31,8 +33,8 @@ class GuestbookTest extends Testbase  {
 
         $objDB->flushQueryCache();
 
-        $this->assertEquals(0, count(GuestbookPost::getPosts($strGBId, true)), __FILE__." check nr of posts portal");
-        $this->assertEquals(1, count(GuestbookPost::getPosts($strGBId)), __FILE__." check nr of posts total");
+        $this->assertEquals(0, count(GuestbookPost::getPosts($strGBId, true)), __FILE__ . " check nr of posts portal");
+        $this->assertEquals(1, count(GuestbookPost::getPosts($strGBId)), __FILE__ . " check nr of posts total");
 
         echo "setting guestbook non-moderated...\n";
         $objGuestbook->setIntGuestbookModerated(0);
@@ -47,8 +49,8 @@ class GuestbookTest extends Testbase  {
         $objPost->setStrGuestbookPostText("test2");
         $objPost->updateObjectToDb($strGBId);
 
-        $this->assertEquals(1, count(GuestbookPost::getPosts($strGBId, true)), __FILE__." check nr of posts portal");
-        $this->assertEquals(2, count(GuestbookPost::getPosts($strGBId)), __FILE__." check nr of posts total");
+        $this->assertEquals(1, count(GuestbookPost::getPosts($strGBId, true)), __FILE__ . " check nr of posts portal");
+        $this->assertEquals(2, count(GuestbookPost::getPosts($strGBId)), __FILE__ . " check nr of posts total");
 
 
         $objDB->flushQueryCache();
@@ -56,7 +58,7 @@ class GuestbookTest extends Testbase  {
         echo "deleting the guestbook...\n";
         $objGuestbook->deleteObjectFromDatabase();
 
-       
+
     }
 
 }

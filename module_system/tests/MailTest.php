@@ -1,18 +1,22 @@
 <?php
 
 namespace Kajona\System\Tests;
-require_once __DIR__."/../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
+
 use Kajona\System\System\Mail;
 use Kajona\System\System\Testbase;
 
-class MailTest extends Testbase  {
+class MailTest extends Testbase
+{
 
-    public function test() {
+    public function test()
+    {
 
         $strTo = "postmaster@localhost";
         $intSentMails = 0;
 
-        echo "\tsend a test email to ".$strTo."...\n";
+        echo "\tsend a test email to " . $strTo . "...\n";
 
         $objMail = new Mail();
         $objMail->setSender("test@kajona.de");
@@ -28,7 +32,7 @@ class MailTest extends Testbase  {
             $intSentMails++;
         }
 
-        $this->assertEquals($intSentMails, 1, __FILE__." checkNrOfMails");
+        $this->assertEquals($intSentMails, 1, __FILE__ . " checkNrOfMails");
     }
 
 }

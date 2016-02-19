@@ -1,7 +1,8 @@
 <?php
 
 namespace Kajona\System\Tests;
-require_once __DIR__."/../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
 
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Rights;
@@ -10,16 +11,18 @@ use Kajona\System\System\Testbase;
 use Kajona\System\System\UserGroup;
 use Kajona\System\System\UserUser;
 
-class RightsTest extends Testbase {
+class RightsTest extends Testbase
+{
 
     /**
      * @var Rights
      */
-    private $objRights ;
+    private $objRights;
     private $strUserId;
 
 
-    public function testInheritance() {
+    public function testInheritance()
+    {
         echo "\tRIGHTS INHERITANCE...\n";
         $objRights = Carrier::getInstance()->getObjRights();
         $this->objRights = Carrier::getInstance()->getObjRights();
@@ -29,70 +32,85 @@ class RightsTest extends Testbase {
         echo "\tcreating a test user\n";
         $objUser = new UserUser();
         //$objUser->setStrEmail(generateSystemid()."@".generateSystemid()."de");
-        $strUsername = "user_".generateSystemid();
+        $strUsername = "user_" . generateSystemid();
         $objUser->setStrUsername($strUsername);
         $objUser->updateObjectToDb();
-        echo "\tid of user: ".$objUser->getSystemid()."\n";
+        echo "\tid of user: " . $objUser->getSystemid() . "\n";
         $this->strUserId = $objUser->getSystemid();
 
         echo "\tcreating a test group\n";
         $objGroup = new UserGroup();
-        $strName = "name_".generateSystemid();
+        $strName = "name_" . generateSystemid();
         $objGroup->setStrName($strName);
         $objGroup->updateObjectToDb();
-        echo "\tid of group: ".$objGroup->getSystemid()."\n";
+        echo "\tid of group: " . $objGroup->getSystemid() . "\n";
 
         echo "\tadding user to group\n";
         $objGroup->getObjSourceGroup()->addMember($objUser->getObjSourceUser());
 
         echo "\tcreating node-tree\n";
-        $objAspect = new SystemAspect(); $objAspect->setStrName("autotest 0");
+        $objAspect = new SystemAspect();
+        $objAspect->setStrName("autotest 0");
         $objAspect->updateObjectToDb();
         $strRootId = $objAspect->getSystemid();
-        echo "\tid of root-node: ".$strRootId."\n";
+        echo "\tid of root-node: " . $strRootId . "\n";
         echo "\tcreating child nodes...\n";
-        $objAspect = new SystemAspect(); $objAspect->setStrName("autotest 01");
+        $objAspect = new SystemAspect();
+        $objAspect->setStrName("autotest 01");
         $objAspect->updateObjectToDb($strRootId);
         $strSecOne = $objAspect->getSystemid();
-        $objAspect = new SystemAspect(); $objAspect->setStrName("autotest 02");
+        $objAspect = new SystemAspect();
+        $objAspect->setStrName("autotest 02");
         $objAspect->updateObjectToDb($strRootId);
         $strSecTwo = $objAspect->getSystemid();
 
-        $objAspect = new SystemAspect(); $objAspect->setStrName("autotest 011");
+        $objAspect = new SystemAspect();
+        $objAspect->setStrName("autotest 011");
         $objAspect->updateObjectToDb($strSecOne);
         $strThirdOne1 = $objAspect->getSystemid();
-        $objAspect = new SystemAspect(); $objAspect->setStrName("autotest 012");
-         $objAspect->updateObjectToDb($strSecOne);
+        $objAspect = new SystemAspect();
+        $objAspect->setStrName("autotest 012");
+        $objAspect->updateObjectToDb($strSecOne);
         $strThirdOne2 = $objAspect->getSystemid();
-        $objAspect = new SystemAspect(); $objAspect->setStrName("autotest 021");
+        $objAspect = new SystemAspect();
+        $objAspect->setStrName("autotest 021");
         $objAspect->updateObjectToDb($strSecTwo);
         $strThirdTwo1 = $objAspect->getSystemid();
-        $objAspect = new SystemAspect(); $objAspect->setStrName("autotest 022");
+        $objAspect = new SystemAspect();
+        $objAspect->setStrName("autotest 022");
         $objAspect->updateObjectToDb($strSecTwo);
         $strThirdTwo2 = $objAspect->getSystemid();
 
-        $objAspect = new SystemAspect(); $objAspect->setStrName("autotest 0111");
+        $objAspect = new SystemAspect();
+        $objAspect->setStrName("autotest 0111");
         $objAspect->updateObjectToDb($strThirdOne1);
         $strThird111 = $objAspect->getSystemid();
-        $objAspect = new SystemAspect(); $objAspect->setStrName("autotest 0112");
+        $objAspect = new SystemAspect();
+        $objAspect->setStrName("autotest 0112");
         $objAspect->updateObjectToDb($strThirdOne1);
         $strThird112 = $objAspect->getSystemid();
-        $objAspect = new SystemAspect(); $objAspect->setStrName("autotest 0121");
+        $objAspect = new SystemAspect();
+        $objAspect->setStrName("autotest 0121");
         $objAspect->updateObjectToDb($strThirdOne2);
         $strThird121 = $objAspect->getSystemid();
-        $objAspect = new SystemAspect(); $objAspect->setStrName("autotest 0122");
+        $objAspect = new SystemAspect();
+        $objAspect->setStrName("autotest 0122");
         $objAspect->updateObjectToDb($strThirdOne2);
         $strThird122 = $objAspect->getSystemid();
-        $objAspect = new SystemAspect(); $objAspect->setStrName("autotest 0211");
+        $objAspect = new SystemAspect();
+        $objAspect->setStrName("autotest 0211");
         $objAspect->updateObjectToDb($strThirdTwo1);
         $strThird211 = $objAspect->getSystemid();
-        $objAspect = new SystemAspect(); $objAspect->setStrName("autotest 0212");
+        $objAspect = new SystemAspect();
+        $objAspect->setStrName("autotest 0212");
         $objAspect->updateObjectToDb($strThirdTwo1);
         $strThird212 = $objAspect->getSystemid();
-        $objAspect = new SystemAspect(); $objAspect->setStrName("autotest 0221");
+        $objAspect = new SystemAspect();
+        $objAspect->setStrName("autotest 0221");
         $objAspect->updateObjectToDb($strThirdTwo2);
         $strThird221 = $objAspect->getSystemid();
-        $objAspect = new SystemAspect(); $objAspect->setStrName("autotest 0222");
+        $objAspect = new SystemAspect();
+        $objAspect->setStrName("autotest 0222");
         $objAspect->updateObjectToDb($strThirdTwo2);
         $strThird222 = $objAspect->getSystemid();
         $arrThirdLevelNodes = array($strThird111, $strThird112, $strThird121, $strThird122, $strThird211, $strThird212, $strThird221, $strThird222);
@@ -100,7 +118,7 @@ class RightsTest extends Testbase {
 
         echo "\tchecking leaf nodes for initial rights\n";
 //        Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBQUERIES | Carrier::INT_CACHE_TYPE_ORMCACHE);
-        foreach($arrThirdLevelNodes as $strOneRootNode) {
+        foreach ($arrThirdLevelNodes as $strOneRootNode) {
             $this->checkNodeRights($strOneRootNode, false, false);
         }
 
@@ -112,7 +130,7 @@ class RightsTest extends Testbase {
 
         echo "\tchecking leaf nodes for inherited rights\n";
 //        Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBQUERIES | Carrier::INT_CACHE_TYPE_ORMCACHE);
-        foreach($arrThirdLevelNodes as $strOneRootNode) {
+        foreach ($arrThirdLevelNodes as $strOneRootNode) {
             $this->checkNodeRights($strOneRootNode, true, true);
         }
 
@@ -140,7 +158,6 @@ class RightsTest extends Testbase {
         $this->checkNodeRights($strThird222, false, true);
 
 
-
         echo "\tmove SecOne as child to 221\n";
         $objTempCommons = new SystemAspect($strSecOne);
         $objTempCommons->setStrPrevId($strThird221);
@@ -164,7 +181,6 @@ class RightsTest extends Testbase {
         $this->checkNodeRights($strThird222, false, true);
 
 
-
         echo "\tsetting rights of third21 to only view\n";
         $objRights->removeGroupFromRight($objGroup->getSystemid(), $strThirdTwo1, "edit");
         $objRights->addGroupToRight($objGroup->getSystemid(), $strThirdTwo1, "view");
@@ -184,7 +200,6 @@ class RightsTest extends Testbase {
         $this->checkNodeRights($strThird212, true);
         $this->checkNodeRights($strThird221, false, true);
         $this->checkNodeRights($strThird222, false, true);
-
 
 
         echo "\tsetting 211 as parent node for third11\n";
@@ -266,8 +281,6 @@ class RightsTest extends Testbase {
         $this->checkNodeRights($strThird222, true, true);
 
 
-
-
 //        echo "\n\n\n";
 //        $this->printTree($strRootId, 1);
 //        echo "\n\n\n";
@@ -301,9 +314,8 @@ class RightsTest extends Testbase {
     }
 
 
-
-
-    public function testAddGroupToPermission() {
+    public function testAddGroupToPermission()
+    {
         $objAspect = new SystemAspect();
         $objAspect->setStrName("democase");
         $objAspect->updateObjectToDb();
@@ -313,19 +325,19 @@ class RightsTest extends Testbase {
         //fill caches
         SystemAspect::getObjectList();
 
-        $arrRow = Carrier::getInstance()->getObjDB()->getPRow("SELECT * FROM "._dbprefix_."system_right WHERE right_id = ?", array($objAspect->getSystemid()), 0, false);
+        $arrRow = Carrier::getInstance()->getObjDB()->getPRow("SELECT * FROM " . _dbprefix_ . "system_right WHERE right_id = ?", array($objAspect->getSystemid()), 0, false);
         $this->assertTrue(!in_array($strGroupId, explode(",", $arrRow["right_view"])));
         $this->assertTrue(!Carrier::getInstance()->getObjRights()->checkPermissionForGroup($strGroupId, class_rights::$STR_RIGHT_VIEW, $objAspect->getSystemid()));
 
         Carrier::getInstance()->getObjRights()->addGroupToRight($strGroupId, $objAspect->getSystemid(), class_rights::$STR_RIGHT_VIEW);
 
-        $arrRow = Carrier::getInstance()->getObjDB()->getPRow("SELECT * FROM "._dbprefix_."system_right WHERE right_id = ?", array($objAspect->getSystemid()), 0, false);
+        $arrRow = Carrier::getInstance()->getObjDB()->getPRow("SELECT * FROM " . _dbprefix_ . "system_right WHERE right_id = ?", array($objAspect->getSystemid()), 0, false);
         $this->assertTrue(in_array($strGroupId, explode(",", $arrRow["right_view"])));
         $this->assertTrue(Carrier::getInstance()->getObjRights()->checkPermissionForGroup($strGroupId, class_rights::$STR_RIGHT_VIEW, $objAspect->getSystemid()));
 
         SystemAspect::getObjectList();
 
-        $arrRow = Carrier::getInstance()->getObjDB()->getPRow("SELECT * FROM "._dbprefix_."system_right WHERE right_id = ?", array($objAspect->getSystemid()), 0, false);
+        $arrRow = Carrier::getInstance()->getObjDB()->getPRow("SELECT * FROM " . _dbprefix_ . "system_right WHERE right_id = ?", array($objAspect->getSystemid()), 0, false);
         $this->assertTrue(in_array($strGroupId, explode(",", $arrRow["right_view"])));
         $this->assertTrue(Carrier::getInstance()->getObjRights()->checkPermissionForGroup($strGroupId, class_rights::$STR_RIGHT_VIEW, $objAspect->getSystemid()));
 
@@ -345,34 +357,34 @@ class RightsTest extends Testbase {
         $bitRight3 = false,
         $bitRight4 = false,
         $bitRight5 = false
-    ) {
+    )
+    {
 
-        $this->assertEquals($bitView, $this->objRights->rightView($strNodeId, $this->strUserId), __FILE__." checkNodeRights View ".$strNodeId);
-        $this->assertEquals($bitEdit, $this->objRights->rightEdit($strNodeId, $this->strUserId), __FILE__." checkNodeRights Edit ".$strNodeId);
-        $this->assertEquals($bitDelete, $this->objRights->rightDelete($strNodeId, $this->strUserId), __FILE__." checkNodeRights Delete ".$strNodeId);
-        $this->assertEquals($bitRights, $this->objRights->rightRight($strNodeId, $this->strUserId), __FILE__." checkNodeRights Rights".$strNodeId);
-        $this->assertEquals($bitRight1, $this->objRights->rightRight1($strNodeId, $this->strUserId), __FILE__." checkNodeRights Right1".$strNodeId);
-        $this->assertEquals($bitRight2, $this->objRights->rightRight2($strNodeId, $this->strUserId), __FILE__." checkNodeRights Right2".$strNodeId);
-        $this->assertEquals($bitRight3, $this->objRights->rightRight3($strNodeId, $this->strUserId), __FILE__." checkNodeRights Right3".$strNodeId);
-        $this->assertEquals($bitRight4, $this->objRights->rightRight4($strNodeId, $this->strUserId), __FILE__." checkNodeRights Right4".$strNodeId);
-        $this->assertEquals($bitRight5, $this->objRights->rightRight5($strNodeId, $this->strUserId), __FILE__." checkNodeRights Right5".$strNodeId);
+        $this->assertEquals($bitView, $this->objRights->rightView($strNodeId, $this->strUserId), __FILE__ . " checkNodeRights View " . $strNodeId);
+        $this->assertEquals($bitEdit, $this->objRights->rightEdit($strNodeId, $this->strUserId), __FILE__ . " checkNodeRights Edit " . $strNodeId);
+        $this->assertEquals($bitDelete, $this->objRights->rightDelete($strNodeId, $this->strUserId), __FILE__ . " checkNodeRights Delete " . $strNodeId);
+        $this->assertEquals($bitRights, $this->objRights->rightRight($strNodeId, $this->strUserId), __FILE__ . " checkNodeRights Rights" . $strNodeId);
+        $this->assertEquals($bitRight1, $this->objRights->rightRight1($strNodeId, $this->strUserId), __FILE__ . " checkNodeRights Right1" . $strNodeId);
+        $this->assertEquals($bitRight2, $this->objRights->rightRight2($strNodeId, $this->strUserId), __FILE__ . " checkNodeRights Right2" . $strNodeId);
+        $this->assertEquals($bitRight3, $this->objRights->rightRight3($strNodeId, $this->strUserId), __FILE__ . " checkNodeRights Right3" . $strNodeId);
+        $this->assertEquals($bitRight4, $this->objRights->rightRight4($strNodeId, $this->strUserId), __FILE__ . " checkNodeRights Right4" . $strNodeId);
+        $this->assertEquals($bitRight5, $this->objRights->rightRight5($strNodeId, $this->strUserId), __FILE__ . " checkNodeRights Right5" . $strNodeId);
 
     }
 
-    private function printTree($strRootNode, $intLevel) {
-        for($i=0; $i<$intLevel; $i++)
+    private function printTree($strRootNode, $intLevel)
+    {
+        for ($i = 0; $i < $intLevel; $i++)
             echo "   ";
 
         $objCommon = new SystemAspect($strRootNode);
         //var_dump($objCommon->getSystemRecord());
-        echo $objCommon->getRecordComment()." / (v: ".$this->objRights->rightView($strRootNode, $this->strUserId)." e: ".$this->objRights->rightEdit($strRootNode, $this->strUserId).") /  ".$objCommon->getSystemid()."\n";
+        echo $objCommon->getRecordComment() . " / (v: " . $this->objRights->rightView($strRootNode, $this->strUserId) . " e: " . $this->objRights->rightEdit($strRootNode, $this->strUserId) . ") /  " . $objCommon->getSystemid() . "\n";
 
         //var_dump($objCommon->getChildNodesAsIdArray());
-        foreach($objCommon->getChildNodesAsIdArray() as $strOneId)
-            $this->printTree($strOneId, $intLevel+1);
+        foreach ($objCommon->getChildNodesAsIdArray() as $strOneId)
+            $this->printTree($strOneId, $intLevel + 1);
     }
-
-
 
 
 }

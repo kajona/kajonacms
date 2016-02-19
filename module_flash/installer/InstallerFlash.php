@@ -33,8 +33,8 @@ class InstallerFlash extends class_installer_base implements interface_installer
         if($objElement == null) {
 		    $objElement = new PagesElement();
 		    $objElement->setStrName($this->objMetadata->getStrTitle());
-		    $objElement->setStrClassAdmin("class_element_flash_admin.php");
-		    $objElement->setStrClassPortal("class_element_flash_portal.php");
+		    $objElement->setStrClassAdmin("ElementFlashAdmin.php");
+		    $objElement->setStrClassPortal("ElementFlashPortal.php");
 		    $objElement->setIntCachetime(3600);
 		    $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->objMetadata->getStrVersion());

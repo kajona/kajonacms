@@ -1,15 +1,18 @@
 <?php
 
 namespace Kajona\System\Tests;
-require_once __DIR__."/../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
 
 use Kajona\System\System\Image2;
 use Kajona\System\System\Testbase;
 
 
-class Image2Test extends Testbase  {
+class Image2Test extends Testbase
+{
 
-    public function testParseColorRgbHex() {
+    public function testParseColorRgbHex()
+    {
 
         list($red, $green, $blue) = Image2::parseColorRgb("#ff0010");
         $this->assertEquals($red, 255);
@@ -23,7 +26,8 @@ class Image2Test extends Testbase  {
         $this->assertEquals($alpha, 127);
     }
 
-    public function testParseColorRgbDecimal() {
+    public function testParseColorRgbDecimal()
+    {
 
         list($red, $green, $blue) = Image2::parseColorRgb("rgb(255,0,16)");
         $this->assertEquals($red, 255);
@@ -36,7 +40,8 @@ class Image2Test extends Testbase  {
         $this->assertEquals($blue, 16);
     }
 
-    public function testParseColorRgbaDecimal() {
+    public function testParseColorRgbaDecimal()
+    {
 
         list($red, $green, $blue, $alpha) = Image2::parseColorRgb("rgba(255,0,16,1.0)");
         $this->assertEquals($red, 255);

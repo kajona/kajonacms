@@ -1,16 +1,20 @@
 <?php
 
 namespace Kajona\System\Tests;
-require_once __DIR__."/../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
+
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Rights;
 use Kajona\System\System\SystemAspect;
 use Kajona\System\System\Testbase;
 
-class CopyTest extends Testbase  {
+class CopyTest extends Testbase
+{
 
 
-    function testCopy() {
+    function testCopy()
+    {
 
 
         $objAspect = new SystemAspect();
@@ -35,7 +39,8 @@ class CopyTest extends Testbase  {
         $objCopy->deleteObjectFromDatabase();
     }
 
-    function testCopySystemStatus() {
+    function testCopySystemStatus()
+    {
 
 
         $objAspect = new SystemAspect();
@@ -63,8 +68,8 @@ class CopyTest extends Testbase  {
     }
 
 
-
-    function testCopyPermissions() {
+    function testCopyPermissions()
+    {
 
         $objAspect = new SystemAspect();
         $objAspect->setStrName("copytest");

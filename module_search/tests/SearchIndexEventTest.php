@@ -1,7 +1,9 @@
 <?php
 
 namespace Kajona\Search\Tests;
-require_once __DIR__."/../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
+
 use Kajona\Search\Event\SearchObjectdeletedlistener;
 use Kajona\Search\Event\SearchRecordupdatedlistener;
 use Kajona\Search\System\SearchCommons;
@@ -11,25 +13,30 @@ use Kajona\System\System\SystemModule;
 use Kajona\System\System\Testbase;
 use Kajona\Tags\System\TagsTag;
 
-class SearchIndexEventTest extends Testbase {
+class SearchIndexEventTest extends Testbase
+{
 
-    protected function setUp() {
+    protected function setUp()
+    {
         parent::setUp();
         SearchObjectdeletedlistener::$BIT_UPDATE_INDEX_ON_END_OF_REQUEST = false;
         SearchRecordupdatedlistener::$BIT_UPDATE_INDEX_ON_END_OF_REQUEST = false;
     }
 
-    protected function tearDown() {
+    protected function tearDown()
+    {
         parent::tearDown();
         SearchObjectdeletedlistener::$BIT_UPDATE_INDEX_ON_END_OF_REQUEST = true;
         SearchRecordupdatedlistener::$BIT_UPDATE_INDEX_ON_END_OF_REQUEST = true;
     }
 
 
-    public function testIndexEvent() {
+    public function testIndexEvent()
+    {
 
-        if(SystemModule::getModuleByName("tags") == null || SystemModule::getModuleByName("system") == null)
+        if (SystemModule::getModuleByName("tags") == null || SystemModule::getModuleByName("system") == null) {
             return;
+        }
 
 
         $strSearchKey1 = generateSystemid();
@@ -45,9 +52,6 @@ class SearchIndexEventTest extends Testbase {
         $arrResult = $objSearchCommons->doIndexedSearch($objSearchParams, null);
         $this->assertEquals(count($arrResult), 1);
         $this->assertEquals($arrResult[0]->getObjObject()->getStrSystemid(), $objAspect->getStrSystemid());
-
-
-
 
 
         $strSearchKey2 = generateSystemid();
@@ -82,8 +86,6 @@ class SearchIndexEventTest extends Testbase {
         $arrResult = $objSearchCommons->doIndexedSearch($objSearchParams, null);
         $this->assertEquals(count($arrResult), 1);
         $this->assertEquals($arrResult[0]->getObjObject()->getStrSystemid(), $objTag->getStrSystemid());
-
-
 
 
         $objAspect->deleteObjectFromDatabase();

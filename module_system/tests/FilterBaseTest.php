@@ -1,7 +1,9 @@
 <?php
 
 namespace Kajona\System\Tests;
-require_once __DIR__."/../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
+
 use Kajona\System\System\Date;
 use Kajona\System\System\FilterBase;
 use Kajona\System\System\OrmObjectlistInRestriction;
@@ -11,23 +13,26 @@ use Kajona\System\System\Testbase;
 /**
  * Class class_test_functions
  */
-class FilterBaseTest extends Testbase  {
+class FilterBaseTest extends Testbase
+{
 
-    public function testFilterBaseNoValues() {
+    public function testFilterBaseNoValues()
+    {
         $objFilter = new FilterBaseA();
 
         $arrRestrictions = $objFilter->getOrmRestrictions();
         $this->assertCount(0, $arrRestrictions);
     }
 
-    public function testFilterBaseValues() {
+    public function testFilterBaseValues()
+    {
         $strSystemid = generateSystemid();
 
         $objFilter = new FilterBaseA();
         $objFilter->setStrFilter1("1");
         $objFilter->setIntFilter2(1);
         $objFilter->setFloatFilter3(1.0);
-        $objFilter->setArrFilter4(array(1,2,3,4));
+        $objFilter->setArrFilter4(array(1, 2, 3, 4));
         $objFilter->setObjFilter5(new Date(20150101000001));
         $objFilter->setIntFilter6(12);
         $objFilter->setObjFilter7(new Date(20150101000001));
@@ -85,7 +90,8 @@ class FilterBaseTest extends Testbase  {
 }
 
 
-class FilterBaseA extends FilterBase {
+class FilterBaseA extends FilterBase
+{
     /**
      * @tableColumn filter.filter1
      * @fieldType text
@@ -145,7 +151,6 @@ class FilterBaseA extends FilterBase {
      * @fieldType text
      */
     protected $strFilter9;
-
 
 
     public function getFilterId()

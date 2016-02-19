@@ -1,13 +1,17 @@
 <?php
 
 namespace Kajona\System\Tests;
-require_once __DIR__."/../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
+
 use Kajona\System\System\Date;
 use Kajona\System\System\Testbase;
 
-class DateTest extends Testbase  {
+class DateTest extends Testbase
+{
 
-    public function testTimezoneShifts() {
+    public function testTimezoneShifts()
+    {
         $objDate = new Date("20141026000000");
 
         $objDate->setNextDay();
@@ -20,8 +24,8 @@ class DateTest extends Testbase  {
     }
 
 
-
-    public function testSameDay() {
+    public function testSameDay()
+    {
         $objDate = new Date();
 
         $this->assertTrue($objDate->isSameDay(new Date()));
@@ -30,7 +34,8 @@ class DateTest extends Testbase  {
         $this->assertTrue(!$objDate->isSameDay(new Date()));
     }
 
-    public function testDateParams() {
+    public function testDateParams()
+    {
         $objDate = new Date(0);
         $this->assertEquals($objDate->getLongTimestamp(), 00000000000000);
 
@@ -66,7 +71,8 @@ class DateTest extends Testbase  {
     }
 
 
-    public function testNextMonth() {
+    public function testNextMonth()
+    {
         $objDate = new Date(20130101000000);
         $objDate->setNextMonth();
         $this->assertEquals($objDate->getLongTimestamp(), 20130201000000);
@@ -89,7 +95,8 @@ class DateTest extends Testbase  {
     }
 
 
-    public function testPreviousMonth() {
+    public function testPreviousMonth()
+    {
         $objDate = new Date(20130101120000);
         $objDate->setPreviousMonth();
         $this->assertEquals($objDate->getLongTimestamp(), 20121201120000);
@@ -108,20 +115,23 @@ class DateTest extends Testbase  {
     }
 
 
-    public function testNextWeek() {
+    public function testNextWeek()
+    {
         $objDate = new Date(20130115120000);
         $objDate->setNextWeek();
         $this->assertEquals($objDate->getLongTimestamp(), 20130122120000);
     }
 
-    public function testPreviousWeek() {
+    public function testPreviousWeek()
+    {
         $objDate = new Date(20130122120000);
         $objDate->setPreviousWeek();
         $this->assertEquals($objDate->getLongTimestamp(), 20130115120000);
     }
 
 
-    public function testNextYear() {
+    public function testNextYear()
+    {
         $objDate = new Date(20130115120000);
         $objDate->setNextYear();
         $this->assertEquals($objDate->getLongTimestamp(), 20140115120000);
@@ -131,7 +141,8 @@ class DateTest extends Testbase  {
         $this->assertEquals($objDate->getLongTimestamp(), 20160531120000);
     }
 
-    public function testPreviousYear() {
+    public function testPreviousYear()
+    {
         $objDate = new Date(20130122120000);
         $objDate->setPreviousYear();
         $this->assertEquals($objDate->getLongTimestamp(), 20120122120000);
@@ -141,13 +152,15 @@ class DateTest extends Testbase  {
         $this->assertEquals($objDate->getLongTimestamp(), 20140531120000);
     }
 
-    public function testSetEndOfDay() {
+    public function testSetEndOfDay()
+    {
         $objDate = new Date(20150901133737);
         $objDate->setEndOfDay();
         $this->assertEquals($objDate->getLongTimestamp(), 20150901235959);
     }
 
-    public function testSetBeginningOfDay() {
+    public function testSetBeginningOfDay()
+    {
         $objDate = new Date(20150901133737);
         $objDate->setBeginningOfDay();
         $this->assertEquals($objDate->getLongTimestamp(), 20150901000000);

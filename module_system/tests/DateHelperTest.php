@@ -1,15 +1,19 @@
 <?php
 
 namespace Kajona\System\Tests;
-require_once __DIR__."/../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
+
 use Kajona\System\System\Date;
 use Kajona\System\System\DateHelper;
 use Kajona\System\System\DatePeriodEnum;
 use Kajona\System\System\Testbase;
 
-class DateHelperTest extends Testbase  {
+class DateHelperTest extends Testbase
+{
 
-    public function testIsEasterHoliday() {
+    public function testIsEasterHoliday()
+    {
         $objHelper = new DateHelper();
 
         //2014
@@ -39,7 +43,8 @@ class DateHelperTest extends Testbase  {
 
     }
 
-    public function testIsTarget2Day() {
+    public function testIsTarget2Day()
+    {
         $objHelper = new DateHelper();
 
         //1.1.
@@ -73,7 +78,8 @@ class DateHelperTest extends Testbase  {
         $this->assertTrue(!$objHelper->isValidTarget2Day(new Date(20141123010000)));
     }
 
-    public function testIsLeapYear() {
+    public function testIsLeapYear()
+    {
         $objHelper = new DateHelper();
 
         $this->assertTrue($objHelper->isLeapYear(2016));
@@ -92,7 +98,8 @@ class DateHelperTest extends Testbase  {
     }
 
 
-    public function testCalculateNextIntervals() {
+    public function testCalculateNextIntervals()
+    {
         $objHelper = new DateHelper();
 
         //NextWorking day
@@ -128,7 +135,8 @@ class DateHelperTest extends Testbase  {
         $this->assertEquals($objCalcDate->getLongTimestamp(), 20150205000001);
     }
 
-    public function test_firstDayOfThis() {
+    public function test_firstDayOfThis()
+    {
         $objHelper = new DateHelper();
 
         $arrDates = array();
@@ -166,15 +174,16 @@ class DateHelperTest extends Testbase  {
         $arrDates[] = array("period" => DatePeriodEnum::WEEK(), "basedate" => 20150208000001, "expecteddate" => 20150202000001);//sun
 
 
-        foreach($arrDates as $arrDate) {
+        foreach ($arrDates as $arrDate) {
             $objDate = new Date($arrDate["basedate"]);
             $objCalcDate = $objHelper->firstDayOfThis($arrDate["period"], $objDate);
-            $this->assertEquals($arrDate["expecteddate"], $objCalcDate->getLongTimestamp(), $arrDate["period"] ."". $arrDate["basedate"]."". $arrDate["expecteddate"]);
+            $this->assertEquals($arrDate["expecteddate"], $objCalcDate->getLongTimestamp(), $arrDate["period"] . "" . $arrDate["basedate"] . "" . $arrDate["expecteddate"]);
         }
     }
 
 
-    public function test_lastDayOfThis() {
+    public function test_lastDayOfThis()
+    {
         $objHelper = new DateHelper();
 
         $arrDates = array();
@@ -212,14 +221,15 @@ class DateHelperTest extends Testbase  {
         $arrDates[] = array("period" => DatePeriodEnum::WEEK(), "basedate" => 20150208000001, "expecteddate" => 20150208000001);//sun
 
 
-        foreach($arrDates as $arrDate) {
+        foreach ($arrDates as $arrDate) {
             $objDate = new Date($arrDate["basedate"]);
             $objCalcDate = $objHelper->lastDayOfThis($arrDate["period"], $objDate);
-            $this->assertEquals($arrDate["expecteddate"], $objCalcDate->getLongTimestamp(), $arrDate["period"] ." ". $arrDate["basedate"]." ". $arrDate["expecteddate"]);
+            $this->assertEquals($arrDate["expecteddate"], $objCalcDate->getLongTimestamp(), $arrDate["period"] . " " . $arrDate["basedate"] . " " . $arrDate["expecteddate"]);
         }
     }
 
-    public function test_firstDayOfLast() {
+    public function test_firstDayOfLast()
+    {
         $objHelper = new DateHelper();
 
         $arrDates = array();
@@ -258,14 +268,15 @@ class DateHelperTest extends Testbase  {
         $arrDates[] = array("period" => DatePeriodEnum::WEEK(), "basedate" => 20150527000001, "expecteddate" => 20150518000001);//sun
 
 
-        foreach($arrDates as $arrDate) {
+        foreach ($arrDates as $arrDate) {
             $objDate = new Date($arrDate["basedate"]);
             $objCalcDate = $objHelper->firstDayOfLast($arrDate["period"], $objDate);
-            $this->assertEquals($arrDate["expecteddate"], $objCalcDate->getLongTimestamp(), $arrDate["period"] ." ". $arrDate["basedate"]." ". $arrDate["expecteddate"]);;
+            $this->assertEquals($arrDate["expecteddate"], $objCalcDate->getLongTimestamp(), $arrDate["period"] . " " . $arrDate["basedate"] . " " . $arrDate["expecteddate"]);;
         }
     }
 
-    public function test_lastDayOfLast() {
+    public function test_lastDayOfLast()
+    {
         $objHelper = new DateHelper();
 
         $arrDates = array();
@@ -303,14 +314,15 @@ class DateHelperTest extends Testbase  {
         $arrDates[] = array("period" => DatePeriodEnum::WEEK(), "basedate" => 20150208000001, "expecteddate" => 20150201000001);//sun
 
 
-        foreach($arrDates as $arrDate) {
+        foreach ($arrDates as $arrDate) {
             $objDate = new Date($arrDate["basedate"]);
             $objCalcDate = $objHelper->lastDayOfLast($arrDate["period"], $objDate);
-            $this->assertEquals($arrDate["expecteddate"], $objCalcDate->getLongTimestamp(), $arrDate["period"] ." ". $arrDate["basedate"]." ". $arrDate["expecteddate"]);;
+            $this->assertEquals($arrDate["expecteddate"], $objCalcDate->getLongTimestamp(), $arrDate["period"] . " " . $arrDate["basedate"] . " " . $arrDate["expecteddate"]);;
         }
     }
 
-    public function test_firstDayOfNext() {
+    public function test_firstDayOfNext()
+    {
         $objHelper = new DateHelper();
 
         $arrDates = array();
@@ -348,14 +360,15 @@ class DateHelperTest extends Testbase  {
         $arrDates[] = array("period" => DatePeriodEnum::WEEK(), "basedate" => 20150208000001, "expecteddate" => 20150209000001);//sun
 
 
-        foreach($arrDates as $arrDate) {
+        foreach ($arrDates as $arrDate) {
             $objDate = new Date($arrDate["basedate"]);
             $objCalcDate = $objHelper->firstDayOfNext($arrDate["period"], $objDate);
-            $this->assertEquals($arrDate["expecteddate"], $objCalcDate->getLongTimestamp(), $arrDate["period"] ." ". $arrDate["basedate"]." ". $arrDate["expecteddate"]);;
+            $this->assertEquals($arrDate["expecteddate"], $objCalcDate->getLongTimestamp(), $arrDate["period"] . " " . $arrDate["basedate"] . " " . $arrDate["expecteddate"]);;
         }
     }
 
-    public function test_lastDayOfNext() {
+    public function test_lastDayOfNext()
+    {
         $objHelper = new DateHelper();
 
         $arrDates = array();
@@ -393,15 +406,16 @@ class DateHelperTest extends Testbase  {
         $arrDates[] = array("period" => DatePeriodEnum::WEEK(), "basedate" => 20150208000001, "expecteddate" => 20150215000001);//sun
 
 
-        foreach($arrDates as $arrDate) {
+        foreach ($arrDates as $arrDate) {
             $objDate = new Date($arrDate["basedate"]);
             $objCalcDate = $objHelper->lastDayOfNext($arrDate["period"], $objDate);
-            $this->assertEquals($arrDate["expecteddate"], $objCalcDate->getLongTimestamp(), $arrDate["period"] ." ". $arrDate["basedate"]." ". $arrDate["expecteddate"]);;
+            $this->assertEquals($arrDate["expecteddate"], $objCalcDate->getLongTimestamp(), $arrDate["period"] . " " . $arrDate["basedate"] . " " . $arrDate["expecteddate"]);;
         }
     }
 
 
-    public function testCalcWorkingDaysBetween() {
+    public function testCalcWorkingDaysBetween()
+    {
         $objHelper = new DateHelper();
         $this->assertEquals(0, $objHelper->calcNumberOfWorkingDaysBetween(new Date(20150801000000), new Date(20150801000000)));
         $this->assertEquals(23, $objHelper->calcNumberOfWorkingDaysBetween(new Date(20150701000000), new Date(20150801000000)));
@@ -414,8 +428,6 @@ class DateHelperTest extends Testbase  {
         $this->assertEquals(count($objHelper->getWorkingDays(7, 2015)), $objHelper->calcNumberOfWorkingDaysBetween(new Date(20150701000000), new Date(20150731000000)));
         $this->assertEquals(count($objHelper->getWorkingDays(8, 2015)), $objHelper->calcNumberOfWorkingDaysBetween(new Date(20150801000000), new Date(20150831000000)));
         $this->assertEquals(count($objHelper->getWorkingDays(9, 2015)), $objHelper->calcNumberOfWorkingDaysBetween(new Date(20150901000000), new Date(20150930000000)));
-
-
 
 
     }
