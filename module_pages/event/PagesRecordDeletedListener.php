@@ -6,10 +6,10 @@
 
 namespace Kajona\Pages\Event;
 
-use class_carrier;
-use class_core_eventdispatcher;
-use class_system_eventidentifier;
-use interface_genericevent_listener;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\CoreEventdispatcher;
+use Kajona\System\System\GenericeventListenerInterface;
+use Kajona\System\System\SystemEventidentifier;
 
 /**
  * Removes category-assignments on record-deletions
@@ -18,7 +18,7 @@ use interface_genericevent_listener;
  * @author sidler@mulchprod.de
  *
  */
-class PagesRecordDeletedListener implements interface_genericevent_listener {
+class PagesRecordDeletedListener implements GenericeventListenerInterface {
 
 
     /**
@@ -33,8 +33,8 @@ class PagesRecordDeletedListener implements interface_genericevent_listener {
         //unwrap arguments
         list($strSystemid, $strSourceClass) = $arrArguments;
 
-        if($strSourceClass == "class_module_pages_page") {
-            return class_carrier::getInstance()->getObjDB()->_pQuery("DELETE FROM " ._dbprefix_. "page_properties WHERE pageproperties_id = ?", array($strSystemid));
+        if($strSourceClass == "Kajona\\Pages\\System\\PagesPage") {
+            return Carrier::getInstance()->getObjDB()->_pQuery("DELETE FROM " ._dbprefix_. "page_properties WHERE pageproperties_id = ?", array($strSystemid));
         }
 
 
@@ -48,7 +48,7 @@ class PagesRecordDeletedListener implements interface_genericevent_listener {
      * @return void
      */
     public static function staticConstruct() {
-        class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, new PagesRecordDeletedListener());
+        CoreEventdispatcher::getInstance()->removeAndAddListener(SystemEventidentifier::EVENT_SYSTEM_RECORDDELETED, new PagesRecordDeletedListener());
     }
 
 

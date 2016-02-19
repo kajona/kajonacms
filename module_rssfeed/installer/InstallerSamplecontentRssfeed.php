@@ -12,6 +12,7 @@ use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
+use Kajona\System\System\SamplecontentInstallerInterface;
 
 
 /**
@@ -19,7 +20,7 @@ use Kajona\Pages\System\PagesPageelement;
  *
  * @package element_rssfeed
  */
-class InstallerSamplecontentRssfeed implements interface_sc_installer  {
+class InstallerSamplecontentRssfeed implements SamplecontentInstallerInterface  {
 
     /**
      * @var class_db

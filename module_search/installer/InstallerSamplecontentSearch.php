@@ -6,26 +6,27 @@
 ********************************************************************************************************/
 
 namespace Kajona\Search\Installer;
-use class_db;
-use class_exception;
-use class_module_navigation_point;
-use class_module_navigation_tree;
-use class_module_system_module;
-use interface_sc_installer;
+
+use Kajona\Navigation\System\NavigationPoint;
+use Kajona\Navigation\System\NavigationTree;
 use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
+use Kajona\System\System\Database;
+use Kajona\System\System\Exception;
+use Kajona\System\System\SamplecontentInstallerInterface;
+use Kajona\System\System\SystemModule;
 
 
 /**
  * Interface of the search samplecontent
  *
  */
-class InstallerSamplecontentSearch implements interface_sc_installer {
-
+class InstallerSamplecontentSearch implements SamplecontentInstallerInterface
+{
     /**
-     * @var class_db
+     * @var Database
      */
     private $objDB;
     private $strContentLanguage;
@@ -44,9 +45,9 @@ class InstallerSamplecontentSearch implements interface_sc_installer {
         //navigations installed?
         $objModule = null;
         try {
-            $objModule = class_module_system_module::getModuleByName("pages", true);
+            $objModule = SystemModule::getModuleByName("pages", true);
         }
-        catch(class_exception $objException) {
+        catch(Exception $objException) {
             $objModule = null;
         }
         if($objModule != null) {
@@ -151,17 +152,17 @@ class InstallerSamplecontentSearch implements interface_sc_installer {
         //navigations installed?
         $objModule = null;
         try {
-            $objModule = class_module_system_module::getModuleByName("navigation", true);
+            $objModule = SystemModule::getModuleByName("navigation", true);
         }
-        catch(class_exception $objException) {
+        catch(Exception $objException) {
             $objModule = null;
         }
         if($objModule != null) {
 
-            $objNavi = class_module_navigation_tree::getNavigationByName("portalnavigation");
+            $objNavi = NavigationTree::getNavigationByName("portalnavigation");
             $strTreeId = $objNavi->getSystemid();
 
-            $objNaviPoint = new class_module_navigation_point();
+            $objNaviPoint = new NavigationPoint();
             if($this->strContentLanguage == "de") {
                 $objNaviPoint->setStrName("Suche");
             }

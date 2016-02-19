@@ -8,24 +8,24 @@
 
 namespace Kajona\Packageserver\Admin;
 
-use class_admin_batchaction;
-use class_admin_controller;
-use class_adminskin_helper;
-use class_array_section_iterator;
-use class_date;
-use class_link;
-use class_model;
-use class_module_mediamanager_admin;
-use class_module_mediamanager_file;
-use class_module_packagemanager_admin;
-use class_module_packagemanager_manager;
-use class_module_packagemanager_metadata;
-use class_module_packageserver_log;
-use class_module_system_module;
-use class_module_system_setting;
-use class_objectfactory;
-use interface_admin;
+use Kajona\Mediamanager\Admin\MediamanagerAdmin;
+use Kajona\Mediamanager\System\MediamanagerFile;
+use Kajona\Packagemanager\Admin\PackagemanagerAdmin;
+use Kajona\Packagemanager\System\PackagemanagerManager;
+use Kajona\Packagemanager\System\PackagemanagerMetadata;
+use Kajona\System\Admin\AdminBatchaction;
+use Kajona\System\Admin\AdminController;
+use Kajona\System\Admin\AdminInterface;
+use Kajona\System\System\AdminskinHelper;
+use Kajona\System\System\ArraySectionIterator;
+use \Kajona\System\System\Date;
+use Kajona\System\System\Link;
+use \Kajona\System\System\Model;
+
 use Kajona\Packageserver\System\PackageserverLog;
+use Kajona\System\System\Objectfactory;
+use Kajona\System\System\SystemModule;
+use Kajona\System\System\SystemSetting;
 
 
 /**
@@ -38,7 +38,7 @@ use Kajona\Packageserver\System\PackageserverLog;
  * @module packageserver
  * @moduleId _packageserver_module_id_
  */
-class PackageserverAdmin extends class_module_mediamanager_admin implements interface_admin
+class PackageserverAdmin extends MediamanagerAdmin implements AdminInterface
 {
 
 
@@ -48,8 +48,8 @@ class PackageserverAdmin extends class_module_mediamanager_admin implements inte
     public function getOutputModuleNavi()
     {
         $arrReturn = array();
-        $arrReturn[] = array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("action_list"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("edit", class_link::getLinkAdmin($this->getArrModule("modul"), "logs", "", $this->getLang("action_logs"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("view", Link::getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("action_list"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("edit", Link::getLinkAdmin($this->getArrModule("modul"), "logs", "", $this->getLang("action_logs"), "", "", true, "adminnavi"));
 
         return $arrReturn;
     }
@@ -77,20 +77,20 @@ class PackageserverAdmin extends class_module_mediamanager_admin implements inte
     protected function actionOpenFolder()
     {
 
-        if (validateSystemid(class_module_system_setting::getConfigValue("_packageserver_repo_id_"))) {
+        if (validateSystemid(SystemSetting::getConfigValue("_packageserver_repo_id_"))) {
             if ($this->getSystemid() == "") {
-                $this->setSystemid(class_module_system_setting::getConfigValue("_packageserver_repo_id_"));
+                $this->setSystemid(SystemSetting::getConfigValue("_packageserver_repo_id_"));
             }
 
-            $objIterator = new class_array_section_iterator(class_module_mediamanager_file::getFileCount($this->getSystemid(), false, false, true));
+            $objIterator = new ArraySectionIterator(MediamanagerFile::getFileCount($this->getSystemid(), false, false, true));
             $objIterator->setPageNumber($this->getParam("pv"));
-            $objIterator->setArraySection(class_module_mediamanager_file::loadFilesDB($this->getSystemid(), false, false, $objIterator->calculateStartPos(), $objIterator->calculateEndPos(), true));
+            $objIterator->setArraySection(MediamanagerFile::loadFilesDB($this->getSystemid(), false, false, $objIterator->calculateStartPos(), $objIterator->calculateEndPos(), true));
 
         }
         else {
-            $objIterator = new class_array_section_iterator(class_module_mediamanager_file::getFlatPackageListCount(false, false));
+            $objIterator = new ArraySectionIterator(MediamanagerFile::getFlatPackageListCount(false, false));
             $objIterator->setPageNumber($this->getParam("pv"));
-            $objIterator->setArraySection(class_module_mediamanager_file::getFlatPackageList(false, false, $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
+            $objIterator->setArraySection(MediamanagerFile::getFlatPackageList(false, false, $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
         }
 
         return $this->renderList($objIterator);
@@ -109,35 +109,35 @@ class PackageserverAdmin extends class_module_mediamanager_admin implements inte
     }
 
     /**
-     * @param class_model $objListEntry
+     * @param \Kajona\System\System\Model $objListEntry
      * @param bool $bitDialog
      *
      * @return string
      */
-    protected function renderEditAction(class_model $objListEntry, $bitDialog = false)
+    protected function renderEditAction(\Kajona\System\System\Model $objListEntry, $bitDialog = false)
     {
         return "";
     }
 
     /**
-     * @param class_model $objListEntry
+     * @param \Kajona\System\System\Model $objListEntry
      *
      * @return array
      */
-    protected function renderAdditionalActions(class_model $objListEntry)
+    protected function renderAdditionalActions(\Kajona\System\System\Model $objListEntry)
     {
 
-        if ($objListEntry instanceof class_module_mediamanager_file && $objListEntry->getIntType() == class_module_mediamanager_file::$INT_TYPE_FOLDER) {
+        if ($objListEntry instanceof MediamanagerFile && $objListEntry->getIntType() == MediamanagerFile::$INT_TYPE_FOLDER) {
             return array(
-                $this->objToolkit->listButton(class_link::getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("action_open_folder", "mediamanager"), "icon_folderActionOpen"))
+                $this->objToolkit->listButton(Link::getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("action_open_folder", "mediamanager"), "icon_folderActionOpen"))
             );
         }
 
 
-        elseif ($objListEntry instanceof class_module_mediamanager_file && $objListEntry->getIntType() == class_module_mediamanager_file::$INT_TYPE_FILE) {
+        elseif ($objListEntry instanceof MediamanagerFile && $objListEntry->getIntType() == MediamanagerFile::$INT_TYPE_FILE) {
             return array(
                 $this->objToolkit->listButton(
-                    class_link::getLinkAdminDialog($this->getArrModule("modul"), "showInfo", "&systemid=".$objListEntry->getSystemid(), $this->getLang("package_info"), $this->getLang("package_info"), "icon_lens", $objListEntry->getStrDisplayName())
+                    Link::getLinkAdminDialog($this->getArrModule("modul"), "showInfo", "&systemid=".$objListEntry->getSystemid(), $this->getLang("package_info"), $this->getLang("package_info"), "icon_lens", $objListEntry->getStrDisplayName())
                 )
             );
         }
@@ -177,15 +177,15 @@ class PackageserverAdmin extends class_module_mediamanager_admin implements inte
         $strReturn = "";
         $this->setArrModuleEntry("template", "/folderview.tpl");
 
-        /** @var $objPackage class_module_mediamanager_file */
-        $objPackage = class_objectfactory::getInstance()->getObject($this->getSystemid());
-        if ($objPackage instanceof class_module_mediamanager_file && $objPackage->rightView()) {
+        /** @var $objPackage MediamanagerFile */
+        $objPackage = Objectfactory::getInstance()->getObject($this->getSystemid());
+        if ($objPackage instanceof MediamanagerFile && $objPackage->rightView()) {
 
-            $objManager = new class_module_packagemanager_manager();
+            $objManager = new PackagemanagerManager();
             $objHandler = $objManager->getPackageManagerForPath($objPackage->getStrFilename());
 
-            /** @var class_module_packagemanager_admin $objAdmin */
-            $objAdmin = class_module_system_module::getModuleByName("packagemanager")->getAdminInstanceOfConcreteModule();
+            /** @var PackagemanagerAdmin $objAdmin */
+            $objAdmin = SystemModule::getModuleByName("packagemanager")->getAdminInstanceOfConcreteModule();
             $strReturn .= $objAdmin->renderPackageDetails($objHandler);
         }
 
@@ -202,10 +202,10 @@ class PackageserverAdmin extends class_module_mediamanager_admin implements inte
      */
     protected function actionUpdateDataFromMetadata()
     {
-        $objPackage = new class_module_mediamanager_file($this->getSystemid());
+        $objPackage = new MediamanagerFile($this->getSystemid());
 
         if (is_file("phar://"._realpath_."/".$objPackage->getStrFilename()."/metadata.xml")) {
-            $objMetadata = new class_module_packagemanager_metadata();
+            $objMetadata = new PackagemanagerMetadata();
             $objMetadata->autoInit($objPackage->getStrFilename());
             $objPackage->setStrName($objMetadata->getStrTitle());
             $objPackage->setStrDescription($objMetadata->getStrDescription());
@@ -233,14 +233,14 @@ class PackageserverAdmin extends class_module_mediamanager_admin implements inte
         $intNrOfRecordsPerPage = 25;
 
         $objLog = new PackageserverLog();
-        $objArraySectionIterator = new class_array_section_iterator($objLog->getLogDataCount());
+        $objArraySectionIterator = new ArraySectionIterator($objLog->getLogDataCount());
         $objArraySectionIterator->setIntElementsPerPage($intNrOfRecordsPerPage);
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection($objLog->getLogData($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
         $arrLogs = array();
         foreach ($objArraySectionIterator as $intKey => $arrOneLog) {
-            $arrLogs[$intKey][0] = dateToString(new class_date($arrOneLog["log_date"]));
+            $arrLogs[$intKey][0] = dateToString(new \Kajona\System\System\Date($arrOneLog["log_date"]));
             $arrLogs[$intKey][1] = $arrOneLog["log_ip"];
             $arrLogs[$intKey][2] = $arrOneLog["log_hostname"];
             $arrLogs[$intKey][3] = $arrOneLog["log_query"];
@@ -266,7 +266,7 @@ class PackageserverAdmin extends class_module_mediamanager_admin implements inte
     protected function getBatchActionHandlers($strListIdentifier)
     {
         $arrDefault = array();
-        $arrDefault[] = new class_admin_batchaction(class_adminskin_helper::getAdminImage("icon_text"), class_link::getLinkAdminXml("packageserver", "updateDataFromMetadata", "&systemid=%systemid%"), $this->getLang("batchaction_metadata"));
+        $arrDefault[] = new AdminBatchaction(AdminskinHelper::getAdminImage("icon_text"), Link::getLinkAdminXml("packageserver", "updateDataFromMetadata", "&systemid=%systemid%"), $this->getLang("batchaction_metadata"));
         return $arrDefault;
     }
 
@@ -277,14 +277,14 @@ class PackageserverAdmin extends class_module_mediamanager_admin implements inte
      */
     protected function getArrOutputNaviEntries()
     {
-        $arrEntries = class_admin_controller::getArrOutputNaviEntries();
+        $arrEntries = AdminController::getArrOutputNaviEntries();
 
         $arrPath = $this->getPathArray();
         array_shift($arrPath);
 
         foreach ($arrPath as $strOneSystemid) {
-            $objPoint = class_objectfactory::getInstance()->getObject($strOneSystemid);
-            $arrEntries[] = class_link::getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$strOneSystemid, $objPoint->getStrDisplayName());
+            $objPoint = Objectfactory::getInstance()->getObject($strOneSystemid);
+            $arrEntries[] = Link::getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$strOneSystemid, $objPoint->getStrDisplayName());
         }
 
         return $arrEntries;

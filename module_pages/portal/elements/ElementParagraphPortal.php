@@ -18,7 +18,8 @@ use Kajona\Pages\System\PagesPage;
  * @author sidler@mulchprod.de
  * @targetTable element_paragraph.content_id
  */
-class ElementParagraphPortal extends ElementPortal implements PortalElementInterface {
+class ElementParagraphPortal extends ElementPortal implements PortalElementInterface
+{
 
 
     /**
@@ -26,43 +27,47 @@ class ElementParagraphPortal extends ElementPortal implements PortalElementInter
      *
      * @return string
      */
-    public function loadData() {
+    public function loadData()
+    {
 
         $strReturn = "";
 
         $strTemplate = $this->arrElementData["paragraph_template"];
         //fallback
-        if($strTemplate == "")
+        if ($strTemplate == "") {
             $strTemplate = "paragraph.tpl";
+        }
 
         //choose template section
         $strTemplateSection = "paragraph";
-        if($this->arrElementData["paragraph_image"] != "" && $this->arrElementData["paragraph_link"] != "") {
+        if ($this->arrElementData["paragraph_image"] != "" && $this->arrElementData["paragraph_link"] != "") {
             $strTemplateSection = "paragraph_image_link";
         }
-        elseif($this->arrElementData["paragraph_image"] != "" && $this->arrElementData["paragraph_link"] == "") {
+        elseif ($this->arrElementData["paragraph_image"] != "" && $this->arrElementData["paragraph_link"] == "") {
             $strTemplateSection = "paragraph_image";
         }
-        elseif($this->arrElementData["paragraph_image"] == "" && $this->arrElementData["paragraph_link"] != "") {
+        elseif ($this->arrElementData["paragraph_image"] == "" && $this->arrElementData["paragraph_link"] != "") {
             $strTemplateSection = "paragraph_link";
         }
 
         $strTemplateID = $this->objTemplate->readTemplate("/element_paragraph/".$strTemplate, $strTemplateSection);
 
-        if($this->arrElementData["paragraph_image"] != "") {
+        if ($this->arrElementData["paragraph_image"] != "") {
             //remove the webpath (was added for paragraphs saved pre 3.3.0)
             $this->arrElementData["paragraph_image"] = str_replace("_webpath_", "", $this->arrElementData["paragraph_image"]);
         }
 
-        if($this->arrElementData["paragraph_link"] != "") {
+        if ($this->arrElementData["paragraph_link"] != "") {
             //internal page?
-            if(PagesPage::getPageByName($this->arrElementData["paragraph_link"]) !== null)
+            if (PagesPage::getPageByName($this->arrElementData["paragraph_link"]) !== null) {
                 $this->arrElementData["paragraph_link"] = getLinkPortalHref($this->arrElementData["paragraph_link"]);
-            else
+            }
+            else {
                 $this->arrElementData["paragraph_link"] = getLinkPortalHref("", $this->arrElementData["paragraph_link"]);
+            }
         }
 
-        if($this->arrElementData["paragraph_title"] != "") {
+        if ($this->arrElementData["paragraph_title"] != "") {
             $strTemplateTitleID = $this->objTemplate->readTemplate("/element_paragraph/".$strTemplate, "paragraph_title_tag");
             $this->arrElementData["paragraph_title_tag"] = $this->fillTemplate($this->arrElementData, $strTemplateTitleID);
         }

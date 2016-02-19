@@ -101,7 +101,7 @@ Description</th>
 		</tr>
 		<tr>
 			<td>Arguments</td>
-			<td>class_model $objRecord <br />
+			<td>\Kajona\System\System\Model $objRecord <br />
 			bool $bitRecordCreated
 			</td>
 		</tr>
@@ -142,7 +142,7 @@ The relevant object and the name of the changed property are passed, too.<br />R
 			<td>Arguments</td>
 			<td>string $strOldSystemid<br />
 			string $strNewSystemid<br />
-			class_model $objNewObjectCopy</td>
+			\Kajona\System\System\Model $objNewObjectCopy</td>
 		</tr>
 		<tr>
 			<td>Description</td>
@@ -157,7 +157,7 @@ The relevant object and the name of the changed property are passed, too.<br />R
 			<td>Arguments</td>
 			<td>string $strOldSystemid<br />
 			string $strNewSystemid<br />
-			class_model $objNewObjectCopy</td>
+			\Kajona\System\System\Model $objNewObjectCopy</td>
 		</tr>
 		<tr>
 			<td>Description</td>
@@ -246,7 +246,7 @@ The relevant object and the name of the changed property are passed, too.<br />R
         			<td>Arguments</td>
         			<td>string $strSystemid<br />
                         string $strSourceClass The class-name of the object deleted<br />
-                        class_model $objObject The object which is being restored</td>
+                        \Kajona\System\System\Model $objObject The object which is being restored</td>
         		</tr>
         		<tr>
         			<td>Description</td>
@@ -307,7 +307,7 @@ The relevant object and the name of the changed property are passed, too.<br />R
 		</tr>
 		<tr>
 			<td>Arguments</td>
-			<td>class_model $objInstance<br />
+			<td>\Kajona\System\System\Model $objInstance<br />
 			class_module_search_document&nbsp;​$objSearchDocument</td>
 		</tr>
 		<tr>

@@ -7,24 +7,26 @@
 
 namespace Kajona\Packageserver\Installer;
 
-use class_carrier;
-use class_filesystem;
-use class_installer_base;
-use class_module_mediamanager_repo;
-use class_module_system_aspect;
-use class_module_system_module;
-use class_module_system_setting;
-use class_rights;
-use interface_installer_removable;
+use Kajona\Mediamanager\System\MediamanagerRepo;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Filesystem;
+use Kajona\System\System\InstallerBase;
+use Kajona\System\System\InstallerRemovableInterface;
+use Kajona\System\System\Rights;
+use Kajona\System\System\SystemAspect;
+use Kajona\System\System\SystemModule;
+use Kajona\System\System\SystemSetting;
 
 /**
  * Installer of the packageserver module
  *
  * @moduleId _packageserver_module_id_
  */
-class InstallerPackageserver extends class_installer_base implements interface_installer_removable {
+class InstallerPackageserver extends InstallerBase implements InstallerRemovableInterface
+{
 
-    public function install() {
+    public function install()
+    {
 
         $strReturn = "";
 
@@ -37,35 +39,36 @@ class InstallerPackageserver extends class_installer_base implements interface_i
         $arrFields["log_hostname"] = array("char254", true);
         $arrFields["log_date"] = array("long", true);
 
-        if(!$this->objDB->createTable("packageserver_log", $arrFields, array("log_id"), array("log_date"), false))
+        if (!$this->objDB->createTable("packageserver_log", $arrFields, array("log_id"), array("log_date"), false)) {
             $strReturn .= "An error occurred! ...\n";
+        }
 
 
         //register the module
-        $this->registerModule("packageserver", _packageserver_module_id_, "class_module_packageserver_portal.php", "class_module_packageserver_admin.php", $this->objMetadata->getStrVersion(), true);
+        $this->registerModule("packageserver", _packageserver_module_id_, "PackageserverPortal.php", "PackageserverAdmin.php", $this->objMetadata->getStrVersion(), true);
 
 
         $strReturn .= "creating package-upload-repository...\n";
-        $objFilesytem = new class_filesystem();
+        $objFilesytem = new Filesystem();
         $objFilesytem->folderCreate("/files/packages");
-        $objRepo = new class_module_mediamanager_repo();
+        $objRepo = new MediamanagerRepo();
         $objRepo->setStrPath("/files/packages");
         $objRepo->setStrViewFilter(".phar");
         $objRepo->setStrUploadFilter(".phar");
         $objRepo->setStrTitle("Packageserver packages");
         $objRepo->updateObjectToDb();
 
-        class_carrier::getInstance()->getObjRights()->addGroupToRight(class_module_system_setting::getConfigValue("_guests_group_id_"), $objRepo->getSystemid(), class_rights::$STR_RIGHT_RIGHT2);
+        Carrier::getInstance()->getObjRights()->addGroupToRight(SystemSetting::getConfigValue("_guests_group_id_"), $objRepo->getSystemid(), Rights::$STR_RIGHT_RIGHT2);
 
 
         $strReturn .= "Registering system-constants...\n";
-        $this->registerConstant("_packageserver_repo_id_", "", class_module_system_setting::$int_TYPE_STRING, _packageserver_module_id_);
+        $this->registerConstant("_packageserver_repo_id_", "", SystemSetting::$int_TYPE_STRING, _packageserver_module_id_);
 
 
         $strReturn .= "Setting aspect assignments...\n";
-        if(class_module_system_aspect::getAspectByName("content") != null) {
-            $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
-            $objModule->setStrAspect(class_module_system_aspect::getAspectByName("content")->getSystemid());
+        if (SystemAspect::getAspectByName("content") != null) {
+            $objModule = SystemModule::getModuleByName($this->objMetadata->getStrTitle());
+            $objModule->setStrAspect(SystemAspect::getAspectByName("content")->getSystemid());
             $objModule->updateObjectToDb();
         }
 
@@ -80,7 +83,8 @@ class InstallerPackageserver extends class_installer_base implements interface_i
      *
      * @return bool
      */
-    public function isRemovable() {
+    public function isRemovable()
+    {
         return true;
     }
 
@@ -92,23 +96,24 @@ class InstallerPackageserver extends class_installer_base implements interface_i
      *
      * @return bool
      */
-    public function remove(&$strReturn) {
+    public function remove(&$strReturn)
+    {
 
         $strReturn .= "Deleting config-entries..\n";
-        class_module_system_setting::getConfigByName("_packageserver_repo_id_")->deleteObjectFromDatabase();
+        SystemSetting::getConfigByName("_packageserver_repo_id_")->deleteObjectFromDatabase();
 
         //delete the module-node
         $strReturn .= "Deleting the module-registration...\n";
-        $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
-        if(!$objModule->deleteObjectFromDatabase()) {
+        $objModule = SystemModule::getModuleByName($this->objMetadata->getStrTitle(), true);
+        if (!$objModule->deleteObjectFromDatabase()) {
             $strReturn .= "Error deleting module, aborting.\n";
             return false;
         }
 
         //delete the tables
-        foreach(array("packageserver_log") as $strOneTable) {
+        foreach (array("packageserver_log") as $strOneTable) {
             $strReturn .= "Dropping table ".$strOneTable."...\n";
-            if(!$this->objDB->_pQuery("DROP TABLE ".$this->objDB->encloseTableName(_dbprefix_.$strOneTable), array())) {
+            if (!$this->objDB->_pQuery("DROP TABLE ".$this->objDB->encloseTableName(_dbprefix_.$strOneTable), array())) {
                 $strReturn .= "Error deleting table, aborting.\n";
                 return false;
             }
@@ -119,15 +124,16 @@ class InstallerPackageserver extends class_installer_base implements interface_i
     }
 
 
-    public function update() {
+    public function update()
+    {
         $strReturn = "";
         //check installed version and to which version we can update
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
 
         $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.7") {
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if ($arrModule["module_version"] == "4.7") {
             $strReturn .= "Updating 4.7 to 5.0...\n";
             $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.0");
         }

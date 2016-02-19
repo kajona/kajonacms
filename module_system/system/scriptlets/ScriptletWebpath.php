@@ -9,6 +9,7 @@ namespace Kajona\System\System\Scriptlets;
 
 use class_resourceloader;
 use interface_scriptlet;
+use Kajona\System\System\Resourceloader;
 
 /**
  * A scriptlet to replace script / image src within templates.
@@ -38,7 +39,7 @@ class ScriptletWebpath implements interface_scriptlet {
         preg_match_all("#\[webpath,([A-Za-z0-9_]+)\]#i", $strContent, $arrTemp);
 
         foreach($arrTemp[0] as $intKey => $strSearchString) {
-            $strContent = uniStrReplace($strSearchString, class_resourceloader::getInstance()->getWebPathForModule($arrTemp[1][$intKey]), $strContent);
+            $strContent = uniStrReplace($strSearchString, Resourceloader::getInstance()->getWebPathForModule($arrTemp[1][$intKey]), $strContent);
         }
 
         return $strContent;

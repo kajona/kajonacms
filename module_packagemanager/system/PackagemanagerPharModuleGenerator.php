@@ -9,6 +9,11 @@ namespace Kajona\Packagemanager\System;
 use class_http_responsetypes;
 use class_response_object;
 use FilesystemIterator;
+use Kajona\System\System\Config;
+use Kajona\System\System\Exception;
+use Kajona\System\System\Filesystem;
+use Kajona\System\System\HttpResponsetypes;
+use Kajona\System\System\ResponseObject;
 use Phar;
 
 /**
@@ -27,12 +32,12 @@ class PackagemanagerPharModuleGenerator implements PackagemanagerPharGeneratorIn
      */
     public function generatePhar($strSourceDir, $strTargetPath)
     {
-        if(\class_config::getInstance()->getPhpIni("phar.readonly") == 1) {
+        if(Config::getInstance()->getPhpIni("phar.readonly") == 1) {
             ini_set("phar.readonly", "0");
         }
 
-        if(\class_config::getInstance()->getPhpIni("phar.readonly") == 1) {
-            throw new \class_exception("Phar generation is not possible, the ini-value phar.readonly is set to 1. Please change the php.ini value to 0 in order to generate a valid phar. See http://php.net/manual/en/phar.configuration.php#ini.phar.readonly for more details.", \class_exception::$level_ERROR);
+        if(Config::getInstance()->getPhpIni("phar.readonly") == 1) {
+            throw new Exception("Phar generation is not possible, the ini-value phar.readonly is set to 1. Please change the php.ini value to 0 in order to generate a valid phar. See http://php.net/manual/en/phar.configuration.php#ini.phar.readonly for more details.", Exception::$level_ERROR);
         }
 
 
@@ -62,15 +67,15 @@ class PackagemanagerPharModuleGenerator implements PackagemanagerPharGeneratorIn
         //read and stream
         $strNewName = basename($strSourceDir).".phar";
 
-        class_response_object::getInstance()->addHeader('Pragma: private');
-        class_response_object::getInstance()->addHeader('Cache-control: private, must-revalidate');
-        class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_PHAR);
-        class_response_object::getInstance()->addHeader("Content-Disposition: attachment; filename=" . saveUrlEncode($strNewName));
+        ResponseObject::getInstance()->addHeader('Pragma: private');
+        ResponseObject::getInstance()->addHeader('Cache-control: private, must-revalidate');
+        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_PHAR);
+        ResponseObject::getInstance()->addHeader("Content-Disposition: attachment; filename=" . saveUrlEncode($strNewName));
 
-        class_response_object::getInstance()->sendHeaders();
+        ResponseObject::getInstance()->sendHeaders();
 
 
-        $objFilesystem = new \class_filesystem();
+        $objFilesystem = new Filesystem();
         $objFilesystem->streamFile($strTarget);
         $objFilesystem->fileDelete($strTarget);
         die();

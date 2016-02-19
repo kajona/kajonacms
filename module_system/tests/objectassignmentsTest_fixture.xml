@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <objects>
-  <object name="testobject" class="orm_objectlist_testclass" strName="testclass" />
+  <object name="testobject" class="Kajona\System\Tests\OrmObjectlistTestclass" strName="testclass" />
 
-  <object name="aspect1" class="class_module_system_aspect" strName="aspect 1" />
-  <object name="aspect2" class="class_module_system_aspect" strName="aspect 2" />
-  <object name="aspect3" class="class_module_system_aspect" strName="aspect 3" />
+  <object name="aspect1" class="Kajona\System\System\SystemAspect" strName="aspect 1" />
+  <object name="aspect2" class="Kajona\System\System\SystemAspect" strName="aspect 2" />
+  <object name="aspect3" class="Kajona\System\System\SystemAspect" strName="aspect 3" />
 
-  <object name="language" class="class_module_languages_language" strName="xx" />
+  <object name="language" class="Kajona\System\System\LanguagesLanguage" strName="xx" />
 </objects>

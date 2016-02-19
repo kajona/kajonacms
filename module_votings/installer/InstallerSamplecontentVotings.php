@@ -6,23 +6,23 @@
 ********************************************************************************************************/
 
 namespace Kajona\Votings\Installer;
-use class_db;
-use class_module_votings_answer;
-use class_module_votings_voting;
-use interface_sc_installer;
+
 use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
-
+use Kajona\System\System\Database;
+use Kajona\System\System\SamplecontentInstallerInterface;
+use Kajona\Votings\System\VotingsAnswer;
+use Kajona\Votings\System\VotingsVoting;
 
 /**
  *
  */
-class InstallerSamplecontentVotings implements interface_sc_installer  {
+class InstallerSamplecontentVotings implements SamplecontentInstallerInterface {
 
     /**
-     * @var class_db
+     * @var Database
      */
     private $objDB;
     private $strContentLanguage;
@@ -41,16 +41,16 @@ class InstallerSamplecontentVotings implements interface_sc_installer  {
 
         $strReturn .= "Creating voting\n";
 
-        $objVoting = new class_module_votings_voting();
+        $objVoting = new VotingsVoting();
         if($this->strContentLanguage == "de")
             $objVoting->setStrTitle("Wie gefällt Ihnen unsere neue Webseite?");
         else
             $objVoting->setStrTitle("How do you like our new website?");
 
         $objVoting->updateObjectToDb();
-        $objAnswer1 = new class_module_votings_answer();
-        $objAnswer2 = new class_module_votings_answer();
-        $objAnswer3 = new class_module_votings_answer();
+        $objAnswer1 = new VotingsAnswer();
+        $objAnswer2 = new VotingsAnswer();
+        $objAnswer3 = new VotingsAnswer();
         if($this->strContentLanguage == "de") {
             $objAnswer1->setStrText("Gefällt mir sehr gut!");
             $objAnswer2->setStrText("Ausbaufähig...");

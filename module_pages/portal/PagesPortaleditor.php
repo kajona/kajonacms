@@ -5,16 +5,15 @@
 ********************************************************************************************************/
 
 namespace Kajona\Pages\Portal;
-use class_carrier;
-use class_model;
-use class_module_system_setting;
-use class_objectfactory;
-use Kajona\Pages\System\PagesElement;
+
 use Kajona\Pages\System\PagesPageelement;
 use Kajona\Pages\System\PagesPortaleditorActionAbstract;
 use Kajona\Pages\System\PagesPortaleditorActionEnum;
 use Kajona\Pages\System\PagesPortaleditorPlaceholderAction;
 use Kajona\Pages\System\PagesPortaleditorSystemidAction;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Objectfactory;
+use Kajona\System\System\SystemSetting;
 
 /**
  * The V5 way of generating the portal-editor. now way more object-oriented then in v4, so a plug n play mechanism
@@ -24,7 +23,8 @@ use Kajona\Pages\System\PagesPortaleditorSystemidAction;
  * @module pages
  * @moduleId _pages_modul_id_
  */
-class PagesPortaleditor  {
+class PagesPortaleditor
+{
 
     /**
      * @var PagesPortaleditor
@@ -45,18 +45,20 @@ class PagesPortaleditor  {
 
     /**
      * Converts the portaleditor actions to a json-object
+     *
      * @return string
      */
-    public function convertToJs() {
+    public function convertToJs()
+    {
 
         $arrActions = $this->arrActions;
-        usort($arrActions, function(PagesPortaleditorActionAbstract $objActionA, PagesPortaleditorActionAbstract $objActionB) {
+        usort($arrActions, function (PagesPortaleditorActionAbstract $objActionA, PagesPortaleditorActionAbstract $objActionB) {
 
-            if($objActionA->getObjAction()->equals(PagesPortaleditorActionEnum::MOVE()) && !$objActionB->getObjAction()->equals(PagesPortaleditorActionEnum::MOVE())) {
+            if ($objActionA->getObjAction()->equals(PagesPortaleditorActionEnum::MOVE()) && !$objActionB->getObjAction()->equals(PagesPortaleditorActionEnum::MOVE())) {
                 return -1;
             }
 
-            if(!$objActionA->getObjAction()->equals(PagesPortaleditorActionEnum::MOVE()) && $objActionB->getObjAction()->equals(PagesPortaleditorActionEnum::MOVE())) {
+            if (!$objActionA->getObjAction()->equals(PagesPortaleditorActionEnum::MOVE()) && $objActionB->getObjAction()->equals(PagesPortaleditorActionEnum::MOVE())) {
                 return 1;
             }
 
@@ -64,13 +66,13 @@ class PagesPortaleditor  {
         });
 
         $arrReturn = array("systemIds" => array(), "placeholder" => array());
-        foreach($arrActions as $objOneAction) {
+        foreach ($arrActions as $objOneAction) {
 
-            if($objOneAction instanceof PagesPortaleditorSystemidAction) {
+            if ($objOneAction instanceof PagesPortaleditorSystemidAction) {
                 $arrReturn["systemIds"][$objOneAction->getStrSystemid()][] = array("type" => $objOneAction->getObjAction()."", "link" => $objOneAction->getStrLink(), "systemid" => $objOneAction->getStrSystemid());
             }
 
-            if($objOneAction instanceof PagesPortaleditorPlaceholderAction) {
+            if ($objOneAction instanceof PagesPortaleditorPlaceholderAction) {
                 $arrReturn["placeholder"][$objOneAction->getStrPlaceholder()][] = array("type" => $objOneAction->getObjAction()."", "link" => $objOneAction->getStrLink(), "element" => $objOneAction->getStrElement(), "name" => $objOneAction->getStrElement());
             }
         }
@@ -82,7 +84,7 @@ class PagesPortaleditor  {
      */
     public static function getInstance()
     {
-        if(self::$objInstance == null) {
+        if (self::$objInstance == null) {
             self::$objInstance = new PagesPortaleditor();
         }
 
@@ -91,6 +93,7 @@ class PagesPortaleditor  {
 
     /**
      * Registers an additional action-entry for the current page
+     *
      * @param PagesPortaleditorActionAbstract $objAction
      */
     public function registerAction(PagesPortaleditorActionAbstract $objAction)
@@ -101,6 +104,7 @@ class PagesPortaleditor  {
 
     /**
      * Adds the wrapper for an element rendered by the portal-editor
+     *
      * @param $strOutput
      * @param $strSystemid
      * @param $strElement
@@ -114,25 +118,25 @@ class PagesPortaleditor  {
             return $strOutput;
         }
 
-        /** @var class_model $objInstance */
-        $objInstance = class_objectfactory::getInstance()->getObject($strSystemid);
-        if ($objInstance == null || class_module_system_setting::getConfigValue("_pages_portaleditor_") != "true") {
+        /** @var \Kajona\System\System\Model $objInstance */
+        $objInstance = Objectfactory::getInstance()->getObject($strSystemid);
+        if ($objInstance == null || SystemSetting::getConfigValue("_pages_portaleditor_") != "true") {
             return $strOutput;
         }
 
-        if (!class_carrier::getInstance()->getObjSession()->isAdmin() || !$objInstance->rightEdit() || class_carrier::getInstance()->getObjSession()->getSession("pe_disable") == "true") {
+        if (!Carrier::getInstance()->getObjSession()->isAdmin() || !$objInstance->rightEdit() || Carrier::getInstance()->getObjSession()->getSession("pe_disable") == "true") {
             return $strOutput;
         }
 
         //if the parent one is a block, we want to avoid it being a drag n drop entry
-        $objParent = class_objectfactory::getInstance()->getObject($objInstance->getStrPrevId());
+        $objParent = Objectfactory::getInstance()->getObject($objInstance->getStrPrevId());
 
         $strClass = "peElementWrapper";
-        if($objInstance->getIntRecordStatus() == 0) {
+        if ($objInstance->getIntRecordStatus() == 0) {
             $strClass .= " peInactiveElement";
         }
 
-        if($objParent instanceof PagesPageelement && $objParent->getStrPlaceholder() == "block") {
+        if ($objParent instanceof PagesPageelement && $objParent->getStrPlaceholder() == "block") {
             $strClass .= " peNoDnd";
         }
 
@@ -141,6 +145,7 @@ class PagesPortaleditor  {
 
     /**
      * Adds the code to render a placeholder-fragment for the portal-editor
+     *
      * @param $strPlaceholder
      *
      * @return string
@@ -154,8 +159,8 @@ class PagesPortaleditor  {
 
     public static function isActive()
     {
-        return class_module_system_setting::getConfigValue("_pages_portaleditor_") == "true"
-            && class_carrier::getInstance()->getObjSession()->getSession("pe_disable") != "true"
-            && class_carrier::getInstance()->getObjSession()->isAdmin();
+        return SystemSetting::getConfigValue("_pages_portaleditor_") == "true"
+        && Carrier::getInstance()->getObjSession()->getSession("pe_disable") != "true"
+        && Carrier::getInstance()->getObjSession()->isAdmin();
     }
 }

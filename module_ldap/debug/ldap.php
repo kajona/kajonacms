@@ -7,6 +7,9 @@
 *   $Id$                                     *
 ********************************************************************************************************/
 
+use Kajona\Ldap\System\Ldap;
+use Kajona\System\System\Config;
+
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
 echo "|                                                                               |\n";
@@ -15,9 +18,9 @@ echo "|                                                                         
 echo "+-------------------------------------------------------------------------------+\n";
 
 $intI = 0;
-foreach(class_ldap::getAllInstances() as $objOneLdap) {
+foreach(Ldap::getAllInstances() as $objOneLdap) {
 
-    $arrCfg = class_config::getInstance("ldap.php")->getConfig($objOneLdap->getIntCfgNr());
+    $arrCfg = Config::getInstance("ldap.php")->getConfig($objOneLdap->getIntCfgNr());
     echo "Connecting to ldap at ".$arrCfg["ldap_server"]."\n";
 
     echo "Searching for bind-user ".$arrCfg["ldap_bind_username"]."\n";

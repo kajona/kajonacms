@@ -20,7 +20,8 @@ use Kajona\Pages\Admin\ElementAdmin;
  *
  * @targetTable element_universal.content_id
  */
-class ElementDateAdmin extends ElementAdmin implements AdminElementInterface {
+class ElementDateAdmin extends ElementAdmin implements AdminElementInterface
+{
 
     /**
      * @var int
@@ -51,28 +52,32 @@ class ElementDateAdmin extends ElementAdmin implements AdminElementInterface {
     /**
      * @param string $strTemplate
      */
-    public function setStrTemplate($strTemplate) {
+    public function setStrTemplate($strTemplate)
+    {
         $this->strTemplate = $strTemplate;
     }
 
     /**
      * @return string
      */
-    public function getStrTemplate() {
+    public function getStrTemplate()
+    {
         return $this->strTemplate;
     }
 
     /**
      * @param string $objDate
      */
-    public function setObjDate($objDate) {
+    public function setObjDate($objDate)
+    {
         $this->objDate = $objDate;
     }
 
     /**
      * @return string
      */
-    public function getObjDate() {
+    public function getObjDate()
+    {
         return $this->objDate;
     }
 

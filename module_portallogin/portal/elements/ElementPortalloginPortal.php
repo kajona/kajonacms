@@ -7,7 +7,7 @@
 
 namespace Kajona\Portallogin\Portal\Elements;
 
-use class_date;
+use \Kajona\System\System\Date;
 use class_email_validator;
 use class_link;
 use class_logger;
@@ -325,7 +325,7 @@ class ElementPortalloginPortal extends ElementPortal implements PortalElementInt
                 $arrTemplate["mobile"] = $objUser->getObjSourceUser()->getStrMobile();
                 $arrTemplate["portallogin_elsystemid"] = $this->arrElementData["content_id"];
 
-                $objDate = new class_date($objUser->getObjSourceUser()->getLongDate());
+                $objDate = new \Kajona\System\System\Date($objUser->getObjSourceUser()->getLongDate());
 
                 $arrTemplate["date_day"] = $objDate->getIntDay();
                 $arrTemplate["date_month"] = $objDate->getIntMonth();
@@ -363,7 +363,7 @@ class ElementPortalloginPortal extends ElementPortal implements PortalElementInt
                     $objUser->getObjSourceUser()->setStrTel($this->getParam("phone"));
                     $objUser->getObjSourceUser()->setStrMobile($this->getParam("mobile"));
 
-                    $objDate = new class_date();
+                    $objDate = new \Kajona\System\System\Date();
                     $objDate->setIntDay($this->getParam("date_day"));
                     $objDate->setIntMonth($this->getParam("date_month"));
                     $objDate->setIntYear($this->getParam("date_year"));

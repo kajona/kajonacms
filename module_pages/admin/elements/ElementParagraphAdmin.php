@@ -21,7 +21,8 @@ use Kajona\Pages\Admin\ElementAdmin;
  *
  * @targetTable element_paragraph.content_id
  */
-class ElementParagraphAdmin extends ElementAdmin implements AdminElementInterface {
+class ElementParagraphAdmin extends ElementAdmin implements AdminElementInterface
+{
 
     /**
      * @var string
@@ -91,88 +92,99 @@ class ElementParagraphAdmin extends ElementAdmin implements AdminElementInterfac
      *
      * @return string
      */
-    public function getContentTitle() {
+    public function getContentTitle()
+    {
         $this->loadElementData();
 
-        if($this->getStrTitle() != "") {
+        if ($this->getStrTitle() != "") {
             return htmlStripTags($this->getStrTitle());
         }
-        elseif($this->getStrTextContent() != "") {
+        elseif ($this->getStrTextContent() != "") {
             return uniStrTrim(htmlStripTags($this->getStrTextContent()), 120);
         }
-        else
+        else {
             return parent::getContentTitle();
+        }
     }
-
 
 
     /**
      * @param string $strContent
      */
-    public function setStrTextContent($strContent) {
+    public function setStrTextContent($strContent)
+    {
         $this->strTextContent = $strContent;
     }
 
     /**
      * @return string
      */
-    public function getStrTextContent() {
+    public function getStrTextContent()
+    {
         return $this->strTextContent;
     }
 
     /**
      * @param string $strImage
      */
-    public function setStrImage($strImage) {
+    public function setStrImage($strImage)
+    {
         $this->strImage = $strImage;
     }
 
     /**
      * @return string
      */
-    public function getStrImage() {
+    public function getStrImage()
+    {
         return $this->strImage;
     }
 
     /**
      * @param string $strLink
      */
-    public function setStrLink($strLink) {
+    public function setStrLink($strLink)
+    {
         $this->strLink = $strLink;
     }
 
     /**
      * @return string
      */
-    public function getStrLink() {
+    public function getStrLink()
+    {
         return $this->strLink;
     }
 
     /**
      * @param string $strTemplate
      */
-    public function setStrTemplate($strTemplate) {
+    public function setStrTemplate($strTemplate)
+    {
         $this->strTemplate = $strTemplate;
     }
 
     /**
      * @return string
      */
-    public function getStrTemplate() {
+    public function getStrTemplate()
+    {
         return $this->strTemplate;
     }
 
     /**
      * @param string $strTitle
      */
-    public function setStrTitle($strTitle) {
+    public function setStrTitle($strTitle)
+    {
         $this->strTitle = $strTitle;
     }
 
     /**
      * @return string
      */
-    public function getStrTitle() {
+    public function getStrTitle()
+    {
         return $this->strTitle;
     }
 

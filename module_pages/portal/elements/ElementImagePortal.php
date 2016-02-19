@@ -22,27 +22,32 @@ use Kajona\Pages\System\PagesPage;
  *
  * @targetTable element_image.content_id
  */
-class ElementImagePortal extends ElementPortal implements PortalElementInterface {
+class ElementImagePortal extends ElementPortal implements PortalElementInterface
+{
 
     /**
      * Returns the ready image-htmlcode
      *
      * @return string
      */
-    public function loadData() {
+    public function loadData()
+    {
         $strReturn = "";
 
 
         $strTemplate = $this->arrElementData["image_template"];
         //fallback
-        if($strTemplate == "")
+        if ($strTemplate == "") {
             $strTemplate = "image.tpl";
+        }
 
         //choose template section
-        if($this->arrElementData["image_link"] != "")
+        if ($this->arrElementData["image_link"] != "") {
             $strTemplateID = $this->objTemplate->readTemplate("/element_image/".$strTemplate, "image_link");
-        else
+        }
+        else {
             $strTemplateID = $this->objTemplate->readTemplate("/element_image/".$strTemplate, "image");
+        }
 
         $this->arrElementData["image_src"] = $this->arrElementData["image_image"];
 
@@ -51,12 +56,14 @@ class ElementImagePortal extends ElementPortal implements PortalElementInterface
         $this->arrElementData["image_height"] = $this->arrElementData["image_y"];
 
         //Link?
-        if($this->arrElementData["image_link"] != "") {
+        if ($this->arrElementData["image_link"] != "") {
             //internal page?
-            if(PagesPage::getPageByName($this->arrElementData["image_link"]) !== null)
+            if (PagesPage::getPageByName($this->arrElementData["image_link"]) !== null) {
                 $this->arrElementData["link_href"] = getLinkPortalHref($this->arrElementData["image_link"], "");
-            else
+            }
+            else {
                 $this->arrElementData["link_href"] = getLinkPortalHref("", $this->arrElementData["image_link"]);
+            }
         }
 
 
