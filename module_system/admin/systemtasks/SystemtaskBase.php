@@ -29,7 +29,8 @@ use Kajona\System\System\SystemCommon;
  * @package module_system
  * @autor sidler@mulchprod.de
  */
-abstract class SystemtaskBase {
+abstract class SystemtaskBase
+{
 
     private $strTextbase = "system";
 
@@ -84,7 +85,8 @@ abstract class SystemtaskBase {
     /**
      * Default constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
 
         //load the external objects
         $this->objDB = Carrier::getInstance()->getObjDB();
@@ -103,12 +105,14 @@ abstract class SystemtaskBase {
     {
         $arrFiles = Resourceloader::getInstance()->getFolderContent("/admin/systemtasks/", array(".php"), false, null, function (&$strOneFile, $strPath) {
 
-            $objInstance = Classloader::getInstance()->getInstanceFromFilename($strPath, "SystemtaskBase");
+            $objInstance = Classloader::getInstance()->getInstanceFromFilename($strPath, "Kajona\\System\\Admin\\Systemtasks\\SystemtaskBase");
 
-            if($objInstance instanceof AdminSystemtaskInterface)
+            if ($objInstance instanceof AdminSystemtaskInterface) {
                 $strOneFile = $objInstance;
-            else
+            }
+            else {
                 $strOneFile = null;
+            }
 
         });
 
@@ -125,7 +129,8 @@ abstract class SystemtaskBase {
      *
      * @return string
      */
-    protected function getLang($strLangKey, $arrParameters = array()) {
+    protected function getLang($strLangKey, $arrParameters = array())
+    {
         return $this->objLang->getLang($strLangKey, $this->strTextbase, $arrParameters);
     }
 
@@ -138,27 +143,28 @@ abstract class SystemtaskBase {
      *
      * @return string
      */
-    public final function generateAdminForm($strTargetModule = "system", $strTargetAction = "systemTasks", $objAdminForm = null) {
+    public final function generateAdminForm($strTargetModule = "system", $strTargetAction = "systemTasks", $objAdminForm = null)
+    {
         $strReturn = "";
         $objAdminForm = $objAdminForm == null ? $this->getAdminForm() : $objAdminForm;
 
-        if($objAdminForm instanceof AdminFormgenerator) {
+        if ($objAdminForm instanceof AdminFormgenerator) {
             $objAdminForm->addField(new FormentryHidden("", "execute"))->setStrValue("true");
             $objAdminForm->addField(new FormentryButton("", "systemtask_run"))->setStrLabel($this->objLang->getLang("systemtask_run", "system"))->setStrValue("submit");
 
-            if($this->bitMultipartform) {
+            if ($this->bitMultipartform) {
                 $objAdminForm->setStrFormEncoding(AdminFormgenerator::FORM_ENCTYPE_MULTIPART);
             }
 
-            $strLink = Link::getLinkAdminHref($strTargetModule, $strTargetAction, "task=" . $this->getStrInternalTaskName());
+            $strLink = Link::getLinkAdminHref($strTargetModule, $strTargetAction, "task=".$this->getStrInternalTaskName());
             $strReturn = $objAdminForm->renderForm($strLink, 0);
         }
-        elseif($objAdminForm != "") {
-            if($this->bitMultipartform) {
-                $strReturn .= $this->objToolkit->formHeader(Link::getLinkAdminHref($strTargetModule, $strTargetAction, "task=" . $this->getStrInternalTaskName()), "taskParamForm", AdminFormgenerator::FORM_ENCTYPE_MULTIPART);
+        elseif ($objAdminForm != "") {
+            if ($this->bitMultipartform) {
+                $strReturn .= $this->objToolkit->formHeader(Link::getLinkAdminHref($strTargetModule, $strTargetAction, "task=".$this->getStrInternalTaskName()), "taskParamForm", AdminFormgenerator::FORM_ENCTYPE_MULTIPART);
             }
             else {
-                $strReturn .= $this->objToolkit->formHeader(Link::getLinkAdminHref($strTargetModule, $strTargetAction, "task=" . $this->getStrInternalTaskName()), "taskParamForm");
+                $strReturn .= $this->objToolkit->formHeader(Link::getLinkAdminHref($strTargetModule, $strTargetAction, "task=".$this->getStrInternalTaskName()), "taskParamForm");
             }
             $strReturn .= $objAdminForm;
             $strReturn .= $this->objToolkit->formInputHidden("execute", "true");
@@ -176,54 +182,65 @@ abstract class SystemtaskBase {
      * to enable a proper text-loading.
      *
      * @param string $strModulename
+     *
      * @return void
      */
-    protected function setStrTextBase($strModulename) {
+    protected function setStrTextBase($strModulename)
+    {
         $this->strTextbase = $strModulename;
     }
 
     /**
      * Empty implementation, override in subclass!
+     *
      * @return AdminFormgenerator
      */
-    public function getAdminForm() {
+    public function getAdminForm()
+    {
     }
 
     /**
      * Empty implementation, override in subclass!
+     *
      * @return string[]
      */
-    public function getSubmitParams() {
+    public function getSubmitParams()
+    {
         return "";
     }
 
     /**
      * Empty implementation, oveerride in subclass!
+     *
      * @return string
      */
-    public function getStrInternalTaskName() {
+    public function getStrInternalTaskName()
+    {
     }
 
     /**
      * @param string $strReloadParam
      */
-    public function setStrReloadParam($strReloadParam) {
+    public function setStrReloadParam($strReloadParam)
+    {
         $this->strReloadParam = $strReloadParam;
     }
 
     /**
      * @return string
      */
-    public function getStrReloadParam() {
+    public function getStrReloadParam()
+    {
         return $this->strReloadParam;
     }
 
     /**
      * @return string
      */
-    public function getStrReloadUrl() {
-        if($this->strReloadParam != "") {
-            return getLinkAdminHref("system", "systemTasks", "&task=" . $this->getStrInternalTaskName() . $this->strReloadParam);
+    public function getStrReloadUrl()
+    {
+        if ($this->strReloadParam != "") {
+            return getLinkAdminHref("system", "systemTasks", "&task=".$this->getStrInternalTaskName().$this->strReloadParam);
         }
         else {
             return "";
@@ -232,16 +249,19 @@ abstract class SystemtaskBase {
 
     /**
      * @param string $strProgressInformation
+     *
      * @return void
      */
-    public function setStrProgressInformation($strProgressInformation) {
+    public function setStrProgressInformation($strProgressInformation)
+    {
         $this->strProgressInformation = $strProgressInformation;
     }
 
     /**
      * @return string
      */
-    public function getStrProgressInformation() {
+    public function getStrProgressInformation()
+    {
         return $this->strProgressInformation;
     }
 
@@ -253,7 +273,8 @@ abstract class SystemtaskBase {
      *
      * @return mixed
      */
-    public function getParam($strKey) {
+    public function getParam($strKey)
+    {
         return $this->objSystemCommon->getParam($strKey);
     }
 
@@ -265,7 +286,8 @@ abstract class SystemtaskBase {
      *
      * @return void
      */
-    public function setParam($strKey, $strValue) {
+    public function setParam($strKey, $strValue)
+    {
         $this->objSystemCommon->setParam($strKey, $strValue);
     }
 
@@ -275,7 +297,8 @@ abstract class SystemtaskBase {
      *
      * @param bool $bitMultipartform
      */
-    public function setBitMultipartform($bitMultipartform) {
+    public function setBitMultipartform($bitMultipartform)
+    {
         $this->bitMultipartform = $bitMultipartform;
     }
 

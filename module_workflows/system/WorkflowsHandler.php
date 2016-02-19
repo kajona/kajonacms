@@ -167,7 +167,7 @@ class WorkflowsHandler extends \Kajona\System\System\Model implements \Kajona\Sy
         $arrFiles = Resourceloader::getInstance()->getFolderContent("/system/workflows", array(".php"));
         foreach ($arrFiles as $strPath => $strOneFile) {
 
-            $objInstance = Classloader::getInstance()->getInstanceFromFilename($strPath, null, "interface_workflows_handler");
+            $objInstance = Classloader::getInstance()->getInstanceFromFilename($strPath, null, "Kajona\\Workflows\\System\\WorkflowsHandlerInterface");
             if ($objInstance !== null) {
                 $objWorkflow = WorkflowsHandler::getHandlerByClass(get_class($objInstance));
 

@@ -17,7 +17,8 @@ namespace Kajona\System\System;
  * @author sidler@mulchprod.de
  * @since 4.0
  */
-class ScriptletHelper {
+class ScriptletHelper
+{
 
 
     /**
@@ -29,15 +30,16 @@ class ScriptletHelper {
      * @return string
      * @see interface_scriptlet
      */
-    public function processString($strContent, $intContext = null) {
+    public function processString($strContent, $intContext = null)
+    {
         $arrScriptletFiles = Resourceloader::getInstance()->getFolderContent("/system/scriptlets", array(".php"));
 
-        foreach($arrScriptletFiles as $strPath => $strOneScriptlet) {
+        foreach ($arrScriptletFiles as $strPath => $strOneScriptlet) {
 
             /** @var $objScriptlet ScriptletInterface */
-            $objScriptlet = Classloader::getInstance()->getInstanceFromFilename($strPath, "", "interface_scriptlet");
+            $objScriptlet = Classloader::getInstance()->getInstanceFromFilename($strPath, "", "Kajona\\System\\System\\ScriptletInterface");
 
-            if($objScriptlet != null && ($intContext == null || ($intContext & $objScriptlet->getProcessingContext()))) {
+            if ($objScriptlet != null && ($intContext == null || ($intContext & $objScriptlet->getProcessingContext()))) {
                 $strContent = $objScriptlet->processContent($strContent);
                 Logger::getInstance("scriptlets.log")->addLogRow("processing call to ".$strOneScriptlet.", filter: ".$intContext, Logger::$levelInfo);
             }

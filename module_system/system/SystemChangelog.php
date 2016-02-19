@@ -913,7 +913,7 @@ class SystemChangelog {
 
         $arrReturn = Resourceloader::getInstance()->getFolderContent("/system", array(".php"), false, null,
         function(&$strOneFile, $strPath) {
-            $strOneFile = Classloader::getInstance()->getInstanceFromFilename($strPath, "", "interface_changelog_provider");
+            $strOneFile = Classloader::getInstance()->getInstanceFromFilename($strPath, "", "Kajona\\System\\System\\ChangelogProviderInterface");
         });
 
         $arrReturn = array_filter($arrReturn, function ($objEl) { return $objEl != null; });
