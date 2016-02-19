@@ -1,6 +1,7 @@
 <?php
 
 namespace Kajona\System\Tests;
+
 require_once __DIR__."/../../../core/module_system/system/Testbase.php";
 require_once __DIR__."/../../../core/module_system/system/TestbaseObject.php";
 use Kajona\System\System\Carrier;
@@ -20,28 +21,37 @@ use Kajona\System\System\TestbaseObject;
  * Class class_test_orm_schemamanagerTest
  *
  */
-class OrmObjectassignmentsTest extends TestbaseObject {
+class OrmObjectassignmentsTest extends TestbaseObject
+{
     /**
      * Returns an path to an xml fixture file which can be used to create and delete database structures
      *
      * @return string
      */
-    protected function getFixtureFile() {
+    protected function getFixtureFile()
+    {
         return __DIR__."/objectassignmentsTest_fixture.xml";
     }
 
-        /**
+    /**
      * Returns the default root id for an given class name
      *
      * @param string $strClassName
      *
      * @return string
      */
-    protected function getDefaultRootId($strClassName) {
-        if($strClassName == "Kajona\\System\\System\\LanguagesLanguage")
+    protected function getDefaultRootId($strClassName)
+    {
+        if ($strClassName == "Kajona\\System\\System\\LanguagesLanguage") {
             return SystemModule::getModuleByName("languages")->getSystemid();
+        }
 
-        return SystemModule::getModuleByName("system")->getSystemid();
+        $objModule = SystemModule::getModuleByName("system");
+        if($objModule == null) {
+            SystemModule::flushCache();
+            $objModule = SystemModule::getModuleByName("system");
+        }
+        return $objModule->getSystemid();
     }
 
     /**
@@ -50,17 +60,20 @@ class OrmObjectassignmentsTest extends TestbaseObject {
      * @param Model $objSource
      * @param Model $objReference
      */
-    protected function assignReferenceToObject(Model $objSource, Model $objReference) {
+    protected function assignReferenceToObject(Model $objSource, Model $objReference)
+    {
 
     }
 
-    protected function setUp() {
+    protected function setUp()
+    {
         $objSchema = new OrmSchemamanager();
-        $objSchema->createTable("\\Kajona\\System\\Tests\\OrmObjectlistTestclass");
+        $objSchema->createTable("Kajona\\System\\Tests\\OrmObjectlistTestclass");
         parent::setUp();
     }
 
-    protected function tearDown() {
+    protected function tearDown()
+    {
         parent::tearDown();
         $objDb = Carrier::getInstance()->getObjDB();
         $objDb->_pQuery("DROP TABLE "._dbprefix_."testclass", array());
@@ -70,7 +83,8 @@ class OrmObjectassignmentsTest extends TestbaseObject {
     }
 
 
-    public function testLogicalDeleteUpdateHandlingExcluded() {
+    public function testLogicalDeleteUpdateHandlingExcluded()
+    {
         $objDB = Carrier::getInstance()->getObjDB();
 
         /** @var OrmObjectlistTestclass $objTestobject */
@@ -98,7 +112,8 @@ class OrmObjectassignmentsTest extends TestbaseObject {
     }
 
 
-    public function testLogicalDeleteUpdateHandlingExcludedVariant2() {
+    public function testLogicalDeleteUpdateHandlingExcludedVariant2()
+    {
         $objDB = Carrier::getInstance()->getObjDB();
 
         /** @var OrmObjectlistTestclass $objTestobject */
@@ -125,7 +140,8 @@ class OrmObjectassignmentsTest extends TestbaseObject {
         $this->assertEquals(2, $arrRow["COUNT(*)"]);
     }
 
-    public function testLogicalDeleteUpdateHandlingIncluded() {
+    public function testLogicalDeleteUpdateHandlingIncluded()
+    {
         $objDB = Carrier::getInstance()->getObjDB();
 
         /** @var OrmObjectlistTestclass $objTestobject */
@@ -153,9 +169,8 @@ class OrmObjectassignmentsTest extends TestbaseObject {
     }
 
 
-
-
-    public function testLogicalDeleteLoadHandling() {
+    public function testLogicalDeleteLoadHandling()
+    {
         $objDB = Carrier::getInstance()->getObjDB();
 
         /** @var OrmObjectlistTestclass $objTestobject */
@@ -193,13 +208,11 @@ class OrmObjectassignmentsTest extends TestbaseObject {
         $this->assertEquals(count($objTestobject->getArrObject1()), 2);
         $this->assertTrue(in_array($objTestobject->getArrObject1()[0]->getSystemid(), array($arrAspects[0]->getSystemid(), $arrAspects[2]->getSystemid())));
 
-
-
-
     }
 
 
-    public function testObjectassignmentsSaving() {
+    public function testObjectassignmentsSaving()
+    {
 
         $objDB = Carrier::getInstance()->getObjDB();
 
@@ -242,7 +255,8 @@ class OrmObjectassignmentsTest extends TestbaseObject {
 
     }
 
-    public function testObjectassignmentsOnNonSavedObjects() {
+    public function testObjectassignmentsOnNonSavedObjects()
+    {
 
         $objDB = Carrier::getInstance()->getObjDB();
 
@@ -259,12 +273,11 @@ class OrmObjectassignmentsTest extends TestbaseObject {
 
         $objTestobject->deleteObjectFromDatabase();
 
-
-
     }
 
 
-    public function testObjectassignmentsLazyLoad() {
+    public function testObjectassignmentsLazyLoad()
+    {
         /** @var OrmObjectlistTestclass $objTestobject */
         $objTestobject = $this->getObject("testobject");
         $arrAspects = array($this->getObject("aspect1"), $this->getObject("aspect2"));
@@ -281,7 +294,7 @@ class OrmObjectassignmentsTest extends TestbaseObject {
         $this->assertEquals(2, count($objNewInstance->getArrObject1()));
         $this->assertTrue($objNewInstance->getArrObject1()->getBitInitialized());
 
-        foreach($objNewInstance->getArrObject1() as $objOneObject) {
+        foreach ($objNewInstance->getArrObject1() as $objOneObject) {
             $this->assertTrue(in_array($objOneObject->getSystemid(), array($this->getObject("aspect1")->getSystemid(), $this->getObject("aspect2")->getSystemid())));
         }
 
@@ -289,7 +302,8 @@ class OrmObjectassignmentsTest extends TestbaseObject {
     }
 
 
-    public function testObjectassignmentEventHandling() {
+    public function testObjectassignmentEventHandling()
+    {
 
         $objDB = Carrier::getInstance()->getObjDB();
 
@@ -384,7 +398,6 @@ class OrmObjectassignmentsTest extends TestbaseObject {
         $this->assertTrue(in_array($objHandler->arrCurrentAssignments[1], array($this->getObject("aspect1")->getSystemid(), $this->getObject("aspect2")->getSystemid())));
 
 
-
         //do nothing
 
         $objHandler = new OrmObjectlistTesthandler();
@@ -409,7 +422,8 @@ class OrmObjectassignmentsTest extends TestbaseObject {
 
     }
 
-    public function testAssignmentsDelete() {
+    public function testAssignmentsDelete()
+    {
 
         $objDB = Carrier::getInstance()->getObjDB();
 
@@ -429,7 +443,8 @@ class OrmObjectassignmentsTest extends TestbaseObject {
     }
 
 
-    public function testAssignmentClassTypeCheck() {
+    public function testAssignmentClassTypeCheck()
+    {
         $objDB = Carrier::getInstance()->getObjDB();
 
         /** @var OrmObjectlistTestclass $objTestobject */
@@ -450,11 +465,11 @@ class OrmObjectassignmentsTest extends TestbaseObject {
         $objTestobject = new OrmObjectlistTestclass($objTestobject->getSystemid());
         $this->assertEquals(2, count($objTestobject->getArrObject2()));
 
-
     }
 }
 
-class OrmObjectlistTesthandler implements GenericeventListenerInterface {
+class OrmObjectlistTesthandler implements GenericeventListenerInterface
+{
 
     public $arrNewAssignments = null;
     public $arrRemovedAssignments = null;
@@ -462,7 +477,8 @@ class OrmObjectlistTesthandler implements GenericeventListenerInterface {
     public $objObject = null;
     public $strProperty = null;
 
-    public function handleEvent($strEventIdentifier, array $arrArguments) {
+    public function handleEvent($strEventIdentifier, array $arrArguments)
+    {
         list($this->arrNewAssignments, $this->arrRemovedAssignments, $this->arrCurrentAssignments, $this->objObject, $this->strProperty) = $arrArguments;
         return true;
     }
@@ -475,14 +491,14 @@ class OrmObjectlistTesthandler implements GenericeventListenerInterface {
  *
  * @targetTable testclass.testclass_id
  */
-class OrmObjectlistTestclass extends Model implements ModelInterface {
+class OrmObjectlistTestclass extends Model implements ModelInterface
+{
 
     /**
      * @var array
      * @objectList testclass_rel (source="testclass_source_id", target="testclass_target_id")
      */
     private $arrObject1 = array();
-
 
 
     /**
@@ -503,7 +519,8 @@ class OrmObjectlistTestclass extends Model implements ModelInterface {
      *
      * @return string
      */
-    public function getStrDisplayName() {
+    public function getStrDisplayName()
+    {
         return $this->getStrName();
     }
 
@@ -511,14 +528,16 @@ class OrmObjectlistTestclass extends Model implements ModelInterface {
     /**
      * @return string
      */
-    public function getStrName() {
+    public function getStrName()
+    {
         return $this->strName;
     }
 
     /**
      * @param string $strName
      */
-    public function setStrName($strName) {
+    public function setStrName($strName)
+    {
         $this->strName = $strName;
     }
 
@@ -526,32 +545,34 @@ class OrmObjectlistTestclass extends Model implements ModelInterface {
     /**
      * @return array
      */
-    public function getArrObject1() {
+    public function getArrObject1()
+    {
         return $this->arrObject1;
     }
 
     /**
      * @param array $arrObject1
      */
-    public function setArrObject1($arrObject1) {
+    public function setArrObject1($arrObject1)
+    {
         $this->arrObject1 = $arrObject1;
     }
 
     /**
      * @return array
      */
-    public function getArrObject2() {
+    public function getArrObject2()
+    {
         return $this->arrObject2;
     }
 
     /**
      * @param array $arrObject2
      */
-    public function setArrObject2($arrObject2) {
+    public function setArrObject2($arrObject2)
+    {
         $this->arrObject2 = $arrObject2;
     }
-
-
 
 
 }

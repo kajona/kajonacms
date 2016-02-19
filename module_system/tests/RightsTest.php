@@ -327,19 +327,19 @@ class RightsTest extends Testbase
 
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow("SELECT * FROM " . _dbprefix_ . "system_right WHERE right_id = ?", array($objAspect->getSystemid()), 0, false);
         $this->assertTrue(!in_array($strGroupId, explode(",", $arrRow["right_view"])));
-        $this->assertTrue(!Carrier::getInstance()->getObjRights()->checkPermissionForGroup($strGroupId, class_rights::$STR_RIGHT_VIEW, $objAspect->getSystemid()));
+        $this->assertTrue(!Carrier::getInstance()->getObjRights()->checkPermissionForGroup($strGroupId, Rights::$STR_RIGHT_VIEW, $objAspect->getSystemid()));
 
-        Carrier::getInstance()->getObjRights()->addGroupToRight($strGroupId, $objAspect->getSystemid(), class_rights::$STR_RIGHT_VIEW);
+        Carrier::getInstance()->getObjRights()->addGroupToRight($strGroupId, $objAspect->getSystemid(), Rights::$STR_RIGHT_VIEW);
 
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow("SELECT * FROM " . _dbprefix_ . "system_right WHERE right_id = ?", array($objAspect->getSystemid()), 0, false);
         $this->assertTrue(in_array($strGroupId, explode(",", $arrRow["right_view"])));
-        $this->assertTrue(Carrier::getInstance()->getObjRights()->checkPermissionForGroup($strGroupId, class_rights::$STR_RIGHT_VIEW, $objAspect->getSystemid()));
+        $this->assertTrue(Carrier::getInstance()->getObjRights()->checkPermissionForGroup($strGroupId, Rights::$STR_RIGHT_VIEW, $objAspect->getSystemid()));
 
         SystemAspect::getObjectList();
 
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow("SELECT * FROM " . _dbprefix_ . "system_right WHERE right_id = ?", array($objAspect->getSystemid()), 0, false);
         $this->assertTrue(in_array($strGroupId, explode(",", $arrRow["right_view"])));
-        $this->assertTrue(Carrier::getInstance()->getObjRights()->checkPermissionForGroup($strGroupId, class_rights::$STR_RIGHT_VIEW, $objAspect->getSystemid()));
+        $this->assertTrue(Carrier::getInstance()->getObjRights()->checkPermissionForGroup($strGroupId, Rights::$STR_RIGHT_VIEW, $objAspect->getSystemid()));
 
 
         $objAspect->deleteObjectFromDatabase();

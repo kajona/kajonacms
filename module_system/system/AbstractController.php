@@ -269,7 +269,7 @@ abstract class AbstractController
 
 
     /**
-     * Returns the current instance of class_module_system_module, based on the current subclass.
+     * Returns the current instance of SystemModule, based on the current subclass.
      * Lazy-loading, so loaded on first access.
      *
      * @return SystemModule|null

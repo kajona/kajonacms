@@ -125,6 +125,13 @@ class LogicalDeleteTest extends Testbase
         OrmBase::setObjHandleLogicalDeletedGlobal(OrmDeletedhandlingEnum::EXCLUSIVE);
         $this->assertEquals($intCountDeleted, SystemAspect::getObjectCount());
 
+
+    }
+
+    protected function tearDown()
+    {
+        OrmBase::setObjHandleLogicalDeletedGlobal(OrmDeletedhandlingEnum::EXCLUDED);
+        parent::tearDown();
     }
 
 

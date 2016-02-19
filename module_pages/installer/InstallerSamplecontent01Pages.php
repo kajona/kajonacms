@@ -8,18 +8,13 @@
 ********************************************************************************************************/
 namespace Kajona\Pages\Installer;
 
-use class_carrier;
-use class_module_mediamanager_repo;
-use class_module_system_module;
-use class_module_system_setting;
 use Kajona\Mediamanager\System\MediamanagerRepo;
 use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
-use class_db;
-use interface_sc_installer;
 use Kajona\System\System\Carrier;
+use Kajona\System\System\Database;
 use Kajona\System\System\SamplecontentInstallerInterface;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\SystemSetting;
@@ -29,27 +24,32 @@ use Kajona\System\System\SystemSetting;
  *
  * @package module_pages
  */
-class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  {
+class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
+{
 
     /**
-     * @var class_db
+     * @var Database
      */
     private $objDB;
     private $strContentLanguage;
     private $strIndexID;
     private $strMasterID;
 
-    public function install() {
+    public function install()
+    {
         $strReturn = $this->installScPages();
         $strReturn .= $this->installScDownloads();
         $strReturn .= $this->installScGallery();
         return $strReturn;
     }
+
     /**
      * Does the hard work: installs the module and registers needed constants
+     *
      * @return string
      */
-    public function installScPages() {
+    public function installScPages()
+    {
 
         $strReturn = "";
 
@@ -83,7 +83,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
         $objPage = new PagesPage();
         $objPage->setStrName("index");
 
-        if($this->strContentLanguage == "de") {
+        if ($this->strContentLanguage == "de") {
             $objPage->setStrBrowsername("Willkommen");
         }
         else {
@@ -95,7 +95,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
         $this->strIndexID = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$this->strIndexID."\n";
         $strReturn .= "Adding headline-element to new page\n";
-        if(PagesElement::getElement("row") != null) {
+        if (PagesElement::getElement("row") != null) {
             $objPagelement = new PagesPageelement();
             $objPagelement->setStrPlaceholder("headline_row");
             $objPagelement->setStrName("headline");
@@ -104,7 +104,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
             $strElementId = $objPagelement->getSystemid();
 
             $arrParams = array();
-            if($this->strContentLanguage == "de") {
+            if ($this->strContentLanguage == "de") {
                 $arrParams[] = "Willkommen";
                 $arrParams[] = $strElementId;
             }
@@ -116,14 +116,16 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
             $strQuery = "UPDATE "._dbprefix_."element_paragraph
                                 SET paragraph_title = ?
                                 WHERE content_id = ?";
-            if($this->objDB->_pQuery($strQuery, $arrParams))
+            if ($this->objDB->_pQuery($strQuery, $arrParams)) {
                 $strReturn .= "Headline element created.\n";
-            else
+            }
+            else {
                 $strReturn .= "Error creating headline element.\n";
+            }
         }
 
         $strReturn .= "Adding paragraph-elements to new page\n";
-        if(PagesElement::getElement("paragraph") != null) {
+        if (PagesElement::getElement("paragraph") != null) {
             $objPagelement = new PagesPageelement();
             $objPagelement->setStrPlaceholder("content_paragraph|image");
             $objPagelement->setStrName("text");
@@ -132,7 +134,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
             $strElementId = $objPagelement->getSystemid();
 
             $arrParams = array();
-            if($this->strContentLanguage == "de") {
+            if ($this->strContentLanguage == "de") {
                 $arrParams[] = "Herzlichen Glückwunsch!";
                 $arrParams[] = "Diese Installation von Kajona war erfolgreich. Wir wünschen viel Spaß mit Kajona V4.<br />
                                 Nehmen Sie sich die Zeit und betrachten Sie die einzelnen Seiten, die mit Beispielinhalten befüllt wurde. Sie gelangen jederzeit auf diese
@@ -162,11 +164,12 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
                                     paragraph_image = ?
                                 WHERE content_id = ?";
 
-            if($this->objDB->_pQuery($strQuery, $arrParams, array(true, false)))
+            if ($this->objDB->_pQuery($strQuery, $arrParams, array(true, false))) {
                 $strReturn .= "Paragraph element created.\n";
-            else
+            }
+            else {
                 $strReturn .= "Error creating paragraph element.\n";
-
+            }
 
 
             $objPagelement = new PagesPageelement();
@@ -177,7 +180,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
             $strElementId = $objPagelement->getSystemid();
 
             $arrParams = array();
-            if($this->strContentLanguage == "de") {
+            if ($this->strContentLanguage == "de") {
                 $arrParams[] = "Teaser 1";
                 $arrParams[] = "Dieser Text-Absatz befindet sich am Platzhalter column1_paragraph|image, der im Standard-Template links ausgerichtet ist. Sobald Sie sich am
                                 System <a href='_webpath_/admin'>angemeldet</a> haben und das Portal erneut aufrufen, wird der Portal-Editor angezeigt. Nutzen Sie Drag n Drop
@@ -200,11 +203,12 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
                                     paragraph_content =  ?
                                 WHERE content_id = ?";
 
-            if($this->objDB->_pQuery($strQuery, $arrParams, array(true, false)))
+            if ($this->objDB->_pQuery($strQuery, $arrParams, array(true, false))) {
                 $strReturn .= "Paragraph element created.\n";
-            else
+            }
+            else {
                 $strReturn .= "Error creating paragraph element.\n";
-
+            }
 
 
             $objPagelement = new PagesPageelement();
@@ -215,7 +219,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
             $strElementId = $objPagelement->getSystemid();
 
             $arrParams = array();
-            if($this->strContentLanguage == "de") {
+            if ($this->strContentLanguage == "de") {
                 $arrParams[] = "Teaser 2";
                 $arrParams[] = "Der Platzhalter dieses Elementes lautet column2_paragraph|image. Daher ist er für alle anderen Absätze auf dieser Seite ein gültiger Ziel-Platzhalter,
                                 sobald ein Absatz per drag n drop verschoben wird. Verschieben Sie die Absätze auf dieser Seite, um ein erstes Gefühl hierfür zu bekommen.";
@@ -234,12 +238,14 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
                                     paragraph_content =  ?
                                 WHERE content_id = ?";
 
-            if($this->objDB->_pQuery($strQuery, $arrParams, array(true, false)))
+            if ($this->objDB->_pQuery($strQuery, $arrParams, array(true, false))) {
                 $strReturn .= "Paragraph element created.\n";
-            else
+            }
+            else {
                 $strReturn .= "Error creating paragraph element.\n";
-            
-           
+            }
+
+
             $objPagelement = new PagesPageelement();
             $objPagelement->setStrPlaceholder("column3_paragraph|image");
             $objPagelement->setStrName("column3");
@@ -248,7 +254,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
             $strElementId = $objPagelement->getSystemid();
 
             $arrParams = array();
-            if($this->strContentLanguage == "de") {
+            if ($this->strContentLanguage == "de") {
                 $arrParams[] = "Teaser 3";
                 $arrParams[] = "Der Platzhalter dieses Elementes lautet column3_paragraph|image. Daher ist er für alle anderen Absätze auf dieser Seite ein gültiger Ziel-Platzhalter,
                                 sobald ein Absatz per drag n drop verschoben wird. Verschieben Sie die Absätze auf dieser Seite, um ein erstes Gefühl hierfür zu bekommen.";
@@ -267,19 +273,14 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
                                     paragraph_content =  ?
                                 WHERE content_id = ?";
 
-            if($this->objDB->_pQuery($strQuery, $arrParams, array(true, false)))
+            if ($this->objDB->_pQuery($strQuery, $arrParams, array(true, false))) {
                 $strReturn .= "Paragraph element created.\n";
-            else
-                $strReturn .= "Error creating paragraph element.\n";            
-            
-            
-        }
-        
-        
+            }
+            else {
+                $strReturn .= "Error creating paragraph element.\n";
+            }
 
-        
-        
-        
+        }
 
 
         $strReturn .= "Creating master-page\n";
@@ -296,10 +297,12 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
         $objPage = new PagesPage();
         $objPage->setStrName("error");
 
-        if($this->strContentLanguage == "de")
+        if ($this->strContentLanguage == "de") {
             $objPage->setStrBrowsername("Fehler");
-        else
+        }
+        else {
             $objPage->setStrBrowsername("Error");
+        }
 
 
         $objPage->setStrTemplate("standard.tpl");
@@ -308,7 +311,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
         $strReturn .= "ID of new page: ".$strErrorPageId."\n";
 
         $strReturn .= "Adding headline-element to new page\n";
-        if(PagesElement::getElement("row") != null) {
+        if (PagesElement::getElement("row") != null) {
             $objPagelement = new PagesPageelement();
             $objPagelement->setStrPlaceholder("headline_row");
             $objPagelement->setStrName("headline");
@@ -317,7 +320,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
             $strElementId = $objPagelement->getSystemid();
 
             $arrParams = array();
-            if($this->strContentLanguage == "de") {
+            if ($this->strContentLanguage == "de") {
                 $arrParams[] = "Fehler";
                 $arrParams[] = $strElementId;
             }
@@ -329,15 +332,17 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
             $strQuery = "UPDATE "._dbprefix_."element_paragraph
                             SET paragraph_title = ?
                             WHERE content_id = ?";
-            if($this->objDB->_pQuery($strQuery,$arrParams))
+            if ($this->objDB->_pQuery($strQuery, $arrParams)) {
                 $strReturn .= "Headline element created.\n";
-            else
+            }
+            else {
                 $strReturn .= "Error creating headline element.\n";
+            }
 
         }
 
         $strReturn .= "Adding paragraph-element to new page\n";
-        if(PagesElement::getElement("paragraph") != null) {
+        if (PagesElement::getElement("paragraph") != null) {
             $objPagelement = new PagesPageelement();
             $objPagelement->setStrPlaceholder("content_paragraph|image");
             $objPagelement->setStrName("text");
@@ -346,7 +351,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
             $strElementId = $objPagelement->getSystemid();
 
             $arrParams = array();
-            if($this->strContentLanguage == "de") {
+            if ($this->strContentLanguage == "de") {
                 $arrParams[] = "Ein Fehler ist aufgetreten";
                 $arrParams[] = "Während Ihre Anfrage ist leider ein Fehler aufgetreten.<br />Bitte versuchen Sie die letzte Aktion erneut.";
                 $arrParams[] = $strElementId;
@@ -362,26 +367,30 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
                             paragraph_content = ?
                         WHERE content_id = ?";
 
-            if($this->objDB->_pQuery($strQuery, $arrParams, array(true, false)))
+            if ($this->objDB->_pQuery($strQuery, $arrParams, array(true, false))) {
                 $strReturn .= "Paragraph element created.\n";
-            else
+            }
+            else {
                 $strReturn .= "Error creating paragraph element.\n";
+            }
         }
 
 
         $strReturn .= "Creating imprint-site...\n";
         $objPage = new PagesPage();
         $objPage->setStrName("imprint");
-        if($this->strContentLanguage == "de")
+        if ($this->strContentLanguage == "de") {
             $objPage->setStrBrowsername("Impressum");
-        else
+        }
+        else {
             $objPage->setStrBrowsername("Imprint");
+        }
         $objPage->setStrTemplate("standard.tpl");
         $objPage->updateObjectToDb($strSystemFolderID);
         $strImprintPageId = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strImprintPageId."\n";
         $strReturn .= "Adding headline-element to new page\n";
-        if(PagesElement::getElement("row") != null) {
+        if (PagesElement::getElement("row") != null) {
             $objPagelement = new PagesPageelement();
             $objPagelement->setStrPlaceholder("headline_row");
             $objPagelement->setStrName("headline");
@@ -390,7 +399,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
             $strElementId = $objPagelement->getSystemid();
 
             $arrParams = array();
-            if($this->strContentLanguage == "de") {
+            if ($this->strContentLanguage == "de") {
                 $arrParams[] = "Impressum";
                 $arrParams[] = $strElementId;
             }
@@ -402,15 +411,17 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
             $strQuery = "UPDATE "._dbprefix_."element_paragraph
                             SET paragraph_title = ?
                             WHERE content_id = ?";
-            if($this->objDB->_pQuery($strQuery, $arrParams))
+            if ($this->objDB->_pQuery($strQuery, $arrParams)) {
                 $strReturn .= "Headline element created.\n";
-            else
-            $strReturn .= "Error creating headline element.\n";
+            }
+            else {
+                $strReturn .= "Error creating headline element.\n";
+            }
 
         }
 
         $strReturn .= "Adding paragraph-element to new page\n";
-        if(PagesElement::getElement("paragraph") != null) {
+        if (PagesElement::getElement("paragraph") != null) {
             $objPagelement = new PagesPageelement();
             $objPagelement->setStrPlaceholder("content_paragraph|image");
             $objPagelement->setStrName("text");
@@ -419,7 +430,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
             $strElementId = $objPagelement->getSystemid();
 
             $arrParams = array();
-            if($this->strContentLanguage == "de") {
+            if ($this->strContentLanguage == "de") {
                 $arrParams[] = "Impressum";
                 $arrParams[] = "Bitte tragen Sie hier Ihre Kontaktdaten ein.<br />
                                Nachname, Name<br />
@@ -449,10 +460,12 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
                         SET paragraph_title = ?,
                            paragraph_content = ?
                       WHERE content_id = ?";
-            if($this->objDB->_pQuery($strQuery, $arrParams, array(true, false)))
+            if ($this->objDB->_pQuery($strQuery, $arrParams, array(true, false))) {
                 $strReturn .= "Paragraph element created.\n";
-            else
+            }
+            else {
                 $strReturn .= "Error creating paragraph element.\n";
+            }
 
         }
 
@@ -460,17 +473,19 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
         $strReturn .= "Creating sample page...\n";
         $objPage = new PagesPage();
         $objPage->setStrName("page_1");
-        if($this->strContentLanguage == "de")
+        if ($this->strContentLanguage == "de") {
             $objPage->setStrBrowsername("Beispielseite 1");
-        else
+        }
+        else {
             $objPage->setStrBrowsername("Sample page 1");
+        }
         $objPage->setStrTemplate("standard.tpl");
         $objPage->updateObjectToDb($strMainnavigationFolderID);
         $strSamplePageId = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strSamplePageId."\n";
         $strReturn .= "Adding headline-element to new page\n";
 
-        if(PagesElement::getElement("row") != null) {
+        if (PagesElement::getElement("row") != null) {
             $objPagelement = new PagesPageelement();
             $objPagelement->setStrPlaceholder("headline_row");
             $objPagelement->setStrName("headline");
@@ -479,7 +494,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
             $strElementId = $objPagelement->getSystemid();
 
             $arrParams = array();
-            if($this->strContentLanguage == "de") {
+            if ($this->strContentLanguage == "de") {
                 $arrParams[] = "Beispielseite 1";
                 $arrParams[] = $strElementId;
             }
@@ -491,14 +506,16 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
             $strQuery = "UPDATE "._dbprefix_."element_paragraph
                             SET paragraph_title = ?
                             WHERE content_id = ?";
-            if($this->objDB->_pQuery($strQuery, $arrParams))
+            if ($this->objDB->_pQuery($strQuery, $arrParams)) {
                 $strReturn .= "Headline element created.\n";
-            else
+            }
+            else {
                 $strReturn .= "Error creating headline element.\n";
+            }
 
         }
         $strReturn .= "Adding paragraph-element to new page\n";
-        if(PagesElement::getElement("paragraph") != null) {
+        if (PagesElement::getElement("paragraph") != null) {
             $objPagelement = new PagesPageelement();
             $objPagelement->setStrPlaceholder("content_paragraph|image");
             $objPagelement->setStrName("text");
@@ -507,7 +524,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
             $strElementId = $objPagelement->getSystemid();
 
             $arrParams = array();
-            if($this->strContentLanguage == "de") {
+            if ($this->strContentLanguage == "de") {
                 $arrParams[] = "Standard-Absatz";
                 $arrParams[] = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.";
                 $arrParams[] = "/files/images/samples/IMG_3000.JPG";
@@ -528,31 +545,33 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
                                 paragraph_image = ?,
                                 paragraph_link = ?
                             WHERE content_id = ?";
-            if($this->objDB->_pQuery($strQuery, $arrParams))
+            if ($this->objDB->_pQuery($strQuery, $arrParams)) {
                 $strReturn .= "Paragraph element created.\n";
-            else
+            }
+            else {
                 $strReturn .= "Error creating paragraph element.\n";
-
+            }
 
         }
 
 
-
-       $strReturn .= "Creating sample subpage...\n";
+        $strReturn .= "Creating sample subpage...\n";
         $objPage = new PagesPage();
         $objPage->setStrName("subpage_1");
 
-        if($this->strContentLanguage == "de")
+        if ($this->strContentLanguage == "de") {
             $objPage->setStrBrowsername("Beispiel-Unterseite 1");
-        else
+        }
+        else {
             $objPage->setStrBrowsername("Sample subpage 1");
+        }
         $objPage->setStrTemplate("standard.tpl");
         $objPage->updateObjectToDb($strSamplePageId);
         $strSampleSubPageId = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strSampleSubPageId."\n";
         $strReturn .= "Adding headline-element to new page\n";
 
-        if(PagesElement::getElement("row") != null) {
+        if (PagesElement::getElement("row") != null) {
             $objPagelement = new PagesPageelement();
             $objPagelement->setStrPlaceholder("headline_row");
             $objPagelement->setStrName("headline");
@@ -561,7 +580,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
             $strElementId = $objPagelement->getSystemid();
 
             $arrParams = array();
-            if($this->strContentLanguage == "de") {
+            if ($this->strContentLanguage == "de") {
                 $arrParams[] = "Beispiel-Unterseite 1";
                 $arrParams[] = $strElementId;
             }
@@ -573,15 +592,17 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
             $strQuery = "UPDATE "._dbprefix_."element_paragraph
                             SET paragraph_title = ?
                             WHERE content_id = ?";
-            if($this->objDB->_pQuery($strQuery, $arrParams))
+            if ($this->objDB->_pQuery($strQuery, $arrParams)) {
                 $strReturn .= "Headline element created.\n";
-            else
+            }
+            else {
                 $strReturn .= "Error creating headline element.\n";
+            }
 
         }
 
         $strReturn .= "Adding paragraph-element to new page\n";
-        if(PagesElement::getElement("paragraph") != null) {
+        if (PagesElement::getElement("paragraph") != null) {
             $objPagelement = new PagesPageelement();
             $objPagelement->setStrPlaceholder("content_paragraph|image");
             $objPagelement->setStrName("text");
@@ -591,7 +612,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
 
 
             $arrParams = array();
-            if($this->strContentLanguage == "de") {
+            if ($this->strContentLanguage == "de") {
                 $arrParams[] = "Standard-Absatz auf Unterseite";
                 $arrParams[] = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.";
                 $arrParams[] = $strElementId;
@@ -606,32 +627,34 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
                             SET paragraph_title = ?,
                                 paragraph_content = ?
                             WHERE content_id = ?";
-            if($this->objDB->_pQuery($strQuery, $arrParams))
+            if ($this->objDB->_pQuery($strQuery, $arrParams)) {
                 $strReturn .= "Paragraph element created.\n";
-            else
+            }
+            else {
                 $strReturn .= "Error creating paragraph element.\n";
+            }
         }
 
         return $strReturn;
     }
 
 
-
-
-
-    public function installScDownloads() {
+    public function installScDownloads()
+    {
         $strReturn = "";
 
-        if(SystemModule::getModuleByName("mediamanager") == null)
+        if (SystemModule::getModuleByName("mediamanager") == null) {
             return "Mediamanger not installed, skipping element\n";
+        }
 
         //fetch navifolder-id
         $strNaviFolderId = "";
         $arrFolder = PagesFolder::getFolderList();
-        foreach($arrFolder as $objOneFolder)
-            if($objOneFolder->getStrName() == "mainnavigation")
+        foreach ($arrFolder as $objOneFolder) {
+            if ($objOneFolder->getStrName() == "mainnavigation") {
                 $strNaviFolderId = $objOneFolder->getSystemid();
-
+            }
+        }
 
 
         $strReturn .= "Creating new downloads...\n";
@@ -643,10 +666,10 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
         $objDownloads->syncRepo();
 
         $strReturn .= "Adding download-permissions for guests...\n";
-        Carrier::getInstance()->getObjRights()->addGroupToRight(class_module_system_setting::getConfigValue("_guests_group_id_"), $objDownloads->getSystemid(), "right2");
+        Carrier::getInstance()->getObjRights()->addGroupToRight(SystemSetting::getConfigValue("_guests_group_id_"), $objDownloads->getSystemid(), "right2");
 
         $strReturn .= "Adding rating-permissions for guests...\n";
-        Carrier::getInstance()->getObjRights()->addGroupToRight(class_module_system_setting::getConfigValue("_guests_group_id_"), $objDownloads->getSystemid(), "right3");
+        Carrier::getInstance()->getObjRights()->addGroupToRight(SystemSetting::getConfigValue("_guests_group_id_"), $objDownloads->getSystemid(), "right3");
 
         $strReturn .= "Creating new downloads page...\n";
 
@@ -661,7 +684,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
         $strReturn .= "Adding pagelement to new page\n";
 
         $objPagelement = new PagesPageelement();
-        if(PagesElement::getElement("downloads") != null) {
+        if (PagesElement::getElement("downloads") != null) {
             $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
             $objPagelement->setStrName("special");
             $objPagelement->setStrElement("downloads");
@@ -671,15 +694,17 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
                             SET download_id = ?,
                                 download_template = ?
                             WHERE content_id = ? ";
-            if($this->objDB->_pQuery($strQuery, array($strDownloadsID, "downloads.tpl", $strElementId)))
+            if ($this->objDB->_pQuery($strQuery, array($strDownloadsID, "downloads.tpl", $strElementId))) {
                 $strReturn .= "downloads element created.\n";
-            else
+            }
+            else {
                 $strReturn .= "Error creating downloads element.\n";
+            }
         }
 
 
         $strReturn .= "Adding headline-element to new page\n";
-        if(PagesElement::getElement("row") != null) {
+        if (PagesElement::getElement("row") != null) {
             $objPagelement = new PagesPageelement();
             $objPagelement->setStrPlaceholder("headline_row");
             $objPagelement->setStrName("headline");
@@ -689,10 +714,12 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
             $strQuery = "UPDATE "._dbprefix_."element_paragraph
                                 SET paragraph_title = ?
                                 WHERE content_id = ?";
-            if($this->objDB->_pQuery($strQuery, array("Downloads", $strElementId)))
+            if ($this->objDB->_pQuery($strQuery, array("Downloads", $strElementId))) {
                 $strReturn .= "Headline element created.\n";
-            else
+            }
+            else {
                 $strReturn .= "Error creating headline element.\n";
+            }
         }
 
 
@@ -700,10 +727,12 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
     }
 
 
-    public function installScGallery() {
+    public function installScGallery()
+    {
 
-        if(SystemModule::getModuleByName("mediamanager") == null)
+        if (SystemModule::getModuleByName("mediamanager") == null) {
             return "Mediamanger not installed, skipping element\n";
+        }
 
 
         $strReturn = "";
@@ -711,9 +740,11 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
         //fetch navifolder-id
         $strNaviFolderId = "";
         $arrFolder = PagesFolder::getFolderList();
-        foreach($arrFolder as $objOneFolder)
-            if($objOneFolder->getStrName() == "mainnavigation")
+        foreach ($arrFolder as $objOneFolder) {
+            if ($objOneFolder->getStrName() == "mainnavigation") {
                 $strNaviFolderId = $objOneFolder->getSystemid();
+            }
+        }
 
 
         $strReturn .= "Creating new gallery...\n";
@@ -742,7 +773,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
         $strReturn .= "ID of new page: ".$strGalleryPageId."\n";
         $strReturn .= "Adding pagelement to new page\n";
 
-        if(PagesElement::getElement("gallery") != null) {
+        if (PagesElement::getElement("gallery") != null) {
             $objPagelement = new PagesPageelement();
             $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
             $objPagelement->setStrName("special");
@@ -760,16 +791,18 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
                                 gallery_text_x = ?,
                                 gallery_text_y = ?
                             WHERE content_id = ? ";
-            if($this->objDB->_pQuery($strQuery, array($strGalleryID, 0, "gallery_imagelightbox.tpl", 600, 600, 0, "(c) kajona.de", 5, 15, $strElementId)))
+            if ($this->objDB->_pQuery($strQuery, array($strGalleryID, 0, "gallery_imagelightbox.tpl", 600, 600, 0, "(c) kajona.de", 5, 15, $strElementId))) {
                 $strReturn .= "Gallery element created.\n";
-            else
+            }
+            else {
                 $strReturn .= "Error creating Gallery element.\n";
+            }
         }
 
 
         $strReturn .= "Adding headline-element to new page\n";
 
-        if(PagesElement::getElement("row") != null) {
+        if (PagesElement::getElement("row") != null) {
             $objPagelement = new PagesPageelement();
             $objPagelement->setStrPlaceholder("headline_row");
             $objPagelement->setStrName("headline");
@@ -779,16 +812,18 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
             $strQuery = "UPDATE "._dbprefix_."element_paragraph
                                 SET paragraph_title = ?
                                 WHERE content_id = ?";
-            if($this->objDB->_pQuery($strQuery, array("Gallery", $strElementId)))
+            if ($this->objDB->_pQuery($strQuery, array("Gallery", $strElementId))) {
                 $strReturn .= "Headline element created.\n";
-            else
+            }
+            else {
                 $strReturn .= "Error creating headline element.\n";
+            }
 
         }
 
 
         $strReturn .= "Adding paragraph-element to new page\n";
-        if(PagesElement::getElement("paragraph") != null) {
+        if (PagesElement::getElement("paragraph") != null) {
             $objPagelement = new PagesPageelement();
             $objPagelement->setStrPlaceholder("text_paragraph");
             $objPagelement->setStrName("text");
@@ -797,7 +832,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
             $strElementId = $objPagelement->getSystemid();
 
             $arrParams = array();
-            if($this->strContentLanguage == "de") {
+            if ($this->strContentLanguage == "de") {
                 $arrParams[] = "";
                 $arrParams[] = "Alle Beispielbilder &copy; by kajona.de";
                 $arrParams[] = $strElementId;
@@ -812,10 +847,12 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
                                 SET paragraph_title = ?,
                                     paragraph_content = ?
                                 WHERE content_id = ?";
-            if($this->objDB->_pQuery($strQuery, $arrParams))
+            if ($this->objDB->_pQuery($strQuery, $arrParams)) {
                 $strReturn .= "Paragraph element created.\n";
-            else
+            }
+            else {
                 $strReturn .= "Error creating paragraph element.\n";
+            }
 
         }
 
@@ -823,15 +860,18 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  
         return $strReturn;
     }
 
-    public function setObjDb($objDb) {
+    public function setObjDb($objDb)
+    {
         $this->objDB = $objDb;
     }
 
-    public function setStrContentlanguage($strContentlanguage) {
+    public function setStrContentlanguage($strContentlanguage)
+    {
         $this->strContentLanguage = $strContentlanguage;
     }
 
-    public function getCorrespondingModule() {
+    public function getCorrespondingModule()
+    {
         return "pages";
     }
 
