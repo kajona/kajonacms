@@ -191,7 +191,7 @@ class DbPostgres extends DbBase {
         $arrTemp = $this->getPArray(
             "SELECT *
             FROM information_schema.columns
-            WHERE table_name = '".class_carrier::getInstance()->getObjDB()->dbsafeString($strTableName)."'"
+            WHERE table_name = '".\Kajona\System\System\Carrier::getInstance()->getObjDB()->dbsafeString($strTableName)."'"
             , array()
         );
 

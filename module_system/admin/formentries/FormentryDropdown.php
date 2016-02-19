@@ -21,7 +21,8 @@ use Kajona\System\System\Validators\TextValidator;
  * @since 4.0
  * @package module_formgenerator
  */
-class FormentryDropdown extends FormentryBase implements FormentryPrintableInterface {
+class FormentryDropdown extends FormentryBase implements FormentryPrintableInterface
+{
 
     /**
      * a list of [key=>value],[key=>value] pairs, resolved from the language-files
@@ -34,7 +35,8 @@ class FormentryDropdown extends FormentryBase implements FormentryPrintableInter
     private $strDataPlaceholder = "";
     private $bitRenderReset = false;
 
-    public function __construct($strFormName, $strSourceProperty, $objSourceObject = null) {
+    public function __construct($strFormName, $strSourceProperty, $objSourceObject = null)
+    {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
 
         //set the default validator
@@ -47,50 +49,55 @@ class FormentryDropdown extends FormentryBase implements FormentryPrintableInter
      *
      * @return string
      */
-    public function renderField() {
+    public function renderField()
+    {
         $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         $strReturn = "";
-        if($this->getStrHint() != null)
+        if ($this->getStrHint() != null) {
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
-
-        $strOpener = "";
-        if($this->bitRenderReset) {
-            $strOpener = " ".Link::getLinkAdminManual(
-                "href=\"#\" onclick=\"$('#".$this->getStrEntryName()."').val('');return false;\"",
-                "",
-                    Carrier::getInstance()->getObjLang()->getLang("commons_reset", "prozessverwaltung"),
-                "icon_delete"
-            );
         }
 
-        $strReturn.=$objToolkit->formInputDropdown($this->getStrEntryName(), $this->arrKeyValues, $this->getStrLabel(), $this->getStrValue(), "", !$this->getBitReadonly(), $this->getStrAddons(), $this->getStrDataPlaceholder(), $strOpener);
+        $strOpener = "";
+        if ($this->bitRenderReset) {
+            $strOpener = " ".Link::getLinkAdminManual(
+                    "href=\"#\" onclick=\"$('#".$this->getStrEntryName()."').val('');return false;\"",
+                    "",
+                    Carrier::getInstance()->getObjLang()->getLang("commons_reset", "prozessverwaltung"),
+                    "icon_delete"
+                );
+        }
+
+        $strReturn .= $objToolkit->formInputDropdown($this->getStrEntryName(), $this->arrKeyValues, $this->getStrLabel(), $this->getStrValue(), "", !$this->getBitReadonly(), $this->getStrAddons(), $this->getStrDataPlaceholder(), $strOpener);
         return $strReturn;
     }
 
     /**
      * Overwritten in order to load key-value pairs declared by annotations
      */
-    protected function updateValue() {
+    protected function updateValue()
+    {
         parent::updateValue();
 
-        if($this->getObjSourceObject() != null && $this->getStrSourceProperty() != "") {
+        if ($this->getObjSourceObject() != null && $this->getStrSourceProperty() != "") {
             $objReflection = new Reflection($this->getObjSourceObject());
 
             //try to find the matching source property
             $arrProperties = $objReflection->getPropertiesWithAnnotation(self::STR_DDVALUES_ANNOTATION);
             $strSourceProperty = null;
-            foreach($arrProperties as $strPropertyName => $strValue) {
-                if(uniSubstr(uniStrtolower($strPropertyName), (uniStrlen($this->getStrSourceProperty()))*-1) == $this->getStrSourceProperty())
+            foreach ($arrProperties as $strPropertyName => $strValue) {
+                if (uniSubstr(uniStrtolower($strPropertyName), (uniStrlen($this->getStrSourceProperty())) * -1) == $this->getStrSourceProperty()) {
                     $strSourceProperty = $strPropertyName;
+                }
             }
 
-            if($strSourceProperty == null)
+            if ($strSourceProperty == null) {
                 return;
+            }
 
             //set dd values
             $strDDValues = $objReflection->getAnnotationValueForProperty($strSourceProperty, self::STR_DDVALUES_ANNOTATION);
             $arrDDValues = self::convertDDValueStringToArray($strDDValues, $this->getObjSourceObject()->getArrModule("modul"));
-            if($arrDDValues !== null) {
+            if ($arrDDValues !== null) {
                 $this->setArrKeyValues($arrDDValues);
             }
         }
@@ -99,21 +106,24 @@ class FormentryDropdown extends FormentryBase implements FormentryPrintableInter
     /**
      * @param $strDDValues
      * @param $strModule
+     *
      * @return array|null
      */
-    public static function convertDDValueStringToArray($strDDValues, $strModule) {
+    public static function convertDDValueStringToArray($strDDValues, $strModule)
+    {
         $arrDDValues = null;
-        if($strDDValues !== null && $strDDValues != "") {
+        if ($strDDValues !== null && $strDDValues != "") {
             $arrDDValues = array();
-            foreach(explode(",", $strDDValues) as $strOneKeyVal) {
+            foreach (explode(",", $strDDValues) as $strOneKeyVal) {
                 $strOneKeyVal = uniSubstr(trim($strOneKeyVal), 1, -1);
                 $arrOneKeyValue = explode("=>", $strOneKeyVal);
 
                 $strKey = trim($arrOneKeyValue[0]) == "" ? " " : trim($arrOneKeyValue[0]);
-                if(count($arrOneKeyValue) == 2) {
-                    $strValue = class_carrier::getInstance()->getObjLang()->getLang(trim($arrOneKeyValue[1]), $strModule);
-                    if($strValue == "!".trim($arrOneKeyValue[1])."!")
+                if (count($arrOneKeyValue) == 2) {
+                    $strValue = Carrier::getInstance()->getObjLang()->getLang(trim($arrOneKeyValue[1]), $strModule);
+                    if ($strValue == "!".trim($arrOneKeyValue[1])."!") {
                         $strValue = $arrOneKeyValue[1];
+                    }
                     $arrDDValues[$strKey] = $strValue;
                 }
             }
@@ -122,7 +132,8 @@ class FormentryDropdown extends FormentryBase implements FormentryPrintableInter
         return $arrDDValues;
     }
 
-    public function validateValue() {
+    public function validateValue()
+    {
         return in_array($this->getStrValue(), array_keys($this->arrKeyValues));
     }
 
@@ -133,28 +144,34 @@ class FormentryDropdown extends FormentryBase implements FormentryPrintableInter
      *
      * @return string
      */
-    public function getValueAsText() {
+    public function getValueAsText()
+    {
         return isset($this->arrKeyValues[$this->getStrValue()]) ? $this->arrKeyValues[$this->getStrValue()] : "";
     }
 
     /**
      * @param $arrKeyValues
+     *
      * @return FormentryDropdown
      */
-    public function setArrKeyValues($arrKeyValues) {
+    public function setArrKeyValues($arrKeyValues)
+    {
         $this->arrKeyValues = $arrKeyValues;
         return $this;
     }
 
-    public function getArrKeyValues() {
+    public function getArrKeyValues()
+    {
         return $this->arrKeyValues;
     }
 
     /**
      * @param string $strAddons
+     *
      * @return $this
      */
-    public function setStrAddons($strAddons) {
+    public function setStrAddons($strAddons)
+    {
         $this->strAddons = $strAddons;
         return $this;
     }
@@ -162,42 +179,45 @@ class FormentryDropdown extends FormentryBase implements FormentryPrintableInter
     /**
      * @return string
      */
-    public function getStrAddons() {
+    public function getStrAddons()
+    {
         return $this->strAddons;
     }
 
     /**
      * @return string
      */
-    public function getStrDataPlaceholder() {
+    public function getStrDataPlaceholder()
+    {
         return $this->strDataPlaceholder;
     }
 
     /**
      * @param string $strDataPlaceholder
+     *
      * @return $this
      */
-    public function setStrDataPlaceholder($strDataPlaceholder) {
+    public function setStrDataPlaceholder($strDataPlaceholder)
+    {
         $this->strDataPlaceholder = $strDataPlaceholder;
-            return $this;
+        return $this;
     }
 
     /**
      * @return boolean
      */
-    public function getBitRenderReset() {
+    public function getBitRenderReset()
+    {
         return $this->bitRenderReset;
     }
 
     /**
      * @param boolean $bitRenderReset
      */
-    public function setBitRenderReset($bitRenderReset) {
+    public function setBitRenderReset($bitRenderReset)
+    {
         $this->bitRenderReset = $bitRenderReset;
     }
-
-
-
 
 
 }

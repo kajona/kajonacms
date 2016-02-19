@@ -58,7 +58,7 @@ function getTotalUniquePackagesererSystems() {
                 ORDER BY ANZ DESC   ";
 
     $intI = 0;
-    foreach(class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array()) as $arrOneRow) {
+    foreach(\Kajona\System\System\Carrier::getInstance()->getObjDB()->getPArray($strQuery, array()) as $arrOneRow) {
         if(uniStrpos($arrOneRow["log_hostname"], "localhost/") === false
             && uniStrpos($arrOneRow["log_hostname"], "kajona.de") === false
             && uniStrpos($arrOneRow["log_hostname"], "kajonabase") === false
@@ -80,7 +80,7 @@ function getUniquePackageserverSystems($intStartDate, $intEndDate) {
               WHERE log_date >= ?
                 AND log_date <= ?";
 
-    $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($intStartDate, $intEndDate));
+    $arrRow = \Kajona\System\System\Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($intStartDate, $intEndDate));
     $intReturn = $arrRow["ANZ"];
 
     return $intReturn;
@@ -94,7 +94,7 @@ function getPackageserverSystems($intStartDate, $intEndDate) {
            GROUP BY log_hostname
            ORDER BY ANZ desc";
 
-    $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($intStartDate, $intEndDate));
+    $arrRows = \Kajona\System\System\Carrier::getInstance()->getObjDB()->getPArray($strQuery, array($intStartDate, $intEndDate));
 
 
     return $arrRows;
@@ -106,7 +106,7 @@ function getPackageserverRequests($intStartDate, $intEndDate) {
               WHERE log_date >= ?
                 AND log_date <= ?";
 
-    $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($intStartDate, $intEndDate));
+    $arrRow = \Kajona\System\System\Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($intStartDate, $intEndDate));
     $intReturn = $arrRow["count(*)"];
 
     return $intReturn;
@@ -119,7 +119,7 @@ function getHits($intStartDate, $intEndDate) {
                               WHERE stats_date >= ?
                                 AND stats_date <= ?";
 
-    $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($intStartDate, $intEndDate));
+    $arrRow = \Kajona\System\System\Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($intStartDate, $intEndDate));
     $intReturn = $arrRow["count(*)"];
 
     return $intReturn;
@@ -131,7 +131,7 @@ function getDownloads($intStartDate, $intEndDate) {
                               WHERE downloads_log_date >= ?
                                 AND downloads_log_date <= ?";
 
-    $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($intStartDate, $intEndDate));
+    $arrRow = \Kajona\System\System\Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($intStartDate, $intEndDate));
     $intReturn = $arrRow["count(*)"];
 
     return $intReturn;
@@ -146,7 +146,7 @@ function getVisitors($intStartDate, $intEndDate) {
                               GROUP BY stats_ip, stats_browser
                               ORDER BY stats_date ASC";
 
-    $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($intStartDate, $intEndDate));
+    $arrRows = \Kajona\System\System\Carrier::getInstance()->getObjDB()->getPArray($strQuery, array($intStartDate, $intEndDate));
     $intReturn = count($arrRows);
     return $intReturn;
 }

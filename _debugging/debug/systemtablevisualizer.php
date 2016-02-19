@@ -17,7 +17,7 @@ echo "+-------------------------------------------------------------------------
 
 
 
-$objDb = class_carrier::getInstance()->getObjDB();
+$objDb = \Kajona\System\System\Carrier::getInstance()->getObjDB();
 
 
 echo "scanning system-table...\n";

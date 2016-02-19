@@ -15,7 +15,7 @@ echo "|                                                                         
 echo "| Analyzes the sort-values of the system-table and tries to fix them.           |\n";
 echo "+-------------------------------------------------------------------------------+\n";
 
-$objDb = class_carrier::getInstance()->getObjDB();
+$objDb = \Kajona\System\System\Carrier::getInstance()->getObjDB();
 
 echo "scanning system-table...\n";
 echo "traversing internal tree structure...\n\n";
@@ -49,7 +49,7 @@ function validateSingleLevelSort($strParentId) {
                            AND system_module_nr IN (?, ?)
                          ORDER BY system_sort ASC, system_comment ASC";
 
-        $arrNodesRaw = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strParentId, _pages_modul_id_, _pages_folder_id_));
+        $arrNodesRaw = \Kajona\System\System\Carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strParentId, _pages_modul_id_, _pages_folder_id_));
         $arrNodes = array();
         foreach($arrNodesRaw as $arrOneRow)
             $arrNodes[] = $arrOneRow["system_id"];
@@ -76,7 +76,7 @@ function validateSingleLevelSort($strParentId) {
             if(getGet("doFix") != "") {
                 $strCurLevel .= "\nSetting new sort-id to ".$intI."\n";
                 $strQuery = "UPDATE "._dbprefix_."system SET system_sort = ? WHERE system_id = ? ";
-                class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($intI, $objCurNode->getSystemid()));
+                \Kajona\System\System\Carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($intI, $objCurNode->getSystemid()));
             }
         }
         else
@@ -112,7 +112,7 @@ function validateSinglePage(class_module_pages_page $objPage) {
             if(getGet("doFix") != "") {
                 $strCurLevel .= "\nSetting new sort-id to ".$intI."\n";
                 $strQuery = "UPDATE "._dbprefix_."system SET system_sort = ? WHERE system_id = ? ";
-                class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($intI, $objOneElement->getSystemid()));
+                \Kajona\System\System\Carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($intI, $objOneElement->getSystemid()));
             }
         }
         else {

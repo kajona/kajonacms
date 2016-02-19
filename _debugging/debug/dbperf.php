@@ -97,10 +97,10 @@ $intTimeUsed = (($arrTimestampEnde['sec'] * 1000000 + $arrTimestampEnde['usec'])
 
 
 echo  "\n\n<b>PHP-Time:</b>                              " . number_format($intTimeUsed, 6) . " sec \n";
-echo  "<b>Queries db/cachesize/cached/fired:</b>     " . class_carrier::getInstance()->getObjDB()->getNumber() . "/" .
-    class_carrier::getInstance()->getObjDB()->getCacheSize() . "/" .
-    class_carrier::getInstance()->getObjDB()->getNumberCache() . "/" .
-    (class_carrier::getInstance()->getObjDB()->getNumber() - class_carrier::getInstance()->getObjDB()->getNumberCache()) . "\n";
+echo  "<b>Queries db/cachesize/cached/fired:</b>     " . \Kajona\System\System\Carrier::getInstance()->getObjDB()->getNumber() . "/" .
+    \Kajona\System\System\Carrier::getInstance()->getObjDB()->getCacheSize() . "/" .
+    \Kajona\System\System\Carrier::getInstance()->getObjDB()->getNumberCache() . "/" .
+    (\Kajona\System\System\Carrier::getInstance()->getObjDB()->getNumber() - \Kajona\System\System\Carrier::getInstance()->getObjDB()->getNumberCache()) . "\n";
 
 
 
