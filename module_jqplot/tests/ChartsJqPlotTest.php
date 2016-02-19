@@ -1,7 +1,9 @@
 <?php
 
 namespace Kajona\Jqplot\Tests;
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "../../../core/module_system/system/Testbase.php";
+
 use Kajona\System\System\GraphFactory;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\SystemSetting;

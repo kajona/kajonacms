@@ -1,7 +1,9 @@
 <?php
 
 namespace Kajona\Search\Tests;
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "../../../core/module_system/system/Testbase.php";
+
 use Kajona\Search\System\SearchBooleanQuery;
 use Kajona\Search\System\SearchDocument;
 use Kajona\Search\System\SearchIndexwriter;
@@ -13,11 +15,13 @@ use Kajona\System\System\Carrier;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Testbase;
 
-class SearchBooleanQueryTest extends Testbase {
+class SearchBooleanQueryTest extends Testbase
+{
 
     private static $arrObjectIds = array();
 
-    protected function setUp() {
+    protected function setUp()
+    {
 
         $objObject = $this->createObject("Kajona\\System\\System\\SystemAspect", "");
         self::$arrObjectIds[] = $objObject->getSystemid();
@@ -58,24 +62,25 @@ class SearchBooleanQueryTest extends Testbase {
         parent::setUp();
     }
 
-    protected function tearDown() {
+    protected function tearDown()
+    {
         //since the test cleared the index, we want a fresh index again :)
         $objSearchIndexWriter = new SearchIndexwriter();
         $objSearchIndexWriter->indexRebuild();
 
-        foreach(self::$arrObjectIds as $intKey => $strId) {
+        foreach (self::$arrObjectIds as $intKey => $strId) {
             $objObject = Objectfactory::getInstance()->getObject($strId);
-            if($objObject !== null)
+            if ($objObject !== null) {
                 $objObject->deleteObjectFromDatabase();
+            }
 
             unset(self::$arrObjectIds[$intKey]);
         }
     }
 
 
-
-
-    public function testBooleanQuery() {
+    public function testBooleanQuery()
+    {
 
         $objSearchTerm1 = new SearchTerm("hallo");
         $objSearchTerm2 = new SearchTerm("welt");
@@ -153,15 +158,15 @@ class SearchBooleanQueryTest extends Testbase {
     }
 
 
-
-
-    private function getResultsFromQuery(SearchQueryInterface $objSearchQuery) {
+    private function getResultsFromQuery(SearchQueryInterface $objSearchQuery)
+    {
         $arrParameters = array();
         $objSearchQuery->getListQuery($strQuery, $arrParameters);
         return Carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParameters);
     }
 
-    private function getCountFromQuery(SearchQueryInterface $objSearchQuery) {
+    private function getCountFromQuery(SearchQueryInterface $objSearchQuery)
+    {
         $arrParameters = array();
         $objSearchQuery->getCountQuery($strQuery, $arrParameters);
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParameters);

@@ -2,68 +2,73 @@
 
 namespace Kajona\Packagemanager\Tests;
 
+require_once __DIR__ . "../../../core/module_system/system/Testbase.php";
+
 use Kajona\Packagemanager\System\PackagemanagerManager;
 use Kajona\Packagemanager\System\PackagemanagerMetadata;
 use Kajona\System\System\Filesystem;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\Testbase;
 use Kajona\System\System\Zip;
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
-class PackagemanagerTest extends Testbase  {
+
+class PackagemanagerTest extends Testbase
+{
 
 
-
-    public function testMetadataReader() {
+    public function testMetadataReader()
+    {
 
         $objReader = new PackagemanagerMetadata();
-        $objReader->autoInit(Resourceloader::getInstance()->getCorePathForModule("module_packagemanager")."/module_packagemanager");
+        $objReader->autoInit(Resourceloader::getInstance()->getCorePathForModule("module_packagemanager") . "/module_packagemanager");
 
-        echo $objReader."\n\n";
+        echo $objReader . "\n\n";
     }
 
 
-    public function testInstalledPackageList() {
+    public function testInstalledPackageList()
+    {
 
         $objManager = new PackagemanagerManager();
         $arrModules = $objManager->getAvailablePackages();
 
-        foreach($arrModules as $intKey => $objOneModule) {
-            echo "#".$intKey.": ".$objOneModule."\n";
+        foreach ($arrModules as $intKey => $objOneModule) {
+            echo "#" . $intKey . ": " . $objOneModule . "\n";
         }
     }
 
 
-    public function testExtractAndMove() {
+    public function testExtractAndMove()
+    {
 
         $objFilesystem = new Filesystem();
 
-        $objFilesystem->folderCreate(_projectpath_."/temp/moduletest");
+        $objFilesystem->folderCreate(_projectpath_ . "/temp/moduletest");
 
-        file_put_contents(_realpath_._projectpath_."/temp/moduletest/metadata.xml", $this->getStrMetadata());
+        file_put_contents(_realpath_ . _projectpath_ . "/temp/moduletest/metadata.xml", $this->getStrMetadata());
 
-        $objFilesystem->folderCreate(_projectpath_."/temp/moduletest/system");
-        file_put_contents(_realpath_._projectpath_."/temp/moduletest/system/test.txt", $this->getStrMetadata());
+        $objFilesystem->folderCreate(_projectpath_ . "/temp/moduletest/system");
+        file_put_contents(_realpath_ . _projectpath_ . "/temp/moduletest/system/test.txt", $this->getStrMetadata());
 
         $objZip = new Zip();
-        $objZip->openArchiveForWriting(_projectpath_."/temp/autotest.zip");
-        $objZip->addFile(_projectpath_."/temp/moduletest/metadata.xml", "/metadata.xml");
-        $objZip->addFile(_projectpath_."/temp/moduletest/system/test.txt", "/system/test.txt");
+        $objZip->openArchiveForWriting(_projectpath_ . "/temp/autotest.zip");
+        $objZip->addFile(_projectpath_ . "/temp/moduletest/metadata.xml", "/metadata.xml");
+        $objZip->addFile(_projectpath_ . "/temp/moduletest/system/test.txt", "/system/test.txt");
         $objZip->closeArchive();
 
-        $objFilesystem->folderDeleteRecursive(_projectpath_."/temp/moduletest/");
+        $objFilesystem->folderDeleteRecursive(_projectpath_ . "/temp/moduletest/");
 
 
         $objManager = new PackagemanagerManager();
-        $objPackageManager = $objManager->getPackageManagerForPath(_projectpath_."/temp/autotest.zip");
+        $objPackageManager = $objManager->getPackageManagerForPath(_projectpath_ . "/temp/autotest.zip");
         $this->assertEquals(get_class($objPackageManager), "class_module_packagemanager_packagemanager_module");
 
-        $objPackageManager = $objManager->extractPackage(_projectpath_."/temp/autotest.zip");
+        $objPackageManager = $objManager->extractPackage(_projectpath_ . "/temp/autotest.zip");
         $this->assertEquals(get_class($objPackageManager), "class_module_packagemanager_packagemanager_module");
 
         $objPackageManager->move2Filesystem();
 
-        $this->assertFileExists(_realpath_."/core/module_autotest/metadata.xml");
-        $this->assertFileExists(_realpath_."/core/module_autotest/system/test.txt");
+        $this->assertFileExists(_realpath_ . "/core/module_autotest/metadata.xml");
+        $this->assertFileExists(_realpath_ . "/core/module_autotest/system/test.txt");
 
         $objMetadata = new PackagemanagerMetadata();
         $objMetadata->autoInit("/core/module_autotest/");
@@ -91,12 +96,13 @@ class PackagemanagerTest extends Testbase  {
         $this->assertEquals("/test.jpg", $arrImages[0]);
 
         $objFilesystem->folderDeleteRecursive("/core/module_autotest");
-        $objFilesystem->fileDelete(_projectpath_."/temp/autotest.zip");
+        $objFilesystem->fileDelete(_projectpath_ . "/temp/autotest.zip");
 
     }
 
 
-    public function testProviderConfig() {
+    public function testProviderConfig()
+    {
         $objManager = new PackagemanagerManager();
         $arrProviders = $objManager->getContentproviders();
         $this->assertEquals(3, count($arrProviders));
@@ -104,13 +110,15 @@ class PackagemanagerTest extends Testbase  {
     }
 
 
-    public function testUpdateOrInstall() {
+    public function testUpdateOrInstall()
+    {
         $objManager = new PackagemanagerManager();
-        $objHandler = $objManager->getPackageManagerForPath(Resourceloader::getInstance()->getCorePathForModule("module_packagemanager")."/module_packagemanager");
+        $objHandler = $objManager->getPackageManagerForPath(Resourceloader::getInstance()->getCorePathForModule("module_packagemanager") . "/module_packagemanager");
         $this->assertTrue(!$objHandler->isInstallable());
     }
 
-    public function testRequiredBy() {
+    public function testRequiredBy()
+    {
         $objManager = new PackagemanagerManager();
         $objSystem = $objManager->getPackage("system");
 
@@ -120,7 +128,8 @@ class PackagemanagerTest extends Testbase  {
     }
 
 
-    private function getStrMetadata() {
+    private function getStrMetadata()
+    {
         return <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <package>

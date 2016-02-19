@@ -1,7 +1,8 @@
 <?php
 
 namespace Kajona\System\Tests;
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "../../../core/module_system/system/Testbase.php";
 
 use Kajona\System\System\TemplateBlockContainer;
 use Kajona\System\System\TemplateBlocksParser;
@@ -13,10 +14,12 @@ use Kajona\System\System\Testbase;
  * Class class_test_templateTest
  *
  */
-class TemplateParseBlocksTest extends Testbase  {
+class TemplateParseBlocksTest extends Testbase
+{
 
 
-    public function testBlocksParser() {
+    public function testBlocksParser()
+    {
         $strTemplate = <<<HTML
 
         <kajona-blocks kajona-name="name1" attribute2="value2">
@@ -55,7 +58,8 @@ HTML;
     }
 
 
-    public function testBlockParser() {
+    public function testBlockParser()
+    {
         $strTemplate = <<<HTML
 
         <kajona-block kajona-name="name1" attribute2="value2">
@@ -99,8 +103,8 @@ HTML;
     }
 
 
-
-    public function testBlockParser2() {
+    public function testBlockParser2()
+    {
         $strTemplate = <<<HTML
 
                     <kajona-block kajona-name="Row light">
@@ -134,7 +138,6 @@ HTML;
         $this->assertEquals(array_keys($arrBlocks)[1], "Row dark");
 
     }
-
 
 
 }

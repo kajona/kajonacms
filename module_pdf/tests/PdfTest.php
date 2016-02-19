@@ -1,7 +1,9 @@
 <?php
 
 namespace Kajona\Pdf\Tests;
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "../../../core/module_system/system/Testbase.php";
+
 use Kajona\Pdf\System\Pdf;
 use Kajona\System\System\Testbase;
 

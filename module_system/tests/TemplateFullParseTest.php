@@ -1,7 +1,8 @@
 <?php
 
 namespace Kajona\System\Tests;
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "../../../core/module_system/system/Testbase.php";
 
 use Kajona\System\System\Template;
 use Kajona\System\System\Testbase;
@@ -74,8 +75,6 @@ HTML;
         $this->assertEquals(count($arrBlocks->getArrBlocks()["content"]->getArrBlocks()), 2);
         $this->assertEquals(count($arrBlocks->getArrBlocks()["2ndcontent"]->getArrBlocks()), 1);
     }
-
-
 
 
 }

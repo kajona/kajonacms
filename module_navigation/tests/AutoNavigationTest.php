@@ -1,7 +1,9 @@
 <?php
 
 namespace Kajona\Navigation\Tests;
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "../../../core/module_system/system/Testbase.php";
+
 use Kajona\Navigation\System\NavigationTree;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
@@ -10,14 +12,16 @@ use Kajona\System\System\Carrier;
 use Kajona\System\System\Testbase;
 
 
-class AutoNavigationTest extends Testbase {
+class AutoNavigationTest extends Testbase
+{
 
     private static $strFolderSystemid;
     private static $strPage1Systemid;
     private static $strPage2Systemid;
     private static $strPage2aSystemid;
 
-    public function setUp() {
+    public function setUp()
+    {
         //creating a new page-node structure
         $objFolder = new PagesFolder();
         $objFolder->setStrName("naviautotest");
@@ -76,7 +80,8 @@ class AutoNavigationTest extends Testbase {
         parent::setUp();
     }
 
-    public function testGeneration() {
+    public function testGeneration()
+    {
 
         echo "test auto navigation...\n";
 
@@ -115,7 +120,8 @@ class AutoNavigationTest extends Testbase {
     }
 
 
-    public function tearDown() {
+    public function tearDown()
+    {
         Carrier::getInstance()->getObjDB()->flushQueryCache();
         //delete pages and folders created
 

@@ -1,7 +1,9 @@
 <?php
 
 namespace Kajona\Search\Tests;
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "../../../core/module_system/system/Testbase.php";
+
 use Kajona\News\System\NewsNews;
 use Kajona\Search\Event\SearchRequestEndprocessinglistener;
 use Kajona\Search\System\SearchEnumIndexaction;
@@ -14,15 +16,16 @@ use Kajona\System\System\SystemModule;
 use Kajona\System\System\SystemSetting;
 use Kajona\System\System\Testbase;
 
-class SearchDeferredIndexerTest extends Testbase {
+class SearchDeferredIndexerTest extends Testbase
+{
 
 
-
-
-    public function testObjectIndexer() {
+    public function testObjectIndexer()
+    {
         //use a news-record, if available
-        if(SystemModule::getModuleByName("news") === null)
+        if (SystemModule::getModuleByName("news") === null) {
             return;
+        }
 
         $objConfig = SystemSetting::getConfigByName("_search_deferred_indexer_");
         $objConfig->setStrValue("true");
@@ -63,12 +66,13 @@ class SearchDeferredIndexerTest extends Testbase {
 
     }
 
-    public function testObjectIndexerPerformance() {
-        if(SystemModule::getModuleByName("news") === null)
+    public function testObjectIndexerPerformance()
+    {
+        if (SystemModule::getModuleByName("news") === null) {
             return;
+        }
 
         $arrNewsIds = array();
-
 
 
         echo "Indexing without deferred indexer...\n";
@@ -76,7 +80,7 @@ class SearchDeferredIndexerTest extends Testbase {
         $intTimeStart = microtime(true);
         $intQueriesStart = Database::getInstance()->getNumber();
 
-        for($intI = 0; $intI < 15; $intI++) {
+        for ($intI = 0; $intI < 15; $intI++) {
             $objNews = new NewsNews();
             $objNews->setStrTitle("demo 1");
             $objNews->setStrIntro("intro demo news");
@@ -85,7 +89,7 @@ class SearchDeferredIndexerTest extends Testbase {
             $arrNewsIds[] = $objNews->getSystemid();
         }
 
-        echo "Queries pre indexing: ", Database::getInstance()->getNumber() - $intQueriesStart. " \n";
+        echo "Queries pre indexing: ", Database::getInstance()->getNumber() - $intQueriesStart . " \n";
 
         $objHandler = new SearchRequestEndprocessinglistener();
         $objHandler->handleEvent(SystemEventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array());
@@ -93,7 +97,7 @@ class SearchDeferredIndexerTest extends Testbase {
         $intTimeEnd = microtime(true);
         $time = $intTimeEnd - $intTimeStart;
         echo "Object updates: ", sprintf('%f', $time), " sec.\n";
-        echo "Queries total: ", Database::getInstance()->getNumber() - $intQueriesStart. " \n";
+        echo "Queries total: ", Database::getInstance()->getNumber() - $intQueriesStart . " \n";
 
 
         echo "\nIndexing with deferred indexer...\n";
@@ -104,7 +108,7 @@ class SearchDeferredIndexerTest extends Testbase {
         $intTimeStart = microtime(true);
         $intQueriesStart = Database::getInstance()->getNumber();
 
-        for($intI = 0; $intI < 15; $intI++) {
+        for ($intI = 0; $intI < 15; $intI++) {
             $objNews = new NewsNews();
             $objNews->setStrTitle("demo 1");
             $objNews->setStrIntro("intro demo news");
@@ -113,7 +117,7 @@ class SearchDeferredIndexerTest extends Testbase {
             $arrNewsIds[] = $objNews->getSystemid();
         }
 
-        echo "Queries pre indexing: ", Database::getInstance()->getNumber() - $intQueriesStart. " \n";
+        echo "Queries pre indexing: ", Database::getInstance()->getNumber() - $intQueriesStart . " \n";
 
         echo "Triggering queue update event...\n";
         $objHandler = new SearchRequestEndprocessinglistener();
@@ -122,14 +126,14 @@ class SearchDeferredIndexerTest extends Testbase {
         $intTimeEnd = microtime(true);
         $time = $intTimeEnd - $intTimeStart;
         echo "Object updates: ", sprintf('%f', $time), " sec.\n";
-        echo "Queries total: ", Database::getInstance()->getNumber() - $intQueriesStart. " \n";
+        echo "Queries total: ", Database::getInstance()->getNumber() - $intQueriesStart . " \n";
 
 
         $objConfig = SystemSetting::getConfigByName("_search_deferred_indexer_");
         $objConfig->setStrValue("false");
         $objConfig->updateObjectToDb();
 
-        foreach($arrNewsIds as $strNewsId)
+        foreach ($arrNewsIds as $strNewsId)
             Objectfactory::getInstance()->getObject($strNewsId)->deleteObjectFromDatabase();
 
     }

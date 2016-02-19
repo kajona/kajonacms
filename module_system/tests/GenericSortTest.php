@@ -1,17 +1,21 @@
 <?php
 
 namespace Kajona\System\Tests;
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "../../../core/module_system/system/Testbase.php";
+
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Database;
 use Kajona\System\System\OrmObjectlist;
 use Kajona\System\System\SystemAspect;
 use Kajona\System\System\Testbase;
 
-class SortTest extends Testbase  {
+class SortTest extends Testbase
+{
 
 
-    function testSortOnDelete() {
+    function testSortOnDelete()
+    {
 
         $objRootAspect = new SystemAspect();
         $objRootAspect->setStrName("testroot");
@@ -19,9 +23,9 @@ class SortTest extends Testbase  {
 
         /** @var SystemAspect[] $arrAspects */
         $arrAspects = array();
-        for($intI = 0; $intI < 100; $intI++) {
+        for ($intI = 0; $intI < 100; $intI++) {
             $objAspect = new SystemAspect();
-            $objAspect->setStrName("autotest_".$intI);
+            $objAspect->setStrName("autotest_" . $intI);
             $objAspect->updateObjectToDb($objRootAspect->getSystemid());
             $arrAspects[] = $objAspect;
         }
@@ -32,13 +36,13 @@ class SortTest extends Testbase  {
         $arrAspects[5]->deleteObjectFromDatabase();
 
         $intQueriesPost = Database::getInstance()->getNumber();
-        echo "Queries: ".($intQueriesPost-$intQueriesPre)." \n";
+        echo "Queries: " . ($intQueriesPost - $intQueriesPre) . " \n";
 
         $objOrm = new OrmObjectlist();
         $arrChilds = $objOrm->getObjectList("Kajona\\System\\System\\SystemAspect", $objRootAspect->getSystemid());
         $this->assertEquals(count($arrChilds), 99);
-        for($intI = 1; $intI <= 99; $intI++) {
-            $this->assertEquals($arrChilds[$intI-1]->getIntSort(), $intI);
+        for ($intI = 1; $intI <= 99; $intI++) {
+            $this->assertEquals($arrChilds[$intI - 1]->getIntSort(), $intI);
         }
 
 
@@ -46,8 +50,8 @@ class SortTest extends Testbase  {
     }
 
 
-
-    function testTreeSortBehaviour() {
+    function testTreeSortBehaviour()
+    {
 
         $objDB = Carrier::getInstance()->getObjDB();
 
@@ -59,7 +63,7 @@ class SortTest extends Testbase  {
         $objAspect->updateObjectToDb();
         $strBaseNodeId = $objAspect->getSystemid();
         $arrNodes = array();
-        for($intI = 1; $intI <= 10; $intI++) {
+        for ($intI = 1; $intI <= 10; $intI++) {
             $objAspect = new SystemAspect();
             $objAspect->updateObjectToDb($strBaseNodeId);
             $arrNodes[] = $objAspect->getSystemid();
@@ -68,7 +72,7 @@ class SortTest extends Testbase  {
         //initial movings
         $objAspect = new SystemAspect($arrNodes[1]);
         $objAspect->setPosition("upwards");
-        $arrNodes = $objDB->getPArray("SELECT system_id FROM "._dbprefix_."system WHERE system_prev_id = ? ORDER BY system_sort ASC", array($strBaseNodeId));
+        $arrNodes = $objDB->getPArray("SELECT system_id FROM " . _dbprefix_ . "system WHERE system_prev_id = ? ORDER BY system_sort ASC", array($strBaseNodeId));
         echo "\trelative shiftings...\n";
         //move the third to the first pos
         $objAspect = new SystemAspect($arrNodes[2]["system_id"]);
@@ -78,32 +82,32 @@ class SortTest extends Testbase  {
         //next one should be with no effect
         $objAspect->setPosition("upwards");
         $objDB->flushQueryCache();
-        $arrNodesAfter = $objDB->getPArray("SELECT system_id FROM "._dbprefix_."system WHERE system_prev_id = ? ORDER BY system_sort ASC", array($strBaseNodeId));
+        $arrNodesAfter = $objDB->getPArray("SELECT system_id FROM " . _dbprefix_ . "system WHERE system_prev_id = ? ORDER BY system_sort ASC", array($strBaseNodeId));
 
-        $this->assertEquals($arrNodesAfter[0]["system_id"], $arrNodes[2]["system_id"], __FILE__." checkPositionShitftingByRelativeShift");
-        $this->assertEquals($arrNodesAfter[1]["system_id"], $arrNodes[0]["system_id"], __FILE__." checkPositionShitftingByRelativeShift");
-        $this->assertEquals($arrNodesAfter[2]["system_id"], $arrNodes[1]["system_id"], __FILE__." checkPositionShitftingByRelativeShift");
+        $this->assertEquals($arrNodesAfter[0]["system_id"], $arrNodes[2]["system_id"], __FILE__ . " checkPositionShitftingByRelativeShift");
+        $this->assertEquals($arrNodesAfter[1]["system_id"], $arrNodes[0]["system_id"], __FILE__ . " checkPositionShitftingByRelativeShift");
+        $this->assertEquals($arrNodesAfter[2]["system_id"], $arrNodes[1]["system_id"], __FILE__ . " checkPositionShitftingByRelativeShift");
 
         //moving by set pos
         echo "\tabsolute shifting..\n";
         $objDB->flushQueryCache();
-        $arrNodes = $objDB->getPArray("SELECT system_id FROM "._dbprefix_."system WHERE system_prev_id = ? ORDER BY system_sort ASC", array($strBaseNodeId));
+        $arrNodes = $objDB->getPArray("SELECT system_id FROM " . _dbprefix_ . "system WHERE system_prev_id = ? ORDER BY system_sort ASC", array($strBaseNodeId));
         $objDB->flushQueryCache();
         $objAspect = new SystemAspect($arrNodes[2]["system_id"]);
         $objAspect->setAbsolutePosition(1);
-        $arrNodesAfter = $objDB->getPArray("SELECT system_id FROM "._dbprefix_."system WHERE system_prev_id = ? ORDER BY system_sort ASC", array($strBaseNodeId));
-        $this->assertEquals($arrNodesAfter[0]["system_id"], $arrNodes[2]["system_id"], __FILE__." checkPositionShitftingByAbsoluteShift");
-        $this->assertEquals($arrNodesAfter[1]["system_id"], $arrNodes[0]["system_id"], __FILE__." checkPositionShitftingByAbsoluteShift");
-        $this->assertEquals($arrNodesAfter[2]["system_id"], $arrNodes[1]["system_id"], __FILE__." checkPositionShitftingByAbsoluteShift");
+        $arrNodesAfter = $objDB->getPArray("SELECT system_id FROM " . _dbprefix_ . "system WHERE system_prev_id = ? ORDER BY system_sort ASC", array($strBaseNodeId));
+        $this->assertEquals($arrNodesAfter[0]["system_id"], $arrNodes[2]["system_id"], __FILE__ . " checkPositionShitftingByAbsoluteShift");
+        $this->assertEquals($arrNodesAfter[1]["system_id"], $arrNodes[0]["system_id"], __FILE__ . " checkPositionShitftingByAbsoluteShift");
+        $this->assertEquals($arrNodesAfter[2]["system_id"], $arrNodes[1]["system_id"], __FILE__ . " checkPositionShitftingByAbsoluteShift");
         //and back...
         $objDB->flushQueryCache();
         $objAspect = new SystemAspect($arrNodes[2]["system_id"]);
         $objAspect->setAbsolutePosition(3);
         $objDB->flushQueryCache();
-        $arrNodesAfter = $objDB->getPArray("SELECT system_id FROM "._dbprefix_."system WHERE system_prev_id = ? ORDER BY system_sort ASC", array($strBaseNodeId));
-        $this->assertEquals($arrNodesAfter[0]["system_id"], $arrNodes[0]["system_id"], __FILE__." checkPositionShitftingByAbsoluteShift");
-        $this->assertEquals($arrNodesAfter[1]["system_id"], $arrNodes[1]["system_id"], __FILE__." checkPositionShitftingByAbsoluteShift");
-        $this->assertEquals($arrNodesAfter[2]["system_id"], $arrNodes[2]["system_id"], __FILE__." checkPositionShitftingByAbsoluteShift");
+        $arrNodesAfter = $objDB->getPArray("SELECT system_id FROM " . _dbprefix_ . "system WHERE system_prev_id = ? ORDER BY system_sort ASC", array($strBaseNodeId));
+        $this->assertEquals($arrNodesAfter[0]["system_id"], $arrNodes[0]["system_id"], __FILE__ . " checkPositionShitftingByAbsoluteShift");
+        $this->assertEquals($arrNodesAfter[1]["system_id"], $arrNodes[1]["system_id"], __FILE__ . " checkPositionShitftingByAbsoluteShift");
+        $this->assertEquals($arrNodesAfter[2]["system_id"], $arrNodes[2]["system_id"], __FILE__ . " checkPositionShitftingByAbsoluteShift");
 
         //deleting all records created
         foreach ($arrNodes as $arrOneNode) {
@@ -113,8 +117,6 @@ class SortTest extends Testbase  {
         $objAspect = new SystemAspect($strBaseNodeId);
         $objAspect->deleteObjectFromDatabase();
     }
-
-
 
 
 }

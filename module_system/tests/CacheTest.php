@@ -1,16 +1,20 @@
 <?php
 
 namespace Kajona\System\Tests;
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "../../../core/module_system/system/Testbase.php";
+
 use Kajona\System\System\Cache;
 use Kajona\System\System\Testbase;
 
-class CacheTest extends Testbase  {
+class CacheTest extends Testbase
+{
 
     private static $strTestId = "";
     private static $strCacheSource = "autotest";
 
-    protected function setUp() {
+    protected function setUp()
+    {
         self::$strTestId = generateSystemid();
         parent::setUp();
 
@@ -18,7 +22,8 @@ class CacheTest extends Testbase  {
     }
 
 
-    public function testCacheSources() {
+    public function testCacheSources()
+    {
 
         $objCache = Cache::createNewInstance(self::$strCacheSource);
 
@@ -34,12 +39,13 @@ class CacheTest extends Testbase  {
     }
 
 
-    public function testClean() {
+    public function testClean()
+    {
 
         $objCache = Cache::createNewInstance(self::$strCacheSource);
         $objCache->setStrHash1("testFlush");
         $objCache->setStrContent("test");
-        $objCache->setIntLeasetime(time()+2);
+        $objCache->setIntLeasetime(time() + 2);
         $objCache->updateObjectToDb();
         $this->flushDBCache();
         sleep(3);
@@ -53,12 +59,13 @@ class CacheTest extends Testbase  {
     }
 
 
-    public function testCacheing() {
+    public function testCacheing()
+    {
 
         $objCache = Cache::createNewInstance(self::$strCacheSource);
         $objCache->setStrHash1("testCache");
         $objCache->setStrContent("testContent");
-        $objCache->setIntLeasetime(time()+100);
+        $objCache->setIntLeasetime(time() + 100);
         $objCache->updateObjectToDb();
         $this->flushDBCache();
 
@@ -71,12 +78,13 @@ class CacheTest extends Testbase  {
 
     }
 
-    public function testCacheFlushing() {
+    public function testCacheFlushing()
+    {
 
         $objCache = Cache::createNewInstance(self::$strCacheSource);
         $objCache->setStrHash1("testClean");
         $objCache->setStrContent("test");
-        $objCache->setIntLeasetime(time()+2);
+        $objCache->setIntLeasetime(time() + 2);
         $objCache->updateObjectToDb();
         $this->flushDBCache();
 

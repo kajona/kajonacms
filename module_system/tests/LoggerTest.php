@@ -1,15 +1,19 @@
 <?php
 
 namespace Kajona\System\Tests;
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "../../../core/module_system/system/Testbase.php";
+
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Filesystem;
 use Kajona\System\System\Logger;
 use Kajona\System\System\Testbase;
 
-class LoggerTest extends Testbase  {
+class LoggerTest extends Testbase
+{
 
-    public function testLogger() {
+    public function testLogger()
+    {
 
         echo "test logger...\n";
 
@@ -23,18 +27,19 @@ class LoggerTest extends Testbase  {
         $objLogger->setIntLogLevel(Logger::$levelInfo);
         $objLogger->addLogRow("test log row 1", Logger::$levelInfo);
 
-        $this->assertFileExists(_realpath_._projectpath_."/log/test.log");
+        $this->assertFileExists(_realpath_ . _projectpath_ . "/log/test.log");
 
         $this->assertTrue(uniStripos($objLogger->getLogFileContent(), "test log row 1") !== false);
 
 
         $objFilesystem = new Filesystem();
-        $objFilesystem->fileDelete(_projectpath_."/log/test.log");
-        $this->assertFileNotExists(_realpath_._projectpath_."/log/test.log");
+        $objFilesystem->fileDelete(_projectpath_ . "/log/test.log");
+        $this->assertFileNotExists(_realpath_ . _projectpath_ . "/log/test.log");
 
     }
 
-    public function testNormalLogLevel() {
+    public function testNormalLogLevel()
+    {
 
         $objLogger = Logger::getInstance('test_logger_normal.log');
 
@@ -45,13 +50,14 @@ class LoggerTest extends Testbase  {
         $objLogger->addLogRow("test log row 2", Logger::$levelWarning);
         $objLogger->addLogRow("test log row 1", Logger::$levelError);
 
-        $this->assertFileExists(_realpath_._projectpath_."/log/test_logger_normal.log");
+        $this->assertFileExists(_realpath_ . _projectpath_ . "/log/test_logger_normal.log");
         $this->assertTrue(uniStripos($objLogger->getLogFileContent(), 'test log row 3') === false);
         $this->assertTrue(uniStripos($objLogger->getLogFileContent(), 'test log row 2') !== false);
         $this->assertTrue(uniStripos($objLogger->getLogFileContent(), 'test log row 1') !== false);
     }
 
-    public function testCustomLogLevel() {
+    public function testCustomLogLevel()
+    {
 
         Carrier::getInstance()->getObjConfig()->setDebug('debuglogging_overwrite', array('test_logger_custom.log' => 1));
 
@@ -64,7 +70,7 @@ class LoggerTest extends Testbase  {
         $objLogger->addLogRow("test log row 2", Logger::$levelWarning);
         $objLogger->addLogRow("test log row 1", Logger::$levelError);
 
-        $this->assertFileExists(_realpath_._projectpath_."/log/test_logger_custom.log");
+        $this->assertFileExists(_realpath_ . _projectpath_ . "/log/test_logger_custom.log");
         $this->assertTrue(uniStripos($objLogger->getLogFileContent(), 'test log row 3') === false);
         $this->assertTrue(uniStripos($objLogger->getLogFileContent(), 'test log row 2') === false);
         $this->assertTrue(uniStripos($objLogger->getLogFileContent(), 'test log row 1') !== false);

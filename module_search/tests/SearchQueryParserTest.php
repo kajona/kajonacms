@@ -1,13 +1,16 @@
 <?php
 
 namespace Kajona\Search\Tests;
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "../../../core/module_system/system/Testbase.php";
+
 use Kajona\Search\System\SearchBooleanQuery;
 use Kajona\Search\System\SearchQueryParser;
 use Kajona\Search\System\SearchTermQuery;
 use Kajona\System\System\Testbase;
 
-class SearchQueryParserTest extends Testbase {
+class SearchQueryParserTest extends Testbase
+{
 
 
     public function testSpecialCharacterReplacement()
@@ -29,7 +32,8 @@ class SearchQueryParserTest extends Testbase {
     }
 
 
-    public function testQueryParser() {
+    public function testQueryParser()
+    {
         echo "Test Query Parser\n";
 
         $objParser = new SearchQueryParser();
@@ -52,7 +56,7 @@ class SearchQueryParserTest extends Testbase {
         echo "Must - Must...\n";
         $objQuery = $objParser->parseText("hello world");
         $this->assertTrue($objQuery instanceof SearchBooleanQuery, "wrong query type");
-        if($objQuery instanceof SearchBooleanQuery) {
+        if ($objQuery instanceof SearchBooleanQuery) {
             /** @var $objQuery SearchBooleanQuery */
             $this->assertEquals(count($objQuery->getMustOccurs()), 2);
             $this->assertEquals(count($objQuery->getMustNotOccurs()), 0);
@@ -67,7 +71,7 @@ class SearchQueryParserTest extends Testbase {
         echo "Must - Should...\n";
         $objQuery = $objParser->parseText("+hello world");
         $this->assertTrue($objQuery instanceof SearchBooleanQuery, "wrong query type");
-        if($objQuery instanceof SearchBooleanQuery) {
+        if ($objQuery instanceof SearchBooleanQuery) {
             /** @var $objQuery SearchBooleanQuery */
             $this->assertEquals(count($objQuery->getMustOccurs()), 1);
             $this->assertEquals(count($objQuery->getShouldOccurs()), 1);
@@ -81,7 +85,7 @@ class SearchQueryParserTest extends Testbase {
         echo "Must - Must - Should...\n";
         $objQuery = $objParser->parseText("+hello +world blub");
         $this->assertTrue($objQuery instanceof SearchBooleanQuery, "wrong query type");
-        if($objQuery instanceof SearchBooleanQuery) {
+        if ($objQuery instanceof SearchBooleanQuery) {
             /** @var $objQuery SearchBooleanQuery */
             $this->assertEquals(count($objQuery->getMustOccurs()), 2);
             $this->assertEquals(count($objQuery->getShouldOccurs()), 1);
@@ -96,7 +100,7 @@ class SearchQueryParserTest extends Testbase {
         echo "Must - Must - MustNot...\n";
         $objQuery = $objParser->parseText("+hello +world -blub");
         $this->assertTrue($objQuery instanceof SearchBooleanQuery, "wrong query type");
-        if($objQuery instanceof SearchBooleanQuery) {
+        if ($objQuery instanceof SearchBooleanQuery) {
             /** @var $objQuery SearchBooleanQuery */
             $this->assertEquals(count($objQuery->getMustOccurs()), 2);
             $this->assertEquals(count($objQuery->getShouldOccurs()), 0);
@@ -111,7 +115,7 @@ class SearchQueryParserTest extends Testbase {
         echo "Must - MustNot...\n";
         $objQuery = $objParser->parseText("hello -world");
         $this->assertTrue($objQuery instanceof SearchBooleanQuery, "wrong query type");
-        if($objQuery instanceof SearchBooleanQuery) {
+        if ($objQuery instanceof SearchBooleanQuery) {
             /** @var $objQuery SearchBooleanQuery */
             $this->assertEquals(count($objQuery->getMustOccurs()), 1);
             $this->assertEquals(count($objQuery->getMustNotOccurs()), 1);
