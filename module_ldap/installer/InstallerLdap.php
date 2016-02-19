@@ -6,6 +6,9 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                            *
 ********************************************************************************************************/
+
+namespace Kajona\Ldap\Installer;
+
 use Kajona\System\System\Config;
 use Kajona\System\System\DbDatatypes;
 use Kajona\System\System\InstallerBase;

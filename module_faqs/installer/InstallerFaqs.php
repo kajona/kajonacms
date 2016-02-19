@@ -6,6 +6,9 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                           *
 ********************************************************************************************************/
+
+namespace Kajona\Faqs\Installer;
+
 use Kajona\Faqs\System\FaqsCategory;
 use Kajona\Faqs\System\FaqsFaq;
 use Kajona\Pages\System\PagesElement;
