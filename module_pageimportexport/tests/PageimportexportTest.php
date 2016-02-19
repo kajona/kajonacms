@@ -7,8 +7,10 @@ use Kajona\Pages\Admin\Elements\ElementParagraphAdmin;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
 use Kajona\System\System\Carrier;
+use Kajona\System\System\Classloader;
 use Kajona\System\System\Database;
 use Kajona\System\System\OrmRowcache;
+use Kajona\System\System\Resourceloader;
 use Kajona\System\System\Testbase;
 
 require_once __DIR__."/../../../core/module_system/system/Testbase.php";
@@ -85,7 +87,11 @@ class PageimportexportTest extends Testbase
 
         $this->assertEquals(1, count($objElements));
         $objElements = $objElements[0];
-        $this->assertEquals($objElements->getStrClassAdmin(), "Kajona\\Pages\\Admin\\Elements\\ElementParagraphAdmin.php");
+
+        $strPath = Resourceloader::getInstance()->getPathForFile("/admin/elements/".$objElements->getStrClassAdmin());
+        $strClass = Classloader::getInstance()->getClassnameFromFilename($strPath);
+
+        $this->assertEquals($strClass, "Kajona\\Pages\\Admin\\Elements\\ElementParagraphAdmin");
 
 
         $objElement = $objElements->getConcreteAdminInstance();
