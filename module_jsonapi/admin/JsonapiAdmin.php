@@ -29,8 +29,8 @@ use Kajona\System\System\SystemModule;
  * @module jsonapi
  * @moduleId _jsonapi_module_id_
  */
-class JsonapiAdmin extends AdminController implements AdminInterface {
-
+class JsonapiAdmin extends AdminController implements AdminInterface
+{
 
 
     /**
@@ -39,7 +39,8 @@ class JsonapiAdmin extends AdminController implements AdminInterface {
      *
      * @xml
      */
-    protected function actionDispatch() {
+    protected function actionDispatch()
+    {
 
         ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
 
@@ -49,7 +50,7 @@ class JsonapiAdmin extends AdminController implements AdminInterface {
             $strRequestMethod = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
             $strRequestMethod = strtolower($strRequestMethod);
 
-            if(in_array($strRequestMethod, array('get', 'post', 'put', 'delete'))) {
+            if (in_array($strRequestMethod, array('get', 'post', 'put', 'delete'))) {
                 $arrResponse = $this->action($strRequestMethod);
             } else {
                 throw new InvalidRequestException('Invalid request method', Exception::$level_ERROR);
@@ -97,38 +98,39 @@ class JsonapiAdmin extends AdminController implements AdminInterface {
      * @permissions view
      * @xml
      */
-    protected function actionGet() {
+    protected function actionGet()
+    {
         // if we have no systemId we return an list else only an specific entry
-        if(!validateSystemid($this->getSystemid())) {
+        if (!validateSystemid($this->getSystemid())) {
 
             $strClass = $this->getParam('class');
 
-            if(empty($strClass) || !class_exists($strClass)) {
+            if (empty($strClass) || !class_exists($strClass)) {
                 throw new InvalidRequestException('Invalid class name', Exception::$level_ERROR);
             }
 
-            if(!method_exists($strClass, 'getObjectList')) {
+            if (!method_exists($strClass, 'getObjectList')) {
                 throw new InvalidRequestException('Invalid class type', Exception::$level_ERROR);
             }
 
             // filter parameters
             $strFilter = $this->getParam('filter');
-            $intStartIndex = (int) $this->getParam('startIndex');
+            $intStartIndex = (int)$this->getParam('startIndex');
 
-            $intCount = (int) $this->getParam('count');
-            if($intCount <= 0) {
+            $intCount = (int)$this->getParam('count');
+            if ($intCount <= 0) {
                 $intCount = 8;
             }
 
             $strStartDate = $this->getParam('startDate');
-            if(!empty($strStartDate)) {
+            if (!empty($strStartDate)) {
                 $objStartDate = new \Kajona\System\System\Date(strtotime($strStartDate));
             } else {
                 $objStartDate = null;
             }
 
             $strEndDate = $this->getParam('endDate');
-            if(!empty($strEndDate)) {
+            if (!empty($strEndDate)) {
                 $objEndDate = new \Kajona\System\System\Date(strtotime($strEndDate));
             } else {
                 $objEndDate = null;
@@ -138,14 +140,14 @@ class JsonapiAdmin extends AdminController implements AdminInterface {
             $arrEntries = $strClass::getObjectList($strFilter, $intStartIndex, $intCount, $objStartDate, $objEndDate);
             $arrResult = array();
 
-            foreach($arrEntries as $objEntry) {
+            foreach ($arrEntries as $objEntry) {
                 // internal permission handling right here
-                if(!$objEntry->rightView()) {
+                if (!$objEntry->rightView()) {
                     continue;
                 }
 
                 $arrRow = $this->serializeObject($objEntry);
-                if(!empty($arrRow)) {
+                if (!empty($arrRow)) {
                     $arrResult[] = $arrRow;
                 }
             }
@@ -166,18 +168,19 @@ class JsonapiAdmin extends AdminController implements AdminInterface {
      * @permissions edit
      * @xml
      */
-    protected function actionPost() {
+    protected function actionPost()
+    {
         /** @var \Kajona\System\System\Model $objObject */
         $objObject = $this->getCurrentObject();
 
-        if(!SystemModule::getModuleByName($objObject->getArrModule("module"))->rightEdit()) {
+        if (!SystemModule::getModuleByName($objObject->getArrModule("module"))->rightEdit()) {
             throw new AuthenticationException("You are not allowed to create new records", Exception::$level_ERROR);
         }
 
         $this->injectData($objObject);
 
         // @TODO validate the model data which can contain any data from the json request
-        // we could use the form-validators, so field- and object validators right here. currently this is all rather fixed inside class_admin_formgenerator,
+        // we could use the form-validators, so field- and object validators right here. currently this is all rather fixed inside AdminFormgenerator,
         // but we should refactor it from there into separate classes, so in order to reuse it here -> filing a ticket?
 
         $objObject->updateObjectToDb();
@@ -189,7 +192,7 @@ class JsonapiAdmin extends AdminController implements AdminInterface {
     }
 
     /**
-     * Inserts the request data into the model and updates the entry in the 
+     * Inserts the request data into the model and updates the entry in the
      * database
      *
      * @return array
@@ -197,11 +200,12 @@ class JsonapiAdmin extends AdminController implements AdminInterface {
      * @permissions edit
      * @xml
      */
-    protected function actionPut() {
+    protected function actionPut()
+    {
         /** @var \Kajona\System\System\Model $objObject */
         $objObject = $this->getCurrentObject($this->getSystemid());
 
-        if(!$objObject->rightEdit()) {
+        if (!$objObject->rightEdit()) {
             throw new AuthenticationException("You are not allowed to update records", Exception::$level_ERROR);
         }
 
@@ -225,11 +229,12 @@ class JsonapiAdmin extends AdminController implements AdminInterface {
      * @permissions delete
      * @xml
      */
-    protected function actionDelete() {
+    protected function actionDelete()
+    {
         /** @var \Kajona\System\System\Model $objObject */
         $objObject = $this->getCurrentObject($this->getSystemid());
 
-        if(!$objObject->rightDelete()) {
+        if (!$objObject->rightDelete()) {
             throw new AuthenticationException("You are not allowed to delete new records", Exception::$level_ERROR);
         }
 
@@ -242,18 +247,19 @@ class JsonapiAdmin extends AdminController implements AdminInterface {
     }
 
     /**
-     * Serialize an model into an array. Uses the object serializer which 
-     * searches in the model for @jsonExport annotations. The system id is 
+     * Serialize an model into an array. Uses the object serializer which
+     * searches in the model for @jsonExport annotations. The system id is
      * always added
      *
      * @param \Kajona\System\System\ModelInterface $objModel
      * @return array
      */
-    protected function serializeObject(\Kajona\System\System\ModelInterface $objModel) {
+    protected function serializeObject(\Kajona\System\System\ModelInterface $objModel)
+    {
         $objSerializer = new ObjectSerializer($objModel);
 
         return array_merge(
-            array('_id' => $objModel->getSystemid()), 
+            array('_id' => $objModel->getSystemid()),
             $objSerializer->getArrMapping()
         );
     }
@@ -263,14 +269,15 @@ class JsonapiAdmin extends AdminController implements AdminInterface {
      *
      * @param \Kajona\System\System\ModelInterface $objModel
      */
-    protected function injectData(\Kajona\System\System\ModelInterface $objModel) {
+    protected function injectData(\Kajona\System\System\ModelInterface $objModel)
+    {
         $arrData = $this->getRequestBody();
         $objSerializer = new ObjectSerializer($objModel);
         $arrProperties = $objSerializer->getPropertyNames();
 
-        foreach($arrProperties as $strProperty) {
+        foreach ($arrProperties as $strProperty) {
             $strSetterMethod = 'set' . ucfirst($strProperty);
-            if(isset($arrData[$strProperty]) && method_exists($objModel, $strSetterMethod)) {
+            if (isset($arrData[$strProperty]) && method_exists($objModel, $strSetterMethod)) {
                 $objModel->$strSetterMethod($arrData[$strProperty]);
             }
         }
@@ -282,13 +289,14 @@ class JsonapiAdmin extends AdminController implements AdminInterface {
      * @return array
      * @throws InvalidRequestException
      */
-    protected function getRequestBody() {
+    protected function getRequestBody()
+    {
         $strRawBody = file_get_contents('php://input');
-        if(!empty($strRawBody)) {
+        if (!empty($strRawBody)) {
             $arrBody = json_decode($strRawBody, true);
             $strLastError = json_last_error();
 
-            if($strLastError == JSON_ERROR_NONE) {
+            if ($strLastError == JSON_ERROR_NONE) {
                 return $arrBody;
             } else {
                 throw new InvalidRequestException('Invalid JSON request', Exception::$level_ERROR);
@@ -300,35 +308,36 @@ class JsonapiAdmin extends AdminController implements AdminInterface {
 
     /**
      * Returns an model based on the given GET parameter "class". If the system
-     * id is available it validates whether the id is valid and that the object 
+     * id is available it validates whether the id is valid and that the object
      * exists
      *
      * @param string $strSystemId
      * @return \Kajona\System\System\ModelInterface
      * @throws InvalidRequestException
      */
-    protected function getCurrentObject($strSystemId = null) {
+    protected function getCurrentObject($strSystemId = null)
+    {
         $strClassName = $this->getParam('class');
 
-        if(empty($strClassName) || !class_exists($strClassName)) {
+        if (empty($strClassName) || !class_exists($strClassName)) {
             throw new InvalidRequestException('Invalid class name', Exception::$level_ERROR);
         }
 
-        if($strSystemId !== null) {
-            if(!validateSystemid($strSystemId)) {
+        if ($strSystemId !== null) {
+            if (!validateSystemid($strSystemId)) {
                 throw new InvalidRequestException('Invalid system id', Exception::$level_ERROR);
             }
 
             $objObject = Objectfactory::getInstance()->getObject($strSystemId);
 
-            if($objObject == null) {
+            if ($objObject == null) {
                 throw new InvalidRequestException('Object not exisiting', Exception::$level_ERROR);
             }
         } else {
             $objObject = new $strClassName();
         }
 
-        if(!$objObject instanceof \Kajona\System\System\ModelInterface) {
+        if (!$objObject instanceof \Kajona\System\System\ModelInterface) {
             throw new InvalidRequestException('Selected class must be a model', Exception::$level_ERROR);
         }
 

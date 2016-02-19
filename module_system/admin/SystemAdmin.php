@@ -9,7 +9,7 @@
 
 namespace Kajona\System\Admin;
 
-use class_module_packagemanager_manager;
+use Kajona\Packagemanager\System\PackagemanagerManager;
 use Kajona\System\Admin\Formentries\FormentryHidden;
 use Kajona\System\Admin\Formentries\FormentryText;
 use Kajona\System\Admin\Formentries\FormentryTextarea;
@@ -45,6 +45,12 @@ use Kajona\System\System\SystemWorker;
 use Kajona\System\System\UserUser;
 use Kajona\System\System\Validators\EmailValidator;
 use Kajona\System\System\VersionableInterface;
+use PHPExcel;
+use PHPExcel_IOFactory;
+use PHPExcel_Shared_Date;
+use PHPExcel_Style_Alignment;
+use PHPExcel_Style_Border;
+use PHPExcel_Style_Fill;
 
 
 /**
@@ -121,7 +127,7 @@ class SystemAdmin extends AdminSimple implements AdminInterface
 
         $objInstance = Objectfactory::getInstance()->getObject($this->getSystemid());
         if ($objInstance instanceof SystemAspect) {
-            $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "editAspect", "&systemid=".$objInstance->getSystemid()));
+            $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "editAspect", "&systemid=" . $objInstance->getSystemid()));
         }
 
         if ($objInstance instanceof SystemModule) {
@@ -157,17 +163,15 @@ class SystemAdmin extends AdminSimple implements AdminInterface
     {
         if ($objListEntry instanceof SystemModule) {
             $arrReturn = array();
-            $arrReturn[] = $this->objToolkit->listButton(Link::getLinkAdminDialog("system", "moduleAspect", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("modul_aspectedit"), "icon_aspect", $this->getLang("modul_aspectedit")));
+            $arrReturn[] = $this->objToolkit->listButton(Link::getLinkAdminDialog("system", "moduleAspect", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("modul_aspectedit"), "icon_aspect", $this->getLang("modul_aspectedit")));
 
             if ($objListEntry->rightEdit() && Carrier::getInstance()->getObjSession()->isSuperAdmin()) {
                 if ($objListEntry->getStrName() == "system") {
                     $arrReturn[] = $this->objToolkit->listButton(Link::getLinkAdmin("system", "moduleList", "", "", $this->getLang("modul_status_system"), "icon_enabled"));
-                }
-                elseif ($objListEntry->getIntRecordStatus() == 0) {
-                    $arrReturn[] = $this->objToolkit->listButton(Link::getLinkAdmin("system", "moduleStatus", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("modul_status_disabled"), "icon_disabled"));
-                }
-                else {
-                    $arrReturn[] = $this->objToolkit->listButton(Link::getLinkAdmin("system", "moduleStatus", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("modul_status_enabled"), "icon_enabled"));
+                } elseif ($objListEntry->getIntRecordStatus() == 0) {
+                    $arrReturn[] = $this->objToolkit->listButton(Link::getLinkAdmin("system", "moduleStatus", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("modul_status_disabled"), "icon_disabled"));
+                } else {
+                    $arrReturn[] = $this->objToolkit->listButton(Link::getLinkAdmin("system", "moduleStatus", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("modul_status_enabled"), "icon_enabled"));
                 }
             }
 
@@ -221,7 +225,7 @@ class SystemAdmin extends AdminSimple implements AdminInterface
         }
 
         if ($objListEntry instanceof SystemAspect && $objListEntry->rightDelete()) {
-            return $this->objToolkit->listDeleteButton($objListEntry->getStrName(), $this->getLang("aspect_delete_question"), Link::getLinkAdminHref($this->getArrModule("modul"), "deleteAspect", "&systemid=".$objListEntry->getSystemid()));
+            return $this->objToolkit->listDeleteButton($objListEntry->getStrName(), $this->getLang("aspect_delete_question"), Link::getLinkAdminHref($this->getArrModule("modul"), "deleteAspect", "&systemid=" . $objListEntry->getSystemid()));
         }
 
         return parent::renderDeleteAction($objListEntry);
@@ -273,7 +277,7 @@ class SystemAdmin extends AdminSimple implements AdminInterface
         $strReturn .= $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "saveModuleAspect"));
         $arrAspects = SystemAspect::getObjectList();
         foreach ($arrAspects as $objOneAspect) {
-            $strReturn .= $this->objToolkit->formInputCheckbox("aspect_".$objOneAspect->getSystemid(), $objOneAspect->getStrName(), in_array($objOneAspect->getSystemid(), $arrAspectsSet));
+            $strReturn .= $this->objToolkit->formInputCheckbox("aspect_" . $objOneAspect->getSystemid(), $objOneAspect->getStrName(), in_array($objOneAspect->getSystemid(), $arrAspectsSet));
         }
 
         $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
@@ -369,8 +373,8 @@ class SystemAdmin extends AdminSimple implements AdminInterface
                 }
                 //Build the rows
                 //Print a help-text?
-                $strHelper = $this->getLang($objOneSetting->getStrName()."hint", $objCurrentModule->getStrName());
-                if ($strHelper != "!".$objOneSetting->getStrName()."hint!") {
+                $strHelper = $this->getLang($objOneSetting->getStrName() . "hint", $objCurrentModule->getStrName());
+                if ($strHelper != "!" . $objOneSetting->getStrName() . "hint!") {
                     $strRows .= $this->objToolkit->formTextRow($strHelper);
                 }
 
@@ -379,13 +383,11 @@ class SystemAdmin extends AdminSimple implements AdminInterface
                     $arrDD = array();
                     $arrDD["true"] = $this->getLang("commons_yes");
                     $arrDD["false"] = $this->getLang("commons_no");
-                    $strRows .= $this->objToolkit->formInputDropdown("set[".$objOneSetting->getSystemid()."]", $arrDD, $this->getLang($objOneSetting->getStrName(), $objCurrentModule->getStrName()), $objOneSetting->getStrValue());
-                }
-                elseif ($objOneSetting->getIntType() == 3) {
-                    $strRows .= $this->objToolkit->formInputPageSelector("set[".$objOneSetting->getSystemid()."]", $this->getLang($objOneSetting->getStrName(), $objCurrentModule->getStrName()), $objOneSetting->getStrValue());
-                }
-                else {
-                    $strRows .= $this->objToolkit->formInputText("set[".$objOneSetting->getSystemid()."]", $this->getLang($objOneSetting->getStrName(), $objCurrentModule->getStrName()), $objOneSetting->getStrValue());
+                    $strRows .= $this->objToolkit->formInputDropdown("set[" . $objOneSetting->getSystemid() . "]", $arrDD, $this->getLang($objOneSetting->getStrName(), $objCurrentModule->getStrName()), $objOneSetting->getStrValue());
+                } elseif ($objOneSetting->getIntType() == 3) {
+                    $strRows .= $this->objToolkit->formInputPageSelector("set[" . $objOneSetting->getSystemid() . "]", $this->getLang($objOneSetting->getStrName(), $objCurrentModule->getStrName()), $objOneSetting->getStrValue());
+                } else {
+                    $strRows .= $this->objToolkit->formInputText("set[" . $objOneSetting->getSystemid() . "]", $this->getLang($objOneSetting->getStrName(), $objCurrentModule->getStrName()), $objOneSetting->getStrValue());
                 }
             }
             //Build a form to return -> include the last module
@@ -398,8 +400,7 @@ class SystemAdmin extends AdminSimple implements AdminInterface
             $arrTabs[$this->getLang("modul_titel", $objCurrentModule->getStrName())] = $strTabContent;
 
             $strReturn .= $this->objToolkit->getTabbedContent($arrTabs);
-        }
-        else {
+        } else {
             //Seems we have to update a few records
             $arrSettings = $this->getAllParams();
             foreach ($arrSettings["set"] as $strKey => $strValue) {
@@ -461,7 +462,7 @@ class SystemAdmin extends AdminSimple implements AdminInterface
             }
 
 
-            $strReturn .= $this->objToolkit->formHeadline($this->getLang("systemtask_group_".$strGroupName));
+            $strReturn .= $this->objToolkit->formHeadline($this->getLang("systemtask_group_" . $strGroupName));
             $strReturn .= $this->objToolkit->listHeader();
             /** @var $objOneTask AdminSystemtaskInterface */
             foreach ($arrTasks as $objOneTask) {
@@ -470,7 +471,7 @@ class SystemAdmin extends AdminSimple implements AdminInterface
                 $strLink = Link::getLinkAdmin(
                     "system",
                     "systemTasks",
-                    "&task=".$objOneTask->getStrInternalTaskName(),
+                    "&task=" . $objOneTask->getStrInternalTaskName(),
                     $objOneTask->getStrTaskname(),
                     $this->getLang("systemtask_run"),
                     "icon_accept"
@@ -489,7 +490,7 @@ class SystemAdmin extends AdminSimple implements AdminInterface
 
         //include js-code & stuff to handle executions
         $strReturn .= self::getTaskDialogCode();
-        $strReturn = $strTaskOutput.$strReturn;
+        $strReturn = $strTaskOutput . $strReturn;
 
         return $strReturn;
     }
@@ -512,7 +513,7 @@ class SystemAdmin extends AdminSimple implements AdminInterface
         $strTaskOutput = "";
 
 
-        //If the task is going to be executed, validate the form first (if form is of type class_admin_formgenerator)
+        //If the task is going to be executed, validate the form first (if form is of type AdminFormgenerator)
         $objAdminForm = null;
         if ($bitExecute) {
             $objAdminForm = $objTask->getAdminForm();
@@ -527,25 +528,22 @@ class SystemAdmin extends AdminSimple implements AdminInterface
         if ($bitExecute) {
             if ($bitExecuteDirectly) {
                 $strTaskOutput .= $objTask->executeTask();
-            }
-            else {
+            } else {
                 $strTaskOutput .= "
                 <script type=\"text/javascript\">
                 $(function() {
                    setTimeout(function() {
-                        KAJONA.admin.systemtask.executeTask('".$objTask->getStrInternalTaskname()."', '".$objTask->getSubmitParams()."');
-                        KAJONA.admin.systemtask.setName('".$objLang->getLang("systemtask_runningtask", "system")." ".$objTask->getStrTaskName()."');
+                        KAJONA.admin.systemtask.executeTask('" . $objTask->getStrInternalTaskname() . "', '" . $objTask->getSubmitParams() . "');
+                        KAJONA.admin.systemtask.setName('" . $objLang->getLang("systemtask_runningtask", "system") . " " . $objTask->getStrTaskName() . "');
                    }, 500);
                  });
                 </script>";
             }
-        }
-        else {
+        } else {
             $strForm = $objTask->generateAdminForm($strModule, $strAction, $objAdminForm);
             if ($strForm != "") {
                 $strTaskOutput .= $strForm;
-            }
-            else {
+            } else {
                 $strLang = Carrier::getInstance()->getObjLang()->getLang("systemtask_runningtask", "system");
                 $strTaskJS = <<<JS
                 $(function() {
@@ -555,7 +553,7 @@ class SystemAdmin extends AdminSimple implements AdminInterface
                     }, 500);
                 });
 JS;
-                $strTaskOutput .= "<script type='text/javascript'>".$strTaskJS."</script>";
+                $strTaskOutput .= "<script type='text/javascript'>" . $strTaskJS . "</script>";
             }
         }
 
@@ -570,12 +568,12 @@ JS;
     public static function getTaskDialogCode()
     {
         $objLang = Carrier::getInstance()->getObjLang();
-        $strDialogContent = "<div id=\"systemtaskLoadingDiv\" class=\"loadingContainer loadingContainerBackground\"></div><br /><b id=\"systemtaskNameDiv\"></b><br /><br /><div id=\"systemtaskStatusDiv\"></div><br /><input id=\"systemtaskCancelButton\" type=\"submit\" value=\"".$objLang->getLang("systemtask_cancel_execution", "system")."\" class=\"btn inputSubmit\" /><br />";
+        $strDialogContent = "<div id=\"systemtaskLoadingDiv\" class=\"loadingContainer loadingContainerBackground\"></div><br /><b id=\"systemtaskNameDiv\"></b><br /><br /><div id=\"systemtaskStatusDiv\"></div><br /><input id=\"systemtaskCancelButton\" type=\"submit\" value=\"" . $objLang->getLang("systemtask_cancel_execution", "system") . "\" class=\"btn inputSubmit\" /><br />";
         return "<script type=\"text/javascript\">
-            var KAJONA_SYSTEMTASK_TITLE = '".$objLang->getLang("systemtask_dialog_title", "system")."';
-            var KAJONA_SYSTEMTASK_TITLE_DONE = '".$objLang->getLang("systemtask_dialog_title_done", "system")."';
-            var KAJONA_SYSTEMTASK_CLOSE = '".$objLang->getLang("systemtask_close_dialog", "system")."';
-            var kajonaSystemtaskDialogContent = '".$strDialogContent."';
+            var KAJONA_SYSTEMTASK_TITLE = '" . $objLang->getLang("systemtask_dialog_title", "system") . "';
+            var KAJONA_SYSTEMTASK_TITLE_DONE = '" . $objLang->getLang("systemtask_dialog_title_done", "system") . "';
+            var KAJONA_SYSTEMTASK_CLOSE = '" . $objLang->getLang("systemtask_close_dialog", "system") . "';
+            var kajonaSystemtaskDialogContent = '" . $strDialogContent . "';
             </script>";
     }
 
@@ -606,13 +604,12 @@ JS;
                 $strImage = $objOneRecord->getStrIcon();
                 if (is_array($strImage)) {
                     $strImage = AdminskinHelper::getAdminImage($strImage[0], $strImage[1]);
-                }
-                else {
+                } else {
                     $strImage = AdminskinHelper::getAdminImage($strImage);
                 }
             }
 
-            $strActions = $this->objToolkit->listButton(Link::getLinkAdmin($this->getArrModule("modul"), "lockedRecords", "&unlockid=".$objOneRecord->getSystemid(), $this->getLang("action_unlock_record"), $this->getLang("action_unlock_record"), "icon_lockerOpen"));
+            $strActions = $this->objToolkit->listButton(Link::getLinkAdmin($this->getArrModule("modul"), "lockedRecords", "&unlockid=" . $objOneRecord->getSystemid(), $this->getLang("action_unlock_record"), $this->getLang("action_unlock_record"), "icon_lockerOpen"));
             $objLockUser = new UserUser($objOneRecord->getLockManager()->getLockId());
 
             $strReturn .= $this->objToolkit->genericAdminList(
@@ -661,25 +658,23 @@ JS;
                 $strImage = $objOneRecord->getStrIcon();
                 if (is_array($strImage)) {
                     $strImage = AdminskinHelper::getAdminImage($strImage[0], $strImage[1]);
-                }
-                else {
+                } else {
                     $strImage = AdminskinHelper::getAdminImage($strImage);
                 }
             }
 
             $strActions = "";
-            if($objOneRecord->rightDelete()) {
+            if ($objOneRecord->rightDelete()) {
                 $strActions .= $this->objToolkit->listButton(
-                    Link::getLinkAdmin($this->getArrModule("modul"), "finalDeleteRecord", "&systemid=".$objOneRecord->getSystemid(), $this->getLang("action_final_delete_record"), $this->getLang("action_final_delete_record"), "icon_delete")
+                    Link::getLinkAdmin($this->getArrModule("modul"), "finalDeleteRecord", "&systemid=" . $objOneRecord->getSystemid(), $this->getLang("action_final_delete_record"), $this->getLang("action_final_delete_record"), "icon_delete")
                 );
             }
 
             if ($objOneRecord->isRestorable()) {
                 $strActions .= $this->objToolkit->listButton(
-                    Link::getLinkAdmin($this->getArrModule("modul"), "restoreRecord", "&systemid=".$objOneRecord->getSystemid(), $this->getLang("action_restore_record"), $this->getLang("action_restore_record"), "icon_undo")
+                    Link::getLinkAdmin($this->getArrModule("modul"), "restoreRecord", "&systemid=" . $objOneRecord->getSystemid(), $this->getLang("action_restore_record"), $this->getLang("action_restore_record"), "icon_undo")
                 );
-            }
-            else {
+            } else {
                 $strActions .= $this->objToolkit->listButton(AdminskinHelper::getAdminImage("icon_undoDisabled", $this->getLang("action_restore_record_blocked")));
             }
 
@@ -689,7 +684,7 @@ JS;
                 $strImage,
                 $strActions,
                 0,
-                "Systemid / Previd: ".$objOneRecord->getStrSystemid()." / ".$objOneRecord->getStrPrevId()
+                "Systemid / Previd: " . $objOneRecord->getStrSystemid() . " / " . $objOneRecord->getStrPrevId()
             );
         }
 
@@ -729,7 +724,7 @@ JS;
      */
     protected function actionFinalDeleteRecord()
     {
-        if($this->getParam("delete") == "") {
+        if ($this->getParam("delete") == "") {
             OrmBase::setObjHandleLogicalDeletedGlobal(OrmDeletedhandlingEnum::INCLUDED);
             $objRecord = Objectfactory::getInstance()->getObject($this->getSystemid());
             $strReturn = $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "finalDeleteRecord"));
@@ -739,8 +734,7 @@ JS;
             $strReturn .= $this->objToolkit->formInputHidden("delete", "1");
             $strReturn .= $this->objToolkit->formClose();
             return $strReturn;
-        }
-        else {
+        } else {
 
             OrmBase::setObjHandleLogicalDeletedGlobal(OrmDeletedhandlingEnum::INCLUDED);
             $objRecord = Objectfactory::getInstance()->getObject($this->getSystemid());
@@ -799,8 +793,7 @@ JS;
             $arrRowData[2] = timeToString($objOneSession->getIntReleasetime());
             if ($objOneSession->getStrLoginstatus() == SystemSession::$LOGINSTATUS_LOGGEDIN) {
                 $arrRowData[3] = $this->getLang("session_loggedin");
-            }
-            else {
+            } else {
                 $arrRowData[3] = $this->getLang("session_loggedout");
             }
 
@@ -819,13 +812,11 @@ JS;
                         $strActivity .= $arrUrlParam[1];
                     }
                 }
-            }
-            else {
+            } else {
                 $strActivity .= $this->getLang("session_portal");
                 if ($strLastUrl == "") {
                     $strActivity .= SystemSetting::getConfigValue("_pages_indexpage_") != "" ? SystemSetting::getConfigValue("_pages_indexpage_") : "";
-                }
-                else {
+                } else {
                     foreach (explode("&amp;", $strLastUrl) as $strOneParam) {
                         $arrUrlParam = explode("=", $strOneParam);
                         if ($arrUrlParam[0] == "page") {
@@ -841,9 +832,8 @@ JS;
 
             $arrRowData[4] = $strActivity;
             if ($objOneSession->getStrLoginstatus() == SystemSession::$LOGINSTATUS_LOGGEDIN) {
-                $arrRowData[5] = Link::getLinkAdmin("system", "systemSessions", "&logout=true&systemid=".$objOneSession->getSystemid(), "", $this->getLang("session_logout"), "icon_delete");
-            }
-            else {
+                $arrRowData[5] = Link::getLinkAdmin("system", "systemSessions", "&logout=true&systemid=" . $objOneSession->getSystemid(), "", $this->getLang("session_logout"), "icon_delete");
+            } else {
                 $arrRowData[5] = AdminskinHelper::getAdminImage("icon_deleteDisabled");
             }
             $arrData[] = $arrRowData;
@@ -867,12 +857,12 @@ JS;
 
         //load logfiles available
         $objFilesystem = new Filesystem();
-        $arrFiles = $objFilesystem->getFilelist(_projectpath_."/log", array(".log"));
+        $arrFiles = $objFilesystem->getFilelist(_projectpath_ . "/log", array(".log"));
 
         $arrTabs = array();
 
         foreach ($arrFiles as $strName) {
-            $objFilesystem->openFilePointer(_projectpath_."/log/".$strName, "r");
+            $objFilesystem->openFilePointer(_projectpath_ . "/log/" . $strName, "r");
             $strLogContent = $objFilesystem->readLastLinesFromFile(20);
             $strLogContent = str_replace(array("INFO", "ERROR"), array("INFO   ", "ERROR  "), $strLogContent);
             $arrLogEntries = explode("\r", $strLogContent);
@@ -970,7 +960,7 @@ JS;
                 $arrRowData[] = $objTarget != null ? $objTarget->getArrModule("modul") : "";
             }
             if ($strSystemid == "") {
-                $arrRowData[] = $objTarget != null ? $this->objToolkit->getTooltipText(uniStrTrim($objTarget->getVersionRecordName(), 20), $objTarget->getVersionRecordName()." ".$objOneEntry->getStrSystemid()) : "";
+                $arrRowData[] = $objTarget != null ? $this->objToolkit->getTooltipText(uniStrTrim($objTarget->getVersionRecordName(), 20), $objTarget->getVersionRecordName() . " " . $objOneEntry->getStrSystemid()) : "";
             }
             $arrRowData[] = $objTarget != null ? $this->objToolkit->getTooltipText(uniStrTrim($objTarget->getVersionActionName($objOneEntry->getStrAction()), 15), $objTarget->getVersionActionName($objOneEntry->getStrAction())) : "";
             $arrRowData[] = $objTarget != null ? $this->objToolkit->getTooltipText(uniStrTrim($objTarget->getVersionPropertyName($objOneEntry->getStrProperty()), 20), $objTarget->getVersionPropertyName($objOneEntry->getStrProperty())) : "";
@@ -980,16 +970,16 @@ JS;
             $arrData[] = $arrRowData;
         }
 
-        $objManager = new class_module_packagemanager_manager();
+        $objManager = new PackagemanagerManager();
         if ($objManager->getPackage("phpexcel") != null) {
             $strReturn .= $this->objToolkit->getContentToolbar(array(
-                Link::getLinkAdmin($this->getArrModule("modul"), "genericChangelogExportExcel", "&systemid=".$strSystemid, AdminskinHelper::getAdminImage("icon_excel")." ".$this->getLang("change_export_excel"), "", "", false)
+                Link::getLinkAdmin($this->getArrModule("modul"), "genericChangelogExportExcel", "&systemid=" . $strSystemid, AdminskinHelper::getAdminImage("icon_excel") . " " . $this->getLang("change_export_excel"), "", "", false)
             ));
         }
 
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrData);
 
-        $strReturn .= $this->objToolkit->getPageview($objArraySectionIterator, $strSourceModule, $strSourceAction, "&systemid=".$strSystemid."&bitBlockFolderview=".$this->getParam("bitBlockFolderview"));
+        $strReturn .= $this->objToolkit->getPageview($objArraySectionIterator, $strSourceModule, $strSourceAction, "&systemid=" . $strSystemid . "&bitBlockFolderview=" . $this->getParam("bitBlockFolderview"));
 
         return $strReturn;
     }
@@ -1005,12 +995,12 @@ JS;
     protected function actionGenericChangelogExportExcel($strSystemid = "")
     {
 
-        $objManager = new class_module_packagemanager_manager();
+        $objManager = new PackagemanagerManager();
         if ($objManager->getPackage("phpexcel") == null) {
             return $this->getLang("commons_error_permissions");
         }
         // include phpexcel
-        require_once Resourceloader::getInstance()->getAbsolutePathForModule("module_phpexcel").'/vendor/autoload.php';
+        require_once Resourceloader::getInstance()->getAbsolutePathForModule("module_phpexcel") . '/vendor/autoload.php';
         $objPHPExcel = new PHPExcel();
 
         // get system id
@@ -1029,7 +1019,7 @@ JS;
 
         $objDataSheet = $objPHPExcel->getActiveSheet();
         $objDataSheet->setTitle($this->getLang("change_report_title"));
-        $objDataSheet->setAutoFilter('A1:F'.(count($arrLogEntries) + 1));
+        $objDataSheet->setAutoFilter('A1:F' . (count($arrLogEntries) + 1));
 
         // style
         $arrStyles = $this->getStylesArray();
@@ -1088,7 +1078,7 @@ JS;
                 $arrRowData[] = $objTarget != null ? $objTarget->getArrModule("modul") : "";
             }
             if ($strSystemid == "") {
-                $arrRowData[] = $objTarget != null ? $objTarget->getVersionRecordName()." ".$objOneEntry->getStrSystemid() : "";
+                $arrRowData[] = $objTarget != null ? $objTarget->getVersionRecordName() . " " . $objOneEntry->getStrSystemid() : "";
             }
             $arrRowData[] = $objTarget != null ? $objTarget->getVersionActionName($objOneEntry->getStrAction()) : "";
             $arrRowData[] = $objTarget != null ? $objTarget->getVersionPropertyName($objOneEntry->getStrProperty()) : "";
@@ -1105,7 +1095,7 @@ JS;
             }
 
             // format first column as date
-            $objDataSheet->getStyle('A'.$intRow)->getNumberFormat()->setFormatCode('dd.mm.yyyy hh:mm');
+            $objDataSheet->getStyle('A' . $intRow)->getNumberFormat()->setFormatCode('dd.mm.yyyy hh:mm');
 
             $intRow++;
         }
@@ -1113,7 +1103,7 @@ JS;
         // Set active sheet index to the first sheet, so Excel opens this as the first sheet
         $objPHPExcel->setActiveSheetIndex(0);
         header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="'.createFilename($this->getLang("change_report_title").'.xlsx').'"');
+        header('Content-Disposition: attachment;filename="' . createFilename($this->getLang("change_report_title") . '.xlsx') . '"');
         header('Pragma: private');
         header('Cache-control: private, must-revalidate');
         //header('Cache-Control : No Store');
@@ -1165,8 +1155,7 @@ JS;
         $objAspect = null;
         if ($strMode == "new") {
             $objAspect = new SystemAspect();
-        }
-        elseif ($strMode == "edit") {
+        } elseif ($strMode == "edit") {
             $objAspect = new SystemAspect($this->getSystemid());
             if (!$objAspect->rightEdit()) {
                 $objAspect = null;
@@ -1182,8 +1171,7 @@ JS;
             $objFormManager->addField(new FormentryHidden("", "mode"))->setStrValue($strMode);
             $strReturn = $objFormManager->renderForm(Link::getLinkAdminHref($this->getArrModule("modul"), "saveAspect"));
 
-        }
-        else {
+        } else {
             $strReturn = $this->getLang("commons_error_permissions");
         }
 
@@ -1217,8 +1205,7 @@ JS;
 
         if ($this->getParam("mode") == "new") {
             $objAspect = new SystemAspect();
-        }
-        elseif ($this->getParam("mode") == "edit") {
+        } elseif ($this->getParam("mode") == "edit") {
             $objAspect = new SystemAspect($this->getSystemid());
         }
 
@@ -1255,8 +1242,7 @@ JS;
             }
 
             $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "aspects"));
-        }
-        else {
+        } else {
             return $this->getLang("commons_error_permissions");
         }
         return "";
@@ -1372,8 +1358,7 @@ JS;
 
         if ($objEmail->sendMail()) {
             return $this->getLang("mail_send_success");
-        }
-        else {
+        } else {
             return $this->getLang("mail_send_error");
         }
     }
@@ -1397,8 +1382,7 @@ JS;
                     return $objOneModule;
                 }
             }
-        }
-        elseif ($intModuleID == 0 && $bitZeroIsSystem) {
+        } elseif ($intModuleID == 0 && $bitZeroIsSystem) {
             foreach ($arrModules as $objOneModule) {
                 if ($objOneModule->getStrName() == "system") {
                     return $objOneModule;
@@ -1418,12 +1402,12 @@ JS;
         $arrStlyes = array();
 
         $arrStlyes["header_1"] = array(
-            'fill'      => array(
-                'type'       => PHPExcel_Style_Fill::FILL_SOLID,
+            'fill' => array(
+                'type' => PHPExcel_Style_Fill::FILL_SOLID,
                 'startcolor' => array('rgb' => 'EBF1DE'),
-                'endcolor'   => array('rgb' => 'EBF1DE')
+                'endcolor' => array('rgb' => 'EBF1DE')
             ),
-            'borders'   => array(
+            'borders' => array(
                 'allborders' => array(
                     'style' => PHPExcel_Style_Border::BORDER_THIN,
                     'color' => array(
@@ -1433,9 +1417,9 @@ JS;
             ),
             'alignment' => array(
                 'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-                'vertical'   => PHPExcel_Style_Alignment::VERTICAL_BOTTOM,
-                'rotation'   => 0,
-                'wrap'       => true
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_BOTTOM,
+                'rotation' => 0,
+                'wrap' => true
             )
         );
 
