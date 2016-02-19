@@ -9,7 +9,6 @@
 
 namespace Kajona\Postacomment\System;
 
-use class_search_result;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Search\System\SearchResult;
 use Kajona\System\System\AdminListableInterface;
