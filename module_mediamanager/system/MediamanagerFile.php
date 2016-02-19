@@ -6,7 +6,6 @@
 
 namespace Kajona\Mediamanager\System;
 
-use class_search_result;
 use Kajona\Packagemanager\System\PackagemanagerMetadata;
 use Kajona\Search\System\SearchResult;
 use Kajona\System\System\AdminGridableInterface;

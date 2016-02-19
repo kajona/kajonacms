@@ -5,8 +5,9 @@
 ********************************************************************************************************/
 
 namespace Kajona\Eventmanager\System;
-use class_event_entry;
-use interface_event_provider;
+
+use Kajona\Dashboard\System\EventEntry;
+use Kajona\Dashboard\System\EventProviderInterface;
 use Kajona\System\System\AdminskinHelper;
 use Kajona\System\System\Lang;
 use Kajona\System\System\Link;
@@ -16,7 +17,7 @@ use Kajona\System\System\SystemModule;
 /**
  * @package module_eventmanager
  */
-class EventmanagerEventProvider implements interface_event_provider
+class EventmanagerEventProvider implements EventProviderInterface
 {
     public static function getExtensionName()
     {
@@ -36,9 +37,9 @@ class EventmanagerEventProvider implements interface_event_provider
 
         $arrResult = array();
         $arrEvents = EventmanagerEvent::getAllEvents(null, null, $objStartDate, $objEndDate);
-        foreach($arrEvents as $objOneEvent) {
+        foreach ($arrEvents as $objOneEvent) {
             if ($objOneEvent->rightView()) {
-                $objEvent = new class_event_entry();
+                $objEvent = new EventEntry();
                 $objEvent->setStrIcon($objOneEvent->getStrIcon());
                 $objEvent->setStrCategory("calendarEvent");
                 $objEvent->setStrDisplayName($objOneEvent->getStrDisplayName());

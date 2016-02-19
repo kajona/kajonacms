@@ -7,7 +7,6 @@
 
 namespace Kajona\Guestbook\System;
 
-use class_search_result;
 use Kajona\Search\System\SearchResult;
 use Kajona\System\System\AdminListableInterface;
 use Kajona\System\System\Link;

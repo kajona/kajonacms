@@ -9,12 +9,12 @@
 
 namespace Kajona\Maps\Admin\Elements;
 
-use class_admin_formgenerator;
-use class_formentry_button;
-use class_formentry_plaintext;
-use class_formentry_textrow;
 use Kajona\Pages\Admin\AdminElementInterface;
 use Kajona\Pages\Admin\ElementAdmin;
+use Kajona\System\Admin\AdminFormgenerator;
+use Kajona\System\Admin\Formentries\FormentryButton;
+use Kajona\System\Admin\Formentries\FormentryPlaintext;
+use Kajona\System\Admin\Formentries\FormentryTextrow;
 
 
 /**
@@ -24,7 +24,8 @@ use Kajona\Pages\Admin\ElementAdmin;
  *
  * @targetTable element_universal.content_id
  */
-class ElementMapsAdmin extends ElementAdmin implements AdminElementInterface {
+class ElementMapsAdmin extends ElementAdmin implements AdminElementInterface
+{
 
     /**
      * @var string
@@ -77,15 +78,15 @@ class ElementMapsAdmin extends ElementAdmin implements AdminElementInterface {
 
     /**
      * Creates the backend form to enter a new map configuration
-     * @return class_admin_formgenerator|null
+     * @return AdminFormgenerator|null
      */
-    public function getAdminForm() {
+    public function getAdminForm()
+    {
         $objForm = parent::getAdminForm();
 
 
-
-        $objForm->addField(new class_formentry_button("", "geocode_button"))->setStrLabel($this->getLang("maps_geocode_button"))->setStrEventhandler("onclick=\"lookupAddress(); return false;\"");
-        $objForm->addField(new class_formentry_textrow("geocode_hint"))->setStrValue($this->getLang("maps_geocode_hint"));
+        $objForm->addField(new FormentryButton("", "geocode_button"))->setStrLabel($this->getLang("maps_geocode_button"))->setStrEventhandler("onclick=\"lookupAddress(); return false;\"");
+        $objForm->addField(new FormentryTextrow("geocode_hint"))->setStrValue($this->getLang("maps_geocode_hint"));
 
         $objForm->setFieldToPosition("geocode_button", 2);
         $objForm->setFieldToPosition("geocode_hint", 2);
@@ -108,7 +109,7 @@ class ElementMapsAdmin extends ElementAdmin implements AdminElementInterface {
 	    <script type=\"text/javascript\">
 			var map;
 			var infoWindow;
-			var startPos = new google.maps.LatLng('".$floatLat."', '".$floatLng."');
+			var startPos = new google.maps.LatLng('" . $floatLat . "', '" . $floatLng . "');
 			var geocoder = new google.maps.Geocoder();
 
 			var mapOptions = {
@@ -165,13 +166,13 @@ class ElementMapsAdmin extends ElementAdmin implements AdminElementInterface {
 					   infoWindow.setPosition(pos);
 					   document.getElementById('char2').value = pos.toUrlValue();
 					} else {
-					   alert('".addslashes($this->getLang("maps_geocode_error"))."'.replace('{error}', status));
+					   alert('" . addslashes($this->getLang("maps_geocode_error")) . "'.replace('{error}', status));
 					}
 			    });
 			}
         </script>";
 
-        $objForm->addField(new class_formentry_plaintext("js"))->setStrValue($strJs);
+        $objForm->addField(new FormentryPlaintext("js"))->setStrValue($strJs);
 
         return $objForm;
     }
@@ -180,56 +181,64 @@ class ElementMapsAdmin extends ElementAdmin implements AdminElementInterface {
      * @param $strText
      *
      */
-    public function setStrText($strText) {
+    public function setStrText($strText)
+    {
         $this->strText = $strText;
     }
 
     /**
      * @return string
      */
-    public function getStrText() {
+    public function getStrText()
+    {
         return $this->strText;
     }
 
     /**
      * @param string $strChar3
      */
-    public function setStrChar3($strChar3) {
+    public function setStrChar3($strChar3)
+    {
         $this->strChar3 = $strChar3;
     }
 
     /**
      * @return string
      */
-    public function getStrChar3() {
+    public function getStrChar3()
+    {
         return $this->strChar3;
     }
 
     /**
      * @param string $strChar2
      */
-    public function setStrChar2($strChar2) {
+    public function setStrChar2($strChar2)
+    {
         $this->strChar2 = $strChar2;
     }
 
     /**
      * @return string
      */
-    public function getStrChar2() {
+    public function getStrChar2()
+    {
         return $this->strChar2;
     }
 
     /**
      * @param string $strChar1
      */
-    public function setStrChar1($strChar1) {
+    public function setStrChar1($strChar1)
+    {
         $this->strChar1 = $strChar1;
     }
 
     /**
      * @return string
      */
-    public function getStrChar1() {
+    public function getStrChar1()
+    {
         return $this->strChar1;
     }
 
