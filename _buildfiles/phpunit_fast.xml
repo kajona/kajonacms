@@ -4,6 +4,7 @@
     convertErrorsToExceptions="true"
     convertNoticesToExceptions="true"
     convertWarningsToExceptions="true"
+    bootstrap="buildproject/core/module_system/bootstrap.php"
 >
     <testsuites>
         <testsuite name="AllTests">
