@@ -1,7 +1,9 @@
 <?php
 
 namespace Kajona\System\Tests;
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "../../../core/module_system/system/Testbase.php";
+
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Date;
 use Kajona\System\System\Testbase;
@@ -9,12 +11,14 @@ use Kajona\System\System\Testbase;
 /**
  * Class class_test_functions
  */
-class FunctionsTest extends Testbase  {
+class FunctionsTest extends Testbase
+{
 
     /**
      * @return void
      */
-    public function testReplaceTextLinks() {
+    public function testReplaceTextLinks()
+    {
         /**
          * @todo: white-space handling is still messed up
          */
@@ -40,10 +44,11 @@ class FunctionsTest extends Testbase  {
     /**
      * @return void
      */
-    public function testDateToString() {
+    public function testDateToString()
+    {
 
         Carrier::getInstance()->getObjLang()->setStrTextLanguage("de");
-        if(Carrier::getInstance()->getObjLang()->getLang("dateStyleShort", "system") != "d.m.Y") {
+        if (Carrier::getInstance()->getObjLang()->getLang("dateStyleShort", "system") != "d.m.Y") {
             return;
         }
 
@@ -65,9 +70,8 @@ class FunctionsTest extends Testbase  {
         $this->assertEquals("", dateToString("asdfsfdsfdsfds"));
 
 
-
         Carrier::getInstance()->getObjLang()->setStrTextLanguage("en");
-        if(Carrier::getInstance()->getObjLang()->getLang("dateStyleShort", "system") != "m/d/Y") {
+        if (Carrier::getInstance()->getObjLang()->getLang("dateStyleShort", "system") != "m/d/Y") {
             return;
         }
 
@@ -85,7 +89,8 @@ class FunctionsTest extends Testbase  {
     }
 
 
-    public function testValidateSystemid() {
+    public function testValidateSystemid()
+    {
         $this->assertTrue(validateSystemid("12345678901234567890"));
         $this->assertTrue(validateSystemid("abcdefghijklmnopqrst"));
 
@@ -108,25 +113,26 @@ class FunctionsTest extends Testbase  {
         $this->assertTrue(!validateSystemid("abcdefghij lmnopqrst"));
     }
 
-    public function testSysIdValidationPerformanceTest() {
+    public function testSysIdValidationPerformanceTest()
+    {
 
         $strTest = "1234567890AbCdEfghij";
 
 
         $intStart = microtime(true);
-        for($intI = 0; $intI < 10000; $intI++) {
+        for ($intI = 0; $intI < 10000; $intI++) {
             $this->assertTrue(strlen($strTest) == 20 && preg_match("/([a-z|A-a|0-9]){20}/", $strTest));
         }
         $intEnd = microtime(true);
-        echo "preg based : ".($intEnd-$intStart)." sec\n";
+        echo "preg based : " . ($intEnd - $intStart) . " sec\n";
 
         $intStart = microtime(true);
 
-        for($intI = 0; $intI < 10000; $intI++) {
+        for ($intI = 0; $intI < 10000; $intI++) {
             $this->assertTrue(strlen($strTest) == 20 && ctype_alnum($strTest));
         }
         $intEnd = microtime(true);
-        echo "ctype based : ".($intEnd-$intStart)." sec\n";
+        echo "ctype based : " . ($intEnd - $intStart) . " sec\n";
     }
 }
 

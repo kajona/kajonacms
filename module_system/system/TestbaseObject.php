@@ -35,7 +35,7 @@ abstract class TestbaseObject extends Testbase
 
         $strFile = $this->getFixtureFile();
         if (!is_file($strFile)) {
-            throw new RuntimeException('Could not find fixture file '.$strFile);
+            throw new RuntimeException('Could not find fixture file ' . $strFile);
         }
 
         $objDom = new DOMDocument();
@@ -95,7 +95,7 @@ abstract class TestbaseObject extends Testbase
 
             //if it is a user also delete the user from the database completeley
             if ($objOneModel instanceof UserUser) {
-                $strQuery = "DELETE FROM "._dbprefix_."user WHERE user_id=?";
+                $strQuery = "DELETE FROM " . _dbprefix_ . "user WHERE user_id=?";
                 //call other models that may be interested
                 $bitDelete = Database::getInstance()->_pQuery($strQuery, array($strSystemId));
             }
@@ -166,13 +166,12 @@ abstract class TestbaseObject extends Testbase
 
         $strClassName = $objElement->getAttribute('class');
         if (empty($strClassName)) {
-            throw new RuntimeException('No class name given for object "'.$strName.'" ('.$objElement->getNodePath().')');
+            throw new RuntimeException('No class name given for object "' . $strName . '" (' . $objElement->getNodePath() . ')');
         }
 
         if ($strClassName == "class_module_user_user") {
             $objObject = $this->createFixtureUser($objElement, $objParent, $strClassName, $arrParameters, $strName);
-        }
-        else {
+        } else {
             $objObject = $this->createFixtureObject($objElement, $objParent, $strClassName, $arrParameters, $strName);
         }
 
@@ -225,20 +224,17 @@ abstract class TestbaseObject extends Testbase
                     $objRef = $this->getObject($strRefKey);
                     if ($objRef instanceof Model) {
                         $arrParameters[$strKey][] = $objRef;
-                    }
-                    else {
-                        throw new RuntimeException('Object "'.$strName.'" refers to an non existing object ('.$objElement->getNodePath().')');
+                    } else {
+                        throw new RuntimeException('Object "' . $strName . '" refers to an non existing object (' . $objElement->getNodePath() . ')');
                     }
                 }
-            }
-            elseif (substr($strValue, 0, 4) == 'ref:') {
+            } elseif (substr($strValue, 0, 4) == 'ref:') {
                 $strRef = trim(substr($strValue, 4));
                 $objRef = $this->getObject($strRef);
                 if ($objRef instanceof Model) {
                     $arrParameters[$strKey] = $objRef->getStrSystemid();
-                }
-                else {
-                    throw new RuntimeException('Object "'.$strName.'" refers to an non existing object ('.$objElement->getNodePath().')');
+                } else {
+                    throw new RuntimeException('Object "' . $strName . '" refers to an non existing object (' . $objElement->getNodePath() . ')');
                 }
             }
         }
@@ -270,8 +266,8 @@ abstract class TestbaseObject extends Testbase
         $objSourceUser = $objUser->getObjSourceUser();
         $objSourceUser->setStrPass($strUserName);
         $objSourceUser->setStrEmail("{$strUserName}@example");
-        $objSourceUser->setStrForename($strUserName."_Forname");
-        $objSourceUser->setStrName($strUserName."Lastname");
+        $objSourceUser->setStrForename($strUserName . "_Forname");
+        $objSourceUser->setStrName($strUserName . "Lastname");
         $objSourceUser->updateObjectToDb();
 
         return $objUser;

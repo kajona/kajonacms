@@ -1,11 +1,8 @@
 <?php
 namespace Kajona\Packageserver\Tests;
 
-use class_filesystem;
-use class_module_mediamanager_file;
-use class_module_mediamanager_repo;
-use class_module_system_module;
-use class_testbase;
+require_once __DIR__ . "../../../core/module_system/system/Testbase.php";
+
 use FilesystemIterator;
 use Kajona\Mediamanager\System\MediamanagerFile;
 use Kajona\Mediamanager\System\MediamanagerRepo;
@@ -14,32 +11,33 @@ use Kajona\System\System\Filesystem;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\Testbase;
 use Phar;
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
-class PackageserverTest extends Testbase  {
+
+class PackageserverTest extends Testbase
+{
 
 
-    public function testJsonList() {
+    public function testJsonList()
+    {
 
         $objFilesystem = new Filesystem();
 
         $objFilesystem->folderCreate("/files/packageservertest");
         $objFilesystem->folderCreate("/files/packageservertest/t");
 
-        file_put_contents(_realpath_."/files/packageservertest/t/metadata.xml", $this->getStrMetadata());
+        file_put_contents(_realpath_ . "/files/packageservertest/t/metadata.xml", $this->getStrMetadata());
         $objFilesystem->folderCreate("/files/packageservertest/t/system");
-        file_put_contents(_realpath_."/files/packageservertest/t/system/test.txt", $this->getStrMetadata());
-
+        file_put_contents(_realpath_ . "/files/packageservertest/t/system/test.txt", $this->getStrMetadata());
 
 
         $objPhar = new Phar(
-            _realpath_."/files/packageservertest/autotest.phar",
+            _realpath_ . "/files/packageservertest/autotest.phar",
             FilesystemIterator::CURRENT_AS_FILEINFO | FilesystemIterator::KEY_AS_FILENAME,
             "autotest.phar"
         );
-        $objPhar->buildFromDirectory(_realpath_."/files/packageservertest/t");
+        $objPhar->buildFromDirectory(_realpath_ . "/files/packageservertest/t");
         $objPhar->setStub($objPhar->createDefaultStub());
 
-        $this->assertFileExists(_realpath_."/files/packageservertest/autotest.phar");
+        $this->assertFileExists(_realpath_ . "/files/packageservertest/autotest.phar");
 
         $objFilesystem->folderDeleteRecursive("/files/packageservertest/t");
 
@@ -77,20 +75,17 @@ class PackageserverTest extends Testbase  {
         $this->assertEquals("MODULE", $arrItem["type"]);
 
 
-
         unset($objPhar);
         $objMediamanagerRepo->deleteObjectFromDatabase();
-        Phar::unlinkArchive(_realpath_."/files/packageservertest/autotest.phar");
+        Phar::unlinkArchive(_realpath_ . "/files/packageservertest/autotest.phar");
 
-        $this->assertFileNotExists(_realpath_."/files/packageservertest/autotest.phar");
+        $this->assertFileNotExists(_realpath_ . "/files/packageservertest/autotest.phar");
 
     }
 
 
-
-
-
-    private function getStrMetadata() {
+    private function getStrMetadata()
+    {
         return <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <package>

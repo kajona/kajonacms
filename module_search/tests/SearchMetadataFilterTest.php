@@ -1,7 +1,9 @@
 <?php
 
 namespace Kajona\Search\Tests;
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "../../../core/module_system/system/Testbase.php";
+
 use Kajona\Search\System\SearchDocument;
 use Kajona\Search\System\SearchIndexwriter;
 use Kajona\Search\System\SearchMetadataFilter;
@@ -12,7 +14,8 @@ use Kajona\System\System\Carrier;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Testbase;
 
-class SearchMetadataFilterTest extends Testbase {
+class SearchMetadataFilterTest extends Testbase
+{
 
     private static $arrObjectIds = array();
 
@@ -21,7 +24,8 @@ class SearchMetadataFilterTest extends Testbase {
     private static $objTimestamp3 = null;
 
 
-    protected function setUp() {
+    protected function setUp()
+    {
 
         self::$objTimestamp1 = new \Kajona\System\System\Date();
         $objObject = $this->createObject("Kajona\\System\\System\\SystemAspect", "");
@@ -67,22 +71,25 @@ class SearchMetadataFilterTest extends Testbase {
         parent::setUp();
     }
 
-    protected function tearDown() {
+    protected function tearDown()
+    {
         //since the test cleared the index, we want a fresh index again :)
         $objSearchIndexWriter = new SearchIndexwriter();
         $objSearchIndexWriter->indexRebuild();
 
-        foreach(self::$arrObjectIds as $intKey => $strId) {
+        foreach (self::$arrObjectIds as $intKey => $strId) {
             $objObject = Objectfactory::getInstance()->getObject($strId);
-            if($objObject !== null)
+            if ($objObject !== null) {
                 $objObject->deleteObjectFromDatabase();
+            }
 
             unset(self::$arrObjectIds[$intKey]);
         }
     }
 
 
-    public function testTermQuery() {
+    public function testTermQuery()
+    {
 
         //simple module filter
         $objSearchTerm = new SearchTerm("blub");
@@ -142,7 +149,8 @@ class SearchMetadataFilterTest extends Testbase {
     }
 
 
-    public function testClassFilter() {
+    public function testClassFilter()
+    {
         //simple module filter
         $objSearchTerm = new SearchTerm("blub");
         $objSearchQuery = new SearchTermQuery($objSearchTerm);
@@ -163,7 +171,8 @@ class SearchMetadataFilterTest extends Testbase {
     }
 
 
-    private function getResultsFromQuery(SearchQueryInterface $objSearchQuery) {
+    private function getResultsFromQuery(SearchQueryInterface $objSearchQuery)
+    {
         $arrParameters = array();
         $objSearchQuery->getListQuery($strQuery, $arrParameters);
         return Carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParameters);

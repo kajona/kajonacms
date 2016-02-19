@@ -1,16 +1,20 @@
 <?php
 
 namespace Kajona\System\Tests;
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "../../../core/module_system/system/Testbase.php";
+
 use Kajona\System\System\Classloader;
 use Kajona\System\System\Pluginmanager;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\Testbase;
 
-class PluginmanagerTest extends Testbase  {
+class PluginmanagerTest extends Testbase
+{
 
 
-    protected function setUp() {
+    protected function setUp()
+    {
 
         $strClass = <<<PHP
 <?php
@@ -67,12 +71,12 @@ PHP;
 
 PHP;
 
-        echo "Saving testfiles to ".Resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/system/PluginmanagerTestModel.php\n";
-        echo "Saving testfiles to ".Resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/system/PluginmanagerTestModel2.php\n";
-        echo "Saving testfiles to ".Resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/system/PluginmanagerTestModel3.php\n";
-        file_put_contents(Resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/system/PluginmanagerTestModel.php", $strClass);
-        file_put_contents(Resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/system/PluginmanagerTestModel2.php", $strClass2);
-        file_put_contents(Resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/system/PluginmanagerTestModel3.php", $strClass3);
+        echo "Saving testfiles to " . Resourceloader::getInstance()->getCorePathForModule("module_system", true) . "/module_system/system/PluginmanagerTestModel.php\n";
+        echo "Saving testfiles to " . Resourceloader::getInstance()->getCorePathForModule("module_system", true) . "/module_system/system/PluginmanagerTestModel2.php\n";
+        echo "Saving testfiles to " . Resourceloader::getInstance()->getCorePathForModule("module_system", true) . "/module_system/system/PluginmanagerTestModel3.php\n";
+        file_put_contents(Resourceloader::getInstance()->getCorePathForModule("module_system", true) . "/module_system/system/PluginmanagerTestModel.php", $strClass);
+        file_put_contents(Resourceloader::getInstance()->getCorePathForModule("module_system", true) . "/module_system/system/PluginmanagerTestModel2.php", $strClass2);
+        file_put_contents(Resourceloader::getInstance()->getCorePathForModule("module_system", true) . "/module_system/system/PluginmanagerTestModel3.php", $strClass3);
 
         Classloader::getInstance()->flushCache();
 
@@ -82,7 +86,8 @@ PHP;
     }
 
 
-    public function testSearching() {
+    public function testSearching()
+    {
         $objManager = new Pluginmanager("core.pluginmanager.test");
 
         $arrInstances = $objManager->getPlugins();
@@ -106,7 +111,8 @@ PHP;
         $this->assertEquals($objInstance->arg2, 2);
     }
 
-    public function testNegativeSearch() {
+    public function testNegativeSearch()
+    {
         $objManager = new Pluginmanager("core.pluginmanager.nonexisting");
 
         $arrInstances = $objManager->getPlugins();
@@ -115,11 +121,12 @@ PHP;
     }
 
 
-    protected function tearDown() {
+    protected function tearDown()
+    {
 
-        unlink(Resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/system/PluginmanagerTestModel.php");
-        unlink(Resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/system/PluginmanagerTestModel2.php");
-        unlink(Resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/system/PluginmanagerTestModel3.php");
+        unlink(Resourceloader::getInstance()->getCorePathForModule("module_system", true) . "/module_system/system/PluginmanagerTestModel.php");
+        unlink(Resourceloader::getInstance()->getCorePathForModule("module_system", true) . "/module_system/system/PluginmanagerTestModel2.php");
+        unlink(Resourceloader::getInstance()->getCorePathForModule("module_system", true) . "/module_system/system/PluginmanagerTestModel3.php");
 
         Classloader::getInstance()->flushCache();
 

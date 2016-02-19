@@ -1,9 +1,10 @@
 <?php
 
 namespace Kajona\System\Tests;
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
 
-use interface_todo_provider;
+require_once __DIR__ . "../../../core/module_system/system/Testbase.php";
+
+use Kajona\Dashboard\System\TodoProviderInterface;
 use Kajona\System\System\Pluginmanager;
 use Kajona\System\System\Testbase;
 
@@ -11,7 +12,7 @@ class TodoProviderTest extends Testbase
 {
     public function testProvider()
     {
-        $objPluginManager = new Pluginmanager(interface_todo_provider::EXTENSION_POINT);
+        $objPluginManager = new Pluginmanager(TodoProviderInterface::EXTENSION_POINT);
         $arrPlugins = $objPluginManager->getPlugins();
         $arrNames = array();
 
@@ -20,7 +21,7 @@ class TodoProviderTest extends Testbase
             $arrCategories = $objPlugin->getCategories();
             $arrNames[] = $objPlugin->getName();
 
-            $this->assertInstanceOf('interface_todo_provider', $objPlugin);
+            $this->assertInstanceOf("Kajona\\Dashboard\\System\\TodoProviderInterface", $objPlugin);
             $this->assertTrue($objPlugin->getName() != "");
             $this->assertTrue(is_array($arrCategories));
 

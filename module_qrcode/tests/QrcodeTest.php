@@ -1,5 +1,10 @@
 <?php
 
+namespace Kajona\Qrcode\Tests;
+
+require_once __DIR__ . "../../../core/module_system/system/Testbase.php";
+
+use Kajona\Qrcode\System\Qrcode;
 use Kajona\System\System\Testbase;
 
 class QrcodeTest extends Testbase
@@ -10,7 +15,7 @@ class QrcodeTest extends Testbase
 
         echo "test qrcode...\n";
 
-        $objQrCode = new class_qrcode();
+        $objQrCode = new Qrcode();
 
         $strImage1 = $objQrCode->getImageForString("Kajona Test Image");
         $this->assertFileExists(_realpath_ . $strImage1);

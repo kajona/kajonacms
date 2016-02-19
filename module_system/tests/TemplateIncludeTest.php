@@ -1,8 +1,8 @@
 <?php
 
 namespace Kajona\System\Tests;
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
 
+require_once __DIR__ . "../../../core/module_system/system/Testbase.php";
 
 use Kajona\System\System\Filesystem;
 use Kajona\System\System\TemplateFileParser;
@@ -17,19 +17,18 @@ class TemplateIncludeTest extends Testbase
         $objFilesystem = new Filesystem();
         $objFilesystem->folderCreate("/templates/default/tpl/test", true);
 
-        file_put_contents(_realpath_."/templates/default/tpl/test/test1.tpl", "
+        file_put_contents(_realpath_ . "/templates/default/tpl/test/test1.tpl", "
             page template
 
             [KajonaTemplateInclude,/test/test2.tpl]
         ");
 
-        $this->assertFileExists(_realpath_."/templates/default/tpl/test/test1.tpl");
+        $this->assertFileExists(_realpath_ . "/templates/default/tpl/test/test1.tpl");
 
 
+        file_put_contents(_realpath_ . "/templates/default/tpl/test/test2.tpl", "template 2");
 
-        file_put_contents(_realpath_."/templates/default/tpl/test/test2.tpl", "template 2");
-
-        $this->assertFileExists(_realpath_."/templates/default/tpl/test/test2.tpl");
+        $this->assertFileExists(_realpath_ . "/templates/default/tpl/test/test2.tpl");
 
 
         $objParser = new TemplateFileParser();

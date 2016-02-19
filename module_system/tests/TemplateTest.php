@@ -1,7 +1,8 @@
 <?php
 
 namespace Kajona\System\Tests;
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "../../../core/module_system/system/Testbase.php";
 
 use Kajona\System\System\Template;
 use Kajona\System\System\Testbase;
@@ -11,9 +12,11 @@ use Kajona\System\System\Testbase;
  * @todo add test to parse the attributes themselves
  *
  */
-class TemplateTest extends Testbase  {
+class TemplateTest extends Testbase
+{
 
-    public function testBasicSectionParser() {
+    public function testBasicSectionParser()
+    {
         $strTemplate = <<<HTML
 
         <list>
@@ -47,7 +50,8 @@ HTML;
         $this->assertEquals("<content>test</content> test", $strFilled);
     }
 
-    public function testEmptySectionParser() {
+    public function testEmptySectionParser()
+    {
         $strTemplate = <<<HTML
 
         <list1></list1>
@@ -79,7 +83,8 @@ HTML;
     }
 
 
-    public function testFillCurrentTemplate() {
+    public function testFillCurrentTemplate()
+    {
         $strTemplate = <<<HTML
             test %%ende%%
 HTML;
@@ -91,7 +96,8 @@ HTML;
     }
 
 
-    public function testSectionWithAttributesParser() {
+    public function testSectionWithAttributesParser()
+    {
         $strTemplate = <<<HTML
 
         <list attribute1="value1" attribute2="value2">
@@ -123,7 +129,8 @@ HTML;
     }
 
 
-    public function testRemoveSection() {
+    public function testRemoveSection()
+    {
         $strTemplate1 = <<<HTML
 a
 <list attribute1="value1" attribute2="value2">
@@ -154,17 +161,17 @@ HTML;
 
         $objTemplate = Template::getInstance();
         $this->assertEquals(
-"a
+            "a
 
 b", $objTemplate->removeSection($strTemplate1, "list"));
 
         $this->assertEquals(
-"a
+            "a
 
 b", $objTemplate->removeSection($strTemplate2, "list"));
 
-    $this->assertEquals(
-"a
+        $this->assertEquals(
+            "a
 
 b
 
@@ -174,8 +181,8 @@ c", $objTemplate->removeSection($strTemplate3, "list"));
     }
 
 
-
-    public function testGetElements() {
+    public function testGetElements()
+    {
         $strTemplate = <<<HTML
 
         <list attribute1="value1" attribute2="value2">

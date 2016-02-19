@@ -1,14 +1,18 @@
 <?php
 
 namespace Kajona\System\Tests;
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "../../../core/module_system/system/Testbase.php";
+
 use Kajona\System\System\Lang;
 use Kajona\System\System\Testbase;
 
-class LangTest extends Testbase  {
+class LangTest extends Testbase
+{
 
 
-    public function testStringToPlaceholder() {
+    public function testStringToPlaceholder()
+    {
 
         $objLang = Lang::getInstance();
 
@@ -17,7 +21,8 @@ class LangTest extends Testbase  {
     }
 
 
-    public function testStringParameters() {
+    public function testStringParameters()
+    {
         $objLang = Lang::getInstance();
 
         $this->assertEquals($objLang->replaceParams("lorem {0} dolor {1} amet", array("ipsum", "sit")), "lorem ipsum dolor sit amet");
@@ -28,9 +33,8 @@ class LangTest extends Testbase  {
     }
 
 
-
-
-    public function testPerformanceTest() {
+    public function testPerformanceTest()
+    {
 
         $objLang = Lang::getInstance();
 
@@ -38,46 +42,50 @@ class LangTest extends Testbase  {
         $strPropertyRaw = "lorem {0} ipsum {1} dolor {2} sit {3} amet {4} {0}";
 
         $intStart = microtime(true);
-        for($intI = 0; $intI <= 100; $intI++) {
+        for ($intI = 0; $intI <= 100; $intI++) {
             $strProperty = $strPropertyRaw;
-            foreach($arrParameters as $intKey => $strParameter) {
-                $strProperty = uniStrReplace("{".$intKey."}", $strParameter, $strProperty);
+            foreach ($arrParameters as $intKey => $strParameter) {
+                $strProperty = uniStrReplace("{" . $intKey . "}", $strParameter, $strProperty);
             }
             $this->assertEquals($strProperty, "lorem lorem ipsum ipsum dolor dolor sit sit amet amet lorem");
         }
         $intEnd = microtime(true);
 
-        echo "uniStrReplace: ".($intEnd-$intStart)." sec\n";
+        echo "uniStrReplace: " . ($intEnd - $intStart) . " sec\n";
 
 
         $intStart = microtime(true);
-        for($intI = 0; $intI <= 100; $intI++) {
-            $strProperty = uniStrReplace(array_map(function($i) {return "{".$i."}";}, array_keys($arrParameters)), $arrParameters, $strPropertyRaw);
+        for ($intI = 0; $intI <= 100; $intI++) {
+            $strProperty = uniStrReplace(array_map(function ($i) {
+                return "{" . $i . "}";
+            }, array_keys($arrParameters)), $arrParameters, $strPropertyRaw);
             $this->assertEquals($strProperty, "lorem lorem ipsum ipsum dolor dolor sit sit amet amet lorem");
         }
         $intEnd = microtime(true);
 
-        echo "array based uniStrReplace: ".($intEnd-$intStart)." sec\n";
+        echo "array based uniStrReplace: " . ($intEnd - $intStart) . " sec\n";
 
 
         $intStart = microtime(true);
-        for($intI = 0; $intI <= 100; $intI++) {
-            $strProperty = preg_replace_callback("/{(\d)}/", function($hit) use ($arrParameters) { return $arrParameters[$hit[1]]; } , $strPropertyRaw);
+        for ($intI = 0; $intI <= 100; $intI++) {
+            $strProperty = preg_replace_callback("/{(\d)}/", function ($hit) use ($arrParameters) {
+                return $arrParameters[$hit[1]];
+            }, $strPropertyRaw);
             $this->assertEquals($strProperty, "lorem lorem ipsum ipsum dolor dolor sit sit amet amet lorem");
         }
         $intEnd = microtime(true);
 
-        echo "preg_replace based : ".($intEnd-$intStart)." sec\n";
+        echo "preg_replace based : " . ($intEnd - $intStart) . " sec\n";
 
 
         $intStart = microtime(true);
-        for($intI = 0; $intI <= 100; $intI++) {
+        for ($intI = 0; $intI <= 100; $intI++) {
             $strProperty = $objLang->replaceParams($strPropertyRaw, $arrParameters);
             $this->assertEquals($strProperty, "lorem lorem ipsum ipsum dolor dolor sit sit amet amet lorem");
         }
         $intEnd = microtime(true);
 
-        echo "current implementation : ".($intEnd-$intStart)." sec\n";
+        echo "current implementation : " . ($intEnd - $intStart) . " sec\n";
 
     }
 }

@@ -1,7 +1,9 @@
 <?php
 
 namespace Kajona\System\Tests;
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "../../../core/module_system/system/Testbase.php";
+
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Rights;
@@ -10,20 +12,23 @@ use Kajona\System\System\Testbase;
 use Kajona\System\System\UserGroup;
 use Kajona\System\System\UserUser;
 
-class ObjectRightsTest extends Testbase {
+class ObjectRightsTest extends Testbase
+{
 
     /**
      * @var Rights
      */
-    private $objRights ;
+    private $objRights;
     private $strUserId;
 
 
-    public function testInheritanceForObjects() {
+    public function testInheritanceForObjects()
+    {
 
 
-        if(SystemModule::getModuleByName("pages") === null)
+        if (SystemModule::getModuleByName("pages") === null) {
             return;
+        }
 
         echo "\tRIGHTS INHERITANCE...\n";
         $objRights = Carrier::getInstance()->getObjRights();
@@ -33,18 +38,18 @@ class ObjectRightsTest extends Testbase {
         //create a new user & group to be used during testing
         echo "\tcreating a test user\n";
         $objUser = new UserUser();
-        $strUsername = "user_".generateSystemid();
+        $strUsername = "user_" . generateSystemid();
         $objUser->setStrUsername($strUsername);
         $objUser->updateObjectToDb();
-        echo "\tid of user: ".$objUser->getSystemid()."\n";
+        echo "\tid of user: " . $objUser->getSystemid() . "\n";
         $this->strUserId = $objUser->getSystemid();
 
         echo "\tcreating a test group\n";
         $objGroup = new UserGroup();
-        $strName = "name_".generateSystemid();
+        $strName = "name_" . generateSystemid();
         $objGroup->setStrName($strName);
         $objGroup->updateObjectToDb();
-        echo "\tid of group: ".$objGroup->getSystemid()."\n";
+        echo "\tid of group: " . $objGroup->getSystemid() . "\n";
 
         echo "\tadding user to group\n";
         $objGroup->getObjSourceGroup()->addMember($objUser->getObjSourceUser());
@@ -55,7 +60,7 @@ class ObjectRightsTest extends Testbase {
 
         echo "\tcreating node-tree\n";
         $strRootId = $this->createObject("class_module_pages_page", $strModuleId)->getSystemid();
-        echo "\tid of root-node: ".$strRootId."\n";
+        echo "\tid of root-node: " . $strRootId . "\n";
         echo "\tcreating child nodes...\n";
         $strSecOne = $this->createObject("class_module_pages_page", $strRootId)->getSystemid();
         $strSecTwo = $this->createObject("class_module_pages_page", $strRootId)->getSystemid();
@@ -77,7 +82,7 @@ class ObjectRightsTest extends Testbase {
 
 
         echo "\tchecking leaf nodes for initial rights\n";
-        foreach($arrThirdLevelNodes as $strOneRootNode) {
+        foreach ($arrThirdLevelNodes as $strOneRootNode) {
             $this->checkNodeRights($strOneRootNode, false, false);
         }
 
@@ -87,7 +92,7 @@ class ObjectRightsTest extends Testbase {
 
 
         echo "\tchecking leaf nodes for inherited rights\n";
-        foreach($arrThirdLevelNodes as $strOneRootNode) {
+        foreach ($arrThirdLevelNodes as $strOneRootNode) {
             $this->checkNodeRights($strOneRootNode, true, true);
         }
 
@@ -110,7 +115,6 @@ class ObjectRightsTest extends Testbase {
         $this->checkNodeRights($strThird212, false, true);
         $this->checkNodeRights($strThird221, false, true);
         $this->checkNodeRights($strThird222, false, true);
-
 
 
         echo "\tmove SecOne as child to 221\n";
@@ -136,7 +140,6 @@ class ObjectRightsTest extends Testbase {
         $this->checkNodeRights($strThird222, false, true);
 
 
-
         echo "\tsetting rights of third21 to only view\n";
         $objRights->removeGroupFromRight($objGroup->getSystemid(), $strThirdTwo1, "edit");
         $objRights->addGroupToRight($objGroup->getSystemid(), $strThirdTwo1, "view");
@@ -156,7 +159,6 @@ class ObjectRightsTest extends Testbase {
         $this->checkNodeRights($strThird212, true);
         $this->checkNodeRights($strThird221, false, true);
         $this->checkNodeRights($strThird222, false, true);
-
 
 
         echo "\tsetting 211 as parent node for third11\n";
@@ -231,9 +233,7 @@ class ObjectRightsTest extends Testbase {
         $this->checkNodeRights($strThird222, true, true);
 
 
-
         echo "\tdeleting systemnodes\n";
-
 
 
         Objectfactory::getInstance()->getObject($strThird111)->deleteObjectFromDatabase();
@@ -262,8 +262,6 @@ class ObjectRightsTest extends Testbase {
     }
 
 
-
-
     private function checkNodeRights(
         $strNodeId,
         $bitView = false,
@@ -275,24 +273,22 @@ class ObjectRightsTest extends Testbase {
         $bitRight3 = false,
         $bitRight4 = false,
         $bitRight5 = false
-    ) {
+    )
+    {
 
         $objTestObject = Objectfactory::getInstance()->getObject($strNodeId);
 
-        $this->assertEquals($bitView,   $this->objRights->rightView($strNodeId, $this->strUserId), __FILE__." checkNodeRights View ".$strNodeId);
-        $this->assertEquals($bitEdit,   $this->objRights->rightEdit($strNodeId, $this->strUserId), __FILE__." checkNodeRights Edit ".$strNodeId);
-        $this->assertEquals($bitDelete, $this->objRights->rightDelete($strNodeId, $this->strUserId), __FILE__." checkNodeRights Delete ".$strNodeId);
-        $this->assertEquals($bitRights, $this->objRights->rightRight($strNodeId, $this->strUserId), __FILE__." checkNodeRights Rights".$strNodeId);
-        $this->assertEquals($bitRight1, $this->objRights->rightRight1($strNodeId, $this->strUserId), __FILE__." checkNodeRights Right1".$strNodeId);
-        $this->assertEquals($bitRight2, $this->objRights->rightRight2($strNodeId, $this->strUserId), __FILE__." checkNodeRights Right2".$strNodeId);
-        $this->assertEquals($bitRight3, $this->objRights->rightRight3($strNodeId, $this->strUserId), __FILE__." checkNodeRights Right3".$strNodeId);
-        $this->assertEquals($bitRight4, $this->objRights->rightRight4($strNodeId, $this->strUserId), __FILE__." checkNodeRights Right4".$strNodeId);
-        $this->assertEquals($bitRight5, $this->objRights->rightRight5($strNodeId, $this->strUserId), __FILE__." checkNodeRights Right5".$strNodeId);
+        $this->assertEquals($bitView, $this->objRights->rightView($strNodeId, $this->strUserId), __FILE__ . " checkNodeRights View " . $strNodeId);
+        $this->assertEquals($bitEdit, $this->objRights->rightEdit($strNodeId, $this->strUserId), __FILE__ . " checkNodeRights Edit " . $strNodeId);
+        $this->assertEquals($bitDelete, $this->objRights->rightDelete($strNodeId, $this->strUserId), __FILE__ . " checkNodeRights Delete " . $strNodeId);
+        $this->assertEquals($bitRights, $this->objRights->rightRight($strNodeId, $this->strUserId), __FILE__ . " checkNodeRights Rights" . $strNodeId);
+        $this->assertEquals($bitRight1, $this->objRights->rightRight1($strNodeId, $this->strUserId), __FILE__ . " checkNodeRights Right1" . $strNodeId);
+        $this->assertEquals($bitRight2, $this->objRights->rightRight2($strNodeId, $this->strUserId), __FILE__ . " checkNodeRights Right2" . $strNodeId);
+        $this->assertEquals($bitRight3, $this->objRights->rightRight3($strNodeId, $this->strUserId), __FILE__ . " checkNodeRights Right3" . $strNodeId);
+        $this->assertEquals($bitRight4, $this->objRights->rightRight4($strNodeId, $this->strUserId), __FILE__ . " checkNodeRights Right4" . $strNodeId);
+        $this->assertEquals($bitRight5, $this->objRights->rightRight5($strNodeId, $this->strUserId), __FILE__ . " checkNodeRights Right5" . $strNodeId);
 
     }
-
-
-
 
 
 }

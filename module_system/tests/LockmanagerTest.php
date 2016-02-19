@@ -1,7 +1,9 @@
 <?php
 
 namespace Kajona\System\Tests;
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "../../../core/module_system/system/Testbase.php";
+
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Exception;
 use Kajona\System\System\SystemAspect;
@@ -10,11 +12,12 @@ use Kajona\System\System\Testbase;
 use Kajona\System\System\UserGroup;
 use Kajona\System\System\UserUser;
 
-class LockmanagerTest extends Testbase  {
+class LockmanagerTest extends Testbase
+{
 
 
-
-    public function testLocking() {
+    public function testLocking()
+    {
         $objAspect = new SystemAspect();
         $objAspect->setStrName("test");
         $objAspect->updateObjectToDb();
@@ -54,8 +57,8 @@ class LockmanagerTest extends Testbase  {
     }
 
 
-
-    public function testLockBetweenUsers() {
+    public function testLockBetweenUsers()
+    {
         $objAspect = new SystemAspect();
         $objAspect->setStrName("test");
         $objAspect->updateObjectToDb();
@@ -147,8 +150,8 @@ class LockmanagerTest extends Testbase  {
     }
 
 
-
-    public function testLockExceptionOnSort() {
+    public function testLockExceptionOnSort()
+    {
         $objAspect = new SystemAspect();
         $objAspect->setStrName("test");
         $objAspect->updateObjectToDb();
@@ -176,7 +179,7 @@ class LockmanagerTest extends Testbase  {
         $objException = null;
         try {
             $objAspect->setAbsolutePosition(4);
-        } catch(Exception $objEx) {
+        } catch (Exception $objEx) {
             $objException = $objEx;
         }
 

@@ -1,19 +1,23 @@
 <?php
 
 namespace Kajona\System\Tests;
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "../../../core/module_system/system/Testbase.php";
+
 use Kajona\System\System\EnumBase;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Testbase;
 
-class EnumTest extends Testbase  {
+class EnumTest extends Testbase
+{
 
-    public function testEnumValid() {
+    public function testEnumValid()
+    {
 
         $objEnum = TestEnum::a();
 
         $this->assertNotNull($objEnum);
-        $this->assertEquals($objEnum."", "a");
+        $this->assertEquals($objEnum . "", "a");
 
         $this->assertTrue($objEnum->equals(TestEnum::a()));
         $this->assertTrue(!$objEnum->equals(TestEnum::b()));
@@ -23,7 +27,8 @@ class EnumTest extends Testbase  {
     /**
      * @expectedException Exception
      */
-    public function testEnumInvalid() {
+    public function testEnumInvalid()
+    {
         $objEnum = TestEnum::d();
         $this->assertNull($objEnum);
     }
@@ -36,8 +41,10 @@ class EnumTest extends Testbase  {
  * @method static TestEnum b()
  * @method static TestEnum c()
  */
-class TestEnum extends EnumBase {
-    protected function getArrValues() {
+class TestEnum extends EnumBase
+{
+    protected function getArrValues()
+    {
         return array("a", "b", "c");
     }
 }

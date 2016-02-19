@@ -1,7 +1,9 @@
 <?php
 
 namespace Kajona\System\Tests;
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
+
+require_once __DIR__ . "../../../core/module_system/system/Testbase.php";
+
 use Kajona\System\System\Messageproviders\MessageproviderExceptions;
 use Kajona\System\System\MessagingMessage;
 use Kajona\System\System\MessagingMessagehandler;
@@ -9,14 +11,16 @@ use Kajona\System\System\SystemSetting;
 use Kajona\System\System\Testbase;
 use Kajona\System\System\UserGroup;
 
-class MessagingTest extends Testbase  {
+class MessagingTest extends Testbase
+{
 
 
-    public function testSendMessage() {
+    public function testSendMessage()
+    {
 
-        $strText = generateSystemid()." autotest";
-        $strTitle = generateSystemid()." title";
-        $strIdentifier = generateSystemid()." identifier";
+        $strText = generateSystemid() . " autotest";
+        $strTitle = generateSystemid() . " title";
+        $strIdentifier = generateSystemid() . " identifier";
 
         $objMessageHandler = new MessagingMessagehandler();
         $objMessageHandler->sendMessage($strText, new UserGroup(SystemSetting::getConfigValue("_admins_group_id_")), new MessageproviderExceptions(), $strIdentifier, $strTitle);
@@ -28,8 +32,8 @@ class MessagingTest extends Testbase  {
 
         $arrMessages = MessagingMessage::getObjectList($arrUsers[0]);
 
-        foreach($arrMessages as $objOneMessage) {
-            if($objOneMessage->getStrBody() == $strText && $objOneMessage->getStrMessageProvider() == "Kajona\\System\\System\\Messageproviders\\MessageproviderExceptions") {
+        foreach ($arrMessages as $objOneMessage) {
+            if ($objOneMessage->getStrBody() == $strText && $objOneMessage->getStrMessageProvider() == "Kajona\\System\\System\\Messageproviders\\MessageproviderExceptions") {
                 $bitFound = true;
                 $this->assertEquals($objOneMessage->getStrTitle(), $strTitle);
                 $this->assertEquals($objOneMessage->getStrInternalIdentifier(), $strIdentifier);
@@ -43,12 +47,12 @@ class MessagingTest extends Testbase  {
     }
 
 
+    public function testSendMessageObject()
+    {
 
-    public function testSendMessageObject() {
-
-        $strText = generateSystemid()." autotest";
-        $strTitle = generateSystemid()." title";
-        $strIdentifier = generateSystemid()." identifier";
+        $strText = generateSystemid() . " autotest";
+        $strTitle = generateSystemid() . " title";
+        $strIdentifier = generateSystemid() . " identifier";
         $strSender = generateSystemid();
         $strReference = generateSystemid();
 
@@ -67,12 +71,12 @@ class MessagingTest extends Testbase  {
         $objGroup = new UserGroup(SystemSetting::getConfigValue("_admins_group_id_"));
         $arrUsers = $objGroup->getObjSourceGroup()->getUserIdsForGroup();
 
-        foreach($arrUsers as $objOneUser) {
+        foreach ($arrUsers as $objOneUser) {
             $bitFound = false;
             $arrMessages = MessagingMessage::getObjectList($objOneUser);
 
-            foreach($arrMessages as $objOneMessage) {
-                if($objOneMessage->getStrBody() == $strText && $objOneMessage->getStrMessageProvider() == "Kajona\\System\\System\\Messageproviders\\MessageproviderExceptions") {
+            foreach ($arrMessages as $objOneMessage) {
+                if ($objOneMessage->getStrBody() == $strText && $objOneMessage->getStrMessageProvider() == "Kajona\\System\\System\\Messageproviders\\MessageproviderExceptions") {
                     $bitFound = true;
                     $this->assertEquals($objOneMessage->getStrTitle(), $strTitle);
                     $this->assertEquals($objOneMessage->getStrInternalIdentifier(), $strIdentifier);
@@ -90,8 +94,9 @@ class MessagingTest extends Testbase  {
     }
 
 
-    public function testUnreadCount() {
-        $strText = generateSystemid()." autotest";
+    public function testUnreadCount()
+    {
+        $strText = generateSystemid() . " autotest";
 
         $objMessageHandler = new MessagingMessagehandler();
         $objMessageHandler->sendMessage($strText, new UserGroup(SystemSetting::getConfigValue("_admins_group_id_")), new MessageproviderExceptions());
@@ -108,13 +113,13 @@ class MessagingTest extends Testbase  {
         $this->assertTrue($intUnread > 0);
         $this->flushDBCache();
 
-        foreach($arrMessages as $objOneMessage) {
-            if($objOneMessage->getStrBody() == $strText && $objOneMessage->getStrMessageProvider() == "Kajona\\System\\System\\Messageproviders\\MessageproviderExceptions") {
+        foreach ($arrMessages as $objOneMessage) {
+            if ($objOneMessage->getStrBody() == $strText && $objOneMessage->getStrMessageProvider() == "Kajona\\System\\System\\Messageproviders\\MessageproviderExceptions") {
                 $bitFound = true;
                 $objOneMessage->setBitRead(true);
                 $objOneMessage->updateObjectToDb();
 
-                $this->assertEquals($intUnread-1, MessagingMessage::getNumberOfMessagesForUser($arrUsers[0], true));
+                $this->assertEquals($intUnread - 1, MessagingMessage::getNumberOfMessagesForUser($arrUsers[0], true));
 
 
                 $objOneMessage->deleteObjectFromDatabase();
@@ -125,8 +130,6 @@ class MessagingTest extends Testbase  {
         $this->assertTrue($bitFound);
         $this->flushDBCache();
     }
-
-
 
 
 }
