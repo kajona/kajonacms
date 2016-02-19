@@ -87,24 +87,39 @@ class FormentryDropdown extends FormentryBase implements FormentryPrintableInter
             if($strSourceProperty == null)
                 return;
 
+            //set dd values
             $strDDValues = $objReflection->getAnnotationValueForProperty($strSourceProperty, self::STR_DDVALUES_ANNOTATION);
-            if($strDDValues !== null && $strDDValues != "") {
-                $arrDDValues = array();
-                foreach(explode(",", $strDDValues) as $strOneKeyVal) {
-                    $strOneKeyVal = uniSubstr(trim($strOneKeyVal), 1, -1);
-                    $arrOneKeyValue = explode("=>", $strOneKeyVal);
-
-                    $strKey = trim($arrOneKeyValue[0]) == "" ? " " : trim($arrOneKeyValue[0]);
-                    if(count($arrOneKeyValue) == 2) {
-                        $strValue = Carrier::getInstance()->getObjLang()->getLang(trim($arrOneKeyValue[1]), $this->getObjSourceObject()->getArrModule("modul"));
-                        if($strValue == "!".trim($arrOneKeyValue[1])."!")
-                            $strValue = $arrOneKeyValue[1];
-                        $arrDDValues[$strKey] = $strValue;
-                    }
-                }
+            $arrDDValues = self::convertDDValueStringToArray($strDDValues, $this->getObjSourceObject()->getArrModule("modul"));
+            if($arrDDValues !== null) {
                 $this->setArrKeyValues($arrDDValues);
             }
         }
+    }
+
+    /**
+     * @param $strDDValues
+     * @param $strModule
+     * @return array|null
+     */
+    public static function convertDDValueStringToArray($strDDValues, $strModule) {
+        $arrDDValues = null;
+        if($strDDValues !== null && $strDDValues != "") {
+            $arrDDValues = array();
+            foreach(explode(",", $strDDValues) as $strOneKeyVal) {
+                $strOneKeyVal = uniSubstr(trim($strOneKeyVal), 1, -1);
+                $arrOneKeyValue = explode("=>", $strOneKeyVal);
+
+                $strKey = trim($arrOneKeyValue[0]) == "" ? " " : trim($arrOneKeyValue[0]);
+                if(count($arrOneKeyValue) == 2) {
+                    $strValue = class_carrier::getInstance()->getObjLang()->getLang(trim($arrOneKeyValue[1]), $strModule);
+                    if($strValue == "!".trim($arrOneKeyValue[1])."!")
+                        $strValue = $arrOneKeyValue[1];
+                    $arrDDValues[$strKey] = $strValue;
+                }
+            }
+        }
+
+        return $arrDDValues;
     }
 
     public function validateValue() {
