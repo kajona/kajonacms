@@ -29,7 +29,7 @@ use Kajona\System\System\SystemSetting;
  * @module news
  * @moduleId _news_module_id_
  *
- * @formGenerator NewsFeed_formgenerator
+ * @formGenerator Kajona\News\Admin\NewsFeedFormgenerator
  */
 class NewsFeed extends Model implements ModelInterface, AdminListableInterface {
 

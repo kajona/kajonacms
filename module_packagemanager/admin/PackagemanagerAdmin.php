@@ -546,7 +546,6 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
      *
      * @return string
      * @permissions edit
-     * @autoTestable
      */
     protected function actionAddPackage()
     {

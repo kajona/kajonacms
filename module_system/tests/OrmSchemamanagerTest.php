@@ -38,7 +38,7 @@ class OrmSchemamanagerTest extends Testbase
         $arrTables = $objDb->getTables();
         $this->assertTrue(!in_array(_dbprefix_ . "ormtest", $arrTables));
 
-        $objManager->createTable("orm_schematest_testclass");
+        $objManager->createTable("Kajona\\System\\Tests\\OrmSchematestTestclass");
         Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBTABLES);
 
         $arrTables = $objDb->getTables();
@@ -69,7 +69,7 @@ class OrmSchemamanagerTest extends Testbase
 
         $objEx = null;
         try {
-            $objManager->createTable("orm_schematest_testclass_targettable1");
+            $objManager->createTable("Kajona\\System\\Tests\\OrmSchematestTestclassTargettable1");
         } catch (OrmException $objException) {
             $objEx = $objException;
         }
@@ -84,7 +84,7 @@ class OrmSchemamanagerTest extends Testbase
 
         $objEx = null;
         try {
-            $objManager->createTable("orm_schematest_testclass_targettable2");
+            $objManager->createTable("Kajona\\System\\Tests\\OrmSchematestTestclassTargettable2");
         } catch (OrmException $objException) {
             $objEx = $objException;
         }
@@ -99,7 +99,7 @@ class OrmSchemamanagerTest extends Testbase
 
         $objEx = null;
         try {
-            $objManager->createTable("orm_schematest_testclass_datatype");
+            $objManager->createTable("Kajona\\System\\Tests\\OrmSchematestTestclassDatatype");
         } catch (OrmException $objException) {
             $objEx = $objException;
         }
@@ -114,7 +114,7 @@ class OrmSchemamanagerTest extends Testbase
 
         $objEx = null;
         try {
-            $objManager->createTable("orm_schematest_testclass_tablecolumn");
+            $objManager->createTable("Kajona\\System\\Tests\\OrmSchematestTestclassTablecolumn");
         } catch (OrmException $objException) {
             $objEx = $objException;
         }
@@ -135,7 +135,7 @@ class OrmSchemamanagerTest extends Testbase
         $this->assertTrue(!in_array(_dbprefix_ . "testclass_rel", $arrTables));
         $this->assertTrue(!in_array(_dbprefix_ . "testclass2_rel", $arrTables));
 
-        $objManager->createTable("orm_schematest_testclass_assignments");
+        $objManager->createTable("Kajona\\System\\Tests\\OrmSchematestTestclassAssignments");
         Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBTABLES);
 
         $arrTables = $objDb->getTables();
@@ -168,11 +168,10 @@ class OrmSchemamanagerTest extends Testbase
 }
 
 /**
- * Class orm_schematest_testclass
  *
  * @targetTable ormtest.content_id
  */
-class orm_schematest_testclass
+class OrmSchematestTestclass
 {
 
     /**
@@ -197,11 +196,10 @@ class orm_schematest_testclass
 }
 
 /**
- * Class orm_schematest_testclass
  *
  * @targetTable ormtest.content_id
  */
-class orm_schematest_testclass_datatype
+class OrmSchematestTestclassDatatype
 {
 
     /**
@@ -213,12 +211,11 @@ class orm_schematest_testclass_datatype
 }
 
 /**
- * Class orm_schematest_testclass
  *
  * @targetTable ormtest.content_id
  * @targetTable ormtest2.content_id
  */
-class orm_schematest_testclass_tablecolumn
+class OrmSchematestTestclassTablecolumn
 {
 
     /**
@@ -231,31 +228,28 @@ class orm_schematest_testclass_tablecolumn
 
 
 /**
- * Class orm_schematest_testclass
  *
  */
-class orm_schematest_testclass_targettable1
+class OrmSchematestTestclassTargettable1
 {
 
 
 }
 
 /**
- * Class orm_schematest_testclass
  * @targetTable ormtest
  */
-class orm_schematest_testclass_targettable2
+class OrmSchematestTestclassTargettable2
 {
 
 
 }
 
 /**
- * Class orm_schematest_testclass_assignments
  *
  * @targetTable testclass.testclass_id
  */
-class orm_schematest_testclass_assignments
+class OrmSchematestTestclassAssignments
 {
 
     /**
