@@ -1073,7 +1073,7 @@ class Database
         /** @var $objDbDriver DbDriverInterface */
         $objDbDriver = null;
 
-        $strClassname = "Db_".$strDriver;
+        $strClassname = "Kajona\\System\\System\\Db\\Db".ucfirst($strDriver);
         if (class_exists($strClassname)) {
             $objDbDriver = new $strClassname();
         }
