@@ -1,22 +1,28 @@
 <?php
+namespace Kajona\Pages\Tests;
+
+use Kajona\System\System\SystemModule;
+use Kajona\System\System\Testbase;
 
 require_once __DIR__."../../../core/module_system/system/Testbase.php";
-class class_test_portalTest extends class_testbase  {
+
+class PortalTest extends Testbase
+{
 
 
-
-    public function testPortal() {
+    public function testPortal()
+    {
 
         echo "generating all pages existing to find notices...\n";
 
         $arrPages = \Kajona\Pages\System\PagesPage::getAllPages();
-        $objModule = class_module_system_module::getModuleByName("pages");
+        $objModule = SystemModule::getModuleByName("pages");
 
         /** @var $objModuleRequested \Kajona\Pages\Portal\PagesPortalController */
         $objModuleRequested = $objModule->getPortalInstanceOfConcreteModule();
 
         /** @var \Kajona\Pages\System\PagesPage $objOnePage */
-        foreach($arrPages as $objOnePage) {
+        foreach ($arrPages as $objOnePage) {
             echo "generating page ".$objOnePage->getStrName()."\n";
 
             $objModuleRequested->setParam("page", $objOnePage->getStrName());
