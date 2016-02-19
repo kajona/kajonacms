@@ -7,15 +7,14 @@
 
 namespace Kajona\Pageimportexport\Admin\Systemtasks;
 
-use class_carrier;
-use \Kajona\System\System\Date;
-use class_exception;
-use class_module_languages_language;
-use class_module_system_module;
-use class_systemtask_base;
-use interface_admin_systemtask;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
+use Kajona\System\Admin\Systemtasks\AdminSystemtaskInterface;
+use Kajona\System\Admin\Systemtasks\SystemtaskBase;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Exception;
+use Kajona\System\System\LanguagesLanguage;
+use Kajona\System\System\SystemModule;
 use XMLWriter;
 
 
@@ -25,7 +24,7 @@ use XMLWriter;
  * @package module_pageimportexport
  * @author sidler@mulchprod.de
  */
-class SystemtaskPageexport extends class_systemtask_base implements interface_admin_systemtask
+class SystemtaskPageexport extends SystemtaskBase implements AdminSystemtaskInterface
 {
 
 
@@ -40,7 +39,7 @@ class SystemtaskPageexport extends class_systemtask_base implements interface_ad
     }
 
     /**
-     * @see interface_admin_systemtask::getGroupIdenitfier()
+     * @see AdminSystemtaskInterface::getGroupIdenitfier()
      * @return string
      */
     public function getGroupIdentifier()
@@ -49,7 +48,7 @@ class SystemtaskPageexport extends class_systemtask_base implements interface_ad
     }
 
     /**
-     * @see interface_admin_systemtask::getStrInternalTaskName()
+     * @see AdminSystemtaskInterface::getStrInternalTaskName()
      * @return string
      */
     public function getStrInternalTaskName()
@@ -58,7 +57,7 @@ class SystemtaskPageexport extends class_systemtask_base implements interface_ad
     }
 
     /**
-     * @see interface_admin_systemtask::getStrTaskName()
+     * @see AdminSystemtaskInterface::getStrTaskName()
      * @return string
      */
     public function getStrTaskName()
@@ -67,14 +66,14 @@ class SystemtaskPageexport extends class_systemtask_base implements interface_ad
     }
 
     /**
-     * @see interface_admin_systemtask::executeTask()
-     * @throws class_exception
+     * @see AdminSystemtaskInterface::executeTask()
+     * @throws Exception
      * @return string
      */
     public function executeTask()
     {
 
-        if (!class_module_system_module::getModuleByName("pages")->rightEdit()) {
+        if (!SystemModule::getModuleByName("pages")->rightEdit()) {
             return $this->getLang("commons_error_permissions");
         }
 
@@ -82,7 +81,7 @@ class SystemtaskPageexport extends class_systemtask_base implements interface_ad
         $objPage = PagesPage::getPageByName($this->getParam("pageExport"));
         if ($objPage !== null) {
 
-            $objSystem = class_module_system_module::getModuleByName("system");
+            $objSystem = SystemModule::getModuleByName("system");
 
             $objXmlWriter = new XMLWriter();
 
@@ -104,7 +103,7 @@ class SystemtaskPageexport extends class_systemtask_base implements interface_ad
             if (is_dir($strExportFolder)) {
 
                 if (!$objXmlWriter->openUri($strExportFolder."/".$strExportPrefix.$objPage->getSystemid().".xml")) {
-                    throw new class_exception("failed to open export file ", class_exception::$level_ERROR);
+                    throw new Exception("failed to open export file ", Exception::$level_ERROR);
                 }
 
                 //$objXmlWriter->openMemory();
@@ -180,7 +179,7 @@ class SystemtaskPageexport extends class_systemtask_base implements interface_ad
                 return $this->getLang("systemtask_pageexport_success").$strExportFolder."/".$strExportPrefix.$objPage->getSystemid().".xml"."";
             }
             else {
-                throw new class_exception("writing XML: Folder ".$strExportFolder." does not exist! ", class_exception::$level_ERROR);
+                throw new Exception("writing XML: Folder ".$strExportFolder." does not exist! ", Exception::$level_ERROR);
             }
 
         }
@@ -190,7 +189,7 @@ class SystemtaskPageexport extends class_systemtask_base implements interface_ad
     }
 
     /**
-     * @see interface_admin_systemtask::getAdminForm()
+     * @see AdminSystemtaskInterface::getAdminForm()
      * @return string
      */
     public function getAdminForm()
@@ -199,7 +198,7 @@ class SystemtaskPageexport extends class_systemtask_base implements interface_ad
     }
 
     /**
-     * @see interface_admin_systemtask::getSubmitParams()
+     * @see AdminSystemtaskInterface::getSubmitParams()
      * @return string
      */
     public function getSubmitParams()
@@ -261,8 +260,8 @@ class SystemtaskPageexport extends class_systemtask_base implements interface_ad
 
 
             //content-row
-            $arrContentRow = class_carrier::getInstance()->getObjDB()->getPRow("SELECT * FROM ".$strElementTable." WHERE content_id = ? ", array($objOneElement->getSystemid()));
-            $arrColumns = class_carrier::getInstance()->getObjDB()->getColumnsOfTable($strElementTable);
+            $arrContentRow = Carrier::getInstance()->getObjDB()->getPRow("SELECT * FROM ".$strElementTable." WHERE content_id = ? ", array($objOneElement->getSystemid()));
+            $arrColumns = Carrier::getInstance()->getObjDB()->getColumnsOfTable($strElementTable);
 
             foreach ($arrColumns as $arrOneCol) {
 
@@ -291,10 +290,10 @@ class SystemtaskPageexport extends class_systemtask_base implements interface_ad
     private function createPageMetadata($strPageId, XMLWriter $objWriter)
     {
         //loop all languages if given
-        $objLanguages = new class_module_languages_language();
+        $objLanguages = new LanguagesLanguage();
         $strCurrentLanguage = $objLanguages->getStrAdminLanguageToWorkOn();
 
-        $arrLanguages = class_module_languages_language::getObjectList();
+        $arrLanguages = LanguagesLanguage::getObjectList();
         foreach ($arrLanguages as $objOneLanguage) {
             $objLanguages->setStrAdminLanguageToWorkOn($objOneLanguage->getStrName());
 

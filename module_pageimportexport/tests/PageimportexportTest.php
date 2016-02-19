@@ -1,26 +1,31 @@
 <?php
+namespace Kajona\Pageimportexport\Admin\Tests;
 
 use Kajona\Pageimportexport\Admin\Systemtasks\SystemtaskPageexport;
 use Kajona\Pageimportexport\Admin\Systemtasks\SystemtaskPageimport;
 use Kajona\Pages\Admin\Elements\ElementParagraphAdmin;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Database;
+use Kajona\System\System\OrmRowcache;
+use Kajona\System\System\Testbase;
 
 require_once __DIR__."/../../../core/module_system/system/Testbase.php";
 
-class class_test_pageimportexportTest extends class_testbase
+class PageimportexportTest extends Testbase
 {
     protected function tearDown()
     {
         parent::tearDown();
-        class_carrier::getInstance()->getObjRights()->setBitTestMode(false);
+        Carrier::getInstance()->getObjRights()->setBitTestMode(false);
     }
 
 
     public function testImportExport()
     {
 
-        class_carrier::getInstance()->getObjRights()->setBitTestMode(true);
+        Carrier::getInstance()->getObjRights()->setBitTestMode(true);
         $strName = generateSystemid();
         $strBrowsername = generateSystemid();
         $strSeoString = generateSystemid();
@@ -52,19 +57,19 @@ class class_test_pageimportexportTest extends class_testbase
         $objPagelement = new PagesPageelement($objPagelement->getSystemid());
 
 
-        class_carrier::getInstance()->setParam("pageExport", $strName);
+        Carrier::getInstance()->setParam("pageExport", $strName);
         $objPageExport = new SystemtaskPageexport();
         $objPageExport->executeTask();
 
         $objPage->deleteObjectFromDatabase();
-        class_orm_rowcache::flushCache();
-        class_db::getInstance()->flushQueryCache();
+        OrmRowcache::flushCache();
+        Database::getInstance()->flushQueryCache();
 
         $this->assertNull(PagesPage::getPageByName($strName));
 
         $this->assertFileExists(_realpath_._projectpath_."/temp/".$strPagesystemid.".xml");
 
-        class_carrier::getInstance()->setParam("pageimport_file", _projectpath_."/temp/".$strPagesystemid.".xml");
+        Carrier::getInstance()->setParam("pageimport_file", _projectpath_."/temp/".$strPagesystemid.".xml");
         $objImport = new SystemtaskPageimport();
         $objImport->executeTask();
 
@@ -80,7 +85,7 @@ class class_test_pageimportexportTest extends class_testbase
 
         $this->assertEquals(1, count($objElements));
         $objElements = $objElements[0];
-        $this->assertEquals($objElements->getStrClassAdmin(), "ElementParagraphAdmin.php");
+        $this->assertEquals($objElements->getStrClassAdmin(), "Kajona\\Pages\\Admin\\Elements\\ElementParagraphAdmin.php");
 
 
         $objElement = $objElements->getConcreteAdminInstance();
