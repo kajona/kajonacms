@@ -6,6 +6,9 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                       *
 ********************************************************************************************************/
+
+namespace Kajona\Eventmanager\Installer;
+
 use Kajona\Eventmanager\System\EventmanagerEvent;
 use Kajona\Pages\System\PagesElement;
 use Kajona\System\System\Carrier;
