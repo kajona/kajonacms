@@ -8,9 +8,11 @@
 ********************************************************************************************************/
 use Kajona\Eventmanager\System\EventmanagerEvent;
 use Kajona\Pages\System\PagesElement;
+use Kajona\System\System\Carrier;
 use Kajona\System\System\InstallerBase;
 use Kajona\System\System\InstallerRemovableInterface;
 use Kajona\System\System\OrmSchemamanager;
+use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\SystemSetting;
 
@@ -145,53 +147,6 @@ class InstallerEventmanager extends InstallerBase implements InstallerRemovableI
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.0") {
-            $strReturn .= $this->update_40_41();
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.1") {
-            $strReturn .= "Updating 4.1 to 4.2...\n";
-            $strReturn .= "Updating module-versions...\n";
-            $this->updateModuleVersion("eventmanager", "4.2");
-            $strReturn .= "Updating element-versions...\n";
-            $this->updateElementVersion("eventmanager", "4.2");
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.2") {
-            $strReturn .= $this->update_42_421();
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.2.1") {
-            $strReturn .= $this->update_421_422();
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.2.2") {
-            $strReturn .= "Updating 4.2.2 to 4.3...\n";
-            $strReturn .= "Updating module-versions...\n";
-            $this->updateModuleVersion("eventmanager", "4.3");
-            $strReturn .= "Updating element-versions...\n";
-            $this->updateElementVersion("eventmanager", "4.3");
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.3") {
-            $strReturn .= "Updating 4.3 to 4.4...\n";
-            $this->updateModuleVersion("eventmanager", "4.4");
-            $this->updateElementVersion("eventmanager", "4.4");
-        }
-
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.4") {
-            $strReturn .= "Updating 4.4 to 4.5...\n";
-            $this->updateModuleVersion("eventmanager", "4.5");
-            $this->updateElementVersion("eventmanager", "4.5");
-        }
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.5") {
@@ -210,51 +165,5 @@ class InstallerEventmanager extends InstallerBase implements InstallerRemovableI
         return $strReturn."\n\n";
 	}
 
-    private function update_40_41() {
-        $strReturn = "Updating 4.0 to 4.1...\n";
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("eventmanager", "4.1");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("eventmanager", "4.1");
-        return $strReturn;
-    }
-
-
-    private function update_42_421() {
-        $strReturn = "Updating 4.2 to 4.2.1...\n";
-
-        $strReturn .= "Adding new status column...\n";
-        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."em_event")."
-                            ADD ".$this->objDB->encloseColumnName("em_ev_eventstatus")." ".$this->objDB->getDatatype("int")." NULL";
-        if(!$this->objDB->_pQuery($strQuery, array()))
-            $strReturn .= "An error occurred! ...\n";
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("eventmanager", "4.2.1");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("eventmanager", "4.2.1");
-        return $strReturn;
-    }
-
-    private function update_421_422() {
-        $strReturn = "Updating 4.2.1 to 4.2.2...\n";
-
-        $strReturn .= "Adding new user columns...\n";
-        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."em_participant")."
-                            ADD ".$this->objDB->encloseColumnName("em_pt_userid")." ".$this->objDB->getDatatype("char20")." NULL";
-        if(!$this->objDB->_pQuery($strQuery, array()))
-            $strReturn .= "An error occurred! ...\n";
-
-        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."em_participant")."
-                            ADD ".$this->objDB->encloseColumnName("em_pt_status")." ".$this->objDB->getDatatype("int")." NULL";
-        if(!$this->objDB->_pQuery($strQuery, array()))
-            $strReturn .= "An error occurred! ...\n";
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("eventmanager", "4.2.2");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("eventmanager", "4.2.2");
-        return $strReturn;
-    }
 
 }

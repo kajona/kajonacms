@@ -73,19 +73,19 @@ class GraphPchart implements GraphInterface {
 
 	/**
      *
-     * @var pChart
+     * @var \pChart
      */
     private $objChart = null;
 
     /**
      *
-     * @var pData
+     * @var \pData
      */
     private $objDataset = null;
 
     /**
      *
-     * @var pData
+     * @var \pData
      */
     private $objAdditionalDataset = null;
 
@@ -95,8 +95,8 @@ class GraphPchart implements GraphInterface {
 	 *
 	 */
 	public function __construct() {
-        $this->objDataset = new pData();
-        $this->objAdditionalDataset = new pData();
+        $this->objDataset = new \pData();
+        $this->objAdditionalDataset = new \pData();
         $this->arrDefaultColorPalette = GraphColorpalettes::$arrDefaultColorPalette;
 	}
 
@@ -351,7 +351,7 @@ class GraphPchart implements GraphInterface {
     private function preGraphCreation() {
 
         // Initialize the graph
-        $this->objChart = new pChart($this->intWidth, $this->intHeight);
+        $this->objChart = new \pChart($this->intWidth, $this->intHeight);
 
         //set the color palette to be used
         foreach($this->arrDefaultColorPalette as $intKey => $strCurrentColor) {

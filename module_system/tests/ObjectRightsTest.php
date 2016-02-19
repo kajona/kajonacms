@@ -54,30 +54,30 @@ class ObjectRightsTest extends Testbase
         echo "\tadding user to group\n";
         $objGroup->getObjSourceGroup()->addMember($objUser->getObjSourceUser());
 
-        $strModuleId = $this->createObject("class_module_system_module", "0")->getSystemid();
+        $strModuleId = $this->createObject("Kajona\\System\\System\\SystemModule", "0")->getSystemid();
         Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_MODULES);
         SystemModule::getAllModules();
 
         echo "\tcreating node-tree\n";
-        $strRootId = $this->createObject("class_module_pages_page", $strModuleId)->getSystemid();
+        $strRootId = $this->createObject("Kajona\\Pages\\System\\PagesPage", $strModuleId)->getSystemid();
         echo "\tid of root-node: " . $strRootId . "\n";
         echo "\tcreating child nodes...\n";
-        $strSecOne = $this->createObject("class_module_pages_page", $strRootId)->getSystemid();
-        $strSecTwo = $this->createObject("class_module_pages_page", $strRootId)->getSystemid();
+        $strSecOne = $this->createObject("Kajona\\Pages\\System\\PagesPage", $strRootId)->getSystemid();
+        $strSecTwo = $this->createObject("Kajona\\Pages\\System\\PagesPage", $strRootId)->getSystemid();
 
-        $strThirdOne1 = $this->createObject("class_module_pages_page", $strSecOne)->getSystemid();
-        $strThirdOne2 = $this->createObject("class_module_pages_page", $strSecOne)->getSystemid();
-        $strThirdTwo1 = $this->createObject("class_module_pages_page", $strSecTwo)->getSystemid();
-        $strThirdTwo2 = $this->createObject("class_module_pages_page", $strSecTwo)->getSystemid();
+        $strThirdOne1 = $this->createObject("Kajona\\Pages\\System\\PagesPage", $strSecOne)->getSystemid();
+        $strThirdOne2 = $this->createObject("Kajona\\Pages\\System\\PagesPage", $strSecOne)->getSystemid();
+        $strThirdTwo1 = $this->createObject("Kajona\\Pages\\System\\PagesPage", $strSecTwo)->getSystemid();
+        $strThirdTwo2 = $this->createObject("Kajona\\Pages\\System\\PagesPage", $strSecTwo)->getSystemid();
 
-        $strThird111 = $this->createObject("class_module_pages_page", $strThirdOne1)->getSystemid();
-        $strThird112 = $this->createObject("class_module_pages_page", $strThirdOne1)->getSystemid();
-        $strThird121 = $this->createObject("class_module_pages_page", $strThirdOne2)->getSystemid();
-        $strThird122 = $this->createObject("class_module_pages_page", $strThirdOne2)->getSystemid();
-        $strThird211 = $this->createObject("class_module_pages_page", $strThirdTwo1)->getSystemid();
-        $strThird212 = $this->createObject("class_module_pages_page", $strThirdTwo1)->getSystemid();
-        $strThird221 = $this->createObject("class_module_pages_page", $strThirdTwo2)->getSystemid();
-        $strThird222 = $this->createObject("class_module_pages_page", $strThirdTwo2)->getSystemid();
+        $strThird111 = $this->createObject("Kajona\\Pages\\System\\PagesPage", $strThirdOne1)->getSystemid();
+        $strThird112 = $this->createObject("Kajona\\Pages\\System\\PagesPage", $strThirdOne1)->getSystemid();
+        $strThird121 = $this->createObject("Kajona\\Pages\\System\\PagesPage", $strThirdOne2)->getSystemid();
+        $strThird122 = $this->createObject("Kajona\\Pages\\System\\PagesPage", $strThirdOne2)->getSystemid();
+        $strThird211 = $this->createObject("Kajona\\Pages\\System\\PagesPage", $strThirdTwo1)->getSystemid();
+        $strThird212 = $this->createObject("Kajona\\Pages\\System\\PagesPage", $strThirdTwo1)->getSystemid();
+        $strThird221 = $this->createObject("Kajona\\Pages\\System\\PagesPage", $strThirdTwo2)->getSystemid();
+        $strThird222 = $this->createObject("Kajona\\Pages\\System\\PagesPage", $strThirdTwo2)->getSystemid();
         $arrThirdLevelNodes = array($strThird111, $strThird112, $strThird121, $strThird122, $strThird211, $strThird212, $strThird221, $strThird222);
 
 

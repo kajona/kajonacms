@@ -4,6 +4,7 @@ namespace Kajona\Pchart\Tests;
 require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
 
 use Kajona\Pchart\System\GraphPchart;
+use Kajona\System\System\GraphColorpalettes;
 use Kajona\System\System\Testbase;
 
 class ChartsPchartTest extends Testbase
@@ -46,7 +47,7 @@ class ChartsPchartTest extends Testbase
 
         echo "\tbar chart...\n";
         $objGraph = new GraphPchart();
-        $objGraph->setArrColorPalette(class_graph_colorpalettes::$arrBlueColorPalette);
+        $objGraph->setArrColorPalette(GraphColorpalettes::$arrBlueColorPalette);
         $objGraph->setBitRoundedCorners(true);
         $objGraph->setStrXAxisTitle("x-axis");
         $objGraph->setStrYAxisTitle("y-axis");
@@ -63,7 +64,7 @@ class ChartsPchartTest extends Testbase
 
         echo "\tbar chart variation...\n";
         $objGraph = new GraphPchart();
-        $objGraph->setArrColorPalette(class_graph_colorpalettes::$arrBlueColorPalette);
+        $objGraph->setArrColorPalette(GraphColorpalettes::$arrBlueColorPalette);
         $objGraph->setBitRoundedCorners(true);
         $objGraph->setStrXAxisTitle("x-axis");
         $objGraph->setStrYAxisTitle("y-axis");

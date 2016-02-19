@@ -25,7 +25,7 @@ class EventProviderTest extends Testbase
             $arrCategories = $objPlugin->getCategories();
             $arrNames[] = $objPlugin->getName();
 
-            $this->assertInstanceOf('EventProviderInterface', $objPlugin);
+            $this->assertInstanceOf('Kajona\\Dashboard\\System\\EventProviderInterface', $objPlugin);
             $this->assertTrue($objPlugin->getName() != "");
             $this->assertTrue(is_array($arrCategories));
 
@@ -37,7 +37,7 @@ class EventProviderTest extends Testbase
                 $this->assertTrue(!empty($strCategoryLabel));
 
                 foreach ($arrTodos as $objTodo) {
-                    $this->assertInstanceOf('class_event_entry', $objTodo);
+                    $this->assertInstanceOf('Kajona\\Dashboard\\System\\EventEntry', $objTodo);
                 }
             }
         }

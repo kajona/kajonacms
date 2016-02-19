@@ -60,10 +60,10 @@ class PackagemanagerTest extends Testbase
 
         $objManager = new PackagemanagerManager();
         $objPackageManager = $objManager->getPackageManagerForPath(_projectpath_ . "/temp/autotest.zip");
-        $this->assertEquals(get_class($objPackageManager), "class_module_packagemanager_packagemanager_module");
+        $this->assertEquals(get_class($objPackageManager), "Kajona\\Packagemanager\\System\\PackagemanagerPackagemanagerModule");
 
         $objPackageManager = $objManager->extractPackage(_projectpath_ . "/temp/autotest.zip");
-        $this->assertEquals(get_class($objPackageManager), "class_module_packagemanager_packagemanager_module");
+        $this->assertEquals(get_class($objPackageManager), "Kajona\\Packagemanager\\System\\PackagemanagerPackagemanagerModule");
 
         $objPackageManager->move2Filesystem();
 

@@ -6,6 +6,7 @@
 ********************************************************************************************************/
 
 namespace Kajona\Eventmanager\System;
+
 use Kajona\System\System\AdminListableInterface;
 use Kajona\System\System\OrmComparatorEnum;
 use Kajona\System\System\OrmObjectlist;
@@ -28,7 +29,8 @@ use Kajona\System\System\VersionableInterface;
  * @module eventmanager
  * @moduleId _eventmanager_module_id_
  */
-class EventmanagerEvent extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, VersionableInterface, AdminListableInterface  {
+class EventmanagerEvent extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, VersionableInterface, AdminListableInterface
+{
 
     /**
      * @var string
@@ -129,6 +131,7 @@ class EventmanagerEvent extends \Kajona\System\System\Model implements \Kajona\S
 
     /**
      * For form generation only
+     *
      * @var \Kajona\System\System\Date
      * @versionable
      * @fieldType datetime
@@ -141,6 +144,7 @@ class EventmanagerEvent extends \Kajona\System\System\Model implements \Kajona\S
 
     /**
      * For form-generation only
+     *
      * @var \Kajona\System\System\Date
      * @versionable
      * @fieldType datetime
@@ -151,7 +155,6 @@ class EventmanagerEvent extends \Kajona\System\System\Model implements \Kajona\S
     private $objEndDate;
 
 
-
     /**
      * Returns the icon the be used in lists.
      * Please be aware, that only the filename should be returned, the wrapping by getImageAdmin() is
@@ -160,7 +163,8 @@ class EventmanagerEvent extends \Kajona\System\System\Model implements \Kajona\S
      * @return string the name of the icon, not yet wrapped by getImageAdmin(). Alternatively, you may return an array containing
      *         [the image name, the alt-title]
      */
-    public function getStrIcon() {
+    public function getStrIcon()
+    {
         return "icon_event";
     }
 
@@ -169,13 +173,15 @@ class EventmanagerEvent extends \Kajona\System\System\Model implements \Kajona\S
      *
      * @return string
      */
-    public function getStrAdditionalInfo() {
+    public function getStrAdditionalInfo()
+    {
         $strCenter = "(".dateToString($this->getObjStartDate());
-        if($this->getObjEndDate() != null)
+        if ($this->getObjEndDate() != null) {
             $strCenter .= " - ".dateToString($this->getObjEndDate());
+        }
 
-        if($this->getIntRegistrationRequired()) {
-            $strCenter .= ", ". EventmanagerParticipant::getObjectCount($this->getSystemid())." ".$this->getLang("event_participant");
+        if ($this->getIntRegistrationRequired()) {
+            $strCenter .= ", ".EventmanagerParticipant::getObjectCount($this->getSystemid())." ".$this->getLang("event_participant");
         }
 
         $strCenter .= ")";
@@ -187,7 +193,8 @@ class EventmanagerEvent extends \Kajona\System\System\Model implements \Kajona\S
      *
      * @return string
      */
-    public function getStrLongDescription() {
+    public function getStrLongDescription()
+    {
         return "";
     }
 
@@ -196,11 +203,13 @@ class EventmanagerEvent extends \Kajona\System\System\Model implements \Kajona\S
      *
      * @return string
      */
-    public function getStrDisplayName() {
+    public function getStrDisplayName()
+    {
         return $this->getStrTitle();
     }
 
-    public function isParticipant($strUserid) {
+    public function isParticipant($strUserid)
+    {
         return EventmanagerParticipant::getParticipantByUserid($strUserid, $this->getSystemid()) !== null;
     }
 
@@ -218,20 +227,21 @@ class EventmanagerEvent extends \Kajona\System\System\Model implements \Kajona\S
      *
      * @return EventmanagerEvent[]
      */
-    public static function getAllEvents($intStart = false, $intEnd = false, \Kajona\System\System\Date $objStartDate = null, \Kajona\System\System\Date $objEndDate = null, $bitOnlyActive = false, $intOrder = 0, $intStatusFilter = null) {
+    public static function getAllEvents($intStart = false, $intEnd = false, \Kajona\System\System\Date $objStartDate = null, \Kajona\System\System\Date $objEndDate = null, $bitOnlyActive = false, $intOrder = 0, $intStatusFilter = null)
+    {
 
 
         $objORM = new OrmObjectlist();
 
-        if($objStartDate != null && $objEndDate != null) {
+        if ($objStartDate != null && $objEndDate != null) {
             $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND (system_date_start > ? AND system_date_start <= ?) ", array($objStartDate->getLongTimestamp(), $objEndDate->getLongTimestamp())));
 
         }
-        if($intStatusFilter != null) {
+        if ($intStatusFilter != null) {
             $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND em_ev_eventstatus = ?", array($intStatusFilter)));
         }
 
-        if($bitOnlyActive) {
+        if ($bitOnlyActive) {
             $objORM->addWhereRestriction(new OrmObjectlistSystemstatusRestriction(OrmComparatorEnum::Equal(), 1));
         }
 
@@ -247,9 +257,11 @@ class EventmanagerEvent extends \Kajona\System\System\Model implements \Kajona\S
      *
      * @return string the human readable name
      */
-    public function getVersionActionName($strAction) {
-        if($strAction == SystemChangelog::$STR_ACTION_EDIT)
+    public function getVersionActionName($strAction)
+    {
+        if ($strAction == SystemChangelog::$STR_ACTION_EDIT) {
             return $this->getLang("event_edit");
+        }
 
         return $strAction;
     }
@@ -259,7 +271,8 @@ class EventmanagerEvent extends \Kajona\System\System\Model implements \Kajona\S
      *
      * @return string the human readable name
      */
-    public function getVersionRecordName() {
+    public function getVersionRecordName()
+    {
         return $this->getLang("change_object_participant");
     }
 
@@ -270,7 +283,8 @@ class EventmanagerEvent extends \Kajona\System\System\Model implements \Kajona\S
      *
      * @return string the human readable name
      */
-    public function getVersionPropertyName($strProperty) {
+    public function getVersionPropertyName($strProperty)
+    {
         return $strProperty;
     }
 
@@ -283,72 +297,85 @@ class EventmanagerEvent extends \Kajona\System\System\Model implements \Kajona\S
      *
      * @return string
      */
-    public function renderVersionValue($strProperty, $strValue) {
-        if( ($strProperty == "objEndDate" || $strProperty == "objStartDate") && $strValue != "") {
+    public function renderVersionValue($strProperty, $strValue)
+    {
+        if (($strProperty == "objEndDate" || $strProperty == "objStartDate") && $strValue != "") {
             return dateToString(new \Kajona\System\System\Date($strValue));
         }
-        if($strProperty == "limitGiven" || $strProperty == "registrationRequired") {
+        if ($strProperty == "limitGiven" || $strProperty == "registrationRequired") {
             return $this->getLang("event_yesno_".$strValue, "eventmanager");
         }
         return $strValue;
     }
 
 
-
-
-    public function getStrTitle() {
+    public function getStrTitle()
+    {
         return $this->strTitle;
     }
 
-    public function setStrTitle($strTitle) {
+    public function setStrTitle($strTitle)
+    {
         $this->strTitle = $strTitle;
     }
 
-    public function getStrDescription() {
+    public function getStrDescription()
+    {
         return $this->strDescription;
     }
 
-    public function setStrDescription($strDescription) {
+    public function setStrDescription($strDescription)
+    {
         $this->strDescription = $strDescription;
     }
 
-    public function getStrLocation() {
+    public function getStrLocation()
+    {
         return $this->strLocation;
     }
 
-    public function setStrLocation($strLocation) {
+    public function setStrLocation($strLocation)
+    {
         $this->strLocation = $strLocation;
     }
 
-    public function getIntRegistrationRequired() {
+    public function getIntRegistrationRequired()
+    {
         return $this->intRegistrationRequired;
     }
 
-    public function setIntRegistrationRequired($intRegistration) {
+    public function setIntRegistrationRequired($intRegistration)
+    {
         $this->intRegistrationRequired = $intRegistration;
     }
 
-    public function getIntLimitGiven() {
+    public function getIntLimitGiven()
+    {
         return $this->intLimitGiven;
     }
 
-    public function setIntLimitGiven($intLimitGiven) {
+    public function setIntLimitGiven($intLimitGiven)
+    {
         $this->intLimitGiven = $intLimitGiven;
     }
 
-    public function getIntParticipantsLimit() {
+    public function getIntParticipantsLimit()
+    {
         return $this->intParticipantsLimit;
     }
 
-    public function setIntParticipantsLimit($intParticipantsLimit) {
+    public function setIntParticipantsLimit($intParticipantsLimit)
+    {
         $this->intParticipantsLimit = (int)$intParticipantsLimit;
     }
 
-    public function setIntEventStatus($intEventStatus) {
+    public function setIntEventStatus($intEventStatus)
+    {
         $this->intEventStatus = $intEventStatus;
     }
 
-    public function getIntEventStatus() {
+    public function getIntEventStatus()
+    {
         return $this->intEventStatus;
     }
 

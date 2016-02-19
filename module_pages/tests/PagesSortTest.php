@@ -15,16 +15,16 @@ class PagesSortTest extends Testbase
     public function testPagesSortOnPrevIdChange()
     {
 
-        $objRootPage = $this->createObject("PagesPage", "", array(), array("strName" => "pagesSortTest"));
-        $objSubPage1 = $this->createObject("PagesPage", $objRootPage->getSystemid(), array(), array("strName" => "pagesSortTest"));
-        $objSubPage2 = $this->createObject("PagesPage", $objRootPage->getSystemid(), array(), array("strName" => "pagesSortTest"));
+        $objRootPage = $this->createObject("Kajona\\Pages\\System\\PagesPage", "", array(), array("strName" => "pagesSortTest"));
+        $objSubPage1 = $this->createObject("Kajona\\Pages\\System\\PagesPage", $objRootPage->getSystemid(), array(), array("strName" => "pagesSortTest"));
+        $objSubPage2 = $this->createObject("Kajona\\Pages\\System\\PagesPage", $objRootPage->getSystemid(), array(), array("strName" => "pagesSortTest"));
 
         $objLangugage = new LanguagesLanguage();
-        $objPagelement1At1 = $this->createObject("PagesPageelement", $objSubPage1->getSystemid(), array(), array("strPlaceholder" => "headline_row", "strName" => "headline1", "strElement" => "row", "strLanguage" => $objLangugage->getStrAdminLanguageToWorkOn()));
-        $objPagelement2At1 = $this->createObject("PagesPageelement", $objSubPage1->getSystemid(), array(), array("strPlaceholder" => "headline_row", "strName" => "headline2", "strElement" => "row", "strLanguage" => $objLangugage->getStrAdminLanguageToWorkOn()));
+        $objPagelement1At1 = $this->createObject("Kajona\\Pages\\System\\PagesPageelement", $objSubPage1->getSystemid(), array(), array("strPlaceholder" => "headline_row", "strName" => "headline1", "strElement" => "row", "strLanguage" => $objLangugage->getStrAdminLanguageToWorkOn()));
+        $objPagelement2At1 = $this->createObject("Kajona\\Pages\\System\\PagesPageelement", $objSubPage1->getSystemid(), array(), array("strPlaceholder" => "headline_row", "strName" => "headline2", "strElement" => "row", "strLanguage" => $objLangugage->getStrAdminLanguageToWorkOn()));
 
-        $objPagelement1At2 = $this->createObject("PagesPageelement", $objSubPage2->getSystemid(), array(), array("strPlaceholder" => "headline_row", "strName" => "headline1", "strElement" => "row", "strLanguage" => $objLangugage->getStrAdminLanguageToWorkOn()));
-        $objPagelement2At2 = $this->createObject("PagesPageelement", $objSubPage2->getSystemid(), array(), array("strPlaceholder" => "headline_row", "strName" => "headline2", "strElement" => "row", "strLanguage" => $objLangugage->getStrAdminLanguageToWorkOn()));
+        $objPagelement1At2 = $this->createObject("Kajona\\Pages\\System\\PagesPageelement", $objSubPage2->getSystemid(), array(), array("strPlaceholder" => "headline_row", "strName" => "headline1", "strElement" => "row", "strLanguage" => $objLangugage->getStrAdminLanguageToWorkOn()));
+        $objPagelement2At2 = $this->createObject("Kajona\\Pages\\System\\PagesPageelement", $objSubPage2->getSystemid(), array(), array("strPlaceholder" => "headline_row", "strName" => "headline2", "strElement" => "row", "strLanguage" => $objLangugage->getStrAdminLanguageToWorkOn()));
 
 
         //validate sorts pre previd change
@@ -414,7 +414,7 @@ class PagesSortTest extends Testbase
         $objPage->setStrName("sortTest");
         $objPage->updateObjectToDb();
 
-        $objLangugage = new class_module_languages_language();
+        $objLangugage = new LanguagesLanguage();
 
         $objPagelementb1 = new PagesPageelement();
         $objPagelementb1->setStrPlaceholder("b_test");

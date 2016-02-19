@@ -9,8 +9,6 @@ namespace Kajona\System\System;
 
 use PHPUnit_Framework_TestCase;
 
-require_once __DIR__."../../../bootstrap.php";
-
 
 /**
  * The Testbase is the common baseclass for all testcases.
