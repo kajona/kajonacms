@@ -42,8 +42,8 @@ class InstallerWorkflows extends InstallerBase implements InstallerRemovableInte
 		$this->registerModule(
             "workflows",
             _workflows_module_id_,
-            "class_module_workflows_portal.php",
-            "class_module_workflows_admin.php",
+            "WorkflowsPortal.php",
+            "WorkflowsAdmin.php",
             $this->objMetadata->getStrVersion(),
             true
         );

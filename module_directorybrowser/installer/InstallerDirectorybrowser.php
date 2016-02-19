@@ -35,8 +35,8 @@ class InstallerDirectorybrowser extends class_installer_base implements interfac
         if($objElement == null) {
             $objElement = new PagesElement();
             $objElement->setStrName($this->objMetadata->getStrTitle());
-            $objElement->setStrClassAdmin("class_element_directorybrowser_admin.php");
-            $objElement->setStrClassPortal("class_element_directorybrowser_portal.php");
+            $objElement->setStrClassAdmin("ElementDirectorybrowserAdmin.php");
+            $objElement->setStrClassPortal("ElementDirectorybrowserPortal.php");
             $objElement->setIntCachetime(3600);
             $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->objMetadata->getStrVersion());

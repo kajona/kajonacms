@@ -30,7 +30,7 @@ class InstallerPortalregistration extends class_installer_base implements interf
        	//Table for page-element
 		$strReturn .= "Installing formular-element table...\n";
         $objManager = new class_orm_schemamanager();
-        $objManager->createTable("class_element_portalregistration_admin");
+        $objManager->createTable("Kajona\\Portalregistration\\Admin\\Elements\\ElementPortalregistrationAdmin");
 
 		//Register the element
 		$strReturn .= "Registering portalregistration-element...\n";

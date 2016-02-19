@@ -32,7 +32,7 @@ class InstallerPortallogin extends class_installer_base implements interface_ins
         //Table for page-element
 		$strReturn .= "Installing element_plogin-element table...\n";
         $objManager = new class_orm_schemamanager();
-        $objManager->createTable("class_element_portallogin_admin");
+        $objManager->createTable("Kajona\\Portallogin\\Admin\\Elements\\ElementPortalloginAdmin");
 
 		//Register the element
 		$strReturn .= "Registering portallogin-element...\n";
@@ -41,8 +41,8 @@ class InstallerPortallogin extends class_installer_base implements interface_ins
         if($objElement == null) {
 		    $objElement = new PagesElement();
 		    $objElement->setStrName("portallogin");
-		    $objElement->setStrClassAdmin("class_element_portallogin_admin.php");
-		    $objElement->setStrClassPortal("class_element_portallogin_portal.php");
+		    $objElement->setStrClassAdmin("ElementPortalloginAdmin.php");
+		    $objElement->setStrClassPortal("ElementPortalloginPortal.php");
 		    $objElement->setIntCachetime(-1);
 		    $objElement->setIntRepeat(1);
             $objElement->setStrVersion($this->objMetadata->getStrVersion());
