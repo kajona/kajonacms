@@ -1,7 +1,7 @@
 <?php
 
 namespace Kajona\System\Tests;
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
+require_once __DIR__."/../../../core/module_system/system/Testbase.php";
 use Kajona\System\System\EnumBase;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Testbase;

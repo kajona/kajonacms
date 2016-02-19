@@ -1,7 +1,7 @@
 <?php
 
 namespace Kajona\System\Tests;
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
+require_once __DIR__."/../../../core/module_system/system/Testbase.php";
 use interface_event_provider;
 use Kajona\System\System\Date;
 use Kajona\System\System\Pluginmanager;

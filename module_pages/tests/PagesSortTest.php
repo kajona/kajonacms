@@ -7,7 +7,7 @@ use Kajona\Pages\System\PagesPageelement;
 use Kajona\System\System\LanguagesLanguage;
 use Kajona\System\System\Testbase;
 
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
+require_once __DIR__."/../../../core/module_system/system/Testbase.php";
 
 class PagesSortTest extends Testbase
 {

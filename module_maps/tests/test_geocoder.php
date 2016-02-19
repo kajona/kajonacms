@@ -1,7 +1,7 @@
 <?php
 
 // includes
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
+require_once __DIR__."/../../../core/module_system/system/Testbase.php";
 class class_test_geocoder extends \Kajona\System\System\Testbase {
 
     public function test() {

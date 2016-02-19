@@ -9,7 +9,7 @@ use Kajona\System\System\Carrier;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\Testbase;
 
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
+require_once __DIR__."/../../../core/module_system/system/Testbase.php";
 
 class PagesTest extends Testbase
 {

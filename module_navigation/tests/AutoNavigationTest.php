@@ -1,7 +1,7 @@
 <?php
 
 namespace Kajona\Navigation\Tests;
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
+require_once __DIR__."/../../../core/module_system/system/Testbase.php";
 use Kajona\Navigation\System\NavigationTree;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;

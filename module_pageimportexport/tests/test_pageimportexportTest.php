@@ -6,7 +6,7 @@ use Kajona\Pages\Admin\Elements\ElementParagraphAdmin;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
 
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
+require_once __DIR__."/../../../core/module_system/system/Testbase.php";
 
 class class_test_pageimportexportTest extends class_testbase
 {

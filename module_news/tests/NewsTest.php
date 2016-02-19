@@ -1,7 +1,7 @@
 <?php
 
 namespace Kajona\News\Tests;
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
+require_once __DIR__."/../../../core/module_system/system/Testbase.php";
 use Kajona\News\Portal\NewsPortalXml;
 use Kajona\News\System\NewsCategory;
 use Kajona\News\System\NewsFeed;

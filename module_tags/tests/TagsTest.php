@@ -1,7 +1,7 @@
 <?php
 
 namespace Kajona\Tags\Tests;
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
+require_once __DIR__."/../../../core/module_system/system/Testbase.php";
 
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
@@ -10,7 +10,7 @@ use Kajona\System\System\SystemModule;
 use Kajona\System\System\Testbase;
 use Kajona\Tags\System\TagsTag;
 
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
+require_once __DIR__."/../../../core/module_system/system/Testbase.php";
 class TagsTest extends Testbase {
 
     public function testCopyRecordWithTag() {

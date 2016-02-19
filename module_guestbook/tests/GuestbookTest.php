@@ -1,7 +1,7 @@
 <?php
 
 namespace Kajona\Guestbook\Tests;
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
+require_once __DIR__."/../../../core/module_system/system/Testbase.php";
 use Kajona\Guestbook\System\GuestbookGuestbook;
 use Kajona\Guestbook\System\GuestbookPost;
 use Kajona\System\System\Carrier;

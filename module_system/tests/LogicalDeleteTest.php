@@ -1,7 +1,7 @@
 <?php
 
 namespace Kajona\System\Tests;
-require_once __DIR__."../../../core/module_system/system/Testbase.php";
+require_once __DIR__."/../../../core/module_system/system/Testbase.php";
 use Kajona\System\System\OrmBase;
 use Kajona\System\System\OrmDeletedhandlingEnum;
 use Kajona\System\System\SystemAspect;
