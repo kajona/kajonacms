@@ -10,9 +10,9 @@
 namespace Kajona\Pages\Admin\Widgets;
 
 use Kajona\Dashboard\Admin\Widgets\Adminwidget;
+use Kajona\Dashboard\Admin\Widgets\AdminwidgetInterface;
 use Kajona\Dashboard\System\DashboardWidget;
 use Kajona\Pages\System\PagesPage;
-use Kajona\System\Admin\AdminInterface;
 use Kajona\System\System\Link;
 use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemCommon;
@@ -22,7 +22,7 @@ use Kajona\System\System\SystemModule;
 /**
  * A widget rendering the pages last modified
  */
-class AdminwidgetLastmodifiedpages extends Adminwidget implements AdminInterface
+class AdminwidgetLastmodifiedpages extends Adminwidget implements AdminwidgetInterface
 {
 
     /**
