@@ -15,6 +15,7 @@ use Kajona\Search\System\SearchResult;
 use Kajona\Search\System\SearchSearch;
 use Kajona\System\Portal\PortalController;
 use Kajona\System\Portal\PortalInterface;
+use Kajona\System\System\ArraySectionIterator;
 use Kajona\System\System\Link;
 
 
@@ -93,10 +94,10 @@ class SearchPortal extends PortalController implements PortalInterface {
         $this->objSearchSearch->setBitPortalObjectFilter(true);
         $this->objSearchSearch->setStrPortalLangFilter($this->getStrPortalLanguage());
 
-        /** @var $arrHitsSorted class_search_result[] */
+        /** @var $arrHitsSorted SearchResult[] */
         $arrHitsSorted = array_values($objSearchCommons->doPortalSearch($this->objSearchSearch));
 
-        $objArraySectionIterator = new class_array_section_iterator(count($arrHitsSorted));
+        $objArraySectionIterator = new ArraySectionIterator(count($arrHitsSorted));
         $objArraySectionIterator->setIntElementsPerPage($this->arrElementData["search_amount"]);
         $objArraySectionIterator->setPageNumber($this->getParam("pv"));
         $objArraySectionIterator->setArraySection(array_slice($arrHitsSorted, $objArraySectionIterator->calculateStartPos(), $this->arrElementData["search_amount"]));
@@ -117,7 +118,7 @@ class SearchPortal extends PortalController implements PortalInterface {
 
         $strRowTemplateID = $this->objTemplate->readTemplate("/module_search/".$this->arrElementData["search_template"], "search_hitlist_hit");
 
-        /** @var $objHit class_search_result */
+        /** @var $objHit SearchResult */
         foreach($objArraySectionIterator as $objHit) {
 
             if($objHit->getStrPagename() == "master")
