@@ -32,13 +32,13 @@ echo "\n<input type=\"submit\" value=\"submit\" />\n";
 
 echo "\n--- Kajona timestamp handling ---------------------------------------------------\n\n";
 echo "integer to date: \n";
-$objDateFromInt = new class_date();
+$objDateFromInt = new \Kajona\System\System\Date();
 $objDateFromInt->setTimeInOldStyle(getPost("kajonainttime"));
 echo "\tinteger: <input type=\"text\" value=\"".getPost("kajonainttime")."\" name=\"kajonainttime\"/>";
 echo "  --> ".$objDateFromInt."\n";
 
 
-$objDateFromInt = new class_date(getPost("kajonainttime"));
+$objDateFromInt = new \Kajona\System\System\Date(getPost("kajonainttime"));
 echo "\tinteger: <input type=\"text\" value=\"".getPost("kajonainttime")."\" name=\"kajonainttime\"/>";
 echo "  --> ".$objDateFromInt."\n";
 
@@ -49,7 +49,7 @@ echo "\n<input type=\"submit\" value=\"submit\" />\n";
 echo "<input type='hidden' name='debugfile' value='".basename(__FILE__)."'>";
 echo "</form>";
 
-echo "\ncurrent time: ".class_date::getCurrentTimestamp()."\n";
+echo "\ncurrent time: ".\Kajona\System\System\Date::getCurrentTimestamp()."\n";
 
 echo "\n\n";
 echo "+-------------------------------------------------------------------------------+\n";

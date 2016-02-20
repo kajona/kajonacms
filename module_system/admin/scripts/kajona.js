@@ -877,7 +877,7 @@ KAJONA.admin.forms.renderMandatoryFields = function(arrFields) {
     for(var i=0; i<arrFields.length; i++) {
         var arrElement = arrFields[i];
         if(arrElement.length == 2) {
-            if(arrElement[1] == 'date' || arrElement[1] == 'class_date_validator') {
+            if(arrElement[1] == 'date' || arrElement[1] == '\Kajona\System\System\Date_validator') {
 
                 var $objElementDay = $("#"+arrElement[0]+"_day");
                 if($objElementDay) {

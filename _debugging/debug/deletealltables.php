@@ -25,11 +25,11 @@ if(issetPost("dodelete")) {
         if(in_array(class_module_system_setting::getConfigValue("_admins_group_id_"), $arrGroupIds)) {
             echo "User is member of admin-group.\n";
 
-            $arrTables = class_carrier::getInstance()->getObjDB()->getTables();
+            $arrTables = \Kajona\System\System\Carrier::getInstance()->getObjDB()->getTables();
             foreach($arrTables as $strOneTable) {
                 $strQuery = "DROP TABLE " . $strOneTable;
                 echo " executing " . $strQuery . "\n";
-                class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array());
+                \Kajona\System\System\Carrier::getInstance()->getObjDB()->_pQuery($strQuery, array());
             }
 
         }
@@ -44,7 +44,7 @@ if(issetPost("dodelete")) {
 }
 else {
 
-    $arrTables = class_carrier::getInstance()->getObjDB()->getTables();
+    $arrTables = \Kajona\System\System\Carrier::getInstance()->getObjDB()->getTables();
 
     echo "ATTENTION: This script will delete all tables of you current installation.\n\n";
     echo "To perform this action, you have to provide the credentials of a member of the admin-group.\n\n";

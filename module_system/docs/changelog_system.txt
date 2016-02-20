@@ -63,7 +63,7 @@ NEW: module_system | admin_controller -> removed the module-permission link from
 NEW: module_system | class_root -> when copying a record, the _copy extension is only added if the title is not empty
 NEW: module_system | module_login -> moved the routing-logic to load a matching module right after login to module login. in addition, the login-module generates rewrite-urls whenever possible
 NEW: module_system | interface_sortmanager -> updated fixSortOnPrevIdChange in order to take a module-filter as an optional argument
-NEW: module_system | class_date -> added the compare-method isSameDay(class_date) to class_date
+NEW: module_system | \Kajona\System\System\Date -> added the compare-method isSameDay(\Kajona\System\System\Date) to \Kajona\System\System\Date
 NEW: module_system | class_rights -> when changing permissions recursively, the re-write is skipped for nodes not inheriting the parent nodes' permissions
 NEW: module_system | class_carrier -> added a centralized method public function flushCache($intCacheType = 0). single point to flush the systems various temporary caches
 NEW: module_system | enum -> Added support for php based enums, extend from class_enum
@@ -87,7 +87,7 @@ NEW: module_system | orm -> list-queries may be enriched with additional where r
 NEW: module_system | orm -> refactored class_orm_mapper, now split into three separate classes (init, list and update)
 NEW: module_system | orm -> added a new annotation "@targetTableTxSafe", value (true / false) indicates if the target table is tx safe or not. if not specified, a tx-safe table will be created
 NEW: module_system | orm_objectlist -> added another method getSingleObject() to load a single object instead of a list of objects
-NEW: module_system | object validator -> added the possibility to create and assign object validators for objects derived from class class_model. The object validator is being used/executed during form validation but can also be used in a different context (e.g. unit tests) by just creating an instance of the validator and executing it's "validateObject" method [ticket #883]
+NEW: module_system | object validator -> added the possibility to create and assign object validators for objects derived from class \Kajona\System\System\Model. The object validator is being used/executed during form validation but can also be used in a different context (e.g. unit tests) by just creating an instance of the validator and executing it's "validateObject" method [ticket #883]
 NEW: module_system | formgenerator, validation errors -> for each key it is now possible to create several error messages
 NEW: module_system | functions.php -> removed the direct access to $HTTP_RAW_POST_DATA, will be removed post php 5.6
 NEW / APICHANGE: module_system | formgenerator -> properties starting with obj (e.g. objStartDate) are now added like regular properties, so as "form_xxx_startdate". Please change your lang-entries and direct field accessor.
@@ -99,7 +99,7 @@ NEW / APICHANGE: removed the method interface_validator::getStrName() since no l
 BUG: module_system | admin batchactions -> the default batchactions validate the permissions, at least at module-level
 BUG: module_system | class_rights -> fixed a race condition where changing a modules permission could lead to inconsistent permissions of child nodes (due to cached module nodes)
 BUG: module_system | module admin list -> fixed a weak null comparison, causing the module-list to render some entries twice
-BUG: module_system | class_date -> the setPrev/NextDay methods got confused for days changing the DST offset. Refactored both methods to use PHPs DateTime class internally
+BUG: module_system | \Kajona\System\System\Date -> the setPrev/NextDay methods got confused for days changing the DST offset. Refactored both methods to use PHPs DateTime class internally
 BUG: module_system | bootstrap/functions -> modules may use numbers within the module name (e.g. news2)
 BUG: module_system | kajona.js -> renderMandatoryFields updates a possible chosen element, too. otherwise mandatory dropdowns may not be marked as mandatory for scenarios where the chosen plugin is loaded before rendering the mandatory fields
 BUG: module_system | class_root -> the internally cached old-previd is reset for new system-records. otherwise sort-managers may not be queried for new records, resulting in possible wrong sort-ids
@@ -155,7 +155,7 @@ BUG: module_system | image-plugins -> Background of transparent PNG is set to bl
 BUG: module_system | class_csv -> when streaming csv files directly to the browser, the headers were sent after the content
 BUG: module_system | class_root -> when copying a record, the internal init-row is reset, too. otherwise some meta-info (e.g. the create date) was not updated correctly
 BUG: module_system | class_exception -> The history stacks (portal and admin) were loaded using a wrong session access code, resulting in empty histories
-BUG: module_system | class_date -> changed order of if statemens so that int params with value 0 are handled correctly. Added new method to class test_class_dateTest for checking class_date
+BUG: module_system | \Kajona\System\System\Date -> changed order of if statemens so that int params with value 0 are handled correctly. Added new method to class test_\Kajona\System\System\DateTest for checking \Kajona\System\System\Date
 BUG: module_system | class_module_system_common -> copySystemrecord() missed a column for the rights-table
 BUG: module_system | class_cookie -> Fixed a cookies' path to avoid problems with different paths if mod_rewrite is enabled
 BUG / SECURITY: module_system | class_link -> fixed some rare conditions where a possible xss injection was possible for the systemid-param
@@ -174,7 +174,7 @@ BUG: mail-notifications sent by the messaging subsystem could use a wrong recipi
 
 V4.4 ----------------------------------------------------------------------------------------------------
 NEW: added new method which gets all subnodes of a given node recursively
-NEW: class_date accepts instances of class_date as a constructor param
+NEW: \Kajona\System\System\Date accepts instances of \Kajona\System\System\Date as a constructor param
 NEW: if an object is copied and the object provides a title-property, the framework adds _copy to the new instances title. Otherwise, source and copy-objects could not be distinguished.
 NEW: removed the (deprecated since 4.0) form-validation methods from class_admin
 NEW: added a common base class for admin / portal views, class_ui_base. Reduces copied code-fragments #871
@@ -230,7 +230,7 @@ NEW: added a method containsSection to class_template in order to validate the p
 NEW: the generic actionList @ class_admin_evensimpler creates a list-identifier (listTypename)  by default
 NEW: the changelog may be temporary disabled to speed up script execution
 NEW: settings are cached internally, reducing the amount of queries per request
-NEW: class_date supports setNext/PreviousMonth/Week
+NEW: \Kajona\System\System\Date supports setNext/PreviousMonth/Week
 NEW: systemtask-executions are logged with level WARNING to their own logfile
 NEW: introduced a new annotation "@fieldDDValues", relevant for dropdown admin-form entries. The value is a list of [key=>value],[key=>value] pairs, resolved from the language-files. This makes it obsolete to pass the language-file based options programmatically
 NEW: class_link, replacing all link-functions in functions.php. getLinkAdminRaw is replaces by (nearly identical) getLinkAdminManual

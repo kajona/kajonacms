@@ -8,6 +8,7 @@ namespace Kajona\System\System\Scriptlets;
 
 use class_module_system_setting;
 use interface_scriptlet;
+use Kajona\System\System\SystemSetting;
 
 /**
  * General replacement of global constants such as the webpath
@@ -36,12 +37,12 @@ class ScriptletXConstants implements interface_scriptlet {
         $arrValues = array(
             _indexpath_,
             _webpath_,
-            class_module_system_setting::getConfigValue("_system_browser_cachebuster_"),
+            SystemSetting::getConfigValue("_system_browser_cachebuster_"),
             date("d.m.y H:i", time())
         );
 
         $arrConstants[] = "_packagemanager_defaulttemplate_";
-        $arrValues[] = class_module_system_setting::getConfigValue("_packagemanager_defaulttemplate_");
+        $arrValues[] = SystemSetting::getConfigValue("_packagemanager_defaulttemplate_");
 
         if(defined("_skinwebpath_")) {
             $arrConstants[] = "_skinwebpath_";

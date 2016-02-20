@@ -20,7 +20,8 @@ use Kajona\Pages\Admin\ElementAdmin;
  *
  * @targetTable element_universal.content_id
  */
-class ElementRichtextAdmin extends ElementAdmin implements AdminElementInterface {
+class ElementRichtextAdmin extends ElementAdmin implements AdminElementInterface
+{
 
     /**
      * @var string
@@ -53,14 +54,16 @@ class ElementRichtextAdmin extends ElementAdmin implements AdminElementInterface
      *
      * @return string
      */
-    public function getContentTitle() {
+    public function getContentTitle()
+    {
         $this->loadElementData();
 
-        if($this->getStrText() != "") {
+        if ($this->getStrText() != "") {
             return uniStrTrim(htmlStripTags($this->getStrText()), 120);
         }
-        else
+        else {
             return parent::getContentTitle();
+        }
     }
 
     /**
@@ -75,28 +78,32 @@ class ElementRichtextAdmin extends ElementAdmin implements AdminElementInterface
     /**
      * @param string $strTemplate
      */
-    public function setStrTemplate($strTemplate) {
+    public function setStrTemplate($strTemplate)
+    {
         $this->strTemplate = $strTemplate;
     }
 
     /**
      * @return string
      */
-    public function getStrTemplate() {
+    public function getStrTemplate()
+    {
         return $this->strTemplate;
     }
 
     /**
      * @param string $strText
      */
-    public function setStrText($strText) {
+    public function setStrText($strText)
+    {
         $this->strText = $strText;
     }
 
     /**
      * @return string
      */
-    public function getStrText() {
+    public function getStrText()
+    {
         return $this->strText;
     }
 

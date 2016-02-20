@@ -7,9 +7,7 @@
 
 namespace Kajona\System\System;
 
-use class_apc_cache;
-use class_config;
-use class_filesystem;
+
 
 /**
  * The bootstrap cache is used by various kernel-components of the system in order to
@@ -68,10 +66,10 @@ class BootstrapCache
     private function __construct()
     {
 
-        include_once(__DIR__."/class_apc_cache.php");
+        include_once(__DIR__."/ApcCache.php");
 
         foreach($this->getCacheNames() as $strOneFile) {
-            self::$arrCaches[$strOneFile] = class_apc_cache::getInstance()->getValue(__CLASS__.$strOneFile);
+            self::$arrCaches[$strOneFile] = ApcCache::getInstance()->getValue(__CLASS__.$strOneFile);
 
             if(self::$arrCaches[$strOneFile] === false) {
                 if(is_file(_realpath_."/project/temp/".$strOneFile)) {
@@ -88,8 +86,8 @@ class BootstrapCache
     public function __destruct()
     {
         foreach($this->getCacheNames() as $strOneFile) {
-            if(isset(self::$arrCacheSavesRequired[$strOneFile]) && class_config::getInstance()->getConfig("bootstrapcache_".$strOneFile) === true && isset(self::$arrCaches[$strOneFile])) {
-                class_apc_cache::getInstance()->addValue(__CLASS__.$strOneFile, self::$arrCaches[$strOneFile]);
+            if(isset(self::$arrCacheSavesRequired[$strOneFile]) && Config::getInstance()->getConfig("bootstrapcache_".$strOneFile) === true && isset(self::$arrCaches[$strOneFile])) {
+                ApcCache::getInstance()->addValue(__CLASS__.$strOneFile, self::$arrCaches[$strOneFile]);
                 file_put_contents(_realpath_."/project/temp/".$strOneFile, serialize(self::$arrCaches[$strOneFile]));
             }
         }
@@ -157,13 +155,13 @@ class BootstrapCache
 
     public function flushCache()
     {
-        $objFilesystem = new class_filesystem();
+        $objFilesystem = new Filesystem();
         foreach($this->getCacheNames() as $strOneFile) {
             $objFilesystem->fileDelete("/project/temp/".$strOneFile);
         }
 
         self::$arrCaches = array();
-        class_apc_cache::getInstance()->flushCache();
+        ApcCache::getInstance()->flushCache();
     }
 }
 

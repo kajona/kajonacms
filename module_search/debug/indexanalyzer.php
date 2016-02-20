@@ -7,6 +7,8 @@
 *   $Id$                                     *
 ********************************************************************************************************/
 
+use Kajona\System\System\Database;
+
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
 echo "|                                                                               |\n";
@@ -15,25 +17,25 @@ echo "|                                                                         
 echo "+-------------------------------------------------------------------------------+\n";
 
 
-$arrRow = class_db::getInstance()->getPRow("SELECT COUNT(*) as anz FROM "._dbprefix_."search_ix_document", array());
+$arrRow = Database::getInstance()->getPRow("SELECT COUNT(*) as anz FROM "._dbprefix_."search_ix_document", array());
 echo "Documents in doc table:                     ".$arrRow["anz"]."\n";
 
-$arrRow = class_db::getInstance()->getPRow("SELECT COUNT(DISTINCT(search_ix_system_id)) as anz FROM "._dbprefix_."search_ix_document", array());
+$arrRow = Database::getInstance()->getPRow("SELECT COUNT(DISTINCT(search_ix_system_id)) as anz FROM "._dbprefix_."search_ix_document", array());
 echo "Unique documents in doc table:              ".$arrRow["anz"]."\n";
 
-$arrRow = class_db::getInstance()->getPRow("SELECT COUNT(*) as anz FROM "._dbprefix_."system", array());
+$arrRow = Database::getInstance()->getPRow("SELECT COUNT(*) as anz FROM "._dbprefix_."system", array());
 echo "Records in system table:                    ".$arrRow["anz"]."\n";
 
 
-$arrRow = class_db::getInstance()->getPRow("SELECT COUNT(*) as anz FROM "._dbprefix_."search_ix_content", array());
+$arrRow = Database::getInstance()->getPRow("SELECT COUNT(*) as anz FROM "._dbprefix_."search_ix_content", array());
 echo "Entries in content:                         ".$arrRow["anz"]."\n";
 
 echo "\n";
 
-$arrRow = class_db::getInstance()->getPRow("SELECT COUNT(DISTINCT(search_ix_content_document_id)) as anz FROM "._dbprefix_."search_ix_content", array());
+$arrRow = Database::getInstance()->getPRow("SELECT COUNT(DISTINCT(search_ix_content_document_id)) as anz FROM "._dbprefix_."search_ix_content", array());
 echo "Unique documents in content table:          ".$arrRow["anz"]."\n";
 
-$arrRow = class_db::getInstance()->getPRow(
+$arrRow = Database::getInstance()->getPRow(
     "SELECT COUNT(DISTINCT(search_ix_content_document_id)) as anz FROM "._dbprefix_."search_ix_content as con
   LEFT JOIN "._dbprefix_."search_ix_document as doc ON con.search_ix_content_document_id = doc.search_ix_document_id
   WHERE doc.search_ix_document_id IS NULL", array()
@@ -41,7 +43,7 @@ $arrRow = class_db::getInstance()->getPRow(
 echo "Documents in content missing from document: ".$arrRow["anz"]."\n";
 
 
-$arrRow = class_db::getInstance()->getPRow(
+$arrRow = Database::getInstance()->getPRow(
     "SELECT COUNT(*) as anz FROM "._dbprefix_."search_ix_content as con
   LEFT JOIN "._dbprefix_."search_ix_document as doc ON con.search_ix_content_document_id = doc.search_ix_document_id
   WHERE doc.search_ix_document_id IS NULL", array()

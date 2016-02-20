@@ -5,6 +5,20 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Mediamanager;
+
+use Kajona\Mediamanager\System\MediamanagerFile;
+use Kajona\Mediamanager\System\MediamanagerLogbook;
+use Kajona\System\System\CoreEventdispatcher;
+use Kajona\System\System\Filesystem;
+use Kajona\System\System\HttpStatuscodes;
+use Kajona\System\System\Link;
+use Kajona\System\System\Objectfactory;
+use Kajona\System\System\RequestEntrypointEnum;
+use Kajona\System\System\ResponseObject;
+use Kajona\System\System\Root;
+use Kajona\System\System\SystemEventidentifier;
+use Kajona\System\System\SystemSetting;
 
 /**
  * Used to send a file to the user
@@ -12,68 +26,73 @@
  * @package module_mediamanager
  * @author sidler@mulchprod.de
  */
-class class_download_manager extends class_root {
+class DownloadManager extends Root
+{
 
     /**
      * Constructor
      *
      * @param string $strSystemid
      */
-    public function __construct($strSystemid) {
+    public function __construct($strSystemid)
+    {
         parent::__construct($strSystemid);
 
         //Increase max execution time
-        if(@ini_get("max_execution_time") < 7200 && @ini_get("max_execution_time") > 0)
+        if (@ini_get("max_execution_time") < 7200 && @ini_get("max_execution_time") > 0) {
             @ini_set("max_execution_time", "7200");
+        }
     }
 
     /**
      * Sends the requested file to the browser
+     *
      * @return string
      */
-    public function actionDownload() {
+    public function actionDownload()
+    {
         //Load filedetails
 
-        if(validateSystemid($this->getSystemid())) {
+        if (validateSystemid($this->getSystemid())) {
 
-            /** @var $objFile class_module_mediamanager_file */
-            $objFile = class_objectfactory::getInstance()->getObject($this->getSystemid());
+            /** @var $objFile MediamanagerFile */
+            $objFile = Objectfactory::getInstance()->getObject($this->getSystemid());
             //Succeeded?
-            if($objFile instanceof class_module_mediamanager_file && $objFile->getIntRecordStatus() == "1" && $objFile->getIntType() == class_module_mediamanager_file::$INT_TYPE_FILE) {
+            if ($objFile instanceof MediamanagerFile && $objFile->getIntRecordStatus() == "1" && $objFile->getIntType() == MediamanagerFile::$INT_TYPE_FILE) {
                 //Check rights
-                if($objFile->rightRight2()) {
+                if ($objFile->rightRight2()) {
                     //Log the download
-                    class_module_mediamanager_logbook::generateDlLog($objFile);
-                    $objFilesystem = new class_filesystem();
+                    MediamanagerLogbook::generateDlLog($objFile);
+                    $objFilesystem = new Filesystem();
                     $objFilesystem->streamFile($objFile->getStrFilename());
                     return "";
 
                 }
                 else {
-                    class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_FORBIDDEN);
+                    ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_FORBIDDEN);
                 }
 
             }
             else {
-                class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_NOT_FOUND);
+                ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_NOT_FOUND);
             }
 
         }
         else {
-            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_NOT_FOUND);
+            ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_NOT_FOUND);
         }
 
         //if we reach up here, something gone wrong :/
-        class_response_object::getInstance()->setStrRedirectUrl(str_replace(array("_indexpath_", "&amp;"), array(_indexpath_, "&"), class_link::getLinkPortalHref(class_module_system_setting::getConfigValue("_pages_errorpage_"))));
-        class_response_object::getInstance()->sendHeaders();
-        class_response_object::getInstance()->sendContent();
+        ResponseObject::getInstance()->setStrRedirectUrl(str_replace(array("_indexpath_", "&amp;"), array(_indexpath_, "&"), Link::getLinkPortalHref(SystemSetting::getConfigValue("_pages_errorpage_"))));
+        ResponseObject::getInstance()->sendHeaders();
+        ResponseObject::getInstance()->sendContent();
         return "";
     }
 }
 
 
 //Create a object
-$objDownload = new class_download_manager(getGet("systemid"));
+$objDownload = new DownloadManager(getGet("systemid"));
 $objDownload->actionDownload();
-class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array(class_request_entrypoint_enum::DOWNLOAD()));
+CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array(RequestEntrypointEnum::DOWNLOAD()));
 

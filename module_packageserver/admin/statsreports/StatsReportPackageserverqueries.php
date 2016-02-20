@@ -7,14 +7,13 @@
 
 namespace Kajona\Packageserver\Admin\Statsreports;
 
-use class_date;
-use class_db;
-use class_graph_factory;
-use class_lang;
-use class_module_user_user;
-use class_session;
-use class_toolkit_admin;
-use interface_admin_statsreports;
+use Kajona\Stats\Admin\AdminStatsreportsInterface;
+use Kajona\System\Admin\ToolkitAdmin;
+use Kajona\System\System\Database;
+use Kajona\System\System\GraphFactory;
+use Kajona\System\System\Lang;
+use Kajona\System\System\Session;
+use Kajona\System\System\UserUser;
 
 
 /**
@@ -22,7 +21,7 @@ use interface_admin_statsreports;
  *
  * @author sidler@mulchprod.de
  */
-class StatsReportPackageserverqueries implements interface_admin_statsreports
+class StatsReportPackageserverqueries implements AdminStatsreportsInterface
 {
 
     //class vars
@@ -38,7 +37,7 @@ class StatsReportPackageserverqueries implements interface_admin_statsreports
     /**
      * Constructor
      */
-    public function __construct(class_db $objDB, class_toolkit_admin $objToolkit, class_lang $objTexts)
+    public function __construct(Database $objDB, ToolkitAdmin $objToolkit, Lang $objTexts)
     {
         $this->objLang = $objTexts;
         $this->objToolkit = $objToolkit;
@@ -112,7 +111,7 @@ class StatsReportPackageserverqueries implements interface_admin_statsreports
 
         $arrLogs = array();
         $intI = 0;
-        $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
+        $objUser = new UserUser(Session::getInstance()->getUserID());
         foreach ($arrData as $arrOneLog) {
             if ($intI++ >= $objUser->getIntItemsPerPage()) {
                 break;
@@ -139,8 +138,8 @@ class StatsReportPackageserverqueries implements interface_admin_statsreports
      */
     public function getTotalHitsInInterval()
     {
-        $objStart = new class_date($this->intDateStart);
-        $objEnd = new class_date($this->intDateEnd);
+        $objStart = new \Kajona\System\System\Date($this->intDateStart);
+        $objEnd = new \Kajona\System\System\Date($this->intDateEnd);
         $strQuery = "SELECT COUNT(*)
 						FROM "._dbprefix_."packageserver_log
 						WHERE log_date > ?
@@ -164,8 +163,8 @@ class StatsReportPackageserverqueries implements interface_admin_statsreports
      */
     public function getTotalUniqueHostsInInterval()
     {
-        $objStart = new class_date($this->intDateStart);
-        $objEnd = new class_date($this->intDateEnd);
+        $objStart = new \Kajona\System\System\Date($this->intDateStart);
+        $objEnd = new \Kajona\System\System\Date($this->intDateEnd);
         $strQuery = "SELECT log_hostname, COUNT(*) as anzahl
 						FROM "._dbprefix_."packageserver_log
 						WHERE log_date > ?
@@ -207,7 +206,7 @@ class StatsReportPackageserverqueries implements interface_admin_statsreports
         }
         //create graph
         if ($intCount > 1) {
-            $objGraph = class_graph_factory::getGraphInstance();
+            $objGraph = GraphFactory::getGraphInstance();
             $objGraph->setArrXAxisTickLabels($arrTickLabels);
             $objGraph->addLinePlot($arrTotalHits, $this->objLang->getLang("packageservertopqueries_total", "packageserver"));
             $objGraph->addLinePlot($arrUniqueHits, $this->objLang->getLang("packageservertopqueries_unique", "packageserver"));

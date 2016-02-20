@@ -21,12 +21,14 @@ namespace Kajona\System\System;
  *
  *
  */
-interface InterfaceJStreeNodeLoader {
+interface InterfaceJStreeNodeLoader
+{
 
     /**
      * Returns all child nodes for the given system id.
      *
      * @param $strSystemId
+     *
      * @return mixed
      */
     public function getChildNodes($strSystemId);
@@ -36,6 +38,7 @@ interface InterfaceJStreeNodeLoader {
      * Returns a node for the tree.
      *
      * @param $strSystemId
+     *
      * @return mixed
      */
     public function getNode($strSystemId);

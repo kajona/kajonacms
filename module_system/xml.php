@@ -6,10 +6,19 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                                      *
 ********************************************************************************************************/
-
+namespace Kajona\System;
 
 //Determine the area to load
-if(issetGet("admin") && getGet("admin") == 1) {
+use Kajona\System\System\Carrier;
+use Kajona\System\System\CoreEventdispatcher;
+use Kajona\System\System\HttpResponsetypes;
+use Kajona\System\System\HttpStatuscodes;
+use Kajona\System\System\RequestDispatcher;
+use Kajona\System\System\RequestEntrypointEnum;
+use Kajona\System\System\ResponseObject;
+use Kajona\System\System\SystemEventidentifier;
+
+if (issetGet("admin") && getGet("admin") == 1) {
     define("_admin_", true);
 }
 else {
@@ -24,12 +33,13 @@ define("_autotesting_", false);
  *
  * @package module_system
  */
-class class_xml {
+class Xml
+{
 
     private static $bitRenderXmlHeader = true;
 
     /**
-     * @var class_response_object
+     * @var ResponseObject
      */
     public $objResponse;
 
@@ -40,30 +50,32 @@ class class_xml {
 
     /**
      * Starts the processing of the requests, fetches params and passes control to the request dispatcher
+     *
      * @return void
      */
-    public function processRequest() {
+    public function processRequest()
+    {
 
-        $strModule = class_carrier::getInstance()->getParam("module");
-        $strAction = class_carrier::getInstance()->getParam("action");
-        $strLanguageParam = class_carrier::getInstance()->getParam("language");
+        $strModule = Carrier::getInstance()->getParam("module");
+        $strAction = Carrier::getInstance()->getParam("action");
+        $strLanguageParam = Carrier::getInstance()->getParam("language");
 
-        $this->objResponse = class_response_object::getInstance();
-        $this->objResponse->setStrResponseType(class_http_responsetypes::STR_TYPE_XML);
-        $this->objResponse->setStrStatusCode(class_http_statuscodes::SC_OK);
+        $this->objResponse = ResponseObject::getInstance();
+        $this->objResponse->setStrResponseType(HttpResponsetypes::STR_TYPE_XML);
+        $this->objResponse->setStrStatusCode(HttpStatuscodes::SC_OK);
 
-        $this->objBuilder = class_carrier::getInstance()->getContainer()->offsetGet('object_builder');
+        $this->objBuilder = Carrier::getInstance()->getContainer()->offsetGet('object_builder');
 
-        $objDispatcher = new class_request_dispatcher($this->objResponse, $this->objBuilder);
+        $objDispatcher = new RequestDispatcher($this->objResponse, $this->objBuilder);
         $objDispatcher->processRequest(_admin_, $strModule, $strAction, $strLanguageParam);
 
-        if($this->objResponse->getStrContent() == "") {
-            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_BADREQUEST);
+        if ($this->objResponse->getStrContent() == "") {
+            ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_BADREQUEST);
             $this->objResponse->setStrContent("<error>An error occurred, malformed request</error>");
         }
 
-        if($this->objResponse->getStrResponseType() == class_http_responsetypes::STR_TYPE_XML && self::$bitRenderXmlHeader) {
-            $this->objResponse->setStrContent("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n" . $this->objResponse->getStrContent());
+        if ($this->objResponse->getStrResponseType() == HttpResponsetypes::STR_TYPE_XML && self::$bitRenderXmlHeader) {
+            $this->objResponse->setStrContent("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n".$this->objResponse->getStrContent());
         }
     }
 
@@ -71,19 +83,20 @@ class class_xml {
      * If set to true, the output will be sent without the mandatory xml-head-element
      *
      * @param bool $bitSuppressXmlHeader
+     *
      * @return void
      */
-    public static function setBitSuppressXmlHeader($bitSuppressXmlHeader) {
+    public static function setBitSuppressXmlHeader($bitSuppressXmlHeader)
+    {
         self::$bitRenderXmlHeader = !$bitSuppressXmlHeader;
     }
-
 
 
 }
 
 //pass control
-$objXML = new class_xml();
+$objXML = new Xml();
 $objXML->processRequest();
 $objXML->objResponse->sendHeaders();
 $objXML->objResponse->sendContent();
-class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array(class_request_entrypoint_enum::XML()));
+CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array(RequestEntrypointEnum::XML()));

@@ -11,13 +11,16 @@ use class_module_languages_language;
 use interface_sc_installer;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
+use Kajona\System\System\Classloader;
+use Kajona\System\System\LanguagesLanguage;
+use Kajona\System\System\SamplecontentInstallerInterface;
 
 
 /**
  * Installer of the navigation languages
  *
  */
-class InstallerSamplecontentZZLanguages implements interface_sc_installer  {
+class InstallerSamplecontentZZLanguages implements SamplecontentInstallerInterface  {
 
     /**
      * @var class_db
@@ -40,24 +43,24 @@ class InstallerSamplecontentZZLanguages implements interface_sc_installer  {
 
             $strReturn .= " Target language: de\n";
 
-            if(class_exists("PagesPage", false) || class_classloader::getInstance()->loadClass("PagesPage") !== false)
+            if(class_exists("Kajona\\Pages\\System\\PagesPage", false) || Classloader::getInstance()->loadClass("Kajona\\Pages\\System\\PagesPage") !== false)
                 PagesPage::assignNullProperties("de", true);
-            if(class_exists("class_module_pages_pageelement", false) || class_classloader::getInstance()->loadClass("class_module_pages_pageelement") !== false)
+            if(class_exists("Kajona\\Pages\\System\\PagesPageelement", false) || Classloader::getInstance()->loadClass("Kajona\\Pages\\System\\PagesPageelement") !== false)
                 PagesPageelement::assignNullElements("de");
 
-            $objLang = new class_module_languages_language();
+            $objLang = new LanguagesLanguage();
             $objLang->setStrAdminLanguageToWorkOn("de");
         }
         else {
 
             $strReturn .= " Target language: en\n";
 
-            if(class_exists("PagesPage", false) || class_classloader::getInstance()->loadClass("PagesPage") !== false)
+            if(class_exists("Kajona\\Pages\\System\\PagesPage", false) || Classloader::getInstance()->loadClass("Kajona\\Pages\\System\\PagesPage") !== false)
                 PagesPage::assignNullProperties("en", true);
-            if(class_exists("class_module_pages_pageelement", false) || class_classloader::getInstance()->loadClass("class_module_pages_pageelement") !== false)
+            if(class_exists("Kajona\\Pages\\System\\PagesPageelement", false) || Classloader::getInstance()->loadClass("Kajona\\Pages\\System\\PagesPageelement") !== false)
                 PagesPageelement::assignNullElements("en");
 
-            $objLang = new class_module_languages_language();
+            $objLang = new LanguagesLanguage();
             $objLang->setStrAdminLanguageToWorkOn("en");
 
         }

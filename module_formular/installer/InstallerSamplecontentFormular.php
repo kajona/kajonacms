@@ -14,6 +14,8 @@ use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
+use Kajona\System\System\SamplecontentInstallerInterface;
+use Kajona\System\System\SystemSetting;
 
 
 /**
@@ -21,7 +23,7 @@ use Kajona\Pages\System\PagesPageelement;
  *
  * @package element_formular
  */
-class InstallerSamplecontentFormular implements interface_sc_installer  {
+class InstallerSamplecontentFormular implements SamplecontentInstallerInterface  {
 
     /**
      * @var class_db
@@ -66,13 +68,13 @@ class InstallerSamplecontentFormular implements interface_sc_installer  {
             $arrParams = array();
             if($this->strContentLanguage == "de") {
                 $arrParams[] = "FormularContact.php";
-                $arrParams[] = class_module_system_setting::getConfigValue("_system_admin_email_");
+                $arrParams[] = SystemSetting::getConfigValue("_system_admin_email_");
                 $arrParams[] = "contact.tpl";
                 $arrParams[] = $strElementId;
             }
             else {
                 $arrParams[] = "FormularContact.php";
-                $arrParams[] = class_module_system_setting::getConfigValue("_system_admin_email_");
+                $arrParams[] = SystemSetting::getConfigValue("_system_admin_email_");
                 $arrParams[] = "contact.tpl";
                 $arrParams[] = $strElementId;
             }

@@ -6,15 +6,15 @@
 
 namespace Kajona\Packageserver\Portal;
 
-use class_exception;
-use class_http_responsetypes;
-use class_module_mediamanager_file;
-use class_module_packagemanager_manager;
-use class_module_system_setting;
-use class_portal_controller;
-use class_response_object;
-use interface_portal;
+use Kajona\Mediamanager\System\MediamanagerFile;
+use Kajona\Packagemanager\System\PackagemanagerManager;
 use Kajona\Packageserver\System\PackageserverLog;
+use Kajona\System\Portal\PortalController;
+use Kajona\System\Portal\PortalInterface;
+use Kajona\System\System\Exception;
+use Kajona\System\System\HttpResponsetypes;
+use Kajona\System\System\ResponseObject;
+use Kajona\System\System\SystemSetting;
 
 /**
  * Portal-class of the packageserver. Processes requests and passes infos / download-links
@@ -26,7 +26,8 @@ use Kajona\Packageserver\System\PackageserverLog;
  * @module packageserver
  * @moduleId _packageserver_module_id_
  */
-class PackageserverPortal extends class_portal_controller implements interface_portal {
+class PackageserverPortal extends PortalController implements PortalInterface
+{
 
     const PROTOCOL_VERSION = 5;
 
@@ -38,7 +39,8 @@ class PackageserverPortal extends class_portal_controller implements interface_p
      * @permissions view
      * @xml
      */
-    protected function actionList() {
+    protected function actionList()
+    {
         $arrPackages = array();
         $intNrOfFiles = 0;
 
@@ -51,17 +53,17 @@ class PackageserverPortal extends class_portal_controller implements interface_p
         if ($this->isValidPagingParameter($intStart) && $this->isValidPagingParameter($intEnd)) {
 
             if ($intEnd >= $intStart) {
-                $intNrOfFiles = $this->getAllPackagesCount(class_module_system_setting::getConfigValue("_packageserver_repo_id_"), $strTypeFilter, $strNameFilter);
-                $arrDBFiles = $this->getAllPackages(class_module_system_setting::getConfigValue("_packageserver_repo_id_"), $strTypeFilter, $intStart, $intEnd, $strNameFilter);
+                $intNrOfFiles = $this->getAllPackagesCount(SystemSetting::getConfigValue("_packageserver_repo_id_"), $strTypeFilter, $strNameFilter);
+                $arrDBFiles = $this->getAllPackages(SystemSetting::getConfigValue("_packageserver_repo_id_"), $strTypeFilter, $intStart, $intEnd, $strNameFilter);
 
                 //error-handling: a new filter and a offset is passed. but maybe the passed offset is no longer valid for the new filter criteria
-                if(count($arrDBFiles) == 0 && $intNrOfFiles > 0) {
-                    $arrDBFiles = $this->getAllPackages(class_module_system_setting::getConfigValue("_packageserver_repo_id_"), $strTypeFilter, 0, $intNrOfFiles, $strNameFilter);
+                if (count($arrDBFiles) == 0 && $intNrOfFiles > 0) {
+                    $arrDBFiles = $this->getAllPackages(SystemSetting::getConfigValue("_packageserver_repo_id_"), $strTypeFilter, 0, $intNrOfFiles, $strNameFilter);
                 }
 
-                $objManager = new class_module_packagemanager_manager();
+                $objManager = new PackagemanagerManager();
 
-                foreach($arrDBFiles as $objOneFile) {
+                foreach ($arrDBFiles as $objOneFile) {
 
                     try {
 
@@ -75,13 +77,13 @@ class PackageserverPortal extends class_portal_controller implements interface_p
                         );
 
                     }
-                    catch(class_exception $objEx) {
+                    catch (Exception $objEx) {
 
                     }
                 }
 
                 PackageserverLog::generateDlLog($strNameFilter !== false ? $strNameFilter : "", isset($_SERVER["REMOTE_ADDR"]) ? $_SERVER["REMOTE_ADDR"] : "::1", urldecode($this->getParam("domain")));
-                class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JSON);
+                ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
             }
         }
 
@@ -94,26 +96,30 @@ class PackageserverPortal extends class_portal_controller implements interface_p
         return $strReturn;
     }
 
-    private function ensureNumericValue($strParam, $objDefaultValue) {
+    private function ensureNumericValue($strParam, $objDefaultValue)
+    {
         if ($strParam === null || trim($strParam) === "") {
             return $objDefaultValue;
-        } elseif (!is_numeric($strParam)) {
+        }
+        elseif (!is_numeric($strParam)) {
             // type filter has unknown value
             return $objDefaultValue;
         }
         return $strParam;
     }
 
-    private function isValidCategoryFilter($strParam) {
+    private function isValidCategoryFilter($strParam)
+    {
         $arrTypes = array(
-            class_module_packagemanager_manager::STR_TYPE_MODULE,
-            class_module_packagemanager_manager::STR_TYPE_TEMPLATE
+            PackagemanagerManager::STR_TYPE_MODULE,
+            PackagemanagerManager::STR_TYPE_TEMPLATE
         );
         return in_array($strParam, $arrTypes);
     }
 
-    private function isValidPagingParameter($parameter) {
-        if ($parameter === null || (is_numeric($parameter) && (int) $parameter >= 0)) {
+    private function isValidPagingParameter($parameter)
+    {
+        if ($parameter === null || (is_numeric($parameter) && (int)$parameter >= 0)) {
             return true;
         }
         return false;
@@ -129,53 +135,60 @@ class PackageserverPortal extends class_portal_controller implements interface_p
      * @param int $intEnd
      * @param bool $strNameFilter
      *
-     * @return class_module_mediamanager_file[]
+     * @return MediamanagerFile[]
      */
-    private function getAllPackages($strParentId, $strCategoryFilter = false, $intStart = null, $intEnd = null, $strNameFilter = false) {
+    private function getAllPackages($strParentId, $strCategoryFilter = false, $intStart = null, $intEnd = null, $strNameFilter = false)
+    {
         $arrReturn = array();
 
-        if(validateSystemid($strParentId)) {
+        if (validateSystemid($strParentId)) {
 
-            $arrSubfiles = class_module_mediamanager_file::loadFilesDB($strParentId, false, true, null, null, true);
+            $arrSubfiles = MediamanagerFile::loadFilesDB($strParentId, false, true, null, null, true);
 
-            foreach($arrSubfiles as $objOneFile) {
-                if($objOneFile->getIntType() == class_module_mediamanager_file::$INT_TYPE_FILE) {
+            foreach ($arrSubfiles as $objOneFile) {
+                if ($objOneFile->getIntType() == MediamanagerFile::$INT_TYPE_FILE) {
 
                     //filename based check if the file should be included
-                    if($strNameFilter !== false) {
-                        if(uniStrpos($strNameFilter, ",") !== false) {
-                            if(in_array($objOneFile->getStrName(), explode(",", $strNameFilter)))
+                    if ($strNameFilter !== false) {
+                        if (uniStrpos($strNameFilter, ",") !== false) {
+                            if (in_array($objOneFile->getStrName(), explode(",", $strNameFilter))) {
                                 $arrReturn[] = $objOneFile;
+                            }
                         }
-                        elseif(uniSubstr($objOneFile->getStrName(), 0, uniStrlen($strNameFilter)) == $strNameFilter)
+                        elseif (uniSubstr($objOneFile->getStrName(), 0, uniStrlen($strNameFilter)) == $strNameFilter) {
                             $arrReturn[] = $objOneFile;
+                        }
                     }
-                    else
+                    else {
                         $arrReturn[] = $objOneFile;
+                    }
                 }
-                else
+                else {
                     $arrReturn = array_merge($arrReturn, $this->getAllPackages($objOneFile->getSystemid()));
+                }
             }
 
-            if($intStart !== null && $intEnd !== null && $intStart > 0 && $intEnd > $intStart) {
-                if($intEnd > count($arrReturn))
+            if ($intStart !== null && $intEnd !== null && $intStart > 0 && $intEnd > $intStart) {
+                if ($intEnd > count($arrReturn)) {
                     $intEnd = count($arrReturn);
+                }
 
                 $arrTemp = array();
-                for($intI = $intStart; $intI <= $intEnd; $intI++)
+                for ($intI = $intStart; $intI <= $intEnd; $intI++) {
                     $arrTemp[] = $arrReturn[$intI];
+                }
 
                 $arrReturn = $arrTemp;
 
             }
 
             //sort them by filename
-            usort($arrReturn, function(class_module_mediamanager_file $objA, class_module_mediamanager_file $objB) {
+            usort($arrReturn, function (MediamanagerFile $objA, MediamanagerFile $objB) {
                 return strcmp($objA->getStrName(), $objB->getStrName());
             });
         }
         else {
-            $arrReturn = class_module_mediamanager_file::getFlatPackageList($strCategoryFilter, true, $intStart, $intEnd, $strNameFilter);
+            $arrReturn = MediamanagerFile::getFlatPackageList($strCategoryFilter, true, $intStart, $intEnd, $strNameFilter);
         }
 
         return $arrReturn;
@@ -190,11 +203,14 @@ class PackageserverPortal extends class_portal_controller implements interface_p
      *
      * @return int
      */
-    private function getAllPackagesCount($strParentId, $strCategoryFilterFilter = false, $strNameFilter = false) {
-        if(validateSystemid($strParentId))
+    private function getAllPackagesCount($strParentId, $strCategoryFilterFilter = false, $strNameFilter = false)
+    {
+        if (validateSystemid($strParentId)) {
             return count($this->getAllPackages($strParentId, $strCategoryFilterFilter, null, null, $strNameFilter));
-        else
-            return class_module_mediamanager_file::getFlatPackageListCount($strCategoryFilterFilter, true, $strNameFilter);
+        }
+        else {
+            return MediamanagerFile::getFlatPackageListCount($strCategoryFilterFilter, true, $strNameFilter);
+        }
     }
 
 

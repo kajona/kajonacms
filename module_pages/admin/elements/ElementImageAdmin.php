@@ -19,7 +19,8 @@ use Kajona\Pages\Admin\ElementAdmin;
  *
  * @targetTable element_image.content_id
  */
-class ElementImageAdmin extends ElementAdmin implements AdminElementInterface {
+class ElementImageAdmin extends ElementAdmin implements AdminElementInterface
+{
 
     /**
      * @var string
@@ -105,89 +106,98 @@ class ElementImageAdmin extends ElementAdmin implements AdminElementInterface {
     /**
      * @param string $strImage
      */
-    public function setStrImage($strImage) {
+    public function setStrImage($strImage)
+    {
         $this->strImage = $strImage;
     }
 
     /**
      * @return string
      */
-    public function getStrImage() {
+    public function getStrImage()
+    {
         return $this->strImage;
     }
 
     /**
      * @param string $strImageX
      */
-    public function setStrImageX($strImageX) {
+    public function setStrImageX($strImageX)
+    {
         $this->strImageX = $strImageX;
     }
 
     /**
      * @return string
      */
-    public function getStrImageX() {
+    public function getStrImageX()
+    {
         return $this->strImageX;
     }
 
     /**
      * @param string $strImageY
      */
-    public function setStrImageY($strImageY) {
+    public function setStrImageY($strImageY)
+    {
         $this->strImageY = $strImageY;
     }
 
     /**
      * @return string
      */
-    public function getStrImageY() {
+    public function getStrImageY()
+    {
         return $this->strImageY;
     }
 
     /**
      * @param string $strLink
      */
-    public function setStrLink($strLink) {
+    public function setStrLink($strLink)
+    {
         $this->strLink = $strLink;
     }
 
     /**
      * @return string
      */
-    public function getStrLink() {
+    public function getStrLink()
+    {
         return $this->strLink;
     }
 
     /**
      * @param string $strTemplate
      */
-    public function setStrTemplate($strTemplate) {
+    public function setStrTemplate($strTemplate)
+    {
         $this->strTemplate = $strTemplate;
     }
 
     /**
      * @return string
      */
-    public function getStrTemplate() {
+    public function getStrTemplate()
+    {
         return $this->strTemplate;
     }
 
     /**
      * @param string $strTitle
      */
-    public function setStrTitle($strTitle) {
+    public function setStrTitle($strTitle)
+    {
         $this->strTitle = $strTitle;
     }
 
     /**
      * @return string
      */
-    public function getStrTitle() {
+    public function getStrTitle()
+    {
         return $this->strTitle;
     }
-
-
-
 
 
 }

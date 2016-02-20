@@ -12,12 +12,13 @@ use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
+use Kajona\System\System\SamplecontentInstallerInterface;
 
 /**
  * Installer of the postacomment samplecontent
  *
  */
-class InstallerSamplecontentPostacomment implements interface_sc_installer  {
+class InstallerSamplecontentPostacomment implements SamplecontentInstallerInterface  {
 
     /**
      * @var class_db
@@ -53,7 +54,7 @@ class InstallerSamplecontentPostacomment implements interface_sc_installer  {
         $strPostacommentPageID = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strPostacommentPageID."\n";
         $strReturn .= "Adding pagelement to new page\n";
-        
+
         if(PagesElement::getElement("postacomment") != null) {
             $objPagelement = new PagesPageelement();
             $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
@@ -92,7 +93,7 @@ class InstallerSamplecontentPostacomment implements interface_sc_installer  {
                 $strReturn .= "Error creating headline element.\n";
             }
         }
-        
+
         $strReturn .= "Adding paragraph-element to new page\n";
         if(PagesElement::getElement("paragraph") != null) {
             $objPagelement = new PagesPageelement();
@@ -127,7 +128,7 @@ class InstallerSamplecontentPostacomment implements interface_sc_installer  {
             }
         }
 
-       
+
         return $strReturn;
     }
 

@@ -73,8 +73,8 @@ class BuildHelper {
         echo "starting up system-kernel...\n";
         echo "including ".__DIR__."/".$this->strProjectPath."/core/module_system/bootstrap.php...\n";
         include __DIR__."/".$this->strProjectPath."/core/module_system/bootstrap.php";
-        echo "creating instance of class_carrier...\n";
-        $objCarrier = class_carrier::getInstance();
+        echo "creating instance of \\Kajona\\System\\System\\Carrier...\n";
+        $objCarrier = \Kajona\System\System\Carrier::getInstance();
 
         echo "dropping old tables...\n";
         $objDB = $objCarrier->getObjDB();
@@ -85,7 +85,7 @@ class BuildHelper {
             $objDB->_pQuery("DROP TABLE ".$strOneTable, array());
         }
 
-        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_DBTABLES | class_carrier::INT_CACHE_TYPE_MODULES | class_carrier::INT_CACHE_TYPE_OBJECTFACTORY | class_carrier::INT_CACHE_TYPE_ORMCACHE);
+        \Kajona\System\System\Carrier::getInstance()->flushCache(\Kajona\System\System\Carrier::INT_CACHE_TYPE_DBQUERIES | \Kajona\System\System\Carrier::INT_CACHE_TYPE_DBTABLES | \Kajona\System\System\Carrier::INT_CACHE_TYPE_MODULES | \Kajona\System\System\Carrier::INT_CACHE_TYPE_OBJECTFACTORY | \Kajona\System\System\Carrier::INT_CACHE_TYPE_ORMCACHE);
 
         echo "\n\n";
         echo "Blocking browscap update\n";

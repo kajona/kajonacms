@@ -10,18 +10,18 @@
 
 namespace Kajona\Pages\System;
 
-use class_carrier;
-use class_element_admin;
-use class_element_portal;
-use class_exception;
-use class_model;
-use class_module_pages_pageelement;
-use class_orm_objectlist;
-use class_orm_objectlist_restriction;
-use interface_admin_element;
-use interface_admin_listable;
-use interface_model;
-use interface_portal_element;
+use Kajona\Pages\Admin\AdminElementInterface;
+use Kajona\Pages\Admin\ElementAdmin;
+use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\Portal\PortalElementInterface;
+use Kajona\System\System\AdminListableInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Classloader;
+use Kajona\System\System\Exception;
+use Kajona\System\System\OrmObjectlist;
+use Kajona\System\System\OrmObjectlistRestriction;
+use Kajona\System\System\Resourceloader;
+
 
 /**
  * Model for a element. This is the "raw"-element, not the element on a page
@@ -34,7 +34,7 @@ use interface_portal_element;
  *
  * @blockFromAutosave
  */
-class PagesElement extends class_model implements interface_model, interface_admin_listable
+class PagesElement extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, AdminListableInterface
 {
 
     /**
@@ -127,7 +127,7 @@ class PagesElement extends class_model implements interface_model, interface_adm
         //delete elements in the database
         $arrElements = $this->objDB->getPArray("SELECT page_element_id FROM "._dbprefix_."page_element WHERE page_element_ph_element = ?", array($this->getStrName()));
         foreach ($arrElements as $arrOneRow) {
-            $objElement = new class_module_pages_pageelement($arrOneRow["page_element_id"]);
+            $objElement = new PagesPageelement($arrOneRow["page_element_id"]);
             $objElement->deleteObjectFromDatabase();
         }
 
@@ -158,7 +158,7 @@ class PagesElement extends class_model implements interface_model, interface_adm
      */
     public function getStrDisplayName()
     {
-        $strName = class_carrier::getInstance()->getObjLang()->getLang("element_".$this->getStrName()."_name", "elements");
+        $strName = Carrier::getInstance()->getObjLang()->getLang("element_".$this->getStrName()."_name", "elements");
         if ($strName == "!element_".$this->getStrName()."_name!") {
             $strName = $this->getStrName();
         }
@@ -210,8 +210,8 @@ class PagesElement extends class_model implements interface_model, interface_adm
      */
     public static function getElement($strName)
     {
-        $objORM = new class_orm_objectlist();
-        $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND element_name = ?", array($strName)));
+        $objORM = new OrmObjectlist();
+        $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND element_name = ?", array($strName)));
         return $objORM->getSingleObject(get_called_class());
     }
 
@@ -221,18 +221,18 @@ class PagesElement extends class_model implements interface_model, interface_adm
      * The admin-element won't get initialized by a systemid, so you shouldn't retrieve
      * it for further usings.
      *
-     * @throws class_exception
-     * @return interface_admin_element|class_element_admin An instance of the admin-class linked by the current element
+     * @throws Exception
+     * @return AdminElementInterface|ElementAdmin An instance of the admin-class linked by the current element
      */
     public function getAdminElementInstance()
     {
-        $strFilename = \class_resourceloader::getInstance()->getPathForFile("/admin/elements/".$this->getStrClassAdmin());
-        $objInstance = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin", null, array(), true);
+        $strFilename = Resourceloader::getInstance()->getPathForFile("/admin/elements/".$this->getStrClassAdmin());
+        $objInstance = Classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin", null, array(), true);
 
         //legacy handling
         if ($objInstance == null) {
-            $strFilename = \class_resourceloader::getInstance()->getPathForFile("/legacy/".$this->getStrClassAdmin());
-            $objInstance = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin");
+            $strFilename = Resourceloader::getInstance()->getPathForFile("/legacy/".$this->getStrClassAdmin());
+            $objInstance = Classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin");
 
         }
 
@@ -240,7 +240,7 @@ class PagesElement extends class_model implements interface_model, interface_adm
             return $objInstance;
         }
         else {
-            throw new class_exception("element class ".$this->getStrClassAdmin()." not existing", class_exception::$level_FATALERROR);
+            throw new Exception("element class ".$this->getStrClassAdmin()." not existing", Exception::$level_FATALERROR);
         }
     }
 
@@ -249,18 +249,18 @@ class PagesElement extends class_model implements interface_model, interface_adm
      * The admin-element won't get initialized by a systemid, so you shouldn't retrieve
      * it for further usings.
      *
-     * @throws class_exception
-     * @return interface_portal_element|class_element_portal An instance of the portal-class linked by the current element
+     * @throws Exception
+     * @return PortalElementInterface|ElementPortal An instance of the portal-class linked by the current element
      */
     public function getPortalElementInstance()
     {
-        $strFilename = \class_resourceloader::getInstance()->getPathForFile("/portal/elements/".$this->getStrClassPortal());
-        $objInstance = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Portal\\ElementPortal", null, array(new class_module_pages_pageelement()), true);
+        $strFilename = Resourceloader::getInstance()->getPathForFile("/portal/elements/".$this->getStrClassPortal());
+        $objInstance = Classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Portal\\ElementPortal", null, array(new PagesPageelement()), true);
 
         if ($objInstance == null) {
             //legacy handling
-            $strFilename = \class_resourceloader::getInstance()->getPathForFile("/legacy/".$this->getStrClassPortal());
-            $objInstance = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Portal\\ElementPortal", null, array(new class_module_pages_pageelement()), true);
+            $strFilename = Resourceloader::getInstance()->getPathForFile("/legacy/".$this->getStrClassPortal());
+            $objInstance = Classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Portal\\ElementPortal", null, array(new PagesPageelement()), true);
         }
 
 
@@ -270,7 +270,7 @@ class PagesElement extends class_model implements interface_model, interface_adm
             return $objInstance;
         }
         else {
-            throw new class_exception("element class ".$this->getStrClassPortal()." not existing", class_exception::$level_FATALERROR);
+            throw new Exception("element class ".$this->getStrClassPortal()." not existing", Exception::$level_FATALERROR);
         }
     }
 
@@ -325,7 +325,7 @@ class PagesElement extends class_model implements interface_model, interface_adm
      */
     public function getStrReadableName()
     {
-        $strName = class_carrier::getInstance()->getObjLang()->getLang("element_".$this->getStrName()."_name", "elemente");
+        $strName = Carrier::getInstance()->getObjLang()->getLang("element_".$this->getStrName()."_name", "elemente");
         if ($strName == "!element_".$this->getStrName()."_name!") {
             $strName = $this->getStrName();
         }

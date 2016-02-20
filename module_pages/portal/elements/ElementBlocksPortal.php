@@ -6,12 +6,12 @@
 
 namespace Kajona\Pages\Portal\Elements;
 
-use class_template;
 use Kajona\Pages\Portal\ElementPortal;
 use Kajona\Pages\Portal\PagesPortaleditor;
 use Kajona\Pages\Portal\PortalElementInterface;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
+use Kajona\System\System\Template;
 
 
 /**
@@ -37,29 +37,27 @@ class ElementBlocksPortal extends ElementPortal implements PortalElementInterfac
         //load elements below
         $arrElementsOnBlocks = PagesPageelement::getElementsOnPage($this->getSystemid(), !PagesPortaleditor::isActive(), $this->getStrPortalLanguage());
 
-        if(count($arrElementsOnBlocks) == 0) {
+        if (count($arrElementsOnBlocks) == 0) {
             return "";
         }
 
         $objPageData = PagesPage::getPageByName($this->getPagename());
 
-        $objPlaceholders = $this->objTemplate->parsePageTemplate("/module_pages/".$objPageData->getStrTemplate(), class_template::INT_ELEMENT_MODE_REGULAR);
+        $objPlaceholders = $this->objTemplate->parsePageTemplate("/module_pages/".$objPageData->getStrTemplate(), Template::INT_ELEMENT_MODE_REGULAR);
 
-        foreach($objPlaceholders->getArrBlocks() as $objOneBlock) {
-            if($objOneBlock->getStrName() == $this->arrElementData["page_element_ph_name"]) {
+        foreach ($objPlaceholders->getArrBlocks() as $objOneBlock) {
+            if ($objOneBlock->getStrName() == $this->arrElementData["page_element_ph_name"]) {
 
-                foreach($arrElementsOnBlocks as $objOneElement) {
-                    /** @var  ElementBlockPortal $objElement  */
+                foreach ($arrElementsOnBlocks as $objOneElement) {
+                    /** @var  ElementBlockPortal $objElement */
                     $objElement = $objOneElement->getConcretePortalInstance();
                     $strReturn .= $objElement->getRenderedElementOutput(PagesPortaleditor::isActive());
-//                    $strReturn .= PagesPortaleditor::getPlaceholderWrapper("block_".$objOneElement->getSystemid());
                 }
 
             }
         }
 
         return $strReturn;
-        return '<div data-element="blocks" data-name="content" data-systemid="' . $this->getSystemid() . '">' . $strReturn . '</div>';
     }
 
     protected function addPortalEditorCode($strElementOutput)

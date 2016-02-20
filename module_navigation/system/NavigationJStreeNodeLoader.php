@@ -9,13 +9,12 @@
 
 namespace Kajona\Navigation\System;
 
-use class_module_navigation_point;
-use class_module_navigation_tree;
+use Kajona\Pages\System\PagesPage;
+use Kajona\System\System\AdminskinHelper;
+use Kajona\System\System\Carrier;
 use Kajona\System\System\InterfaceJStreeNodeLoader;
-use class_carrier;
-use class_objectfactory;
-use class_adminskin_helper;
-use class_link;
+use Kajona\System\System\Link;
+use Kajona\System\System\Objectfactory;
 
 /**
  * @package module_navigation
@@ -37,7 +36,7 @@ class NavigationJStreeNodeLoader implements InterfaceJStreeNodeLoader
      */
     public function __construct()
     {
-        $this->objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+        $this->objToolkit = Carrier::getInstance()->getObjToolkit("admin");
     }
 
     public function getChildNodes($strSystemId) {
@@ -45,7 +44,7 @@ class NavigationJStreeNodeLoader implements InterfaceJStreeNodeLoader
 
         //1. Get Page
         /** @var PagesPage $objSingleProcess */
-        $objSingleProcess = class_objectfactory::getInstance()->getObject($strSystemId);
+        $objSingleProcess = Objectfactory::getInstance()->getObject($strSystemId);
 
         //2. Handle Children
         $arrChildrenProcesse = $this->getChildrenObjects($objSingleProcess);
@@ -59,13 +58,13 @@ class NavigationJStreeNodeLoader implements InterfaceJStreeNodeLoader
     }
 
 
-    private function getNodeNavigationPoint(class_module_navigation_point $objSinglePoint) {
+    private function getNodeNavigationPoint(NavigationPoint $objSinglePoint) {
 
         $arrNode = array(
             "id" => $objSinglePoint->getSystemid(),
-            "text" => class_adminskin_helper::getAdminImage($objSinglePoint->getStrIcon())."&nbsp;".$objSinglePoint->getStrDisplayName(),
+            "text" => AdminskinHelper::getAdminImage($objSinglePoint->getStrIcon())."&nbsp;".$objSinglePoint->getStrDisplayName(),
             "a_attr"  => array(
-                "href"     => class_link::getLinkAdminHref("navigation", "list", "&systemid=".$objSinglePoint->getSystemid(), false),
+                "href"     => Link::getLinkAdminHref("navigation", "list", "&systemid=".$objSinglePoint->getSystemid(), false),
             ),
             "type" => "navigationpoint",
             "children" => count($this->getChildrenObjects($objSinglePoint)) > 0
@@ -74,12 +73,12 @@ class NavigationJStreeNodeLoader implements InterfaceJStreeNodeLoader
         return $arrNode;
     }
 
-    private function getNodeNavigationTree(class_module_navigation_tree $objSingleEntry) {
+    private function getNodeNavigationTree(NavigationTree $objSingleEntry) {
         $arrNode = array(
             "id" => $objSingleEntry->getSystemid(),
-            "text" => class_adminskin_helper::getAdminImage($objSingleEntry->getStrIcon())."&nbsp;".$objSingleEntry->getStrDisplayName(),
+            "text" => AdminskinHelper::getAdminImage($objSingleEntry->getStrIcon())."&nbsp;".$objSingleEntry->getStrDisplayName(),
             "a_attr"  => array(
-                "href"     => class_link::getLinkAdminHref("navigation", "list", "&systemid=".$objSingleEntry->getSystemid(), false),
+                "href"     => Link::getLinkAdminHref("navigation", "list", "&systemid=".$objSingleEntry->getSystemid(), false),
             ),
             "type" => "navigationtree",
             "children" => count($this->getChildrenObjects($objSingleEntry)) > 0
@@ -91,12 +90,12 @@ class NavigationJStreeNodeLoader implements InterfaceJStreeNodeLoader
     public function getNode($strSystemId) {
 
         //1. Get Process
-        $objSingleEntry = class_objectfactory::getInstance()->getObject($strSystemId);
+        $objSingleEntry = Objectfactory::getInstance()->getObject($strSystemId);
 
-        if ($objSingleEntry instanceof class_module_navigation_point) {
+        if ($objSingleEntry instanceof NavigationPoint) {
             return $this->getNodeNavigationPoint($objSingleEntry);
         }
-        elseif ($objSingleEntry instanceof class_module_navigation_tree) {
+        elseif ($objSingleEntry instanceof NavigationTree) {
             return $this->getNodeNavigationTree($objSingleEntry);
         }
 
@@ -105,7 +104,7 @@ class NavigationJStreeNodeLoader implements InterfaceJStreeNodeLoader
 
     private function getChildrenObjects($objPage) {
         //Handle Children
-        $arrNavigations = class_module_navigation_point::getNaviLayer($objPage->getSystemid());
+        $arrNavigations = NavigationPoint::getNaviLayer($objPage->getSystemid());
         $arrNavigations = array_values(array_filter($arrNavigations, function($objPage) {return $objPage->rightView();}));
         return $arrNavigations;
     }

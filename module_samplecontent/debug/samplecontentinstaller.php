@@ -22,7 +22,7 @@ for ($i = 0; $i < ob_get_level(); $i++) {
 ob_implicit_flush(1);
 
 //search for installers available
-$arrInstaller = class_resourceloader::getInstance()->getFolderContent("/installer", array(".php"), false, function($strFile) {
+$arrInstaller = \Kajona\System\System\Resourceloader::getInstance()->getFolderContent("/installer", array(".php"), false, function($strFile) {
    return strpos($strFile, "installer_sc_") !== false;
 });
 
@@ -44,7 +44,7 @@ echo "</form>";
 if(issetPost("doinstall")) {
     $intStart = time();
 
-    $arrFiles = class_resourceloader::getInstance()->getFolderContent("/installer", array(".php"), false, function($strFile) {
+    $arrFiles = \Kajona\System\System\Resourceloader::getInstance()->getFolderContent("/installer", array(".php"), false, function($strFile) {
         return strpos($strFile, "installer_sc_") !== false && substr($strFile, -4) == ".php";
     });
 
@@ -57,18 +57,18 @@ if(issetPost("doinstall")) {
 
             $strName = $strClass = "class_".str_replace(".php", "", $strFilename);
             $objInstaller = new $strName();
-            $objLang = new class_module_languages_language();
+            $objLang = new \Kajona\System\System\LanguagesLanguage();
 
-            if($objInstaller instanceof interface_sc_installer ) {
+            if($objInstaller instanceof \Kajona\System\System\SamplecontentInstallerInterface ) {
                 $strModule = $objInstaller->getCorrespondingModule();
                 echo "Module ".$strModule."...\n";
-                $objModule = class_module_system_module::getModuleByName($strModule);
+                $objModule = \Kajona\System\System\SystemModule::getModuleByName($strModule);
                 if($objModule == null) {
                     echo "\t... not installed!\n";
                 }
                 else {
                     echo "\t... installed.\n";
-                    $objInstaller->setObjDb(class_carrier::getInstance()->getObjDB());
+                    $objInstaller->setObjDb(\Kajona\System\System\Carrier::getInstance()->getObjDB());
                     $objInstaller->setStrContentlanguage($objLang->getStrAdminLanguageToWorkOn());
                     echo $objInstaller->install();
                 }

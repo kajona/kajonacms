@@ -20,7 +20,8 @@ use Kajona\Pages\Admin\ElementAdmin;
  *
  * @targetTable element_paragraph.content_id
  */
-class ElementRowAdmin extends ElementAdmin implements AdminElementInterface {
+class ElementRowAdmin extends ElementAdmin implements AdminElementInterface
+{
 
     /**
      * @var string
@@ -53,31 +54,34 @@ class ElementRowAdmin extends ElementAdmin implements AdminElementInterface {
     /**
      * @param string $strTemplate
      */
-    public function setStrTemplate($strTemplate) {
+    public function setStrTemplate($strTemplate)
+    {
         $this->strTemplate = $strTemplate;
     }
 
     /**
      * @return string
      */
-    public function getStrTemplate() {
+    public function getStrTemplate()
+    {
         return $this->strTemplate;
     }
 
     /**
      * @param string $strTitle
      */
-    public function setStrTitle($strTitle) {
+    public function setStrTitle($strTitle)
+    {
         $this->strTitle = $strTitle;
     }
 
     /**
      * @return string
      */
-    public function getStrTitle() {
+    public function getStrTitle()
+    {
         return $this->strTitle;
     }
-
 
 
 }

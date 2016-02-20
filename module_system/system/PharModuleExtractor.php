@@ -6,8 +6,6 @@
 
 namespace Kajona\System\System;
 
-use class_classloader;
-use class_logger;
 
 /**
  * Tries to extract the static contents of a phar in order to make them accessible by the webserver
@@ -24,30 +22,30 @@ class PharModuleExtractor
     private function extractStaticContent($arrIndexMap)
     {
         //fetch all phar based modules
-        $arrModules = \class_classloader::getInstance()->getArrModules();
+        $arrModules = Classloader::getInstance()->getArrModules();
 
-        $objFilesystem = new \class_filesystem();
-        foreach($arrModules as $strPath => $strModule) {
+        $objFilesystem = new Filesystem();
+        foreach ($arrModules as $strPath => $strModule) {
 
             //to index?
-            if(!isset($arrIndexMap[$strModule])) {
+            if (!isset($arrIndexMap[$strModule])) {
                 continue;
             }
 
-            if(!PharModule::isPhar($strPath)) {
+            if (!PharModule::isPhar($strPath)) {
                 continue;
             }
 
             //mark revision indexed
             BootstrapCache::getInstance()->addCacheRow(BootstrapCache::CACHE_PHARSUMS, $strModule, $arrIndexMap[$strModule]);
-            class_logger::getInstance($this->strLogName)->addLogRow("extracting phar ".$strPath."\n", class_logger::$levelInfo);
+            Logger::getInstance($this->strLogName)->addLogRow("extracting phar ".$strPath."\n", Logger::$levelInfo);
 
             $objPharModule = new PharModule($strPath);
 
-            foreach($objPharModule->getContentMap() as $strKey => $strFullPath) {
+            foreach ($objPharModule->getContentMap() as $strKey => $strFullPath) {
 
                 //check for matching suffix and move to temp dir
-                if(preg_match($this->strExtractPattern, $strKey)) {
+                if (preg_match($this->strExtractPattern, $strKey)) {
                     //extract the file and export it
                     $strTargetPath = _realpath_."/files/extract/".$strModule."/".$strKey;
                     $objFilesystem->folderCreate(dirname($strTargetPath), true, true);
@@ -58,7 +56,6 @@ class PharModuleExtractor
 
         }
 
-
     }
 
 
@@ -66,15 +63,15 @@ class PharModuleExtractor
     {
         $arrPharMap = array();
         $arrOldMap = BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_PHARSUMS);
-        $arrModules = \class_classloader::getInstance()->getArrModules();
+        $arrModules = Classloader::getInstance()->getArrModules();
 
-        foreach($arrModules as $strPath => $strModule) {
+        foreach ($arrModules as $strPath => $strModule) {
             if (!PharModule::isPhar($strPath)) {
                 continue;
             }
 
             $strSum = filemtime(_realpath_.$strPath);
-            if(!isset($arrOldMap[$strModule]) || $arrOldMap[$strModule] != $strSum) {
+            if (!isset($arrOldMap[$strModule]) || $arrOldMap[$strModule] != $strSum) {
                 $arrPharMap[$strModule] = $strSum;
             }
 
@@ -88,8 +85,8 @@ class PharModuleExtractor
     {
         $objInstance = new PharModuleExtractor();
         $arrIndex = $objInstance->createPharMap();
-        if(!empty($arrIndex)) {
-            class_classloader::getInstance()->flushCache();
+        if (!empty($arrIndex)) {
+            Classloader::getInstance()->flushCache();
             $objInstance->extractStaticContent($arrIndex);
         }
     }

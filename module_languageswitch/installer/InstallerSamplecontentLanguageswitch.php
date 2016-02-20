@@ -11,6 +11,7 @@ use interface_sc_installer;
 use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
+use Kajona\System\System\SamplecontentInstallerInterface;
 
 
 /**
@@ -18,7 +19,7 @@ use Kajona\Pages\System\PagesPageelement;
  *
  * @package element_languageswitch
  */
-class InstallerSamplecontentLanguageswitch implements interface_sc_installer  {
+class InstallerSamplecontentLanguageswitch implements SamplecontentInstallerInterface  {
 
     /**
      * @var class_db

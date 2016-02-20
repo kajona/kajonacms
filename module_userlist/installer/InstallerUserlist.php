@@ -7,10 +7,10 @@
 
 namespace Kajona\Userlist\Installer;
 
-use class_installer_base;
-use class_module_system_module;
-use interface_installer_removable;
 use Kajona\Pages\System\PagesElement;
+use Kajona\System\System\InstallerBase;
+use Kajona\System\System\InstallerRemovableInterface;
+use Kajona\System\System\SystemModule;
 
 /**
  * Installer to install a login-element to use in the portal
@@ -18,10 +18,12 @@ use Kajona\Pages\System\PagesElement;
  * @author sidler@mulchprod.de
  * @moduleId _userlist_module_id_
  */
-class InstallerUserlist extends class_installer_base implements interface_installer_removable {
+class InstallerUserlist extends InstallerBase implements InstallerRemovableInterface
+{
 
-	public function install() {
-		$strReturn = "";
+    public function install()
+    {
+        $strReturn = "";
 
         //register the module
         $this->registerModule($this->objMetadata->getStrTitle(), _userlist_module_id_, "", "", $this->objMetadata->getStrVersion(), false);
@@ -30,11 +32,11 @@ class InstallerUserlist extends class_installer_base implements interface_instal
         $strReturn .= "Registering userlist-element...\n";
         //check, if not already existing
         $objElement = PagesElement::getElement("userlist");
-        if($objElement == null) {
+        if ($objElement == null) {
             $objElement = new PagesElement();
             $objElement->setStrName("userlist");
-            $objElement->setStrClassAdmin("class_element_userlist_admin.php");
-            $objElement->setStrClassPortal("class_element_userlist_portal.php");
+            $objElement->setStrClassAdmin("ElementUserlistAdmin.php");
+            $objElement->setStrClassPortal("ElementUserlistPortal.php");
             $objElement->setIntCachetime(-1);
             $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->objMetadata->getStrVersion());
@@ -44,7 +46,7 @@ class InstallerUserlist extends class_installer_base implements interface_instal
         else {
             $strReturn .= "Element already installed!...\n";
 
-            if($objElement->getStrVersion() < 1) {
+            if ($objElement->getStrVersion() < 1) {
                 $strReturn .= "Updating element version!...\n";
                 $objElement->setStrVersion("1.0");
                 $objElement->updateObjectToDb();
@@ -57,11 +59,12 @@ class InstallerUserlist extends class_installer_base implements interface_instal
     /**
      * @return string
      */
-    public function update() {
+    public function update()
+    {
         $strReturn = "";
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "1.0") {
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if ($arrModule["module_version"] == "1.0") {
             $strReturn .= "Updating 1.0 to 1.1...\n";
             $this->updateElementAndModule("1.1");
         }
@@ -72,7 +75,8 @@ class InstallerUserlist extends class_installer_base implements interface_instal
     /**
      * @inheritdoc
      */
-    public function isRemovable() {
+    public function isRemovable()
+    {
         return true;
     }
 
@@ -80,7 +84,8 @@ class InstallerUserlist extends class_installer_base implements interface_instal
     /**
      * @inheritdoc
      */
-    public function remove(&$strReturn) {
+    public function remove(&$strReturn)
+    {
         return $this->removeModuleAndElement($strReturn);
     }
 }
