@@ -29,7 +29,7 @@ use Kajona\System\System\SystemModule;
  * @module dashboard
  * @moduleId _dashboard_module_id_
  *
- * @sortManager class_common_sortmanager
+ * @sortManager \Kajona\System\System\CommonSortmanager
  */
 class DashboardWidget extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface {
 

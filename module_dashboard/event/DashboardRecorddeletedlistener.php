@@ -25,7 +25,8 @@ use Kajona\System\System\SystemEventidentifier;
  * @author sidler@mulchprod.de
  *
  */
-class DashboardRecorddeletedlistener implements GenericeventListenerInterface {
+class DashboardRecorddeletedlistener implements GenericeventListenerInterface
+{
 
 
     /**
@@ -42,18 +43,19 @@ class DashboardRecorddeletedlistener implements GenericeventListenerInterface {
      *
      * @return bool
      */
-    public function handleEvent($strEventName, array $arrArguments) {
+    public function handleEvent($strEventName, array $arrArguments)
+    {
         //unwrap arguments
         list($strSystemid, $strSourceClass) = $arrArguments;
 
-        if($strSourceClass == "class_module_user_user" && validateSystemid($strSystemid)) {
+        if ($strSourceClass == "Kajona\\System\\System\\UserUser" && validateSystemid($strSystemid)) {
 
             $objORM = new OrmObjectlist();
             $objORM->addWhereRestriction(new OrmObjectlistPropertyRestriction("strUser", OrmComparatorEnum::Equal(), $strSystemid));
             $objORM->setObjHandleLogicalDeleted(OrmDeletedhandlingEnum::INCLUDED);
-            $arrWidgets = $objORM->getObjectList("class_module_dashboard_widget");
+            $arrWidgets = $objORM->getObjectList("Kajona\\Dashboard\\System\\DashboardWidget");
 
-            foreach($arrWidgets as $objWidget) {
+            foreach ($arrWidgets as $objWidget) {
                 $objWidget->deleteObjectFromDatabase();
             }
         }
@@ -63,9 +65,11 @@ class DashboardRecorddeletedlistener implements GenericeventListenerInterface {
 
     /**
      * Internal init to register the event listener, called on file-inclusion, e.g. by the class-loader
+     *
      * @return void
      */
-    public static function staticConstruct() {
+    public static function staticConstruct()
+    {
         CoreEventdispatcher::getInstance()->removeAndAddListener(SystemEventidentifier::EVENT_SYSTEM_RECORDDELETED, new DashboardRecorddeletedlistener());
     }
 
