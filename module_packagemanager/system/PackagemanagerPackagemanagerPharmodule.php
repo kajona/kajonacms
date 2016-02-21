@@ -192,7 +192,7 @@ class PackagemanagerPackagemanagerPharmodule extends PackagemanagerPackagemanage
 
         $bitReturn = true;
 
-        //if we reach up until here, each installer should be an instance of interface_installer_removable
+        //if we reach up until here, each installer should be an instance of InstallerRemovableInterface
         foreach ($this->getInstaller($this->getObjMetadata()) as $objOneInstaller) {
             if ($objOneInstaller instanceof InstallerRemovableInterface) {
                 $bitReturn = $bitReturn && $objOneInstaller->remove($strLog);

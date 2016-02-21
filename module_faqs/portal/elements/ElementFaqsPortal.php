@@ -9,7 +9,6 @@
 
 namespace Kajona\Faqs\Portal\Elements;
 
-use class_module_rating_rate;
 use Kajona\Pages\Portal\ElementPortal;
 use Kajona\Pages\Portal\PortalElementInterface;
 use Kajona\Rating\System\RatingRate;

@@ -9,17 +9,14 @@
 namespace Kajona\Pages\Portal;
 
 use Kajona\Navigation\System\NavigationPoint;
-use Kajona\System\Portal\PortalController;
 use Kajona\Pages\Admin\Elements\ElementBlockAdmin;
-use Kajona\Pages\Admin\Elements\ElementBlocksAdmin;
-use Kajona\Pages\Portal\Elements\ElementBlocksPortal;
-use Kajona\Pages\Portal\PagesPortaleditor;
 use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
 use Kajona\Pages\System\PagesPortaleditorActionEnum;
 use Kajona\Pages\System\PagesPortaleditorPlaceholderAction;
 use Kajona\Pages\System\PagesPortaleditorSystemidAction;
+use Kajona\System\Portal\PortalController;
 use Kajona\System\System\Cache;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Exception;
@@ -135,8 +132,8 @@ abstract class ElementPortal extends PortalController
             //An error occurred during content generation. redirect to error page
             //$objEx->processException();
             //if available, show the error-page. on debugging-environments, the exception processing already die()d the process.
-//            if ($this->getPagename() != class_module_system_setting::getConfigValue("_pages_errorpage_")) {
-//                $this->portalReload(Link::getLinkPortalHref(class_module_system_setting::getConfigValue("_pages_errorpage_")));
+//            if ($this->getPagename() != SystemSetting::getConfigValue("_pages_errorpage_")) {
+//                $this->portalReload(Link::getLinkPortalHref(SystemSetting::getConfigValue("_pages_errorpage_")));
 //            }
 
             $strReturn = $objEx->getMessage();
@@ -443,10 +440,10 @@ abstract class ElementPortal extends PortalController
      * this special feature.
      * The array returned by this method should be structured like:
      * array(
-     *    node => class_module_navigation_point ,
+     *    node => NavigationPoint ,
      *    subnodes => array(
-     *        array( node => class_module_navigation_point, subnodes => array(...)),
-     *        array( node => class_module_navigation_point, subnodes => array(...))
+     *        array( node => NavigationPoint, subnodes => array(...)),
+     *        array( node => NavigationPoint, subnodes => array(...))
      *    )
      * )
      * If you don't want to create additional navigation entries, don't overwrite this method.
@@ -456,8 +453,8 @@ abstract class ElementPortal extends PortalController
      * If you only want to return a flat list of nodes, you can return an array of class_module_navigation_point instances instead of wrapping them
      * into the way more complex node/subnode structure.
      *
-     * @see class_module_navigation_tree::getCompleteNaviStructure()
-     * @see class_module_navigation_point::getDynamicNaviLayer()
+     * @see NavigationTree::getCompleteNaviStructure()
+     * @see NavigationPoint::getDynamicNaviLayer()
      * @return array|NavigationPoint[]|bool
      * @since 4.0
      */
@@ -467,7 +464,7 @@ abstract class ElementPortal extends PortalController
     }
 
     /**
-     * @return \class_module_pages_pageelement
+     * @return PagesPageelement
      */
     public function getObjElementData()
     {

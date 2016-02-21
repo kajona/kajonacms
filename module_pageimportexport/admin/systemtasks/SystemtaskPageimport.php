@@ -131,8 +131,7 @@ class SystemtaskPageimport extends SystemtaskBase implements AdminSystemtaskInte
     }
 
     /**
-     * @see interface_admin_systemtask::getSubmitParams()
-     * @return string
+     * @inheritdoc
      */
     public function getSubmitParams()
     {

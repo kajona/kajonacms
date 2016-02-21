@@ -25,7 +25,7 @@ class MediamanagerLogbook extends \Kajona\System\System\Model implements \Kajona
     /**
      * Generates an entry in the logbook an increases the hits-counter
      *
-     * @param \class_module_mediamanager_file $objFile
+     * @param MediamanagerFile $objFile
      */
     public static function generateDlLog(MediamanagerFile $objFile)
     {
