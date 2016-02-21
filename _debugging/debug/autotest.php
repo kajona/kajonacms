@@ -4,6 +4,12 @@
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
+namespace Kajona\Debugging\Debug;
+
+use Kajona\System\System\Filesystem;
+use Kajona\System\System\Resourceloader;
+use Kajona\System\System\Testbase;
+use ReflectionClass;
 
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
@@ -27,8 +33,8 @@ echo "             PHPUnit and is no real replacement.\n";
 echo "             Some tests require a full PHPUnit environment to run properly.\n\n";
 echo "searching tests available...\n";
 
-$objFilesystem = new class_filesystem();
-$arrFiles = class_resourceloader::getInstance()->getFolderContent("/tests", array(".php"));
+$objFilesystem = new Filesystem();
+$arrFiles = Resourceloader::getInstance()->getFolderContent("/tests", array(".php"));
 asort($arrFiles);
 echo "found ".count($arrFiles)." test(s)\n\n";
 
@@ -49,7 +55,7 @@ if(issetPost("dotest")) {
     $intStart = time();
 
     $strFilename = getPost("testname");
-    $arrFiles = class_resourceloader::getInstance()->getFolderContent("/tests", array(".php"));
+    $arrFiles = Resourceloader::getInstance()->getFolderContent("/tests", array(".php"));
 
     $strSearched = array_search($strFilename, $arrFiles);
 
@@ -60,7 +66,7 @@ if(issetPost("dotest")) {
         foreach($arrClasses as $strClassName) {
             if(uniStripos($strClassName, "test") !== false) {
                 $objTest = new $strClassName();
-                if($objTest instanceof class_testbase) {
+                if($objTest instanceof Testbase) {
                     echo " invoking kajonaTestTrigger() on instance of ".$strClassName."\n\n\n\n";
                     $objTest->kajonaTestTrigger();
                 }

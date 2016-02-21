@@ -6,11 +6,14 @@
 *-------------------------------------------------------------------------------------------------------*
 *   $Id$                                     *
 ********************************************************************************************************/
+namespace Kajona\Debugging\Debug;
+
+use Kajona\Navigation\System\NavigationPoint;
+use Kajona\Navigation\System\NavigationTree;
+use Kajona\System\System\SystemAspect;
 
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
-echo "|                                                                               |\n";
-echo "| CACHEVIEW                                                                     |\n";
 echo "|                                                                               |\n";
 echo "+-------------------------------------------------------------------------------+\n";
 
@@ -18,13 +21,13 @@ echo "Creating 200 records with sortmanager...\n";
 
 $arrTimestampStart = gettimeofday();
 
-$objNaviTree = new class_module_navigation_tree();
+$objNaviTree = new NavigationTree();
 $objNaviTree->updateObjectToDb();
 
 /** @var \Kajona\System\System\Model[] $arrRecords */
 $arrRecords = array();
 for($intI = 0; $intI < 200; $intI++) {
-    $objPoint = new class_module_navigation_point();
+    $objPoint = new NavigationPoint();
     $objPoint->updateObjectToDb($objNaviTree->getSystemid());
     $arrRecords[] = $objPoint;
 }
@@ -62,13 +65,13 @@ echo "\n\nCreating 200 records without sortmanager...\n";
 
 $arrTimestampStart = gettimeofday();
 
-$objRootAspect = new class_module_system_aspect();
+$objRootAspect = new SystemAspect();
 $objRootAspect->updateObjectToDb();
 
 /** @var \Kajona\System\System\Model[] $arrRecords */
 $arrRecords = array();
 for($intI = 0; $intI < 200; $intI++) {
-    $objAspect = new class_module_system_aspect();
+    $objAspect = new SystemAspect();
     $objAspect->updateObjectToDb($objRootAspect->getSystemid());
     $arrRecords[] = $objAspect;
 }

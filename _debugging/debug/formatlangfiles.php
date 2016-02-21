@@ -6,6 +6,9 @@
 *-------------------------------------------------------------------------------------------------------*
 *   $Id$                                           *
 ********************************************************************************************************/
+namespace Kajona\Debugging\Debug;
+
+use Kajona\System\System\Classloader;
 
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
@@ -19,7 +22,7 @@ echo "+-------------------------------------------------------------------------
 
 if(issetPost("format")) {
 
-    foreach(class_classloader::getInstance()->getCoreDirectories() as $strOneCore) {
+    foreach(Classloader::getInstance()->getCoreDirectories() as $strOneCore) {
 
         $strJavaCommand = "java -jar '"._realpath_."/".$strOneCore."/_debugging/debug/KajonaLanguageEditorCore.jar' --formatLangfiles --projectFolder '"._realpath_."' ";
 

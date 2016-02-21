@@ -4,6 +4,10 @@
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
+namespace Kajona\Debugging\Debug;
+
+use Kajona\System\System\SystemSetting;
+use Kajona\System\System\UserSourcefactory;
 
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
@@ -16,13 +20,13 @@ if(issetPost("dodelete")) {
     $strUsername = getPost("username");
     $strPassword = getPost("password");
 
-    $objUsersource = new class_module_user_sourcefactory();
+    $objUsersource = new UserSourcefactory();
     $objUser = $objUsersource->getUserByUsername($strUsername);
     echo "Authenticating user...\n";
     if($objUsersource->authenticateUser($strUsername, $strPassword)) {
         echo " ... authenticated.\n";
         $arrGroupIds = $objUser->getArrGroupIds();
-        if(in_array(class_module_system_setting::getConfigValue("_admins_group_id_"), $arrGroupIds)) {
+        if(in_array(SystemSetting::getConfigValue("_admins_group_id_"), $arrGroupIds)) {
             echo "User is member of admin-group.\n";
 
             $arrTables = \Kajona\System\System\Carrier::getInstance()->getObjDB()->getTables();

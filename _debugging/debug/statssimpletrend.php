@@ -1,17 +1,13 @@
 <?php
+namespace Kajona\Debugging\Debug;
 
-echo "<pre>\n";
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
-echo "|                                                                               |\n";
-echo "|                                                                               |\n";
 echo "+-------------------------------------------------------------------------------+\n";
 
 
 
 $objStartDate = new \Kajona\System\System\Date();
-$objEndDate = new \Kajona\System\System\Date();
-
 
 echo str_pad("Month", 15);
 echo str_pad("Hits", 15);
@@ -155,6 +151,3 @@ echo "\n\n";
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| (c) www.kajona.de                                                             |\n";
 echo "+-------------------------------------------------------------------------------+\n";
-echo "</pre>";
-
-

@@ -14,7 +14,7 @@ class CsvTest extends Testbase
     public function test()
     {
 
-        echo "\ttesting class_csv...\n";
+        echo "\ttesting Csv...\n";
 
         //test code
         $strFile = "/files/public/testCsv.csv";

@@ -14,7 +14,7 @@ class JsFilesTest extends Testbase
     {
 
 
-        $arrJsFiles = $this->getJsFiles();// class_resourceloader::getInstance()->getFolderContent("", array(".js"), true);
+        $arrJsFiles = $this->getJsFiles();
 
         foreach ($arrJsFiles as $strOneFile => $strFilename) {
 
