@@ -29,8 +29,7 @@ class WorkflowLdapSync implements WorkflowsHandlerInterface
     private $objWorkflow = null;
 
     /**
-     * @see interface_workflows_handler::getConfigValueNames()
-     * @return string[]
+     * @inheritdoc
      */
     public function getConfigValueNames()
     {
@@ -38,12 +37,7 @@ class WorkflowLdapSync implements WorkflowsHandlerInterface
     }
 
     /**
-     * @param string $strVal1
-     * @param string $strVal2
-     * @param string $strVal3
-     *
-     * @see interface_workflows_handler::setConfigValues()
-     * @return void
+     * @inheritdoc
      */
     public function setConfigValues($strVal1, $strVal2, $strVal3)
     {
@@ -51,8 +45,7 @@ class WorkflowLdapSync implements WorkflowsHandlerInterface
     }
 
     /**
-     * @see interface_workflows_handler::getDefaultValues()
-     * @return string[]
+     * @inheritdoc
      */
     public function getDefaultValues()
     {

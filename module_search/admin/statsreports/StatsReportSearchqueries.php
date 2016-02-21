@@ -9,6 +9,7 @@
 
 namespace Kajona\Search\Admin\Statsreports;
 
+use Kajona\Stats\Admin\AdminStatsreportsInterface;
 use Kajona\System\Admin\ToolkitAdmin;
 use Kajona\System\System\ArraySectionIterator;
 use Kajona\System\System\Database;
@@ -23,7 +24,8 @@ use Kajona\System\System\UserUser;
  * @package module_search
  * @author sidler@mulchprod.de
  */
-class StatsReportSearchqueries implements \interface_admin_statsreports {
+class StatsReportSearchqueries implements AdminStatsreportsInterface
+{
 
     //class vars
     private $intDateStart;
@@ -42,7 +44,8 @@ class StatsReportSearchqueries implements \interface_admin_statsreports {
     /**
      * Constructor
      */
-    public function __construct(Database $objDB, ToolkitAdmin $objToolkit, Lang $objLang) {
+    public function __construct(Database $objDB, ToolkitAdmin $objToolkit, Lang $objLang)
+    {
         $this->objLang = $objLang;
         $this->objToolkit = $objToolkit;
         $this->objDB = $objDB;
@@ -53,52 +56,62 @@ class StatsReportSearchqueries implements \interface_admin_statsreports {
      *
      * @return string
      */
-    public static function getExtensionName() {
+    public static function getExtensionName()
+    {
         return "core.stats.admin.statsreport";
     }
 
     /**
      * @param int $intEndDate
+     *
      * @return void
      */
-    public function setEndDate($intEndDate) {
+    public function setEndDate($intEndDate)
+    {
         $this->intDateEnd = $intEndDate;
     }
 
     /**
      * @param int $intStartDate
+     *
      * @return void
      */
-    public function setStartDate($intStartDate) {
+    public function setStartDate($intStartDate)
+    {
         $this->intDateStart = $intStartDate;
     }
 
     /**
      * @return string
      */
-    public function getTitle() {
+    public function getTitle()
+    {
         return $this->objLang->getLang("stats_title", "search");
     }
 
     /**
      * @return bool
      */
-    public function isIntervalable() {
+    public function isIntervalable()
+    {
         return false;
     }
 
     /**
      * @param int $intInterval
+     *
      * @return void
      */
-    public function setInterval($intInterval) {
+    public function setInterval($intInterval)
+    {
 
     }
 
     /**
      * @return string
      */
-    public function getReport() {
+    public function getReport()
+    {
         $strReturn = "";
 
         //showing a list using the pageview
@@ -109,9 +122,10 @@ class StatsReportSearchqueries implements \interface_admin_statsreports {
         $intI = 0;
         $arrLogs = array();
         $objUser = new UserUser(Session::getInstance()->getUserID());
-        foreach($objArraySectionIterator as $intKey => $arrOneLog) {
-            if($intI++ >= $objUser->getIntItemsPerPage())
+        foreach ($objArraySectionIterator as $intKey => $arrOneLog) {
+            if ($intI++ >= $objUser->getIntItemsPerPage()) {
                 break;
+            }
 
             $arrLogs[$intKey][0] = $intI;
             $arrLogs[$intKey][1] = $arrOneLog["search_log_query"];
@@ -134,7 +148,8 @@ class StatsReportSearchqueries implements \interface_admin_statsreports {
     /**
      * @return array|string
      */
-    public function getReportGraph() {
+    public function getReportGraph()
+    {
         $arrReturn = array();
         //collect data
         $arrQueries = $this->getTopQueries();
@@ -143,15 +158,16 @@ class StatsReportSearchqueries implements \interface_admin_statsreports {
         $arrLabels = array();
 
         $intCount = 1;
-        foreach($arrQueries as $arrOneQuery) {
+        foreach ($arrQueries as $arrOneQuery) {
             $arrGraphData[] = $arrOneQuery["hits"];
             $arrLabels[] = $arrOneQuery["search_log_query"];
 
-            if($intCount++ >= 9)
+            if ($intCount++ >= 9) {
                 break;
+            }
         }
 
-        if(count($arrGraphData) > 1) {
+        if (count($arrGraphData) > 1) {
             //generate a bar-chart
             $objGraph = GraphFactory::getGraphInstance();
             $objGraph->setArrXAxisTickLabels($arrLabels);
@@ -164,8 +180,9 @@ class StatsReportSearchqueries implements \interface_admin_statsreports {
 
             return $arrReturn;
         }
-        else
+        else {
             return "";
+        }
     }
 
 
@@ -175,7 +192,8 @@ class StatsReportSearchqueries implements \interface_admin_statsreports {
      *
      * @return array
      */
-    private function getTopQueries($intStart = false, $intEnd = false) {
+    private function getTopQueries($intStart = false, $intEnd = false)
+    {
         $objUser = new UserUser(Session::getInstance()->getUserID());
         $strQuery = "SELECT search_log_query, COUNT(*) as hits
 					  FROM "._dbprefix_."search_log
@@ -184,10 +202,12 @@ class StatsReportSearchqueries implements \interface_admin_statsreports {
 				   GROUP BY search_log_query
 				   ORDER BY hits DESC";
 
-        if($intStart !== false && $intEnd !== false)
+        if ($intStart !== false && $intEnd !== false) {
             $arrReturn = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), $intStart, $intEnd);
-        else
+        }
+        else {
             $arrReturn = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), 0, $objUser->getIntItemsPerPage() - 1);
+        }
 
         return $arrReturn;
     }
@@ -195,7 +215,8 @@ class StatsReportSearchqueries implements \interface_admin_statsreports {
     /**
      * @return mixed
      */
-    private function getTopQueriesCount() {
+    private function getTopQueriesCount()
+    {
         $strQuery = "SELECT COUNT(DISTINCT(search_log_query)) as total
 					  FROM "._dbprefix_."search_log
 					  WHERE search_log_date > ?

@@ -19,72 +19,79 @@ use Kajona\System\System\SystemModule;
  *
  * @package module_system
  */
-class SystemtaskDbimport extends SystemtaskBase implements AdminSystemtaskInterface {
+class SystemtaskDbimport extends SystemtaskBase implements AdminSystemtaskInterface
+{
 
 
     /**
-     * @see interface_admin_systemtask::getGroupIdenitfier()
-     * @return string
+     * @inheritdoc
      */
-    public function getGroupIdentifier() {
+    public function getGroupIdentifier()
+    {
         return "database";
     }
 
     /**
-     * @see interface_admin_systemtask::getStrInternalTaskName()
-     * @return string
+     * @inheritdoc
      */
-    public function getStrInternalTaskName() {
+    public function getStrInternalTaskName()
+    {
         return "dbimport";
     }
 
     /**
-     * @see interface_admin_systemtask::getStrTaskName()
-     * @return string
+     * @inheritdoc
      */
-    public function getStrTaskName() {
+    public function getStrTaskName()
+    {
         return $this->getLang("systemtask_dbimport_name");
     }
 
     /**
-     * @see interface_admin_systemtask::executeTask()
-     * @return string
+     * @inheritdoc
      */
-    public function executeTask() {
-        if(!SystemModule::getModuleByName("system")->rightRight2())
+    public function executeTask()
+    {
+        if (!SystemModule::getModuleByName("system")->rightRight2()) {
             return $this->getLang("commons_error_permissions");
+        }
 
-        if(Carrier::getInstance()->getObjDB()->importDb($this->getParam("dbImportFile")))
+        if (Carrier::getInstance()->getObjDB()->importDb($this->getParam("dbImportFile"))) {
             return $this->objToolkit->getTextRow($this->getLang("systemtask_dbimport_success"));
-        else
+        }
+        else {
             return $this->objToolkit->getTextRow($this->getLang("systemtask_dbimport_error"));
+        }
     }
 
     /**
-     * @see interface_admin_systemtask::getAdminForm()
-     * @return string
+     * @inheritdoc
      */
-    public function getAdminForm() {
+    public function getAdminForm()
+    {
         $strReturn = "";
         //show dropdown to select db-dump
         $objFilesystem = new Filesystem();
         $arrFiles = $objFilesystem->getFilelist(_projectpath_."/dbdumps/", array(".sql", ".gz"));
         $arrOptions = array();
-        foreach($arrFiles as $strOneFile) {
+        foreach ($arrFiles as $strOneFile) {
             $arrDetails = $objFilesystem->getFileDetails(_projectpath_."/dbdumps/".$strOneFile);
 
             $strTimestamp = "";
-            if(uniStrpos($strOneFile, "_") !== false)
+            if (uniStrpos($strOneFile, "_") !== false) {
                 $strTimestamp = uniSubstr($strOneFile, uniStrrpos($strOneFile, "_") + 1, (uniStrpos($strOneFile, ".") - uniStrrpos($strOneFile, "_")));
+            }
 
-            if(uniStrlen($strTimestamp) > 9 && is_numeric($strTimestamp))
+            if (uniStrlen($strTimestamp) > 9 && is_numeric($strTimestamp)) {
                 $arrOptions[$strOneFile] = $strOneFile." (".bytesToString($arrDetails["filesize"]).")"
-                                ."<br />".$this->getLang("systemtask_dbimport_datefilename")." ".timeToString($strTimestamp)
-                                ."<br />".$this->getLang("systemtask_dbimport_datefileinfo")." ".timeToString($arrDetails['filechange']);
+                    ."<br />".$this->getLang("systemtask_dbimport_datefilename")." ".timeToString($strTimestamp)
+                    ."<br />".$this->getLang("systemtask_dbimport_datefileinfo")." ".timeToString($arrDetails['filechange']);
+            }
 
-            else
+            else {
                 $arrOptions[$strOneFile] = $strOneFile." (".bytesToString($arrDetails["filesize"]).")"
-                                ."<br />".$this->getLang("systemtask_dbimport_datefileinfo")." ".timeToString($arrDetails['filechange']);
+                    ."<br />".$this->getLang("systemtask_dbimport_datefileinfo")." ".timeToString($arrDetails['filechange']);
+            }
         }
 
         $strReturn .= $this->objToolkit->formInputRadiogroup("dbImportFile", $arrOptions, $this->getLang("systemtask_dbimport_file"));
@@ -93,10 +100,10 @@ class SystemtaskDbimport extends SystemtaskBase implements AdminSystemtaskInterf
     }
 
     /**
-     * @see interface_admin_systemtask::getSubmitParams()
-     * @return string
+     * @inheritdoc
      */
-    public function getSubmitParams() {
+    public function getSubmitParams()
+    {
         return "&dbImportFile=".$this->getParam("dbImportFile");
     }
 }

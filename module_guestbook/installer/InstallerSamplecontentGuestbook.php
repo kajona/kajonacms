@@ -7,14 +7,12 @@
 
 namespace Kajona\Guestbook\Installer;
 
-use class_db;
-use class_module_guestbook_guestbook;
-use interface_sc_installer;
 use Kajona\Guestbook\System\GuestbookGuestbook;
 use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
+use Kajona\System\System\Database;
 use Kajona\System\System\SamplecontentInstallerInterface;
 
 
@@ -26,7 +24,7 @@ class InstallerSamplecontentGuestbook implements SamplecontentInstallerInterface
 {
 
     /**
-     * @var class_db
+     * @var Database
      */
     private $objDB;
     private $strContentLanguage;

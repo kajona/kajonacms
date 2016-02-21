@@ -34,32 +34,28 @@ class SystemtaskNavigationcheck extends SystemtaskBase implements AdminSystemtas
     }
 
     /**
-     * @see interface_admin_systemtask::getGroupIdenitfier()
-     * @return string
+     * @inheritdoc
      */
     public function getGroupIdentifier() {
         return "";
     }
 
     /**
-     * @see interface_admin_systemtask::getStrInternalTaskName()
-     * @return string
+     * @inheritdoc
      */
     public function getStrInternalTaskName() {
         return "navigationcheck";
     }
 
     /**
-     * @see interface_admin_systemtask::getStrTaskName()
-     * @return string
+     * @inheritdoc
      */
     public function getStrTaskName() {
         return $this->getLang("systemtask_navigationcheck_name");
     }
 
     /**
-     * @see interface_admin_systemtask::executeTask()
-     * @return string
+     * @inheritdoc
      */
     public function executeTask() {
 
@@ -133,8 +129,7 @@ class SystemtaskNavigationcheck extends SystemtaskBase implements AdminSystemtas
     }
 
     /**
-     * @see interface_admin_systemtask::getAdminForm()
-     * @return string
+     * @inheritdoc
      */
     public function getAdminForm() {
         return "";

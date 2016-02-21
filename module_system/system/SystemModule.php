@@ -19,7 +19,7 @@ use Kajona\System\Portal\PortalInterface;
  *
  * @package module_system
  * @targetTable system_module.module_id
- * @sortManager class_common_sortmanager
+ * @sortManager Kajona\System\System\CommonSortmanager
  *
  * @module system
  * @moduleId _system_modul_id_

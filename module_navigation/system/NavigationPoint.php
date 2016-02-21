@@ -27,7 +27,7 @@ use Kajona\System\System\Resourceloader;
  * @package module_navigation
  * @author sidler@mulchprod.de
  * @targetTable navigation.navigation_id
- * @sortManager class_common_sortmanager
+ * @sortManager Kajona\System\System\CommonSortmanager
  *
  * @module navigation
  * @moduleId _navigation_modul_id_
