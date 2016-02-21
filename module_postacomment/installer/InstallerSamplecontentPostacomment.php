@@ -6,12 +6,11 @@
 ********************************************************************************************************/
 
 namespace Kajona\Postacomment\Installer;
-use class_db;
-use interface_sc_installer;
 use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
+use Kajona\System\System\Database;
 use Kajona\System\System\SamplecontentInstallerInterface;
 
 /**
@@ -21,7 +20,7 @@ use Kajona\System\System\SamplecontentInstallerInterface;
 class InstallerSamplecontentPostacomment implements SamplecontentInstallerInterface  {
 
     /**
-     * @var class_db
+     * @var Database
      */
     private $objDB;
     private $strContentLanguage;

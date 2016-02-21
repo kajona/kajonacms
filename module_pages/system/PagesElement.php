@@ -85,7 +85,7 @@ class PagesElement extends \Kajona\System\System\Model implements \Kajona\System
      * @tableColumn element.element_cachetime
      * @tableColumnDatatype int
      * @fieldMandatory
-     * @fieldValidator class_numeric_validator
+     * @fieldValidator Kajona\System\System\Validators\NumericValidator
      * @fieldType text
      */
     private $intCachetime = "-1";

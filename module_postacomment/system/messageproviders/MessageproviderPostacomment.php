@@ -7,8 +7,6 @@
 
 namespace Kajona\Postacomment\System\Messageproviders;
 
-use class_carrier;
-use interface_messageprovider;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Messageproviders\MessageproviderInterface;
 
