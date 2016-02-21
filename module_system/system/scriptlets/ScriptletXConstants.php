@@ -8,6 +8,7 @@ namespace Kajona\System\System\Scriptlets;
 
 use class_module_system_setting;
 use interface_scriptlet;
+use Kajona\System\System\ScriptletInterface;
 use Kajona\System\System\SystemSetting;
 
 /**
@@ -16,7 +17,8 @@ use Kajona\System\System\SystemSetting;
  * @since 4.0
  * @author sidler@mulchprod.de
  */
-class ScriptletXConstants implements interface_scriptlet {
+class ScriptletXConstants implements ScriptletInterface
+{
 
     /**
      * Processes the content.
@@ -26,7 +28,8 @@ class ScriptletXConstants implements interface_scriptlet {
      *
      * @return string
      */
-    public function processContent($strContent) {
+    public function processContent($strContent)
+    {
 
         $arrConstants = array(
             "_indexpath_",
@@ -44,7 +47,7 @@ class ScriptletXConstants implements interface_scriptlet {
         $arrConstants[] = "_packagemanager_defaulttemplate_";
         $arrValues[] = SystemSetting::getConfigValue("_packagemanager_defaulttemplate_");
 
-        if(defined("_skinwebpath_")) {
+        if (defined("_skinwebpath_")) {
             $arrConstants[] = "_skinwebpath_";
             $arrValues[] = _skinwebpath_;
         }
@@ -57,13 +60,14 @@ class ScriptletXConstants implements interface_scriptlet {
      * Define the context the scriptlet is applied to.
      * A combination of contexts is allowed using an or-concatenation.
      * Examples:
-     *   return interface_scriptlet::BIT_CONTEXT_ADMIN
-     *   return interface_scriptlet::BIT_CONTEXT_ADMIN | BIT_CONTEXT_ADMIN::BIT_CONTEXT_PORTAL_ELEMENT
+     *   return ScriptletInterface::BIT_CONTEXT_ADMIN
+     *   return ScriptletInterface::BIT_CONTEXT_ADMIN | ScriptletInterface::BIT_CONTEXT_PORTAL_ELEMENT
      *
      * @return mixed
      */
-    public function getProcessingContext() {
-        return interface_scriptlet::BIT_CONTEXT_PORTAL_PAGE | interface_scriptlet::BIT_CONTEXT_ADMIN;
+    public function getProcessingContext()
+    {
+        return ScriptletInterface::BIT_CONTEXT_PORTAL_PAGE | ScriptletInterface::BIT_CONTEXT_ADMIN;
     }
 
 }

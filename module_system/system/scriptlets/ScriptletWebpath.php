@@ -7,9 +7,8 @@
 
 namespace Kajona\System\System\Scriptlets;
 
-use class_resourceloader;
-use interface_scriptlet;
 use Kajona\System\System\Resourceloader;
+use Kajona\System\System\ScriptletInterface;
 
 /**
  * A scriptlet to replace script / image src within templates.
@@ -20,7 +19,8 @@ use Kajona\System\System\Resourceloader;
  * @since 5.0
  * @author sidler@mulchprod.de
  */
-class ScriptletWebpath implements interface_scriptlet {
+class ScriptletWebpath implements ScriptletInterface
+{
 
     /**
      * Processes the content.
@@ -30,15 +30,17 @@ class ScriptletWebpath implements interface_scriptlet {
      *
      * @return string
      */
-    public function processContent($strContent) {
+    public function processContent($strContent)
+    {
 
-        if($strContent == "")
+        if ($strContent == "") {
             return $strContent;
+        }
 
         $arrTemp = array();
         preg_match_all("#\[webpath,([A-Za-z0-9_]+)\]#i", $strContent, $arrTemp);
 
-        foreach($arrTemp[0] as $intKey => $strSearchString) {
+        foreach ($arrTemp[0] as $intKey => $strSearchString) {
             $strContent = uniStrReplace($strSearchString, Resourceloader::getInstance()->getWebPathForModule($arrTemp[1][$intKey]), $strContent);
         }
 
@@ -49,13 +51,14 @@ class ScriptletWebpath implements interface_scriptlet {
      * Define the context the scriptlet is applied to.
      * A combination of contexts is allowed using an or-concatenation.
      * Examples:
-     *   return interface_scriptlet::BIT_CONTEXT_ADMIN
-     *   return interface_scriptlet::BIT_CONTEXT_ADMIN | BIT_CONTEXT_ADMIN::BIT_CONTEXT_PORTAL_ELEMENT
+     *   return ScriptletInterface::BIT_CONTEXT_ADMIN
+     *   return ScriptletInterface::BIT_CONTEXT_ADMIN | ScriptletInterface::BIT_CONTEXT_PORTAL_ELEMENT
      *
      * @return mixed
      */
-    public function getProcessingContext() {
-        return interface_scriptlet::BIT_CONTEXT_ADMIN | interface_scriptlet::BIT_CONTEXT_PORTAL_ELEMENT | interface_scriptlet::BIT_CONTEXT_PORTAL_PAGE;
+    public function getProcessingContext()
+    {
+        return ScriptletInterface::BIT_CONTEXT_ADMIN | ScriptletInterface::BIT_CONTEXT_PORTAL_ELEMENT | ScriptletInterface::BIT_CONTEXT_PORTAL_PAGE;
     }
 
 }

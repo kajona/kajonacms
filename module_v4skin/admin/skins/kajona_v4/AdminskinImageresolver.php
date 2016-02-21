@@ -10,8 +10,6 @@ namespace Kajona\V4Skin\Admin\Skins\Kajona_V4;
 use Kajona\System\Admin\AdminskinImageresolverInterface;
 
 /**
- * Class class_adminskin_imageresolver
- *
  * @author sidler@mulchprod.de
  * @since 4.2
  * @package module_v4skin

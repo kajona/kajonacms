@@ -8,6 +8,7 @@ namespace Kajona\System\System\Scriptlets;
 
 use interface_scriptlet;
 use Kajona\System\System\Carrier;
+use Kajona\System\System\ScriptletInterface;
 
 
 /**
@@ -21,7 +22,8 @@ use Kajona\System\System\Carrier;
  * @since 4.0
  * @author sidler@mulchprod.de
  */
-class ScriptletLang implements interface_scriptlet {
+class ScriptletLang implements ScriptletInterface
+{
 
     /**
      * Processes the content.
@@ -31,14 +33,15 @@ class ScriptletLang implements interface_scriptlet {
      *
      * @return string
      */
-    public function processContent($strContent) {
+    public function processContent($strContent)
+    {
 
         $objLang = Carrier::getInstance()->getObjLang();
 
         $arrTemp = array();
         preg_match_all("#\[lang,([A-Za-z0-9_]+),([0-9A-Za-z_]+)\]#i", $strContent, $arrTemp);
 
-        foreach($arrTemp[0] as $intKey => $strSearchString) {
+        foreach ($arrTemp[0] as $intKey => $strSearchString) {
             $strContent = uniStrReplace($strSearchString, $objLang->getLang($arrTemp[1][$intKey], $arrTemp[2][$intKey]), $strContent);
         }
 
@@ -49,13 +52,14 @@ class ScriptletLang implements interface_scriptlet {
      * Define the context the scriptlet is applied to.
      * A combination of contexts is allowed using an or-concatenation.
      * Examples:
-     *   return interface_scriptlet::BIT_CONTEXT_ADMIN
-     *   return interface_scriptlet::BIT_CONTEXT_ADMIN | BIT_CONTEXT_ADMIN::BIT_CONTEXT_PORTAL_ELEMENT
+     *   return ScriptletInterface::BIT_CONTEXT_ADMIN
+     *   return ScriptletInterface::BIT_CONTEXT_ADMIN | ScriptletInterface::BIT_CONTEXT_PORTAL_ELEMENT
      *
      * @return mixed
      */
-    public function getProcessingContext() {
-        return interface_scriptlet::BIT_CONTEXT_ADMIN | interface_scriptlet::BIT_CONTEXT_PORTAL_ELEMENT | interface_scriptlet::BIT_CONTEXT_PORTAL_PAGE;
+    public function getProcessingContext()
+    {
+        return ScriptletInterface::BIT_CONTEXT_ADMIN | ScriptletInterface::BIT_CONTEXT_PORTAL_ELEMENT | ScriptletInterface::BIT_CONTEXT_PORTAL_PAGE;
     }
 
 }
