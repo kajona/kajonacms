@@ -6,9 +6,6 @@
 
 namespace Kajona\Mediamanager\Installer;
 
-use class_module_mediamanager_repo;
-use class_module_system_setting;
-use interface_sc_installer;
 use Kajona\Mediamanager\System\MediamanagerRepo;
 use Kajona\System\System\SamplecontentInstallerInterface;
 use Kajona\System\System\SystemSetting;

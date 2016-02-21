@@ -11,8 +11,8 @@ use Kajona\System\System\Reflection;
 use Kajona\System\System\Root;
 
 /**
- * The ObjectSerializer is based on the class_template_mapper. Returns 
- * all properties of an class which has an @jsonExport annotation. These 
+ * The ObjectSerializer is based on the TemplateMapper. Returns
+ * all properties of an class which has an @jsonExport annotation. These
  * properties are exposed through the json api
  *
  * @package module_system
@@ -22,7 +22,8 @@ use Kajona\System\System\Root;
  *
  * @todo this class requires some cleanup, e.g. the removal of unused methods
  */
-class ObjectSerializer {
+class ObjectSerializer
+{
 
     const STR_ANNOTATION_JSONEXPORT = "@jsonExport";
 
@@ -35,11 +36,13 @@ class ObjectSerializer {
     /**
      * @param null $objObject
      */
-    function __construct($objObject = null) {
+    function __construct($objObject = null)
+    {
         $this->objObject = $objObject;
 
-        if($objObject !== null)
+        if ($objObject !== null) {
             $this->readPropertiesFromObject();
+        }
     }
 
     /**
@@ -47,7 +50,8 @@ class ObjectSerializer {
      *
      * @return array
      */
-    public function getPropertyNames() {
+    public function getPropertyNames()
+    {
         $objReflection = new Reflection($this->objObject);
         $arrProperties = $objReflection->getPropertiesWithAnnotation(self::STR_ANNOTATION_JSONEXPORT);
 
@@ -59,11 +63,12 @@ class ObjectSerializer {
      *
      * @return void
      */
-    private function readPropertiesFromObject() {
+    private function readPropertiesFromObject()
+    {
         $objReflection = new Reflection($this->objObject);
         $properties = $this->getPropertyNames();
 
-        foreach($properties as $strOneProperty) {
+        foreach ($properties as $strOneProperty) {
             $strGetter = $objReflection->getGetter($strOneProperty);
 
             $strValue = $this->objObject->{$strGetter}();
@@ -77,16 +82,19 @@ class ObjectSerializer {
 
     /**
      * @param array $arrMapping
+     *
      * @return void
      */
-    public function setArrMapping($arrMapping) {
+    public function setArrMapping($arrMapping)
+    {
         $this->arrMapping = $arrMapping;
     }
 
     /**
      * @return array
      */
-    public function getArrMapping() {
+    public function getArrMapping()
+    {
         return $this->arrMapping;
     }
 }

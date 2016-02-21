@@ -9,13 +9,13 @@
 
 namespace Kajona\Postacomment\Portal;
 
-use class_module_rating_portal;
 use Kajona\Pages\Portal\PagesPortaleditor;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPortaleditorActionEnum;
 use Kajona\Pages\System\PagesPortaleditorSystemidAction;
 use Kajona\Postacomment\System\Messageproviders\MessageproviderPostacomment;
 use Kajona\Postacomment\System\PostacommentPost;
+use Kajona\Rating\Portal\RatingPortal;
 use Kajona\System\Portal\PortalController;
 use Kajona\System\Portal\PortalInterface;
 use Kajona\System\System\ArraySectionIterator;
@@ -112,7 +112,7 @@ class PostacommentPortal extends PortalController implements PortalInterface
                 $arrOnePost["postacomment_post_date"] = timeToString($objOnePost->getIntDate(), true);
                 //ratings available?
                 if ($objOnePost->getFloatRating() !== null) {
-                    /** @var $objRating class_module_rating_portal */
+                    /** @var $objRating RatingPortal */
                     $objRating = SystemModule::getModuleByName("rating")->getPortalInstanceOfConcreteModule();
                     $arrOnePost["postacomment_post_rating"] = $objRating->buildRatingBar(
                         $objOnePost->getFloatRating(), $objOnePost->getIntRatingHits(), $objOnePost->getSystemid(), $objOnePost->isRateableByUser(), $objOnePost->rightRight2()

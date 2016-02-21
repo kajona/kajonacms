@@ -7,8 +7,6 @@
 
 namespace Kajona\Facebooklikebox\Installer;
 
-use class_installer_base;
-use interface_installer_removable;
 use Kajona\Pages\System\PagesElement;
 use Kajona\System\System\InstallerBase;
 use Kajona\System\System\InstallerRemovableInterface;

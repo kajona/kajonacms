@@ -8,14 +8,14 @@
 
 namespace Kajona\Mediamanager\Portal;
 
-use class_module_navigation_point;
-use class_module_rating_portal;
 use Kajona\Mediamanager\System\MediamanagerFile;
 use Kajona\Mediamanager\System\MediamanagerRepo;
+use Kajona\Navigation\System\NavigationPoint;
 use Kajona\Pages\Portal\PagesPortalController;
 use Kajona\Pages\Portal\PagesPortaleditor;
 use Kajona\Pages\System\PagesPortaleditorActionEnum;
 use Kajona\Pages\System\PagesPortaleditorSystemidAction;
+use Kajona\Rating\Portal\RatingPortal;
 use Kajona\System\Portal\PortalController;
 use Kajona\System\Portal\PortalInterface;
 use Kajona\System\System\ArraySectionIterator;
@@ -254,7 +254,7 @@ class MediamanagerPortal extends PortalController implements PortalInterface
 
         //ratings available?
         if ($objOneFile->getFloatRating() !== null) {
-            /** @var $objRating class_module_rating_portal */
+            /** @var $objRating RatingPortal */
             $objRating = SystemModule::getModuleByName("rating")->getPortalInstanceOfConcreteModule();
             $arrFileTemplate["file_rating"] = $objRating->buildRatingBar(
                 $objOneFile->getFloatRating(),
@@ -418,7 +418,7 @@ class MediamanagerPortal extends PortalController implements PortalInterface
 
         //ratings available?
         if ($objFile->getFloatRating() !== null) {
-            /** @var $objRating class_module_rating_portal */
+            /** @var $objRating RatingPortal */
             $objRating = SystemModule::getModuleByName("rating")->getPortalInstanceOfConcreteModule();
             $arrDetailsTemplate["file_rating"] = $objRating->buildRatingBar(
                 $objFile->getFloatRating(),
@@ -712,7 +712,7 @@ class MediamanagerPortal extends PortalController implements PortalInterface
         $arrReturn = array();
 
         $objRepo = new MediamanagerRepo($this->arrElementData["repo_id"]);
-        $objPoint = new class_module_navigation_point();
+        $objPoint = new NavigationPoint();
         $objPoint->setIntRecordStatus(1);
         $objPoint->setStrName($objRepo->getStrTitle());
         $objPoint->setStrPageI($this->getPagename());
@@ -740,7 +740,7 @@ class MediamanagerPortal extends PortalController implements PortalInterface
 
         $arrReturn = array();
         foreach ($arrFoldersDB as $objOneFolder) {
-            $objPoint = new class_module_navigation_point();
+            $objPoint = new NavigationPoint();
             $objPoint->setIntRecordStatus(1);
             $objPoint->setStrName($objOneFolder->getStrName());
             $objPoint->setStrPageI($this->getPagename());

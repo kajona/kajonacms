@@ -9,8 +9,8 @@
 
 namespace Kajona\Maps\System;
 
-use class_exception;
-use class_remoteloader;
+use Kajona\System\System\Exception;
+use Kajona\System\System\Remoteloader;
 use SimpleXMLElement;
 
 
@@ -24,7 +24,8 @@ use SimpleXMLElement;
  *
  * @author jschroeter
  */
-class Geocoder {
+class Geocoder
+{
     /**
      * 0 = Google Maps
      * 1 = Yahoo! Maps
@@ -49,7 +50,8 @@ class Geocoder {
      *
      * @param int $intApiId
      */
-    public function __construct($intApiId = 0) {
+    public function __construct($intApiId = 0)
+    {
         $this->intApiId = $intApiId;
     }
 
@@ -66,7 +68,8 @@ class Geocoder {
      *
      * @return bool
      */
-    public function lookupAddress($strStreet = "", $strPostalCode = "", $strCity = "", $strCountry = "") {
+    public function lookupAddress($strStreet = "", $strPostalCode = "", $strCity = "", $strCountry = "")
+    {
         $bitReturn = false;
 
         $this->strResponseRaw = "";
@@ -78,10 +81,10 @@ class Geocoder {
         $this->floatLongitude = 0.0;
         $this->intAccuracy = 0;
 
-        if($this->intApiId == 0) {
+        if ($this->intApiId == 0) {
             $bitReturn = $this->lookupAddressUsingGoogle($strStreet, $strPostalCode, $strCity, $strCountry);
         }
-        elseif($this->intApiId == 1) {
+        elseif ($this->intApiId == 1) {
             $bitReturn = $this->lookupAddressUsingYahoo($strStreet, $strPostalCode, $strCity, $strCountry);
         }
 
@@ -99,14 +102,15 @@ class Geocoder {
      *
      * @return bool
      */
-    private function lookupAddressUsingGoogle($strStreet = "", $strPostalCode = "", $strCity = "", $strCountry = "") {
+    private function lookupAddressUsingGoogle($strStreet = "", $strPostalCode = "", $strCity = "", $strCountry = "")
+    {
         $bitReturn = false;
 
         $strHost = "maps.google.de"; //change this to your country/language e.g. maps.google.it
         $strApiKey = ""; //change this; probably not needed anymore
         $strQuery = "/maps/geo?output=xml"."&key=".$strApiKey."&sensor=false&oe=utf8&q=".urlencode($strStreet.", ".$strPostalCode." ".$strCity.", ".$strCountry);
 
-        $objRemoteloader = new class_remoteloader();
+        $objRemoteloader = new Remoteloader();
         $objRemoteloader->setStrHost($strHost);
         $objRemoteloader->setStrQueryParams($strQuery);
 
@@ -114,41 +118,41 @@ class Geocoder {
         //send another delayed requests if requests were sent too fast
         $intDelay = 0;
         $bitResponsePending = true;
-        while($bitResponsePending) {
+        while ($bitResponsePending) {
             try {
                 $bitForceReload = $intDelay > 0 ? true : false;
                 $strResponse = $objRemoteloader->getRemoteContent($bitForceReload);
             }
-            catch(class_exception $objExeption) {
+            catch (Exception $objExeption) {
                 $bitResponsePending = false;
                 $bitReturn = false;
                 $strResponse = false;
             }
 
-            if($strResponse != false) {
+            if ($strResponse != false) {
                 $this->strResponseRaw = $strResponse;
 
                 /** @var SimpleXMLElement $xml */
                 $xml = simplexml_load_string($strResponse);
                 $status = $xml->Response->Status->code;
 
-                if(strcmp($status, "200") == 0) {
+                if (strcmp($status, "200") == 0) {
                     //Successful geocode
                     $bitResponsePending = false;
 
                     //extract response
-                    if($xml->Response->Placemark->AddressDetails->Country->Locality->Thoroughfare) {
+                    if ($xml->Response->Placemark->AddressDetails->Country->Locality->Thoroughfare) {
                         $this->strStreet = $xml->Response->Placemark->AddressDetails->Country->Locality->Thoroughfare->ThoroughfareName;
                         $this->strPostalCode = "";
                         $this->strCity = $xml->Response->Placemark->AddressDetails->Country->Locality->LocalityName;
                     }
-                    elseif($xml->Response->Placemark->AddressDetails->Country->AdministrativeArea->Locality) {
+                    elseif ($xml->Response->Placemark->AddressDetails->Country->AdministrativeArea->Locality) {
                         $this->strStreet = $xml->Response->Placemark->AddressDetails->Country->AdministrativeArea->Locality->Thoroughfare->ThoroughfareName;
                         $this->strPostalCode = $xml->Response->Placemark->AddressDetails->Country->AdministrativeArea->Locality->PostalCode->PostalCodeNumber;
                         $this->strCity = $xml->Response->Placemark->AddressDetails->Country->AdministrativeArea->Locality->LocalityName;
 
                     }
-                    elseif($xml->Response->Placemark->AddressDetails->Country->AdministrativeArea->SubAdministrativeArea->Locality->DependentLocality) {
+                    elseif ($xml->Response->Placemark->AddressDetails->Country->AdministrativeArea->SubAdministrativeArea->Locality->DependentLocality) {
                         $this->strStreet = $xml->Response->Placemark->AddressDetails->Country->AdministrativeArea->SubAdministrativeArea->Locality->DependentLocality->Thoroughfare->ThoroughfareName;
                         $this->strPostalCode = $xml->Response->Placemark->AddressDetails->Country->AdministrativeArea->SubAdministrativeArea->Locality->DependentLocality->PostalCode->PostalCodeNumber;
                         $this->strCity = $xml->Response->Placemark->AddressDetails->Country->AdministrativeArea->SubAdministrativeArea->Locality->LocalityName;
@@ -160,11 +164,12 @@ class Geocoder {
                         $this->strCity = $xml->Response->Placemark->AddressDetails->Country->AdministrativeArea->SubAdministrativeArea->Locality->LocalityName;
                     }
 
-                    if($xml->Response->Placemark->AddressDetails->Country->AdministrativeArea) {
+                    if ($xml->Response->Placemark->AddressDetails->Country->AdministrativeArea) {
                         $this->strAdministrativeArea = $xml->Response->Placemark->AddressDetails->Country->AdministrativeArea->AdministrativeAreaName;
 
-                        if($xml->Response->Placemark->AddressDetails->Country->AdministrativeArea->SubAdministrativeArea)
+                        if ($xml->Response->Placemark->AddressDetails->Country->AdministrativeArea->SubAdministrativeArea) {
                             $this->strSubAdministrativeArea = $xml->Response->Placemark->AddressDetails->Country->AdministrativeArea->SubAdministrativeArea->SubAdministrativeAreaName;
+                        }
                     }
 
                     $this->strCountryCode = $xml->Response->Placemark->AddressDetails->Country->CountryNameCode;
@@ -177,7 +182,7 @@ class Geocoder {
 
                     $bitReturn = $this->intAccuracy >= 4 ? true : false;
                 }
-                elseif(strcmp($status, "620") == 0) {
+                elseif (strcmp($status, "620") == 0) {
                     //sent requests too fast
                     $intDelay += 100000;
                 }
@@ -205,7 +210,8 @@ class Geocoder {
      *
      * @return bool
      */
-    private function lookupAddressUsingYahoo($strStreet = "", $strPostalCode = "", $strCity = "", $strCountry = "") {
+    private function lookupAddressUsingYahoo($strStreet = "", $strPostalCode = "", $strCity = "", $strCountry = "")
+    {
         $bitReturn = false;
 
         $strHost = "where.yahooapis.com";
@@ -213,23 +219,23 @@ class Geocoder {
         $strQuery = "/geocode?appid=".$strApiKey."&flags=P&q=".urlencode($strStreet.", ".$strPostalCode." ".$strCity.", ".$strCountry);
 
         try {
-            $objRemoteloader = new class_remoteloader();
+            $objRemoteloader = new Remoteloader();
             $objRemoteloader->setStrHost($strHost);
             $objRemoteloader->setStrQueryParams($strQuery);
             $strResponse = $objRemoteloader->getRemoteContent();
         }
-        catch(class_exception $objExeption) {
+        catch (Exception $objExeption) {
             $bitReturn = false;
             $strResponse = false;
         }
 
-        if($strResponse != false) {
+        if ($strResponse != false) {
             $this->strResponseRaw = $strResponse;
 
             $arrResponse = unserialize($strResponse);
             $arrResponse = $arrResponse["ResultSet"];
 
-            if($arrResponse["Error"] == 0) {
+            if ($arrResponse["Error"] == 0) {
                 $arrResult = $arrResponse["Result"][0];
                 //extract response
                 $this->strStreet = $arrResult["street"]." ".$arrResult["house"];
@@ -260,63 +266,72 @@ class Geocoder {
      *
      * @return string
      */
-    public function getStrResponseRaw() {
+    public function getStrResponseRaw()
+    {
         return $this->strResponseRaw;
     }
 
     /**
      * @return string
      */
-    public function getStrStreet() {
+    public function getStrStreet()
+    {
         return $this->strStreet;
     }
 
     /**
      * @return string
      */
-    public function getStrPostalCode() {
+    public function getStrPostalCode()
+    {
         return $this->strPostalCode;
     }
 
     /**
      * @return string
      */
-    public function getStrCity() {
+    public function getStrCity()
+    {
         return $this->strCity;
     }
 
     /**
      * @return string
      */
-    public function getStrAdministrativeArea() {
+    public function getStrAdministrativeArea()
+    {
         return $this->strAdministrativeArea;
     }
 
     /**
      * @return string
      */
-    public function getStrSubAdministrativeArea() {
+    public function getStrSubAdministrativeArea()
+    {
         return $this->strSubAdministrativeArea;
     }
 
     /**
      * @return string
      */
-    public function getStrCountryCode() {
+    public function getStrCountryCode()
+    {
         return $this->strCountryCode;
     }
 
     /**
      * @return float
      */
-    public function getFloatLatitude() {
+    public function getFloatLatitude()
+    {
         return $this->floatLatitude;
     }
 
     /**
      * @return float
      */
-    public function getFloatLongitude() {
+    public function getFloatLongitude()
+    {
         return $this->floatLongitude;
     }
 

@@ -6,10 +6,9 @@
 
 namespace Kajona\Markdown\Portal\Elements;
 
-use class_remoteloader;
-use class_resourceloader;
 use Kajona\Pages\Portal\ElementPortal;
 use Kajona\Pages\Portal\PortalElementInterface;
+use Kajona\System\System\Remoteloader;
 use Parsedown;
 
 
@@ -20,20 +19,22 @@ use Parsedown;
  *
  * @targetTable element_universal.content_id
  */
-class ElementMarkdownPortal extends ElementPortal implements PortalElementInterface {
+class ElementMarkdownPortal extends ElementPortal implements PortalElementInterface
+{
 
     /**
      * Loads the feed and displays it
      *
      * @return string the prepared html-output
      */
-    public function loadData() {
-        
+    public function loadData()
+    {
+
         require_once __DIR__."/../../vendor/autoload.php";
 
         $arrUrl = parse_url($this->arrElementData["char2"]);
 
-        $objLoader = new class_remoteloader();
+        $objLoader = new Remoteloader();
         $objLoader->setStrProtocolHeader($arrUrl["scheme"]."://");
         $objLoader->setStrHost($arrUrl["host"]);
         $objLoader->setStrQueryParams($arrUrl["path"]);

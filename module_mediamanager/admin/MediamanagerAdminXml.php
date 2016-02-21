@@ -22,7 +22,6 @@ use Kajona\System\System\Logger;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\ResponseObject;
 
-
 /**
  * admin-class of the mediamanager-module
  * Serves xml-requests, e.g. syncing a gallery
@@ -234,7 +233,6 @@ class MediamanagerAdminXml extends AdminController implements XmlAdminInterface
         if ($bitJsonResponse) {
             //disabled for ie. otherwise the upload won't work due to the headers.
             ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_HTML);
-            //ResponseObject::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
         }
         @unlink($arrSource["tmp_name"]);
         return $strReturn;
@@ -286,7 +284,6 @@ class MediamanagerAdminXml extends AdminController implements XmlAdminInterface
     protected function actionSyncRepo()
     {
         $strReturn = "";
-        $strResult = "";
 
         /** @var MediamanagerRepo|MediamanagerFile $objInstance */
         $objInstance = Objectfactory::getInstance()->getObject($this->getSystemid());
