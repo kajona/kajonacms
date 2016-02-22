@@ -108,11 +108,11 @@ class InstallerPages extends InstallerBase implements InstallerInterface {
 
         //Table for page-element
         $strReturn .= "Installing gallery-element table...\n";
-        $objManager->createTable("Kajona\\Pages\\Admin\\Elements\\ElementGalleryAdmin");
+        $objManager->createTable("Kajona\\Mediamanager\\Admin\\Elements\\ElementGalleryAdmin");
 
         //Table for page-element
         $strReturn .= "Installing downloads-element table...\n";
-        $objManager->createTable("Kajona\\Pages\\Admin\\Elements\\ElementDownloadsAdmin");
+        $objManager->createTable("Kajona\\Mediamanager\\Admin\\Elements\\ElementDownloadsAdmin");
 
         //Table for images
         $strReturn .= "Installing image table...\n";

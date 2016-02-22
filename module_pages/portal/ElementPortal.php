@@ -450,7 +450,7 @@ abstract class ElementPortal extends PortalController
      * Otherwise you have to override the method providesNavigationEntries() and return true.
      * This method is only queried if the static providesNavigationEntries is true since the number of queries
      * could be reduced drastically due to this pre-check.
-     * If you only want to return a flat list of nodes, you can return an array of class_module_navigation_point instances instead of wrapping them
+     * If you only want to return a flat list of nodes, you can return an array of NavigationPoint instances instead of wrapping them
      * into the way more complex node/subnode structure.
      *
      * @see NavigationTree::getCompleteNaviStructure()
