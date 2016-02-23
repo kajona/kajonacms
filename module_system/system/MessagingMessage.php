@@ -22,7 +22,7 @@ use Kajona\System\System\Messageproviders\MessageproviderInterface;
  * @module messaging
  * @moduleId _messaging_module_id_
  *
- * @formGenerator MessagingMessage_formgenerator
+ * @formGenerator Kajona\System\Admin\MessagingMessageFormgenerator
  */
 class MessagingMessage extends Model implements ModelInterface, AdminListableInterface
 {
