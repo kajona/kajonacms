@@ -66,7 +66,7 @@ class ScriptletQrcode implements ScriptletInterface
      * A combination of contexts is allowed using an or-concatenation.
      * Examples:
      *   return ScriptletInterface::BIT_CONTEXT_ADMIN
-     *   return ScriptletInterface::BIT_CONTEXT_ADMIN | BIT_CONTEXT_ADMIN::BIT_CONTEXT_PORTAL_ELEMENT
+     *   return ScriptletInterface::BIT_CONTEXT_ADMIN | ScriptletInterface::BIT_CONTEXT_PORTAL_ELEMENT
      *
      * @return mixed
      */

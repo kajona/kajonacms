@@ -23,7 +23,8 @@ use Kajona\System\System\SystemSetting;
  * @package module_packagemanager
  * @author sidler@mulchprod.de
  */
-class PackagemanagerRecordupdatedlistener implements GenericeventListenerInterface {
+class PackagemanagerRecordupdatedlistener implements GenericeventListenerInterface
+{
 
 
     /**
@@ -34,20 +35,21 @@ class PackagemanagerRecordupdatedlistener implements GenericeventListenerInterfa
      *
      * @return bool
      */
-    public function handleEvent($strEventName, array $arrArguments) {
+    public function handleEvent($strEventName, array $arrArguments)
+    {
 
         $objRecord = $arrArguments[0];
 
-        if($objRecord instanceof PackagemanagerTemplate) {
+        if ($objRecord instanceof PackagemanagerTemplate) {
 
-            if($objRecord->getIntRecordStatus() == 1) {
+            if ($objRecord->getIntRecordStatus() == 1) {
 
                 $objOrm = new OrmObjectlist();
                 $objOrm->addWhereRestriction(new OrmObjectlistSystemstatusRestriction(OrmComparatorEnum::Equal(), 1));
-                $arrPacks = $objOrm->getObjectList("class_module_packagemanager_template");
+                $arrPacks = $objOrm->getObjectList("Kajona\\Packagemanager\\System\\PackagemanagerTemplate");
 
-                foreach($arrPacks as $objPack) {
-                    if($objPack->getSystemid() != $objRecord->getSystemid()) {
+                foreach ($arrPacks as $objPack) {
+                    if ($objPack->getSystemid() != $objRecord->getSystemid()) {
                         $objPack->setIntRecordStatus(0);
                         $objPack->updateObjectToDb();
                     }
@@ -55,7 +57,7 @@ class PackagemanagerRecordupdatedlistener implements GenericeventListenerInterfa
 
                 //update the active-pack constant
                 $objSetting = SystemSetting::getConfigByName("_packagemanager_defaulttemplate_");
-                if($objSetting !== null) {
+                if ($objSetting !== null) {
                     $objSetting->setStrValue($objRecord->getStrName());
                     $objSetting->updateObjectToDb();
                 }
@@ -69,9 +71,11 @@ class PackagemanagerRecordupdatedlistener implements GenericeventListenerInterfa
 
     /**
      * Internal init to register the event listener, called on file-inclusion, e.g. by the class-loader
+     *
      * @return void
      */
-    public static function staticConstruct() {
+    public static function staticConstruct()
+    {
         CoreEventdispatcher::getInstance()->removeAndAddListener(SystemEventidentifier::EVENT_SYSTEM_RECORDUPDATED, new PackagemanagerRecordupdatedlistener());
     }
 

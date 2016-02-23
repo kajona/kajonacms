@@ -6,10 +6,6 @@
 
 namespace Kajona\System\System;
 
-use Kajona\Pages\System\PagesPage;
-use Kajona\System\Admin\AdminHelper;
-
-
 /**
  * Class to handle all link-generations, backend and portal.
  * Moved from functions.php to a central class in order to avoid duplicated code.
@@ -385,7 +381,7 @@ class Link {
                 $strAddKeys = "";
 
                 //used later to add seo-relevant keywords
-                $objPage = PagesPage::getPageByName($strPageI);
+                $objPage = \Kajona\Pages\System\PagesPage::getPageByName($strPageI);
                 if($objPage !== null) {
                     if($strLanguage != "") {
                         $objPage->setStrLanguage($strLanguage);

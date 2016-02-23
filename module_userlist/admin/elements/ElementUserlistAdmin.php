@@ -7,9 +7,9 @@
 
 namespace Kajona\Userlist\Admin\Elements;
 
-use class_module_user_group;
 use Kajona\Pages\Admin\AdminElementInterface;
 use Kajona\Pages\Admin\ElementAdmin;
+use Kajona\System\System\UserGroup;
 
 
 /**
@@ -19,7 +19,8 @@ use Kajona\Pages\Admin\ElementAdmin;
  *
  * @targetTable element_universal.content_id
  */
-class ElementUserlistAdmin extends ElementAdmin implements AdminElementInterface {
+class ElementUserlistAdmin extends ElementAdmin implements AdminElementInterface
+{
 
     /**
      * @var string
@@ -53,13 +54,14 @@ class ElementUserlistAdmin extends ElementAdmin implements AdminElementInterface
     private $intInt1;
 
 
-    public function getAdminForm() {
+    public function getAdminForm()
+    {
 
-        $arrGroups = class_module_user_group::getObjectList();
+        $arrGroups = UserGroup::getObjectList();
         $arrGroupsDD = array();
         $arrGroupsDD[0] = $this->getLang("userlist_all");
-        if(count($arrGroups) > 0) {
-            foreach($arrGroups as $objOneGroup) {
+        if (count($arrGroups) > 0) {
+            foreach ($arrGroups as $objOneGroup) {
                 $arrGroupsDD[$objOneGroup->getSystemid()] = $objOneGroup->getStrName();
             }
         }
@@ -72,45 +74,50 @@ class ElementUserlistAdmin extends ElementAdmin implements AdminElementInterface
     /**
      * @param string $strChar2
      */
-    public function setStrChar2($strChar2) {
+    public function setStrChar2($strChar2)
+    {
         $this->strChar2 = $strChar2;
     }
 
     /**
      * @return string
      */
-    public function getStrChar2() {
+    public function getStrChar2()
+    {
         return $this->strChar2;
     }
 
     /**
      * @param string $strChar1
      */
-    public function setStrChar1($strChar1) {
+    public function setStrChar1($strChar1)
+    {
         $this->strChar1 = $strChar1;
     }
 
     /**
      * @return string
      */
-    public function getStrChar1() {
+    public function getStrChar1()
+    {
         return $this->strChar1;
     }
 
     /**
      * @param string $intInt1
      */
-    public function setIntInt1($intInt1) {
+    public function setIntInt1($intInt1)
+    {
         $this->intInt1 = $intInt1;
     }
 
     /**
      * @return string
      */
-    public function getIntInt1() {
+    public function getIntInt1()
+    {
         return $this->intInt1;
     }
-
 
 
 }

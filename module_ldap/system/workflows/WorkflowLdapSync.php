@@ -8,10 +8,10 @@
 
 namespace Kajona\Ldap\System\Workflows;
 
-use class_module_workflows_workflow;
-use interface_workflows_handler;
 use Kajona\Ldap\System\Usersources\UsersourcesSourceLdap;
 use Kajona\System\System\Carrier;
+use Kajona\Workflows\System\WorkflowsHandlerInterface;
+use Kajona\Workflows\System\WorkflowsWorkflow;
 
 
 /**
@@ -19,18 +19,17 @@ use Kajona\System\System\Carrier;
  *
  * @package module_ldap
  */
-class WorkflowLdapSync implements interface_workflows_handler
+class WorkflowLdapSync implements WorkflowsHandlerInterface
 {
 
 
     /**
-     * @var class_module_workflows_workflow
+     * @var WorkflowsWorkflow
      */
     private $objWorkflow = null;
 
     /**
-     * @see interface_workflows_handler::getConfigValueNames()
-     * @return string[]
+     * @inheritdoc
      */
     public function getConfigValueNames()
     {
@@ -38,12 +37,7 @@ class WorkflowLdapSync implements interface_workflows_handler
     }
 
     /**
-     * @param string $strVal1
-     * @param string $strVal2
-     * @param string $strVal3
-     *
-     * @see interface_workflows_handler::setConfigValues()
-     * @return void
+     * @inheritdoc
      */
     public function setConfigValues($strVal1, $strVal2, $strVal3)
     {
@@ -51,8 +45,7 @@ class WorkflowLdapSync implements interface_workflows_handler
     }
 
     /**
-     * @see interface_workflows_handler::getDefaultValues()
-     * @return string[]
+     * @inheritdoc
      */
     public function getDefaultValues()
     {
@@ -60,7 +53,7 @@ class WorkflowLdapSync implements interface_workflows_handler
     }
 
     /**
-     * @param class_module_workflows_workflow $objWorkflow
+     * @param WorkflowsWorkflow $objWorkflow
      * @return void
      */
     public function setObjWorkflow($objWorkflow)

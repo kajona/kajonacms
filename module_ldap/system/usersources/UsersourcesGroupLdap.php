@@ -12,6 +12,7 @@ namespace Kajona\Ldap\System\Usersources;
 use Kajona\Ldap\System\Ldap;
 use Kajona\System\Admin\AdminFormgenerator;
 use Kajona\System\System\CoreEventdispatcher;
+use Kajona\System\System\Exception;
 use Kajona\System\System\Logger;
 use Kajona\System\System\SystemEventidentifier;
 use Kajona\System\System\Usersources\UsersourcesGroupInterface;
@@ -72,7 +73,7 @@ class UsersourcesGroupLdap extends \Kajona\System\System\Model implements \Kajon
 
     /**
      * Updates the current object to the database.
-     * Overwrites class_roots' logic since a ldap group is not reflected in the system-table
+     * Overwrites Roots' logic since a ldap group is not reflected in the system-table
      *
      * @param bool $strPrevId
      *

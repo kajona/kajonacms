@@ -7,6 +7,12 @@
 
 namespace Kajona\Pages\Admin;
 
+use Kajona\Pages\Admin\Elements\ElementBlockAdmin;
+use Kajona\Pages\Portal\PagesPortaleditor;
+use Kajona\Pages\System\PagesElement;
+use Kajona\Pages\System\PagesFolder;
+use Kajona\Pages\System\PagesPage;
+use Kajona\Pages\System\PagesPageelement;
 use Kajona\System\Admin\AdminInterface;
 use Kajona\System\Admin\AdminSimple;
 use Kajona\System\Admin\LanguagesAdmin;
@@ -19,13 +25,6 @@ use Kajona\System\System\HttpStatuscodes;
 use Kajona\System\System\LanguagesLanguage;
 use Kajona\System\System\Link;
 use Kajona\System\System\Lockmanager;
-use \Kajona\System\System\ModelInterface;
-use Kajona\Pages\Admin\Elements\ElementBlockAdmin;
-use Kajona\Pages\Portal\PagesPortaleditor;
-use Kajona\Pages\System\PagesElement;
-use Kajona\Pages\System\PagesFolder;
-use Kajona\Pages\System\PagesPage;
-use Kajona\Pages\System\PagesPageelement;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\OrmBase;
 use Kajona\System\System\Reflection;
@@ -1269,10 +1268,9 @@ JS;
                 if ($objLockmanager->isLockedByCurrentUser()) {
                     //and finally create the object
                     /** @var PagesPageelement $objElement */
-                    $strElementClass = str_replace(".php", "", $objObject->getStrClassAdmin());
                     //and finally create the object
-                    $strFilename = \class_resourceloader::getInstance()->getPathForFile("/admin/elements/".$objObject->getStrClassAdmin());
-                    $objElement = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin");
+                    $strFilename = Resourceloader::getInstance()->getPathForFile("/admin/elements/".$objObject->getStrClassAdmin());
+                    $objElement = Classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin");
 
                     //and finally create the object
                     /** @var $objElement ElementAdmin */

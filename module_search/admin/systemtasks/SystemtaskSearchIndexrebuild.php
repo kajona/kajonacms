@@ -21,7 +21,8 @@ use Kajona\System\System\SystemModule;
  *
  * @package module_search
  */
-class SystemtaskSearchIndexrebuild extends SystemtaskBase implements AdminSystemtaskInterface {
+class SystemtaskSearchIndexrebuild extends SystemtaskBase implements AdminSystemtaskInterface
+{
 
 
     private $STR_SESSION_KEY = "SystemtaskSearchIndexrebuild";
@@ -30,55 +31,58 @@ class SystemtaskSearchIndexrebuild extends SystemtaskBase implements AdminSystem
     /**
      * constructor to call the base constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->setStrTextBase("search");
     }
 
     /**
-     * @see interface_admin_systemtast::getGroupIdenitfier()
-     * @return string
+     * @inheritdoc
      */
-    public function getGroupIdentifier() {
+    public function getGroupIdentifier()
+    {
         return "search";
     }
 
     /**
-     * @see interface_admin_systemtast::getStrInternalTaskName()
-     * @return string
+     * @inheritdoc
      */
-    public function getStrInternalTaskName() {
+    public function getStrInternalTaskName()
+    {
         return "searchindexrebuild";
     }
 
     /**
-     * @see interface_admin_systemtast::getStrTaskName()
-     * @return string
+     * @inheritdoc
      */
-    public function getStrTaskName() {
+    public function getStrTaskName()
+    {
         return $this->getLang("systemtask_search_indexrebuild");
     }
 
     /**
-     * @see interface_admin_systemtast::executeTask()
-     * @return string
+     * @inheritdoc
      */
-    public function executeTask() {
+    public function executeTask()
+    {
 
-        if(!SystemModule::getModuleByName("search")->rightEdit())
+        if (!SystemModule::getModuleByName("search")->rightEdit()) {
             return $this->getLang("commons_error_permissions");
+        }
 
         $objWorker = new SearchIndexwriter();
 
-        if(!Carrier::getInstance()->getObjSession()->sessionIsset($this->STR_SESSION_KEY)) {
+        if (!Carrier::getInstance()->getObjSession()->sessionIsset($this->STR_SESSION_KEY)) {
 
             //fetch all records to be indexed
-            $strQuery = "SELECT system_id FROM " . _dbprefix_ . "system WHERE system_deleted = 0";
+            $strQuery = "SELECT system_id FROM "._dbprefix_."system WHERE system_deleted = 0";
             $arrRows = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
 
             $arrIds = array();
-            foreach($arrRows as $arrOneRow)
+            foreach ($arrRows as $arrOneRow) {
                 $arrIds[] = $arrOneRow["system_id"];
+            }
 
 
             $objWorker->clearIndex();
@@ -89,23 +93,25 @@ class SystemtaskSearchIndexrebuild extends SystemtaskBase implements AdminSystem
 
         $arrIds = Carrier::getInstance()->getObjSession()->getSession($this->STR_SESSION_KEY);
 
-        if(count($arrIds) == 0) {
+        if (count($arrIds) == 0) {
             Carrier::getInstance()->getObjSession()->sessionUnset($this->STR_SESSION_KEY);
             return $this->objToolkit->getTextRow($this->getLang("worker_indexrebuild_end", array($objWorker->getNumberOfDocuments(), $objWorker->getNumberOfContentEntries())));
         }
 
         $intMax = 0;
-        foreach($arrIds as $intKey => $strOneValue) {
+        foreach ($arrIds as $intKey => $strOneValue) {
 
             $objObject = Objectfactory::getInstance()->getObject($strOneValue);
 
-            if($objObject != null)
+            if ($objObject != null) {
                 $objWorker->indexObject($objObject);
+            }
 
             unset($arrIds[$intKey]);
 
-            if($intMax++ > 500)
+            if ($intMax++ > 500) {
                 break;
+            }
         }
 
         Carrier::getInstance()->getObjSession()->setSession($this->STR_SESSION_KEY, $arrIds);
@@ -117,21 +123,21 @@ class SystemtaskSearchIndexrebuild extends SystemtaskBase implements AdminSystem
         //and multiply it with the already processed records
         $intLookupsDone = ((int)$intTotal - count($arrIds)) * $floatOnePercent;
         $intLookupsDone = round($intLookupsDone, 2);
-        if($intLookupsDone < 0) {
+        if ($intLookupsDone < 0) {
             $intLookupsDone = 0;
         }
 
         $this->setStrProgressInformation($this->getLang("worker_indexrebuild", array($objWorker->getNumberOfDocuments(), $objWorker->getNumberOfContentEntries())));
-        $this->setStrReloadParam("&totalCount=" . $this->getParam("totalCount"));
+        $this->setStrReloadParam("&totalCount=".$this->getParam("totalCount"));
 
         return $intLookupsDone;
     }
 
     /**
-     * @see interface_admin_systemtask::getAdminForm()
-     * @return string
+     * @inheritdoc
      */
-    public function getAdminForm() {
+    public function getAdminForm()
+    {
         Carrier::getInstance()->getObjSession()->sessionUnset($this->STR_SESSION_KEY);
         return "";
     }

@@ -8,10 +8,10 @@
 
 namespace Kajona\Mediamanager\Portal\Elements;
 
-use class_module_rating_rate;
 use Kajona\Mediamanager\Portal\MediamanagerPortal;
 use Kajona\Pages\Portal\ElementPortal;
 use Kajona\Pages\Portal\PortalElementInterface;
+use Kajona\Rating\System\RatingRate;
 use Kajona\System\System\SystemModule;
 
 
@@ -38,7 +38,7 @@ class ElementGalleryPortal extends ElementPortal implements PortalElementInterfa
 
         //we support ratings, so add cache-busters
         if (SystemModule::getModuleByName("rating") !== null) {
-            $this->setStrCacheAddon(getCookie(class_module_rating_rate::RATING_COOKIE));
+            $this->setStrCacheAddon(getCookie(RatingRate::RATING_COOKIE));
         }
     }
 

@@ -20,7 +20,7 @@ interface ModuleRatingSortalgoInterface
 
     /**
      * Sets an array of elements to be sorted.
-     * Elements have to be an instance of interface_sortable_rating.
+     * Elements have to be an instance of SortableRatingInterface.
      *
      * @param array $arrElements
      *

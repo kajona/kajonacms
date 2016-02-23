@@ -33,8 +33,7 @@ class SystemtaskPermissions extends SystemtaskBase implements AdminSystemtaskInt
 
 
     /**
-     * @see interface_admin_systemtask::getGroupIdenitfier()
-     * @return string
+     * @inheritdoc
      */
     public function getGroupIdentifier()
     {
@@ -42,8 +41,7 @@ class SystemtaskPermissions extends SystemtaskBase implements AdminSystemtaskInt
     }
 
     /**
-     * @see interface_admin_systemtask::getStrInternalTaskName()
-     * @return string
+     * @inheritdoc
      */
     public function getStrInternalTaskName()
     {
@@ -51,8 +49,7 @@ class SystemtaskPermissions extends SystemtaskBase implements AdminSystemtaskInt
     }
 
     /**
-     * @see interface_admin_systemtask::getStrTaskName()
-     * @return string
+     * @inheritdoc
      */
     public function getStrTaskName()
     {
@@ -60,8 +57,7 @@ class SystemtaskPermissions extends SystemtaskBase implements AdminSystemtaskInt
     }
 
     /**
-     * @see interface_admin_systemtask::executeTask()
-     * @return string
+     * @inheritdoc
      */
     public function executeTask()
     {
@@ -117,8 +113,7 @@ class SystemtaskPermissions extends SystemtaskBase implements AdminSystemtaskInt
     }
 
     /**
-     * @see interface_admin_systemtask::getAdminForm()
-     * @return string
+     * @inheritdoc
      */
     public function getAdminForm()
     {
@@ -150,8 +145,7 @@ class SystemtaskPermissions extends SystemtaskBase implements AdminSystemtaskInt
     }
 
     /**
-     * @see interface_admin_systemtask::getSubmitParams()
-     * @return string
+     * @inheritdoc
      */
     public function getSubmitParams()
     {

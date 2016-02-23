@@ -20,44 +20,46 @@ use Kajona\System\System\SystemModule;
  * @author sidler@mulchprod.de
  * @since 3.4
  */
-class SystemtaskSystemstatus extends SystemtaskBase implements AdminSystemtaskInterface {
+class SystemtaskSystemstatus extends SystemtaskBase implements AdminSystemtaskInterface
+{
 
 
     /**
-     * @see interface_admin_systemtask::getGroupIdenitfier()
-     * @return string
+     * @inheritdoc
      */
-    public function getGroupIdentifier() {
+    public function getGroupIdentifier()
+    {
         return "database";
     }
 
     /**
-     * @see interface_admin_systemtask::getStrInternalTaskName()
-     * @return string
+     * @inheritdoc
      */
-    public function getStrInternalTaskName() {
+    public function getStrInternalTaskName()
+    {
         return "systemstatus";
     }
 
     /**
-     * @see interface_admin_systemtask::getStrTaskName()
-     * @return string
+     * @inheritdoc
      */
-    public function getStrTaskName() {
+    public function getStrTaskName()
+    {
         return $this->getLang("systemtask_systemstatus_name");
     }
 
     /**
-     * @see interface_admin_systemtask::executeTask()
-     * @return string
+     * @inheritdoc
      */
-    public function executeTask() {
+    public function executeTask()
+    {
 
-        if(!SystemModule::getModuleByName("system")->rightRight2())
+        if (!SystemModule::getModuleByName("system")->rightRight2()) {
             return $this->getLang("commons_error_permissions");
+        }
 
         //try to load and update the systemrecord
-        if(validateSystemid($this->getParam("systemstatus_systemid"))) {
+        if (validateSystemid($this->getParam("systemstatus_systemid"))) {
             $objRecord = new SystemCommon($this->getParam("systemstatus_systemid"));
             $objRecord->setIntRecordStatus($this->getParam("systemstatus_status"));
             $objRecord->updateObjectToDb();
@@ -69,11 +71,11 @@ class SystemtaskSystemstatus extends SystemtaskBase implements AdminSystemtaskIn
     }
 
     /**
-     * @see interface_admin_systemtask::getAdminForm()
-     * @return string
+     * @inheritdoc
      */
-    public function getAdminForm() {
-    	$strReturn = "";
+    public function getAdminForm()
+    {
+        $strReturn = "";
 
         $arrDropdown = array(
             1 => $this->getLang("systemtask_systemstatus_active"),
@@ -87,10 +89,10 @@ class SystemtaskSystemstatus extends SystemtaskBase implements AdminSystemtaskIn
     }
 
     /**
-     * @see interface_admin_systemtask::getSubmitParams()
-     * @return string
+     * @inheritdoc
      */
-    public function getSubmitParams() {
+    public function getSubmitParams()
+    {
         return "&systemstatus_systemid=".$this->getParam("systemstatus_systemid")."&systemstatus_status=".$this->getParam("systemstatus_status");
     }
 }

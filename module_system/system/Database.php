@@ -1073,16 +1073,16 @@ class Database
         /** @var $objDbDriver DbDriverInterface */
         $objDbDriver = null;
 
-        $strClassname = "Kajona\\System\\System\\Db\\Db".ucfirst($strDriver);
-        if (class_exists($strClassname)) {
-            $objDbDriver = new $strClassname();
+        $strPath = Resourceloader::getInstance()->getPathForFile("/system/db/Db".ucfirst($strDriver).".php");
+        if ($strPath != null) {
+            $objDbDriver = Classloader::getInstance()->getInstanceFromFilename($strPath);
         }
         else {
             return false;
         }
 
         try {
-            if ($objDbDriver->dbconnect($strDbHost, $strDbUser, $strDbPass, $strDbName, $intDbPort)) {
+            if ($objDbDriver != null && $objDbDriver->dbconnect($strDbHost, $strDbUser, $strDbPass, $strDbName, $intDbPort)) {
                 $objDbDriver->dbclose();
                 return true;
             }

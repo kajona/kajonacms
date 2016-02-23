@@ -33,7 +33,7 @@ class TodoProviderTest extends Testbase
                 $this->assertTrue(!empty($strCategoryLabel));
 
                 foreach ($arrTodos as $objTodo) {
-                    $this->assertInstanceOf('class_todo_entry', $objTodo);
+                    $this->assertInstanceOf('Kajpna\\Dashboard\\System\\TodoEntry', $objTodo);
                 }
             }
         }

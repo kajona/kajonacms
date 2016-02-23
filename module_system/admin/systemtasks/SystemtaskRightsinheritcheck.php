@@ -22,50 +22,52 @@ use Kajona\System\System\SystemModule;
  *
  * @package module_system
  */
-class SystemtaskRightsinheritcheck extends SystemtaskBase implements AdminSystemtaskInterface {
+class SystemtaskRightsinheritcheck extends SystemtaskBase implements AdminSystemtaskInterface
+{
 
 
     /**
-     * @see interface_admin_systemtask::getGroupIdentifier()
-     * @return string
+     * @inheritdoc
      */
-    public function getGroupIdentifier() {
+    public function getGroupIdentifier()
+    {
         return "database";
     }
 
     /**
-     * @see interface_admin_systemtask::getStrInternalTaskName()
-     * @return string
+     * @inheritdoc
      */
-    public function getStrInternalTaskName() {
+    public function getStrInternalTaskName()
+    {
         return "rightsinheritcheck";
     }
 
     /**
-     * @see interface_admin_systemtask::getStrTaskName()
-     * @return string
+     * @inheritdoc
      */
-    public function getStrTaskName() {
+    public function getStrTaskName()
+    {
         return $this->getLang("systemtask_rightsinheritcheck_name");
     }
 
     /**
-     * @see interface_admin_systemtask::executeTask()
-     * @return string
+     * @inheritdoc
      */
-    public function executeTask() {
+    public function executeTask()
+    {
 
-        if(!SystemModule::getModuleByName("system")->rightRight2())
+        if (!SystemModule::getModuleByName("system")->rightRight2()) {
             return $this->getLang("commons_error_permissions");
+        }
 
         $arrReturn = array();
         $this->checkSingleLevel("0", $arrReturn);
 
         $strReturn = $this->objToolkit->warningBox($this->getLang("systemtask_rightsinheritcheck_intro"));
 
-        if(count($arrReturn) > 0) {
+        if (count($arrReturn) > 0) {
             $strReturn .= $this->objToolkit->listHeader();
-            foreach($arrReturn as $objOneEntry) {
+            foreach ($arrReturn as $objOneEntry) {
                 $strReturn .= $this->objToolkit->genericAdminList($objOneEntry->getSystemid(), $objOneEntry->getStrDisplayName(), "", "", 0, $objOneEntry->getSystemid(), get_class($objOneEntry));
             }
             $strReturn .= $this->objToolkit->listFooter();
@@ -77,7 +79,8 @@ class SystemtaskRightsinheritcheck extends SystemtaskBase implements AdminSystem
         return $strReturn;
     }
 
-    private function checkSingleLevel($strParentId, &$arrReturn) {
+    private function checkSingleLevel($strParentId, &$arrReturn)
+    {
         $objRights = Carrier::getInstance()->getObjRights();
 
         $arrParentRights = $objRights->getArrayRights($strParentId);
@@ -86,23 +89,24 @@ class SystemtaskRightsinheritcheck extends SystemtaskBase implements AdminSystem
         $objCommon = new SystemCommon();
         $arrChildNodes = $objCommon->getChildNodesAsIdArray($strParentId);
 
-        foreach($arrChildNodes as $strOneChildId) {
-            if(!$objRights->isInherited($strOneChildId)) {
+        foreach ($arrChildNodes as $strOneChildId) {
+            if (!$objRights->isInherited($strOneChildId)) {
                 $arrChildRights = $objRights->getArrayRights($strOneChildId);
 
                 $bitIsDifferent = false;
-                foreach($arrChildRights as $strPermission => $arrOneChildPermission) {
+                foreach ($arrChildRights as $strPermission => $arrOneChildPermission) {
 
-                    if($strPermission == Rights::$STR_RIGHT_INHERIT)
+                    if ($strPermission == Rights::$STR_RIGHT_INHERIT) {
                         continue;
+                    }
 
-                    if(count(array_diff($arrChildRights[$strPermission], $arrParentRights[$strPermission])) != 0) {
+                    if (count(array_diff($arrChildRights[$strPermission], $arrParentRights[$strPermission])) != 0) {
                         $bitIsDifferent = true;
                         break;
                     }
                 }
 
-                if(!$bitIsDifferent) {
+                if (!$bitIsDifferent) {
                     $arrReturn[] = Objectfactory::getInstance()->getObject($strOneChildId);
                     $objRights->setInherited(true, $strOneChildId);
                 }
@@ -113,10 +117,10 @@ class SystemtaskRightsinheritcheck extends SystemtaskBase implements AdminSystem
     }
 
     /**
-     * @see interface_admin_systemtask::getAdminForm()
-     * @return string
+     * @inheritdoc
      */
-    public function getAdminForm() {
+    public function getAdminForm()
+    {
         return "";
     }
 

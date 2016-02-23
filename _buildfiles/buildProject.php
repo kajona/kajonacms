@@ -93,7 +93,7 @@ class BuildHelper {
 
         echo "\n\n\n";
         echo "Searching for packages to be installed...";
-        $objManager = new class_module_packagemanager_manager();
+        $objManager = new \Kajona\Packagemanager\System\PackagemanagerManager();
         $arrPackageMetadata = $objManager->getAvailablePackages();
 
         $arrPackagesToInstall = array();
@@ -108,7 +108,7 @@ class BuildHelper {
         $intMaxLoops = 0;
         echo "starting installations...\n";
         while(count($arrPackagesToInstall) > 0 && ++$intMaxLoops < 100) {
-            /** @var class_module_packagemanager_metadata $objOneMetadata */
+            /** @var \Kajona\Packagemanager\System\PackagemanagerMetadata $objOneMetadata */
             foreach($arrPackagesToInstall as $intKey => $objOneMetadata) {
 
                 echo "---------------------------------------------------------------\n";
@@ -139,9 +139,9 @@ class BuildHelper {
 
         echo "Installing samplecontent...\n\n";
         try {
-            $objHandler = $objManager->getPackageManagerForPath(class_resourceloader::getInstance()->getCorePathForModule("module_samplecontent")."/module_samplecontent");
+            $objHandler = $objManager->getPackageManagerForPath(\Kajona\System\System\Resourceloader::getInstance()->getCorePathForModule("module_samplecontent")."/module_samplecontent");
         }
-        catch (class_exception $objEx) {
+        catch (\Kajona\System\System\Exception $objEx) {
             $objHandler = null;
         }
         if($objHandler !== null)

@@ -18,7 +18,8 @@ use Kajona\System\System\SystemEventidentifier;
  * @author sidler@mulchprod.de
  *
  */
-class NewsRecorddeletedlistener implements GenericeventListenerInterface {
+class NewsRecorddeletedlistener implements GenericeventListenerInterface
+{
 
 
     /**
@@ -29,23 +30,25 @@ class NewsRecorddeletedlistener implements GenericeventListenerInterface {
      *
      * @return bool
      */
-    public function handleEvent($strEventName, array $arrArguments) {
+    public function handleEvent($strEventName, array $arrArguments)
+    {
         //unwrap arguments
         list($strSystemid, $strSourceClass) = $arrArguments;
 
-        if($strSourceClass == "class_module_news_category") {
+        if ($strSourceClass == "Kajona\\News\\System\\NewsCategory") {
             return Carrier::getInstance()->getObjDB()->_pQuery("DELETE FROM "._dbprefix_."news_member WHERE newsmem_category = ? ", array($strSystemid));
         }
         return true;
     }
 
 
-
     /**
      * Internal init to register the event listener, called on file-inclusion, e.g. by the class-loader
+     *
      * @return void
      */
-    public static function staticConstruct() {
+    public static function staticConstruct()
+    {
         CoreEventdispatcher::getInstance()->removeAndAddListener(SystemEventidentifier::EVENT_SYSTEM_RECORDDELETED, new NewsRecorddeletedlistener());
     }
 

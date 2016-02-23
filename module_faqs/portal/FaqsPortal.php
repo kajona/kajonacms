@@ -10,12 +10,12 @@
 namespace Kajona\Faqs\Portal;
 
 
-use class_module_rating_portal;
 use Kajona\Faqs\System\FaqsCategory;
 use Kajona\Faqs\System\FaqsFaq;
 use Kajona\Pages\Portal\PagesPortaleditor;
 use Kajona\Pages\System\PagesPortaleditorActionEnum;
 use Kajona\Pages\System\PagesPortaleditorSystemidAction;
+use Kajona\Rating\Portal\RatingPortal;
 use Kajona\System\Portal\PortalController;
 use Kajona\System\Portal\PortalInterface;
 use Kajona\System\System\Link;
@@ -86,7 +86,7 @@ class FaqsPortal extends PortalController implements PortalInterface
 
                     //ratings available?
                     if ($objOneFaq->getFloatRating() !== null && SystemModule::getModuleByName("rating") != null) {
-                        /** @var $objRating class_module_rating_portal */
+                        /** @var $objRating RatingPortal */
                         $objRating = SystemModule::getModuleByName("rating")->getPortalInstanceOfConcreteModule();
                         $objMapper->addPlaceholder("faq_rating", $objRating->buildRatingBar($objOneFaq->getFloatRating(), $objOneFaq->getIntRatingHits(), $objOneFaq->getSystemid(), $objOneFaq->isRateableByUser(), $objOneFaq->rightRight1()));
                     }

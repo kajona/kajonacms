@@ -9,7 +9,6 @@
 
 namespace Kajona\News\Portal;
 
-use class_module_rating_portal;
 use Kajona\News\System\NewsCategory;
 use Kajona\News\System\NewsNews;
 use Kajona\Pages\Portal\PagesPortalController;
@@ -18,6 +17,7 @@ use Kajona\Pages\System\PagesPortaleditorActionEnum;
 use Kajona\Pages\System\PagesPortaleditorSystemidAction;
 use Kajona\Postacomment\Portal\PostacommentPortal;
 use Kajona\Postacomment\System\PostacommentPost;
+use Kajona\Rating\Portal\RatingPortal;
 use Kajona\System\Portal\PortalController;
 use Kajona\System\Portal\PortalInterface;
 use Kajona\System\System\ArraySectionIterator;
@@ -140,7 +140,7 @@ class NewsPortal extends PortalController implements PortalInterface {
 
                 //ratings
                 if($objOneNews->getFloatRating() !== null) {
-                    /** @var $objRating class_module_rating_portal */
+                    /** @var $objRating RatingPortal */
                     $objRating = SystemModule::getModuleByName("rating")->getPortalInstanceOfConcreteModule();
                     $objMapper->addPlaceholder(
                         "news_rating",
@@ -226,7 +226,7 @@ class NewsPortal extends PortalController implements PortalInterface {
 
             //ratings
             if($objNews->getFloatRating() !== null) {
-                /** @var $objRating class_module_rating_portal */
+                /** @var $objRating RatingPortal */
                 $objRating = SystemModule::getModuleByName("rating")->getPortalInstanceOfConcreteModule();
                 $objMapper->addPlaceholder(
                     "news_rating",

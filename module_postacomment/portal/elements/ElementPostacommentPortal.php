@@ -9,9 +9,9 @@
 
 namespace Kajona\Postacomment\Portal\Elements;
 
-use class_module_rating_rate;
 use Kajona\Pages\Portal\ElementPortal;
 use Kajona\Pages\Portal\PortalElementInterface;
+use Kajona\Rating\System\RatingRate;
 use Kajona\System\System\SystemModule;
 
 
@@ -38,7 +38,7 @@ class ElementPostacommentPortal extends ElementPortal implements PortalElementIn
         //we support ratings, so add cache-busters
         $objRatingModule = SystemModule::getModuleByName("rating");
         if ($objRatingModule != null) {
-            $this->setStrCacheAddon(getCookie(class_module_rating_rate::RATING_COOKIE));
+            $this->setStrCacheAddon(getCookie(RatingRate::RATING_COOKIE));
         }
     }
 

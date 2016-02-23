@@ -7,16 +7,16 @@
 
 namespace Kajona\Portalregistration\Portal\Elements;
 
-use class_email_validator;
-use class_link;
-use class_mail;
-use class_module_system_setting;
-use class_module_user_group;
-use class_module_user_user;
-use class_scriptlet_helper;
-use class_text_validator;
 use Kajona\Pages\Portal\ElementPortal;
 use Kajona\Pages\Portal\PortalElementInterface;
+use Kajona\System\System\Link;
+use Kajona\System\System\Mail;
+use Kajona\System\System\ScriptletHelper;
+use Kajona\System\System\SystemSetting;
+use Kajona\System\System\UserGroup;
+use Kajona\System\System\UserUser;
+use Kajona\System\System\Validators\EmailValidator;
+use Kajona\System\System\Validators\TextValidator;
 
 
 /**
@@ -61,7 +61,7 @@ class ElementPortalregistrationPortal extends ElementPortal implements PortalEle
         $strReturn = "";
 
         if($this->getSystemid() != "") {
-            $objUser = new class_module_user_user($this->getParam("systemid"));
+            $objUser = new UserUser($this->getParam("systemid"));
 
             if($objUser->getStrEmail() != "") {
                 if($objUser->getIntActive() == 0 && $objUser->getIntLogins() == 0 && $objUser->getStrAuthcode() == $this->getParam("authcode") && $objUser->getStrAuthcode() != "") {
@@ -70,7 +70,7 @@ class ElementPortalregistrationPortal extends ElementPortal implements PortalEle
                     if($objUser->updateObjectToDb()) {
                         $strReturn .= $this->getLang("pr_completionSuccess");
                         if($this->arrElementData["portalregistration_success"] != "") {
-                            $this->portalReload(class_link::getLinkPortalHref($this->arrElementData["portalregistration_success"]));
+                            $this->portalReload(Link::getLinkPortalHref($this->arrElementData["portalregistration_success"]));
                         }
                     }
                 }
@@ -98,8 +98,8 @@ class ElementPortalregistrationPortal extends ElementPortal implements PortalEle
         //what to do?
         if($this->getParam("submitUserForm") != "") {
 
-            $objTextValidator = new class_text_validator();
-            $objEmailValidator = new class_email_validator();
+            $objTextValidator = new TextValidator();
+            $objEmailValidator = new EmailValidator();
 
             if($this->getParam("password") == "" || $this->getParam("password") != $this->getParam("password2")) {
                 $arrErrors[] = $this->getLang("pr_passwordsUnequal");
@@ -110,7 +110,7 @@ class ElementPortalregistrationPortal extends ElementPortal implements PortalEle
             }
 
             //username already existing?
-            if($objTextValidator->validate($this->getParam("username")) && count(class_module_user_user::getAllUsersByName($this->getParam("username"))) > 0) {
+            if($objTextValidator->validate($this->getParam("username")) && count(UserUser::getAllUsersByName($this->getParam("username"))) > 0) {
                 $arrErrors[] = $this->getLang("pr_usernameGiven");
             }
 
@@ -137,7 +137,7 @@ class ElementPortalregistrationPortal extends ElementPortal implements PortalEle
             $arrTemplate["email"] = $this->getParam("email");
             $arrTemplate["forename"] = $this->getParam("forename");
             $arrTemplate["name"] = $this->getParam("name");
-            $arrTemplate["formaction"] = class_link::getLinkPortalHref($this->getPagename(), "", "portalCreateAccount");
+            $arrTemplate["formaction"] = Link::getLinkPortalHref($this->getPagename(), "", "portalCreateAccount");
 
             $arrTemplate["formErrors"] = "";
             if(count($arrErrors) > 0) {
@@ -151,7 +151,7 @@ class ElementPortalregistrationPortal extends ElementPortal implements PortalEle
         }
         else {
             //create new user, inactive
-            $objUser = new class_module_user_user();
+            $objUser = new UserUser();
             $objUser->setStrUsername($this->getParam("username"));
             $objUser->setIntActive(0);
             $objUser->setIntAdmin(0);
@@ -170,22 +170,22 @@ class ElementPortalregistrationPortal extends ElementPortal implements PortalEle
                 $objSourceuser->updateObjectToDb();
 
                 //group assignments
-                $objGroup = new class_module_user_group($this->arrElementData["portalregistration_group"]);
+                $objGroup = new UserGroup($this->arrElementData["portalregistration_group"]);
                 $objGroup->getObjSourceGroup()->addMember($objUser->getObjSourceUser());
                 //and to the guests to avoid conflicts
-                $objGroup = new class_module_user_group(class_module_system_setting::getConfigValue("_guests_group_id_"));
+                $objGroup = new UserGroup(SystemSetting::getConfigValue("_guests_group_id_"));
                 $objGroup->getObjSourceGroup()->addMember($objUser->getObjSourceUser());
                 //create a mail to allow the user to activate itself
 
                 $strMailContent = $this->getLang("pr_email_body");
-                $strTemp = getLinkPortalHref($this->getPagename(), "", "portalCompleteRegistration", "&authcode=" . $strAuthcode, $objUser->getSystemid());
+                $strTemp = Link::getLinkPortalHref($this->getPagename(), "", "portalCompleteRegistration", "&authcode=" . $strAuthcode, $objUser->getSystemid());
                 $strMailContent .= html_entity_decode("<a href=\"" . $strTemp . "\">" . $strTemp . "</a>");
                 $strMailContent .= $this->getLang("pr_email_footer");
 
-                $objScriptlets = new class_scriptlet_helper();
+                $objScriptlets = new ScriptletHelper();
                 $strMailContent = $objScriptlets->processString($strMailContent);
 
-                $objMail = new class_mail();
+                $objMail = new Mail();
                 $objMail->setSubject($this->getLang("pr_email_subject"));
                 $objMail->setHtml($strMailContent);
                 $objMail->addTo($this->getParam("email"));

@@ -19,55 +19,57 @@ use Kajona\System\System\SystemWorker;
  *
  * @package module_system
  */
-class SystemtaskDbconsistency extends SystemtaskBase implements AdminSystemtaskInterface {
+class SystemtaskDbconsistency extends SystemtaskBase implements AdminSystemtaskInterface
+{
 
 
     /**
-     * @see interface_admin_systemtask::getGroupIdenitfier()
-     * @return string
+     * @inheritdoc
      */
-    public function getGroupIdentifier() {
+    public function getGroupIdentifier()
+    {
         return "database";
     }
 
     /**
-     * @see interface_admin_systemtask::getStrInternalTaskName()
-     * @return string
+     * @inheritdoc
      */
-    public function getStrInternalTaskName() {
+    public function getStrInternalTaskName()
+    {
         return "dbconsistency";
     }
 
     /**
-     * @see interface_admin_systemtask::getStrTaskName()
-     * @return string
+     * @inheritdoc
      */
-    public function getStrTaskName() {
+    public function getStrTaskName()
+    {
         return $this->getLang("systemtask_dbconsistency_name");
     }
 
     /**
-     * @see interface_admin_systemtask::executeTask()
-     * @return string
+     * @inheritdoc
      */
-    public function executeTask() {
+    public function executeTask()
+    {
 
-        if(!SystemModule::getModuleByName("system")->rightRight2())
+        if (!SystemModule::getModuleByName("system")->rightRight2()) {
             return $this->getLang("commons_error_permissions");
+        }
 
-    	$intI = 0;
-    	$strReturn = "";
+        $intI = 0;
+        $strReturn = "";
         $objWorker = new SystemWorker();
 
         //chec 1.level nodes
         $arrCorruptedRecords = $objWorker->checkFirstLevelNodeConsistency();
 
         //create the output tables
-        if(count($arrCorruptedRecords) > 0) {
+        if (count($arrCorruptedRecords) > 0) {
             //ohoh. errors found. create tow tables
             $strReturn .= $this->objToolkit->listHeader();
             $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("systemtask_dbconsistency_firstlevel_error"), getImageAdmin("icon_disabled"), "", ++$intI);
-            foreach($arrCorruptedRecords as $arrRow)  {
+            foreach ($arrCorruptedRecords as $arrRow) {
                 $objRecord = Objectfactory::getInstance()->getObject($arrRow["system_id"]);
                 $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $arrRow["system_id"]." (".uniStrTrim(($objRecord != null ? $objRecord->getStrDisplayName() : $arrRow["system_comment"]), 20).")", "", "", $intI);
             }
@@ -84,11 +86,11 @@ class SystemtaskDbconsistency extends SystemtaskBase implements AdminSystemtaskI
         $arrCorruptedRecords = $objWorker->checkSystemTableCurPrevRelations();
 
         //create the output tables
-        if(count($arrCorruptedRecords) > 0) {
+        if (count($arrCorruptedRecords) > 0) {
             //ohoh. errors found. create tow tables
             $strReturn .= $this->objToolkit->listHeader();
             $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("systemtask_dbconsistency_curprev_error"), getImageAdmin("icon_disabled"), "", ++$intI);
-            foreach($arrCorruptedRecords as $strID => $strComment)  {
+            foreach ($arrCorruptedRecords as $strID => $strComment) {
                 $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $strID." (".$strComment.")", "", "", $intI);
             }
             $strReturn .= $this->objToolkit->listFooter();
@@ -103,11 +105,11 @@ class SystemtaskDbconsistency extends SystemtaskBase implements AdminSystemtaskI
         //check if every right-record has a system-record
         $arrCorruptedRecords = $objWorker->chekRightSystemRelations();
         //create the output tables
-        if(count($arrCorruptedRecords) > 0) {
+        if (count($arrCorruptedRecords) > 0) {
             //ohoh. errors found. create tow tables
             $strReturn .= $this->objToolkit->listHeader();
             $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("systemtask_dbconsistency_right_error"), getImageAdmin("icon_disabled"), "", ++$intI);
-            foreach($arrCorruptedRecords as $arrOneRecords)  {
+            foreach ($arrCorruptedRecords as $arrOneRecords) {
                 $objRecord = Objectfactory::getInstance()->getObject($arrOneRecords["system_id"]);
                 $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $arrOneRecords["right_id"]." (".uniStrTrim(($objRecord != null ? $objRecord->getStrDisplayName() : $arrOneRecords["system_comment"]), 20).")", "", "", $intI);
             }
@@ -123,11 +125,11 @@ class SystemtaskDbconsistency extends SystemtaskBase implements AdminSystemtaskI
         //check if every date-record has a system-record
         $arrCorruptedRecords = $objWorker->checkDateSystemRelations();
         //create the output tables
-        if(count($arrCorruptedRecords) > 0) {
+        if (count($arrCorruptedRecords) > 0) {
             //ohoh. errors found. create tow tables
             $strReturn .= $this->objToolkit->listHeader();
             $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("systemtask_dbconsistency_date_error"), getImageAdmin("icon_disabled"), "", ++$intI);
-            foreach($arrCorruptedRecords as $arrOneRecords)  {
+            foreach ($arrCorruptedRecords as $arrOneRecords) {
                 $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $arrOneRecords["system_date_id"], "", "", $intI);
             }
             $strReturn .= $this->objToolkit->listFooter();
@@ -144,10 +146,10 @@ class SystemtaskDbconsistency extends SystemtaskBase implements AdminSystemtaskI
     }
 
     /**
-     * @see interface_admin_systemtask::getAdminForm()
-     * @return string
+     * @inheritdoc
      */
-    public function getAdminForm() {
+    public function getAdminForm()
+    {
         return "";
     }
 

@@ -17,8 +17,6 @@ class ZipTest extends Testbase
     {
         $objFileSystem = new Filesystem();
 
-        echo "\ttesting class_zip...\n";
-
         $objZip = new Zip();
         echo "\topening " . _realpath_ . "/test.zip\n";
         $this->assertTrue($objZip->openArchiveForWriting("/files/cache/test.zip"), __FILE__ . " openArchive");
@@ -68,7 +66,6 @@ class ZipTest extends Testbase
         $objFileSystem->fileCopy(Resourceloader::getInstance()->getCorePathForModule("module_system") . "/module_system/metadata.xml", "/files/cache/ziptest/licence_lgpl2.txt");
         $objFileSystem->fileCopy(Resourceloader::getInstance()->getCorePathForModule("module_system") . "/module_system/metadata.xml", "/files/cache/ziptest/subdir/licence_lgpl.txt");
 
-        echo "\ttesting class_zip...\n";
 
         $objZip = new Zip();
         echo "\topening test.zip\n";
@@ -105,7 +102,6 @@ class ZipTest extends Testbase
     {
         $objFileSystem = new Filesystem();
 
-        echo "\ttesting class_zip file-reading...\n";
 
         $objZip = new Zip();
         echo "\topening " . _realpath_ . "/test.zip\n";

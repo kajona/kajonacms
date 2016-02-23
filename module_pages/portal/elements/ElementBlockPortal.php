@@ -14,6 +14,7 @@ use Kajona\Pages\System\PagesPageelement;
 use Kajona\Pages\System\PagesPortaleditorActionEnum;
 use Kajona\Pages\System\PagesPortaleditorPlaceholderAction;
 use Kajona\Pages\System\PagesPortaleditorSystemidAction;
+use Kajona\System\System\Exception;
 use Kajona\System\System\LanguagesLanguage;
 use Kajona\System\System\Link;
 use Kajona\System\System\Objectfactory;
@@ -88,7 +89,7 @@ class ElementBlockPortal extends ElementPortal implements PortalElementInterface
 
 
     /**
-     * @throws \class_exception
+     * @throws Exception
      */
     public function getPortalEditorActions()
     {

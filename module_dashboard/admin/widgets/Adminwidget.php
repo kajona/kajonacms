@@ -21,7 +21,8 @@ use Kajona\System\System\Lang;
  * @package module_dashboard
  * @author sidler@mulchprod.de
  */
-abstract class Adminwidget {
+abstract class Adminwidget
+{
 
     private $arrFields = array();
     private $arrPersistenceKeys = array();
@@ -35,7 +36,6 @@ abstract class Adminwidget {
     private $objDb;
 
     /**
-     * instance of class_toolkit
      *
      * @var ToolkitAdmin
      */
@@ -51,7 +51,8 @@ abstract class Adminwidget {
 
     private $bitBlockSessionClose = false;
 
-    public function __construct() {
+    public function __construct()
+    {
 
         $this->objDb = Carrier::getInstance()->getObjDB();
         $this->objToolkit = Carrier::getInstance()->getObjToolkit("admin");
@@ -65,7 +66,8 @@ abstract class Adminwidget {
      *
      * @param array $arrKeys
      */
-    protected final function setPersistenceKeys($arrKeys) {
+    protected final function setPersistenceKeys($arrKeys)
+    {
         $this->arrPersistenceKeys = $arrKeys;
     }
 
@@ -75,7 +77,8 @@ abstract class Adminwidget {
      *
      * @return string
      */
-    public final function generateWidgetOutput() {
+    public final function generateWidgetOutput()
+    {
         return $this->getWidgetOutput();
     }
 
@@ -83,9 +86,10 @@ abstract class Adminwidget {
      * Overwrite this method!
      *
      * @return string
-     * @see interface_adminwidget::getWidgetOutput()
+     * @see AdminwidgetInterface::getWidgetOutput()
      */
-    public function getWidgetOutput() {
+    public function getWidgetOutput()
+    {
         return "";
     }
 
@@ -94,9 +98,10 @@ abstract class Adminwidget {
      *
      * @return string
      */
-    public final function getFieldsAsString() {
+    public final function getFieldsAsString()
+    {
         $arrFieldsToPersist = array();
-        foreach($this->arrPersistenceKeys as $strOneKey) {
+        foreach ($this->arrPersistenceKeys as $strOneKey) {
             $arrFieldsToPersist[$strOneKey] = $this->getFieldValue($strOneKey);
         }
 
@@ -109,10 +114,11 @@ abstract class Adminwidget {
      *
      * @param string $strContent
      */
-    public final function setFieldsAsString($strContent) {
+    public final function setFieldsAsString($strContent)
+    {
         $arrFieldsToLoad = unserialize(stripslashes($strContent));
-        foreach($this->arrPersistenceKeys as $strOneKey) {
-            if(isset($arrFieldsToLoad[$strOneKey])) {
+        foreach ($this->arrPersistenceKeys as $strOneKey) {
+            if (isset($arrFieldsToLoad[$strOneKey])) {
                 $this->setFieldValue($strOneKey, $arrFieldsToLoad[$strOneKey]);
             }
         }
@@ -124,9 +130,10 @@ abstract class Adminwidget {
      *
      * @param array $arrFields
      */
-    public final function loadFieldsFromArray($arrFields) {
-        foreach($this->arrPersistenceKeys as $strOneKey) {
-            if(isset($arrFields[$strOneKey])) {
+    public final function loadFieldsFromArray($arrFields)
+    {
+        foreach ($this->arrPersistenceKeys as $strOneKey) {
+            if (isset($arrFields[$strOneKey])) {
                 $this->setFieldValue($strOneKey, $arrFields[$strOneKey]);
             }
             else {
@@ -143,7 +150,8 @@ abstract class Adminwidget {
      *
      * @return string
      */
-    public final function getLang($strKey, $arrParameters = array()) {
+    public final function getLang($strKey, $arrParameters = array())
+    {
         return $this->objLang->getLang($strKey, "adminwidget", $arrParameters);
     }
 
@@ -154,8 +162,9 @@ abstract class Adminwidget {
      *
      * @return mixed
      */
-    protected final function getFieldValue($strFieldName) {
-        if(isset($this->arrFields[$strFieldName])) {
+    protected final function getFieldValue($strFieldName)
+    {
+        if (isset($this->arrFields[$strFieldName])) {
             return $this->arrFields[$strFieldName];
         }
         else {
@@ -169,7 +178,8 @@ abstract class Adminwidget {
      * @param string $strFieldName
      * @param mixed $mixedValue
      */
-    protected final function setFieldValue($strFieldName, $mixedValue) {
+    protected final function setFieldValue($strFieldName, $mixedValue)
+    {
         $this->arrFields[$strFieldName] = $mixedValue;
     }
 
@@ -178,7 +188,8 @@ abstract class Adminwidget {
      *
      * @param string $strSystemid
      */
-    public final function setSystemid($strSystemid) {
+    public final function setSystemid($strSystemid)
+    {
         $this->strSystemid = $strSystemid;
     }
 
@@ -187,7 +198,8 @@ abstract class Adminwidget {
      *
      * @return string
      */
-    public final function getSystemid() {
+    public final function getSystemid()
+    {
         return $this->strSystemid;
     }
 
@@ -199,7 +211,8 @@ abstract class Adminwidget {
      *
      * @return string
      */
-    public function getLayoutSection() {
+    public function getLayoutSection()
+    {
         return "adminwidget_widget";
     }
 
@@ -212,7 +225,8 @@ abstract class Adminwidget {
      *
      * @return string
      */
-    protected final function widgetText($strText) {
+    protected final function widgetText($strText)
+    {
         return $this->objToolkit->adminwidgetText($strText);
     }
 
@@ -222,19 +236,23 @@ abstract class Adminwidget {
      *
      * @return string
      */
-    protected final function widgetSeparator() {
+    protected final function widgetSeparator()
+    {
         return $this->objToolkit->adminwidgetSeparator();
     }
 
-    public function setBitBlockSessionClose($bitBlockSessionClose) {
+    public function setBitBlockSessionClose($bitBlockSessionClose)
+    {
         $this->bitBlockSessionClose = $bitBlockSessionClose;
     }
 
-    public function getBitBlockSessionClose() {
+    public function getBitBlockSessionClose()
+    {
         return $this->bitBlockSessionClose;
     }
 
-    public function getWidgetNameAdditionalContent() {
+    public function getWidgetNameAdditionalContent()
+    {
         return "";
     }
 }

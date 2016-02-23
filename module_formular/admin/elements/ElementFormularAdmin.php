@@ -9,9 +9,9 @@
 
 namespace Kajona\Formular\Admin\Elements;
 
-use class_resourceloader;
 use Kajona\Pages\Admin\AdminElementInterface;
 use Kajona\Pages\Admin\ElementAdmin;
+use Kajona\System\System\Resourceloader;
 
 
 /**
@@ -41,7 +41,7 @@ class ElementFormularAdmin extends ElementAdmin implements AdminElementInterface
      * @tableColumnDatatype char254
      * @fieldType text
      * @fieldLabel formular_email
-     * @fieldValidator class_email_validator
+     * @fieldValidator Kajona\System\System\Validators\EmailValidator
      * @fieldMandatory
      */
     private $strEmail;
@@ -82,7 +82,7 @@ class ElementFormularAdmin extends ElementAdmin implements AdminElementInterface
         $objForm = parent::getAdminForm();
 
         $arrClassesDD = array();
-        foreach(class_resourceloader::getInstance()->getFolderContent("/portal/forms", array(".php")) as $strClass) {
+        foreach(Resourceloader::getInstance()->getFolderContent("/portal/forms", array(".php")) as $strClass) {
             $arrClassesDD[$strClass] = $strClass;
         }
 

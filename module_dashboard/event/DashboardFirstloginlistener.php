@@ -23,23 +23,26 @@ use Kajona\System\System\SystemEventidentifier;
  * @author sidler@mulchprod.de
  *
  */
-class DashboardFirstloginlistener implements GenericeventListenerInterface {
+class DashboardFirstloginlistener implements GenericeventListenerInterface
+{
 
     /**
      * handles the event
+     *
      * @param string $strEventName
      * @param array $arrArguments
      *
      * @return bool
      */
-    public function handleEvent($strEventName, array $arrArguments) {
+    public function handleEvent($strEventName, array $arrArguments)
+    {
         list($strUserid) = $arrArguments;
 
         $bitReturn = true;
 
         //get all widgets and call them in order
         $arrWidgets = DashboardWidget::getListOfWidgetsAvailable();
-        foreach($arrWidgets as $strOneWidgetClass) {
+        foreach ($arrWidgets as $strOneWidgetClass) {
             /** @var $objInstance AdminwidgetInterface */
             $objInstance = new $strOneWidgetClass();
             $objInstance->onFistLogin($strUserid);
@@ -51,9 +54,11 @@ class DashboardFirstloginlistener implements GenericeventListenerInterface {
 
     /**
      * Internal init to register the event listener, called on file-inclusion, e.g. by the class-loader
+     *
      * @return void
      */
-    public static function staticConstruct() {
+    public static function staticConstruct()
+    {
         CoreEventdispatcher::getInstance()->removeAndAddListener(SystemEventidentifier::EVENT_SYSTEM_USERFIRSTLOGIN, new DashboardFirstloginlistener());
     }
 

@@ -8,7 +8,7 @@
 namespace Kajona\Mediamanager\Admin\Statsreports;
 
 
-use interface_admin_statsreports;
+use Kajona\Stats\Admin\AdminStatsreportsInterface;
 use Kajona\System\Admin\ToolkitAdmin;
 use Kajona\System\System\Database;
 use Kajona\System\System\GraphFactory;
@@ -22,7 +22,7 @@ use Kajona\System\System\UserUser;
  * @package module_mediamanager
  * @author sidler@mulchprod.de
  */
-class StatsReportTopdownloads implements interface_admin_statsreports
+class StatsReportTopdownloads implements AdminStatsreportsInterface
 {
 
     //class vars

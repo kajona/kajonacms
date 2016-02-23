@@ -193,7 +193,7 @@ class StatsAdmin extends AdminController implements AdminInterface
     /**
      * Creates a small form to set the date-interval of the current report
      *
-     * @param \interface_admin_statsreports|null $objReport
+     * @param AdminStatsreportsInterface|null $objReport
      *
      * @return string
      */

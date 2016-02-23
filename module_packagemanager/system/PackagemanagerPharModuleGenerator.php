@@ -6,8 +6,6 @@
 
 namespace Kajona\Packagemanager\System;
 
-use class_http_responsetypes;
-use class_response_object;
 use FilesystemIterator;
 use Kajona\System\System\Config;
 use Kajona\System\System\Exception;
@@ -29,6 +27,8 @@ class PackagemanagerPharModuleGenerator implements PackagemanagerPharGeneratorIn
     /**
      * @param $strSourceDir string the directory to be included in the phar, absolute paths
      * @param $strTargetPath string the full path including the name of the phar to be generated
+     *
+     * @throws Exception
      */
     public function generatePhar($strSourceDir, $strTargetPath)
     {

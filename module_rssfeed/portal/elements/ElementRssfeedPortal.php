@@ -9,11 +9,10 @@
 
 namespace Kajona\Rssfeed\Portal\Elements;
 
-use class_exception;
-use class_remoteloader;
-use class_xml_parser;
 use Kajona\Pages\Portal\ElementPortal;
 use Kajona\Pages\Portal\PortalElementInterface;
+use Kajona\System\System\Remoteloader;
+use Kajona\System\System\XmlParser;
 
 
 /**
@@ -35,7 +34,7 @@ class ElementRssfeedPortal extends ElementPortal implements PortalElementInterfa
         $strReturn = "";
         $strFeed = "";
         try {
-            $objRemoteloader = new class_remoteloader();
+            $objRemoteloader = new Remoteloader();
 
             if(uniStrtolower(uniSubstr($this->arrElementData["char2"], 0, 8)) == "https://")
                 $objRemoteloader->setStrProtocolHeader("https://");
@@ -46,7 +45,7 @@ class ElementRssfeedPortal extends ElementPortal implements PortalElementInterfa
             $objRemoteloader->setIntPort(0);
             $strFeed = $objRemoteloader->getRemoteContent();
         }
-        catch(class_exception $objExeption) {
+        catch(\Kajona\System\System\Exception $objExeption) {
             $strFeed = "";
         }
 
@@ -59,7 +58,7 @@ class ElementRssfeedPortal extends ElementPortal implements PortalElementInterfa
             $strContent = $this->getLang("rssfeed_errorloading");
         }
         else {
-            $objXmlparser = new class_xml_parser();
+            $objXmlparser = new XmlParser();
             $objXmlparser->loadString($strFeed);
 
             $arrFeed = $objXmlparser->xmlToArray();
