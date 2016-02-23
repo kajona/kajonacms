@@ -52,12 +52,19 @@ class Config
         $config = array();
         $debug = array();
 
-        //Include the config-File
+        // default config
+        $strFile = __DIR__."/config/config.php";
+        if (is_file($strFile)) {
+            include $strFile;
+        } elseif (strpos(__DIR__, '.phar') !== false) {
+            include 'phar://'.$strFile;
+        }
+
+        // project config
         $strPath = Resourceloader::getInstance()->getPathForFile("/system/config/".$strConfigFile);
         if ($strPath !== false) {
-            include($strPath);
-        }
-        else {
+            include $strPath;
+        } else {
             die("Error reading /system/config/{$strConfigFile} config-file");
         }
 
@@ -111,23 +118,25 @@ class Config
      */
     public static function readPlainConfigsFromFilesystem($strEntryName)
     {
-
         $config = array();
 
-        if (!@include __DIR__."/config/config.php") {
-            die("Error reading config-file!");
+        // default config
+        $strFile = __DIR__."/config/config.php";
+        if (is_file($strFile)) {
+            include $strFile;
+        } elseif (strpos(__DIR__, '.phar') !== false) {
+            include 'phar://'.$strFile;
         }
 
-        //merge with projects-file
-        if (is_file(__DIR__."/../../../project/system/config/config.php")) {
-            if (!@include __DIR__."/../../../project/system/config/config.php") {
-                die("Error reading config-file!");
-            }
+        // project config
+        $strFile = __DIR__."/../../../project/system/config/config.php";
+        if (is_file($strFile)) {
+            include $strFile;
+        } elseif (strpos(__DIR__, '.phar') !== false) {
+            include 'phar://'.$strFile;
         }
-
 
         return isset($config[$strEntryName]) ? $config[$strEntryName] : "";
-
     }
 
     /**
@@ -270,6 +279,5 @@ class Config
             date_default_timezone_set(_system_timezone_);
         }
     }
-
 }
 
