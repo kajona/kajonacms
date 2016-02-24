@@ -78,7 +78,7 @@ class AdminFormgeneratorFilter extends AdminFormgenerator
         // 3. Init the form
         $this->generateFieldsFromObject();
         $this->updateSourceObject();
-        $this->addField(new class_formentry_hidden($this->getStrFormname(), "setcontentfilter"))->setStrValue("true");
+        $this->addField(new FormentryHidden($this->getStrFormname(), "setcontentfilter"))->setStrValue("true");
         $objFilter->updateFilterForm($this);
 
         // 4. Keep filter object in separate variable
