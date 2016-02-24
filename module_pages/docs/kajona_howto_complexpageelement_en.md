@@ -16,22 +16,22 @@ A current version of the rssfeed-element is available for download at http://www
 This tutorial is based on Kajona V4.3.
 
 ##Create the filesystem
-The filesystem of the element is based on the same structure as the simple-elements' version. Since we'll call the element „rssfeed“, the name of the top-level folder (under /core) will be „element_rssfeed“.
+The filesystem of the element is based on the same structure as the simple-elements' version. Since we'll call the element „rssfeed“, the name of the top-level folder (under /core) will be „module_rssfeed“.
 
 Start by creating the following structure of files and folders in your installations' /core folder:
 
 ```
-element_rssfeed
+module_rssfeed
     |- admin
     |    |- elements
-    |         |- class_element_rssfeed_admin.php
+    |         |- ElementRssfeedAdmin.php
     |
     |- installer
-    |    |- class_installer_element_rssfeed.php
+    |    |- InstallerElementRssfeed.php
     |
     |- portal
     |    |- elements
-    |         |- class_element_rssfeed_portal.php
+    |         |- ElementRssfeedPortal.php
     |
     |- templates
     |    |- default
@@ -55,14 +55,14 @@ Since all files are created, we'll continue to fill them with the relevant code-
 Therefore we'll start with the installer.
 
 ###Installer
-The name of the installers' class (and therefore the filename) is based on the name of the element.  The name follows the schema class_installer_element_name.php, so „class_installer_element_rssfeed“ in this case since our element will be named „rssfeed“.
+The name of the installers' class (and therefore the filename) is based on the name of the element.  The name follows the schema InstallerElementRssfeed.php, so „InstallerElementRssfeed“ in this case since our element will be named „rssfeed“.
 
 The installer is created in the same way as the simple-element installer:
 
 ```
 <?php
 ```
-As usual, the installer extends “class_installer_base” and implements the interface interface_installer. Please take care to set the annotation “@moduleId” along with the value “_pages_content_modul_id_”. This annotation is used by the framework to register the element at the matching position in the database. All page-elements use the moduleId “_pages_content_modul_id_”, so there's no need to change the value.
+As usual, the installer extends “InstallerBase” and implements the interface InstallerInterface. Please take care to set the annotation “@moduleId” along with the value “_pages_content_modul_id_”. This annotation is used by the framework to register the element at the matching position in the database. All page-elements use the moduleId “_pages_content_modul_id_”, so there's no need to change the value.
 
 ```
 /**
@@ -70,7 +70,7 @@ As usual, the installer extends “class_installer_base” and implements the in
  *
  * @moduleId _pages_content_modul_id_
  */
-class class_installer_element_rssfeed extends class_installer_base implements interface_installer {
+class InstallerElementRssfeed extends InstallerBase implements InstallerInterface {
 ```
 
 
@@ -104,11 +104,11 @@ public function install() {
     //Register the element
     $strReturn .= "Registering rssfeed-element...\n";
     //check, if not already existing
-    if(class_module_pages_element::getElement("rssfeed") == null) {
-        $objElement = new class_module_pages_element();
+    if(PagesElement::getElement("rssfeed") == null) {
+        $objElement = new PagesElement();
         $objElement->setStrName("rssfeed");
-        $objElement->setStrClassAdmin("class_element_rssfeed_admin.php");
-        $objElement->setStrClassPortal("class_element_rssfeed_portal.php");
+        $objElement->setStrClassAdmin("ElementRssfeedAdmin.php");
+        $objElement->setStrClassPortal("ElementRssfeedPortal.php");
         $objElement->setIntCachetime(3600);
         $objElement->setIntRepeat(0);
         $objElement->setStrVersion($this->objMetadata->getStrVersion());
@@ -129,7 +129,7 @@ The second method required to be implemented by the interface is an “update()�
 public function update() {
     $strReturn = "";
     
-    if(class_module_pages_element::getElement("rssfeed")->getStrVersion() == "4.2") {
+    if(PagesElement::getElement("rssfeed")->getStrVersion() == "4.2") {
         $strReturn .= "Updating element rssfeed to 4.3...\n";
         $this->updateElementVersion("rssfeed", "4.3");
         $this->objDB->flushQueryCache();
@@ -146,7 +146,7 @@ The elements' backend-view is shown as soon as a user creates or modified a rssf
 /**
  * @targetTable element_universal.content_id
  */
-class class_element_rssfeed_admin extends class_element_admin implements interface_admin_element {
+class ElementRssfeedAdmin extends ElementAdmin implements AdminElementInterface {
 ```
 
 As you may have guessed already, the element extends from a common base class and implements an interface.
@@ -255,10 +255,10 @@ The definition and the prologue is nearly the same as in the backend:
  *
  * @targetTable element_universal.content_id
  */
-class class_element_rssfeed_portal extends class_element_portal implements interface_portal_element {
+class ElementRssfeedPortal extends ElementPortal implements PortalElementInterface {
 ```
 
-The element extends a common base class and implements interface_portal_element.
+The element extends a common base class and implements PortalElementInterface.
 In addition, the @targetTable annotation is declared, too. This parametrizes the database-mapper and tells the mapper where to fetch the content from.
 
 The data is available in the array “arrElementData”, so via 
@@ -279,12 +279,12 @@ To load the remote-feed, the element makes use of Kajonas remote-loader. The loa
 ```
 $strFeed = "";
 try {
-    $objRemoteloader = new class_remoteloader();
+    $objRemoteloader = new Remoteloader();
     $objRemoteloader->setStrHost(str_ireplace("http://", "", $this->arrElementData["char2"]));
     $objRemoteloader->setIntPort(0);
     $strFeed = $objRemoteloader->getRemoteContent();
 }
-catch (class_exception $objExeption) {
+catch (Exception $objExeption) {
     $strFeed = "";
 }
 ```
@@ -326,7 +326,7 @@ Before starting to parse the xml-contents of the feed, check if anything was loa
 The processing of the feed is based on a simple array, therefore the internal methods of Kajona are used to transform the string into an xml-tree and to transform it into an array. Please note that there are a ton of xml-processors for PHP such as simpleXML or others, feel free to use the library of your choice.
 
 ```
-   $objXmlparser = new class_xml_parser();
+   $objXmlparser = new XmlParser();
    $objXmlparser->loadString($strFeed);
    $arrFeed = $objXmlparser->xmlToArray();
    if(count($arrFeed) >= 1) {

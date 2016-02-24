@@ -321,10 +321,6 @@ class InstallerSearch extends InstallerBase implements InstallerRemovableInterfa
     private function update_45_451() {
         $strReturn = "Updating 4.5 to 4.5.1...\n";
 
-        $strReturn .= "Registering config-values...\n";
-//        $this->registerConstant("_search_deferred_indexer_", "false", class_module_system_setting::$int_TYPE_BOOL, _search_module_id_);
-
-
         //Table for the index queue
         $strReturn .= "Installing search-queue table...\n";
 

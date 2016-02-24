@@ -35,21 +35,21 @@ abstract class SystemtaskBase
     private $strTextbase = "system";
 
     /**
-     * Instance of class_db
+     * Instance of Database
      *
      * @var Database
      */
     private $objDB;
 
     /**
-     * Instance of class_text
+     * Instance of Lang
      *
      * @var Lang
      */
     private $objLang;
 
     /**
-     * Instance of class_toolkit
+     * Instance of ToolkitAdmin
      *
      * @var ToolkitAdmin
      */

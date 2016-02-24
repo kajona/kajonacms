@@ -87,8 +87,8 @@ abstract class AdminEvensimpler extends AdminSimple
 
     /**
      * Tries to get the name of an action (edit, delete, list, new, save) for a given object-type.
-     * Example: Converts list to listOtherObject for the object class_module_demo_demo if the annotation
-     *          @ objectListOtherObject class_module_demo_demo is declared
+     * Example: Converts list to listOtherObject for the object DemoDemo if the annotation
+     *          @ objectListOtherObject Kajona\Demo\System\DemoDemo is declared
      *
      * @param string $strAction
      * @param $objInstance
@@ -147,7 +147,7 @@ abstract class AdminEvensimpler extends AdminSimple
     }
 
     /**
-     * Check if method exists in concrete class and not only in class_admin_simple
+     * Check if method exists in concrete class and not only in AdminSimple
      *
      * @param string $strMethod
      *

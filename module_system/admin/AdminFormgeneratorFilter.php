@@ -26,18 +26,20 @@ class AdminFormgeneratorFilter extends AdminFormgenerator
     /**
      * @param string $strFormname
      * @param FilterBase $objSourceobject
+     *
+     * @throws Exception
      */
     public function __construct($strFormname, $objSourceobject)
     {
         if (!$objSourceobject instanceof FilterBase) {
-            throw new Exception("Source object must be an instance of class_filter_base object", Exception::$level_ERROR);
+            throw new Exception("Source object must be an instance of FilterBase object", Exception::$level_ERROR);
         }
 
         parent::__construct($strFormname, $objSourceobject);
     }
 
     /**
-     * @return \class_filter_base
+     * @return FilterBase
      */
     public function getObjSourceobject()
     {

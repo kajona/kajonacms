@@ -16,13 +16,14 @@ use Kajona\System\System\SystemModule;
 
 /**
  * A class holding common helper-methods for the backend.
- * The main purpose is to reduce the code stored at class_admin_controller
+ * The main purpose is to reduce the code stored at AdminController
  *
  * @package module_system
  * @author  sidler@mulchprod.de
  * @since   4.0
  */
-class AdminHelper {
+class AdminHelper
+{
 
     /**
      * Adds a menu-button to the second entry of the path-array. The menu renders the list of all modules installed,
@@ -36,40 +37,42 @@ class AdminHelper {
      * @internal param array $arrModuleActions
      * @return string
      */
-    public static function getAdminPathNavi($arrPathEntries, $strSourceModule = "") {
+    public static function getAdminPathNavi($arrPathEntries, $strSourceModule = "")
+    {
         //modify some of the entries
         $arrMenuEntries = array();
         $arrModules = SystemModule::getModulesInNaviAsArray();
-        foreach($arrModules as $arrOneModule) {
+        foreach ($arrModules as $arrOneModule) {
             $objModule = SystemModule::getModuleByName($arrOneModule["module_name"]);
 
-            if(!$objModule->rightView())
+            if (!$objModule->rightView()) {
                 continue;
+            }
 
             $arrCurMenuEntry = array(
-                "name" => Carrier::getInstance()->getObjLang()->getLang("modul_titel", $arrOneModule["module_name"]),
+                "name"    => Carrier::getInstance()->getObjLang()->getLang("modul_titel", $arrOneModule["module_name"]),
                 "onclick" => "location.href='".Link::getLinkAdminHref($arrOneModule["module_name"], "", "", false)."'",
-                "link" => "#"
+                "link"    => "#"
             );
 
             //fetch the submenu entries
-            if($objModule != null) {
+            if ($objModule != null) {
                 $arrActionMenuEntries = array();
                 $arrModuleActions = self::getModuleActionNaviHelper($objModule);
-                foreach($arrModuleActions as $strOneAction) {
-                    if($strOneAction != "") {
+                foreach ($arrModuleActions as $strOneAction) {
+                    if ($strOneAction != "") {
                         $arrLink = splitUpLink($strOneAction);
 
-                        if($arrLink["name"] != "" && $arrLink["href"] != "")
+                        if ($arrLink["name"] != "" && $arrLink["href"] != "") {
                             $arrActionMenuEntries[] = array(
-                                "name" => $arrLink["name"],
+                                "name"    => $arrLink["name"],
                                 "onclick" => "location.href='".$arrLink["href"]."'",
-                                "link" => $arrLink["href"]
+                                "link"    => $arrLink["href"]
                             );
-
+                        }
 
                     }
-                    elseif($strOneAction == "") {
+                    elseif ($strOneAction == "") {
                         $arrActionMenuEntries[] = array(
                             "name" => ""
                         );
@@ -96,18 +99,21 @@ class AdminHelper {
      * Fetches the list of actions for a single module, saved to the session for performance reasons
      *
      * @param SystemModule $objModule
+     *
      * @static
      *
      * @return array
      */
-    public static function getModuleActionNaviHelper(SystemModule $objModule) {
-        if(Carrier::getInstance()->getObjSession()->isLoggedin()) {
+    public static function getModuleActionNaviHelper(SystemModule $objModule)
+    {
+        if (Carrier::getInstance()->getObjSession()->isLoggedin()) {
 
             $strKey = __CLASS__."adminNaviEntries".$objModule->getSystemid().SystemAspect::getCurrentAspectId();
 
             $arrFinalItems = Carrier::getInstance()->getObjSession()->getSession($strKey);
-            if($arrFinalItems !== false)
+            if ($arrFinalItems !== false) {
                 return $arrFinalItems;
+            }
 
             $objAdminInstance = $objModule->getAdminInstanceOfConcreteModule();
             $arrItems = $objAdminInstance->getOutputModuleNavi();
@@ -115,15 +121,17 @@ class AdminHelper {
             $arrFinalItems = array();
             //build array of final items
             $intI = 0;
-            foreach($arrItems as $arrOneItem) {
-                if($arrOneItem[0] == "")
+            foreach ($arrItems as $arrOneItem) {
+                if ($arrOneItem[0] == "") {
                     $bitAdd = true;
-                else
+                }
+                else {
                     $bitAdd = Carrier::getInstance()->getObjRights()->validatePermissionString($arrOneItem[0], $objModule);
+                }
 
-                if($bitAdd || $arrOneItem[1] == "") {
+                if ($bitAdd || $arrOneItem[1] == "") {
 
-                    if($arrOneItem[1] != "" || (!isset($arrFinalItems[$intI-1]) || $arrFinalItems[$intI-1] != "")) {
+                    if ($arrOneItem[1] != "" || (!isset($arrFinalItems[$intI - 1]) || $arrFinalItems[$intI - 1] != "")) {
                         $arrFinalItems[] = $arrOneItem[1];
                         $intI++;
                     }
@@ -131,8 +139,9 @@ class AdminHelper {
             }
 
             //if the last one is a divider, remove it
-            if($arrFinalItems[count($arrFinalItems)-1] == "")
-                unset($arrFinalItems[count($arrFinalItems)-1]);
+            if ($arrFinalItems[count($arrFinalItems) - 1] == "") {
+                unset($arrFinalItems[count($arrFinalItems) - 1]);
+            }
 
             Carrier::getInstance()->getObjSession()->setSession($strKey, $arrFinalItems);
             return $arrFinalItems;
@@ -146,14 +155,16 @@ class AdminHelper {
      *
      * @return void
      */
-    public static function flushActionNavigationCache() {
+    public static function flushActionNavigationCache()
+    {
 
         $arrAspects = SystemAspect::getObjectList();
 
-        foreach(SystemModule::getModulesInNaviAsArray() as $arrOneModule) {
+        foreach (SystemModule::getModulesInNaviAsArray() as $arrOneModule) {
             $objOneModule = SystemModule::getModuleByName($arrOneModule["module_name"]);
-            foreach($arrAspects as $objOneAspect)
+            foreach ($arrAspects as $objOneAspect) {
                 Carrier::getInstance()->getObjSession()->sessionUnset(__CLASS__."adminNaviEntries".$objOneModule->getSystemid().$objOneAspect->getSystemid());
+            }
         }
 
     }
