@@ -6,7 +6,6 @@
 
 namespace Kajona\System\System\Scriptlets;
 
-use interface_scriptlet;
 use Kajona\System\System\ScriptletInterface;
 
 

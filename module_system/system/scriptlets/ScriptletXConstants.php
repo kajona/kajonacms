@@ -6,8 +6,6 @@
 
 namespace Kajona\System\System\Scriptlets;
 
-use class_module_system_setting;
-use interface_scriptlet;
 use Kajona\System\System\ScriptletInterface;
 use Kajona\System\System\SystemSetting;
 
