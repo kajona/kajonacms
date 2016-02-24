@@ -59,7 +59,7 @@ following `ServiceProvider` class:
 
 Inside a controller we can use the `@Inject` annotation to retrieve the logger instance.
 
-    class PagesAdminController extends class_admin_simple implements interface_admin
+    class PagesAdminController extends AdminSimple implements AdminInterface
     {
         /**
          * @Inject logger

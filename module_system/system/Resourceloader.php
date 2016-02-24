@@ -522,7 +522,7 @@ class Resourceloader
      * Returns the list of modules and elements under the /core folder
      *
      * @return array [folder/module] => [module]
-     * @deprecated use class_classloader::getInstance()->getArrModules() instead
+     * @deprecated use Classloader::getInstance()->getArrModules() instead
      */
     public function getArrModules()
     {

@@ -16,7 +16,8 @@ use Kajona\System\System\Database;
  * @since 4.5
  * @author sidler@mulchprod.de
  */
-abstract class DbBase implements DbDriverInterface {
+abstract class DbBase implements DbDriverInterface
+{
 
     protected $arrStatementsCache = array();
 
@@ -29,7 +30,8 @@ abstract class DbBase implements DbDriverInterface {
      * @return bool
      * @since 4.6
      */
-    public function renameTable($strOldName, $strNewName) {
+    public function renameTable($strOldName, $strNewName)
+    {
         return $this->_pQuery("ALTER TABLE ".($this->encloseTableName($strOldName))." RENAME TO ".($this->encloseTableName($strNewName)), array());
     }
 
@@ -44,7 +46,8 @@ abstract class DbBase implements DbDriverInterface {
      * @return bool
      * @since 4.6
      */
-    public function changeColumn($strTable, $strOldColumnName, $strNewColumnName, $strNewDatatype) {
+    public function changeColumn($strTable, $strOldColumnName, $strNewColumnName, $strNewDatatype)
+    {
         return $this->_pQuery("ALTER TABLE ".($this->encloseTableName($strTable))." CHANGE COLUMN ".($this->encloseColumnName($strOldColumnName)." ".$this->encloseColumnName($strNewColumnName)." ".$this->getDatatype($strNewDatatype)), array());
     }
 
@@ -58,7 +61,8 @@ abstract class DbBase implements DbDriverInterface {
      * @return bool
      * @since 4.6
      */
-    public function addColumn($strTable, $strColumn, $strDatatype) {
+    public function addColumn($strTable, $strColumn, $strDatatype)
+    {
         return $this->_pQuery("ALTER TABLE ".($this->encloseTableName($strTable))." ADD ".($this->encloseColumnName($strColumn)." ".$this->getDatatype($strDatatype)), array());
     }
 
@@ -71,7 +75,8 @@ abstract class DbBase implements DbDriverInterface {
      * @return bool
      * @since 4.6
      */
-    public function removeColumn($strTable, $strColumn) {
+    public function removeColumn($strTable, $strColumn)
+    {
         return $this->_pQuery("ALTER TABLE ".($this->encloseTableName($strTable))." DROP COLUMN ".($this->encloseColumnName($strColumn)), array());
     }
 
@@ -81,7 +86,7 @@ abstract class DbBase implements DbDriverInterface {
      * For most databases, this will create s.th. like
      * INSERT INTO $strTable ($arrColumns) VALUES (?, ?), (?, ?)...
      * Please note that this method is used to create the query itself, based on the Kajona-internal syntax.
-     * The query is fired to the database by class_db
+     * The query is fired to the database by Database
      *
      * @param string $strTable
      * @param string[] $arrColumns
@@ -90,12 +95,13 @@ abstract class DbBase implements DbDriverInterface {
      *
      * @return bool
      */
-    public function triggerMultiInsert($strTable, $arrColumns, $arrValueSets, Database $objDb) {
+    public function triggerMultiInsert($strTable, $arrColumns, $arrValueSets, Database $objDb)
+    {
 
         $arrPlaceholder = array();
         $arrSafeColumns = array();
 
-        foreach($arrColumns as $strOneColumn) {
+        foreach ($arrColumns as $strOneColumn) {
             $arrSafeColumns[] = $this->encloseColumnName($strOneColumn);
             $arrPlaceholder[] = "?";
         }
@@ -104,7 +110,7 @@ abstract class DbBase implements DbDriverInterface {
         $arrPlaceholderSets = array();
         $arrParams = array();
 
-        foreach($arrValueSets as $arrOneSet) {
+        foreach ($arrValueSets as $arrOneSet) {
             $arrPlaceholderSets[] = $strPlaceholder;
             $arrParams = array_merge($arrParams, $arrOneSet);
         }
@@ -128,11 +134,12 @@ abstract class DbBase implements DbDriverInterface {
      * @return array
      * @since 3.4
      */
-    public function getPArraySection($strQuery, $arrParams, $intStart, $intEnd) {
+    public function getPArraySection($strQuery, $arrParams, $intStart, $intEnd)
+    {
         //calculate the end-value: mysql limit: start, nr of records, so:
         $intEnd = $intEnd - $intStart + 1;
         //add the limits to the query
-        $strQuery .= " LIMIT " . $intStart . ", " . $intEnd;
+        $strQuery .= " LIMIT ".$intStart.", ".$intEnd;
         //and load the array
         return $this->getPArray($strQuery, $arrParams);
     }
@@ -145,7 +152,8 @@ abstract class DbBase implements DbDriverInterface {
      *
      * @return string
      */
-    public function encloseColumnName($strColumn) {
+    public function encloseColumnName($strColumn)
+    {
         return $strColumn;
     }
 
@@ -156,7 +164,8 @@ abstract class DbBase implements DbDriverInterface {
      *
      * @return string
      */
-    public function encloseTableName($strTable) {
+    public function encloseTableName($strTable)
+    {
         return $strTable;
     }
 
@@ -168,15 +177,18 @@ abstract class DbBase implements DbDriverInterface {
      *
      * @return void
      */
-    public function flushQueryCache() {
+    public function flushQueryCache()
+    {
         $this->arrStatementsCache = array();
     }
 
     /**
      * @param string $strValue
+     *
      * @return string
      */
-    public function escape($strValue) {
+    public function escape($strValue)
+    {
         return $strValue;
     }
 

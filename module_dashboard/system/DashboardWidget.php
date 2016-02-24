@@ -29,9 +29,10 @@ use Kajona\System\System\SystemModule;
  * @module dashboard
  * @moduleId _dashboard_module_id_
  *
- * @sortManager \Kajona\System\System\CommonSortmanager
+ * @sortManager Kajona\System\System\CommonSortmanager
  */
-class DashboardWidget extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface {
+class DashboardWidget extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface
+{
 
     /**
      * @var string
@@ -74,9 +75,11 @@ class DashboardWidget extends \Kajona\System\System\Model implements \Kajona\Sys
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     *
      * @return string
      */
-    public function getStrDisplayName() {
+    public function getStrDisplayName()
+    {
         return "dashboard widget ".$this->getSystemid();
     }
 
@@ -87,7 +90,8 @@ class DashboardWidget extends \Kajona\System\System\Model implements \Kajona\Sys
      *
      * @return string[]
      */
-    public static function getListOfWidgetsAvailable() {
+    public static function getListOfWidgetsAvailable()
+    {
 
         $arrWidgets = Resourceloader::getInstance()->getFolderContent("/admin/widgets", array(".php"));
 
@@ -110,7 +114,8 @@ class DashboardWidget extends \Kajona\System\System\Model implements \Kajona\Sys
      *
      * @return AdminwidgetInterface|Adminwidget
      */
-    public function getConcreteAdminwidget() {
+    public function getConcreteAdminwidget()
+    {
         /** @var $objWidget AdminwidgetInterface|Adminwidget */
         $objWidget = new $this->strClass();
         //Pass the field-values
@@ -118,8 +123,6 @@ class DashboardWidget extends \Kajona\System\System\Model implements \Kajona\Sys
         $objWidget->setSystemid($this->getSystemid());
         return $objWidget;
     }
-
-
 
 
     /**
@@ -132,10 +135,12 @@ class DashboardWidget extends \Kajona\System\System\Model implements \Kajona\Sys
      *
      * @return array of DashboardWidget
      */
-    public function getWidgetsForColumn($strColumn, $strAspectFilter = "", $strUserId = "") {
+    public function getWidgetsForColumn($strColumn, $strAspectFilter = "", $strUserId = "")
+    {
 
-        if($strUserId == "")
+        if($strUserId == "") {
             $strUserId = $this->objSession->getUserID();
+        }
 
         $objORM = new OrmObjectlist();
         $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND dashboard_user = ?", array($strUserId)));
@@ -151,13 +156,16 @@ class DashboardWidget extends \Kajona\System\System\Model implements \Kajona\Sys
      *
      * @param string $strUserid
      * @param string $strAspectId
+     *
      * @return string
      * @static
      */
-    public static function getWidgetsRootNodeForUser($strUserid, $strAspectId = "") {
+    public static function getWidgetsRootNodeForUser($strUserid, $strAspectId = "")
+    {
 
-        if($strAspectId == "")
+        if($strAspectId == "") {
             $strAspectId = SystemAspect::getCurrentAspectId();
+        }
 
         $strQuery = "SELECT system_id
         			  FROM "._dbprefix_."dashboard,
@@ -186,8 +194,9 @@ class DashboardWidget extends \Kajona\System\System\Model implements \Kajona\Sys
 
             $strReturnId = $objWidget->getSystemid();
         }
-        else
+        else {
             $strReturnId = $arrRow["system_id"];
+        }
 
         return $strReturnId;
     }
@@ -201,7 +210,8 @@ class DashboardWidget extends \Kajona\System\System\Model implements \Kajona\Sys
      * @return DashboardWidget[]
      * @deprecated will be removed as soon as the v3->v4 update sequences will be removed
      */
-    public static function getAllWidgets() {
+    public static function getAllWidgets()
+    {
 
         $arrParams = array();
 
@@ -214,7 +224,7 @@ class DashboardWidget extends \Kajona\System\System\Model implements \Kajona\Sys
         $arrRows = Carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
         $arrReturn = array();
         if(count($arrRows) > 0) {
-            foreach ($arrRows as $arrOneRow) {
+            foreach($arrRows as $arrOneRow) {
                 $arrReturn[] = new DashboardWidget($arrOneRow["system_id"]);
             }
 
@@ -225,76 +235,91 @@ class DashboardWidget extends \Kajona\System\System\Model implements \Kajona\Sys
 
     /**
      * @param string $strColumn
+     *
      * @return void
      */
-    public function setStrColumn($strColumn) {
+    public function setStrColumn($strColumn)
+    {
         $this->strColumn = $strColumn;
     }
 
     /**
      * @param string $strUser
+     *
      * @return void
      */
-    public function setStrUser($strUser) {
+    public function setStrUser($strUser)
+    {
         $this->strUser = $strUser;
     }
 
     /**
      * @return string
      */
-    public function getStrColumn() {
+    public function getStrColumn()
+    {
         return $this->strColumn;
     }
 
     /**
      * @return string
      */
-    public function getStrUser() {
+    public function getStrUser()
+    {
         return $this->strUser;
     }
 
     /**
      * @return string
      */
-    public function getStrAspect() {
+    public function getStrAspect()
+    {
         return $this->strAspect;
     }
 
     /**
      * @param string $strAspect
+     *
      * @return void
      */
-    public function setStrAspect($strAspect) {
+    public function setStrAspect($strAspect)
+    {
         $this->strAspect = $strAspect;
     }
 
     /**
      * @param string $strClass
+     *
      * @return void
      */
-    public function setStrClass($strClass) {
+    public function setStrClass($strClass)
+    {
         $this->strClass = $strClass;
     }
 
     /**
      * @return string
      */
-    public function getStrClass() {
+    public function getStrClass()
+    {
         return $this->strClass;
     }
 
     /**
      * @param string $strContent
+     *
      * @return void
      */
-    public function setStrContent($strContent) {
+    public function setStrContent($strContent)
+    {
         $this->strContent = $strContent;
     }
 
     /**
      * @return string
      */
-    public function getStrContent() {
+    public function getStrContent()
+    {
         return $this->strContent;
     }
 

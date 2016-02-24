@@ -484,9 +484,6 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
             if ($objInstance instanceof PagesPage) {
                 $arrPathNames[] = urlSafeString($objInstance->getStrBrowsername());
             }
-            //elseif($objInstance instanceof class_module_pages_folder) {
-            //    $arrPathNames[] = urlSafeString($objInstance->getStrName());
-            //}
         }
 
         $arrPathNames[] = urlSafeString($this->getStrBrowsername());
@@ -550,7 +547,7 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
             $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND system_status = 1", array()));
         }
 
-        return $objORM->getObjectCount("class_module_pages_pageelement");
+        return $objORM->getObjectCount("Kajona\\Pages\\System\\PagesPageelement");
     }
 
     /**

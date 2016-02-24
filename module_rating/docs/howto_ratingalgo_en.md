@@ -16,28 +16,28 @@ At first, the algorithm to be created is called in order to calculate the new ra
 In a second step, a history-entry is created containing the id of user who rated (or an empty string in case of a guest), the systemid which was rated and the rating the user sent for the record.
 This means, that the history provided to the algorithm does not yet contain the current rating – it will be appended afterwards.
 
-If you want to implement your own algorithm, you have to create a new class implementing the interface interface_module_rating_algo. This interface contains only one method:
+If you want to implement your own algorithm, you have to create a new class implementing the interface RatingAlgoInterface. This interface contains only one method:
 
 ```
 <?php
-interface interface_module_rating_algo {
-  public function doRating(class_module_rating_rate $objSourceRate, $floatNewRating);
+interface RatingAlgoInterface {
+  public function doRating(RatingRate $objSourceRate, $floatNewRating);
 }
 ```
 
 
 Lets have a look at the different parameters and the semantic meaning of the method.
-The method is called within the method ``saveRating()`` of the class ``class_module_rating_rate``. saveRating() is used by the framework to make the rating, passed by the user, persistent to the database. Therefore ``saveRating()`` creates an instance of the rating-algorithm and invokes doRating() in order to get the new, recalculated rating for the current record.
+The method is called within the method ``saveRating()`` of the class ``RatingRate``. saveRating() is used by the framework to make the rating, passed by the user, persistent to the database. Therefore ``saveRating()`` creates an instance of the rating-algorithm and invokes doRating() in order to get the new, recalculated rating for the current record.
 To provide all needed data, doRating() contains two parameters in its signature:
-``$objSourceRate``, the current(!) instance of class_module_rating_rate and
+``$objSourceRate``, the current(!) instance of RatingRate and
 ``$floatNewRating,`` the rating passed to the system by the user.
-Within your rating-algorithm you can now use all the methods provided by the class ``class_module_rating_rate`` to calculate the new value.
+Within your rating-algorithm you can now use all the methods provided by the class ``RatingRate`` to calculate the new value.
 As an example, we'll have a look at a rather simple algorithm, calculating the value using the absolute average.
 
 ```
 <?php
-class class_modul_rating_algo_absolute implements interface_modul_rating_algo {	
- public function doRating(class_module_rating_rate $objSourceRate, $floatNewRating) {
+class RatingAlgoAbsolute implements RatingAlgoInterface {	
+ public function doRating(RatingRate $objSourceRate, $floatNewRating) {
 
   $floatNewRating = (($objSourceRate->getFloatRating() * 
                       $objSourceRate->getIntHits()) + $floatNewRating) / 
@@ -65,10 +65,10 @@ With this data you should be able to generate the value the way you want.
 As a last step, please return the value calculated by you algorithm. The returned value is saved back to the database.
 After saving this value, the current rating is appended to the history.
 
-If you want to use your algorithm, change the object-creation in the method saveRating() of the class class_module_rating_rate. The method should contain two lines like
+If you want to use your algorithm, change the object-creation in the method saveRating() of the class RatingRate. The method should contain two lines like
 
 ```
-$objRatingAlgo = new class_modul_rating_algo_absolute();
+$objRatingAlgo = new RatingAlgoAbsolute();
 ```
 
 Change them to match your newly created class and have a look at the ratings.

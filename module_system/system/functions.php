@@ -971,7 +971,7 @@ function checkFolder($strPath)
  * @return bool
  *
  * @deprecated replaced by @link{TextValidator}
- * @see interface_validator
+ * @see ValidatorInterface
  */
 function checkText($strText, $intMin = 1, $intMax = 0)
 {

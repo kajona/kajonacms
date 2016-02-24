@@ -8,14 +8,12 @@
 
 namespace Kajona\System\System;
 
-use interface_changelog_provider;
-
 /**
  * A simple provider to separate settings-changes from the other changes
  *
  * @author sidler@mulchprod.de
  */
-class ChangelogProviderSettings implements interface_changelog_provider
+class ChangelogProviderSettings implements ChangelogProviderInterface
 {
 
     /**
@@ -38,7 +36,7 @@ class ChangelogProviderSettings implements interface_changelog_provider
      */
     public function getHandledClasses()
     {
-        return array("class_module_system_setting");
+        return array("Kajona\\System\\System\\SystemSetting");
     }
 
 }

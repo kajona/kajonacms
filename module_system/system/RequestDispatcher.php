@@ -224,7 +224,7 @@ class RequestDispatcher
 
         if ($bitLogin) {
             if (_xmlLoader_) {
-                $objLogin = $this->objBuilder->factory("class_module_login_admin_xml");
+                $objLogin = $this->objBuilder->factory("Kajona\\System\\Admin\\LoginAdminXml");
                 $strReturn = $objLogin->action($strAction);
             }
             else {
@@ -234,7 +234,7 @@ class RequestDispatcher
                     return "";
                 }
 
-                $objLogin = $this->objBuilder->factory("class_module_login_admin");
+                $objLogin = $this->objBuilder->factory("Kajona\\System\\Admin\\LoginAdmin");
                 $objLogin->action($strAction);
                 $strReturn = $objLogin->getModuleOutput();
             }
@@ -301,7 +301,6 @@ class RequestDispatcher
                 if (count(Carrier::getInstance()->getObjDB()->getTables()) == 0 && file_exists(_realpath_."/installer.php")) {
                     ResponseObject::getInstance()->setStrRedirectUrl(_webpath_."/installer.php");
                     return "";
-                    //throw new class_exception("Module Pages not installed, redirect to installer", class_exception::$level_ERROR);
                 }
             }
 

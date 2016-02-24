@@ -125,7 +125,7 @@ class PagesPortalController extends PortalController implements PortalInterface
 
 
         //Initialize the caches internal cache :)
-        Cache::fillInternalCache("ElementPortal", $this->getPagename(), null, $this->getStrPortalLanguage()); //TODO move to cache handler
+        Cache::fillInternalCache("ElementPortal", $this->getPagename(), null, $this->getStrPortalLanguage()); //TODO move to cache handler, use namespace
 
 
         //try to load the additional title from cache

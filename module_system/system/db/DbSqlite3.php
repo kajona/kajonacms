@@ -23,7 +23,8 @@ use SQLite3Stmt;
  * @author sidler@mulchprod.de
  * @package module_system
  */
-class DbSqlite3 extends DbBase  {
+class DbSqlite3 extends DbBase
+{
 
     /**
      * @var SQLite3
@@ -43,10 +44,12 @@ class DbSqlite3 extends DbBase  {
      * @throws Exception
      * @return bool
      */
-    public function dbconnect($strHost, $strUsername, $strPass, $strDbName, $intPort) {
+    public function dbconnect($strHost, $strUsername, $strPass, $strDbName, $intPort)
+    {
 
-        if($strDbName == "")
+        if ($strDbName == "") {
             return false;
+        }
 
         $this->strDbFile = _projectpath_.'/dbdumps/'.$strDbName.'.db3';
 
@@ -62,12 +65,13 @@ class DbSqlite3 extends DbBase  {
             //TODO deprecated in sqlite, so may be removed
             $this->_pQuery('PRAGMA short_column_names = ON', array());
             $this->_pQuery("PRAGMA journal_mode = TRUNCATE", array());
-            if(method_exists($this->linkDB, "busyTimeout"))
+            if (method_exists($this->linkDB, "busyTimeout")) {
                 $this->linkDB->busyTimeout(5000);
+            }
 
             return true;
         }
-        catch(Exception $e) {
+        catch (Exception $e) {
             throw new Exception("Error connecting to database: ".$e, Exception::$level_FATALERROR);
         }
 
@@ -75,23 +79,26 @@ class DbSqlite3 extends DbBase  {
 
     /**
      * Closes the connection to the database
+     *
      * @return void
      */
-    public function dbclose() {
+    public function dbclose()
+    {
         $this->linkDB->close();
     }
 
 
-    private function buildAndCopyTempTables($strTargetTableName, $arrSourceTableInfo, $arrTargetTableInfo) {
+    private function buildAndCopyTempTables($strTargetTableName, $arrSourceTableInfo, $arrTargetTableInfo)
+    {
         $bitReturn = true;
 
         $arrSourceColumns = array();
-        array_walk($arrSourceTableInfo, function($arrValue) use (&$arrSourceColumns) {
+        array_walk($arrSourceTableInfo, function ($arrValue) use (&$arrSourceColumns) {
             $arrSourceColumns[] = $arrValue["columnName"];
         });
 
         $arrTargetColumns = array();
-        array_walk($arrTargetTableInfo, function($arrValue) use (&$arrTargetColumns) {
+        array_walk($arrTargetTableInfo, function ($arrValue) use (&$arrTargetColumns) {
             $arrTargetColumns[] = $arrValue["columnName"];
         });
 
@@ -99,10 +106,10 @@ class DbSqlite3 extends DbBase  {
         //build the a temp table
         $strQuery = "CREATE TABLE ".$strTargetTableName."_temp ( \n";
         //loop the fields
-        foreach($arrTargetTableInfo as $intI => $arrOneColumn) {
+        foreach ($arrTargetTableInfo as $intI => $arrOneColumn) {
             $strQuery .= " ".$arrOneColumn["columnName"]." ".$arrOneColumn["columnType"];
             //nullable?
-            if($intI == 0) {
+            if ($intI == 0) {
                 $strQuery .= " NOT NULL, \n";
             }
             else {
@@ -139,12 +146,13 @@ class DbSqlite3 extends DbBase  {
      * @return bool
      * @since 4.6
      */
-    public function changeColumn($strTable, $strOldColumnName, $strNewColumnName, $strNewDatatype) {
+    public function changeColumn($strTable, $strOldColumnName, $strNewColumnName, $strNewDatatype)
+    {
 
         $arrTableInfo = $this->getColumnsOfTable($strTable);
         $arrTargetTableInfo = array();
-        foreach($arrTableInfo as $arrOneColumn) {
-            if($arrOneColumn["columnName"] == $strOldColumnName) {
+        foreach ($arrTableInfo as $arrOneColumn) {
+            if ($arrOneColumn["columnName"] == $strOldColumnName) {
                 $arrNewRow = array(
                     "columnName" => $strNewColumnName,
                     "columnType" => $this->getDatatype($strNewDatatype)
@@ -171,12 +179,13 @@ class DbSqlite3 extends DbBase  {
      * @return bool
      * @since 4.6
      */
-    public function removeColumn($strTable, $strColumn) {
+    public function removeColumn($strTable, $strColumn)
+    {
 
         $arrTableInfo = $this->getColumnsOfTable($strTable);
         $arrTargetTableInfo = array();
-        foreach($arrTableInfo as $arrOneColumn) {
-            if($arrOneColumn["columnName"] != $strColumn) {
+        foreach ($arrTableInfo as $arrOneColumn) {
+            if ($arrOneColumn["columnName"] != $strColumn) {
                 $arrTargetTableInfo[] = $arrOneColumn;
             }
 
@@ -191,7 +200,7 @@ class DbSqlite3 extends DbBase  {
      * For most databases, this will create s.th. like
      * INSERT INTO $strTable ($arrColumns) VALUES (?, ?), (?, ?)...
      * Please note that this method is used to create the query itself, based on the Kajona-internal syntax.
-     * The query is fired to the database by class_db
+     * The query is fired to the database by Database
      *
      * @param string $strTable
      * @param string[] $arrColumns
@@ -200,10 +209,11 @@ class DbSqlite3 extends DbBase  {
      *
      * @return bool
      */
-    public function triggerMultiInsert($strTable, $arrColumns, $arrValueSets, Database $objDb) {
+    public function triggerMultiInsert($strTable, $arrColumns, $arrValueSets, Database $objDb)
+    {
 
         $arrVersion = SQLite3::version();
-        if(version_compare("3.7.11", $arrVersion["versionString"], "<=")) {
+        if (version_compare("3.7.11", $arrVersion["versionString"], "<=")) {
             return parent::triggerMultiInsert($strTable, $arrColumns, $arrValueSets, $objDb);
         }
         //legacy code
@@ -211,7 +221,7 @@ class DbSqlite3 extends DbBase  {
 
             $arrSafeColumns = array();
             $arrPlaceholder = array();
-            foreach($arrColumns as $strOneColumn) {
+            foreach ($arrColumns as $strOneColumn) {
                 $arrSafeColumns[] = $this->encloseColumnName($strOneColumn);
                 $arrPlaceholder[] = "?";
             }
@@ -219,14 +229,14 @@ class DbSqlite3 extends DbBase  {
             $arrParams = array();
 
             $strQuery = "INSERT INTO ".$this->encloseTableName($strTable)."  (".implode(",", $arrSafeColumns).") ";
-            for($intI = 0; $intI < count($arrValueSets); $intI++) {
+            for ($intI = 0; $intI < count($arrValueSets); $intI++) {
 
                 $arrTemp = array();
-                for($intK = 0; $intK < count($arrColumns); $intK++) {
+                for ($intK = 0; $intK < count($arrColumns); $intK++) {
                     $arrTemp[] = " ? AS ".$this->encloseColumnName($arrColumns[$intK]);
                 }
 
-                if($intI == 0) {
+                if ($intI == 0) {
                     $strQuery .= " SELECT ".implode(", ", $arrTemp);
                 }
                 else {
@@ -250,27 +260,32 @@ class DbSqlite3 extends DbBase  {
      * @return bool
      * @since 3.4
      */
-    public function _pQuery($strQuery, $arrParams) {
+    public function _pQuery($strQuery, $arrParams)
+    {
         $strQuery = $this->fixQuoting($strQuery);
         $strQuery = $this->processQuery($strQuery);
 
         $objStmt = $this->getPreparedStatement($strQuery);
-        if($objStmt === false)
+        if ($objStmt === false) {
             return false;
+        }
         $intCount = 1;
-        foreach($arrParams as $strOneParam) {
-            if($strOneParam === null)
+        foreach ($arrParams as $strOneParam) {
+            if ($strOneParam === null) {
                 $objStmt->bindValue(':param'.$intCount++, $strOneParam, SQLITE3_NULL);
+            }
             //else if(is_double($strOneParam))
             //    $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_FLOAT);
             //else if(is_numeric($strOneParam))
             //    $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_INTEGER);
-            else
+            else {
                 $objStmt->bindValue(':param'.$intCount++, $strOneParam, SQLITE3_TEXT);
+            }
         }
 
-        if($objStmt->execute() === false)
+        if ($objStmt->execute() === false) {
             return false;
+        }
 
         return true;
     }
@@ -285,39 +300,43 @@ class DbSqlite3 extends DbBase  {
      * @since 3.4
      * @return array
      */
-    public function getPArray($strQuery, $arrParams) {
+    public function getPArray($strQuery, $arrParams)
+    {
         $strQuery = $this->fixQuoting($strQuery);
         $strQuery = $this->processQuery($strQuery);
 
         $objStmt = $this->getPreparedStatement($strQuery);
-        if($objStmt === false)
+        if ($objStmt === false) {
             return false;
+        }
 
         $intCount = 1;
-        foreach($arrParams as $strOneParam) {
-            if($strOneParam === null)
+        foreach ($arrParams as $strOneParam) {
+            if ($strOneParam === null) {
                 $objStmt->bindValue(':param'.$intCount++, $strOneParam, SQLITE3_NULL);
+            }
             //else if(is_double($strOneParam))
             //    $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_FLOAT);
             //else if(is_numeric($strOneParam))
             //    $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_INTEGER);
-            else
+            else {
                 $objStmt->bindValue(':param'.$intCount++, $strOneParam, SQLITE3_TEXT);
+            }
         }
 
         $arrResult = array();
         $objResult = $objStmt->execute();
 
-        if($objResult === false)
+        if ($objResult === false) {
             return false;
+        }
 
-        while($arrTemp = $objResult->fetchArray()) {
+        while ($arrTemp = $objResult->fetchArray()) {
             $arrResult[] = $arrTemp;
         }
 
         return $arrResult;
     }
-
 
 
     /**
@@ -326,7 +345,8 @@ class DbSqlite3 extends DbBase  {
      *
      * @return string
      */
-    public function getError() {
+    public function getError()
+    {
         return $this->linkDB->lastErrorMsg();
     }
 
@@ -337,11 +357,13 @@ class DbSqlite3 extends DbBase  {
      *
      * @return array
      */
-    public function getTables() {
+    public function getTables()
+    {
         $arrReturn = array();
         $resultSet = $this->linkDB->query("SELECT name FROM sqlite_master WHERE type='table'");
-        while($arrRow = $resultSet->fetchArray(SQLITE3_ASSOC))
+        while ($arrRow = $resultSet->fetchArray(SQLITE3_ASSOC)) {
             $arrReturn[] = array("name" => $arrRow["name"]);
+        }
         return $arrReturn;
     }
 
@@ -354,10 +376,11 @@ class DbSqlite3 extends DbBase  {
      *
      * @return array
      */
-    public function getColumnsOfTable($strTableName) {
+    public function getColumnsOfTable($strTableName)
+    {
         $arrColumns = array();
         $arrTableInfo = $this->getPArray("SELECT sql FROM sqlite_master WHERE type='table' and name=?", array($strTableName));
-        if(!empty($arrTableInfo)) {
+        if (!empty($arrTableInfo)) {
             $strTableDef = $arrTableInfo[0]["sql"];
             $strTableDef = uniStrReplace("\"", "", $strTableDef);
 
@@ -368,16 +391,17 @@ class DbSqlite3 extends DbBase  {
             // Get all column names and types
             $strColumnDef = $arrMatch[1];
             $intPrimaryKeyPos = strripos($strColumnDef, "PRIMARY KEY");
-            if($intPrimaryKeyPos !== false) {
+            if ($intPrimaryKeyPos !== false) {
                 $strColumnDef = substr($strColumnDef, 0, $intPrimaryKeyPos);
             }
             preg_match_all("/\s*([a-z_0-9]+)\s+([a-z]+)[^,]+/ism", trim($strColumnDef), $arrMatch, PREG_SET_ORDER);
 
-            foreach($arrMatch as $arrColumnInfo)
+            foreach ($arrMatch as $arrColumnInfo) {
                 $arrColumns[] = array(
                     "columnName" => $arrColumnInfo[1],
                     "columnType" => $arrColumnInfo[2]
                 );
+            }
         }
         return $arrColumns;
     }
@@ -408,11 +432,14 @@ class DbSqlite3 extends DbBase  {
      *
      * @return bool
      */
-    public function createTable($strName, $arrFields, $arrKeys, $arrIndices = array(), $bitTxSafe = true) {
+    public function createTable($strName, $arrFields, $arrKeys, $arrIndices = array(), $bitTxSafe = true)
+    {
         $arrTables = $this->getTables();
-        foreach($arrTables as $arrTable)
-            if($arrTable["name"] == $strName)
+        foreach ($arrTables as $arrTable) {
+            if ($arrTable["name"] == $strName) {
                 return true;
+            }
+        }
 
         $strQuery = "";
 
@@ -420,17 +447,18 @@ class DbSqlite3 extends DbBase  {
         $strQuery .= "CREATE TABLE ".$strName." ( \n";
 
         //loop the fields
-        foreach($arrFields as $strFieldName => $arrColumnSettings) {
+        foreach ($arrFields as $strFieldName => $arrColumnSettings) {
             $strQuery .= " ".$strFieldName." ";
 
             $strQuery .= $this->getDatatype($arrColumnSettings[0]);
 
             //any default?
-            if(isset($arrColumnSettings[2]))
+            if (isset($arrColumnSettings[2])) {
                 $strQuery .= " DEFAULT ".$arrColumnSettings[2]." ";
+            }
 
             //nullable?
-            if($arrColumnSettings[1] === true) {
+            if ($arrColumnSettings[1] === true) {
                 $strQuery .= ", \n";
             }
             else {
@@ -446,7 +474,7 @@ class DbSqlite3 extends DbBase  {
 
         $bitCreate = $this->_pQuery($strQuery, array());
 
-        if($bitCreate && count($arrIndices) > 0) {
+        if ($bitCreate && count($arrIndices) > 0) {
             $strQuery = "CREATE INDEX ix_".generateSystemid()." ON ".$strName." ( ".implode(", ", $arrIndices).") ";
             $bitCreate = $bitCreate && $this->_pQuery($strQuery, array());
         }
@@ -457,25 +485,31 @@ class DbSqlite3 extends DbBase  {
 
     /**
      * Starts a transaction
+     *
      * @return void
      */
-    public function transactionBegin() {
+    public function transactionBegin()
+    {
         $this->_pQuery("BEGIN TRANSACTION", array());
     }
 
     /**
      * Ends a successful operation by Committing the transaction
+     *
      * @return void
      */
-    public function transactionCommit() {
+    public function transactionCommit()
+    {
         $this->_pQuery("COMMIT TRANSACTION", array());
     }
 
     /**
      * Ends a non-successfull transaction by using a rollback
+     *
      * @return void
      */
-    public function transactionRollback() {
+    public function transactionRollback()
+    {
         $this->_pQuery("ROLLBACK TRANSACTION", array());
     }
 
@@ -488,7 +522,8 @@ class DbSqlite3 extends DbBase  {
      *
      * @return mixed
      */
-    public function getDbInfo() {
+    public function getDbInfo()
+    {
         $arrDB = $this->linkDB->version();
         $arrReturn = array();
         $arrReturn["dbdriver"] = "sqlite3-extension";
@@ -507,7 +542,8 @@ class DbSqlite3 extends DbBase  {
      *
      * @return bool Indicates, if the dump worked or not
      */
-    public function dbExport($strFilename, $arrTables) {
+    public function dbExport($strFilename, $arrTables)
+    {
         // FIXME: Only export relevant tables.
         $objFilesystem = new Filesystem();
         return $objFilesystem->fileCopy($this->strDbFile, $strFilename);
@@ -520,11 +556,11 @@ class DbSqlite3 extends DbBase  {
      *
      * @return bool
      */
-    public function dbImport($strFilename) {
+    public function dbImport($strFilename)
+    {
         $objFilesystem = new Filesystem();
         return $objFilesystem->fileCopy($strFilename, $this->strDbFile, true);
     }
-
 
 
     /**
@@ -545,31 +581,43 @@ class DbSqlite3 extends DbBase  {
      *
      * @return string
      */
-    public function getDatatype($strType) {
+    public function getDatatype($strType)
+    {
         $strReturn = "";
 
-        if($strType == DbDatatypes::STR_TYPE_INT)
+        if ($strType == DbDatatypes::STR_TYPE_INT) {
             $strReturn .= " INTEGER ";
-        elseif($strType == DbDatatypes::STR_TYPE_LONG)
+        }
+        elseif ($strType == DbDatatypes::STR_TYPE_LONG) {
             $strReturn .= " INTEGER ";
-        elseif($strType == DbDatatypes::STR_TYPE_DOUBLE)
+        }
+        elseif ($strType == DbDatatypes::STR_TYPE_DOUBLE) {
             $strReturn .= " REAL ";
-        elseif($strType == DbDatatypes::STR_TYPE_CHAR10)
+        }
+        elseif ($strType == DbDatatypes::STR_TYPE_CHAR10) {
             $strReturn .= " TEXT ";
-        elseif($strType == DbDatatypes::STR_TYPE_CHAR20)
+        }
+        elseif ($strType == DbDatatypes::STR_TYPE_CHAR20) {
             $strReturn .= " TEXT ";
-        elseif($strType == DbDatatypes::STR_TYPE_CHAR100)
+        }
+        elseif ($strType == DbDatatypes::STR_TYPE_CHAR100) {
             $strReturn .= " TEXT ";
-        elseif($strType == DbDatatypes::STR_TYPE_CHAR254)
+        }
+        elseif ($strType == DbDatatypes::STR_TYPE_CHAR254) {
             $strReturn .= " TEXT ";
-        elseif($strType == DbDatatypes::STR_TYPE_CHAR500)
+        }
+        elseif ($strType == DbDatatypes::STR_TYPE_CHAR500) {
             $strReturn .= " TEXT ";
-        elseif($strType == DbDatatypes::STR_TYPE_TEXT)
+        }
+        elseif ($strType == DbDatatypes::STR_TYPE_TEXT) {
             $strReturn .= " TEXT ";
-        elseif($strType == DbDatatypes::STR_TYPE_LONGTEXT)
+        }
+        elseif ($strType == DbDatatypes::STR_TYPE_LONGTEXT) {
             $strReturn .= " TEXT ";
-        else
+        }
+        else {
             $strReturn .= " TEXT ";
+        }
 
         return $strReturn;
     }
@@ -582,7 +630,8 @@ class DbSqlite3 extends DbBase  {
      *
      * @return string
      */
-    private function fixQuoting($strSql) {
+    private function fixQuoting($strSql)
+    {
         $strSql = str_replace("\\'", "''", $strSql);
         $strSql = str_replace("\\\"", "\"", $strSql);
         return $strSql;
@@ -595,9 +644,10 @@ class DbSqlite3 extends DbBase  {
      *
      * @return string
      */
-    private function processQuery($strQuery) {
+    private function processQuery($strQuery)
+    {
         $intCount = 1;
-        while(uniStrpos($strQuery, "?") !== false) {
+        while (uniStrpos($strQuery, "?") !== false) {
             $intPos = uniStrpos($strQuery, "?");
             $strQuery = substr($strQuery, 0, $intPos).":param".$intCount++.substr($strQuery, $intPos + 1);
         }
@@ -611,12 +661,14 @@ class DbSqlite3 extends DbBase  {
      *
      * @return SQLite3Stmt
      */
-    private function getPreparedStatement($strQuery) {
+    private function getPreparedStatement($strQuery)
+    {
 
         $strName = md5($strQuery);
 
-        if(isset($this->arrStatementsCache[$strName]))
+        if (isset($this->arrStatementsCache[$strName])) {
             return $this->arrStatementsCache[$strName];
+        }
 
         $objStmt = $this->linkDB->prepare($strQuery);
         $this->arrStatementsCache[$strName] = $objStmt;
@@ -624,7 +676,8 @@ class DbSqlite3 extends DbBase  {
         return $objStmt;
     }
 
-    public function encloseTableName($strTable) {
+    public function encloseTableName($strTable)
+    {
         return "'".$strTable."'";
     }
 

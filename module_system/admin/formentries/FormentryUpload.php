@@ -2,13 +2,11 @@
 /*"******************************************************************************************************
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id: FormentryUpload.php 6322 2014-01-02 08:31:49Z sidler $                               *
 ********************************************************************************************************/
 
 namespace Kajona\System\Admin\Formentries;
 
-use class_module_mediamanager_file;
+use Kajona\Mediamanager\System\MediamanagerFile;
 use Kajona\System\Admin\FormentryPrintableInterface;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Reflection;
@@ -105,19 +103,19 @@ class FormentryUpload extends FormentryBase implements FormentryPrintableInterfa
 
         if (!is_array($strData)) {
             if (validateSystemid($strData)) {
-                $strData = new class_module_mediamanager_file($strData);
+                $strData = new MediamanagerFile($strData);
             } else {
                 $strData = json_decode($strData, true);
             }
         }
 
-        if ($strData instanceof class_module_mediamanager_file) {
+        if ($strData instanceof MediamanagerFile) {
             $strFile = $strData->getStrDisplayName();
         } else {
             $strFile = isset($strData['name']) && $strData['name'] != "" ? urldecode($strData['name']) : null;
         }
 
-        if ($strData instanceof class_module_mediamanager_file) {
+        if ($strData instanceof MediamanagerFile) {
             $strFileHref = _webpath_ . "/download.php?systemid=" . $strData->getSystemid();
         } else {
             $strFileHref = "#";
@@ -128,6 +126,8 @@ class FormentryUpload extends FormentryBase implements FormentryPrintableInterfa
 
     /**
      * @param array $arrData
+     *
+     * @return array|null
      */
     public static function handleFileUpload(array $arrData)
     {

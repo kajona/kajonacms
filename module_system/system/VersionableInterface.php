@@ -7,7 +7,7 @@
 namespace Kajona\System\System;
 
 /**
- * The interface_versionable lists all methods an object has to implement in
+ * The VersionableInterface lists all methods an object has to implement in
  * order to comply with the internal changelog-system.
  * The mechanism follows parts of the memento-pattern (@see Gang Of Four, Gamma et. al)
  *

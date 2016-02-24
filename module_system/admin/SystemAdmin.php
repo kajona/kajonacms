@@ -908,14 +908,9 @@ JS;
             $strReturn .= $this->objToolkit->formClose();
 
             return $strReturn;
-//            return "asd";
         }
 
         $strReturn = "";
-//        check needed rights - done twice since public and callable by not only the controller
-//        if(!Carrier::getInstance()->getObjRights()->validatePermissionString(class_rights::$STR_RIGHT_CHANGELOG, $this->getObjModule()))
-//            return $this->getLang("commons_error_permissions");
-
         //showing a list using the pageview
         $objArraySectionIterator = new ArraySectionIterator(SystemChangelog::getLogEntriesCount($strSystemid));
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));

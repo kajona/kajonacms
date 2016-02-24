@@ -23,7 +23,8 @@ use Kajona\System\Portal\XmlPortalInterface;
  * @module rating
  * @moduleId _rating_modul_id_
  */
-class RatingPortalXml extends PortalController implements XmlPortalInterface {
+class RatingPortalXml extends PortalController implements XmlPortalInterface
+{
 
 
     /**
@@ -32,11 +33,12 @@ class RatingPortalXml extends PortalController implements XmlPortalInterface {
      * @return string the new rating for the passed file
      * @permissions view
      */
-    protected function actionSaveRating() {
+    protected function actionSaveRating()
+    {
 
         //rating already existing?
         $objRating = RatingRate::getRating($this->getSystemid());
-        if($objRating == null) {
+        if ($objRating == null) {
             $objRating = new RatingRate();
             $objRating->setStrRatingSystemid($this->getSystemid());
             $objRating->updateObjectToDb();

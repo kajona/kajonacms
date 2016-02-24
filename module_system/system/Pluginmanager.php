@@ -13,7 +13,7 @@ use ReflectionClass;
 
 
 /**
- * The pluginmanager is a central object used to load implementers of interface_generic_plugin.
+ * The pluginmanager is a central object used to load implementers of GenericPluginInterface.
  * Plugins identify themselves using a plugin / extension point key.
  *
  * @package module_system
@@ -35,7 +35,7 @@ class Pluginmanager
      * @param string $strPluginPoint
      * @param string $strSearchPath
      */
-    function __construct($strPluginPoint, $strSearchPath = "/system")
+    public function __construct($strPluginPoint, $strSearchPath = "/system")
     {
         $this->strPluginPoint = $strPluginPoint;
         $this->strSearchPath = $strSearchPath;

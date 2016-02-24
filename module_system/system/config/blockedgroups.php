@@ -16,4 +16,4 @@
  */
 
 
-$config["blockedgroups"] = "".class_module_system_setting::getConfigValue("_admins_group_id_");
+$config["blockedgroups"] = "".\Kajona\System\System\SystemSetting::getConfigValue("_admins_group_id_");

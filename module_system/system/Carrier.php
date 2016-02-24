@@ -70,18 +70,6 @@ class Carrier
 
         if (self::$objCarrier == null) {
             self::$objCarrier = new Carrier();
-//            $objConfig = self::$objCarrier->getObjConfig();
-//            $objDB = self::$objCarrier->getObjDB();
-            //so, lets init the constants
-
-            //and init the internal session
-            //SIR 2010/03: deactivated session startup right here.
-            //The session-start is handled by class_session internally to avoid
-            //senseless db-updates, e.g. when manipulating images
-            //self::$objCarrier->getObjSession()->initInternalSession();
-
-            //include relevant classes for possible static init blocks
-            //class_classloader::getInstance()->includeClasses();
         }
 
         return self::$objCarrier;

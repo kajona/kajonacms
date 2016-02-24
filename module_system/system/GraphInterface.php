@@ -9,13 +9,13 @@ namespace Kajona\System\System;
 
 /**
  * Interface for all chart-engines.
- * Concrete instances may be returned by class_graph_factory.
+ * Concrete instances may be returned by GraphFactory.
  * This interface defines only the least subset of methods, so each implementation may
  * provide additional methods.
  *
  * @author sidler@mulchprod.de
  * @since 3.4
- * @see class_graph_factory
+ * @see GraphFactory
  * @package module_system
  */
 interface GraphInterface
@@ -26,7 +26,7 @@ interface GraphInterface
      * For each set of bar-values you can call this method once.
      * This means, calling this method twice creates a grouped bar chart
      * A sample-code could be:
-     *  $objGraph = new class_graph();
+     *  $objGraph = new Graph();
      *  $objGraph->setStrXAxisTitle("x-axis");
      *  $objGraph->setStrYAxisTitle("y-axis");
      *  $objGraph->setStrGraphTitle("Test Graph");
@@ -35,10 +35,10 @@ interface GraphInterface
      *      $objGraph->addBarChartSet(array(1,2,4,5) "serie 1");
      *
      * //datapoints array
-     *      $objDataPoint1 = new class_graph_datapoint(1);
-     *      $objDataPoint2 = new class_graph_datapoint(2);
-     *      $objDataPoint3 = new class_graph_datapoint(4);
-     *      $objDataPoint4 = new class_graph_datapoint(5);
+     *      $objDataPoint1 = new GraphDatapoint(1);
+     *      $objDataPoint2 = new GraphDatapoint(2);
+     *      $objDataPoint3 = new GraphDatapoint(4);
+     *      $objDataPoint4 = new GraphDatapoint(5);
      *
      *      //set action handler example
      *      $objDataPoint1->setObjActionHandler("<javascript code here>");
@@ -47,7 +47,7 @@ interface GraphInterface
      *      $objGraph->addBarChartSet(array($objDataPoint1, $objDataPoint2, $objDataPoint3, $objDataPoint4) "serie 1");
      *
      *
-     * @param array $arrValues - an array with simple values or an array of data points (class_graph_datapoint).
+     * @param array $arrValues - an array with simple values or an array of data points (GraphDatapoint).
      *                           The advantage of a data points are that action handlers can be defined for each data point which will be executed when clicking on the data point in the chart.
      * @param string $strLegend
      * @param bool $bitWriteValues Enables the rendering of values on top of the graphs
@@ -58,7 +58,7 @@ interface GraphInterface
      * Used to create a stacked bar-chart.
      * For each set of bar-values you can call this method once.
      * A sample-code could be:
-     *  $objGraph = new class_graph();
+     *  $objGraph = new Graph();
      *  $objGraph->setStrXAxisTitle("x-axis");
      *  $objGraph->setStrYAxisTitle("y-axis");
      *  $objGraph->setStrGraphTitle("Test Graph");
@@ -69,10 +69,10 @@ interface GraphInterface
      *      $objGraph->addStackedBarChartSet(array(1,2,4,5) "serie 2");
      *
      * //datapoints array
-     *      $objDataPoint1 = new class_graph_datapoint(1);
-     *      $objDataPoint2 = new class_graph_datapoint(2);
-     *      $objDataPoint3 = new class_graph_datapoint(4);
-     *      $objDataPoint4 = new class_graph_datapoint(5);
+     *      $objDataPoint1 = new GraphDatapoint(1);
+     *      $objDataPoint2 = new GraphDatapoint(2);
+     *      $objDataPoint3 = new GraphDatapoint(4);
+     *      $objDataPoint4 = new GraphDatapoint(5);
      *
      *      //set action handler example
      *      $objDataPoint1->setObjActionHandler("<javascript code here>");
@@ -81,7 +81,7 @@ interface GraphInterface
      *      $objGraph->addStackedBarChartSet(array($objDataPoint1, $objDataPoint2, $objDataPoint3, $objDataPoint4) "serie 1");
      *
      *
-     * @param array $arrValues - an array with simple values or an array of data points (class_graph_datapoint).
+     * @param array $arrValues - an array with simple values or an array of data points (GraphDatapoint).
      *                           The advantage of a data points are that action handlers can be defined for each data point which will be executed when clicking on the data point in the chart.
      * @param string $strLegend
      */
@@ -94,7 +94,7 @@ interface GraphInterface
      * the bars. Nevertheless, the scale is calculated out of the bars, so make
      * sure to remain inside the visible range!
      * A sample-code could be:
-     *  $objGraph = new class_graph();
+     *  $objGraph = new Graph();
      *  $objGraph->setStrXAxisTitle("x-axis");
      *  $objGraph->setStrYAxisTitle("y-axis");
      *  $objGraph->setStrGraphTitle("Test Graph");
@@ -103,10 +103,10 @@ interface GraphInterface
      *      $objGraph->addLinePlot(array(1,4,6,7,4), "serie 1");
      *
      * //datapoints array
-     *      $objDataPoint1 = new class_graph_datapoint(1);
-     *      $objDataPoint2 = new class_graph_datapoint(2);
-     *      $objDataPoint3 = new class_graph_datapoint(4);
-     *      $objDataPoint4 = new class_graph_datapoint(5);
+     *      $objDataPoint1 = new GraphDatapoint(1);
+     *      $objDataPoint2 = new GraphDatapoint(2);
+     *      $objDataPoint3 = new GraphDatapoint(4);
+     *      $objDataPoint4 = new GraphDatapoint(5);
      *
      *      //set action handler example
      *      $objDataPoint1->setObjActionHandler("<javascript code here>");
@@ -115,7 +115,7 @@ interface GraphInterface
      *      $objGraph->addLinePlot(array($objDataPoint1, $objDataPoint2, $objDataPoint3, $objDataPoint4) "serie 1");
      *
      *
-     * @param array $arrValues - an array with simple values or an array of data points (class_graph_datapoint).
+     * @param array $arrValues - an array with simple values or an array of data points (GraphDatapoint).
      *                           The advantage of a data points are that action handlers can be defined for each data point which will be executed when clicking on the data point in the chart.
      * @param string $strLegend the name of the single plot
      */
@@ -127,17 +127,17 @@ interface GraphInterface
      * Make sure the array have the same number of elements, ohterwise they won't
      * be uses.
      * A sample-code could be:
-     *  $objChart = new class_graph();
+     *  $objChart = new Graph();
      *  $objChart->setStrGraphTitle("Test Pie Chart");
      *
      * //simple array
      *      $objChart->createPieChart(array(2,6,7,3), array("val 1", "val 2", "val 3", "val 4"));
      *
      * //datapoints array
-     *      $objDataPoint1 = new class_graph_datapoint(1);
-     *      $objDataPoint2 = new class_graph_datapoint(2);
-     *      $objDataPoint3 = new class_graph_datapoint(4);
-     *      $objDataPoint4 = new class_graph_datapoint(5);
+     *      $objDataPoint1 = new GraphDatapoint(1);
+     *      $objDataPoint2 = new GraphDatapoint(2);
+     *      $objDataPoint3 = new GraphDatapoint(4);
+     *      $objDataPoint4 = new GraphDatapoint(5);
      *
      *      //set action handler example
      *      $objDataPoint1->setObjActionHandler("<javascript code here>");
@@ -146,7 +146,7 @@ interface GraphInterface
      *      $objGraph->createPieChart(array($objDataPoint1, $objDataPoint2, $objDataPoint3, $objDataPoint4) , array("val 1", "val 2", "val 3", "val 4"), "serie 1");
      *
      *
-     * @param array $arrValues - an array with simple values or an array of data points (class_graph_datapoint).
+     * @param array $arrValues - an array with simple values or an array of data points (GraphDatapoint).
      *                           The advantage of a data points are that action handlers can be defined for each data point which will be executed when clicking on the data point in the chart.
      * @param array $arrLegends
      */
@@ -158,7 +158,7 @@ interface GraphInterface
      * Execution should be terminated afterwards.
      * <b>Please note that not all chart-engines support this method.</b>
      *
-     * @deprecated use interface_graph::renderGraph() instead
+     * @deprecated use GraphInterface::renderGraph() instead
      */
     public function showGraph();
 
@@ -167,7 +167,7 @@ interface GraphInterface
      * saves the graph to the specified filename
      * <b>Please note that not all chart-engines support this method.</b>
      *
-     * @deprecated use interface_graph::renderGraph() instead
+     * @deprecated use GraphInterface::renderGraph() instead
      */
     public function saveGraph($strFilename);
 

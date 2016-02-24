@@ -20,7 +20,8 @@ use Kajona\System\System\Logger;
  * @author sidler@mulchprod.de
  * @since 3.4.1
  */
-class DbOci8 extends DbBase {
+class DbOci8 extends DbBase
+{
 
     private $linkDB; //DB-Link
     private $strHost = "";
@@ -47,9 +48,11 @@ class DbOci8 extends DbBase {
      * @return bool
      * @throws Exception
      */
-    public function dbconnect($strHost, $strUsername, $strPass, $strDbName, $intPort) {
-        if($intPort == "")
+    public function dbconnect($strHost, $strUsername, $strPass, $strDbName, $intPort)
+    {
+        if ($intPort == "") {
             $intPort = "1521";
+        }
 
         //save connection-details
         $this->strHost = $strHost;
@@ -64,7 +67,7 @@ class DbOci8 extends DbBase {
         $this->linkDB = @oci_connect($strUsername, $strPass, $strHost.":".$intPort."/".$strDbName, "AL32UTF8");
 
 
-        if($this->linkDB !== false) {
+        if ($this->linkDB !== false) {
             @oci_set_client_info($this->linkDB, "Kajona CMS");
             return true;
         }
@@ -75,9 +78,11 @@ class DbOci8 extends DbBase {
 
     /**
      * Closes the connection to the database
+     *
      * @return void
      */
-    public function dbclose() {
+    public function dbclose()
+    {
         @oci_close($this->linkDB);
     }
 
@@ -87,7 +92,7 @@ class DbOci8 extends DbBase {
      * INSERT INTO $strTable ($arrColumns) VALUES (?, ?), (?, ?)...
      *
      * Please note that this method is used to create the query itself, based on the Kajona-internal syntax.
-     * The query is fired to the database by class_db
+     * The query is fired to the database by Database
      *
      * @param string $strTable
      * @param string[] $arrColumns
@@ -96,14 +101,15 @@ class DbOci8 extends DbBase {
      *
      * @return bool
      */
-    public function triggerMultiInsert($strTable, $arrColumns, $arrValueSets, Database $objDb) {
+    public function triggerMultiInsert($strTable, $arrColumns, $arrValueSets, Database $objDb)
+    {
 
         $bitReturn = true;
 
         $arrPlaceholder = array();
         $arrSafeColumns = array();
 
-        foreach($arrColumns as $strOneColumn) {
+        foreach ($arrColumns as $strOneColumn) {
             $arrSafeColumns[] = $this->encloseColumnName($strOneColumn);
             $arrPlaceholder[] = "?";
         }
@@ -113,7 +119,7 @@ class DbOci8 extends DbBase {
         $arrParams = array();
 
         $strQuery = "INSERT ALL ";
-        foreach($arrValueSets as $arrOneSet) {
+        foreach ($arrValueSets as $arrOneSet) {
             $arrParams = array_merge($arrParams, $arrOneSet);
 
             $strQuery .= " INTO ".$this->encloseTableName($strTable)." ".$strColumnNames." VALUES ".$strPlaceholder." ";
@@ -136,18 +142,22 @@ class DbOci8 extends DbBase {
      * @return bool
      * @since 3.4
      */
-    public function _pQuery($strQuery, $arrParams) {
+    public function _pQuery($strQuery, $arrParams)
+    {
         $strQuery = $this->processQuery($strQuery);
         $objStatement = $this->getParsedStatement($strQuery);
-        if($objStatement === false)
+        if ($objStatement === false) {
             return false;
+        }
 
-        foreach($arrParams as $intPos => $strValue)
+        foreach ($arrParams as $intPos => $strValue) {
             oci_bind_by_name($objStatement, ":".($intPos + 1), $arrParams[$intPos]);
+        }
 
         $bitAddon = OCI_COMMIT_ON_SUCCESS;
-        if($this->bitTxOpen)
+        if ($this->bitTxOpen) {
             $bitAddon = OCI_NO_AUTO_COMMIT;
+        }
         $bitResult = oci_execute($objStatement, $bitAddon);
         @oci_free_statement($objStatement);
         return $bitResult;
@@ -163,28 +173,33 @@ class DbOci8 extends DbBase {
      * @since 3.4
      * @return array
      */
-    public function getPArray($strQuery, $arrParams) {
+    public function getPArray($strQuery, $arrParams)
+    {
         $arrReturn = array();
         $intCounter = 0;
 
         $strQuery = $this->processQuery($strQuery);
         $objStatement = $this->getParsedStatement($strQuery);
 
-        if($objStatement === false)
+        if ($objStatement === false) {
             return false;
+        }
 
-        foreach($arrParams as $intPos => $strValue)
+        foreach ($arrParams as $intPos => $strValue) {
             oci_bind_by_name($objStatement, ":".($intPos + 1), $arrParams[$intPos]);
+        }
 
         $bitAddon = OCI_COMMIT_ON_SUCCESS;
-        if($this->bitTxOpen)
+        if ($this->bitTxOpen) {
             $bitAddon = OCI_NO_AUTO_COMMIT;
+        }
         $resultSet = oci_execute($objStatement, $bitAddon);
 
-        if(!$resultSet)
+        if (!$resultSet) {
             return false;
+        }
 
-        while($arrRow = oci_fetch_array($objStatement, OCI_BOTH + OCI_RETURN_NULLS)) {
+        while ($arrRow = oci_fetch_array($objStatement, OCI_BOTH + OCI_RETURN_NULLS)) {
             $arrRow = $this->parseResultRow($arrRow);
             $arrReturn[$intCounter++] = $arrRow;
         }
@@ -206,7 +221,8 @@ class DbOci8 extends DbBase {
      * @return array
      * @since 3.4
      */
-    public function getPArraySection($strQuery, $arrParams, $intStart, $intEnd) {
+    public function getPArraySection($strQuery, $arrParams, $intStart, $intEnd)
+    {
         //calculate the end-value:
         //array-counters to real-counters
         $intStart++;
@@ -230,7 +246,8 @@ class DbOci8 extends DbBase {
      *
      * @return string
      */
-    public function getError() {
+    public function getError()
+    {
         $strError = oci_error($this->linkDB);
         return $strError;
     }
@@ -240,11 +257,13 @@ class DbOci8 extends DbBase {
      *
      * @return mixed
      */
-    public function getTables() {
+    public function getTables()
+    {
         $arrTemp = $this->getPArray("SELECT table_name AS name FROM ALL_TABLES", array());
 
-        foreach($arrTemp as $intKey => $strValue)
+        foreach ($arrTemp as $intKey => $strValue) {
             $arrTemp[$intKey]["name"] = uniStrtolower($strValue["name"]);
+        }
         return $arrTemp;
     }
 
@@ -257,15 +276,16 @@ class DbOci8 extends DbBase {
      *
      * @return array
      */
-    public function getColumnsOfTable($strTableName) {
+    public function getColumnsOfTable($strTableName)
+    {
         $arrReturn = array();
         $arrTemp = $this->getPArray("select column_name, data_type from user_tab_columns where table_name=?", array(strtoupper($strTableName)));
 
-        if(empty($arrTemp)) {
+        if (empty($arrTemp)) {
             return array();
         }
 
-        foreach($arrTemp as $arrOneColumn) {
+        foreach ($arrTemp as $arrOneColumn) {
             $arrReturn[] = array(
                 "columnName" => strtolower($arrOneColumn["column_name"]),
                 "columnType" => ($arrOneColumn["data_type"] == "integer" ? "int" : strtolower($arrOneColumn["data_type"])),
@@ -294,31 +314,43 @@ class DbOci8 extends DbBase {
      *
      * @return string
      */
-    public function getDatatype($strType) {
+    public function getDatatype($strType)
+    {
         $strReturn = "";
 
-        if($strType == DbDatatypes::STR_TYPE_INT)
+        if ($strType == DbDatatypes::STR_TYPE_INT) {
             $strReturn .= " NUMBER(19,0) ";
-        elseif($strType == DbDatatypes::STR_TYPE_LONG)
+        }
+        elseif ($strType == DbDatatypes::STR_TYPE_LONG) {
             $strReturn .= " NUMBER(19, 0) ";
-        elseif($strType == DbDatatypes::STR_TYPE_DOUBLE)
+        }
+        elseif ($strType == DbDatatypes::STR_TYPE_DOUBLE) {
             $strReturn .= " FLOAT (24) ";
-        elseif($strType == DbDatatypes::STR_TYPE_CHAR10)
+        }
+        elseif ($strType == DbDatatypes::STR_TYPE_CHAR10) {
             $strReturn .= " VARCHAR2( 10 ) ";
-        elseif($strType == DbDatatypes::STR_TYPE_CHAR20)
+        }
+        elseif ($strType == DbDatatypes::STR_TYPE_CHAR20) {
             $strReturn .= " VARCHAR2( 20 ) ";
-        elseif($strType == DbDatatypes::STR_TYPE_CHAR100)
+        }
+        elseif ($strType == DbDatatypes::STR_TYPE_CHAR100) {
             $strReturn .= " VARCHAR2( 100 ) ";
-        elseif($strType == DbDatatypes::STR_TYPE_CHAR254)
+        }
+        elseif ($strType == DbDatatypes::STR_TYPE_CHAR254) {
             $strReturn .= " VARCHAR2( 280 ) ";
-        elseif($strType == DbDatatypes::STR_TYPE_CHAR500)
+        }
+        elseif ($strType == DbDatatypes::STR_TYPE_CHAR500) {
             $strReturn .= " VARCHAR2( 500 ) ";
-        elseif($strType == DbDatatypes::STR_TYPE_TEXT)
+        }
+        elseif ($strType == DbDatatypes::STR_TYPE_TEXT) {
             $strReturn .= " VARCHAR2( 4000 ) ";
-        elseif($strType == DbDatatypes::STR_TYPE_LONGTEXT)
+        }
+        elseif ($strType == DbDatatypes::STR_TYPE_LONGTEXT) {
             $strReturn .= " CLOB ";
-        else
+        }
+        else {
             $strReturn .= " VARCHAR( 254 ) ";
+        }
 
         return $strReturn;
     }
@@ -334,8 +366,9 @@ class DbOci8 extends DbBase {
      * @return bool
      * @since 4.6
      */
-    public function changeColumn($strTable, $strOldColumnName, $strNewColumnName, $strNewDatatype) {
-        $bitReturn =  $this->_pQuery("ALTER TABLE ".($this->encloseTableName($strTable))." RENAME COLUMN ".($this->encloseColumnName($strOldColumnName)." TO ".$this->encloseColumnName($strNewColumnName)), array());
+    public function changeColumn($strTable, $strOldColumnName, $strNewColumnName, $strNewDatatype)
+    {
+        $bitReturn = $this->_pQuery("ALTER TABLE ".($this->encloseTableName($strTable))." RENAME COLUMN ".($this->encloseColumnName($strOldColumnName)." TO ".$this->encloseColumnName($strNewColumnName)), array());
         return $bitReturn && $this->_pQuery("ALTER TABLE ".$this->encloseTableName($strTable)." MODIFY ( ".$this->encloseColumnName($strNewColumnName)." ".$this->getDatatype($strNewDatatype)." )", array());
     }
 
@@ -365,31 +398,34 @@ class DbOci8 extends DbBase {
      *
      * @return bool
      */
-    public function createTable($strName, $arrFields, $arrKeys, $arrIndices = array(), $bitTxSafe = true) {
+    public function createTable($strName, $arrFields, $arrKeys, $arrIndices = array(), $bitTxSafe = true)
+    {
         $strQuery = "";
 
         //loop over existing tables to check, if the table already exists
         $arrTables = $this->getTables();
-        foreach($arrTables as $arrOneTable) {
-            if($arrOneTable["name"] == $strName)
+        foreach ($arrTables as $arrOneTable) {
+            if ($arrOneTable["name"] == $strName) {
                 return true;
+            }
         }
 
         //build the oracle code
         $strQuery .= "CREATE TABLE ".$strName." ( \n";
 
         //loop the fields
-        foreach($arrFields as $strFieldName => $arrColumnSettings) {
+        foreach ($arrFields as $strFieldName => $arrColumnSettings) {
             $strQuery .= " ".$strFieldName." ";
 
             $strQuery .= $this->getDatatype($arrColumnSettings[0]);
 
             //any default?
-            if(isset($arrColumnSettings[2]))
+            if (isset($arrColumnSettings[2])) {
                 $strQuery .= "DEFAULT ".$arrColumnSettings[2]." ";
+            }
 
             //nullable?
-            if($arrColumnSettings[1] === true) {
+            if ($arrColumnSettings[1] === true) {
                 $strQuery .= " NULL ";
             }
             else {
@@ -406,7 +442,7 @@ class DbOci8 extends DbBase {
 
         $bitCreate = $this->_pQuery($strQuery, array());
 
-        if($bitCreate && count($arrIndices) > 0) {
+        if ($bitCreate && count($arrIndices) > 0) {
             $strQuery = "CREATE INDEX ix_".generateSystemid()." ON ".$strName." ( ".implode(", ", $arrIndices).") ";
             $bitCreate = $bitCreate && $this->_pQuery($strQuery, array());
         }
@@ -419,24 +455,29 @@ class DbOci8 extends DbBase {
      *
      * @return void
      */
-    public function transactionBegin() {
+    public function transactionBegin()
+    {
         $this->bitTxOpen = true;
     }
 
     /**
      * Ends a successful operation by committing the transaction
+     *
      * @return void
      */
-    public function transactionCommit() {
+    public function transactionCommit()
+    {
         oci_commit($this->linkDB);
         $this->bitTxOpen = false;
     }
 
     /**
      * Ends a non-successful transaction by using a rollback
+     *
      * @return void
      */
-    public function transactionRollback() {
+    public function transactionRollback()
+    {
         oci_rollback($this->linkDB);
         $this->bitTxOpen = false;
     }
@@ -444,7 +485,8 @@ class DbOci8 extends DbBase {
     /**
      * @return array|mixed
      */
-    public function getDbInfo() {
+    public function getDbInfo()
+    {
         $arrReturn = array();
         $arrReturn["dbdriver"] = "oci8-oracle-extension";
         $arrReturn["dbserver"] = oci_server_version($this->linkDB);
@@ -463,7 +505,8 @@ class DbOci8 extends DbBase {
      *
      * @return bool
      */
-    public function dbExport($strFilename, $arrTables) {
+    public function dbExport($strFilename, $arrTables)
+    {
 
         $strFilename = _realpath_.$strFilename;
         $strTables = implode(",", $arrTables);
@@ -490,7 +533,8 @@ class DbOci8 extends DbBase {
      *
      * @return bool
      */
-    public function dbImport($strFilename) {
+    public function dbImport($strFilename)
+    {
 
         $strFilename = _realpath_.$strFilename;
         $strCommand = $this->strRestoreBin." ".$this->strUsername."/".$this->strPass." FILE='".$strFilename."'";
@@ -508,9 +552,10 @@ class DbOci8 extends DbBase {
      *
      * @return string
      */
-    private function processQuery($strQuery) {
+    private function processQuery($strQuery)
+    {
         $intCount = 1;
-        while(uniStrpos($strQuery, "?") !== false) {
+        while (uniStrpos($strQuery, "?") !== false) {
             $intPos = uniStrpos($strQuery, "?");
             $strQuery = substr($strQuery, 0, $intPos).":".$intCount++.substr($strQuery, $intPos + 1);
         }
@@ -526,9 +571,10 @@ class DbOci8 extends DbBase {
      * @return resource
      * @since 3.4
      */
-    private function getParsedStatement($strQuery) {
+    private function getParsedStatement($strQuery)
+    {
 
-        if(uniStripos($strQuery, "select") !== false) {
+        if (uniStripos($strQuery, "select") !== false) {
             $strQuery = uniStrReplace(array(" as ", " AS "), array(" ", " "), $strQuery);
         }
 
@@ -543,13 +589,15 @@ class DbOci8 extends DbBase {
      *
      * @return array
      */
-    private function parseResultRow(array $arrRow) {
+    private function parseResultRow(array $arrRow)
+    {
         $arrRow = array_change_key_case($arrRow, CASE_LOWER);
-        if(isset($arrRow["count(*)"]))
+        if (isset($arrRow["count(*)"])) {
             $arrRow["COUNT(*)"] = $arrRow["count(*)"];
+        }
 
-        foreach($arrRow as $intKey => $mixedValue) {
-            if(is_object($mixedValue)) {
+        foreach ($arrRow as $intKey => $mixedValue) {
+            if (is_object($mixedValue)) {
                 $arrRow[$intKey] = $mixedValue->load();
                 $mixedValue->free();
             }
@@ -565,7 +613,8 @@ class DbOci8 extends DbBase {
      *
      * @return void
      */
-    public function flushQueryCache() {
+    public function flushQueryCache()
+    {
     }
 
 }

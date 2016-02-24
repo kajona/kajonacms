@@ -55,7 +55,7 @@ if(issetPost("doinstall")) {
             echo " \n\nfound installer ".$strFilename." \n";
             include_once _realpath_.$strSearched;
 
-            $strName = $strClass = "class_".str_replace(".php", "", $strFilename);
+            $strName = $strClass = "class_".str_replace(".php", "", $strFilename);//TODO class name parsing
             $objInstaller = new $strName();
             $objLang = new \Kajona\System\System\LanguagesLanguage();
 

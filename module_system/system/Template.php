@@ -171,7 +171,7 @@ class Template
 
     /**
      * Fills a template with values passed in an array.
-     * As an optional parameter an instance of class_lang_wrapper can be passed
+     * As an optional parameter an instance of LangWrapper can be passed
      * to fill placeholders matching the schema %%lang_...%% automatically.
      *
      * @param mixed $arrContent
@@ -203,7 +203,7 @@ class Template
 
     /**
      * Fills a template with values passed in an array.
-     * As an optional parameter an instance of class_lang_wrapper can be passed
+     * As an optional parameter an instance of LangWrapper can be passed
      * to fill placeholders matching the schema %%lang_...%% automatically.
      *
      * @param $arrPlaceholderContent

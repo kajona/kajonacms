@@ -20,13 +20,14 @@ use Kajona\System\System\ValidatorInterface;
  * The base-class for all form-entries.
  * Holds common values and common method-logic to reduce the amount
  * of own code as much as possible.
- * In addition to extending FormentryBase, make sure to implement interface_formentry, too.
+ * In addition to extending FormentryBase, make sure to implement FormentryInterface, too.
  *
  * @author sidler@mulchprod.de
  * @since 4.0
  * @package module_formgenerator
  */
-class FormentryBase {
+class FormentryBase
+{
 
     /**
      * @var Model
@@ -35,6 +36,7 @@ class FormentryBase {
 
     /**
      * The name of the property as used in the forms, leading type-prefix is removed
+     *
      * @var null
      */
     private $strSourceProperty = null;
@@ -55,8 +57,6 @@ class FormentryBase {
     private $bitReadonly = false;
 
 
-
-
     /**
      * Creates a new instance of the current field.
      *
@@ -64,17 +64,19 @@ class FormentryBase {
      * @param $strSourceProperty
      * @param Model $objSourceObject
      */
-    public function __construct($strFormName, $strSourceProperty, $objSourceObject = null) {
+    public function __construct($strFormName, $strSourceProperty, $objSourceObject = null)
+    {
         $this->strSourceProperty = $strSourceProperty;
         $this->objSourceObject = $objSourceObject;
         $this->strFormName = $strFormName;
 
-        if($strFormName != "")
+        if ($strFormName != "") {
             $strFormName .= "_";
+        }
 
         $this->strEntryName = uniStrtolower($strFormName.$strSourceProperty);
 
-        if($objSourceObject != null) {
+        if ($objSourceObject != null) {
             $this->updateLabel();
         }
         $this->updateValue();
@@ -82,9 +84,11 @@ class FormentryBase {
 
     /**
      * Uses the current validator and validates the current value.
+     *
      * @return bool
      */
-    public function validateValue() {
+    public function validateValue()
+    {
         return $this->getObjValidator()->validate($this->getStrValue());
     }
 
@@ -93,9 +97,10 @@ class FormentryBase {
      * If found in the params-array, the value will be used, otherwise
      * the source-objects' getter is invoked.
      */
-    protected function updateValue() {
+    protected function updateValue()
+    {
         $arrParams = Carrier::getAllParams();
-        if(isset($arrParams[$this->strEntryName])) {
+        if (isset($arrParams[$this->strEntryName])) {
             $this->setStrValue($arrParams[$this->strEntryName]);
         }
         else {
@@ -107,10 +112,11 @@ class FormentryBase {
      * Loads the fields label-text, based on a combination of form-name and property-name.
      * The generated label may be overwritten if necessary.
      */
-    public function updateLabel($strKey = "") {
+    public function updateLabel($strKey = "")
+    {
 
         //check, if label is set as a property
-        if($strKey != "") {
+        if ($strKey != "") {
             $this->strLabel = Carrier::getInstance()->getObjLang()->getLang($strKey, $this->objSourceObject->getArrModule("modul"));
         }
         else {
@@ -119,8 +125,9 @@ class FormentryBase {
         }
 
         $strHint = $strKey."_hint";
-        if(Carrier::getInstance()->getObjLang()->getLang($strHint, $this->objSourceObject->getArrModule("modul")) != "!".$strHint."!")
+        if (Carrier::getInstance()->getObjLang()->getLang($strHint, $this->objSourceObject->getArrModule("modul")) != "!".$strHint."!") {
             $this->setStrHint(Carrier::getInstance()->getObjLang()->getLang($strHint, $this->objSourceObject->getArrModule("modul")));
+        }
     }
 
     /**
@@ -131,16 +138,19 @@ class FormentryBase {
      * @throws Exception
      * @return mixed
      */
-    protected function getValueFromObject() {
+    protected function getValueFromObject()
+    {
 
-        if($this->objSourceObject == null)
+        if ($this->objSourceObject == null) {
             return "";
+        }
 
         //try to get the matching getter
         $objReflection = new Reflection($this->objSourceObject);
         $strGetter = $objReflection->getGetter($this->strSourceProperty);
-        if($strGetter === null)
+        if ($strGetter === null) {
             throw new Exception("unable to find getter for value-property ".$this->strSourceProperty."@".get_class($this->objSourceObject), Exception::$level_ERROR);
+        }
 
         return $this->objSourceObject->{$strGetter}();
 
@@ -153,15 +163,18 @@ class FormentryBase {
      * @throws Exception
      * @return mixed
      */
-    public function setValueToObject() {
+    public function setValueToObject()
+    {
 
-        if($this->objSourceObject == null)
+        if ($this->objSourceObject == null) {
             return "";
+        }
 
         $objReflection = new Reflection($this->objSourceObject);
         $strSetter = $objReflection->getSetter($this->strSourceProperty);
-        if($strSetter === null)
+        if ($strSetter === null) {
             throw new Exception("unable to find setter for value-property ".$this->strSourceProperty."@".get_class($this->objSourceObject), Exception::$level_ERROR);
+        }
 
         return $this->objSourceObject->{$strSetter}($this->getStrValue());
 
@@ -169,35 +182,43 @@ class FormentryBase {
 
     /**
      * @param bool $bitMandatory
+     *
      * @return FormentryBase
      */
-    public function setBitMandatory($bitMandatory) {
+    public function setBitMandatory($bitMandatory)
+    {
         $this->bitMandatory = $bitMandatory;
         return $this;
     }
 
-    public function getBitMandatory() {
+    public function getBitMandatory()
+    {
         return $this->bitMandatory;
     }
 
     /**
      * @param string $strLabel
+     *
      * @return FormentryBase
      */
-    public function setStrLabel($strLabel) {
+    public function setStrLabel($strLabel)
+    {
         $this->strLabel = $strLabel;
         return $this;
     }
 
-    public function getStrLabel() {
+    public function getStrLabel()
+    {
         return $this->strLabel;
     }
 
     /**
      * @param ValidatorInterface $objValidator
+     *
      * @return FormentryBase
      */
-    public function setObjValidator(ValidatorInterface $objValidator) {
+    public function setObjValidator(ValidatorInterface $objValidator)
+    {
         $this->objValidator = $objValidator;
         return $this;
     }
@@ -205,90 +226,109 @@ class FormentryBase {
     /**
      * @return ValidatorInterface
      */
-    public function getObjValidator() {
+    public function getObjValidator()
+    {
         return $this->objValidator;
     }
 
-    public function setStrFormName($strFormName) {
+    public function setStrFormName($strFormName)
+    {
         $this->strFormName = $strFormName;
     }
 
-    public function getStrFormName() {
+    public function getStrFormName()
+    {
         return $this->strFormName;
     }
 
     /**
      * @param $strEntryName
+     *
      * @return FormentryBase
      */
-    public function setStrEntryName($strEntryName) {
+    public function setStrEntryName($strEntryName)
+    {
         $this->strEntryName = $strEntryName;
         return $this;
     }
 
-    public function getStrEntryName() {
+    public function getStrEntryName()
+    {
         return $this->strEntryName;
     }
 
     /**
      * @param $strValue
+     *
      * @return FormentryBase
      */
-    public function setStrValue($strValue) {
+    public function setStrValue($strValue)
+    {
         $this->strValue = $strValue;
         return $this;
     }
 
-    public function getStrValue() {
+    public function getStrValue()
+    {
         return $this->strValue;
     }
 
     /**
      * @param $strHint
+     *
      * @return FormentryBase
      */
-    public function setStrHint($strHint) {
-        if(trim($strHint) != "") {
+    public function setStrHint($strHint)
+    {
+        if (trim($strHint) != "") {
             $strHint = nl2br($strHint);
         }
         $this->strHint = $strHint;
         return $this;
     }
 
-    public function getStrHint() {
+    public function getStrHint()
+    {
         return $this->strHint;
     }
 
     /**
      * @param $bitReadonly
+     *
      * @return FormentryBase
      */
-    public function setBitReadonly($bitReadonly) {
+    public function setBitReadonly($bitReadonly)
+    {
         $this->bitReadonly = $bitReadonly;
         return $this;
     }
 
-    public function getBitReadonly() {
+    public function getBitReadonly()
+    {
         return $this->bitReadonly;
     }
 
-    public function getStrSourceProperty() {
+    public function getStrSourceProperty()
+    {
         return $this->strSourceProperty;
     }
 
-    public function getObjSourceObject() {
+    public function getObjSourceObject()
+    {
         return $this->objSourceObject;
     }
 
     /**
      * @param Model $objSourceObject
      */
-    public function setObjSourceObject($objSourceObject) {
+    public function setObjSourceObject($objSourceObject)
+    {
         $this->objSourceObject = $objSourceObject;
     }
 
 
-    public function setStrValidationErrorMsg($strValidationErrorMsg) {
+    public function setStrValidationErrorMsg($strValidationErrorMsg)
+    {
         $this->strValidationErrorMsg = $strValidationErrorMsg;
         return $this;
     }
@@ -296,12 +336,13 @@ class FormentryBase {
     /**
      * @return string
      */
-    public function getStrValidationErrorMsg() {
-        if($this->strValidationErrorMsg != "") {
+    public function getStrValidationErrorMsg()
+    {
+        if ($this->strValidationErrorMsg != "") {
             return $this->strValidationErrorMsg;
         }
         else {
-            if($this->getObjValidator() instanceof ValidatorExtendedInterface) {
+            if ($this->getObjValidator() instanceof ValidatorExtendedInterface) {
                 return "'".$this->getStrLabel()."': ".$this->getObjValidator()->getValidationMessage();
             }
             else {
@@ -310,10 +351,11 @@ class FormentryBase {
         }
     }
 
-    protected function getAnnotationParamsForCurrentProperty() {
+    protected function getAnnotationParamsForCurrentProperty()
+    {
         //params
 
-        if($this->getObjSourceObject() != null) {
+        if ($this->getObjSourceObject() != null) {
             $objReflection = new Reflection($this->getObjSourceObject());
 
             $arrProperties = $objReflection->getPropertiesWithAnnotation("@fieldType");
