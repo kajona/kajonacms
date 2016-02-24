@@ -23,10 +23,10 @@ use Kajona\System\System\Imageplugins\ImageOperationInterface;
  * $objImage->load("/files/images/samples/PA252134.JPG");
  *
  * // Scale and crop the image so it is exactly 800 * 600 pixels large.
- * $objImage->addOperation(new class_image_scale_and_crop(800, 600));
+ * $objImage->addOperation(new ImageScaleAndCrop(800, 600));
  *
  * // Render a text with 80% opacity.
- * $objImage->addOperation(new class_image_text("Kajona", 300, 300, 40, "rgb(0,0,0,0.8)")
+ * $objImage->addOperation(new ImageText("Kajona", 300, 300, 40, "rgb(0,0,0,0.8)")
  *
  * // Apply the operations and send the image to the browser.
  * if (!$objImage->sendToBrowser()) {
@@ -34,7 +34,7 @@ use Kajona\System\System\Imageplugins\ImageOperationInterface;
  * }
  *
  * Custom operations can be added by implementing ImageOperationInterface. Most operations
- * should inherit from class_image_abstract_operation, which implements ImageOperationInterface
+ * should inherit from ImageAbstractOperation, which implements ImageOperationInterface
  * and provides common functionality.
  *
  * @package module_system

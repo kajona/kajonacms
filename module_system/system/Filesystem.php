@@ -3,8 +3,6 @@
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*   $Id$                                         *
 ********************************************************************************************************/
 
 namespace Kajona\System\System;
@@ -378,7 +376,7 @@ class Filesystem
      * @param bool $bitThrowExceptionOnError
      *
      * @return bool
-     * @throws class_exception
+     * @throws Exception
      */
     public function folderCreate($strFolder, $bitRecursive = false, $bitThrowExceptionOnError = false)
     {
@@ -398,7 +396,7 @@ class Filesystem
                     if (!is_dir(_realpath_.$strFolders)) {
 
                         if ($bitThrowExceptionOnError && !is_writable(_realpath_.$strTestfolder)) {
-                            throw new class_exception("Folder "._realpath_.$strTestfolder." is not writable", class_exception::$level_FATALERROR);
+                            throw new Exception("Folder "._realpath_.$strTestfolder." is not writable", Exception::$level_FATALERROR);
                         }
 
                         $bitReturn = $this->folderCreate($strFolders, false);

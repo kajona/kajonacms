@@ -16,7 +16,8 @@ namespace Kajona\System\System;
  * @author sidler@mulchprod.de
  * @since 4.6
  */
-class OrmSchemamanagerTable  {
+class OrmSchemamanagerTable
+{
 
     /**
      * @var OrmSchemamanagerRow[]
@@ -31,57 +32,64 @@ class OrmSchemamanagerTable  {
      * @param string $strName
      * @param bool $bitTxSafe
      */
-    function __construct($strName, $bitTxSafe = true) {
+    public function __construct($strName, $bitTxSafe = true)
+    {
         $this->strName = $strName;
         $this->bitTxSafe = $bitTxSafe;
     }
 
     /**
-     * @param \class_orm_schemamanager_row[] $arrRows
+     * @param OrmSchemamanagerRow[] $arrRows
      */
-    public function setArrRows($arrRows) {
+    public function setArrRows($arrRows)
+    {
         $this->arrRows = $arrRows;
     }
 
     /**
-     * @return \class_orm_schemamanager_row[]
+     * @return OrmSchemamanagerRow[]
      */
-    public function getArrRows() {
+    public function getArrRows()
+    {
         return $this->arrRows;
     }
 
     /**
      * @param boolean $bitTxSafe
      */
-    public function setBitTxSafe($bitTxSafe) {
+    public function setBitTxSafe($bitTxSafe)
+    {
         $this->bitTxSafe = $bitTxSafe;
     }
 
     /**
      * @return boolean
      */
-    public function getBitTxSafe() {
+    public function getBitTxSafe()
+    {
         return $this->bitTxSafe;
     }
 
-    public function addRow(OrmSchemamanagerRow $objRow) {
+    public function addRow(OrmSchemamanagerRow $objRow)
+    {
         $this->arrRows[] = $objRow;
     }
 
     /**
      * @param string $strName
      */
-    public function setStrName($strName) {
+    public function setStrName($strName)
+    {
         $this->strName = $strName;
     }
 
     /**
      * @return string
      */
-    public function getStrName() {
+    public function getStrName()
+    {
         return $this->strName;
     }
-
 
 
 }

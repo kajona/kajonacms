@@ -20,7 +20,8 @@ namespace Kajona\System\System;
  * @module languages
  * @moduleId _languages_modul_id_
  */
-class LanguagesLanguage extends Model implements ModelInterface, AdminListableInterface {
+class LanguagesLanguage extends Model implements ModelInterface, AdminListableInterface
+{
 
     /**
      * @var string
@@ -30,7 +31,7 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
      * @fieldType dropdown
      * @fieldLabel commons_title
      * @fieldMandatory
-     * @fieldValidator class_twochars_validator
+     * @fieldValidator Kajona\\System\\System\\TwocharsValidator
      *
      * @addSearchIndex
      */
@@ -56,7 +57,8 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
      *
      * @return string the name of the icon, not yet wrapped by getImageAdmin()
      */
-    public function getStrIcon() {
+    public function getStrIcon()
+    {
         return "icon_language";
     }
 
@@ -65,7 +67,8 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
      *
      * @return string
      */
-    public function getStrAdditionalInfo() {
+    public function getStrAdditionalInfo()
+    {
         return "";
     }
 
@@ -74,7 +77,8 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
      *
      * @return string
      */
-    public function getStrLongDescription() {
+    public function getStrLongDescription()
+    {
         return "";
     }
 
@@ -84,8 +88,9 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
      *
      * @return string
      */
-    public function getStrDisplayName() {
-        return $this->getLang("lang_" . $this->getStrName(), "languages") . ($this->getBitDefault() == 1 ? " (" . $this->getLang("language_isDefault", "languages") . ")" : "");
+    public function getStrDisplayName()
+    {
+        return $this->getLang("lang_".$this->getStrName(), "languages").($this->getBitDefault() == 1 ? " (".$this->getLang("language_isDefault", "languages").")" : "");
     }
 
     /**
@@ -93,15 +98,16 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
      *
      * @return bool
      */
-    protected function updateStateToDb() {
+    protected function updateStateToDb()
+    {
 
         //if no other language exists, we have a new default language
         $arrObjLanguages = LanguagesLanguage::getObjectList();
-        if(count($arrObjLanguages) == 0) {
+        if (count($arrObjLanguages) == 0) {
             $this->setBitDefault(1);
         }
 
-        if($this->getBitDefault() == 1) {
+        if ($this->getBitDefault() == 1) {
             self::resetAllDefaultLanguages();
         }
 
@@ -118,11 +124,13 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
      * @return LanguagesLanguage[]
      * @static
      */
-    public static function getObjectList($bitJustActive = false, $intStart = null, $intEnd = null) {
+    public static function getObjectList($bitJustActive = false, $intStart = null, $intEnd = null)
+    {
 
         $objOrmList = new OrmObjectlist();
-        if($bitJustActive)
+        if ($bitJustActive) {
             $objOrmList->addWhereRestriction(new OrmObjectlistSystemstatusRestriction(OrmComparatorEnum::NotEqual(), 0));
+        }
 
         return $objOrmList->getObjectList(__CLASS__, "", $intStart, $intEnd);
     }
@@ -134,11 +142,13 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
      *
      * @return int
      */
-    public static function getNumberOfLanguagesAvailable($bitJustActive = false) {
+    public static function getNumberOfLanguagesAvailable($bitJustActive = false)
+    {
 
         $objOrmList = new OrmObjectlist();
-        if($bitJustActive)
+        if ($bitJustActive) {
             $objOrmList->addWhereRestriction(new OrmObjectlistSystemstatusRestriction(OrmComparatorEnum::NotEqual(), 0));
+        }
 
         return $objOrmList->getObjectCount(__CLASS__);
     }
@@ -152,12 +162,13 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
      * @static
      * @return  LanguagesLanguage or false
      */
-    public static function getLanguageByName($strName) {
+    public static function getLanguageByName($strName)
+    {
 
         $objOrmList = new OrmObjectlist();
         $objOrmList->addWhereRestriction(new OrmObjectlistPropertyRestriction("strName", OrmComparatorEnum::Equal(), $strName));
         $arrReturn = $objOrmList->getObjectList(__CLASS__);
-        if(count($arrReturn) > 0) {
+        if (count($arrReturn) > 0) {
             return $arrReturn[0];
         }
         else {
@@ -172,8 +183,9 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
      *
      * @return bool
      */
-    public static function resetAllDefaultLanguages() {
-        $strQuery = "UPDATE " . _dbprefix_ . "languages
+    public static function resetAllDefaultLanguages()
+    {
+        $strQuery = "UPDATE "._dbprefix_."languages
                      SET language_default = 0";
         return Carrier::getInstance()->getObjDB()->_pQuery($strQuery, array());
     }
@@ -186,30 +198,31 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
      *
      * @return bool
      */
-    public function moveContentsToCurrentLanguage($strSourceLanguage) {
+    public function moveContentsToCurrentLanguage($strSourceLanguage)
+    {
         $this->objDB->transactionBegin();
 
-        $strQuery1 = "UPDATE " . _dbprefix_ . "page_properties
+        $strQuery1 = "UPDATE "._dbprefix_."page_properties
                         SET pageproperties_language = ?
                         WHERE pageproperties_language = ?";
 
-        $strQuery2 = "UPDATE " . _dbprefix_ . "page_element
+        $strQuery2 = "UPDATE "._dbprefix_."page_element
                         SET page_element_ph_language = ?
                         WHERE page_element_ph_language = ?";
 
 
         $bitCommit = (
             $this->objDB->_pQuery($strQuery1, array($this->getStrName(), $strSourceLanguage))
-                && $this->objDB->_pQuery($strQuery2, array($this->getStrName(), $strSourceLanguage))
+            && $this->objDB->_pQuery($strQuery2, array($this->getStrName(), $strSourceLanguage))
         );
 
-        if($bitCommit) {
+        if ($bitCommit) {
             $this->objDB->transactionCommit();
-            Logger::getInstance()->addLogRow("moved contents from " . $strSourceLanguage . " to " . $this->getStrName() . " successfully", Logger::$levelInfo);
+            Logger::getInstance()->addLogRow("moved contents from ".$strSourceLanguage." to ".$this->getStrName()." successfully", Logger::$levelInfo);
         }
         else {
             $this->objDB->transactionRollback();
-            Logger::getInstance()->addLogRow("moved contents from " . $strSourceLanguage . " to " . $this->getStrName() . " failed", Logger::$levelError);
+            Logger::getInstance()->addLogRow("moved contents from ".$strSourceLanguage." to ".$this->getStrName()." failed", Logger::$levelError);
         }
 
         return $bitCommit;
@@ -224,8 +237,9 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
      *
      * @return string
      */
-    public function getPortalLanguage() {
-        if($this->objSession->getSession("portalLanguage") !== false && $this->objSession->getSession("portalLanguage") != "") {
+    public function getPortalLanguage()
+    {
+        if ($this->objSession->getSession("portalLanguage") !== false && $this->objSession->getSession("portalLanguage") != "") {
             //Return language saved before in the session
             return $this->objSession->getSession("portalLanguage");
         }
@@ -233,11 +247,11 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
             //try to load the default language
             //maybe the user sent a wanted language
             $strUserLanguages = str_replace(";", ",", getServer("HTTP_ACCEPT_LANGUAGE"));
-            if(uniStrlen($strUserLanguages) > 0) {
+            if (uniStrlen($strUserLanguages) > 0) {
                 $arrLanguages = explode(",", $strUserLanguages);
                 //check, if one of the requested languages is available on our system
-                foreach($arrLanguages as $strOneLanguage) {
-                    if(!preg_match("#q\=[0-9]\.[0-9]#i", $strOneLanguage)) {
+                foreach ($arrLanguages as $strOneLanguage) {
+                    if (!preg_match("#q\=[0-9]\.[0-9]#i", $strOneLanguage)) {
                         //search language
                         $objORM = new OrmObjectlist();
                         $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND system_status = 1", array()));
@@ -245,9 +259,9 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
                         /** @var LanguagesLanguage $objLang */
                         $objLang = $objORM->getSingleObject(get_called_class());
 
-                        if($objLang !== null) {
+                        if ($objLang !== null) {
                             //save to session
-                            if(!$this->objSession->getBitClosed()) {
+                            if (!$this->objSession->getBitClosed()) {
                                 $this->objSession->setSession("portalLanguage", $objLang->getStrName());
                             }
                             return $objLang->getStrName();
@@ -262,9 +276,9 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
             /** @var LanguagesLanguage $objLang */
             $objLang = $objORM->getSingleObject(get_called_class());
 
-            if($objLang !== null) {
+            if ($objLang !== null) {
                 //save to session
-                if(!$this->objSession->getBitClosed()) {
+                if (!$this->objSession->getBitClosed()) {
                     $this->objSession->setSession("portalLanguage", $objLang->getStrName());
                 }
                 return $objLang->getStrName();
@@ -275,9 +289,9 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
                 /** @var LanguagesLanguage $objLang */
                 $objLang = $objORM->getSingleObject(get_called_class());
 
-                if($objLang !== null) {
+                if ($objLang !== null) {
                     //save to session
-                    if(!$this->objSession->getBitClosed()) {
+                    if (!$this->objSession->getBitClosed()) {
                         $this->objSession->setSession("portalLanguage", $objLang->getStrName());
                     }
                     return $objLang->getStrName();
@@ -297,8 +311,9 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
      *
      * @return string
      */
-    public function getAdminLanguage() {
-        if($this->objSession->getSession("adminLanguage") !== false && $this->objSession->getSession("adminLanguage") != "") {
+    public function getAdminLanguage()
+    {
+        if ($this->objSession->getSession("adminLanguage") !== false && $this->objSession->getSession("adminLanguage") != "") {
             //Return language saved before in the session
             return $this->objSession->getSession("adminLanguage");
         }
@@ -309,9 +324,9 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
             /** @var LanguagesLanguage $objLang */
             $objLang = $objORM->getSingleObject(get_called_class());
 
-            if($objLang !== null) {
+            if ($objLang !== null) {
                 //save to session
-                if(!$this->objSession->getBitClosed()) {
+                if (!$this->objSession->getBitClosed()) {
                     $this->objSession->setSession("adminLanguage", $objLang->getStrName());
                 }
                 return $objLang->getStrName();
@@ -321,9 +336,9 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
                 /** @var LanguagesLanguage $objLang */
                 $objLang = $objORM->getSingleObject(get_called_class());
 
-                if($objLang !== null) {
+                if ($objLang !== null) {
                     //save to session
-                    if(!$this->objSession->getBitClosed()) {
+                    if (!$this->objSession->getBitClosed()) {
                         $this->objSession->setSession("adminLanguage", $objLang->getStrName());
                     }
                     return $objLang->getStrName();
@@ -340,7 +355,8 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
      *
      * @return LanguagesLanguage
      */
-    public static function getDefaultLanguage() {
+    public static function getDefaultLanguage()
+    {
         $objORM = new OrmObjectlist();
         $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND system_status = 1", array()));
         $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND language_default = 1", array()));
@@ -353,11 +369,12 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
      *
      * @param string $strLanguage
      */
-    public function setStrPortalLanguage($strLanguage) {
+    public function setStrPortalLanguage($strLanguage)
+    {
         $objLanguage = LanguagesLanguage::getLanguageByName($strLanguage);
-        if($objLanguage !== false) {
-            if($objLanguage->getIntRecordStatus() != 0) {
-                if(!$this->objSession->getBitClosed()) {
+        if ($objLanguage !== false) {
+            if ($objLanguage->getIntRecordStatus() != 0) {
+                if (!$this->objSession->getBitClosed()) {
                     $this->objSession->setSession("portalLanguage", $objLanguage->getStrName());
                 }
             }
@@ -369,11 +386,12 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
      *
      * @param string $strLanguage
      */
-    public function setStrAdminLanguageToWorkOn($strLanguage) {
+    public function setStrAdminLanguageToWorkOn($strLanguage)
+    {
         $objLanguage = LanguagesLanguage::getLanguageByName($strLanguage);
-        if($objLanguage !== false) {
-            if($objLanguage->getIntRecordStatus() != 0) {
-                if(!$this->objSession->getBitClosed()) {
+        if ($objLanguage !== false) {
+            if ($objLanguage->getIntRecordStatus() != 0) {
+                if (!$this->objSession->getBitClosed()) {
                     $this->objSession->setSession("adminLanguage", $objLanguage->getStrName());
                 }
             }
@@ -381,19 +399,23 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
     }
 
 
-    public function setStrName($strName) {
+    public function setStrName($strName)
+    {
         $this->strName = $strName;
     }
 
-    public function setBitDefault($bitDefault) {
+    public function setBitDefault($bitDefault)
+    {
         $this->bitDefault = $bitDefault;
     }
 
-    public function getStrName() {
+    public function getStrName()
+    {
         return $this->strName;
     }
 
-    public function getBitDefault() {
+    public function getBitDefault()
+    {
         return $this->bitDefault;
     }
 
@@ -402,7 +424,8 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
      *
      * @return array
      */
-    public function getAllLanguagesAvailable() {
+    public function getAllLanguagesAvailable()
+    {
         return explode(",", $this->strLanguagesAvailable);
     }
 }

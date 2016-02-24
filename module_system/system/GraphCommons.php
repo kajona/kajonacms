@@ -25,7 +25,7 @@ class GraphCommons
      *
      * @param $arrValues
      *
-     * @return array of class_graph_datapoints
+     * @return GraphDatapoint[]
      */
     public static function convertArrValuesToDataPointArray(array $arrValues)
     {

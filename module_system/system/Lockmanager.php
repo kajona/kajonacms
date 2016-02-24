@@ -31,7 +31,7 @@ class Lockmanager
      * Constructor
      *
      * @param string $strSystemid
-     * @param \class_root|null $objSourceObject
+     * @param Root|null $objSourceObject
      */
     public function __construct($strSystemid = "", Root $objSourceObject = null)
     {
@@ -172,16 +172,6 @@ class Lockmanager
     public function unlockOldRecords()
     {
         return true;
-
-        /*
-
-         $intMinTime = time() - class_module_system_setting::getConfigValue("_system_lock_maxtime_");
-        $strQuery = "UPDATE "._dbprefix_."system
-						SET system_lock_id='0'
-				      WHERE system_lock_time <= ?";
-        return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($intMinTime));
-
-        */
     }
 
     /**

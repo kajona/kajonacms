@@ -302,7 +302,7 @@ class Lang
                 }
                 else {
                     $strReturn = "!".$strText."!";
-                    //class_logger::getInstance(class_logger::LANG)->addLogRow("failed to load lang-property for: ".$strText, class_logger::$levelWarning);
+                    //Logger::getInstance(Logger::LANG)->addLogRow("failed to load lang-property for: ".$strText, Logger::$levelWarning);
                 }
             }
         }

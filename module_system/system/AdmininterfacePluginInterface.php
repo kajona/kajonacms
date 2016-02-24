@@ -21,9 +21,9 @@ interface AdmininterfacePluginInterface
     /**
      * Contructor, used to init the plugin
      *
-     * @param \class_db $objDB
-     * @param \class_toolkit_admin $objToolkit
-     * @param \class_lang $objTexts
+     * @param Database $objDB
+     * @param ToolkitAdmin $objToolkit
+     * @param Lang $objTexts
      */
     public function __construct(Database $objDB, ToolkitAdmin $objToolkit, Lang $objTexts);
 

@@ -10,7 +10,7 @@ namespace Kajona\System\System;
 
 
 /**
- * A common base class for class_admin_controller and class_portal_controller.
+ * A common base class for AdminController and PortalController.
  * Use one of both to create admin-/portal-views.
  * Do NOT extend this class directly.
  *
@@ -390,7 +390,7 @@ abstract class AbstractController
      */
     public function flushCompletePagesCache()
     {
-        return Cache::flushCache("class_element_portal");
+        return Cache::flushCache("Kajona\\Pages\\Portal\\ElementPortal");
     }
 
     /**

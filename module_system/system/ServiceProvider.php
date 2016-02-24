@@ -2,17 +2,6 @@
 
 namespace Kajona\System\System;
 
-use class_classloader;
-use class_config;
-use class_db;
-use class_lang;
-use class_logger;
-use class_objectfactory;
-use class_resourceloader;
-use class_rights;
-use class_session;
-use class_template;
-use class_toolkit_portal;
 use Kajona\System\Portal\ToolkitPortal;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
@@ -28,23 +17,23 @@ class ServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $objContainer)
     {
-        $objContainer['db'] = function($c){
+        $objContainer['db'] = function ($c) {
             return Database::getInstance();
         };
 
-        $objContainer['rights'] = function($c){
+        $objContainer['rights'] = function ($c) {
             return Rights::getInstance();
         };
 
-        $objContainer['config'] = function($c){
+        $objContainer['config'] = function ($c) {
             return Config::getInstance();
         };
 
-        $objContainer['session'] = function($c){
+        $objContainer['session'] = function ($c) {
             return Session::getInstance();
         };
 
-        $objContainer['admintoolkit'] = function($c){
+        $objContainer['admintoolkit'] = function ($c) {
             // decide which class to load
             $strAdminToolkitClass = $c["config"]->getConfig("admintoolkit");
             if ($strAdminToolkitClass == "") {
@@ -55,38 +44,38 @@ class ServiceProvider implements ServiceProviderInterface
             return Classloader::getInstance()->getInstanceFromFilename($strPath);
         };
 
-        $objContainer['portaltoolkit'] = function($c){
+        $objContainer['portaltoolkit'] = function ($c) {
             $strPath = Resourceloader::getInstance()->getPathForFile("/portal/ToolkitPortal.php");
             include_once $strPath;
 
             return new ToolkitPortal();
         };
 
-        $objContainer['resource_loader'] = function($c){
+        $objContainer['resource_loader'] = function ($c) {
             return Resourceloader::getInstance();
         };
 
-        $objContainer['class_loader'] = function($c){
+        $objContainer['class_loader'] = function ($c) {
             return Classloader::getInstance();
         };
 
-        $objContainer['template'] = function($c){
+        $objContainer['template'] = function ($c) {
             return Template::getInstance();
         };
 
-        $objContainer['lang'] = function($c){
+        $objContainer['lang'] = function ($c) {
             return Lang::getInstance();
         };
 
-        $objContainer['object_factory'] = function($c){
+        $objContainer['object_factory'] = function ($c) {
             return Objectfactory::getInstance();
         };
 
-        $objContainer['object_builder'] = function($c){
+        $objContainer['object_builder'] = function ($c) {
             return new ObjectBuilder($c);
         };
 
-        $objContainer['logger'] = function($c){
+        $objContainer['logger'] = function ($c) {
             return Logger::getInstance();
         };
     }

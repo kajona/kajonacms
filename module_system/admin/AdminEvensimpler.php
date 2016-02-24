@@ -20,7 +20,7 @@ use ReflectionMethod;
 
 /**
  * Class holding common methods for extended and simplified admin-guis.
- * Compared to class_admin_simple, this implementation is based on a declarative approach,
+ * Compared to AdminSimple, this implementation is based on a declarative approach,
  * reducing the amount of code required to implement a modules' admin-views.
  *
  * Subclasses are able to declare actions and the matching objects with annotations.

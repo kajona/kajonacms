@@ -9,7 +9,6 @@
 
 namespace Kajona\System\System;
 
-use Kajona\System\System\BootstrapCache;
 use ReflectionClass;
 use ReflectionException;
 
@@ -695,15 +694,17 @@ class Reflection
      * Checks if a property exists for a class
      *
      * @param $strProperty
+     *
      * @return bool
      */
-    public function hasProperty($strProperty) {
+    public function hasProperty($strProperty)
+    {
         $bitReturn = $this->objReflectionClass->hasProperty($strProperty);
 
-        if(!$bitReturn) {
+        if (!$bitReturn) {
             $objBaseClass = $this->objReflectionClass->getParentClass();
-            if($objBaseClass !== false) {
-                $objBaseAnnotations = new class_reflection($objBaseClass->getName());
+            if ($objBaseClass !== false) {
+                $objBaseAnnotations = new Reflection($objBaseClass->getName());
                 return $objBaseAnnotations->hasProperty($strProperty);
             }
         }
