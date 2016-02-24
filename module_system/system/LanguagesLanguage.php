@@ -31,7 +31,7 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
      * @fieldType dropdown
      * @fieldLabel commons_title
      * @fieldMandatory
-     * @fieldValidator Kajona\\System\\System\\Validators\\TwocharsValidator
+     * @fieldValidator Kajona\System\System\Validators\TwocharsValidator
      *
      * @addSearchIndex
      */
