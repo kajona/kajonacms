@@ -58,11 +58,10 @@ class class_project_setup {
         self::makeWritable("/project/log");
         self::checkDir("/project/dbdumps");
         self::makeWritable("/project/dbdumps");
-        self::checkDir("/project/lang");
-        self::checkDir("/project/system");
-        self::checkDir("/project/system/config");
-        self::makeWritable("/project/system/config");
-        self::checkDir("/project/portal");
+        self::checkDir("/project/module_system");
+        self::checkDir("/project/module_system/system");
+        self::checkDir("/project/module_system/system/config");
+        self::makeWritable("/project/module_system/system/config");
         self::checkDir("/project/temp");
         self::makeWritable("/project/temp");
         self::checkDir("/templates");
@@ -127,7 +126,7 @@ class class_project_setup {
         }
 
 
-        echo "\n<b>Kajona V4 htaccess setup</b>\n";
+        echo "\n<b>Kajona V5 htaccess setup</b>\n";
         self::createAllowHtaccess("/files/cache/.htaccess");
         self::createAllowHtaccess("/files/images/.htaccess");
         self::createAllowHtaccess("/files/public/.htaccess");
@@ -147,7 +146,7 @@ class class_project_setup {
     private static function createLangProjectEntry() {
         $strContent = <<<TXT
 
-Kajona V4 lang subsystem.
+Kajona V5 lang subsystem.
 
     Since Kajona V4, it is possible to change the default-lang files by deploying them inside the projects'
     lang-folder.
@@ -158,10 +157,10 @@ Kajona V4 lang subsystem.
 
     /core/module_packagemanager/lang/module_packagemanager/lang_packagemanager_en.php -> \$lang["modul_titel"].
 
-    To change the entry to "Packages" or "Modules" copy the original lang-file into the matching folder
+    To change the entry to "Packages" or "Modules" create a blank php-file into the matching folder
     under the project root. Using the example above, that would be:
 
-    /project/lang/module_packagemanager/lang_packagemanager_en.php
+    /project/module_packagemanager/lang/module_packagemanager/lang_packagemanager_en.php
 
     Now change the entry
     \$lang["modul_titel"] = "Packagemanagement";
@@ -172,13 +171,13 @@ Kajona V4 lang subsystem.
 
 
 TXT;
-        file_put_contents(self::$strRealPath."/project/lang/readme.txt", $strContent);
+        file_put_contents(self::$strRealPath."/project/lang_readme.txt", $strContent);
     }
 
     private static function createDefaultTemplateEntry() {
         $strContent = <<<TXT
 
-Kajona V4 default template-pack.
+Kajona V5 default template-pack.
 
 Please don't change anything within this folder, updates may break your changes
 and overwrite them without further warning.

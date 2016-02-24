@@ -90,7 +90,7 @@ class Installer {
             $this->objLang->setStrTextLanguage($this->objSession->getAdminLanguage(true));
         }
 
-        $this->STR_PROJECT_CONFIG_FILE = _realpath_."/project/system/config/config.php";
+        $this->STR_PROJECT_CONFIG_FILE = _realpath_."/project/module_system/system/config/config.php";
     }
 
 
@@ -152,7 +152,7 @@ class Installer {
 
 
         $arrFilesAndFolders = array(
-            "/project/system/config",
+            "/project/module_system/system/config",
             "/project/dbdumps",
             "/project/log",
             "/project/temp",
@@ -242,13 +242,7 @@ class Installer {
 
             if($bitCxCheck) {
                 $strFileContent = "<?php\n";
-                $strFileContent .= "/*\n Kajona V4 config-file.\n If you want to overwrite additional settings, copy them from /core/module_system/system/config/config.php into this file.\n*/";
-                $strFileContent .= "if(is_dir(__DIR__.\"/../../../core/module_system/\")) {\n";
-                $strFileContent .= "  include __DIR__.'/../../../core/module_system/system/config/config.php';\n";
-                $strFileContent .= "}\n";
-                $strFileContent .= "else {\n";
-                $strFileContent .= "  include 'phar://'.__DIR__.'/../../../core/module_system.phar/system/config/config.php';\n";
-                $strFileContent .= "}\n";
+                $strFileContent .= "/*\n Kajona V5 config-file.\n If you want to overwrite additional settings, copy them from /core/module_system/system/config/config.php into this file.\n*/";
                 $strFileContent .= "\n\n\n";
                 $strFileContent .= "  \$config['dbhost']               = '".$_POST["hostname"]."';                   //Server name \n";
                 $strFileContent .= "  \$config['dbusername']           = '".$_POST["username"]."';                   //Username \n";

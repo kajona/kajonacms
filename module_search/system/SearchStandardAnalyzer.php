@@ -72,7 +72,7 @@ class SearchStandardAnalyzer {
     private function blacklisting() {
 
         // take care of white spaces
-        $arrBlacklist = Config::getInstance("search_blacklist.php")->getConfig("black_list");
+        $arrBlacklist = Config::getInstance("module_search")->getConfig("black_list");
         foreach($this->arrResults as $strToken => $intScore)
             if(in_array($strToken, $arrBlacklist))
                 unset($this->arrResults[$strToken]);
@@ -121,7 +121,7 @@ class SearchStandardAnalyzer {
      * @return void
      */
     private function clearmarks() {
-        $arrMarks = Config::getInstance("search_blacklist.php")->getConfig("marks_list");
+        $arrMarks = Config::getInstance("module_search")->getConfig("marks_list");
         $this->setText(uniStrReplace($arrMarks, "", html_entity_decode($this->getText())));
     }
 

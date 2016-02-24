@@ -195,7 +195,7 @@ class PackagemanagerManager
      */
     public function getContentproviders()
     {
-        $objConfig = Config::getInstance("packagemanager.php");
+        $objConfig = Config::getInstance("module_packagemanager");
 
         $strProvider = $objConfig->getConfig("contentproviders");
 

@@ -63,7 +63,7 @@ abstract class Testbase extends PHPUnit_Framework_TestCase
         }
 
         if (!defined("_autotesting_sqlite_checks_")) {
-            if (Config::getInstance("config.php")->getConfig("dbdriver") == "sqlite3") {
+            if (Config::getInstance()->getConfig("dbdriver") == "sqlite3") {
                 Database::getInstance()->_pQuery("PRAGMA journal_mode = MEMORY", array());
             }
 

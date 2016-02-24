@@ -233,6 +233,7 @@ class Resourceloader
                         $arrReturn[_realpath_.$strCorePath._langpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
                     }
                 }
+
             } elseif (PharModule::isPhar(_realpath_."/".$strCorePath)) {
 
                 $objPhar = new PharModule($strCorePath);
@@ -242,25 +243,20 @@ class Resourceloader
                     }
                 }
             }
-        }
 
-        //check if the same is available in the projects-folder
-        if (is_dir(_realpath_._projectpath_._langpath_."/".$strFolder)) {
-            $arrContent = scandir(_realpath_._projectpath_._langpath_."/".$strFolder);
-            foreach ($arrContent as $strSingleEntry) {
 
-                if (substr($strSingleEntry, -4) == ".php") {
+            //check if there are overwrites in the project-folder
+            if (is_dir(_realpath_._projectpath_."/".$strSingleModule."/"._langpath_."/".$strFolder)) {
+                $arrContent = scandir(_realpath_._projectpath_."/".$strSingleModule."/"._langpath_."/".$strFolder);
+                foreach ($arrContent as $strSingleEntry) {
 
-                    $strKey = array_search($strSingleEntry, $arrReturn);
-                    if ($strKey !== false) {
-                        unset($arrReturn[$strKey]);
+                    if (substr($strSingleEntry, -4) == ".php") {
+                        $arrReturn[_realpath_._projectpath_."/".$strSingleModule."/"._langpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
                     }
-                    $arrReturn[_realpath_._projectpath_._langpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
-
                 }
-
             }
         }
+
 
         BootstrapCache::getInstance()->addCacheRow(BootstrapCache::CACHE_LANG, $strFolder, $arrReturn);
         return $arrReturn;

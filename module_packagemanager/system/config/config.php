@@ -10,7 +10,7 @@
  * There's no need to change anything in this file.
  * All values and settings may be overridden by placing them in the projects' config-file at
  *
- *   /project/system/config/packagemanager.php
+ *   /project/module_packagemanager/system/config/packagemanager.php
  *
  * @package module_packagemanager
  */

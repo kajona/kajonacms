@@ -1035,7 +1035,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
     private function isGroupEditable(UserGroup $objGroup)
     {
         //validate possible blocked groups
-        $objConfig = Config::getInstance("blockedgroups.php");
+        $objConfig = Config::getInstance("module_system", "blockedgroups.php");
         $arrBlockedGroups = explode(",", $objConfig->getConfig("blockedgroups"));
         $arrBlockedGroups[] = SystemSetting::getConfigValue("_admins_group_id_");
 
@@ -1292,7 +1292,7 @@ HTML;
         $arrUserGroups = $objUser->getArrGroupIds();
 
         //validate possible blocked groups
-        $objConfig = Config::getInstance("blockedgroups.php");
+        $objConfig = Config::getInstance("module_system", "blockedgroups.php");
         $arrBlockedGroups = explode(",", $objConfig->getConfig("blockedgroups"));
 
         //Searching for groups to enter
