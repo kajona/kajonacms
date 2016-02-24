@@ -23,51 +23,54 @@ use Kajona\System\System\SystemModule;
  * @package module_rating
  * @moduleId _rating_modul_id_
  */
-class InstallerRating extends InstallerBase implements InstallerRemovableInterface {
+class InstallerRating extends InstallerBase implements InstallerRemovableInterface
+{
 
-    public function install() {
-		$strReturn = "";
+    public function install()
+    {
+        $strReturn = "";
         $objManager = new OrmSchemamanager();
 
-		$strReturn .= "Installing table rating...\n";
+        $strReturn .= "Installing table rating...\n";
         $objManager->createTable("Kajona\\Rating\\System\\RatingRate");
 
-		$strReturn .= "Installing table rating_history...\n";
+        $strReturn .= "Installing table rating_history...\n";
 
         $arrFields = array();
-        $arrFields["rating_history_id"]     = array("char20", false);
+        $arrFields["rating_history_id"] = array("char20", false);
         $arrFields["rating_history_rating"] = array("char20", true);
-        $arrFields["rating_history_user"]   = array("char20", true);
-        $arrFields["rating_history_timestamp"]= array("int", true);
-        $arrFields["rating_history_value"]  = array("double", true);
+        $arrFields["rating_history_user"] = array("char20", true);
+        $arrFields["rating_history_timestamp"] = array("int", true);
+        $arrFields["rating_history_value"] = array("double", true);
 
-        if(!$this->objDB->createTable("rating_history", $arrFields, array("rating_history_id")))
+        if (!$this->objDB->createTable("rating_history", $arrFields, array("rating_history_id"))) {
             $strReturn .= "An error occurred! ...\n";
+        }
 
 
-		//register the module
-		$strSystemID = $this->registerModule(
+        //register the module
+        $strSystemID = $this->registerModule(
             "rating",
-             _rating_modul_id_,
-             "RatingPortal.php",
-             "",
+            _rating_modul_id_,
+            "RatingPortal.php",
+            "",
             $this->objMetadata->getStrVersion(),
-             false,
-             "RatingPortalXml.php"
+            false,
+            "RatingPortalXml.php"
         );
 
         $strReturn .= "Module registered. Module-ID: ".$strSystemID." \n";
 
         $strReturn .= "Setting aspect assignments...\n";
-        if(SystemAspect::getAspectByName("content") != null) {
+        if (SystemAspect::getAspectByName("content") != null) {
             $objModule = SystemModule::getModuleByName($this->objMetadata->getStrTitle());
             $objModule->setStrAspect(SystemAspect::getAspectByName("content")->getSystemid());
             $objModule->updateObjectToDb();
         }
 
-		return $strReturn;
+        return $strReturn;
 
-	}
+    }
 
     /**
      * Validates whether the current module/element is removable or not.
@@ -76,7 +79,8 @@ class InstallerRating extends InstallerBase implements InstallerRemovableInterfa
      *
      * @return bool
      */
-    public function isRemovable() {
+    public function isRemovable()
+    {
         return true;
     }
 
@@ -88,12 +92,13 @@ class InstallerRating extends InstallerBase implements InstallerRemovableInterfa
      *
      * @return bool
      */
-    public function remove(&$strReturn) {
+    public function remove(&$strReturn)
+    {
 
         /** @var RatingRate $objOneObject */
-        foreach(RatingRate::getObjectList() as $objOneObject) {
+        foreach (RatingRate::getObjectList() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
-            if(!$objOneObject->deleteObjectFromDatabase()) {
+            if (!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";
                 return false;
             }
@@ -102,15 +107,15 @@ class InstallerRating extends InstallerBase implements InstallerRemovableInterfa
         //delete the module-node
         $strReturn .= "Deleting the module-registration...\n";
         $objModule = SystemModule::getModuleByName($this->objMetadata->getStrTitle(), true);
-        if(!$objModule->deleteObjectFromDatabase()) {
+        if (!$objModule->deleteObjectFromDatabase()) {
             $strReturn .= "Error deleting module, aborting.\n";
             return false;
         }
 
         //delete the tables
-        foreach(array("rating", "rating_history") as $strOneTable) {
+        foreach (array("rating", "rating_history") as $strOneTable) {
             $strReturn .= "Dropping table ".$strOneTable."...\n";
-            if(!$this->objDB->_pQuery("DROP TABLE ".$this->objDB->encloseTableName(_dbprefix_.$strOneTable)."", array())) {
+            if (!$this->objDB->_pQuery("DROP TABLE ".$this->objDB->encloseTableName(_dbprefix_.$strOneTable)."", array())) {
                 $strReturn .= "Error deleting table, aborting.\n";
                 return false;
             }
@@ -121,29 +126,29 @@ class InstallerRating extends InstallerBase implements InstallerRemovableInterfa
     }
 
 
-    public function update() {
-	    $strReturn = "";
+    public function update()
+    {
+        $strReturn = "";
         //check installed version and to which version we can update
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
 
         $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
 
-
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.5") {
+        if ($arrModule["module_version"] == "4.5") {
             $strReturn .= "Updating 4.5 to 4.6...\n";
             $this->updateModuleVersion("rating", "4.6");
         }
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.6") {
+        if ($arrModule["module_version"] == "4.6") {
             $strReturn .= "Updating to 4.7...\n";
             $this->updateModuleVersion("rating", "4.7");
         }
 
         return $strReturn."\n\n";
-	}
+    }
 
 
 }
