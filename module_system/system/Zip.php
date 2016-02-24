@@ -35,7 +35,7 @@ class Zip
      */
     public function __construct()
     {
-        if (!class_exists("ZipArchive")) {
+        if (!class_exists("ZipArchive")) {//TODO use namespace
             throw new Exception("current installation has no support for ZipArchive", Exception::$level_ERROR);
         }
 
