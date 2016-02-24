@@ -328,21 +328,8 @@ class SystemChangelog
             return self::$bitChangelogEnabled;
         }
 
-//        if(class_module_system_setting::getConfigValue("_system_changehistory_enabled_") != "true") {
-//            self::$bitChangelogEnabled = false;
-//            return false;
-//        }
-
         if (!$objSourceModel instanceof VersionableInterface) {
             throw new Exception("object passed to create changelog not implementing VersionableInterface", Exception::$level_ERROR);
-        }
-
-
-        //changes require at least kajona 3.4.9
-        $arrModul = SystemModule::getPlainModuleData("system");
-        if (version_compare($arrModul["module_version"], "3.4.9") < 0) {
-            self::$bitChangelogEnabled = false;
-            return false;
         }
 
         self::$bitChangelogEnabled = true;

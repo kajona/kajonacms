@@ -14,18 +14,21 @@ namespace Kajona\System\System;
  * @since 4.5
  * @author sidler@mulchprod.de
  */
-interface SysteminfoInterface extends GenericPluginInterface {
+interface SysteminfoInterface extends GenericPluginInterface
+{
 
     const STR_EXTENSION_POINT = "core.system.systeminfo";
 
     /**
      * Returns the title of the info-block
+     *
      * @return string
      */
     public function getStrTitle();
 
     /**
      * Returns the contents of the info-block
+     *
      * @return array
      */
     public function getArrContent();

@@ -22,8 +22,6 @@ class Toolkit
     protected $arrModul = array();
     protected $strSystemid = 0; //Current Systemid
     /**
-     * Instance of class_template
-     *
      * @var Template
      * @todo move to di container inject
      */

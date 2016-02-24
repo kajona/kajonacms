@@ -2,8 +2,6 @@
 /*"******************************************************************************************************
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id: class_changelog_provider_settings.php 6322 2014-01-02 08:31:49Z sidler $                      *
 ********************************************************************************************************/
 
 namespace Kajona\System\System;
@@ -16,13 +14,15 @@ namespace Kajona\System\System;
  * @author sidler@mulchprod.de
  * @since 4.5
  */
-class SysteminfoTime implements SysteminfoInterface {
+class SysteminfoTime implements SysteminfoInterface
+{
     /**
      * Returns the title of the info-block
      *
      * @return string
      */
-    public function getStrTitle() {
+    public function getStrTitle()
+    {
         return Carrier::getInstance()->getObjLang()->getLang("timeinfo", "system");
     }
 
@@ -31,16 +31,17 @@ class SysteminfoTime implements SysteminfoInterface {
      *
      * @return mixed
      */
-    public function getArrContent() {
+    public function getArrContent()
+    {
         $strOldTimezone = date_default_timezone_get();
         $objLang = Carrier::getInstance()->getObjLang();
         $arrReturn = array();
         $arrReturn[] = array($objLang->getLang("time_phptimestamp", "system"), time());
-        $arrReturn[] = array($objLang->getLang("time_systemtimezone", "system"),  date_default_timezone_get());
-        $arrReturn[] = array($objLang->getLang("time_localsystemtime", "system"),  timeToString(time()));
+        $arrReturn[] = array($objLang->getLang("time_systemtimezone", "system"), date_default_timezone_get());
+        $arrReturn[] = array($objLang->getLang("time_localsystemtime", "system"), timeToString(time()));
         date_default_timezone_set("UTC");
-        $arrReturn[] = array($objLang->getLang("time_systemtime_UTC", "system"),  date('Y-m-d H:i:s'));
-        $arrReturn[] = array($objLang->getLang("time_systemzone_manual_setting", "system"),  SystemSetting::getConfigValue("_system_timezone_"));
+        $arrReturn[] = array($objLang->getLang("time_systemtime_UTC", "system"), date('Y-m-d H:i:s'));
+        $arrReturn[] = array($objLang->getLang("time_systemzone_manual_setting", "system"), SystemSetting::getConfigValue("_system_timezone_"));
 
         date_default_timezone_set($strOldTimezone);
         return $arrReturn;
@@ -51,7 +52,8 @@ class SysteminfoTime implements SysteminfoInterface {
      *
      * @return string
      */
-    public static function getExtensionName() {
+    public static function getExtensionName()
+    {
         return SysteminfoInterface::STR_EXTENSION_POINT;
     }
 
