@@ -9,7 +9,7 @@ namespace Kajona\System\System;
 
 
 /**
- * Model for a single session. Session are managed by class_session, so there should be no need
+ * Model for a single session. Session are managed by Session, so there should be no need
  * to create instances directly.
  * Session-Entries are not reflected by a systemrecord
  *
@@ -21,10 +21,12 @@ namespace Kajona\System\System;
  *
  * @blockFromAutosave
  */
-class SystemSession extends Model implements ModelInterface {
+class SystemSession extends Model implements ModelInterface
+{
 
     /**
      * Internal session id. used to validate if the current session was already persisted to the database.
+     *
      * @var string
      */
     private $strDbSystemid = "";
@@ -48,7 +50,8 @@ class SystemSession extends Model implements ModelInterface {
      *
      * @param string $strSystemid (use "" on new objects)
      */
-    public function __construct($strSystemid = "") {
+    public function __construct($strSystemid = "")
+    {
         $this->strLoginstatus = self::$LOGINSTATUS_LOGGEDOUT;
 
         //base class
@@ -61,16 +64,19 @@ class SystemSession extends Model implements ModelInterface {
      *
      * @return string
      */
-    public function getStrDisplayName() {
+    public function getStrDisplayName()
+    {
         return $this->getSystemid();
     }
 
 
     /**
      * Initalises the current object, if a systemid was given
+     *
      * @return void
      */
-    protected function initObjectInternal() {
+    protected function initObjectInternal()
+    {
 
         $strQuery = "SELECT * FROM "._dbprefix_."session WHERE session_id = ?";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
@@ -78,7 +84,7 @@ class SystemSession extends Model implements ModelInterface {
         //avoid useless query, set internal row
         $this->setArrInitRow(array("system_id" => ""));
 
-        if(count($arrRow) > 1) {
+        if (count($arrRow) > 1) {
             $this->setStrPHPSessionId($arrRow["session_phpid"]);
             $this->setStrUserid($arrRow["session_userid"]);
             $this->setStrGroupids($arrRow["session_groupids"]);
@@ -101,15 +107,16 @@ class SystemSession extends Model implements ModelInterface {
      * @return bool
      * @overwrite \Kajona\System\System\Model::updateObjectToDb() due to performance issues
      */
-    public function updateObjectToDb($strPrevId = false) {
+    public function updateObjectToDb($strPrevId = false)
+    {
 
         $this->bitValid = true;
 
-        if($this->strDbSystemid == "") {
+        if ($this->strDbSystemid == "") {
             $this->strDbSystemid = $this->getSystemid();
 
-            //only relevant for special conditions, no usage in real world scenarios since handled by class_session
-            if(!validateSystemid($this->strDbSystemid)) {
+            //only relevant for special conditions, no usage in real world scenarios since handled by Session
+            if (!validateSystemid($this->strDbSystemid)) {
                 $this->strDbSystemid = generateSystemid();
                 $this->setSystemid($this->strDbSystemid);
             }
@@ -179,7 +186,8 @@ class SystemSession extends Model implements ModelInterface {
      *
      * @return bool
      */
-    protected function updateStateToDb() {
+    protected function updateStateToDb()
+    {
         return true;
     }
 
@@ -189,7 +197,8 @@ class SystemSession extends Model implements ModelInterface {
      *
      * @return bool
      */
-    public function deleteObjectFromDatabase() {
+    public function deleteObjectFromDatabase()
+    {
         Logger::getInstance()->addLogRow("deleted session ".$this->getSystemid(), Logger::$levelInfo);
         //start with the module-table
         $strQuery = "DELETE FROM "._dbprefix_."session WHERE session_id = ?";
@@ -198,9 +207,11 @@ class SystemSession extends Model implements ModelInterface {
 
     /**
      * Overwritten, no real delete required
+     *
      * @return bool
      */
-    public function deleteObject() {
+    public function deleteObject()
+    {
         return $this->deleteObjectFromDatabase();
     }
 
@@ -212,12 +223,15 @@ class SystemSession extends Model implements ModelInterface {
      *
      * @return SystemSession
      */
-    public static function getSessionById($strSessionid) {
+    public static function getSessionById($strSessionid)
+    {
         $objSession = new SystemSession($strSessionid);
-        if($objSession->isSessionValid())
+        if ($objSession->isSessionValid()) {
             return $objSession;
-        else
+        }
+        else {
             return null;
+        }
     }
 
 
@@ -229,14 +243,16 @@ class SystemSession extends Model implements ModelInterface {
      *
      * @return SystemSession[]
      */
-    public static function getAllActiveSessions($intStart = null, $intEnd = null) {
+    public static function getAllActiveSessions($intStart = null, $intEnd = null)
+    {
 
         $strQuery = "SELECT session_id FROM "._dbprefix_."session WHERE session_releasetime > ? ORDER BY session_releasetime DESC, session_id ASC";
         $arrIds = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array(time()), $intStart, $intEnd);
 
         $arrReturn = array();
-        foreach($arrIds as $arrOneId)
+        foreach ($arrIds as $arrOneId) {
             $arrReturn[] = new SystemSession($arrOneId["session_id"]);
+        }
 
         return $arrReturn;
     }
@@ -246,7 +262,8 @@ class SystemSession extends Model implements ModelInterface {
      *
      * @return int
      */
-    public static function getNumberOfActiveSessions() {
+    public static function getNumberOfActiveSessions()
+    {
         $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."session WHERE session_releasetime > ?";
 
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array(time()));
@@ -259,11 +276,14 @@ class SystemSession extends Model implements ModelInterface {
      *
      * @return bool
      */
-    public function isLoggedIn() {
-        if($this->isSessionValid() && $this->getStrLoginstatus() == self::$LOGINSTATUS_LOGGEDIN)
+    public function isLoggedIn()
+    {
+        if ($this->isSessionValid() && $this->getStrLoginstatus() == self::$LOGINSTATUS_LOGGEDIN) {
             return true;
-        else
+        }
+        else {
             return false;
+        }
     }
 
     /**
@@ -271,7 +291,8 @@ class SystemSession extends Model implements ModelInterface {
      *
      * @return bool
      */
-    public static function deleteInvalidSessions() {
+    public static function deleteInvalidSessions()
+    {
         $strSql = "DELETE FROM "._dbprefix_."session WHERE session_releasetime < ?";
         return Carrier::getInstance()->getObjDB()->_pQuery($strSql, array(time()));
     }
@@ -279,114 +300,136 @@ class SystemSession extends Model implements ModelInterface {
     /**
      * @return bool
      */
-    public function isSessionValid() {
+    public function isSessionValid()
+    {
         return $this->bitValid && $this->getIntReleasetime() > time();
     }
 
 
     /**
      * @param string $strPHPSessId
+     *
      * @return void
      */
-    public function setStrPHPSessionId($strPHPSessId) {
+    public function setStrPHPSessionId($strPHPSessId)
+    {
         $this->strPHPSessionId = $strPHPSessId;
     }
 
     /**
      * @param string $strUserid
+     *
      * @return void
      */
-    public function setStrUserid($strUserid) {
+    public function setStrUserid($strUserid)
+    {
         $this->strUserid = $strUserid;
     }
 
     /**
      * @param string $strGroupids
+     *
      * @return void
      */
-    public function setStrGroupids($strGroupids) {
+    public function setStrGroupids($strGroupids)
+    {
         $this->strGroupids = $strGroupids;
     }
 
     /**
      * @param int $intReleasetime
+     *
      * @return void
      */
-    public function setIntReleasetime($intReleasetime) {
+    public function setIntReleasetime($intReleasetime)
+    {
         $this->intReleasetime = $intReleasetime;
     }
 
     /**
      * @param string $strLoginprovider
+     *
      * @return void
      */
-    public function setStrLoginprovider($strLoginprovider) {
+    public function setStrLoginprovider($strLoginprovider)
+    {
         $this->strLoginprovider = $strLoginprovider;
     }
 
     /**
      * @param string $strLasturl
+     *
      * @return void
      */
-    public function setStrLasturl($strLasturl) {
+    public function setStrLasturl($strLasturl)
+    {
         //limit to 255 chars
         $this->strLasturl = uniStrTrim($strLasturl, 450, "");
     }
 
     /**
      * @param string $strLoginstatus
+     *
      * @return void
      */
-    public function setStrLoginstatus($strLoginstatus) {
+    public function setStrLoginstatus($strLoginstatus)
+    {
         $this->strLoginstatus = $strLoginstatus;
     }
 
     /**
      * @return string
      */
-    public function getStrPHPSessionId() {
+    public function getStrPHPSessionId()
+    {
         return $this->strPHPSessionId;
     }
 
     /**
      * @return string
      */
-    public function getStrUserid() {
+    public function getStrUserid()
+    {
         return $this->strUserid;
     }
 
     /**
      * @return string
      */
-    public function getStrGroupids() {
+    public function getStrGroupids()
+    {
         return $this->strGroupids;
     }
 
     /**
      * @return int
      */
-    public function getIntReleasetime() {
+    public function getIntReleasetime()
+    {
         return $this->intReleasetime;
     }
 
     /**
      * @return string
      */
-    public function getStrLoginprovider() {
+    public function getStrLoginprovider()
+    {
         return $this->strLoginprovider;
     }
 
     /**
      * @return string
      */
-    public function getStrLasturl() {
+    public function getStrLasturl()
+    {
         return $this->strLasturl;
     }
 
     /**
      * @return string
      */
-    public function getStrLoginstatus() {
+    public function getStrLoginstatus()
+    {
         return $this->strLoginstatus;
     }
 

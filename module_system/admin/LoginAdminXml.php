@@ -7,7 +7,6 @@
 
 namespace Kajona\System\Admin;
 
-use Kajona\System\System\AbstractController;
 use Kajona\System\System\HttpStatuscodes;
 use Kajona\System\System\ResponseObject;
 use Kajona\System\System\Wadlgenerator;
@@ -24,12 +23,14 @@ use Kajona\System\System\Wadlgenerator;
  * @module login
  * @moduleId _user_modul_id_
  */
-class LoginAdminXml extends AdminController implements XmlAdminInterface {
+class LoginAdminXml extends AdminController implements XmlAdminInterface
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
 
-        if($this->getAction() == "list") {
+        if ($this->getAction() == "list") {
             $this->setAction("login");
         }
     }
@@ -44,7 +45,8 @@ class LoginAdminXml extends AdminController implements XmlAdminInterface {
      * @return string
      *
      */
-    protected function actionGetRecentMessages() {
+    protected function actionGetRecentMessages()
+    {
         ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
         return "<error>".$this->getLang("commons_error_permissions")."</error>";
     }
@@ -55,20 +57,21 @@ class LoginAdminXml extends AdminController implements XmlAdminInterface {
      *
      * @return string
      */
-    protected function actionLogin() {
+    protected function actionLogin()
+    {
 
-        if($this->objSession->login($this->getParam("username"), $this->getParam("password"))) {
+        if ($this->objSession->login($this->getParam("username"), $this->getParam("password"))) {
             //user allowed to access admin?
-            if(!$this->objSession->isAdmin()) {
+            if (!$this->objSession->isAdmin()) {
                 //no, reset session
                 $this->objSession->logout();
             }
 
-            return "<message><success>" . xmlSafeString($this->getLang("login_xml_succeess", "system")) . "</success></message>";
+            return "<message><success>".xmlSafeString($this->getLang("login_xml_succeess", "system"))."</success></message>";
         }
         else {
             ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
-            return "<message><error>" . xmlSafeString($this->getLang("login_xml_error", "system")) . "</error></message>";
+            return "<message><error>".xmlSafeString($this->getLang("login_xml_error", "system"))."</error></message>";
         }
     }
 
@@ -77,9 +80,10 @@ class LoginAdminXml extends AdminController implements XmlAdminInterface {
      *
      * @return string
      */
-    protected function actionLogout() {
+    protected function actionLogout()
+    {
         $this->objSession->logout();
-        return "<message><success>" . xmlSafeString($this->getLang("logout_xml", "system")) . "</success></message>";
+        return "<message><success>".xmlSafeString($this->getLang("logout_xml", "system"))."</success></message>";
     }
 
 
@@ -89,7 +93,8 @@ class LoginAdminXml extends AdminController implements XmlAdminInterface {
      * @return string
      * @xml
      */
-    protected function actionWADL() {
+    protected function actionWADL()
+    {
         $objWadl = new Wadlgenerator("admin", "login");
         $objWadl->addIncludeGrammars("http://apidocs.kajona.de/xsd/message.xsd");
 

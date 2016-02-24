@@ -3,8 +3,6 @@
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id: interface_xml.php 6322 2014-01-02 08:31:49Z sidler $                                         *
 ********************************************************************************************************/
 
 namespace Kajona\Search\System;
@@ -18,7 +16,8 @@ namespace Kajona\Search\System;
  * @package module_search
  * @since 4.5
  */
-interface SearchEventidentifier {
+interface SearchEventidentifier
+{
 
 
     /**
@@ -35,7 +34,6 @@ interface SearchEventidentifier {
      *
      */
     const EVENT_SEARCH_OBJECTINDEXED = "core.search.objectindexed";
-
 
 
 }

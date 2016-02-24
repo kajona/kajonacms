@@ -385,13 +385,20 @@ abstract class ElementAdmin extends AdminController implements SearchPortalobjec
      */
     private function getValidatorInstance($strName)
     {
-        $strClassname = ucfirst($strName)."Validator";
-        $strPath = Resourceloader::getInstance()->getPathForFile("/system/validators/".$strClassname.".php");
-        if ($strPath) {
-            return Classloader::getInstance()->getInstanceFromFilename($strPath);
+
+        if (class_exists($strName)) {
+            return new $strName();
+        }
+
+        if (uniStrpos($strName, "class_") === false) {
+            $strName = "class_".$strName."_validator";
+        }
+
+        if (Resourceloader::getInstance()->getPathForFile("/system/validators/".$strName.".php")) {
+            return new $strName();
         }
         else {
-            throw new Exception("failed to load validator of type ".$strClassname, Exception::$level_ERROR);
+            throw new Exception("failed to load validator of type ".$strName, Exception::$level_ERROR);
         }
     }
 

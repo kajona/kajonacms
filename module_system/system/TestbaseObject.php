@@ -13,8 +13,8 @@ use RuntimeException;
  * <code>
  * <?xml version="1.0"?>
  * <objects>
- *  <object name="page_1" class="class_module_pages_page" strName="Page 1">
- *   <object name="page_2" class="class_module_pages_page" strName="Page 2" />
+ *  <object name="page_1" class="PagesPage" strName="Page 1">
+ *   <object name="page_2" class="PagesPage" strName="Page 2" />
  *  </object>
  * </objects>
  * </code>
@@ -169,7 +169,7 @@ abstract class TestbaseObject extends Testbase
             throw new RuntimeException('No class name given for object "' . $strName . '" (' . $objElement->getNodePath() . ')');
         }
 
-        if ($strClassName == "class_module_user_user") {
+        if ($strClassName == "Kajona\\System\\System\\UserUser") {
             $objObject = $this->createFixtureUser($objElement, $objParent, $strClassName, $arrParameters, $strName);
         } else {
             $objObject = $this->createFixtureObject($objElement, $objParent, $strClassName, $arrParameters, $strName);

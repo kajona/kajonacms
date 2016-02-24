@@ -112,8 +112,8 @@ abstract class Testbase extends PHPUnit_Framework_TestCase
         $arrProperties = $objReflection->getPropertiesWithAnnotation(OrmBase::STR_ANNOTATION_TABLECOLUMN);
         $arrProperties = array_merge($objReflection->getPropertiesWithAnnotation(OrmBase::STR_ANNOTATION_OBJECTLIST), $arrProperties);
 
-        //exclude class_root properties
-        $objRootReflection = new Reflection("class_root");
+        //exclude Root properties
+        $objRootReflection = new Reflection("Kajona\\System\\System\\Root");
         $arrExcludeFillProperty = array_merge($arrExcludeFillProperty, array_keys($objRootReflection->getPropertiesWithAnnotation(OrmBase::STR_ANNOTATION_TABLECOLUMN)));
 
         foreach ($arrProperties as $strPropName => $strValue) {

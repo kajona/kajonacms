@@ -34,7 +34,7 @@ Firstly, the properties of the class should map to a target-table. Therefore, th
 	/**
 	* @targetTable object.object_id
 	*/
-	class class_basic_object {
+	class BasicObject {
 	
 	}
 	
@@ -45,7 +45,7 @@ Still missing are the properties themselves. A single property is mapped to a si
 	/**
 	* @targetTable object.object_id
 	*/
-	class class_basic_object {
+	class BasicObject {
 	
 	/**
 	* @tableColumn object.property1
@@ -65,7 +65,7 @@ The are two mandatory annotations:
 
 ``@tableColumn``: The name of the column the value is written to and read from
 
-``@tableColumnDatatype``: The data-type of the mapped column. An overview of possible data-types is available here: https://github.com/kajona/kajonacms/blob/master/module_system/system/class_db_datatypes.php
+``@tableColumnDatatype``: The data-type of the mapped column. An overview of possible data-types is available here: https://github.com/kajona/kajonacms/blob/master/module_system/system/DbDatatypes.php
  
 Schematically, the OR mapper will create the following schema and mapping:
  
@@ -76,7 +76,7 @@ Schematically, the OR mapper will create the following schema and mapping:
 	+---------------------------------------------------------------------------+
 	|                          |                   |                            |
 	+---------------------------------------------------------------------------+
-	  -> class_basic_object             $strProperty1        $strProperty2
+	  -> BasicObject               $strProperty1        $strProperty2
 	+---------------------------------------------------------------------------+
  
 Hint: In order to read and write property-values, getters and setters need to be present for all mapped properties:
@@ -84,7 +84,7 @@ Hint: In order to read and write property-values, getters and setters need to be
 	/**
 	* @targetTable object.object_id
 	*/
-	class class_basic_object {
+	class BasicObject {
 	
 	/**
 	* @tableColumn object.property1
@@ -135,7 +135,7 @@ Finally, a commented example making use of all annotations:
 	* @targetTable object.object_id
 	* @targetTableTxSafe false
 	*/
-	class class_basic_object {
+	class BasicObject {
 	
 	/**
 	* @tableColumn object.property1
@@ -194,27 +194,27 @@ Finally, a commented example making use of all annotations:
 
 ##ORM Objectlist
 To fetch a list of objects from the database, the OR object-list class is the way to go.
-Basically, fetching a list of objects (e.g. of type class_basic_object) is as easy as the following:
+Basically, fetching a list of objects (e.g. of type BasicObject) is as easy as the following:
 
-	$objORM = new class_orm_objectlist();
-	$arrList = $objORM->getObjectList("class_basic_object");
+	$objORM = new OrmObjectlist();
+	$arrList = $objORM->getObjectList("BasicObject");
 
-This would load all instances of class_basic_object currently known to the database.
+This would load all instances of BasicObject currently known to the database.
 If you want to limit the result, either by a given parent-id or by setting a limit to the result, feel free to use the full api:
 
-	$objORM = new class_orm_objectlist();
-	$arrList = $objORM->getObjectList("class_basic_object", $strParentId, $intStart, $intEnd);
+	$objORM = new OrmObjectlist();
+	$arrList = $objORM->getObjectList("BasicObject", $strParentId, $intStart, $intEnd);
 
 Side-hint: If you only want to count the number of objects instead of loading them, change getObjectList to getObjectCount:
 
-	$objORM = new class_orm_objectlist();
-	$intCount = $objORM->getObjectCount("class_basic_object");
+	$objORM = new OrmObjectlist();
+	$intCount = $objORM->getObjectCount("BasicObject");
 
-Nevertheless, in many cases you may want to add restrictions to the list-query (WHERE restrictions when talking about sql). Therefore you may add class_orm_objectlist_restriction instances to the list-query:
+Nevertheless, in many cases you may want to add restrictions to the list-query (WHERE restrictions when talking about sql). Therefore you may add OrmObjectlistRestriction instances to the list-query:
 
-	$objOrmList = new class_orm_objectlist();
-	$objOrmList->addWhereRestriction(new class_orm_objectlist_restriction("AND custnr = ?", array($intNumber)));
-	$arrReturn = $objOrmList->getObjectList("class_basic_object");
+	$objOrmList = new OrmObjectlist();
+	$objOrmList->addWhereRestriction(new OrmObjectlistRestriction("AND custnr = ?", array($intNumber)));
+	$arrReturn = $objOrmList->getObjectList("BasicObject");
 
 In this case, a filter is set on the custnr column. You may add multiple restrictions to filter the list by more then one criteria.
  
@@ -233,37 +233,36 @@ Just mark the relevant property with @listOrder ASC/DESC. As soon as this annota
 	
 Programmatically:
 
-	$objOrmList = new class_orm_objectlist();
-	$objOrmList->addWhereRestriction(new class_orm_objectlist_restriction("AND custnr > ?", array($intNumber)));
-	$ objOrmList ->addOrderBy(new class_orm_objectlist_orderby("anotherproperty DESC"));
+	$objOrmList = new OrmObjectlist();
+	$objOrmList->addWhereRestriction(new OrmObjectlistRestriction("AND custnr > ?", array($intNumber)));
+	$ objOrmList ->addOrderBy(new OrmObjectlistOrderby("anotherproperty DESC"));
 	
-	$arrReturn = $objOrmList->getObjectList("class_basic_object");
+	$arrReturn = $objOrmList->getObjectList("BasicObject");
 	
-In this case a list of instances of class_basic_object is fetched, filtered by a custnr greater than ``$intNumber``, order by anotherpropery in descending order.
+In this case a list of instances of BasicObject is fetched, filtered by a custnr greater than ``$intNumber``, order by anotherpropery in descending order.
  
 Hint: Queries generated by the OR mapper are joined with the system- and system-permissions-tables automatically. This means you may use columns of the system-table within your restrictions and order-by definitions, e.g.:
 
-	$objOrmList = new class_orm_objectlist();
-	$objOrmList->addWhereRestriction(new class_orm_objectlist_restriction("AND custnr > ?", array($intNumber)));
-	$ objOrmList ->addOrderBy(new class_orm_objectlist_orderby("system_date_start
-	DESC"));
+	$objOrmList = new OrmObjectlist();
+	$objOrmList->addWhereRestriction(new OrmObjectlistRestriction("AND custnr > ?", array($intNumber)));
+	$ objOrmList ->addOrderBy(new OrmObjectlistOrderby("system_date_start DESC"));
 
-	$arrReturn = $objOrmList->getObjectList("class_basic_object");
+	$arrReturn = $objOrmList->getObjectList("BasicObject");
 	
 	
 ##ORM Object Init
 
 In nearly all cases, the initialization of an object is done by the framework automatically. When loading an object from the database (based on a system-id), the way to go would be to use the objectfactory:
 
-	class_objectfactory::getInstance()->getObject($strSytemid)
+	Objectfactory::getInstance()->getObject($strSytemid)
 
 In this case all the frameworks glory comes into the game: The system is able to determine the class-type oft he record with the passed system-id and initializes the object with all values currently mapped between columns and properties.
 Internally, the init-method makes use of the OR object-init class.
 So, just for the sake of completeness, this are the lines triggered internally:
 
-	$objInstanceToInit = new class_basic_object();
+	$objInstanceToInit = new BasicObject();
 	$objInstanceToInit->setSystemid($strSytemid);
-	$objORM = new class_orm_objectinit($objInstanceToInit);
+	$objORM = new OrmObjectinit($objInstanceToInit);
 	$objORM->initObjectFromDb();
 	
 This results in a fully initialized object. The queries to load all relevant data are generated internally (or they are even skipped if the data is already in the internal cache).	
@@ -272,13 +271,13 @@ This results in a fully initialized object. The queries to load all relevant dat
 When it comes to writing an objects’ property-values back to the database, the object-update mapper will step in. Basically, the mapper works internally and there’s no need to call it directly.
 In common scenarios, you will call updateObjectToDb() on the source-object itself:
 	
-	$objInstance = new class_basic_object($strSystemid);
+	$objInstance = new BasicObject($strSystemid);
 	$objInstance->setIntCustomerNr(25);
 	$objInstance->updateObjectToDb();
 	
 That’s it - the objects state is persisted to the database. Internally, the object-update-handler is triggered and there should be no real-word scenario to write the following lines in your application:
 
-	$objORMapper = new class_orm_objectupdate($objInstance);
+	$objORMapper = new OrmObjectupdate($objInstance);
 	$objORMapper->updateStateToDb();
 
 When it comes to saving the properties to the database, all values are checked for possibly dangerous characters, those will be escaped automatically. For some cases, such as values from a wysiwyg editor (and therefore containing html characters) this escaping should be skipped. Therefore another annotation comes into the game: ``@blockEscaping`.
@@ -312,7 +311,7 @@ On property level:
 Mandatory:
 ``@tableColumn name.columnName`` -> The name of the targetTable and the name of the column the property is mapped to
 
-``@tableColumnDatatype`` text -> The data-type of the column, see https://github.com/kajona/kajonacms/blob/master/module_system/system/class_db_datatypes.php for a full list. 
+``@tableColumnDatatype`` text -> The data-type of the column, see https://github.com/kajona/kajonacms/blob/master/module_system/system/DbDatatypes.php for a full list. 
 
 The keywords are mapped to database-specific datatypes by the driver for the current RDBMS.
  
@@ -335,7 +334,7 @@ Example:
 	* @targetTable object.object_id
 	* @targetTableTxSafe false
 	*/
-	class class_basic_object {
+	class BasicObject {
 	
 	/**
 	* @tableColumn object.property1
@@ -370,8 +369,8 @@ Example:
 	
 In order to generate a table based on all those annotations, you only need two lines:
 
-	$objSchemamanager = new class_orm_schemamanager();
-	$objSchemamanager->createTable("class_basic_object");
+	$objSchemamanager = new OrmSchemamanager();
+	$objSchemamanager->createTable("BasicObject");
 
 On MySQL, this results in a table based on the following DDL:
 	
@@ -404,7 +403,7 @@ In most cases, you don’t need to interact with the cache at all.  Since everyt
 ###Flushing the cache
 This is always possible, and in rare scenarios even required:
 
-	class_orm_rowcache::flushCache();
+	OrmRowcache::flushCache();
 	
 ###Adding rows to the cache
 
@@ -422,14 +421,15 @@ Sometimes useful, e.g. if you trigger a complex query and want to initialize obj
 	AND faqsmem_category = ?
 	ORDER BY faqs_question ASC";
 
-	$arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strFilter), $intStart, $intEnd);
+	$arrRows = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strFilter), $intStart, $intEnd);
 
-	class_orm_rowcache::addArrayOfInitRows ($arrRows);
+
+	OrmRowcache::addArrayOfInitRows ($arrRows);
 
 Since the query loads faq entries, the following statements would be fulfilled without a single database-query:
 
-	$objFaq = new class_module_faqs_faq($arrRows[0]["system_id"]);
+	$objFaq = new FaqsFaq($arrRows[0]["system_id"]);
 
-	$objFaq = class_objectfactory::getInstance()->getObject($arrRows[0]["system_id"]);
+	$objFaq = Objectfactory::getInstance()->getObject($arrRows[0]["system_id"]);
 	
 	

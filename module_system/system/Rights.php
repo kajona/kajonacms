@@ -34,8 +34,6 @@ class Rights
 
 
     /**
-     * class_db
-     *
      * @var Database
      */
     private $objDb = null;
@@ -855,7 +853,7 @@ class Rights
 
     /**
      * Adds a row to the internal cache.
-     * Only to be used in combination with class_roots setArrInitRow.
+     * Only to be used in combination with Root::setArrInitRow.
      *
      * @param array $arrRow
      *

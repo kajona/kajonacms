@@ -184,7 +184,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
         if ($objListEntry instanceof UserUser && $objListEntry->rightDelete()) {
 
             if ($objListEntry->getSystemid() == Carrier::getInstance()->getObjSession()->getUserID()) {
-                return $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_deleteDisabled", $this->getLang("user_loeschen_x")));
+                return $this->objToolkit->listButton(AdminskinHelper::getAdminImage("icon_deleteDisabled", $this->getLang("user_loeschen_x")));
             }
             else {
                 return $this->objToolkit->listDeleteButton($objListEntry->getStrDisplayName(), $this->getLang("user_loeschen_frage"), Link::getLinkAdminHref($this->getArrModule("modul"), "deleteUser", "&systemid=".$objListEntry->getSystemid()));

@@ -5,13 +5,10 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 namespace Kajona\System\Installer;
-use class_classloader;
-use class_db;
-use class_module_languages_language;
-use interface_sc_installer;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
 use Kajona\System\System\Classloader;
+use Kajona\System\System\Database;
 use Kajona\System\System\LanguagesLanguage;
 use Kajona\System\System\SamplecontentInstallerInterface;
 
@@ -23,7 +20,7 @@ use Kajona\System\System\SamplecontentInstallerInterface;
 class InstallerSamplecontentZZLanguages implements SamplecontentInstallerInterface  {
 
     /**
-     * @var class_db
+     * @var Database
      */
     private $objDB;
     private $strContentLanguage;

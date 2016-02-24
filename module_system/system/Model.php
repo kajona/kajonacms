@@ -9,12 +9,12 @@
 
 namespace Kajona\System\System;
 
-use class_module_rating_rate;
+use Kajona\Rating\System\RatingRate;
 
 
 /**
  * Top-level class for all model-classes.
- * Please be aware that all logic located in this class will be moved to class_root. This means that this
+ * Please be aware that all logic located in this class will be moved to Root. This means that this
  * class will become useless. It will remain for API-compatibility but without any logic.
  *
  * @package module_system
@@ -33,7 +33,7 @@ abstract class Model extends Root
      *
      * @param bool $bitRound Rounds the rating or disables rounding
      *
-     * @see interface_sortable_rating
+     * @see SortableRatingInterface
      * @return float
      *
      * @todo: with php5.4, ths could be moved to traits
@@ -43,7 +43,7 @@ abstract class Model extends Root
         $floatRating = null;
         $objModule = SystemModule::getModuleByName("rating");
         if ($objModule != null) {
-            $objRating = \class_module_rating_rate::getRating($this->getSystemid());
+            $objRating = RatingRate::getRating($this->getSystemid());
             if ($objRating != null) {
                 $floatRating = $objRating->getFloatRating();
                 if ($bitRound) {
@@ -70,7 +70,7 @@ abstract class Model extends Root
         $bitReturn = false;
         $objModule = SystemModule::getModuleByName("rating");
         if ($objModule != null) {
-            $objRating = class_module_rating_rate::getRating($this->getSystemid());
+            $objRating = RatingRate::getRating($this->getSystemid());
             if ($objRating != null) {
                 $bitReturn = $objRating->isRateableByCurrentUser();
             }
@@ -85,7 +85,7 @@ abstract class Model extends Root
     /**
      * Number of rating for the current file
      *
-     * @see interface_sortable_rating
+     * @see SortableRatingInterface
      * @return int
      *
      * @todo: with php5.4, ths could be moved to traits
@@ -95,7 +95,7 @@ abstract class Model extends Root
         $intHits = 0;
         $objModule = SystemModule::getModuleByName("rating");
         if ($objModule != null) {
-            $objRating = class_module_rating_rate::getRating($this->getSystemid());
+            $objRating = RatingRate::getRating($this->getSystemid());
             if ($objRating != null) {
                 $intHits = $objRating->getIntHits();
             }

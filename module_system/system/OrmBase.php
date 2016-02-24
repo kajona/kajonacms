@@ -56,7 +56,7 @@ abstract class OrmBase
     /**
      * @param Root|VersionableInterface|null $objObject
      */
-    function __construct($objObject = null)
+    public function __construct($objObject = null)
     {
         $this->objObject = $objObject;
         if (self::$bitLogcialDeleteAvailable === null) {
@@ -69,7 +69,7 @@ abstract class OrmBase
     }
 
     /**
-     * @return \class_root|VersionableInterface
+     * @return Root|VersionableInterface
      */
     protected function getObjObject()
     {
@@ -77,7 +77,7 @@ abstract class OrmBase
     }
 
     /**
-     * @param \class_root $objObject
+     * @param Root $objObject
      *
      * @return void
      */
@@ -266,7 +266,7 @@ abstract class OrmBase
 }
 
 /**
- * Most exceptions thrown by the orm system will use the class_orm_exception type in order
+ * Most exceptions thrown by the orm system will use the OrmException type in order
  * to react with special catch-blocks
  */
 class OrmException extends Exception
@@ -275,7 +275,7 @@ class OrmException extends Exception
 }
 
 /**
- * Most exceptions thrown by the orm system will use the class_orm_exception type in order
+ * Most exceptions thrown by the orm system will use the OrmException type in order
  * to react with special catch-blocks
  */
 class class_orm_exception extends OrmException

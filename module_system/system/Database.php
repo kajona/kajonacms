@@ -89,7 +89,7 @@ class Database
         }
         else {
             //Do not throw any exception here, otherwise an endless loop will exit with an overloaded stack frame
-            //throw new class_exception("No db-driver defined!", class_exception::$level_FATALERROR);
+            //throw new Exception("No db-driver defined!", Exception::$level_FATALERROR);
         }
     }
 

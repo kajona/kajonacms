@@ -44,10 +44,12 @@ use ReflectionClass;
  * @author sidler@mulchprod.de
  * @see AdminController::action()
  */
-abstract class AdminController extends AbstractController {
+abstract class AdminController extends AbstractController
+{
 
     /**
      * String containing the current module to be used to load texts
+     *
      * @var array
      */
     private $arrOutput;
@@ -120,7 +122,8 @@ abstract class AdminController extends AbstractController {
      * @return mixed
      * @deprecated
      */
-    public function getModuleData($strName, $bitCache = true) {
+    public function getModuleData($strName, $bitCache = true)
+    {
         return SystemModule::getPlainModuleData($strName, $bitCache);
 
     }
@@ -133,9 +136,10 @@ abstract class AdminController extends AbstractController {
      * @return string "" in case of an error
      * @deprecated
      */
-    public function getModuleSystemid($strModule) {
+    public function getModuleSystemid($strModule)
+    {
         $objModule = SystemModule::getModuleByName($strModule);
-        if($objModule != null) {
+        if ($objModule != null) {
             return $objModule->getSystemid();
         }
         else {
@@ -150,9 +154,10 @@ abstract class AdminController extends AbstractController {
      * @return string
      * @since 3.2.1
      */
-    public function getModuleDescription() {
+    public function getModuleDescription()
+    {
         $strDesc = $this->getLang("module_description");
-        if($strDesc != "!module_description!") {
+        if ($strDesc != "!module_description!") {
             return $strDesc;
         }
         else {
@@ -166,11 +171,13 @@ abstract class AdminController extends AbstractController {
      * Returns the URL at the given position (from HistoryArray)
      *
      * @param int $intPosition
-     * @deprecated use class_history::getAdminHistory() instead
-     * @see class_history::getAdminHistory()
+     *
+     * @deprecated use History::getAdminHistory() instead
+     * @see History::getAdminHistory()
      * @return string
      */
-    protected function getHistory($intPosition = 0) {
+    protected function getHistory($intPosition = 0)
+    {
         $objHistory = new History();
         return $objHistory->getAdminHistory($intPosition);
     }
@@ -187,10 +194,11 @@ abstract class AdminController extends AbstractController {
      * @final
      * @todo could be moved to a general admin-skin helper
      */
-    public final function getModuleOutput() {
+    public final function getModuleOutput()
+    {
 
         //skip rendering everything if we just want to redirect...
-        if($this->strOutput == "" && ResponseObject::getInstance()->getStrRedirectUrl() != "") {
+        if ($this->strOutput == "" && ResponseObject::getInstance()->getStrRedirectUrl() != "") {
             return "";
         }
 
@@ -199,12 +207,12 @@ abstract class AdminController extends AbstractController {
 
         //Calling the content-setter, including a default dialog
         $this->arrOutput["content"] = $this->strOutput;
-        if($this->getArrModule("template") != "/folderview.tpl") {
+        if ($this->getArrModule("template") != "/folderview.tpl") {
             $this->arrOutput["path"] = AdminHelper::getAdminPathNavi($this->getArrOutputNaviEntries(), $this->getArrModule("modul"));
             $this->arrOutput["moduleSitemap"] = $this->objToolkit->getAdminSitemap($this->getArrModule("modul"));
             $this->arrOutput["moduletitle"] = $this->getOutputModuleTitle();
             $this->arrOutput["actionTitle"] = $this->getOutputActionTitle();
-            if(SystemAspect::getActiveObjectCount() > 1) {
+            if (SystemAspect::getActiveObjectCount() > 1) {
                 $this->arrOutput["aspectChooser"] = $this->objToolkit->getAspectChooser($this->getArrModule("modul"), $this->getAction(), $this->getSystemid());
             }
             $this->arrOutput["login"] = $this->getOutputLogin();
@@ -213,7 +221,7 @@ abstract class AdminController extends AbstractController {
         $this->arrOutput["languageswitch"] = (SystemModule::getModuleByName("languages") != null ? SystemModule::getModuleByName("languages")->getAdminInstanceOfConcreteModule()->getLanguageSwitch() : "");
         $this->arrOutput["module_id"] = $this->getArrModule("moduleId");
         $this->arrOutput["webpathTitle"] = urldecode(str_replace(array("http://", "https://"), array("", ""), _webpath_));
-        $this->arrOutput["head"] = "<script type=\"text/javascript\">KAJONA_DEBUG = ".$this->objConfig->getDebug("debuglevel")."; KAJONA_WEBPATH = '"._webpath_."'; KAJONA_BROWSER_CACHEBUSTER = ".SystemSetting::getConfigValue("_system_browser_cachebuster_")."; KAJONA_LANGUAGE = '" . Carrier::getInstance()->getObjLang()->getStrTextLanguage() . "';</script>";
+        $this->arrOutput["head"] = "<script type=\"text/javascript\">KAJONA_DEBUG = ".$this->objConfig->getDebug("debuglevel")."; KAJONA_WEBPATH = '"._webpath_."'; KAJONA_BROWSER_CACHEBUSTER = ".SystemSetting::getConfigValue("_system_browser_cachebuster_")."; KAJONA_LANGUAGE = '".Carrier::getInstance()->getObjLang()->getStrTextLanguage()."';</script>";
         $this->arrOutput["head"] .= "<script type=\"text/javascript\">KAJONA_PHARMAP = ".json_encode(array_values(Classloader::getInstance()->getArrPharModules())).";</script>";
 
         //see if there are any hooks to be called
@@ -222,21 +230,21 @@ abstract class AdminController extends AbstractController {
         //Loading the desired Template
         //if requested the pe, load different template
         $strTemplateID = "";
-        if($this->getParam("peClose") == 1 || $this->getParam("pe") == 1) {
+        if ($this->getParam("peClose") == 1 || $this->getParam("pe") == 1) {
             //add suffix
             try {
                 $strTemplate = "/folderview.tpl";
                 $strTemplateID = $this->objTemplate->readTemplate($strTemplate, "", false, true);
             }
-            catch(Exception $objException) {
+            catch (Exception $objException) {
                 //An error occurred. In most cases, this is because the user ist not logged in, so the login-template was requested.
-                if($this->getArrModule("template") == "/login.tpl") {
+                if ($this->getArrModule("template") == "/login.tpl") {
                     throw new Exception("You have to be logged in to use the portal editor!!!", Exception::$level_ERROR);
                 }
             }
         }
         else {
-            $strTemplateID = $this->objTemplate->readTemplate(AdminskinHelper::getPathForSkin($this->objSession->getAdminSkin()) . $this->getArrModule("template"), "", true);
+            $strTemplateID = $this->objTemplate->readTemplate(AdminskinHelper::getPathForSkin($this->objSession->getAdminSkin()).$this->getArrModule("template"), "", true);
         }
         return $this->objTemplate->fillTemplate($this->arrOutput, $strTemplateID);
     }
@@ -247,10 +255,11 @@ abstract class AdminController extends AbstractController {
      * the admin-template.
      *
      * @param array &$arrContent
-     * @see class_admin::getModuleOutput
+     *
      * @return void
      */
-    protected function onRenderOutput(&$arrContent) {
+    protected function onRenderOutput(&$arrContent)
+    {
 
     }
 
@@ -260,19 +269,21 @@ abstract class AdminController extends AbstractController {
      *
      * @return void
      */
-    private function validateAndUpdateCurrentAspect() {
-        if(_xmlLoader_ === true || $this->getArrModule("template") == "/folderview.tpl") {
+    private function validateAndUpdateCurrentAspect()
+    {
+        if (_xmlLoader_ === true || $this->getArrModule("template") == "/folderview.tpl") {
             return;
         }
 
         $objModule = $this->getObjModule();
         $strCurrentAspect = SystemAspect::getCurrentAspectId();
-        if($objModule != null && $objModule->getStrAspect() != "") {
+        if ($objModule != null && $objModule->getStrAspect() != "") {
             $arrAspects = explode(",", $objModule->getStrAspect());
-            if(count($arrAspects) == 1 && $arrAspects[0] != $strCurrentAspect) {
+            if (count($arrAspects) == 1 && $arrAspects[0] != $strCurrentAspect) {
                 $objAspect = new SystemAspect($arrAspects[0]);
-                if($objAspect->rightView())
+                if ($objAspect->rightView()) {
                     SystemAspect::setCurrentAspectId($arrAspects[0]);
+                }
             }
 
         }
@@ -284,19 +295,20 @@ abstract class AdminController extends AbstractController {
      *
      * @return string
      */
-    protected function getQuickHelp() {
+    protected function getQuickHelp()
+    {
         $strReturn = "";
         $strText = "";
         $strTextname = "";
 
         //Text for the current action available?
         //different loading when editing page-elements
-        if($this->getParam("module") == "pages_content" && ($this->getParam("action") == "edit" || $this->getParam("action") == "new")) {
+        if ($this->getParam("module") == "pages_content" && ($this->getParam("action") == "edit" || $this->getParam("action") == "new")) {
             $objElement = null;
-            if($this->getParam("action") == "edit") {
+            if ($this->getParam("action") == "edit") {
                 $objElement = new PagesPageelement($this->getSystemid());
             }
-            elseif($this->getParam("action") == "new") {
+            elseif ($this->getParam("action") == "new") {
                 $strPlaceholderElement = $this->getParam("element");
                 $objElement = PagesElement::getElement($strPlaceholderElement);
             }
@@ -306,17 +318,17 @@ abstract class AdminController extends AbstractController {
             $objElement = $this->objClassLoader->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin");
 
             //and finally create the object
-            if($objElement != null) {
-                $strTextname = $this->objLang->stringToPlaceholder("quickhelp_" . $objElement->getArrModule("name"));
+            if ($objElement != null) {
+                $strTextname = $this->objLang->stringToPlaceholder("quickhelp_".$objElement->getArrModule("name"));
                 $strText = $this->objLang->getLang($strTextname, $objElement->getArrModule("modul"));
             }
         }
         else {
-            $strTextname = $this->objLang->stringToPlaceholder("quickhelp_" . $this->getAction());
+            $strTextname = $this->objLang->stringToPlaceholder("quickhelp_".$this->getAction());
             $strText = $this->getLang($strTextname);
         }
 
-        if($strText != "!" . $strTextname . "!") {
+        if ($strText != "!".$strTextname."!") {
             //Text found, embed the quickhelp into the current skin
             $strReturn .= $this->objToolkit->getQuickhelp($strText);
         }
@@ -327,7 +339,8 @@ abstract class AdminController extends AbstractController {
     /**
      * @return array
      */
-    protected function getArrOutputNaviEntries() {
+    protected function getArrOutputNaviEntries()
+    {
         $arrReturn = array(
             Link::getLinkAdmin("dashboard", "", "", $this->getLang("modul_titel", "dashboard")),
             Link::getLinkAdmin($this->getArrModule("modul"), "", "", $this->getOutputModuleTitle())
@@ -336,7 +349,7 @@ abstract class AdminController extends AbstractController {
         //see, if the current action may be mapped
         $strActionName = $this->getObjLang()->stringToPlaceholder("action_".$this->getAction());
         $strAction = $this->getLang($strActionName);
-        if($strAction != "!" . $strActionName . "!") {
+        if ($strAction != "!".$strActionName."!") {
             $arrReturn[] = $strAction;
         }
 
@@ -353,7 +366,8 @@ abstract class AdminController extends AbstractController {
      *
      * @return array array containing all links
      */
-    public function getOutputModuleNavi() {
+    public function getOutputModuleNavi()
+    {
         return array();
     }
 
@@ -361,9 +375,11 @@ abstract class AdminController extends AbstractController {
      * Renders the "always present" module permissions entry for each module (takes the currents' user permissions into
      * account).
      * If you don't want this default behaviour, overwrite this method.
+     *
      * @return array
      */
-    public function getModuleRightNaviEntry() {
+    public function getModuleRightNaviEntry()
+    {
         $arrLinks = array();
         $arrLinks[] = array("", "");
         $arrLinks[] = array("right", Link::getLinkAdmin("right", "change", "&systemid=".$this->getObjModule()->getStrSystemid(), $this->getLang("commons_module_permissions")));
@@ -375,8 +391,9 @@ abstract class AdminController extends AbstractController {
      *
      * @return string
      */
-    protected function getOutputModuleTitle() {
-        if($this->getLang("modul_titel") != "!modul_titel!") {
+    protected function getOutputModuleTitle()
+    {
+        if ($this->getLang("modul_titel") != "!modul_titel!") {
             return $this->getLang("modul_titel");
         }
         else {
@@ -386,9 +403,11 @@ abstract class AdminController extends AbstractController {
 
     /**
      * Creates the action name to be rendered in the output, in most cases below the pathnavigation-bar
+     *
      * @return string
      */
-    protected function getOutputActionTitle() {
+    protected function getOutputActionTitle()
+    {
         return $this->getOutputModuleTitle();
     }
 
@@ -397,8 +416,9 @@ abstract class AdminController extends AbstractController {
      *
      * @return string
      */
-    protected function getOutputLogin() {
-        $objLogin = $this->objBuilder->factory("class_module_login_admin");
+    protected function getOutputLogin()
+    {
+        $objLogin = $this->objBuilder->factory("Kajona\\System\\Admin\\LoginAdmin");
         return $objLogin->getLoginStatus();
     }
 
@@ -416,44 +436,45 @@ abstract class AdminController extends AbstractController {
      *
      * @param string $strAction
      *
-     * @see class_rights::validatePermissionString
+     * @see Rights::validatePermissionString
      *
      * @throws Exception
      * @return string
      * @since 3.4
      */
-    public function action($strAction = "") {
+    public function action($strAction = "")
+    {
 
-        if($strAction != "") {
+        if ($strAction != "") {
             $this->setAction($strAction);
         }
 
         $strAction = $this->getAction();
 
         //search for the matching method - build method name
-        $strMethodName = "action" . uniStrtoupper($strAction[0]) . uniSubstr($strAction, 1);
+        $strMethodName = "action".uniStrtoupper($strAction[0]).uniSubstr($strAction, 1);
 
-        if(method_exists($this, $strMethodName)) {
+        if (method_exists($this, $strMethodName)) {
 
             //validate the permissions required to call this method, the xml-part is validated afterwards
             $objAnnotations = new Reflection(get_class($this));
 
             $strPermissions = $objAnnotations->getMethodAnnotationValue($strMethodName, "@permissions");
-            if($strPermissions !== false) {
+            if ($strPermissions !== false) {
 
-                if(validateSystemid($this->getSystemid()) && $this->objFactory->getObject($this->getSystemid()) != null) {
+                if (validateSystemid($this->getSystemid()) && $this->objFactory->getObject($this->getSystemid()) != null) {
                     $objObjectToCheck = $this->objFactory->getObject($this->getSystemid());
                 }
                 else {
                     $objObjectToCheck = $this->getObjModule();
                 }
 
-                if(!$this->objRights->validatePermissionString($strPermissions, $objObjectToCheck)) {
+                if (!$this->objRights->validatePermissionString($strPermissions, $objObjectToCheck)) {
                     ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
                     $this->strOutput = $this->objToolkit->warningBox($this->getLang("commons_error_permissions"));
                     $objException = new Exception("you are not authorized/authenticated to call this action", Exception::$level_ERROR);
 
-                    if(_xmlLoader_) {
+                    if (_xmlLoader_) {
                         throw $objException;
                     }
                     else {
@@ -466,14 +487,14 @@ abstract class AdminController extends AbstractController {
 
 
             //validate the loading channel - xml or regular
-            if(_xmlLoader_ === true) {
+            if (_xmlLoader_ === true) {
                 //check it the method is allowed for xml-requests
 
-                if(!$objAnnotations->hasMethodAnnotation($strMethodName, "@xml") && strtolower(substr(get_class($this), -3)) != "xml") {
-                    throw new Exception("called method " . $strMethodName . " not allowed for xml-requests", Exception::$level_FATALERROR);
+                if (!$objAnnotations->hasMethodAnnotation($strMethodName, "@xml") && !$this instanceof XmlAdminInterface) {
+                    throw new Exception("called method ".$strMethodName." not allowed for xml-requests", Exception::$level_FATALERROR);
                 }
 
-                if($this->getArrModule("modul") != $this->getParam("module") && ($this->getParam("module") != "messaging")) {
+                if ($this->getArrModule("modul") != $this->getParam("module") && ($this->getParam("module") != "messaging")) {
                     ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
                     throw new Exception("you are not authorized/authenticated to call this action", Exception::$level_FATALERROR);
                 }
@@ -484,17 +505,17 @@ abstract class AdminController extends AbstractController {
         else {
             $objReflection = new ReflectionClass($this);
             //if the pe was requested and the current module is a login-module, there are insufficient permissions given
-            if($this->getArrModule("template") == "/login.tpl" && $this->getParam("pe") != "") {
+            if ($this->getArrModule("template") == "/login.tpl" && $this->getParam("pe") != "") {
                 throw new Exception("You have to be logged in to use the portal editor!!!", Exception::$level_ERROR);
             }
 
-            if(get_class($this) == "class_module_login_admin_xml") {
+            if ($this instanceof LoginAdminXml) {
                 ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
                 throw new Exception("you are not authorized/authenticated to call this action", Exception::$level_FATALERROR);
             }
 
-            $this->strOutput = $this->objToolkit->warningBox("called method " . $strMethodName . " not existing for class " . $objReflection->getName());
-            $objException = new Exception("called method " . $strMethodName . " not existing for class " . $objReflection->getName(), Exception::$level_ERROR);
+            $this->strOutput = $this->objToolkit->warningBox("called method ".$strMethodName." not existing for class ".$objReflection->getName());
+            $objException = new Exception("called method ".$strMethodName." not existing for class ".$objReflection->getName(), Exception::$level_ERROR);
             $objException->setIntDebuglevel(0);
             $objException->processException();
         }
@@ -511,12 +532,13 @@ abstract class AdminController extends AbstractController {
      *
      * @return void
      */
-    public function adminReload($strUrlToLoad) {
+    public function adminReload($strUrlToLoad)
+    {
         //filling constants
         $strUrlToLoad = str_replace("_webpath_", _webpath_, $strUrlToLoad);
         $strUrlToLoad = str_replace("_indexpath_", _indexpath_, $strUrlToLoad);
         //No redirect, if close-Command for admin-area should be sent
-        if($this->getParam("peClose") == "") {
+        if ($this->getParam("peClose") == "") {
             ResponseObject::getInstance()->setStrRedirectUrl($strUrlToLoad);
         }
     }
@@ -526,7 +548,8 @@ abstract class AdminController extends AbstractController {
      *
      * @return string
      */
-    public function getLanguageToWorkOn() {
+    public function getLanguageToWorkOn()
+    {
         $objSystemCommon = new SystemCommon();
         return $objSystemCommon->getStrAdminLanguageToWorkOn();
     }

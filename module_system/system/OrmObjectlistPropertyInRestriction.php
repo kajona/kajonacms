@@ -22,7 +22,7 @@ class OrmObjectlistPropertyInRestriction extends OrmObjectlistInRestriction
 
     private $strPropertyName;
 
-    function __construct($strProperty, array $arrParams, $strCondition = "AND")
+    public function __construct($strProperty, array $arrParams, $strCondition = "AND")
     {
         parent::__construct($strProperty, $arrParams, $strCondition);
 

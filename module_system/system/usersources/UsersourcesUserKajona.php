@@ -9,7 +9,7 @@
 
 namespace Kajona\System\System\Usersources;
 
-use class_logger;
+use Kajona\System\System\Logger;
 use Kajona\System\Admin\AdminFormgenerator;
 use Kajona\System\System\CoreEventdispatcher;
 use Kajona\System\System\Model;
@@ -49,7 +49,7 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
     /**
      * @var string
      * @fieldType text
-     * @fieldValidator class_email_validator
+     * @fieldValidator Kajona\System\System\Validators\EmailValidator
      * @fieldMandatory
      */
     private $strEmail = "";
@@ -193,7 +193,7 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
 
                         ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
 
-            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("new kajona user: ".$this->getStrEmail(), class_logger::$levelInfo);
+            Logger::getInstance(Logger::USERSOURCES)->addLogRow("new kajona user: ".$this->getStrEmail(), Logger::$levelInfo);
 
             return $this->objDB->_pQuery($strQuery, array(
                 $strUserid,
@@ -238,7 +238,7 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
 
             }
 
-            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("updated user ".$this->getStrEmail(), class_logger::$levelInfo);
+            Logger::getInstance(Logger::USERSOURCES)->addLogRow("updated user ".$this->getStrEmail(), Logger::$levelInfo);
 
             return $this->objDB->_pQuery($strQuery, $arrParams);
         }
@@ -264,7 +264,7 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
      */
     public function deleteUser()
     {
-        class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("deleted user with id ".$this->getSystemid(), class_logger::$levelInfo);
+        Logger::getInstance(Logger::USERSOURCES)->addLogRow("deleted user with id ".$this->getSystemid(), Logger::$levelInfo);
         $this->deleteAllUserMemberships();
         $strQuery = "DELETE FROM "._dbprefix_."user_kajona WHERE user_id=?";
         //call other models that may be interested

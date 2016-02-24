@@ -18,7 +18,8 @@ namespace Kajona\System\System;
  * @package module_system
  * @author sidler@mulchprod.de
  */
-abstract class Root {
+abstract class Root
+{
 
     const STR_MODULE_ANNOTATION = "@module";
     const STR_MODULEID_ANNOTATION = "@moduleId";
@@ -26,27 +27,21 @@ abstract class Root {
 
 
     /**
-     * Instance of class_config
      *
      * @var Config
      */
     protected $objConfig = null; //Object containing config-data
     /**
-     * Instance of class_db
      *
      * @var Database
      */
     protected $objDB = null; //Object to the database
     /**
-     * Instance of class_session
-     *
      * @var Session
      */
     protected $objSession = null; //Object containing the session-management
 
     /**
-     * Instance of class_lang
-     *
      * @var Lang
      */
     private $objLang = null; //Object managing the langfiles
@@ -66,6 +61,7 @@ abstract class Root {
 
     /**
      * The records current systemid
+     *
      * @var string
      * @templateExport
      *
@@ -75,6 +71,7 @@ abstract class Root {
 
     /**
      * The records internal parent-id
+     *
      * @var string
      * @versionable
      *
@@ -84,12 +81,14 @@ abstract class Root {
 
     /**
      * The old prev-id, used to track hierarchical changes -> requires a rebuild of the rights-table
+     *
      * @var string
      */
     private $strOldPrevId = -1;
 
     /**
      * The records module-number
+     *
      * @var int
      * @tableColumn system.system_module_nr
      */
@@ -97,6 +96,7 @@ abstract class Root {
 
     /**
      * The records sort-position relative to the parent record
+     *
      * @var int
      * @tableColumn system.system_sort
      */
@@ -104,6 +104,7 @@ abstract class Root {
 
     /**
      * The id of the user who created the record initially
+     *
      * @var string
      * @versionable
      * @templateExport
@@ -114,6 +115,7 @@ abstract class Root {
 
     /**
      * The id of the user last who did the last changes to the current record
+     *
      * @var string
      * @tableColumn system.system_lm_user
      */
@@ -122,6 +124,7 @@ abstract class Root {
     /**
      * Timestamp of the last modification
      * ATTENTION: time() based, so 32 bit integer
+     *
      * @todo migrate to long-timestamp
      * @var int
      * @templateExport
@@ -132,6 +135,7 @@ abstract class Root {
 
     /**
      * The id of the user locking the current record, empty otherwise
+     *
      * @var string
      * @tableColumn system.system_lock_id
      */
@@ -140,6 +144,7 @@ abstract class Root {
     /**
      * Time the current locking was triggered
      * ATTENTION: time() based, so 32 bit integer
+     *
      * @todo migrate to long-timestamp
      * @var int
      * @tableColumn system.system_lock_time
@@ -148,6 +153,7 @@ abstract class Root {
 
     /**
      * The records status
+     *
      * @var int
      * @versionable
      * @tableColumn system.system_status
@@ -156,12 +162,14 @@ abstract class Root {
 
     /**
      * The records previous status, used to trigger status changed events
+     *
      * @var int
      */
     private $intOldRecordStatus = 1;
 
     /**
      * Indicates whether the object is deleted, or not
+     *
      * @var int
      * @versionable
      * @tableColumn system.system_deleted
@@ -170,6 +178,7 @@ abstract class Root {
 
     /**
      * Human readable comment describing the current record
+     *
      * @var string
      * @tableColumn system.system_comment
      */
@@ -177,6 +186,7 @@ abstract class Root {
 
     /**
      * Holds the current objects' class
+     *
      * @var string
      * @tableColumn system.system_class
      */
@@ -184,6 +194,7 @@ abstract class Root {
 
     /**
      * Long-based representation of the timestamp the record was created initially
+     *
      * @var int
      * @templateExport
      * @templateMapper datetime
@@ -193,6 +204,7 @@ abstract class Root {
 
     /**
      * The start-date of the date-table
+     *
      * @var Date
      * @versionable
      * @templateExport
@@ -204,6 +216,7 @@ abstract class Root {
 
     /**
      * The end date of the date-table
+     *
      * @var Date
      * @versionable
      * @templateExport
@@ -215,6 +228,7 @@ abstract class Root {
 
     /**
      * The special-date of the date-table
+     *
      * @var Date
      * @versionable
      * @templateExport
@@ -234,7 +248,8 @@ abstract class Root {
      *
      * @return Root
      */
-    public function __construct($strSystemid = "") {
+    public function __construct($strSystemid = "")
+    {
 
         //Generating all the needed objects. For this we use our cool cool carrier-object
         //take care of loading just the necessary objects
@@ -253,17 +268,17 @@ abstract class Root {
 
         //try to load the current module-name and the moduleId by reflection
         $objReflection = new Reflection($this);
-        if(!isset($this->arrModule["modul"])) {
+        if (!isset($this->arrModule["modul"])) {
             $arrAnnotationValues = $objReflection->getAnnotationValuesFromClass(self::STR_MODULE_ANNOTATION);
-            if(count($arrAnnotationValues) > 0) {
+            if (count($arrAnnotationValues) > 0) {
                 $this->setArrModuleEntry("modul", trim($arrAnnotationValues[0]));
                 $this->setArrModuleEntry("module", trim($arrAnnotationValues[0]));
             }
         }
 
-        if(!isset($this->arrModule["moduleId"])) {
+        if (!isset($this->arrModule["moduleId"])) {
             $arrAnnotationValues = $objReflection->getAnnotationValuesFromClass(self::STR_MODULEID_ANNOTATION);
-            if(count($arrAnnotationValues) > 0) {
+            if (count($arrAnnotationValues) > 0) {
                 $this->setArrModuleEntry("moduleId", constant(trim($arrAnnotationValues[0])));
                 $this->setIntModuleNr(constant(trim($arrAnnotationValues[0])));
             }
@@ -271,12 +286,12 @@ abstract class Root {
 
         //set up a possible sort-manager
         $arrAnnotationValues = $objReflection->getAnnotationValuesFromClass(self::STR_SORTMANAGER_ANNOTATION);
-        if(count($arrAnnotationValues) > 0) {
+        if (count($arrAnnotationValues) > 0) {
             $strClass = trim($arrAnnotationValues[0]);
             $this->objSortManager = new $strClass($this);
         }
 
-        if($strSystemid != "") {
+        if ($strSystemid != "") {
             $this->initObject();
         }
     }
@@ -285,6 +300,7 @@ abstract class Root {
     /**
      * Method to invoke object initialization.
      * In nearly all cases, this is triggered by the framework itself.
+     *
      * @return void
      */
     public final function initObject()
@@ -307,6 +323,7 @@ abstract class Root {
      * If you have a different column-property mapping or additional
      * setters to call, overwrite this method.
      * The row loaded from the database is available by calling $this->getArrInitRow().
+     *
      * @return void
      */
     protected function initObjectInternal()
@@ -317,13 +334,15 @@ abstract class Root {
 
     /**
      * Init the current record with the system-fields
+     *
      * @return void
      */
-    private final function internalInit() {
+    private final function internalInit()
+    {
 
-        if(validateSystemid($this->getSystemid())) {
+        if (validateSystemid($this->getSystemid())) {
 
-            if(is_array($this->arrInitRow)) {
+            if (is_array($this->arrInitRow)) {
                 $arrRow = $this->arrInitRow;
             }
             else {
@@ -336,9 +355,9 @@ abstract class Root {
             }
 
 
-            if(count($arrRow) > 3) {
+            if (count($arrRow) > 3) {
                 //$this->setStrSystemid($arrRow["system_id"]);
-                $this->strPrevId =$arrRow["system_prev_id"];
+                $this->strPrevId = $arrRow["system_prev_id"];
                 $this->intModuleNr = $arrRow["system_module_nr"];
                 $this->intSort = $arrRow["system_sort"];
                 $this->strOwner = $arrRow["system_owner"];
@@ -349,23 +368,28 @@ abstract class Root {
                 $this->intRecordStatus = $arrRow["system_status"];
                 $this->strRecordComment = $arrRow["system_comment"];
                 $this->longCreateDate = $arrRow["system_create_date"];
-                if(isset($arrRow["system_class"]))
+                if (isset($arrRow["system_class"])) {
                     $this->strRecordClass = $arrRow["system_class"];
+                }
 
-                if(isset($arrRow["system_deleted"]))
+                if (isset($arrRow["system_deleted"])) {
                     $this->intRecordDeleted = $arrRow["system_deleted"];
+                }
 
                 $this->strOldPrevId = $this->strPrevId;
                 $this->intOldRecordStatus = $this->intRecordStatus;
 
-                if($arrRow["system_date_start"] > 0)
+                if ($arrRow["system_date_start"] > 0) {
                     $this->objStartDate = new Date($arrRow["system_date_start"]);
+                }
 
-                if($arrRow["system_date_end"] > 0)
+                if ($arrRow["system_date_end"] > 0) {
                     $this->objEndDate = new Date($arrRow["system_date_end"]);
+                }
 
-                if($arrRow["system_date_special"] > 0)
+                if ($arrRow["system_date_special"] > 0) {
                     $this->objSpecialDate = new Date($arrRow["system_date_special"]);
+                }
 
             }
 
@@ -384,7 +408,8 @@ abstract class Root {
      *
      * @return int
      */
-    public static function getObjectCount($strPrevid = "") {
+    public static function getObjectCount($strPrevid = "")
+    {
         $objORM = new OrmObjectlist();
         return $objORM->getObjectCount(get_called_class(), $strPrevid);
     }
@@ -401,7 +426,8 @@ abstract class Root {
      *
      * @return self[]
      */
-    public static function getObjectList($strPrevid = "", $intStart = null, $intEnd = null) {
+    public static function getObjectList($strPrevid = "", $intStart = null, $intEnd = null)
+    {
         $objORM = new OrmObjectlist();
         return $objORM->getObjectList(get_called_class(), $strPrevid, $intStart, $intEnd);
     }
@@ -409,22 +435,25 @@ abstract class Root {
 
     /**
      * Validates if the current record may be restored
+     *
      * @return bool
      */
-    public function isRestorable() {
+    public function isRestorable()
+    {
         //validate the parent nodes' id
         $objParent = Objectfactory::getInstance()->getObject($this->getStrPrevId());
         return $objParent != null && $objParent->getIntRecordDeleted() == 0;
     }
 
 
-    public function restoreObject() {
+    public function restoreObject()
+    {
 
         /** @var $this Root|ModelInterface */
         $this->objDB->transactionBegin();
 
         $this->intRecordDeleted = 0;
-        if($this->objSortManager !== null) {
+        if ($this->objSortManager !== null) {
             $this->intSort = $this->getNextSortValue($this->getStrPrevId());
         }
         $bitReturn = $this->updateObjectToDb();
@@ -433,13 +462,13 @@ abstract class Root {
         OrmRowcache::removeSingleRow($this->getSystemid());
         $this->objDB->flushQueryCache();
 
-        if($this->objSortManager !== null) {
+        if ($this->objSortManager !== null) {
             $this->objSortManager->fixSortOnPrevIdChange($this->strPrevId, $this->strPrevId);
         }
 
         $bitReturn = $bitReturn && CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_RECORDRESTORED_LOGICALLY, array($this->getSystemid(), get_class($this), $this));
 
-        if($bitReturn) {
+        if ($bitReturn) {
             Logger::getInstance()->addLogRow("successfully restored record ".$this->getSystemid()." / ".$this->getStrDisplayName(), Logger::$levelInfo);
             $this->objDB->transactionCommit();
             return true;
@@ -460,21 +489,24 @@ abstract class Root {
      * @throws Exception
      * @return bool
      */
-    public function deleteObject() {
+    public function deleteObject()
+    {
 
-        if(!$this->getLockManager()->isAccessibleForCurrentUser())
+        if (!$this->getLockManager()->isAccessibleForCurrentUser()) {
             return false;
+        }
 
         /** @var $this Root|ModelInterface */
         $this->objDB->transactionBegin();
 
         //validate, if there are subrecords, so child nodes to be deleted
         $arrChilds = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."system where system_prev_id = ?", array($this->getSystemid()));
-        foreach($arrChilds as $arrOneChild) {
-            if(validateSystemid($arrOneChild["system_id"])) {
+        foreach ($arrChilds as $arrOneChild) {
+            if (validateSystemid($arrOneChild["system_id"])) {
                 $objInstance = Objectfactory::getInstance()->getObject($arrOneChild["system_id"]);
-                if($objInstance !== null)
+                if ($objInstance !== null) {
                     $objInstance->deleteObject();
+                }
             }
         }
 
@@ -486,13 +518,13 @@ abstract class Root {
         OrmRowcache::removeSingleRow($this->getSystemid());
         $this->objDB->flushQueryCache();
 
-        if($this->objSortManager !== null) {
+        if ($this->objSortManager !== null) {
             $this->objSortManager->fixSortOnDelete();
         }
 
         $bitReturn = $bitReturn && CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_RECORDDELETED_LOGICALLY, array($this->getSystemid(), get_class($this)));
 
-        if($bitReturn) {
+        if ($bitReturn) {
             Logger::getInstance()->addLogRow("successfully deleted record ".$this->getSystemid()." / ".$this->getStrDisplayName(), Logger::$levelInfo);
             $this->objDB->transactionCommit();
             return true;
@@ -511,11 +543,13 @@ abstract class Root {
      * @return bool
      * @throws Exception
      */
-    public function deleteObjectFromDatabase() {
-        if(!$this->getLockManager()->isAccessibleForCurrentUser())
+    public function deleteObjectFromDatabase()
+    {
+        if (!$this->getLockManager()->isAccessibleForCurrentUser()) {
             return false;
+        }
 
-        if($this instanceof \VersionableInterface) {
+        if ($this instanceof \VersionableInterface) {
             $objChanges = new SystemChangelog();
             $objChanges->createLogEntry($this, SystemChangelog::$STR_ACTION_DELETE);
         }
@@ -525,18 +559,19 @@ abstract class Root {
 
         //validate, if there are subrecords, so child nodes to be deleted
         $arrChilds = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."system where system_prev_id = ?", array($this->getSystemid()));
-        foreach($arrChilds as $arrOneChild) {
-            if(validateSystemid($arrOneChild["system_id"])) {
+        foreach ($arrChilds as $arrOneChild) {
+            if (validateSystemid($arrOneChild["system_id"])) {
                 $objInstance = Objectfactory::getInstance()->getObject($arrOneChild["system_id"]);
-                if($objInstance !== null)
+                if ($objInstance !== null) {
                     $objInstance->deleteObjectFromDatabase();
+                }
             }
         }
 
         $objORM = new OrmObjectdelete($this);
         $bitReturn = $objORM->deleteObject();
 
-        if($this->objSortManager !== null) {
+        if ($this->objSortManager !== null) {
             $this->objSortManager->fixSortOnDelete();
         }
         $bitReturn = $bitReturn && $this->deleteSystemRecord($this->getSystemid());
@@ -549,7 +584,7 @@ abstract class Root {
         //is going to be deleted
         $bitReturn = $bitReturn && CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_RECORDDELETED, array($this->getSystemid(), get_class($this)));
 
-        if($bitReturn) {
+        if ($bitReturn) {
             Logger::getInstance()->addLogRow("successfully deleted record ".$this->getSystemid()." / ".$this->getStrDisplayName(), Logger::$levelInfo);
             $this->objDB->transactionCommit();
             $this->objDB->flushQueryCache();
@@ -576,50 +611,56 @@ abstract class Root {
      * called updateStateToDb() method to reference the correct rows.
      *
      * @param string|bool $strPrevId The prev-id of the records, either to be used for the insert or to be used during the update of the record
+     *
      * @return bool
      * @since 3.3.0
      * @throws Exception
      * @see \Kajona\System\System\ModelInterface
      *
-     * @todo move to class_orm_objectupdate completely
+     * @todo move to OrmObjectupdate completely
      */
-    public function updateObjectToDb($strPrevId = false) {
+    public function updateObjectToDb($strPrevId = false)
+    {
         $bitCommit = true;
         /** @var $this Root|ModelInterface */
-        if(!$this instanceof ModelInterface)
-            throw new Exception("current object must implemented \Kajona\System\System\ModelInterface", Exception::$level_FATALERROR);
+        if (!$this instanceof ModelInterface) {
+            throw new Exception("current object must implement \\Kajona\\System\\System\\ModelInterface", Exception::$level_FATALERROR);
+        }
 
-        if(!$this->getLockManager()->isAccessibleForCurrentUser()) {
-            $objUser  = new UserUser($this->getLockManager()->getLockId());
+        if (!$this->getLockManager()->isAccessibleForCurrentUser()) {
+            $objUser = new UserUser($this->getLockManager()->getLockId());
             throw new Exception("current object is locked by user ".$objUser->getStrDisplayName(), Exception::$level_ERROR);
         }
 
-        if(is_object($strPrevId) && $strPrevId instanceof Root)
+        if (is_object($strPrevId) && $strPrevId instanceof Root) {
             $strPrevId = $strPrevId->getSystemid();
+        }
 
         $this->objDB->transactionBegin();
 
         //current systemid given? if not, create a new record.
         $bitRecordCreated = false;
-        if(!validateSystemid($this->getSystemid())) {
+        if (!validateSystemid($this->getSystemid())) {
             $bitRecordCreated = true;
 
-            if($strPrevId === false || $strPrevId === "" || $strPrevId === null) {
+            if ($strPrevId === false || $strPrevId === "" || $strPrevId === null) {
                 //try to find the current modules-one
-                if(isset($this->arrModule["modul"])) {
+                if (isset($this->arrModule["modul"])) {
                     $objModule = SystemModule::getModuleByName($this->getArrModule("modul"), true);
-                    if($objModule == null) {
+                    if ($objModule == null) {
                         throw new Exception("failed to load module ".$this->getArrModule("modul")."@".get_class($this), Exception::$level_FATALERROR);
                     }
                     $strPrevId = $objModule->getSystemid();
-                    if(!validateSystemid($strPrevId))
+                    if (!validateSystemid($strPrevId)) {
                         throw new Exception("automatic determination of module-id failed ", Exception::$level_FATALERROR);
+                    }
                 }
-                else
+                else {
                     throw new Exception("insert with no previd ", Exception::$level_FATALERROR);
+                }
             }
 
-            if(!validateSystemid($strPrevId) && $strPrevId !== "0") {
+            if (!validateSystemid($strPrevId) && $strPrevId !== "0") {
                 throw new Exception("insert with erroneous prev-id ", Exception::$level_FATALERROR);
             }
 
@@ -629,39 +670,43 @@ abstract class Root {
             $this->createSystemRecord($strPrevId, $this->getStrDisplayName());
             $this->bitDatesChanges = $bitDates;
 
-            if(validateSystemid($this->getStrSystemid())) {
+            if (validateSystemid($this->getStrSystemid())) {
 
                 //Create the foreign records
                 $objAnnotations = new Reflection($this);
                 $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass("@targetTable");
-                if(count($arrTargetTables) > 0) {
-                    foreach($arrTargetTables as $strOneConfig) {
+                if (count($arrTargetTables) > 0) {
+                    foreach ($arrTargetTables as $strOneConfig) {
                         $arrSingleTable = explode(".", $strOneConfig);
                         $strQuery = "INSERT INTO ".$this->objDB->encloseTableName(_dbprefix_.$arrSingleTable[0])."
                                                 (".$this->objDB->encloseColumnName($arrSingleTable[1]).") VALUES
                                                 (?) ";
 
-                        if(!$this->objDB->_pQuery($strQuery, array($this->getStrSystemid())))
+                        if (!$this->objDB->_pQuery($strQuery, array($this->getStrSystemid()))) {
                             $bitCommit = false;
+                        }
                     }
                 }
 
-                if(!$this->onInsertToDb())
+                if (!$this->onInsertToDb()) {
                     $bitCommit = false;
+                }
 
             }
-            else
+            else {
                 throw new Exception("creation of systemrecord failed", Exception::$level_FATALERROR);
+            }
 
             //all updates are done, start the "real" update
             Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBQUERIES);
         }
 
         //new prev-id?
-        if($strPrevId !== false && $this->getSystemid() != $strPrevId && (validateSystemid($strPrevId) || $strPrevId == "0")) {
+        if ($strPrevId !== false && $this->getSystemid() != $strPrevId && (validateSystemid($strPrevId) || $strPrevId == "0")) {
             //validate the new prev id - it is not allowed to set a parent-node as a sub-node of its own child
-            if(!$this->isSystemidChildNode($this->getSystemid(), $strPrevId))
+            if (!$this->isSystemidChildNode($this->getSystemid(), $strPrevId)) {
                 $this->setStrPrevId($strPrevId);
+            }
         }
 
         //new comment?
@@ -675,15 +720,16 @@ abstract class Root {
         $bitCommit = $bitCommit && $this->updateSystemrecord();
 
         //update ourselves to the database
-        if($bitCommit && !$this->updateStateToDb())
+        if ($bitCommit && !$this->updateStateToDb()) {
             $bitCommit = false;
+        }
 
         //now fire the status changed event
-        if($intOldStatus != $intNewStatus && $intOldStatus != -1) {
+        if ($intOldStatus != $intNewStatus && $intOldStatus != -1) {
             CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_STATUSCHANGED, array($this->getSystemid(), $this, $intOldStatus, $intNewStatus));
         }
 
-        if($bitCommit) {
+        if ($bitCommit) {
             $this->objDB->transactionCommit();
             //unlock the record
             $this->getLockManager()->unlockRecord();
@@ -715,27 +761,30 @@ abstract class Root {
      * @throws Exception
      * @return bool
      */
-    public function copyObject($strNewPrevid = "", $bitChangeTitle = true, $bitCopyChilds = true) {
+    public function copyObject($strNewPrevid = "", $bitChangeTitle = true, $bitCopyChilds = true)
+    {
 
         $this->objDB->transactionBegin();
 
         $strOldSysid = $this->getSystemid();
 
-        if($strNewPrevid == "")
+        if ($strNewPrevid == "") {
             $strNewPrevid = $this->strPrevId;
+        }
 
         //any date-objects to copy?
-        if($this->objStartDate != null || $this->objEndDate != null || $this->objSpecialDate != null)
+        if ($this->objStartDate != null || $this->objEndDate != null || $this->objSpecialDate != null) {
             $this->bitDatesChanges = true;
+        }
 
         //check if there's a title field, in most cases that could be used to change the title
-        if($bitChangeTitle) {
+        if ($bitChangeTitle) {
             $objReflection = new Reflection($this);
             $strGetter = $objReflection->getGetter("strTitle");
             $strSetter = $objReflection->getSetter("strTitle");
-            if($strGetter != null && $strSetter != null) {
+            if ($strGetter != null && $strSetter != null) {
                 $strTitle = $this->{$strGetter}();
-                if($strTitle != "") {
+                if ($strTitle != "") {
                     $this->{$strSetter}($strTitle."_copy");
                 }
             }
@@ -750,24 +799,27 @@ abstract class Root {
         $bitReturn = $bitReturn && CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_RECORDCOPIED, array($strOldSysid, $this->getSystemid(), $this));
 
 
-        if($bitCopyChilds) {
+        if ($bitCopyChilds) {
             //process subrecords
             //validate, if there are subrecords, so child nodes to be copied to the current record
             $arrChilds = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."system where system_prev_id = ? ORDER BY system_sort ASC", array($strOldSysid));
-            foreach($arrChilds as $arrOneChild) {
-                if(validateSystemid($arrOneChild["system_id"])) {
+            foreach ($arrChilds as $arrOneChild) {
+                if (validateSystemid($arrOneChild["system_id"])) {
                     $objInstance = Objectfactory::getInstance()->getObject($arrOneChild["system_id"]);
-                    if($objInstance !== null)
+                    if ($objInstance !== null) {
                         $objInstance->copyObject($this->getSystemid(), false);
+                    }
                 }
             }
         }
 
 
-        if($bitReturn)
+        if ($bitReturn) {
             $this->objDB->transactionCommit();
-        else
+        }
+        else {
             $this->objDB->transactionRollback();
+        }
 
         $this->objDB->flushQueryCache();
 
@@ -786,14 +838,17 @@ abstract class Root {
      *
      * @return bool
      */
-    private function isSystemidChildNode($strBaseId, $strChildId) {
+    private function isSystemidChildNode($strBaseId, $strChildId)
+    {
 
-        while(validateSystemid($strChildId)) {
+        while (validateSystemid($strChildId)) {
             $objCommon = new SystemCommon($strChildId);
-            if($objCommon->getSystemid() == $strBaseId)
+            if ($objCommon->getSystemid() == $strBaseId) {
                 return true;
-            else
+            }
+            else {
                 return $this->isSystemidChildNode($strBaseId, $objCommon->getPrevId());
+            }
         }
 
         return false;
@@ -810,7 +865,8 @@ abstract class Root {
      * @throws Exception
      * @return bool
      */
-    protected function updateStateToDb() {
+    protected function updateStateToDb()
+    {
         $objORMMapper = new OrmObjectupdate($this);
         return $objORMMapper->updateStateToDb();
     }
@@ -821,7 +877,8 @@ abstract class Root {
      *
      * @return bool
      */
-    protected function onInsertToDb() {
+    protected function onInsertToDb()
+    {
         return true;
     }
 
@@ -835,14 +892,16 @@ abstract class Root {
      *
      * @todo find ussages and make private
      */
-    protected final function updateSystemrecord() {
+    protected final function updateSystemrecord()
+    {
 
-        if(!validateSystemid($this->getSystemid()))
+        if (!validateSystemid($this->getSystemid())) {
             return true;
+        }
 
         Logger::getInstance()->addLogRow("updated systemrecord ".$this->getStrSystemid()." data", Logger::$levelInfo);
 
-        if(SystemModule::getModuleByName("system") != null  && version_compare(SystemModule::getModuleByName("system")->getStrVersion(), 4.5, "lt")) {
+        if (SystemModule::getModuleByName("system") != null && version_compare(SystemModule::getModuleByName("system")->getStrVersion(), 4.5, "lt")) {
             $strQuery = "UPDATE "._dbprefix_."system
                         SET system_prev_id = ?,
                             system_module_nr = ?,
@@ -917,17 +976,17 @@ abstract class Root {
             );
         }
 
-        if($this->bitDatesChanges) {
+        if ($this->bitDatesChanges) {
             $this->processDateChanges();
         }
 
         Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBQUERIES | Carrier::INT_CACHE_TYPE_ORMCACHE);
 
-        if($this->strOldPrevId != $this->strPrevId && $this->strOldPrevId != -1) {
+        if ($this->strOldPrevId != $this->strPrevId && $this->strOldPrevId != -1) {
             Carrier::getInstance()->getObjRights()->rebuildRightsStructure($this->getSystemid());
             CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_PREVIDCHANGED, array($this->getSystemid(), $this->strOldPrevId, $this->strPrevId));
         }
-        if($this->strOldPrevId != $this->strPrevId && $this->objSortManager !== null) {
+        if ($this->strOldPrevId != $this->strPrevId && $this->objSortManager !== null) {
             $this->objSortManager->fixSortOnPrevIdChange($this->strOldPrevId, $this->strPrevId);
         }
 
@@ -940,18 +999,20 @@ abstract class Root {
 
     /**
      * Internal helper to fetch the next sort-id
+     *
      * @param string $strPrevId
      *
      * @return int
      */
-    private function getNextSortValue($strPrevId) {
+    private function getNextSortValue($strPrevId)
+    {
 
-        if($this->objSortManager == null) {
+        if ($this->objSortManager == null) {
             return -1;
         }
 
         //determine the correct new sort-id - append by default
-        if(SystemModule::getModuleByName("system") != null  && version_compare(SystemModule::getModuleByName("system")->getStrVersion(), "4.7.5", "lt")) {
+        if (SystemModule::getModuleByName("system") != null && version_compare(SystemModule::getModuleByName("system")->getStrVersion(), "4.7.5", "lt")) {
             $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ? AND system_id != '0'";
         }
         else {
@@ -960,35 +1021,38 @@ abstract class Root {
         }
         $arrRow = $this->objDB->getPRow($strQuery, array($strPrevId), 0, false);
         $intSiblings = $arrRow["COUNT(*)"];
-        return (int)($intSiblings+1);
+        return (int)($intSiblings + 1);
     }
 
     /**
      * Generates a new SystemRecord and, if needed, the corresponding record in the rights-table (here inheritance is default)
      * Returns the systemID used for this record
      *
-     * @param string $strPrevId  Previous ID in the tree-structure
+     * @param string $strPrevId Previous ID in the tree-structure
      * @param string $strComment Comment to identify the record
+     *
      * @return string The ID used/generated
      *
      * * @todo find ussages and make private
      */
-    private function createSystemRecord($strPrevId, $strComment) {
+    private function createSystemRecord($strPrevId, $strComment)
+    {
 
         $strSystemId = generateSystemid();
 
         $this->setStrSystemid($strSystemId);
 
         //Correct prevID
-        if($strPrevId == "")
+        if ($strPrevId == "") {
             $strPrevId = 0;
+        }
 
         $this->setStrPrevId($strPrevId);
 
         $strComment = uniStrTrim(strip_tags($strComment), 240);
 
 
-        if(SystemModule::getModuleByName("system") != null  && version_compare(SystemModule::getModuleByName("system")->getStrVersion(), "4.7.5", "lt")) {
+        if (SystemModule::getModuleByName("system") != null && version_compare(SystemModule::getModuleByName("system")->getStrVersion(), "4.7.5", "lt")) {
             //So, lets generate the record
             $strQuery = "INSERT INTO "._dbprefix_."system
                      ( system_id, system_prev_id, system_module_nr, system_owner, system_create_date, system_lm_user,
@@ -1045,7 +1109,7 @@ abstract class Root {
         //update rights to inherit
         Carrier::getInstance()->getObjRights()->setInherited(true, $strSystemId);
 
-        Logger::getInstance()->addLogRow("new system-record created: ".$strSystemId ." (".$strComment.")", Logger::$levelInfo);
+        Logger::getInstance()->addLogRow("new system-record created: ".$strSystemId." (".$strComment.")", Logger::$levelInfo);
         $this->objDB->flushQueryCache();
         $this->internalInit();
         //reset the old values since we're having a new record
@@ -1059,25 +1123,30 @@ abstract class Root {
     /**
      * Process date changes handles the insert and update of date-objects.
      * It replaces the old createDate and updateDate methods
+     *
      * @return bool
      */
-    private function processDateChanges() {
+    private function processDateChanges()
+    {
 
         $intStart = 0;
         $intEnd = 0;
         $intSpecial = 0;
 
-        if($this->objStartDate != null && $this->objStartDate instanceof Date)
+        if ($this->objStartDate != null && $this->objStartDate instanceof Date) {
             $intStart = $this->objStartDate->getLongTimestamp();
+        }
 
-        if($this->objEndDate != null && $this->objEndDate instanceof Date)
+        if ($this->objEndDate != null && $this->objEndDate instanceof Date) {
             $intEnd = $this->objEndDate->getLongTimestamp();
+        }
 
-        if($this->objSpecialDate != null && $this->objSpecialDate instanceof Date)
+        if ($this->objSpecialDate != null && $this->objSpecialDate instanceof Date) {
             $intSpecial = $this->objSpecialDate->getLongTimestamp();
+        }
 
         $arrRow = $this->objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system_date WHERE system_date_id = ?", array($this->getSystemid()));
-        if($arrRow["COUNT(*)"] == 0) {
+        if ($arrRow["COUNT(*)"] == 0) {
             //insert
             $strQuery = "INSERT INTO "._dbprefix_."system_date
                       (system_date_id, system_date_start, system_date_end, system_date_special) VALUES
@@ -1095,7 +1164,6 @@ abstract class Root {
     }
 
 
-
     /**
      * Creates a record in the date table. Make sure to use a proper system-id!
      * Up from Kajona V3.3, the signature changed. Pass instances of Date instead of
@@ -1105,22 +1173,27 @@ abstract class Root {
      * @param Date $objStartDate
      * @param Date $objEndDate
      * @param Date $objSpecialDate
+     *
      * @deprecated use the internal date-objects to have all dates handled automatically
      * @return bool
      */
-    public function createDateRecord($strSystemid, Date $objStartDate = null, Date $objEndDate = null, Date $objSpecialDate = null) {
+    public function createDateRecord($strSystemid, Date $objStartDate = null, Date $objEndDate = null, Date $objSpecialDate = null)
+    {
         $intStart = 0;
         $intEnd = 0;
         $intSpecial = 0;
 
-        if($objStartDate != null && $objStartDate instanceof Date)
+        if ($objStartDate != null && $objStartDate instanceof Date) {
             $intStart = $objStartDate->getLongTimestamp();
+        }
 
-        if($objEndDate != null && $objEndDate instanceof Date)
+        if ($objEndDate != null && $objEndDate instanceof Date) {
             $intEnd = $objEndDate->getLongTimestamp();
+        }
 
-        if($objSpecialDate != null && $objSpecialDate instanceof Date)
+        if ($objSpecialDate != null && $objSpecialDate instanceof Date) {
             $intSpecial = $objSpecialDate->getLongTimestamp();
+        }
 
         $strQuery = "INSERT INTO "._dbprefix_."system_date
                       (system_date_id, system_date_start, system_date_end, system_date_special) VALUES
@@ -1137,22 +1210,27 @@ abstract class Root {
      * @param Date $objStartDate
      * @param Date $objEndDate
      * @param Date $objSpecialDate
+     *
      * @deprecated use the internal date-objects to have all dates handled automatically
      * @return bool
      */
-    public function updateDateRecord($strSystemid, Date $objStartDate = null, Date $objEndDate = null, Date $objSpecialDate = null) {
+    public function updateDateRecord($strSystemid, Date $objStartDate = null, Date $objEndDate = null, Date $objSpecialDate = null)
+    {
         $intStart = 0;
         $intEnd = 0;
         $intSpecial = 0;
 
-        if($objStartDate != null && $objStartDate instanceof Date)
+        if ($objStartDate != null && $objStartDate instanceof Date) {
             $intStart = $objStartDate->getLongTimestamp();
+        }
 
-        if($objEndDate != null && $objEndDate instanceof Date)
+        if ($objEndDate != null && $objEndDate instanceof Date) {
             $intEnd = $objEndDate->getLongTimestamp();
+        }
 
-        if($objSpecialDate != null && $objSpecialDate instanceof Date)
+        if ($objSpecialDate != null && $objSpecialDate instanceof Date) {
             $intSpecial = $objSpecialDate->getLongTimestamp();
+        }
 
         $strQuery = "UPDATE "._dbprefix_."system_date
                       SET system_date_start = ?,
@@ -1169,7 +1247,8 @@ abstract class Root {
      *
      * @return bool
      */
-    public function rightView() {
+    public function rightView()
+    {
         return Carrier::getInstance()->getObjRights()->rightView($this->getSystemid());
     }
 
@@ -1179,7 +1258,8 @@ abstract class Root {
      *
      * @return bool
      */
-    public function rightEdit() {
+    public function rightEdit()
+    {
         return Carrier::getInstance()->getObjRights()->rightEdit($this->getSystemid());
     }
 
@@ -1189,7 +1269,8 @@ abstract class Root {
      *
      * @return bool
      */
-    public function rightDelete() {
+    public function rightDelete()
+    {
         return Carrier::getInstance()->getObjRights()->rightDelete($this->getSystemid());
     }
 
@@ -1199,7 +1280,8 @@ abstract class Root {
      *
      * @return bool
      */
-    public function rightRight() {
+    public function rightRight()
+    {
         return Carrier::getInstance()->getObjRights()->rightRight($this->getSystemid());
     }
 
@@ -1209,7 +1291,8 @@ abstract class Root {
      *
      * @return bool
      */
-    public function rightRight1() {
+    public function rightRight1()
+    {
         return Carrier::getInstance()->getObjRights()->rightRight1($this->getSystemid());
     }
 
@@ -1219,7 +1302,8 @@ abstract class Root {
      *
      * @return bool
      */
-    public function rightRight2() {
+    public function rightRight2()
+    {
         return Carrier::getInstance()->getObjRights()->rightRight2($this->getSystemid());
     }
 
@@ -1229,7 +1313,8 @@ abstract class Root {
      *
      * @return bool
      */
-    public function rightRight3() {
+    public function rightRight3()
+    {
         return Carrier::getInstance()->getObjRights()->rightRight3($this->getSystemid());
     }
 
@@ -1239,7 +1324,8 @@ abstract class Root {
      *
      * @return bool
      */
-    public function rightRight4() {
+    public function rightRight4()
+    {
         return Carrier::getInstance()->getObjRights()->rightRight4($this->getSystemid());
     }
 
@@ -1249,7 +1335,8 @@ abstract class Root {
      *
      * @return bool
      */
-    public function rightRight5() {
+    public function rightRight5()
+    {
         return Carrier::getInstance()->getObjRights()->rightRight5($this->getSystemid());
     }
 
@@ -1259,7 +1346,8 @@ abstract class Root {
      *
      * @return bool
      */
-    public function rightChangelog() {
+    public function rightChangelog()
+    {
         return Carrier::getInstance()->getObjRights()->rightChangelog($this->getSystemid());
     }
 
@@ -1270,12 +1358,15 @@ abstract class Root {
      *
      * @param string $strSystemid
      * @param bool $bitUseCache
+     *
      * @return int
      * @deprecated
      */
-    public function getNumberOfSiblings($strSystemid = "", $bitUseCache = true) {
-        if($strSystemid == "")
+    public function getNumberOfSiblings($strSystemid = "", $bitUseCache = true)
+    {
+        if ($strSystemid == "") {
             $strSystemid = $this->getSystemid();
+        }
 
         $strQuery = "SELECT COUNT(*)
                      FROM "._dbprefix_."system as sys1,
@@ -1292,12 +1383,15 @@ abstract class Root {
      * <b> Only the IDs are fetched since the current object-context is not available!!! </b>
      *
      * @param string $strSystemid
+     *
      * @return string[]
      * @deprecated
      */
-    public function getChildNodesAsIdArray($strSystemid = "") {
-        if($strSystemid == "")
+    public function getChildNodesAsIdArray($strSystemid = "")
+    {
+        if ($strSystemid == "") {
             $strSystemid = $this->getSystemid();
+        }
 
         $objORM = new OrmObjectlist();
 
@@ -1309,11 +1403,13 @@ abstract class Root {
                      ORDER BY system_sort ASC";
 
         $arrReturn = array();
-        $arrTemp =  $this->objDB->getPArray($strQuery, array($strSystemid));
+        $arrTemp = $this->objDB->getPArray($strQuery, array($strSystemid));
 
-        if(count($arrTemp) > 0)
-            foreach($arrTemp as $arrOneRow)
+        if (count($arrTemp) > 0) {
+            foreach ($arrTemp as $arrOneRow) {
                 $arrReturn[] = $arrOneRow["system_id"];
+            }
+        }
 
 
         return $arrReturn;
@@ -1324,13 +1420,15 @@ abstract class Root {
      * <b> Only the IDs are fetched since the current object-context is not available!!! </b>
      *
      * @param string $strSystemid
+     *
      * @return string[]
      * @deprecated
      */
-    public function getAllSubChildNodesAsIdArray($strSystemid = "") {
+    public function getAllSubChildNodesAsIdArray($strSystemid = "")
+    {
         $arrReturn = $this->getChildNodesAsIdArray($strSystemid);
-        if(count($arrReturn) > 0) {
-            foreach($arrReturn as $strId) {
+        if (count($arrReturn) > 0) {
+            foreach ($arrReturn as $strId) {
                 $arrReturn = array_merge($arrReturn, $this->getAllSubChildNodesAsIdArray($strId));
             }
         }
@@ -1345,8 +1443,9 @@ abstract class Root {
      * @throws Exception
      * @deprecated
      */
-    public function setPosition($strDirection = "upwards") {
-        if($this->objSortManager !== null) {
+    public function setPosition($strDirection = "upwards")
+    {
+        if ($this->objSortManager !== null) {
             $this->objSortManager->setPosition($strDirection);
         }
         else {
@@ -1362,9 +1461,10 @@ abstract class Root {
      *
      * @throws Exception
      */
-    public function setAbsolutePosition($intNewPosition, $arrRestrictionModules = false) {
+    public function setAbsolutePosition($intNewPosition, $arrRestrictionModules = false)
+    {
 
-        if($this->objSortManager !== null) {
+        if ($this->objSortManager !== null) {
             $this->objSortManager->setAbsolutePosition($intNewPosition, $arrRestrictionModules);
         }
         else {
@@ -1376,11 +1476,14 @@ abstract class Root {
      * Return a complete SystemRecord
      *
      * @param string $strSystemid
+     *
      * @return mixed
      */
-    public function getSystemRecord($strSystemid = "") {
-        if($strSystemid == "")
+    public function getSystemRecord($strSystemid = "")
+    {
+        if ($strSystemid == "") {
             $strSystemid = $this->getSystemid();
+        }
         $strQuery = "SELECT * FROM "._dbprefix_."system
                          LEFT JOIN "._dbprefix_."system_right
                               ON system_id = right_id
@@ -1395,11 +1498,13 @@ abstract class Root {
      *
      * @param string $strName
      * @param bool $bitCache
+     *
      * @return mixed
      * @deprecated
      * @see SystemModule::getPlainModuleData($strName, $bitCache)
      */
-    public function getModuleData($strName, $bitCache = true) {
+    public function getModuleData($strName, $bitCache = true)
+    {
         return SystemModule::getPlainModuleData($strName, $bitCache);
     }
 
@@ -1409,35 +1514,36 @@ abstract class Root {
      * @param string $strSystemid
      * @param bool $bitRight
      * @param bool $bitDate
+     *
      * @return bool
      * @todo: remove first params, is always the current systemid. maybe mark as protected, currently only called by the test-classes
      *
      * * @todo find ussages and make private
      *
      */
-    public final function deleteSystemRecord($strSystemid, $bitRight = true, $bitDate = true) {
+    public final function deleteSystemRecord($strSystemid, $bitRight = true, $bitDate = true)
+    {
         $bitResult = true;
 
         //Start a tx before deleting anything
         $this->objDB->transactionBegin();
 
         $strQuery = "DELETE FROM "._dbprefix_."system WHERE system_id = ?";
-        $bitResult = $bitResult &&  $this->objDB->_pQuery($strQuery, array($strSystemid));
+        $bitResult = $bitResult && $this->objDB->_pQuery($strQuery, array($strSystemid));
 
-        if($bitRight) {
+        if ($bitRight) {
             $strQuery = "DELETE FROM "._dbprefix_."system_right WHERE right_id = ?";
-            $bitResult = $bitResult &&  $this->objDB->_pQuery($strQuery, array($strSystemid));
+            $bitResult = $bitResult && $this->objDB->_pQuery($strQuery, array($strSystemid));
         }
 
-        if($bitDate) {
+        if ($bitDate) {
             $strQuery = "DELETE FROM "._dbprefix_."system_date WHERE system_date_id = ?";
-            $bitResult = $bitResult &&  $this->objDB->_pQuery($strQuery, array($strSystemid));
+            $bitResult = $bitResult && $this->objDB->_pQuery($strQuery, array($strSystemid));
         }
-
 
 
         //end tx
-        if($bitResult) {
+        if ($bitResult) {
             $this->objDB->transactionCommit();
             Logger::getInstance()->addLogRow("deleted system-record with id ".$strSystemid, Logger::$levelInfo);
         }
@@ -1457,9 +1563,11 @@ abstract class Root {
      * Deletes a record from the rights-table
      *
      * @param string $strSystemid
+     *
      * @return bool
      */
-    public function deleteRight($strSystemid) {
+    public function deleteRight($strSystemid)
+    {
         $strQuery = "DELETE FROM "._dbprefix_."system_right WHERE right_id = ?";
         return $this->objDB->_pQuery($strQuery, array($strSystemid));
     }
@@ -1470,22 +1578,24 @@ abstract class Root {
      *
      * @param string $strSystemid
      * @param string $strStopSystemid
+     *
      * @return mixed
      */
-    public function getPathArray($strSystemid = "", $strStopSystemid = "0") {
+    public function getPathArray($strSystemid = "", $strStopSystemid = "0")
+    {
         $arrReturn = array();
 
-        if($strSystemid == "") {
+        if ($strSystemid == "") {
             $strSystemid = $this->getSystemid();
         }
 
         //loop over all parent-records
         $strTempId = $strSystemid;
-        while($strTempId != "0" && $strTempId != "" && $strTempId != -1 && $strTempId != $strStopSystemid) {
+        while ($strTempId != "0" && $strTempId != "" && $strTempId != -1 && $strTempId != $strStopSystemid) {
             $arrReturn[] = $strTempId;
 
             $objCommon = Objectfactory::getInstance()->getObject($strTempId);
-            if($objCommon === null) {
+            if ($objCommon === null) {
                 break;
             }
             $strTempId = $objCommon->getPrevId();
@@ -1500,27 +1610,15 @@ abstract class Root {
      * If the requested key not exists, returns ""
      *
      * @param string $strKey
+     *
      * @return string
      */
-    public function getArrModule($strKey) {
+    public function getArrModule($strKey)
+    {
         if (isset($this->arrModule[$strKey])) {
             return $this->arrModule[$strKey];
-        } else {
-            /*
-            if ($strKey === "modul" || $strKey === "modul") {
-                // try to load the current module-name and the moduleId by reflection
-                $objReflection = new class_reflection($this);
-                $arrAnnotationValues = $objReflection->getAnnotationValuesFromClass(self::STR_MODULE_ANNOTATION);
-                if(count($arrAnnotationValues) > 0) {
-                    $this->setArrModuleEntry("modul", trim($arrAnnotationValues[0]));
-                    $this->setArrModuleEntry("module", trim($arrAnnotationValues[0]));
-                }
-                return $this->arrModule[$strKey];
-            } elseif ($strKey === "moduleId") {
-                return $this->getIntModuleNr();
-            }
-            */
-
+        }
+        else {
             return "";
         }
     }
@@ -1541,11 +1639,13 @@ abstract class Root {
      *
      * @return string
      */
-    public function getLang($strName, $strModule = "", $arrParameters = array()) {
-        if(is_array($strModule))
+    public function getLang($strName, $strModule = "", $arrParameters = array())
+    {
+        if (is_array($strModule)) {
             $arrParameters = $strModule;
+        }
 
-        if($strModule == "" || is_array($strModule)) {
+        if ($strModule == "" || is_array($strModule)) {
             $strModule = $this->getArrModule("modul");
         }
 
@@ -1558,7 +1658,8 @@ abstract class Root {
      *
      * @return Lang
      */
-    protected function getObjLang() {
+    protected function getObjLang()
+    {
         return $this->objLang;
     }
 
@@ -1570,20 +1671,24 @@ abstract class Root {
     /**
      * Deletes the complete Pages-Cache
      *
+     * @todo reenable
      * @return bool
      */
-    public function flushCompletePagesCache() {
-        return Cache::flushCache("class_element_portal");
+    public function flushCompletePagesCache()
+    {
+        return Cache::flushCache();
     }
 
     /**
      * Removes one page from the cache
      *
      * @param string $strPagename
+     * @todo reenable
      * @return bool
      */
-    public function flushPageFromPagesCache($strPagename) {
-        return Cache::flushCache("class_element_portal", $strPagename);
+    public function flushPageFromPagesCache($strPagename)
+    {
+        return $this->flushCompletePagesCache();
     }
 
 
@@ -1594,7 +1699,8 @@ abstract class Root {
      *
      * @return string
      */
-    public final function getStrPortalLanguage() {
+    final public function getStrPortalLanguage()
+    {
         $objLanguage = new LanguagesLanguage();
         return $objLanguage->getPortalLanguage();
     }
@@ -1609,7 +1715,8 @@ abstract class Root {
      *
      * @return string
      */
-    public final function getStrAdminLanguageToWorkOn() {
+    public final function getStrAdminLanguageToWorkOn()
+    {
         $objLanguage = new LanguagesLanguage();
         return $objLanguage->getAdminLanguage();
     }
@@ -1623,22 +1730,27 @@ abstract class Root {
      * Sets the current SystemID
      *
      * @param string $strID
+     *
      * @return bool
      */
-    public function setSystemid($strID) {
-        if(validateSystemid($strID)) {
+    public function setSystemid($strID)
+    {
+        if (validateSystemid($strID)) {
             $this->strSystemid = $strID;
             return true;
         }
-        else
+        else {
             return false;
+        }
     }
 
     /**
      * Resets the current systemid
+     *
      * @return void
      */
-    public function unsetSystemid() {
+    public function unsetSystemid()
+    {
         $this->strSystemid = "";
     }
 
@@ -1647,23 +1759,27 @@ abstract class Root {
      *
      * @return string
      */
-    public function getSystemid() {
+    public function getSystemid()
+    {
         return $this->strSystemid;
     }
 
     /**
      * @return string
      */
-    public function getStrSystemid() {
+    public function getStrSystemid()
+    {
         return $this->strSystemid;
     }
 
     /**
      * @param string $strSystemid
+     *
      * @return void
      */
-    public function setStrSystemid($strSystemid) {
-        if(validateSystemid($strSystemid)) {
+    public function setStrSystemid($strSystemid)
+    {
+        if (validateSystemid($strSystemid)) {
             $this->strSystemid = $strSystemid;
         }
     }
@@ -1676,9 +1792,11 @@ abstract class Root {
      * @throws Exception
      * @return string
      */
-    public function getPrevId($strSystemid = "") {
-        if($strSystemid != "")
+    public function getPrevId($strSystemid = "")
+    {
+        if ($strSystemid != "") {
             throw new Exception("unsupported param @ ".__METHOD__, Exception::$level_FATALERROR);
+        }
 
         return $this->getStrPrevId();
     }
@@ -1687,17 +1805,20 @@ abstract class Root {
     /**
      * @return string
      */
-    public function getStrPrevId() {
+    public function getStrPrevId()
+    {
         return $this->strPrevId;
     }
 
 
     /**
      * @param string $strPrevId
+     *
      * @return void
      */
-    public function setStrPrevId($strPrevId) {
-        if(validateSystemid($strPrevId) || $strPrevId === "0") {
+    public function setStrPrevId($strPrevId)
+    {
+        if (validateSystemid($strPrevId) || $strPrevId === "0") {
             $this->strPrevId = $strPrevId;
         }
     }
@@ -1710,9 +1831,11 @@ abstract class Root {
      * @throws Exception
      * @return int
      */
-    public function getRecordModuleNr($strSystemid = "") {
-        if($strSystemid != "")
+    public function getRecordModuleNr($strSystemid = "")
+    {
+        if ($strSystemid != "") {
             throw new Exception("unsupported param @ ".__METHOD__, Exception::$level_FATALERROR);
+        }
 
         return $this->getIntModuleNr();
     }
@@ -1722,40 +1845,34 @@ abstract class Root {
      */
     public function getIntModuleNr()
     {
-        /*
-        if ($this->intModuleNr === null) {
-            $objReflection = new class_reflection($this);
-            $arrAnnotationValues = $objReflection->getAnnotationValuesFromClass(self::STR_MODULEID_ANNOTATION);
-            if(count($arrAnnotationValues) > 0) {
-                $this->setArrModuleEntry("moduleId", constant(trim($arrAnnotationValues[0])));
-                $this->setIntModuleNr(constant(trim($arrAnnotationValues[0])));
-            }
-        }
-        */
-
         return $this->intModuleNr;
     }
 
     /**
      * @param int $intModuleNr
+     *
      * @return void
      */
-    public function setIntModuleNr($intModuleNr) {
+    public function setIntModuleNr($intModuleNr)
+    {
         $this->intModuleNr = $intModuleNr;
     }
 
     /**
      * @return int
      */
-    public function getIntSort() {
+    public function getIntSort()
+    {
         return $this->intSort;
     }
 
     /**
      * @param int $intSort
+     *
      * @return void
      */
-    public function setIntSort($intSort) {
+    public function setIntSort($intSort)
+    {
         $this->intSort = $intSort;
     }
 
@@ -1767,22 +1884,26 @@ abstract class Root {
      * @throws Exception
      * @return string
      */
-    public function getLastEditUser($strSystemid = "") {
-        if($strSystemid != "")
+    public function getLastEditUser($strSystemid = "")
+    {
+        if ($strSystemid != "") {
             throw new Exception("unsupported param @ ".__METHOD__, Exception::$level_FATALERROR);
+        }
 
-        if(validateSystemid($this->getStrLmUser())) {
+        if (validateSystemid($this->getStrLmUser())) {
             $objUser = new UserUser($this->getStrLmUser());
             return $objUser->getStrDisplayName();
         }
-        else
+        else {
             return "System";
+        }
     }
 
     /**
      * @return string string
      */
-    public function getStrLmUser() {
+    public function getStrLmUser()
+    {
         return $this->strLmUser;
     }
 
@@ -1791,67 +1912,80 @@ abstract class Root {
      *
      * @return string
      */
-    public function getLastEditUserId() {
+    public function getLastEditUserId()
+    {
         return $this->getStrLmUser();
     }
 
     /**
      * @param string $strLmUser
+     *
      * @return void
      */
-    public function setStrLmUser($strLmUser) {
+    public function setStrLmUser($strLmUser)
+    {
         $this->strLmUser = $strLmUser;
     }
 
     /**
      * @return int
      */
-    public function getIntLmTime() {
+    public function getIntLmTime()
+    {
         return $this->intLmTime;
     }
 
     /**
      * @param int $strLmTime
+     *
      * @return void
      */
-    public function setIntLmTime($strLmTime) {
+    public function setIntLmTime($strLmTime)
+    {
         $this->intLmTime = $strLmTime;
     }
 
     /**
      * @return string
      */
-    public function getStrLockId() {
+    public function getStrLockId()
+    {
         return $this->strLockId;
     }
 
     /**
      * @param string $strLockId
+     *
      * @return void
      */
-    public function setStrLockId($strLockId) {
+    public function setStrLockId($strLockId)
+    {
         $this->strLockId = $strLockId;
     }
 
     /**
      * @return int
      */
-    public function getIntLockTime() {
+    public function getIntLockTime()
+    {
         return $this->intLockTime;
     }
 
     /**
      * @param int $intLockTime
+     *
      * @return void
      */
-    public function setIntLockTime($intLockTime) {
+    public function setIntLockTime($intLockTime)
+    {
         $this->intLockTime = $intLockTime;
     }
 
     /**
      * @return int
      */
-    public function getLongCreateDate() {
+    public function getLongCreateDate()
+    {
         return $this->longCreateDate;
     }
 
@@ -1863,33 +1997,40 @@ abstract class Root {
      * @throws Exception
      * @return Date
      */
-    public function getObjCreateDate($strSystemid = "") {
-        if($strSystemid != "")
+    public function getObjCreateDate($strSystemid = "")
+    {
+        if ($strSystemid != "") {
             throw new Exception("unsupported param @ ".__METHOD__, Exception::$level_FATALERROR);
+        }
 
         return new Date($this->getLongCreateDate());
     }
 
     /**
      * @param int $longCreateDate
+     *
      * @return void
      */
-    public function setLongCreateDate($longCreateDate) {
+    public function setLongCreateDate($longCreateDate)
+    {
         $this->longCreateDate = $longCreateDate;
     }
 
     /**
      * @return string
      */
-    public function getStrOwner() {
+    public function getStrOwner()
+    {
         return $this->strOwner;
     }
 
     /**
      * @param string $strOwner
+     *
      * @return void
      */
-    public function setStrOwner($strOwner) {
+    public function setStrOwner($strOwner)
+    {
         $this->strOwner = $strOwner;
     }
 
@@ -1901,9 +2042,11 @@ abstract class Root {
      * @throws Exception
      * @return string
      */
-    public final function getOwnerId($strSystemid = "") {
-        if($strSystemid != "")
+    public final function getOwnerId($strSystemid = "")
+    {
+        if ($strSystemid != "") {
             throw new Exception("unsupported param @ ".__METHOD__, Exception::$level_FATALERROR);
+        }
 
         return $this->getStrOwner();
     }
@@ -1914,14 +2057,17 @@ abstract class Root {
      *
      * @param string $strOwner
      * @param string $strSystemid
+     *
      * @deprecated
      *
      * @throws Exception
      * @return bool
      */
-    public final function setOwnerId($strOwner, $strSystemid = "") {
-        if($strSystemid != "")
+    public final function setOwnerId($strOwner, $strSystemid = "")
+    {
+        if ($strSystemid != "") {
             throw new Exception("unsupported param @ ".__METHOD__, Exception::$level_FATALERROR);
+        }
 
         $this->setStrOwner($strOwner);
         return true;
@@ -1930,14 +2076,16 @@ abstract class Root {
     /**
      * @return int
      */
-    public function getIntRecordStatus() {
+    public function getIntRecordStatus()
+    {
         return $this->intRecordStatus;
     }
 
     /**
      * @return int
      */
-    public function getIntRecordDeleted() {
+    public function getIntRecordDeleted()
+    {
         return $this->intRecordDeleted;
     }
 
@@ -1951,9 +2099,11 @@ abstract class Root {
      * @deprecated use Root::getIntRecordStatus() instead
      * @see Root::getIntRecordStatus()
      */
-    public function getStatus($strSystemid = "") {
-        if($strSystemid != "")
+    public function getStatus($strSystemid = "")
+    {
+        if ($strSystemid != "") {
             throw new Exception("unsupported param @ ".__METHOD__, Exception::$level_FATALERROR);
+        }
 
         return $this->getIntRecordStatus();
     }
@@ -1964,7 +2114,8 @@ abstract class Root {
      *
      * @param int $intRecordStatus
      */
-    public function setIntRecordStatus($intRecordStatus) {
+    public function setIntRecordStatus($intRecordStatus)
+    {
         $this->intRecordStatus = $intRecordStatus;
     }
 
@@ -1976,9 +2127,11 @@ abstract class Root {
      * @throws Exception
      * @return string
      */
-    public function getRecordComment($strSystemid = "") {
-        if($strSystemid != "")
+    public function getRecordComment($strSystemid = "")
+    {
+        if ($strSystemid != "") {
             throw new Exception("unsupported param @ ".__METHOD__, Exception::$level_FATALERROR);
+        }
 
         return $this->getStrRecordComment();
     }
@@ -1987,25 +2140,31 @@ abstract class Root {
     /**
      * @return string
      */
-    public function getStrRecordComment() {
+    public function getStrRecordComment()
+    {
         return $this->strRecordComment;
     }
 
     /**
      * @param string $strRecordComment
+     *
      * @return void
      */
-    public function setStrRecordComment($strRecordComment) {
-        if(uniStrlen($strRecordComment) > 254)
+    public function setStrRecordComment($strRecordComment)
+    {
+        if (uniStrlen($strRecordComment) > 254) {
             $strRecordComment = uniStrTrim($strRecordComment, 250);
+        }
         $this->strRecordComment = $strRecordComment;
     }
 
     /**
      * @param string $strRecordClass
+     *
      * @return void
      */
-    public function setStrRecordClass($strRecordClass) {
+    public function setStrRecordClass($strRecordClass)
+    {
         $this->strRecordClass = $strRecordClass;
     }
 
@@ -2013,7 +2172,8 @@ abstract class Root {
      * @return string
      * @return void
      */
-    public function getStrRecordClass() {
+    public function getStrRecordClass()
+    {
         return $this->strRecordClass;
     }
 
@@ -2023,9 +2183,11 @@ abstract class Root {
      *
      * @param string $strKey
      * @param mixed $mixedValue Value
+     *
      * @return void
      */
-    public function setParam($strKey, $mixedValue) {
+    public function setParam($strKey, $mixedValue)
+    {
         Carrier::getInstance()->setParam($strKey, $mixedValue);
     }
 
@@ -2033,9 +2195,11 @@ abstract class Root {
      * Returns a value from the params-Array
      *
      * @param string $strKey
+     *
      * @return string else ""
      */
-    public function getParam($strKey) {
+    public function getParam($strKey)
+    {
         return Carrier::getInstance()->getParam($strKey);
     }
 
@@ -2044,7 +2208,8 @@ abstract class Root {
      *
      * @return mixed
      */
-    public final function getAllParams() {
+    public final function getAllParams()
+    {
         return Carrier::getAllParams();
     }
 
@@ -2053,7 +2218,8 @@ abstract class Root {
      *
      * @return string
      */
-    public final function getAction() {
+    public final function getAction()
+    {
         return (string)$this->strAction;
     }
 
@@ -2063,7 +2229,8 @@ abstract class Root {
      *
      * @return Lockmanager
      */
-    public function getLockManager() {
+    public function getLockManager()
+    {
         return new Lockmanager($this->getSystemid(), $this);
     }
 
@@ -2073,9 +2240,11 @@ abstract class Root {
      *
      * @param string $strKey
      * @param mixed $strValue
+     *
      * @return void
      */
-    public function setArrModuleEntry($strKey, $strValue) {
+    public function setArrModuleEntry($strKey, $strValue)
+    {
         $this->arrModule[$strKey] = $strValue;
     }
 
@@ -2088,34 +2257,42 @@ abstract class Root {
      * For best performance, include the matching row of the tables system, system_date and system_rights
      *
      * @param array $arrInitRow
+     *
      * @return void
      */
-    public function setArrInitRow($arrInitRow) {
-        if(isset($arrInitRow["system_id"])) {
+    public function setArrInitRow($arrInitRow)
+    {
+        if (isset($arrInitRow["system_id"])) {
             $this->arrInitRow = $arrInitRow;
         }
     }
 
     /**
      * Returns the set of internal values marked as init-values
+     *
      * @return null|array
      */
-    public function getArrInitRow() {
+    public function getArrInitRow()
+    {
         return $this->arrInitRow;
     }
 
     /**
      * @param Date $objEndDate
+     *
      * @return void
      */
-    public function setObjEndDate($objEndDate = null) {
+    public function setObjEndDate($objEndDate = null)
+    {
 
-        if($objEndDate === 0  || $objEndDate === "0")
+        if ($objEndDate === 0 || $objEndDate === "0") {
             $objEndDate = null;
+        }
 
 
-        if(!$objEndDate instanceof Date && $objEndDate != "" && $objEndDate != null)
+        if (!$objEndDate instanceof Date && $objEndDate != "" && $objEndDate != null) {
             $objEndDate = new Date($objEndDate);
+        }
 
         $this->objEndDate = $objEndDate;
         $this->bitDatesChanges = true;
@@ -2124,21 +2301,26 @@ abstract class Root {
     /**
      * @return Date
      */
-    public function getObjEndDate() {
+    public function getObjEndDate()
+    {
         return $this->objEndDate;
     }
 
     /**
      * @param Date $objSpecialDate
+     *
      * @return void
      */
-    public function setObjSpecialDate($objSpecialDate = null) {
+    public function setObjSpecialDate($objSpecialDate = null)
+    {
 
-        if($objSpecialDate === 0 || $objSpecialDate === "0")
+        if ($objSpecialDate === 0 || $objSpecialDate === "0") {
             $objSpecialDate = null;
+        }
 
-        if(!$objSpecialDate instanceof Date && $objSpecialDate != "" && $objSpecialDate != null)
+        if (!$objSpecialDate instanceof Date && $objSpecialDate != "" && $objSpecialDate != null) {
             $objSpecialDate = new Date($objSpecialDate);
+        }
 
         $this->objSpecialDate = $objSpecialDate;
         $this->bitDatesChanges = true;
@@ -2147,21 +2329,26 @@ abstract class Root {
     /**
      * @return Date
      */
-    public function getObjSpecialDate() {
+    public function getObjSpecialDate()
+    {
         return $this->objSpecialDate;
     }
 
     /**
      * @param Date $objStartDate
+     *
      * @return void
      */
-    public function setObjStartDate($objStartDate = null) {
+    public function setObjStartDate($objStartDate = null)
+    {
 
-        if($objStartDate === 0 || $objStartDate === "0")
+        if ($objStartDate === 0 || $objStartDate === "0") {
             $objStartDate = null;
+        }
 
-        if(!$objStartDate instanceof Date && $objStartDate != "" && $objStartDate != null)
+        if (!$objStartDate instanceof Date && $objStartDate != "" && $objStartDate != null) {
             $objStartDate = new Date($objStartDate);
+        }
 
         $this->bitDatesChanges = true;
         $this->objStartDate = $objStartDate;
@@ -2170,7 +2357,8 @@ abstract class Root {
     /**
      * @return Date
      */
-    public function getObjStartDate() {
+    public function getObjStartDate()
+    {
         return $this->objStartDate;
     }
 

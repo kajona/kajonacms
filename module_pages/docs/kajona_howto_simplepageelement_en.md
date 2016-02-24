@@ -13,38 +13,38 @@ This tutorial is based on Kajona V4.3.
 
 When creating a new element, it's main focus is to be installed on your system/website. Nevertheless, since all elements share a common structure, you may enrich the element with your copyright data and a few credits and publish it to other Kajona users later on. In this way, your work may be spread to other Kajona users and installations and you could earn all the glory.
 
-Since we want to create an element rendering the date of the last modification, we'll call it “lastmodified”. Therefore the root-folder of the element is called “element_lastmodified”.
+Since we want to create an element rendering the date of the last modification, we'll call it “lastmodified”. Therefore the root-folder of the element is called “module_lastmodified”.
 
 Start by creating the following structure of files and folders in your installations' /core folder:
 
 ```
-element_lastmodified
+module_lastmodified
     |- admin
     |    |- elements
-    |         |- class_element_lastmodified_admin.php
+    |         |- ElementLastmodifiedAdmin.php
     |
     |- installer
-    |    |- class_installer_element_lastmodified.php
+    |    |- InstallerElementLastmodified.php
     |
     |- lang
     |    |- module_elements
     |         |- lang_lastmodified_[de|en|bg|pt].php
     |- portal
     |    |-elements
-    |         |- class_element_lastmodified_portal.php
+    |         |- ElementLastmodifiedPortal.php
     |
     |- metadata.xml
-```    
+```     
     
 To get a first understanding of the structure, we'll have a look at each file:
 
-* /admin/elements/class_element_lastmodified_admin.php
+* /admin/elements/ElementLastmodifiedAdmin.php
 This file contains the backend-representation of the element. As soon as a user creates or edits a lastmodified-element, this class takes care of the backend-view.
 
-* /installer/class_installer_element_lastmodified.php
+* /installer/InstallerElementLastmodified.php
 As the name already indicates, the installer takes care of setting up the element during the installation of the element. The installation may be run during a full system-installation or afterwards, when adding the element to an installation already existing. 
 
-* /portal/elements/class_element_lastmodified_portal.php
+* /portal/elements/ElementLastmodifiedPortal.php
 The portal-class takes care of rendering the contents on a portal-page. It is called each time a portal-page is generated, e.g. when a visitor opens the page in a web browser.
 
 * /lang/module_elements/lang_lastmodified_en.php
@@ -57,7 +57,7 @@ The metadata.xml file contains a description of the element and requirements.
 Each file contains a special part of the element, therefore we'll step through each of them.
 
 ###Installer
-The filename of the installer is based on the scheme class_installer_element_name.php, in this case class_installer_element_lastmodified.php. 
+The filename of the installer is based on the scheme InstallerElementName.php, in this case InstallerElementLastmodified.php. 
 
 The main purpose of the installer is to register the element with the pages-module, otherwise the element is unknown and could not be created using the backend.
 
@@ -67,7 +67,7 @@ Let's step through the installer line by line:
 <?php
 ```
 
-We start with the declaration of the installer-class. By definition, an installer has to extend the class_installer_base base-class, inheriting all relevant methods. In addition, the implementation of the interface interface_installer ensures you provide all relevant methods.
+We start with the declaration of the installer-class. By definition, an installer has to extend the InstallerBase base-class, inheriting all relevant methods. In addition, the implementation of the interface InstallerInterface ensures you provide all relevant methods.
 
 Please note the annotation `@moduleId`. This annotation is required in order to categorize the element within Kajonas system-structure. For all page-elements, the @moduleId value is _pages_content_modul_id_, only modules may use other values.
 
@@ -75,14 +75,14 @@ Please note the annotation `@moduleId`. This annotation is required in order to 
 /**
  * @moduleId _pages_content_modul_id_
  */
-class class_installer_element_lastmodified extends class_installer_base implements interface_installer {
+class InstallerElementLastmodified extends InstallerBase implements InstallerInterface {
 ```
 
 The “install” method is the main method of the installer and being called by the framework. The method is used to set up all relevant data and to register the element with the system.
 
 Therefore we check if the element is already installed since we don't want to have the element being registered twice.
 
-If the element is still missing, the installation is handled by a new instance of the class “class_module_pages_element”. We use the object to pass all relevant properties and settings of the lastmodified element:
+If the element is still missing, the installation is handled by a new instance of the class “PagesElement”. We use the object to pass all relevant properties and settings of the lastmodified element:
 
 * setStrName is used to register the name of the new element, “lastmodified”. By this name the element may be used in the portal and templates. When registering the element named “lastmodified”, a valid syntax for placeholders in templates would be %%title_lastmodified%%.
 * setStrClassAdmin stores the filename of the admin-representation.
@@ -99,11 +99,11 @@ public function install() {
     //Register the element
     $strReturn .= "Registering lastmodified-element...\n";
     //check, if not already existing
-    if(class_module_pages_element::getElement("lastmodified") == null) {
-        $objElement = new class_module_pages_element();
+    if(PagesElement::getElement("lastmodified") == null) {
+        $objElement = new PagesElement();
         $objElement->setStrName("lastmodified");
-        $objElement->setStrClassAdmin("class_element_lastmodified_admin.php");
-        $objElement->setStrClassPortal("class_element_lastmodified_portal.php");
+        $objElement->setStrClassAdmin("ElementLastmodifiedAdmin.php");
+        $objElement->setStrClassPortal("ElementLastmodifiedPortal.php");
         $objElement->setIntCachetime(60);
         $objElement->setIntRepeat(0);
         $objElement->setStrVersion($this->objMetadata->getStrVersion());
@@ -123,7 +123,7 @@ Page-elements may be updated as soon as a new version is released (the version f
 public function update() {
   $strReturn = "";
 
-  if(class_module_pages_element::getElement("lastmodified")->getStrVersion() == "4.2") {
+  if(PagesElement::getElement("lastmodified")->getStrVersion() == "4.2") {
       $strReturn .= "Updating element lastmodified to 4.3...\n";
       $this->updateElementVersion("lastmodified", "4.3");
       $this->objDB->flushQueryCache();
@@ -135,14 +135,14 @@ public function update() {
 ###Backend-View
 When placing an element on a page, a simple form is shown to enter all relevant data. Since the lastmodified element doesn't handle any additional settings, the backend-class is kept rather short.
 
-By convention, an elements' backend class has to extend the base-class class_element_admin and implement the interface interface_admin_element.
+By convention, an elements' backend class has to extend the base-class ElementAdmin and implement the interface AdminElementInterface.
 
 Nevertheless, the lastmodified-element class remains empty:
 
 ```
 <?php
 
-class class_element_lastmodified_admin extends class_element_admin implements interface_admin_element {  
+class ElementLastmodifiedAdmin extends ElementAdmin implements AdminElementInterface {  
 
 }
 ```
@@ -156,17 +156,17 @@ When creating a new lastmodified element using the backend, the framwork creates
 ###Portal-View
 The third file is the portal-class of the element. As you already guessed, the portal-class has to extend a base-class and implement an interface, too.
 
-In this case, the base class is class_element_portal whereas the interface is named interface_portal_element.
+In this case, the base class is ElementPortal whereas the interface is named PortalElementInterface.
 
 The interface guarantees you implement the method “loadData”, the hook-method being called by the framework as soon as a page is being generated.
 
 ```
 <?php
 
-class class_element_lastmodified_portal extends class_element_portal implements interface_portal_element {
+class ElementLastmodifiedPortal extends ElementPortal implements PortalElementInterface {
 ```
 
-The real work is done in loadData. Since we want to print the date of the last modification of the current page, the first task is to fetch an instance of the current page. This is done via class_module_pages_page::getPageByName(). By using $this->getPagename() the framework looks up the name of the page being generated and passes it to the factory-method getPageByName.
+The real work is done in loadData. Since we want to print the date of the last modification of the current page, the first task is to fetch an instance of the current page. This is done via PagesPage::getPageByName(). By using $this->getPagename() the framework looks up the name of the page being generated and passes it to the factory-method getPageByName.
  
 By querying the page-object using getIntLmTime(), the date of the last modification is returned as an unix-timestamp. timeToString simply transforms the timestamp to a readable string.
 
@@ -176,7 +176,7 @@ Since a prefix like “Last modified:” would be nice, the text is loaded from 
   public function loadData() {
     $strReturn = "";
     //load the current page
-    $objPage = class_module_pages_page::getPageByName($this->getPagename());
+    $objPage = PagesPage::getPageByName($this->getPagename());
     $strReturn .= $this->getLang("lastmodified").timeToString($objPage->getIntLmTime());
     return $strReturn;
   }

@@ -429,7 +429,7 @@ JS;
     protected function actionNew()
     {
         $this->setStrCurObjectTypeName("");
-        $this->setCurObjectClassName("class_module_messaging_message");
+        $this->setCurObjectClassName("Kajona\\System\\System\\MessagingMessage");
         $this->setArrModuleEntry("template", "/folderview.tpl");
         return parent::actionNew();
     }

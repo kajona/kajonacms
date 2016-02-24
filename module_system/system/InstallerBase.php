@@ -9,7 +9,7 @@
 
 namespace Kajona\System\System;
 
-use class_module_packagemanager_metadata;
+use Kajona\Packagemanager\System\PackagemanagerMetadata;
 use Kajona\Pages\System\PagesElement;
 
 /**
@@ -22,7 +22,7 @@ use Kajona\Pages\System\PagesElement;
 abstract class InstallerBase extends Root implements InstallerInterface {
 
     /**
-     * @var class_module_packagemanager_metadata
+     * @var PackagemanagerMetadata
      */
     protected $objMetadata = null;
 
@@ -40,7 +40,7 @@ abstract class InstallerBase extends Root implements InstallerInterface {
         }
         $strDir = Resourceloader::getInstance()->getPathForFile("/installer/".$strClassname.".php");
         $strDir = dirname(_realpath_.$strDir);
-        $this->objMetadata = new class_module_packagemanager_metadata();
+        $this->objMetadata = new PackagemanagerMetadata();
         $this->objMetadata->autoInit(uniStrReplace(array("/installer", _realpath_), array("", ""), $strDir));
         parent::__construct();
     }
@@ -211,7 +211,7 @@ abstract class InstallerBase extends Root implements InstallerInterface {
 	 *
 	 * @param string $strName
 	 * @param string $strValue
-	 * @param int $intType @link class_module_system_setting::int_TYPE_XX
+	 * @param int $intType @link SystemSetting::int_TYPE_XX
 	 * @param int $intModule
      * @return bool
      */

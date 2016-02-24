@@ -8,7 +8,6 @@
 namespace Kajona\System\System\Usersources;
 
 use Kajona\System\Admin\AdminFormgenerator;
-use Kajona\System\System\AdminskinHelper;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\CoreEventdispatcher;
 use Kajona\System\System\Logger;
@@ -29,7 +28,8 @@ use Kajona\System\System\SystemEventidentifier;
  * @module user
  * @moduleId _user_modul_id_
  */
-class UsersourcesGroupKajona extends Model implements ModelInterface, UsersourcesGroupInterface {
+class UsersourcesGroupKajona extends Model implements ModelInterface, UsersourcesGroupInterface
+{
 
     /**
      * @var string
@@ -43,20 +43,23 @@ class UsersourcesGroupKajona extends Model implements ModelInterface, Usersource
      *
      * @return string
      */
-    public function getStrDisplayName() {
+    public function getStrDisplayName()
+    {
         return $this->getStrDesc();
     }
 
 
     /**
      * Initialises the current object, if a systemid was given
+     *
      * @return void
      */
-    protected function initObjectInternal() {
-        $strQuery = "SELECT * FROM " . _dbprefix_ . "user_group_kajona WHERE group_id=?";
+    protected function initObjectInternal()
+    {
+        $strQuery = "SELECT * FROM "._dbprefix_."user_group_kajona WHERE group_id=?";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 
-        if(count($arrRow) > 0) {
+        if (count($arrRow) > 0) {
             $this->setStrDesc($arrRow["group_desc"]);
             $this->setSystemid($arrRow["group_id"]);
         }
@@ -64,26 +67,27 @@ class UsersourcesGroupKajona extends Model implements ModelInterface, Usersource
 
     /**
      * Updates the current object to the database.
-     * Overwrites class_roots' logic since a kajona group is not reflected in the system-table
+     * Overwrites Roots' logic since a kajona group is not reflected in the system-table
      *
      * @param bool $strPrevId
      *
      * @return bool
      */
-    public function updateObjectToDb($strPrevId = false) {
+    public function updateObjectToDb($strPrevId = false)
+    {
         //mode-splitting
-        if($this->getSystemid() == "") {
-            Logger::getInstance(Logger::USERSOURCES)->addLogRow("saved new kajona group " . $this->getStrSystemid(), Logger::$levelInfo);
+        if ($this->getSystemid() == "") {
+            Logger::getInstance(Logger::USERSOURCES)->addLogRow("saved new kajona group ".$this->getStrSystemid(), Logger::$levelInfo);
             $strGrId = generateSystemid();
             $this->setSystemid($strGrId);
-            $strQuery = "INSERT INTO " . _dbprefix_ . "user_group_kajona
+            $strQuery = "INSERT INTO "._dbprefix_."user_group_kajona
                           (group_id, group_desc) VALUES
                           (?, ?)";
             return $this->objDB->_pQuery($strQuery, array($strGrId, $this->getStrDesc()));
         }
         else {
-            Logger::getInstance(Logger::USERSOURCES)->addLogRow("updated kajona group " . $this->getSystemid(), Logger::$levelInfo);
-            $strQuery = "UPDATE " . _dbprefix_ . "user_group_kajona
+            Logger::getInstance(Logger::USERSOURCES)->addLogRow("updated kajona group ".$this->getSystemid(), Logger::$levelInfo);
+            $strQuery = "UPDATE "._dbprefix_."user_group_kajona
                             SET group_desc=?
                           WHERE group_id=?";
             return $this->objDB->_pQuery($strQuery, array($this->getStrDesc(), $this->getSystemid()));
@@ -97,7 +101,8 @@ class UsersourcesGroupKajona extends Model implements ModelInterface, Usersource
      *
      * @return bool
      */
-    protected function updateStateToDb() {
+    protected function updateStateToDb()
+    {
         return true;
     }
 
@@ -112,8 +117,9 @@ class UsersourcesGroupKajona extends Model implements ModelInterface, Usersource
      *
      * @return void
      */
-    public function setNewRecordId($strId) {
-        $strQuery = "UPDATE " . _dbprefix_ . "user_group_kajona SET group_id = ? WHERE group_id = ?";
+    public function setNewRecordId($strId)
+    {
+        $strQuery = "UPDATE "._dbprefix_."user_group_kajona SET group_id = ? WHERE group_id = ?";
         $this->objDB->_pQuery($strQuery, array($strId, $this->getSystemid()));
         $this->setSystemid($strId);
     }
@@ -127,10 +133,11 @@ class UsersourcesGroupKajona extends Model implements ModelInterface, Usersource
      *
      * @return array
      */
-    public function getUserIdsForGroup($intStart = null, $intEnd = null) {
-        $strQuery = "SELECT k_user.user_id FROM " . _dbprefix_ . "user_kajona as k_user,
-                                         " . _dbprefix_ . "user as user2,
-									     " . _dbprefix_ . "user_kajona_members
+    public function getUserIdsForGroup($intStart = null, $intEnd = null)
+    {
+        $strQuery = "SELECT k_user.user_id FROM "._dbprefix_."user_kajona as k_user,
+                                         "._dbprefix_."user as user2,
+									     "._dbprefix_."user_kajona_members
 								   WHERE group_member_group_kajona_id= ?
 								  	 AND k_user.user_id = group_member_user_kajona_id
                                      AND k_user.user_id = user2.user_id
@@ -139,7 +146,7 @@ class UsersourcesGroupKajona extends Model implements ModelInterface, Usersource
         $arrIds = $this->objDB->getPArray($strQuery, array($this->getSystemid()), $intStart, $intEnd);
 
         $arrReturn = array();
-        foreach($arrIds as $arrOneId) {
+        foreach ($arrIds as $arrOneId) {
             $arrReturn[] = $arrOneId["user_id"];
         }
 
@@ -151,9 +158,10 @@ class UsersourcesGroupKajona extends Model implements ModelInterface, Usersource
      *
      * @return int
      */
-    public function getNumberOfMembers() {
+    public function getNumberOfMembers()
+    {
         $strQuery = "SELECT COUNT(*)
-                       FROM " . _dbprefix_ . "user_kajona_members
+                       FROM "._dbprefix_."user_kajona_members
 					   WHERE group_member_group_kajona_id= ?";
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getSystemid()));
         return $arrRow["COUNT(*)"];
@@ -164,10 +172,11 @@ class UsersourcesGroupKajona extends Model implements ModelInterface, Usersource
      *
      * @return bool
      */
-    public function deleteGroup() {
-        Logger::getInstance(Logger::USERSOURCES)->addLogRow("deleted kajona group with id " . $this->getSystemid(), Logger::$levelInfo);
+    public function deleteGroup()
+    {
+        Logger::getInstance(Logger::USERSOURCES)->addLogRow("deleted kajona group with id ".$this->getSystemid(), Logger::$levelInfo);
         $this->deleteAllUsersFromCurrentGroup();
-        $strQuery = "DELETE FROM " . _dbprefix_ . "user_group_kajona WHERE group_id=?";
+        $strQuery = "DELETE FROM "._dbprefix_."user_group_kajona WHERE group_id=?";
         CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_RECORDDELETED, array($this->getSystemid(), get_class($this)));
         return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
     }
@@ -177,7 +186,8 @@ class UsersourcesGroupKajona extends Model implements ModelInterface, Usersource
      *
      * @return bool
      */
-    public function deleteObject() {
+    public function deleteObject()
+    {
         return $this->deleteGroup();
     }
 
@@ -187,8 +197,9 @@ class UsersourcesGroupKajona extends Model implements ModelInterface, Usersource
      *
      * @return bool
      */
-    private function deleteAllUsersFromCurrentGroup() {
-        $strQuery = "DELETE FROM " . _dbprefix_ . "user_kajona_members WHERE group_member_group_kajona_id=?";
+    private function deleteAllUsersFromCurrentGroup()
+    {
+        $strQuery = "DELETE FROM "._dbprefix_."user_kajona_members WHERE group_member_group_kajona_id=?";
         return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
     }
 
@@ -199,9 +210,10 @@ class UsersourcesGroupKajona extends Model implements ModelInterface, Usersource
      *
      * @return bool
      */
-    public function addMember(UsersourcesUserInterface $objUser) {
+    public function addMember(UsersourcesUserInterface $objUser)
+    {
         $this->removeMember($objUser);
-        $strQuery = "INSERT INTO " . _dbprefix_ . "user_kajona_members
+        $strQuery = "INSERT INTO "._dbprefix_."user_kajona_members
                        (group_member_group_kajona_id, group_member_user_kajona_id) VALUES
                          (?, ?)";
         return $this->objDB->_pQuery($strQuery, array($this->getSystemid(), $objUser->getSystemid()));
@@ -213,7 +225,8 @@ class UsersourcesGroupKajona extends Model implements ModelInterface, Usersource
      *
      * @return bool
      */
-    public function isEditable() {
+    public function isEditable()
+    {
         return true;
     }
 
@@ -225,8 +238,9 @@ class UsersourcesGroupKajona extends Model implements ModelInterface, Usersource
      *
      * @return bool
      */
-    public function removeMember(UsersourcesUserInterface $objUser) {
-        $strQuery = "DELETE FROM " . _dbprefix_ . "user_kajona_members
+    public function removeMember(UsersourcesUserInterface $objUser)
+    {
+        $strQuery = "DELETE FROM "._dbprefix_."user_kajona_members
 						WHERE group_member_group_kajona_id=?
 						  AND group_member_user_kajona_id=?";
         return $this->objDB->_pQuery($strQuery, array($this->getSystemid(), $objUser->getSystemid()));
@@ -234,26 +248,31 @@ class UsersourcesGroupKajona extends Model implements ModelInterface, Usersource
 
     /**
      * Hook to update the admin-form when editing / creating a single group
+     *
      * @param AdminFormgenerator $objForm
      *
      * @return mixed
      */
-    public function updateAdminForm(AdminFormgenerator $objForm) {
+    public function updateAdminForm(AdminFormgenerator $objForm)
+    {
 
     }
 
     /**
      * @return string
      */
-    public function getStrDesc() {
+    public function getStrDesc()
+    {
         return $this->strDesc;
     }
 
     /**
      * @param string $strDesc
+     *
      * @return void
      */
-    public function setStrDesc($strDesc) {
+    public function setStrDesc($strDesc)
+    {
         $this->strDesc = $strDesc;
     }
 

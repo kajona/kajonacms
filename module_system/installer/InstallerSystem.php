@@ -356,7 +356,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         //Send the query to the db
         $this->objDB->_pQuery(
             $strQuery,
-            array(0, 0, _system_modul_id_, Date::getCurrentTimestamp(), time(), 1, 1, "class_module_system_common")
+            array(0, 0, _system_modul_id_, Date::getCurrentTimestamp(), time(), 1, 1, "Kajona\\System\\System\\SystemCommon")
         );
 
 
@@ -657,7 +657,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $strReturn .= "Installing password reset history...\n";
 
         $objManager = new OrmSchemamanager();
-        $objManager->createTable("class_module_system_pwchangehistory");
+        $objManager->createTable("Kajona\\System\\System\\SystemPwchangehistory");
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7.6");

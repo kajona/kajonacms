@@ -8,13 +8,14 @@ namespace Kajona\System\Admin;
 
 /**
  * Interface for all form-objects.
- * Make sure you extend class_formentry_base, too.
+ * Make sure you extend FormentryBase, too.
  *
  * @author sidler@mulchprod.de
  * @since 4.0
  * @package module_formgenerator
  */
-interface FormentryInterface {
+interface FormentryInterface
+{
 
     /**
      * Renders the field itself.
