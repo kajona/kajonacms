@@ -45,6 +45,14 @@ class class_module_system_changelog_restorer extends class_module_system_changel
 
         //all prerequisites match, start creating query
         $objReflection = new class_reflection($objObject);
+
+        //check if the target property was an object-list. if given, the string from the database should be transformed to an array instead.
+        $arrObjectlistProperties = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_OBJECTLIST);
+
+        if(in_array($strProperty, array_keys($arrObjectlistProperties))) {
+            $strValue = array_map(function($strValue) { return class_objectfactory::getInstance()->getObject($strValue); }, explode(",", $strValue));
+        }
+
         $strSetter = $objReflection->getSetter($strProperty);
         if($strSetter !== null) {
             $objObject->{$strSetter}($strValue);
