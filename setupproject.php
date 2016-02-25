@@ -26,8 +26,8 @@ class class_project_setup {
 
 
         $arrExcludedModules = array();
-        if(is_file(self::$strRealPath."project/system/config/packageconfig.php")) {
-            include self::$strRealPath."project/system/config/packageconfig.php";
+        if(is_file(self::$strRealPath."project/packageconfig.php")) {
+            include self::$strRealPath."project/packageconfig.php";
         }
 
         //Module-Constants

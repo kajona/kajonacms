@@ -23,11 +23,11 @@ class CleanCoreHelper {
 
 
         //trigger cleanups if required, e.g. since a module is excluded or an explicit include list is present
-        echo "\n\nSearching for excluded modules at ".__DIR__."/".$this->strProjectPath."/project/system/config/packageconfig.php"."\n\n";
-        if(file_exists(__DIR__."/".$this->strProjectPath."/project/system/config/packageconfig.php")) {
+        echo "\n\nSearching for excluded modules at ".__DIR__."/".$this->strProjectPath."/project/packageconfig.php"."\n\n";
+        if(file_exists(__DIR__."/".$this->strProjectPath."/project/packageconfig.php")) {
             $arrIncludedModules = array();
             $arrExcludedModules = array();
-            include(__DIR__."/".$this->strProjectPath."/project/system/config/packageconfig.php");
+            include(__DIR__."/".$this->strProjectPath."/project/packageconfig.php");
 
             foreach($arrCores as $strCoreFolder) {
                 foreach(scandir(__DIR__."/".$this->strProjectPath."/".$strCoreFolder) as $strOneModule) {

@@ -144,8 +144,8 @@ class Classloader
 
         $arrExcludedModules = array();
         $arrIncludedModules = array();
-        if (is_file(_realpath_."/project/system/config/packageconfig.php")) {
-            include(_realpath_."/project/system/config/packageconfig.php");
+        if (is_file(_realpath_."/project/packageconfig.php")) {
+            include(_realpath_."/project/packageconfig.php");
         }
 
         //Module-Constants
