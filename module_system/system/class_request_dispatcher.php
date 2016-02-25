@@ -181,10 +181,11 @@ class class_request_dispatcher {
                         if(class_carrier::getInstance()->getParam("peClose") == "1") {
 
                             if(getGet("peRefreshPage") != "") {
-                                $strReturn = "<html><head></head><body onload=\"parent.location = '" . urldecode(getGet("peRefreshPage")) . "';\"></body></html>";
+                                $strReloadUrl = urldecode(getGet("peRefreshPage"));
+                                $strReturn = "<html><head></head><body><script type='text/javascript'>if(window.opener) { window.opener.location = '".$strReloadUrl."'; window.close(); } else { parent.location = '".$strReloadUrl."'; }</script></body></html>";
                             }
                             else {
-                                $strReturn = "<html><head></head><body onload=\"parent.location.reload();\"></body></html>";
+                                $strReturn = "<html><head></head><body><script type='text/javascript'>if(window.opener) { window.opener.location.reload(); window.close(); } else { parent.location.reload(); }</script></body></html>";
                             }
                         }
 
@@ -196,7 +197,7 @@ class class_request_dispatcher {
                 }
             }
             else {
-                throw new class_exception("Sorry, but you don't have the needed permissions to access the admin-area", class_exception::$level_FATALERROR);
+                throw new class_exception("Sorry, but you don't have sufficient permissions to access the admin-area", class_exception::$level_FATALERROR);
             }
         }
         else {
