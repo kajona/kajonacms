@@ -254,6 +254,7 @@ class UserSourcefactory
      */
     public function getUsersource($strName)
     {
+        //TODO class name parsing
         $strName = trim($strName);
         if ($strName == "") {
             throw new Exception("login provider ".$strName." not existing", Exception::$level_ERROR);

@@ -567,6 +567,7 @@ class AdminFormgenerator
      */
     private function getValidatorInstance($strClassname)
     {
+        //TODO class name parsing
         if (class_exists($strClassname)) {
             return new $strClassname();
         }

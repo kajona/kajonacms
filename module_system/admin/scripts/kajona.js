@@ -1178,6 +1178,11 @@ KAJONA.admin.messaging = {
  */
 KAJONA.admin.renderTocNavigation = function (selector) {
 
+
+    if(!$('#toc-navigation').length) {
+        return;
+    }
+
     //handled before?
     if($('#toc-navigation ul').length > 0) {
         return;

@@ -49,6 +49,14 @@ class SystemChangelogRestorer extends SystemChangelog
 
         //all prerequisites match, start creating query
         $objReflection = new Reflection($objObject);
+
+        //check if the target property was an object-list. if given, the string from the database should be transformed to an array instead.
+        $arrObjectlistProperties = $objReflection->getPropertiesWithAnnotation(OrmBase::STR_ANNOTATION_OBJECTLIST);
+
+        if(in_array($strProperty, array_keys($arrObjectlistProperties))) {
+            $strValue = array_map(function($strValue) { return Objectfactory::getInstance()->getObject($strValue); }, explode(",", $strValue));
+        }
+
         $strSetter = $objReflection->getSetter($strProperty);
         if ($strSetter !== null) {
             $objObject->{$strSetter}($strValue);
