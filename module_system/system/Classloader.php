@@ -364,11 +364,6 @@ class Classloader
             return null;
         }
 
-        // blacklisting!
-        if (uniStrpos(basename($strFilename), "Testbase") === 0) {
-            return null;
-        }
-
         $strFile = uniSubstr(basename($strFilename), 0, -4);
         $strClassname = null;
 
