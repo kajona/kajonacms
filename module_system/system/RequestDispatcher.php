@@ -195,11 +195,12 @@ class RequestDispatcher
                         //React, if admin was opened by the portaleditor
                         if (Carrier::getInstance()->getParam("peClose") == "1") {
 
-                            if (getGet("peRefreshPage") != "") {
-                                $strReturn = "<html><head></head><body onload=\"parent.location = '".urldecode(getGet("peRefreshPage"))."';\"></body></html>";
+                            if(getGet("peRefreshPage") != "") {
+                                $strReloadUrl = urldecode(getGet("peRefreshPage"));
+                                $strReturn = "<html><head></head><body><script type='text/javascript'>if(window.opener) { window.opener.location = '".$strReloadUrl."'; window.close(); } else { parent.location = '".$strReloadUrl."'; }</script></body></html>";
                             }
                             else {
-                                $strReturn = "<html><head></head><body onload=\"parent.location.reload();\"></body></html>";
+                                $strReturn = "<html><head></head><body><script type='text/javascript'>if(window.opener) { window.opener.location.reload(); window.close(); } else { parent.location.reload(); }</script></body></html>";
                             }
                         }
 
