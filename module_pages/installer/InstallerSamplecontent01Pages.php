@@ -136,7 +136,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
             $arrParams = array();
             if ($this->strContentLanguage == "de") {
                 $arrParams[] = "Herzlichen Glückwunsch!";
-                $arrParams[] = "Diese Installation von Kajona war erfolgreich. Wir wünschen viel Spaß mit Kajona V4.<br />
+                $arrParams[] = "Diese Installation von Kajona war erfolgreich. Wir wünschen viel Spaß mit Kajona V5.<br />
                                 Nehmen Sie sich die Zeit und betrachten Sie die einzelnen Seiten, die mit Beispielinhalten befüllt wurde. Sie gelangen jederzeit auf diese
                                 Seite durch den Link &quot;Home&quot; zurück.<br/>
                                 Um die Inhalte der Webseite zu verändern sollten Sie sich als erstes am Administrationsbereich <a href='_webpath_/admin'>anmelden</a>.
@@ -148,7 +148,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
             }
             else {
                 $arrParams[] = "Congratulations!";
-                $arrParams[] = "This installation of Kajona was successful. Have fun using Kajona V4!<br />
+                $arrParams[] = "This installation of Kajona was successful. Have fun using Kajona V5!<br />
                                 Take some time and watch the pages already created and have a look at the sample-contents assigned to those page.
                                 You may return to this page any time by clicking the &quot;home&quot; link.<br/>
                                 To modify the contents of this webpage you have to <a href='_webpath_/admin'>log in</a> at the administration-backend.

@@ -50,7 +50,7 @@ class Pdf {
         $this->objPdf = new PdfTcpdf(self::$PAGE_ORIENTATION_PORTRAIT, self::$PDF_UNIT, self::$PAGE_FORMAT_A4);
 
         //document meta data
-        $this->objPdf->SetCreator("Kajona V4");
+        $this->objPdf->SetCreator("Kajona V5");
         $this->objPdf->SetAuthor('Kajona PDF Engine');
         $this->objPdf->SetTitle('Kajona PDF');
         $this->objPdf->SetSubject('Kajona - Free Content Management');

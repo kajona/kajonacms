@@ -13,7 +13,7 @@ class class_project_setup {
         
         self::$strRealPath = __DIR__."/../";
 
-        echo "<b>Kajona V4 project setup.</b>\nCreates the folder-structure required to build a new project.\n\n";
+        echo "<b>Kajona V5 project setup.</b>\nCreates the folder-structure required to build a new project.\n\n";
 
         $strCurFolder = __DIR__;
 
@@ -102,7 +102,7 @@ class class_project_setup {
         }
 
 
-        echo "\n<b>Kajona V4 template setup.</b>\nCreates the default-template-pack required to render pages.\n";
+        echo "\n<b>Kajona V5 template setup.</b>\nCreates the default-template-pack required to render pages.\n";
         echo "Files already existing are NOT overwritten.\n";
 
 
