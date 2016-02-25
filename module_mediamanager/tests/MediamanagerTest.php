@@ -2,8 +2,6 @@
 
 namespace Kajona\Mediamanager\Tests;
 
-require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
-
 use Kajona\Mediamanager\System\MediamanagerFile;
 use Kajona\Mediamanager\System\MediamanagerRepo;
 use Kajona\System\System\Filesystem;

@@ -2,8 +2,6 @@
 
 namespace Kajona\Stats\Tests;
 
-require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
-
 use Kajona\Stats\Admin\AdminStatsreportsInterface;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Resourceloader;

@@ -2,8 +2,6 @@
 
 namespace Kajona\Packagemanager\Tests;
 
-require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
-
 use Kajona\Packagemanager\System\PackagemanagerManager;
 use Kajona\Packagemanager\System\PackagemanagerMetadata;
 use Kajona\System\System\Filesystem;

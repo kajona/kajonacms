@@ -13,8 +13,6 @@ use Kajona\System\System\OrmRowcache;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\Testbase;
 
-require_once __DIR__."/../../../core/module_system/system/Testbase.php";
-
 class PageimportexportTest extends Testbase
 {
     protected function tearDown()

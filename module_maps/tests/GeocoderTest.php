@@ -4,7 +4,6 @@ namespace Kajona\Maps\Test;
 // includes
 use Kajona\Maps\System\Geocoder;
 
-require_once __DIR__."/../../../core/module_system/system/Testbase.php";
 class GeocoderTest extends \Kajona\System\System\Testbase {
 
     public function test() {

@@ -1,8 +1,6 @@
 <?php
 namespace Kajona\Pchart\Tests;
 
-require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
-
 use Kajona\Pchart\System\GraphPchart;
 use Kajona\System\System\GraphColorpalettes;
 use Kajona\System\System\Testbase;

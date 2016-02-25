@@ -2,15 +2,12 @@
 
 namespace Kajona\Navigation\Tests;
 
-require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
-
 use Kajona\Navigation\System\NavigationTree;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Testbase;
-
 
 class AutoNavigationTest extends Testbase
 {

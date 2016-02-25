@@ -2,15 +2,12 @@
 
 namespace Kajona\News\Tests;
 
-require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
-
 use Kajona\News\Portal\NewsPortalXml;
 use Kajona\News\System\NewsCategory;
 use Kajona\News\System\NewsFeed;
 use Kajona\News\System\NewsNews;
 use Kajona\System\System\Testbase;
 use Kajona\System\System\XmlParser;
-
 
 class NewsTest extends Testbase
 {

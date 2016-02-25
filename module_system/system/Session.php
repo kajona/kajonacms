@@ -583,7 +583,7 @@ namespace Kajona\System\System;
             setcookie(session_name(), '', time() - 42000);
         }
         // Finally, destroy the session.
-        session_destroy();
+        @session_destroy();
         //start a new one
         $this->sessionStart();
         //and create a new sessid
