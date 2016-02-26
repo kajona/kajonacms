@@ -232,7 +232,7 @@ class FormentryObjectlist extends FormentryBase implements FormentryPrintableInt
         if ($objClass->implementsInterface('AGP\Aufgaben\System\AufgabenTaskableInterface')) {
             $strObjectName .= "[".$objObject->getStrTaskCategory()."] ";
         }
-        elseif ($objClass->implementsInterface('Kajona\System\System\VersionableInterface ')) {
+        elseif ($objClass->implementsInterface('Kajona\System\System\VersionableInterface')) {
             $strObjectName .= "[".$objObject->getVersionRecordName()."] ";
         }
 
