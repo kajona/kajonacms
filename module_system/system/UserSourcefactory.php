@@ -260,7 +260,7 @@ class UserSourcefactory
             throw new Exception("login provider ".$strName." not existing", Exception::$level_ERROR);
         }
 
-        $strClassname = "class_usersources_source_".$strName;
+        $strClassname = "class_usersources_source_".$strName;//TODO namespace
         if (!class_exists($strClassname)) {
             throw new Exception("login provider ".$strName." not existing", Exception::$level_ERROR);
         }
