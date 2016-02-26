@@ -44,7 +44,7 @@ class V4toV5Migration
         $arrLegacyFiles = \Kajona\System\System\Resourceloader::getInstance()->getFolderContent("/legacy", array(".php"));
 
         $arrTablesToRows = array(
-            "system"     => "system_class",
+            "system"            => "system_class",
             "changelog"         => "change_class",
             "changelog_oprisk"  => "change_class",
             "changelog_proc"    => "change_class",
@@ -53,8 +53,16 @@ class V4toV5Migration
             "messages"          => "message_provider",
             "messages_cfg"      => "config_provider",
             "workflows"         => "workflows_class",
-            "workflows_handler" => "workflows_handler_class"
+            "workflows_handler" => "workflows_handler_class",
+            "penitentfee_kpi"   => "kpiamount_variant",
+            "proz_unterdim"     => "proz_unterdim_typ",
+            "repcfg_report"     => "repcfg_report_targetobject",
+
+
+
+
         );
+
 
 
         $arrTables = $objDb->getTables();
@@ -64,6 +72,7 @@ class V4toV5Migration
             echo "\nUpdating table ".$strColumn."@".$strTable."\n";
             if(!in_array(_dbprefix_.$strTable, $arrTables)) {
                 echo "Skipping not-present table ".$strTable."\n";
+                continue;
             }
 
 
@@ -71,11 +80,9 @@ class V4toV5Migration
             foreach ($arrColumns as $arrOneRow) {
                 $strSourceClass = $arrOneRow[$strColumn];
 
-
                 if ($strSourceClass == "root_node" || substr($strSourceClass, 0, 6) != "class_") {
                     continue;
                 }
-
 
                 $strLegacyFile = array_search($strSourceClass.".php", $arrLegacyFiles);
                 if ($strLegacyFile === false) {
@@ -87,6 +94,66 @@ class V4toV5Migration
                 echo "  updating ".$strSourceClass." to ".$strNewName."\n";
                 $strQuery = "UPDATE "._dbprefix_.$strTable." SET ".$strColumn." = ? WHERE ".$strColumn ." = ?";
                 $objDb->_pQuery($strQuery, array($strNewName, $strSourceClass));
+            }
+
+        }
+
+
+        $arrMultiContent = array(
+            "proz_dim"         => array("proz_dim_ziel", "|"),
+            "proz_unterdim"    => array("proz_unterdim_ziel", "|"),
+            "report_cfg"       => array("cfg_objects", ",")
+        );
+
+        foreach ($arrMultiContent as $strTable => $arrColCfg) {
+            $strColumn = $arrColCfg[0];
+            $strSeparator = $arrColCfg[1];
+
+            echo "\nUpdating table ".$strColumn."@".$strTable."\n";
+            if(!in_array(_dbprefix_.$strTable, $arrTables)) {
+                echo "Skipping not-present table ".$strTable."\n";
+                continue;
+            }
+
+
+            $arrColumns = $objDb->getPArray("SELECT DISTINCT(".$strColumn.") FROM "._dbprefix_.$strTable, array());
+            foreach ($arrColumns as $arrOneRow) {
+                $strSourceClass = $arrOneRow[$strColumn];
+
+                //detect already migrated ones
+                if (strpos($strSourceClass, "class_") === false) {
+                    continue;
+                }
+
+                $arrTargets = explode($strSeparator, $strSourceClass);
+                $arrTargets = array_filter($arrTargets, function($strValue) { return !empty(trim($strValue)); });
+
+                if(count($arrTargets) == 0) {
+                    continue;
+                }
+
+
+                $strNewValue = "";
+                foreach($arrTargets as $strOneTargetClass) {
+                    $strLegacyFile = array_search($strOneTargetClass.".php", $arrLegacyFiles);
+                    if ($strLegacyFile === false) {
+                        continue;
+                    }
+
+                    if($strSeparator == "|") {
+                        $strNewValue .= "|".$this->getNewNameFromLegacyClass($strLegacyFile)."|";
+                    }
+                    else if($strSeparator == ",") {
+                        if(strlen($strNewValue) > 0) {
+                            $strNewValue .= ",";
+                        }
+                        $strNewValue .= $this->getNewNameFromLegacyClass($strLegacyFile);
+                    }
+                }
+
+                echo "  updating ".$strSourceClass." to ".$strNewValue."\n";
+                $strQuery = "UPDATE "._dbprefix_.$strTable." SET ".$strColumn." = ? WHERE ".$strColumn ." = ?";
+                $objDb->_pQuery($strQuery, array($strNewValue, $strSourceClass));
             }
 
         }
@@ -117,6 +184,7 @@ class V4toV5Migration
                 echo "\nUpdating table ".$strColumn."@".$strTable."\n";
                 if (!in_array(_dbprefix_.$strTable, $arrTables)) {
                     echo "Skipping not-present table ".$strTable."\n";
+                    continue;
                 }
 
 
@@ -220,6 +288,9 @@ class V4toV5Migration
         $strContent = file_get_contents(__DIR__."/../project/module_system/system/config/config.php");
         $strContent = str_replace($arrSearch, $arrReplace, $strContent);
         file_put_contents(__DIR__."/../project/module_system/system/config/config.php", $strContent);*/
+
+
+
 
     }
 
