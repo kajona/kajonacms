@@ -309,7 +309,7 @@ abstract class Root
         $this->internalInit();
 
         // if given, read versioning information
-        if ($this instanceof \VersionableInterface) {
+        if ($this instanceof VersionableInterface) {
             $objChangelog = new SystemChangelog();
             $objChangelog->readOldValues($this);
         }
