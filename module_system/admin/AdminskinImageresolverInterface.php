@@ -9,7 +9,7 @@
 namespace Kajona\System\Admin;
 
 /**
- * Each skin should provide a class called "class_adminskin_imageresolver.php" implementing this interface.
+ * Each skin should provide a class called "AdminskinImageresolver.php" implementing this interface.
  * The file maps logical image-names such as icon_edit to an absolute path / element.
  * The example would transform
  *    icon_edit ==> <img src='_skinwebpath_/img/icon_edit.png' alt='alt' />
@@ -19,7 +19,8 @@ namespace Kajona\System\Admin;
  * @author sidler@mulchprod.de
  * @since 4.2
  */
-interface AdminskinImageresolverInterface {
+interface AdminskinImageresolverInterface
+{
 
     /**
      * Converts the passed image-name into a real, resolvable code-fragment (such as an image-tag or a
@@ -33,7 +34,6 @@ interface AdminskinImageresolverInterface {
      * @return string
      */
     public function getImage($strName, $strAlt = "", $bitBlockTooltip = false, $strEntryId = "");
-
 
 
 }

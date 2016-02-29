@@ -2,8 +2,6 @@
 
 namespace Kajona\System\Tests;
 
-require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
-
 use Kajona\System\System\Filesystem;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\Testbase;
@@ -16,8 +14,6 @@ class ZipTest extends Testbase
     public function testZipFiles()
     {
         $objFileSystem = new Filesystem();
-
-        echo "\ttesting class_zip...\n";
 
         $objZip = new Zip();
         echo "\topening " . _realpath_ . "/test.zip\n";
@@ -68,7 +64,6 @@ class ZipTest extends Testbase
         $objFileSystem->fileCopy(Resourceloader::getInstance()->getCorePathForModule("module_system") . "/module_system/metadata.xml", "/files/cache/ziptest/licence_lgpl2.txt");
         $objFileSystem->fileCopy(Resourceloader::getInstance()->getCorePathForModule("module_system") . "/module_system/metadata.xml", "/files/cache/ziptest/subdir/licence_lgpl.txt");
 
-        echo "\ttesting class_zip...\n";
 
         $objZip = new Zip();
         echo "\topening test.zip\n";
@@ -105,7 +100,6 @@ class ZipTest extends Testbase
     {
         $objFileSystem = new Filesystem();
 
-        echo "\ttesting class_zip file-reading...\n";
 
         $objZip = new Zip();
         echo "\topening " . _realpath_ . "/test.zip\n";

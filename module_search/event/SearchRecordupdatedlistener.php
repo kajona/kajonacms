@@ -3,11 +3,10 @@
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id: class_module_search_indexwriter.php 6392 2014-01-31 08:56:43Z sidler $                                  *
 ********************************************************************************************************/
 
 namespace Kajona\Search\Event;
+
 use Kajona\Search\System\SearchIndexwriter;
 use Kajona\System\System\CoreEventdispatcher;
 use Kajona\System\System\GenericeventListenerInterface;
@@ -21,7 +20,8 @@ use Kajona\System\System\SystemEventidentifier;
  * @package module_search
  * @author sidler@mulchprod.de
  */
-class SearchRecordupdatedlistener implements GenericeventListenerInterface {
+class SearchRecordupdatedlistener implements GenericeventListenerInterface
+{
 
     public static $BIT_UPDATE_INDEX_ON_END_OF_REQUEST = true;
 
@@ -33,11 +33,12 @@ class SearchRecordupdatedlistener implements GenericeventListenerInterface {
      *
      * @return bool
      */
-    public function handleEvent($strEventName, array $arrArguments) {
+    public function handleEvent($strEventName, array $arrArguments)
+    {
 
         $objRecord = $arrArguments[0];
 
-        if(self::$BIT_UPDATE_INDEX_ON_END_OF_REQUEST) {
+        if (self::$BIT_UPDATE_INDEX_ON_END_OF_REQUEST) {
             SearchRequestEndprocessinglistener::addIdToIndex($objRecord);
         }
         else {
@@ -51,9 +52,11 @@ class SearchRecordupdatedlistener implements GenericeventListenerInterface {
 
     /**
      * Internal init to register the event listener, called on file-inclusion, e.g. by the class-loader
+     *
      * @return void
      */
-    public static function staticConstruct() {
+    public static function staticConstruct()
+    {
         CoreEventdispatcher::getInstance()->removeAndAddListener(SystemEventidentifier::EVENT_SYSTEM_RECORDUPDATED, new SearchRecordupdatedlistener());
     }
 

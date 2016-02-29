@@ -75,10 +75,10 @@ class InstallerSamplecontent extends InstallerBase implements InstallerRemovable
 
         uksort($arrInstaller, function($strA, $strB) {
 
-            $strNameA = uniStrrpos($strA, "\\") !== false ? uniSubstr($strA, uniStrrpos($strA, "\\")) : $strA;
-            $strNameB = uniStrrpos($strB, "\\") !== false ? uniSubstr($strB, uniStrrpos($strB, "\\")) : $strB;
+            $strNameA = uniStrrpos($strA, "\\") !== false ? uniSubstr($strA, uniStrrpos($strA, "\\") + 1) : $strA;
+            $strNameB = uniStrrpos($strB, "\\") !== false ? uniSubstr($strB, uniStrrpos($strB, "\\") + 1) : $strB;
 
-            return strcmp($strNameA, $strNameB);
+            return strcmp(strtolower($strNameA), strtolower($strNameB));
         });
 
         $strReturn .= "Loading installers...\n";

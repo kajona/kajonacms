@@ -7,7 +7,7 @@
 
 namespace Kajona\Portalupload\Admin\Elements;
 
-use class_module_mediamanager_repo;
+use Kajona\Mediamanager\System\MediamanagerRepo;
 use Kajona\Pages\Admin\AdminElementInterface;
 use Kajona\Pages\Admin\ElementAdmin;
 
@@ -44,7 +44,7 @@ class ElementPortaluploadAdmin extends ElementAdmin implements AdminElementInter
 
     public function getAdminForm() {
 
-        $arrDlArchives = class_module_mediamanager_repo::getObjectList();
+        $arrDlArchives = MediamanagerRepo::getObjectList();
         $arrDlDD = array();
         if(count($arrDlArchives) > 0) {
             foreach($arrDlArchives as $objOneArchive) {

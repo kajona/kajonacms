@@ -20,7 +20,8 @@ use Kajona\System\System\SystemModule;
  *
  * @package module_system
  */
-class SystemtaskCompresspicuploads extends SystemtaskBase implements AdminSystemtaskInterface {
+class SystemtaskCompresspicuploads extends SystemtaskBase implements AdminSystemtaskInterface
+{
 
     //class vars
     private $strPicsPath = "/files/images";
@@ -33,48 +34,51 @@ class SystemtaskCompresspicuploads extends SystemtaskBase implements AdminSystem
     /**
      * constructor to call the base constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
 
         //Increase max execution time
-        if(@ini_get("max_execution_time") < 3600 && @ini_get("max_execution_time") > 0)
+        if (@ini_get("max_execution_time") < 3600 && @ini_get("max_execution_time") > 0) {
             @ini_set("max_execution_time", "3600");
+        }
     }
 
 
     /**
-     * @see interface_admin_systemtask::getGroupIdenitfier()
-     * @return string
+     * @inheritdoc
      */
-    public function getGroupIdentifier() {
+    public function getGroupIdentifier()
+    {
         return "";
     }
 
 
     /**
-     * @see interface_admin_systemtask::getStrInternalTaskName()
-     * @return string
+     * @inheritdoc
      */
-    public function getStrInternalTaskName() {
+    public function getStrInternalTaskName()
+    {
         return "compresspicuploads";
     }
 
     /**
-     * @see interface_admin_systemtask::getStrTaskName()
-     * @return string
+     * @inheritdoc
      */
-    public function getStrTaskName() {
+    public function getStrTaskName()
+    {
         return $this->getLang("systemtask_compresspicuploads_name");
     }
 
     /**
-     * @see interface_admin_systemtask::executeTask()
-     * @return string
+     * @inheritdoc
      */
-    public function executeTask() {
+    public function executeTask()
+    {
 
-        if(!SystemModule::getModuleByName("system")->rightRight2())
+        if (!SystemModule::getModuleByName("system")->rightRight2()) {
             return $this->getLang("commons_error_permissions");
+        }
 
         $strReturn = "";
 
@@ -92,36 +96,38 @@ class SystemtaskCompresspicuploads extends SystemtaskBase implements AdminSystem
 
     /**
      * @param $strPath
+     *
      * @return void
      */
-    private function recursiveImageProcessing($strPath) {
+    private function recursiveImageProcessing($strPath)
+    {
         $objFilesystem = new Filesystem();
 
         $arrFilesFolders = $objFilesystem->getCompleteList($strPath, array(".jpg", ".jpeg", ".png", ".gif"), array(), array(".", "..", ".svn"));
         $this->intFilesTotal += $arrFilesFolders["nrFiles"];
 
-        foreach($arrFilesFolders["folders"] as $strOneFolder) {
+        foreach ($arrFilesFolders["folders"] as $strOneFolder) {
             $this->recursiveImageProcessing($strPath."/".$strOneFolder);
         }
 
-        foreach($arrFilesFolders["files"] as $arrOneFile) {
+        foreach ($arrFilesFolders["files"] as $arrOneFile) {
             $strImagePath = $strPath."/".$arrOneFile["filename"];
 
             $objImage = new Image2();
             $objImage->setUseCache(false);
             $objImage->load($strImagePath);
             $objImage->addOperation(new ImageScale($this->intMaxWidth, $this->intMaxHeight));
-            if($objImage->save($strImagePath)) {
+            if ($objImage->save($strImagePath)) {
                 $this->intFilesProcessed++;
             };
         }
     }
 
     /**
-     * @see interface_admin_systemtask::getAdminForm()
-     * @return string
+     * @inheritdoc
      */
-    public function getAdminForm() {
+    public function getAdminForm()
+    {
         $strReturn = "";
 
         //show input fields to choose maximal width and height
@@ -134,10 +140,10 @@ class SystemtaskCompresspicuploads extends SystemtaskBase implements AdminSystem
     }
 
     /**
-     * @see interface_admin_systemtask::getSubmitParams()
-     * @return string
+     * @inheritdoc
      */
-    public function getSubmitParams() {
+    public function getSubmitParams()
+    {
         return "&intMaxWidth=".$this->getParam('intMaxWidth')."&intMaxHeight=".$this->getParam('intMaxHeight');
     }
 

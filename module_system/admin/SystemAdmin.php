@@ -442,7 +442,6 @@ class SystemAdmin extends AdminSimple implements AdminInterface
             }
         }
 
-        $intI = 0;
         //loop over the found files and group them
         $arrTaskGroups = array();
         /** @var AdminSystemtaskInterface|SystemtaskBase $objTask */
@@ -481,8 +480,7 @@ class SystemAdmin extends AdminSimple implements AdminInterface
                     generateSystemid(),
                     $objOneTask->getStrTaskname(),
                     AdminskinHelper::getAdminImage("icon_systemtask"),
-                    $this->objToolkit->listButton($strLink),
-                    $intI++
+                    $this->objToolkit->listButton($strLink)
                 );
             }
             $strReturn .= $this->objToolkit->listFooter();
@@ -617,7 +615,6 @@ JS;
                 $objOneRecord instanceof ModelInterface ? $objOneRecord->getStrDisplayName() : get_class($objOneRecord),
                 $strImage,
                 $strActions,
-                0,
                 get_class($objOneRecord),
                 $this->getLang("locked_record_info", array(dateToString(new Date($objOneRecord->getIntLockTime())), $objLockUser->getStrDisplayName()))
             );
@@ -683,7 +680,6 @@ JS;
                 $objOneRecord instanceof ModelInterface ? $objOneRecord->getStrDisplayName() : get_class($objOneRecord),
                 $strImage,
                 $strActions,
-                0,
                 "Systemid / Previd: " . $objOneRecord->getStrSystemid() . " / " . $objOneRecord->getStrPrevId()
             );
         }
@@ -908,14 +904,9 @@ JS;
             $strReturn .= $this->objToolkit->formClose();
 
             return $strReturn;
-//            return "asd";
         }
 
         $strReturn = "";
-//        check needed rights - done twice since public and callable by not only the controller
-//        if(!Carrier::getInstance()->getObjRights()->validatePermissionString(class_rights::$STR_RIGHT_CHANGELOG, $this->getObjModule()))
-//            return $this->getLang("commons_error_permissions");
-
         //showing a list using the pageview
         $objArraySectionIterator = new ArraySectionIterator(SystemChangelog::getLogEntriesCount($strSystemid));
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));

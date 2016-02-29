@@ -4,8 +4,6 @@ namespace Kajona\Pages\Tests;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\System\System\Testbase;
 
-require_once __DIR__."/../../../core/module_system/system/Testbase.php";
-
 class SortTest extends Testbase
 {
 

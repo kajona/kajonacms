@@ -2,8 +2,6 @@
 
 namespace Kajona\System\Tests;
 
-require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
-
 use Kajona\System\System\Classloader;
 use Kajona\System\System\Config;
 use Kajona\System\System\Filesystem;
@@ -28,7 +26,7 @@ TXT;
 
         $this->assertFileExists(Resourceloader::getInstance()->getCorePathForModule("module_system", true) . "/module_system/system/config/test1.php");
 
-        $objConfig = Config::getInstance("test1.php");
+        $objConfig = Config::getInstance("module_system", "test1.php");
 
         $this->assertEquals("testval1", $objConfig->getConfig("testkey1"));
         $this->assertEquals("testval2", $objConfig->getConfig("testkey2"));
@@ -54,12 +52,6 @@ TXT;
         $strMergingConfigFile = <<<TXT
 <?php
 
-if(is_dir(__DIR__."/../../../core/module_system/")) {
-  include __DIR__.'/../../../core/module_system/system/config/test2.php';
-}
-else {
-  require_once 'phar://'.__DIR__.'/../../../core/module_system.phar/system/config/test2.php';
-}
 
         \$config["testkey2"] = "otherval";
 
@@ -67,24 +59,24 @@ TXT;
 
 
         file_put_contents(Resourceloader::getInstance()->getCorePathForModule("module_system", true) . "/module_system/system/config/test2.php", $strSimpleConfigFile);
-        file_put_contents(_realpath_ . _projectpath_ . "/system/config/test2.php", $strMergingConfigFile);
+        file_put_contents(_realpath_ . _projectpath_ . "/module_system/system/config/test2.php", $strMergingConfigFile);
         Classloader::getInstance()->flushCache();
 
         $this->assertFileExists(Resourceloader::getInstance()->getCorePathForModule("module_system", true) . "/module_system/system/config/test2.php");
-        $this->assertFileExists(_realpath_ . _projectpath_ . "/system/config/test2.php");
+        $this->assertFileExists(_realpath_ . _projectpath_ . "/module_system/system/config/test2.php");
 
-        $objConfig = Config::getInstance("test2.php");
+        $objConfig = Config::getInstance("module_system", "test2.php");
 
         $this->assertEquals("testval1", $objConfig->getConfig("testkey1"));
         $this->assertEquals("otherval", $objConfig->getConfig("testkey2"));
 
         $objFilesystem = new Filesystem();
         $objFilesystem->fileDelete(Resourceloader::getInstance()->getCorePathForModule("module_system") . "/module_system/system/config/test2.php");
-        $objFilesystem->fileDelete(_projectpath_ . "/system/config/test2.php");
+        $objFilesystem->fileDelete(_projectpath_ . "/module_system/system/config/test2.php");
         Classloader::getInstance()->flushCache();
 
         $this->assertFileNotExists(Resourceloader::getInstance()->getCorePathForModule("module_system", true) . "/module_system/system/config/test2.php");
-        $this->assertFileNotExists(_realpath_ . _projectpath_ . "/system/config/test2.php");
+        $this->assertFileNotExists(_realpath_ . _projectpath_ . "/module_system/system/config/test2.php");
     }
 
 

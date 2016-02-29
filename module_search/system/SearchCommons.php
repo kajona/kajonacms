@@ -102,7 +102,7 @@ class SearchCommons extends \Kajona\System\System\Model implements \Kajona\Syste
 
         $arrHits = $this->doIndexedSearch($objSearch, $intStart, $intEnd);
 
-        //if the object is an instance of interface_search_resultobject, the target-link may be updated
+        //if the object is an instance of SearchResultobjectInterface, the target-link may be updated
         foreach ($arrHits as $objOneResult) {
             if ($objOneResult->getObjObject() instanceof SearchResultobjectInterface) {
                 $objOneResult->setStrPagelink($objOneResult->getObjObject()->getSearchAdminLinkForObject());

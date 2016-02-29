@@ -3,8 +3,6 @@
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*   $Id$                                         *
 ********************************************************************************************************/
 
 namespace Kajona\Pages\Installer;
@@ -55,10 +53,10 @@ class InstallerPages extends InstallerBase implements InstallerInterface {
 			$strReturn .= "An error occurred! ...\n";
 
 		$strReturn .= "Installing table element...\n";
-        $objManager->createTable("class_module_pages_element");
+        $objManager->createTable("Kajona\\Pages\\System\\PagesElement");
 
 		$strReturn .= "Installing table page_element...\n";
-        $objManager->createTable("class_module_pages_pageelement");
+        $objManager->createTable("Kajona\\Pages\\System\\PagesPageelement");
 
 
 		//Now we have to register module by module
@@ -104,19 +102,19 @@ class InstallerPages extends InstallerBase implements InstallerInterface {
 
         //Table for paragraphes
         $strReturn .= "Installing paragraph table...\n";
-        $objManager->createTable("class_element_paragraph_admin");
+        $objManager->createTable("Kajona\\Pages\\Admin\\Elements\\ElementParagraphAdmin");
 
         //Table for page-element
         $strReturn .= "Installing gallery-element table...\n";
-        $objManager->createTable("class_element_gallery_admin");
+        $objManager->createTable("Kajona\\Mediamanager\\Admin\\Elements\\ElementGalleryAdmin");
 
         //Table for page-element
         $strReturn .= "Installing downloads-element table...\n";
-        $objManager->createTable("class_element_downloads_admin");
+        $objManager->createTable("Kajona\\Mediamanager\\Admin\\Elements\\ElementDownloadsAdmin");
 
         //Table for images
         $strReturn .= "Installing image table...\n";
-        $objManager->createTable("class_element_image_admin");
+        $objManager->createTable("Kajona\\Pages\\Admin\\Elements\\ElementImageAdmin");
 
 
         $arrElements = array(

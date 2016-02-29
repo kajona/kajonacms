@@ -105,7 +105,7 @@ class MessagingConfig extends Model implements ModelInterface
      * Returns the configuration of a single provider for a user.
      *
      * @param string $strUserid
-     * @param \interface_messageprovider|string $objProvider
+     * @param MessageproviderInterface|string $objProvider
      *
      * @return MessagingConfig
      * @static

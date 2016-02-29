@@ -7,6 +7,10 @@
 *   $Id$                                           *
 ********************************************************************************************************/
 
+namespace Kajona\Debugging\Debug;
+
+use Kajona\System\System\SystemCommon;
+
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
 echo "|                                                                               |\n";
@@ -29,10 +33,10 @@ echo "  found ".count($arrSystemids)." systemrecords.\n";
 echo "traversing internal tree structure...\n\n";
 
 echo "root-record / 0\n";
-$objCommon = new class_module_system_common();
+$objCommon = new SystemCommon();
 $arrChilds = $objCommon->getChildNodesAsIdArray("0");
 
-echo "<div style=\"border: 1px solid #cccccc; margin: 0 0 10px 0px;\" >";
+echo "<div style=\"border: 1px solid #cccccc; margin: 0 0 10px 0;\" >";
 foreach($arrChilds as $strSingleId) {
     if(validateSystemid($strSingleId))
         printSingleLevel($strSingleId, $arrSystemids);
@@ -82,7 +86,7 @@ function printSingleLevel($strStartId, &$arrGlobalNodes) {
     }
 
 
-    $objCommon = new class_module_system_common($strStartId);
+    $objCommon = new SystemCommon($strStartId);
     $arrRecord = $objCommon->getSystemRecord();
 
     $arrChilds = $objCommon->getChildNodesAsIdArray();

@@ -7,6 +7,12 @@
 
 namespace Kajona\Pages\Admin;
 
+use Kajona\Pages\Admin\Elements\ElementBlockAdmin;
+use Kajona\Pages\Portal\PagesPortaleditor;
+use Kajona\Pages\System\PagesElement;
+use Kajona\Pages\System\PagesFolder;
+use Kajona\Pages\System\PagesPage;
+use Kajona\Pages\System\PagesPageelement;
 use Kajona\System\Admin\AdminInterface;
 use Kajona\System\Admin\AdminSimple;
 use Kajona\System\Admin\LanguagesAdmin;
@@ -19,13 +25,6 @@ use Kajona\System\System\HttpStatuscodes;
 use Kajona\System\System\LanguagesLanguage;
 use Kajona\System\System\Link;
 use Kajona\System\System\Lockmanager;
-use \Kajona\System\System\ModelInterface;
-use Kajona\Pages\Admin\Elements\ElementBlockAdmin;
-use Kajona\Pages\Portal\PagesPortaleditor;
-use Kajona\Pages\System\PagesElement;
-use Kajona\Pages\System\PagesFolder;
-use Kajona\Pages\System\PagesPage;
-use Kajona\Pages\System\PagesPageelement;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\OrmBase;
 use Kajona\System\System\Reflection;
@@ -235,7 +234,7 @@ HTML;
         //So, the Row for a new element: element is repeatable or not yet created
         $strActions = $this->objToolkit->listButton($strNewElementLink);
         $strReturn = $this->objToolkit->listHeader();
-        $strReturn .= $this->objToolkit->genericAdminList("", $strBlock, "", $strActions, 0);
+        $strReturn .= $this->objToolkit->genericAdminList("", $strBlock, "", $strActions);
         $strReturn .= $this->objToolkit->listFooter();
         return $strReturn;
     }
@@ -276,7 +275,7 @@ HTML;
                         $objOneElementOnPage->getLockManager()->unlockRecord();
                         $strActions = $this->getActionIcons($objOneElementOnPage);
                         //Put all Output together
-                        $strOutputAtPlaceholder .= $this->objToolkit->simpleAdminList($objOneElementOnPage, $strActions, 0);
+                        $strOutputAtPlaceholder .= $this->objToolkit->simpleAdminList($objOneElementOnPage, $strActions);
 
                         //remove the element from the array
                         unset($arrElementsOnPage[$intArrElementsOnPageKey]);
@@ -304,7 +303,7 @@ HTML;
                             if (($objOnePossibleElementInSystem->getIntRepeat() == 1 || $bitHit === false) && ($strBlock == "" && $strBlocks == "")) {
                                 //So, the Row for a new element: element is repeatable or not yet created
                                 $strActions = $this->objToolkit->listButton($strNewElementLink);
-                                $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $objOnePossibleElementInSystem->getStrDisplayName(), "", $strActions, 0, ($bitRenderCompact ? $arrOneElementOnTemplate["placeholder"] : ""));
+                                $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $objOnePossibleElementInSystem->getStrDisplayName(), "", $strActions, ($bitRenderCompact ? $arrOneElementOnTemplate["placeholder"] : ""));
                             }
                             else {
                                 //element not repeatable.
@@ -318,7 +317,7 @@ HTML;
                                 if (!$bitOneInstalled) {
                                     //So, the Row for a new element
                                     $strActions = $this->objToolkit->listButton($strNewElementLink);
-                                    $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $objOnePossibleElementInSystem->getStrDisplayName(), "", $strActions, 0, ($bitRenderCompact ? $arrOneElementOnTemplate["placeholder"] : ""));
+                                    $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $objOnePossibleElementInSystem->getStrDisplayName(), "", $strActions, ($bitRenderCompact ? $arrOneElementOnTemplate["placeholder"] : ""));
                                 }
                             }
                         }
@@ -366,7 +365,7 @@ HTML;
                 $strActions .= $this->objToolkit->listDeleteButton($objOneElement->getStrDisplayName(), $this->getLang("element_loeschen_frage"), Link::getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneElement->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
 
                 //Put all Output together
-                $strReturn .= $this->objToolkit->genericAdminList("", $objOneElement->getStrDisplayName().$this->getLang("placeholder").$objOneElement->getStrPlaceholder(), "", $strActions, 0);
+                $strReturn .= $this->objToolkit->genericAdminList("", $objOneElement->getStrDisplayName().$this->getLang("placeholder").$objOneElement->getStrPlaceholder(), "", $strActions);
             }
             $strReturn .= $this->objToolkit->listFooter();
         }
@@ -1269,10 +1268,9 @@ JS;
                 if ($objLockmanager->isLockedByCurrentUser()) {
                     //and finally create the object
                     /** @var PagesPageelement $objElement */
-                    $strElementClass = str_replace(".php", "", $objObject->getStrClassAdmin());
                     //and finally create the object
-                    $strFilename = \class_resourceloader::getInstance()->getPathForFile("/admin/elements/".$objObject->getStrClassAdmin());
-                    $objElement = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin");
+                    $strFilename = Resourceloader::getInstance()->getPathForFile("/admin/elements/".$objObject->getStrClassAdmin());
+                    $objElement = Classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin");
 
                     //and finally create the object
                     /** @var $objElement ElementAdmin */

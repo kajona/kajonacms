@@ -28,13 +28,14 @@ class Config
     /**
      * Just an ordinary constructor
      *
+     * @param string $strModule
      * @param string $strConfigFile the config-file to parse
      */
-    private function __construct($strConfigFile = "config.php")
+    private function __construct($strModule = "module_system", $strConfigFile = "config.php")
     {
 
-        $this->readConfigFile($strConfigFile);
-        if ($strConfigFile == "config.php") {
+        $this->readConfigFile($strModule, $strConfigFile);
+        if ($strConfigFile == "config.php" && $strModule == "module_system") {
             $this->setUpConstants();
         }
 
@@ -47,18 +48,24 @@ class Config
      *
      * @return void
      */
-    private function readConfigFile($strConfigFile)
+    private function readConfigFile($strModule, $strConfigFile)
     {
         $config = array();
         $debug = array();
 
-        //Include the config-File
-        $strPath = Resourceloader::getInstance()->getPathForFile("/system/config/".$strConfigFile);
-        if ($strPath !== false) {
-            include($strPath);
+
+        //fetch the module path in order to load the default config
+        $strAbsPath = Resourceloader::getInstance()->getAbsolutePathForModule($strModule)."/system/config/".$strConfigFile;
+        if (is_file($strAbsPath)) {
+            include $strAbsPath;
+        } elseif (strpos(__DIR__, '.phar') !== false) {
+            die("Error reading {$strAbsPath} config-file");
         }
-        else {
-            die("Error reading /system/config/{$strConfigFile} config-file");
+
+        // project config
+        $strProjPath = _realpath_."/project/".$strModule."/system/config/".$strConfigFile;
+        if (is_file($strProjPath)) {
+            include $strProjPath;
         }
 
         $this->arrConfig = $config;
@@ -111,39 +118,42 @@ class Config
      */
     public static function readPlainConfigsFromFilesystem($strEntryName)
     {
-
         $config = array();
 
-        if (!@include __DIR__."/config/config.php") {
-            die("Error reading config-file!");
+        // default config
+        $strFile = __DIR__."/config/config.php";
+        if (is_file($strFile)) {
+            include $strFile;
+        } elseif (strpos(__DIR__, '.phar') !== false) {
+            include 'phar://'.$strFile;
         }
 
-        //merge with projects-file
-        if (is_file(__DIR__."/../../../project/system/config/config.php")) {
-            if (!@include __DIR__."/../../../project/system/config/config.php") {
-                die("Error reading config-file!");
-            }
+        // project config
+        $strFile = __DIR__."/../../../project/system/config/config.php";
+        if (is_file($strFile)) {
+            include $strFile;
+        } elseif (strpos(__DIR__, '.phar') !== false) {
+            include 'phar://'.$strFile;
         }
-
 
         return isset($config[$strEntryName]) ? $config[$strEntryName] : "";
-
     }
 
     /**
      * Using a singleton to get an instance
      *
+     * @param string $strModule the module to load the config file from
      * @param string $strConfigFile the config-file to parse
      *
      * @return Config
      */
-    public static function getInstance($strConfigFile = "config.php")
+    public static function getInstance($strModule = "module_system", $strConfigFile = "config.php")
     {
-        if (!isset(self::$arrInstances[$strConfigFile])) {
-            self::$arrInstances[$strConfigFile] = new Config($strConfigFile);
+        if (!isset(self::$arrInstances[$strModule.$strConfigFile])) {
+            self::$arrInstances[$strModule.$strConfigFile] = new Config($strModule, $strConfigFile);
         }
 
-        return self::$arrInstances[$strConfigFile];
+        return self::$arrInstances[$strModule.$strConfigFile];
     }
 
     /**
@@ -270,6 +280,5 @@ class Config
             date_default_timezone_set(_system_timezone_);
         }
     }
-
 }
 

@@ -38,8 +38,7 @@ class SystemtaskStatsIp2c extends SystemtaskBase implements AdminSystemtaskInter
     }
 
     /**
-     * @see interface_admin_systemtast::getGroupIdenitfier()
-     * @return string
+     * @inheritdoc
      */
     public function getGroupIdentifier()
     {
@@ -47,8 +46,7 @@ class SystemtaskStatsIp2c extends SystemtaskBase implements AdminSystemtaskInter
     }
 
     /**
-     * @see interface_admin_systemtast::getStrInternalTaskName()
-     * @return string
+     * @inheritdoc
      */
     public function getStrInternalTaskName()
     {
@@ -56,8 +54,7 @@ class SystemtaskStatsIp2c extends SystemtaskBase implements AdminSystemtaskInter
     }
 
     /**
-     * @see interface_admin_systemtast::getStrTaskName()
-     * @return string
+     * @inheritdoc
      */
     public function getStrTaskName()
     {
@@ -65,8 +62,7 @@ class SystemtaskStatsIp2c extends SystemtaskBase implements AdminSystemtaskInter
     }
 
     /**
-     * @see interface_admin_systemtast::executeTask()
-     * @return string
+     * @inheritdoc
      */
     public function executeTask()
     {
@@ -130,8 +126,7 @@ class SystemtaskStatsIp2c extends SystemtaskBase implements AdminSystemtaskInter
     }
 
     /**
-     * @see interface_admin_systemtast::getAdminForm()
-     * @return string
+     * @inheritdoc
      */
     public function getAdminForm()
     {

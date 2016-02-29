@@ -17,7 +17,8 @@ use Kajona\System\System\Link;
  */
 class AdminwidgetTodo extends Adminwidget implements AdminwidgetInterface
 {
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
 
         //register the fields to be persisted and loaded
@@ -36,7 +37,8 @@ class AdminwidgetTodo extends Adminwidget implements AdminwidgetInterface
      *
      * @return string
      */
-    public function getEditForm() {
+    public function getEditForm()
+    {
         $strReturn = "";
         $arrCategories = TodoRepository::getAllCategories();
         foreach ($arrCategories as $strTitle => $arrRows) {
@@ -54,7 +56,8 @@ class AdminwidgetTodo extends Adminwidget implements AdminwidgetInterface
      *
      * @return string
      */
-    public function getWidgetOutput() {
+    public function getWidgetOutput()
+    {
         $strReturn = "";
         $strReturn .= "<br>";
 
@@ -83,13 +86,8 @@ class AdminwidgetTodo extends Adminwidget implements AdminwidgetInterface
                 $arrTodos = TodoRepository::getOpenTodos($strKey);
 
                 if (count($arrTodos) > 0) {
-                    $strLink = Link::getLinkAdmin("dashboard", "todo", "listfilter_category=" . $strKey, count($arrTodos));
+                    $strLink = Link::getLinkAdmin("dashboard", "todo", "listfilter_category=".$strKey, count($arrTodos));
                     $arrValues[] = array($strProviderName, $strCategoryName, $strLink);
-                } else {
-                    /*
-                    $strIcon = class_adminskin_helper::getAdminImage("icon_accept");
-                    $arrValues[] = array($strProviderName, $strCategoryName, $strIcon);
-                    */
                 }
             }
         }
@@ -97,7 +95,8 @@ class AdminwidgetTodo extends Adminwidget implements AdminwidgetInterface
         if (empty($arrValues)) {
             $strReturn .= $this->objToolkit->warningBox($this->getLang("no_tasks_available"), "alert-success");
             return $strReturn;
-        } else {
+        }
+        else {
             $strReturn .= $this->objToolkit->dataTable(array(), $arrValues);
         }
 
@@ -113,7 +112,8 @@ class AdminwidgetTodo extends Adminwidget implements AdminwidgetInterface
      *
      * @return bool
      */
-    public function onFistLogin($strUserid) {
+    public function onFistLogin($strUserid)
+    {
     }
 
     /**
@@ -121,7 +121,8 @@ class AdminwidgetTodo extends Adminwidget implements AdminwidgetInterface
      *
      * @return string
      */
-    public function getWidgetName() {
+    public function getWidgetName()
+    {
         return $this->getLang("todo_name");
     }
 

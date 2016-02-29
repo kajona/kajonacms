@@ -23,7 +23,7 @@ namespace Kajona\System\System;
  * @module system
  * @moduleId _system_modul_id_
  *
- * @sortManager class_common_sortmanager
+ * @sortManager Kajona\System\System\CommonSortmanager
  */
 class SystemAspect extends Model implements ModelInterface, AdminListableInterface {
 

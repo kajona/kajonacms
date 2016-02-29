@@ -10,7 +10,7 @@
  * There's no need to change anything in this file.
  * All values and settings may be overridden by placing them in the projects' config-file at
  *
- *   /project/system/config/packagemanager.php
+ *   /project/module_packagemanager/system/config/packagemanager.php
  *
  * @package module_packagemanager
  */
@@ -18,6 +18,6 @@
 $config = array();
 
 //comma-separated list of registered content-providers
-$config["contentproviders"] = "class_module_packagemanager_contentprovider_kajona,";
-$config["contentproviders"] .= "class_module_packagemanager_contentprovider_kajonabase,";
-$config["contentproviders"] .= "class_module_packagemanager_contentprovider_local";
+$config["contentproviders"] = "Kajona\\Packagemanager\\System\\PackagemanagerContentproviderKajona,";
+$config["contentproviders"] .= "Kajona\\Packagemanager\\System\\PackagemanagerContentproviderKajonabase,";
+$config["contentproviders"] .= "Kajona\\Packagemanager\\System\\PackagemanagerContentproviderLocal";

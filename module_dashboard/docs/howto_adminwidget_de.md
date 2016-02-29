@@ -16,7 +16,7 @@ In unserem Fall legen wir nun einen Ordner „module_weatherwidget“ an, der na
 	module_weatherwidget
 	    |- admin
 	    |    |- widgets
-	    |         |- class_adminwidget_weather.php
+	    |         |- AdminwidgetWeather.php
 	    |
 	    |- lang
 	    |    |- module_adminwidget
@@ -27,7 +27,7 @@ In unserem Fall legen wir nun einen Ordner „module_weatherwidget“ an, der na
 	    
 Doch nun zur Bedeutung der einzelnen Dateien im Detail:
 
-* /admin/widgets/class_adminwidget_weather.php
+* /admin/widgets/AdminwidgetWeather.php
 
 Diese Datei beinhaltet die eigentliche Logik des Widgets. Hier wird die Ausgabe aufbereitet und an Kajona übergeben.
 * /lang/module_adminwidget/lang_adminwidgetweather_de.php
@@ -44,10 +44,12 @@ Da nur eine Klasse implementiert werden muss handelt es sich um das
 
 ###Widget
 
-Wie in Kajona üblich gilt die Namenskonvention Dateiname = Klassenname. Im Vorfeld wurde die Datei bereits unter dem Namen „class_adminwidget_weather.php“ angelegt, dies führt dann zwingender maßen zum Klassennamen „class_adminwidget_weather“. Der Aufbau der Klasse wird durch das zu implementierende Interface und durch die abzuleitende Basisklasse definiert, Näheres folgt nun.
+Wie in Kajona üblich gilt die Namenskonvention Dateiname = Klassenname. Im Vorfeld wurde die Datei bereits unter dem Namen „AdminwidgetWeather.php“ angelegt, dies führt dann zwingender maßen zum Klassennamen „AdminwidgetWeather“. Der Aufbau der Klasse wird durch das zu implementierende Interface und durch die abzuleitende Basisklasse definiert, Näheres folgt nun.
 <?php
-Die nun zu definierende Klasse muss von der Klasse „class_adminwidget“ abgeleitet werden und das Interface „interface_adminwidget“ implementieren.
-class class_adminwidget_weather extends class_adminwidget implements interface_adminwidget {
+Die nun zu definierende Klasse muss von der Klasse „Adminwidget“ abgeleitet werden und das Interface „AdminwidgetInterface“ implementieren.
+
+    class AdminwidgetWeather extends Adminwidget implements AdminwidgetInterface {
+    
 Der Konstruktor der Klasse wird, im Gegensatz zu vielen anderen Klassen, zur Konfiguration des Widgets verwendet. Hier werden die Felder definiert, die später gespeichert werden sollen. Gemäß den Anforderungen sind dies die Werte für die Einheit und den Ort. Diese werden über die Methode „setPersistenceKeys()“ der Basisklasse mitgeteilt.    
 
     public function __construct() {
@@ -82,13 +84,12 @@ Im Falle des Wetter-Widgets wird über den Remoteloader auf die Wetterdaten zuge
     public function getWidgetOutput() {
         $strReturn = "";
         try {
-        	include_once(_systempath_."/class_remoteloader.php");
-	        $objRemoteloader = new class_remoteloader();
+	        $objRemoteloader = new Remoteloader();
 	        $objRemoteloader->setStrHost("weather.yahooapis.com");
 	        $objRemoteloader->setStrQueryParams("/forecastrss?p=".$this->getFieldValue("location")."&u=".$this->getFieldValue("unit"));
 	        $strContent = $objRemoteloader->getRemoteContent();
         }
-        catch (class_exception $objExeption) {
+        catch (Exception $objExeption) {
         	$strContent = "";
         }
         [...]

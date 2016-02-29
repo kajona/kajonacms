@@ -156,7 +156,7 @@ abstract class PackagemanagerContentproviderRemoteBase implements Packagemanager
                 $arrOnePackage["version"] = $objLang->getLang("type_".$arrOnePackage["type"], self::$STR_MODULE_NAME).", V ".$arrOnePackage["version"];
 
 
-                $strReturn .= $objToolkit->genericAdminList($arrOnePackage["systemid"], $arrOnePackage["title"], getImageAdmin($strIcon), $strAction, $intI++, $arrOnePackage["version"], $arrOnePackage["description"]);
+                $strReturn .= $objToolkit->genericAdminList($arrOnePackage["systemid"], $arrOnePackage["title"], getImageAdmin($strIcon), $strAction, $arrOnePackage["version"], $arrOnePackage["description"]);
             }
         }
 

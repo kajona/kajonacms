@@ -18,60 +18,65 @@ use Kajona\System\System\SystemModule;
  *
  * @package module_system
  */
-class SystemtaskDbdump extends SystemtaskBase implements AdminSystemtaskInterface {
+class SystemtaskDbdump extends SystemtaskBase implements AdminSystemtaskInterface
+{
 
     private $arrTablesToExlucde = array(
         "stats_data", "stats_ip2country", "cache", "search_ix_document", "search_ix_content"
     );
 
     /**
-     * @see interface_admin_systemtask::getGroupIdenitfier()
-     * @return string
+     * @inheritdoc
      */
-    public function getGroupIdentifier() {
+    public function getGroupIdentifier()
+    {
         return "database";
     }
 
     /**
-     * @see interface_admin_systemtask::getStrInternalTaskName()
-     * @return string
+     * @inheritdoc
      */
-    public function getStrInternalTaskName() {
+    public function getStrInternalTaskName()
+    {
         return "dbdump";
     }
 
     /**
-     * @see interface_admin_systemtask::getStrTaskName()
-     * @return string
+     * @inheritdoc
      */
-    public function getStrTaskName() {
+    public function getStrTaskName()
+    {
         return $this->getLang("systemtask_dbexport_name");
     }
 
     /**
-     * @see interface_admin_systemtask::executeTask()
-     * @return string
+     * @inheritdoc
      */
-    public function executeTask() {
+    public function executeTask()
+    {
 
-        if(!SystemModule::getModuleByName("system")->rightRight2())
+        if (!SystemModule::getModuleByName("system")->rightRight2()) {
             return $this->getLang("commons_error_permissions");
+        }
 
         $arrToExclude = array();
-        if($this->getParam("excludeTables") == "1")
+        if ($this->getParam("excludeTables") == "1") {
             $arrToExclude = $this->arrTablesToExlucde;
+        }
 
-        if(Carrier::getInstance()->getObjDB()->dumpDb($arrToExclude))
+        if (Carrier::getInstance()->getObjDB()->dumpDb($arrToExclude)) {
             return $this->objToolkit->getTextRow($this->getLang("systemtask_dbexport_success"));
-        else
+        }
+        else {
             return $this->objToolkit->getTextRow($this->getLang("systemtask_dbexport_error"));
+        }
     }
 
     /**
-     * @see interface_admin_systemtask::getAdminForm()
-     * @return string
+     * @inheritdoc
      */
-    public function getAdminForm() {
+    public function getAdminForm()
+    {
         $strReturn = "";
         $strReturn .= $this->objToolkit->formTextRow($this->getLang("systemtask_dbexport_exclude_intro"));
         $strReturn .= $this->objToolkit->formInputDropdown("dbExcludeTables", array(0 => $this->getLang("commons_no"), 1 => $this->getLang("commons_yes")), $this->getLang("systemtask_dbexport_excludetitle"));
@@ -79,10 +84,10 @@ class SystemtaskDbdump extends SystemtaskBase implements AdminSystemtaskInterfac
     }
 
     /**
-     * @see interface_admin_systemtask::getSubmitParams()
-     * @return string
+     * @inheritdoc
      */
-    public function getSubmitParams() {
+    public function getSubmitParams()
+    {
         return "&excludeTables=".$this->getParam("dbExcludeTables");
     }
 

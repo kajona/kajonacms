@@ -7,6 +7,8 @@
 *   $Id$                                     *
 ********************************************************************************************************/
 
+namespace Kajona\Debugging\Debug;
+
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
 echo "|                                                                               |\n";
@@ -15,7 +17,7 @@ echo "|                                                                         
 echo "+-------------------------------------------------------------------------------+\n";
 
 
-$arrEntries = \Kajona\System\System\Carrier::getAllCacheEntries();
+$arrEntries = \Kajona\System\System\Cache::getAllCacheEntries();
 
 $arrData = array();
 $arrHeader = array();

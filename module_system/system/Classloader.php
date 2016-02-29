@@ -10,8 +10,6 @@ namespace Kajona\System\System;
 require_once __DIR__."/PharModule.php";
 require_once __DIR__."/BootstrapCache.php";
 
-use Kajona\System\System\BootstrapCache;
-use Kajona\System\System\PharModule;
 use ReflectionClass;
 
 /**
@@ -144,8 +142,8 @@ class Classloader
 
         $arrExcludedModules = array();
         $arrIncludedModules = array();
-        if (is_file(_realpath_."/project/system/config/packageconfig.php")) {
-            include(_realpath_."/project/system/config/packageconfig.php");
+        if (is_file(_realpath_."/project/packageconfig.php")) {
+            include(_realpath_."/project/packageconfig.php");
         }
 
         //Module-Constants
@@ -361,11 +359,6 @@ class Classloader
     {
         // if empty we cant resolve a class name
         if (empty($strFilename) || uniSubstr($strFilename, -4) != '.php') {
-            return null;
-        }
-
-        // blacklisting!
-        if (uniStrpos(basename($strFilename), "Testbase") === 0) {
             return null;
         }
 

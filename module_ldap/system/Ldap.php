@@ -16,13 +16,13 @@ use Kajona\System\System\Logger;
 
 /**
  * The Ldap acts as a ldap-connector and is used by the usersources-subsystem as a login-provider.
- * It is configured by the ldap.php file located at /system/config.
+ * It is configured by the config.php file located at /system/config.
  * Please refer to this file in order to see how source-systes may be connected.
  *
  * @package module_ldap
  * @author sidler@mulchprod.de
  * @since 3.4.1
- * @see /system/config/ldap.php
+ * @see /system/config/config.php
  */
 class Ldap
 {
@@ -49,7 +49,7 @@ class Ldap
      */
     private function __construct($intConfigNumber = 0)
     {
-        $this->arrConfig = Config::getInstance("ldap.php")->getConfig($intConfigNumber);
+        $this->arrConfig = Config::getInstance("module_ldap")->getConfig($intConfigNumber);
         $this->arrConfig["nr"] = $intConfigNumber;
 
         $this->connect();
@@ -98,7 +98,7 @@ class Ldap
     {
         if (self::$arrInstances == null) {
             $intI = 0;
-            while (is_array(Config::getInstance("ldap.php")->getConfig($intI))) {
+            while (is_array(Config::getInstance("module_ldap")->getConfig($intI))) {
                 self::$arrInstances[$intI] = new Ldap($intI);
                 $intI++;
             }

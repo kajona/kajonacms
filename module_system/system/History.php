@@ -12,7 +12,7 @@ namespace Kajona\System\System;
 
 /**
  * Wrapper to access the last urls the current user / session called.
- * In prior versions, this was handled by class_admin_controller and class_portal_controller.
+ * In prior versions, this was handled by AdminController and PortalController.
  *
  * The history itself is filled automatically by the request dispatcher, so there's no need to do this on your own.
  *

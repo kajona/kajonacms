@@ -9,3 +9,7 @@ Deny from all
 <FilesMatch "setupproject\.php" >
   Allow from all
 </FilesMatch>
+
+<FilesMatch "V4toV5Migration\.php" >
+  Allow from all
+</FilesMatch>

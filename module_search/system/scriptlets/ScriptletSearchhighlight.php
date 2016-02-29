@@ -5,6 +5,7 @@
 ********************************************************************************************************/
 
 namespace Kajona\Search\System\Scriptlets;
+
 use Kajona\System\System\Carrier;
 use Kajona\System\System\ScriptletInterface;
 
@@ -18,7 +19,8 @@ use Kajona\System\System\ScriptletInterface;
  * @since 4.0
  * @author sidler@mulchprod.de
  */
-class ScriptletSearchhighlight implements ScriptletInterface {
+class ScriptletSearchhighlight implements ScriptletInterface
+{
 
     /**
      * Processes the content.
@@ -28,10 +30,11 @@ class ScriptletSearchhighlight implements ScriptletInterface {
      *
      * @return string
      */
-    public function processContent($strContent) {
+    public function processContent($strContent)
+    {
 
         $strHighlight = trim(Carrier::getInstance()->getParam("highlight"));
-        if($strHighlight != "") {
+        if ($strHighlight != "") {
             $strHighlight = strip_tags($strHighlight);
             $strJS = <<<JS
 KAJONA.portal.loader.loadFile('/templates/default/js/jquery.highlight.js', function() { $("body div[class='container']").highlight("{$strHighlight}"); });
@@ -40,8 +43,9 @@ JS;
             $strJS = "<script type='text/javascript'>".$strJS."</script><style type='text/css'>.searchHighlight { background-color: #ffff00;}</style>\n";
 
             $intBodyClose = uniStripos($strContent, "</body>");
-            if($intBodyClose !== false)
+            if ($intBodyClose !== false) {
                 $strContent = uniSubstr($strContent, 0, $intBodyClose).$strJS.uniSubstr($strContent, $intBodyClose);
+            }
 
         }
 
@@ -52,12 +56,13 @@ JS;
      * Define the context the scriptlet is applied to.
      * A combination of contexts is allowed using an or-concatenation.
      * Examples:
-     *   return interface_scriptlet::BIT_CONTEXT_ADMIN
-     *   return interface_scriptlet::BIT_CONTEXT_ADMIN | BIT_CONTEXT_ADMIN::BIT_CONTEXT_PORTAL_ELEMENT
+     *   return ScriptletInterface::BIT_CONTEXT_ADMIN
+     *   return ScriptletInterface::BIT_CONTEXT_ADMIN | ScriptletInterface::BIT_CONTEXT_PORTAL_ELEMENT
      *
      * @return mixed
      */
-    public function getProcessingContext() {
+    public function getProcessingContext()
+    {
         return ScriptletInterface::BIT_CONTEXT_PORTAL_PAGE;
     }
 

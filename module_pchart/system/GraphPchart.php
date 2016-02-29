@@ -73,19 +73,19 @@ class GraphPchart implements GraphInterface {
 
 	/**
      *
-     * @var \pChart
+     * @var pChart
      */
     private $objChart = null;
 
     /**
      *
-     * @var \pData
+     * @var pData
      */
     private $objDataset = null;
 
     /**
      *
-     * @var \pData
+     * @var pData
      */
     private $objAdditionalDataset = null;
 

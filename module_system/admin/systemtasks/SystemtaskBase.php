@@ -11,7 +11,6 @@ namespace Kajona\System\Admin\Systemtasks;
 
 use Kajona\System\Admin\AdminFormgenerator;
 use Kajona\System\Admin\Formentries\FormentryButton;
-use Kajona\System\Admin\Formentries\FormentryHeadline;
 use Kajona\System\Admin\Formentries\FormentryHidden;
 use Kajona\System\Admin\ToolkitAdmin;
 use Kajona\System\System\Carrier;
@@ -35,21 +34,21 @@ abstract class SystemtaskBase
     private $strTextbase = "system";
 
     /**
-     * Instance of class_db
+     * Instance of Database
      *
      * @var Database
      */
     private $objDB;
 
     /**
-     * Instance of class_text
+     * Instance of Lang
      *
      * @var Lang
      */
     private $objLang;
 
     /**
-     * Instance of class_toolkit
+     * Instance of ToolkitAdmin
      *
      * @var ToolkitAdmin
      */

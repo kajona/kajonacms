@@ -195,11 +195,12 @@ class RequestDispatcher
                         //React, if admin was opened by the portaleditor
                         if (Carrier::getInstance()->getParam("peClose") == "1") {
 
-                            if (getGet("peRefreshPage") != "") {
-                                $strReturn = "<html><head></head><body onload=\"parent.location = '".urldecode(getGet("peRefreshPage"))."';\"></body></html>";
+                            if(getGet("peRefreshPage") != "") {
+                                $strReloadUrl = urldecode(getGet("peRefreshPage"));
+                                $strReturn = "<html><head></head><body><script type='text/javascript'>if(window.opener) { window.opener.location = '".$strReloadUrl."'; window.close(); } else { parent.location = '".$strReloadUrl."'; }</script></body></html>";
                             }
                             else {
-                                $strReturn = "<html><head></head><body onload=\"parent.location.reload();\"></body></html>";
+                                $strReturn = "<html><head></head><body><script type='text/javascript'>if(window.opener) { window.opener.location.reload(); window.close(); } else { parent.location.reload(); }</script></body></html>";
                             }
                         }
 
@@ -224,7 +225,7 @@ class RequestDispatcher
 
         if ($bitLogin) {
             if (_xmlLoader_) {
-                $objLogin = $this->objBuilder->factory("class_module_login_admin_xml");
+                $objLogin = $this->objBuilder->factory("Kajona\\System\\Admin\\LoginAdminXml");
                 $strReturn = $objLogin->action($strAction);
             }
             else {
@@ -234,7 +235,7 @@ class RequestDispatcher
                     return "";
                 }
 
-                $objLogin = $this->objBuilder->factory("class_module_login_admin");
+                $objLogin = $this->objBuilder->factory("Kajona\\System\\Admin\\LoginAdmin");
                 $objLogin->action($strAction);
                 $strReturn = $objLogin->getModuleOutput();
             }
@@ -301,7 +302,6 @@ class RequestDispatcher
                 if (count(Carrier::getInstance()->getObjDB()->getTables()) == 0 && file_exists(_realpath_."/installer.php")) {
                     ResponseObject::getInstance()->setStrRedirectUrl(_webpath_."/installer.php");
                     return "";
-                    //throw new class_exception("Module Pages not installed, redirect to installer", class_exception::$level_ERROR);
                 }
             }
 

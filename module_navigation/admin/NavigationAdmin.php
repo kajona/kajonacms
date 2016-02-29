@@ -386,7 +386,6 @@ class NavigationAdmin extends AdminSimple implements AdminInterface {
     protected function actionNavigationPointBrowser() {
         $strReturn = "";
         $this->setArrModuleEntry("template", "/folderview.tpl");
-        $intCounter = 1;
         //Load all navis
 
         $arrPoints = NavigationPoint::getNaviLayer($this->getSystemid());
@@ -407,13 +406,13 @@ class NavigationAdmin extends AdminSimple implements AdminInterface {
                     "icon_treeLevelUp"
                 )
             );
-            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", getImageAdmin("icon_treeRoot"), $strAction, $intCounter++);
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", getImageAdmin("icon_treeRoot"), $strAction);
         }
         else {
             $strAction = $this->objToolkit->listButton(
                 "<a href=\"#\" title=\"".$this->getLang("navigation_point_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$this->getParam("form_element")."', ''],['".$this->getParam("form_element")."_id', '".$this->getSystemid()."']]);\">".getImageAdmin("icon_accept")."</a>"
             );
-            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), ".", getImageAdmin("icon_treeLeaf"), $strAction, $intCounter++);
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), ".", getImageAdmin("icon_treeLeaf"), $strAction);
         }
         if(count($arrPoints) > 0) {
             /** @var NavigationPoint $objSinglePoint */
@@ -432,7 +431,7 @@ class NavigationAdmin extends AdminSimple implements AdminInterface {
                     $strAction .= $this->objToolkit->listButton(
                         "<a href=\"#\" title=\"".$this->getLang("navigation_point_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$this->getParam("form_element")."', '".$objSinglePoint->getStrName()."'],['".$this->getParam("form_element")."_id', '".$objSinglePoint->getSystemid()."']]);\">".getImageAdmin("icon_accept")."</a>"
                     );
-                    $strReturn .= $this->objToolkit->simpleAdminList($objSinglePoint, $strAction, $intCounter++);
+                    $strReturn .= $this->objToolkit->simpleAdminList($objSinglePoint, $strAction);
                 }
             }
         }

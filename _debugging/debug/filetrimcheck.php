@@ -6,6 +6,9 @@
 *-------------------------------------------------------------------------------------------------------*
 *   $Id$                                           *
 ********************************************************************************************************/
+namespace Kajona\Debugging\Debug;
+
+use Kajona\System\System\Filesystem;
 
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
@@ -20,7 +23,7 @@ echo "+-------------------------------------------------------------------------
 
 
 function walkFolderRecursive($strStartFolder) {
-    $objFilesystem = new class_filesystem();
+    $objFilesystem = new Filesystem();
     $arrFilesAndFolders = $objFilesystem->getCompleteList($strStartFolder, array(".php"), array(), array(".", "..", ".svn"));
 
     foreach($arrFilesAndFolders["files"] as $arrOneFile) {

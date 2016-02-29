@@ -19,48 +19,50 @@ use Kajona\System\System\SystemSetting;
  *
  * @package module_system
  */
-class SystemtaskFlushcache extends SystemtaskBase implements AdminSystemtaskInterface {
+class SystemtaskFlushcache extends SystemtaskBase implements AdminSystemtaskInterface
+{
 
 
     /**
-     * @see interface_admin_systemtask::getGroupIdenitfier()
-     * @return string
+     * @inheritdoc
      */
-    public function getGroupIdentifier() {
+    public function getGroupIdentifier()
+    {
         return "cache";
     }
 
     /**
-     * @see interface_admin_systemtask::getStrInternalTaskName()
-     * @return string
+     * @inheritdoc
      */
-    public function getStrInternalTaskName() {
+    public function getStrInternalTaskName()
+    {
         return "flushcache";
     }
 
     /**
-     * @see interface_admin_systemtask::getStrTaskName()
-     * @return string
+     * @inheritdoc
      */
-    public function getStrTaskName() {
+    public function getStrTaskName()
+    {
         return $this->getLang("systemtask_flushcache_name");
     }
 
     /**
-     * @see interface_admin_systemtask::executeTask()
-     * @return string
+     * @inheritdoc
      */
-    public function executeTask() {
+    public function executeTask()
+    {
 
-        if(!SystemModule::getModuleByName("system")->rightRight2())
+        if (!SystemModule::getModuleByName("system")->rightRight2()) {
             return $this->getLang("commons_error_permissions");
+        }
 
         //increase the cachebuster, so browsers are forced to reload JS and CSS files
         $objCachebuster = SystemSetting::getConfigByName("_system_browser_cachebuster_");
         $objCachebuster->setStrValue((int)$objCachebuster->getStrValue() + 1);
         $objCachebuster->updateObjectToDb();
 
-        if(Cache::flushCache($this->getParam("cacheSource"))) {
+        if (Cache::flushCache($this->getParam("cacheSource"))) {
             return $this->objToolkit->getTextRow($this->getLang("systemtask_flushcache_success"));
         }
         else {
@@ -69,16 +71,16 @@ class SystemtaskFlushcache extends SystemtaskBase implements AdminSystemtaskInte
     }
 
     /**
-     * @see interface_admin_systemtask::getAdminForm()
-     * @return string
+     * @inheritdoc
      */
-    public function getAdminForm() {
+    public function getAdminForm()
+    {
         $strReturn = "";
         //show dropdown to select cache-source
         $arrSources = Cache::getCacheSources();
         $arrOptions = array();
         $arrOptions[""] = $this->getLang("systemtask_flushcache_all");
-        foreach($arrSources as $strOneSource) {
+        foreach ($arrSources as $strOneSource) {
             $arrOptions[$strOneSource] = $strOneSource;
         }
 
@@ -88,10 +90,10 @@ class SystemtaskFlushcache extends SystemtaskBase implements AdminSystemtaskInte
     }
 
     /**
-     * @see interface_admin_systemtask::getSubmitParams()
-     * @return string
+     * @inheritdoc
      */
-    public function getSubmitParams() {
-        return "&cacheSource=" . $this->getParam("cacheSource");
+    public function getSubmitParams()
+    {
+        return "&cacheSource=".$this->getParam("cacheSource");
     }
 }

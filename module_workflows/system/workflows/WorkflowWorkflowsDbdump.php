@@ -28,7 +28,7 @@ class WorkflowWorkflowsDbdump implements WorkflowsHandlerInterface
     private $objWorkflow = null;
 
     /**
-     * @see interface_workflows_handler::getConfigValueNames()
+     * @inheritdoc
      */
     public function getConfigValueNames()
     {
@@ -38,7 +38,7 @@ class WorkflowWorkflowsDbdump implements WorkflowsHandlerInterface
     }
 
     /**
-     * @see interface_workflows_handler::setConfigValues()
+     * @inheritdoc
      */
     public function setConfigValues($strVal1, $strVal2, $strVal3)
     {
@@ -49,7 +49,7 @@ class WorkflowWorkflowsDbdump implements WorkflowsHandlerInterface
     }
 
     /**
-     * @see interface_workflows_handler::getDefaultValues()
+     * @inheritdoc
      */
     public function getDefaultValues()
     {

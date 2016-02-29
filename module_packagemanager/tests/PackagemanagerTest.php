@@ -2,8 +2,6 @@
 
 namespace Kajona\Packagemanager\Tests;
 
-require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
-
 use Kajona\Packagemanager\System\PackagemanagerManager;
 use Kajona\Packagemanager\System\PackagemanagerMetadata;
 use Kajona\System\System\Filesystem;
@@ -106,7 +104,7 @@ class PackagemanagerTest extends Testbase
         $objManager = new PackagemanagerManager();
         $arrProviders = $objManager->getContentproviders();
         $this->assertEquals(3, count($arrProviders));
-        $this->assertEquals("class_module_packagemanager_contentprovider_local", get_class($arrProviders[2]));
+        $this->assertEquals("Kajona\\Packagemanager\\System\\PackagemanagerContentproviderLocal", get_class($arrProviders[2]));
     }
 
 

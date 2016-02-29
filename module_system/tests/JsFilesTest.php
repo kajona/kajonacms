@@ -2,8 +2,6 @@
 
 namespace Kajona\System\Tests;
 
-require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
-
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\Testbase;
 
@@ -14,7 +12,7 @@ class JsFilesTest extends Testbase
     {
 
 
-        $arrJsFiles = $this->getJsFiles();// class_resourceloader::getInstance()->getFolderContent("", array(".js"), true);
+        $arrJsFiles = $this->getJsFiles();
 
         foreach ($arrJsFiles as $strOneFile => $strFilename) {
 

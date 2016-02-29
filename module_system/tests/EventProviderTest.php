@@ -2,8 +2,6 @@
 
 namespace Kajona\System\Tests;
 
-require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
-
 use Kajona\Dashboard\System\EventProviderInterface;
 use Kajona\System\System\Date;
 use Kajona\System\System\Pluginmanager;

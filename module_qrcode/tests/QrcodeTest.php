@@ -2,8 +2,6 @@
 
 namespace Kajona\Qrcode\Tests;
 
-require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
-
 use Kajona\Qrcode\System\Qrcode;
 use Kajona\System\System\Testbase;
 

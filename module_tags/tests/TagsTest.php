@@ -2,8 +2,6 @@
 
 namespace Kajona\Tags\Tests;
 
-require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
-
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
 use Kajona\System\System\SystemAspect;

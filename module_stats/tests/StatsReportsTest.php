@@ -2,8 +2,6 @@
 
 namespace Kajona\Stats\Tests;
 
-require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
-
 use Kajona\Stats\Admin\AdminStatsreportsInterface;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Resourceloader;
@@ -22,7 +20,7 @@ class StatsReportTest extends Testbase
         echo "processing reports...\n";
 
         $arrReportsInFs = Resourceloader::getInstance()->getFolderContent("/admin/statsreports", array(".php"), false, function ($strOneFile) {
-            if (uniStripos($strOneFile, "class_stats_report") === false) {
+            if (uniStripos($strOneFile, "class_stats_report") === false) {//TODO use namespace
                 return false;
             }
 

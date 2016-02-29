@@ -29,12 +29,12 @@ use Kajona\System\System\SearchPortalobjectInterface;
  * @package module_mediamanager
  * @author sidler@mulchprod.de
  * @targetTable mediamanager_file.file_id
- * @sortManager class_common_sortmanager
+ * @sortManager Kajona\System\System\CommonSortmanager
  *
  * @module mediamanager
  * @moduleId _mediamanager_module_id_
  *
- * @formGenerator MediamanagerFile_formgenerator
+ * @formGenerator Kajona\Mediamanager\Admin\MediamanagerFileFormgenerator
  */
 class MediamanagerFile extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, AdminGridableInterface, SearchPortalobjectInterface
 {
@@ -619,7 +619,7 @@ class MediamanagerFile extends \Kajona\System\System\Model implements \Kajona\Sy
      * @param string $strPrevID
      * @param string $strPath
      * @param bool $bitRecursive
-     * @param \class_module_mediamanager_repo|null $objRepo
+     * @param MediamanagerRepo|null $objRepo
      *
      * @return array [insert, delete]
      */

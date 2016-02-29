@@ -2,8 +2,6 @@
 
 namespace Kajona\Search\Tests;
 
-require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
-
 use Kajona\News\System\NewsNews;
 use Kajona\Search\System\SearchContent;
 use Kajona\Search\System\SearchDocument;

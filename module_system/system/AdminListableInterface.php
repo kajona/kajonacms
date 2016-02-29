@@ -10,7 +10,7 @@ namespace Kajona\System\System;
 
 /**
  * As soon as an entry should be listable in the administration (and makes use of the auto-generated lists),
- * the object should implement interface_admin_listable.
+ * the object should implement AdminListableInterface.
  * The interface enriches the object with additional methods required for a proper rendering.
  *
  * @package module_system

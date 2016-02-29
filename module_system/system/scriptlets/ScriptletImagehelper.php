@@ -6,7 +6,7 @@
 
 namespace Kajona\System\System\Scriptlets;
 
-use interface_scriptlet;
+use Kajona\System\System\ScriptletInterface;
 
 
 /**
@@ -19,7 +19,8 @@ use interface_scriptlet;
  * @since 4.0
  * @author sidler@mulchprod.de
  */
-class ScriptletImagehelper implements interface_scriptlet {
+class ScriptletImagehelper implements ScriptletInterface
+{
 
     /**
      * Processes the content.
@@ -29,14 +30,15 @@ class ScriptletImagehelper implements interface_scriptlet {
      *
      * @return string
      */
-    public function processContent($strContent) {
+    public function processContent($strContent)
+    {
 
         $arrTemp = array();
         preg_match_all("#\[img,([ \-+%A-Za-z0-9_\./\\\\(\)]+),([0-9]+),([0-9]+)(,fixed|,max|)\]#i", $strContent, $arrTemp);
 
-        foreach($arrTemp[0] as $intKey => $strSearchString) {
+        foreach ($arrTemp[0] as $intKey => $strSearchString) {
 
-            if(isset($arrTemp[4][$intKey]) && $arrTemp[4][$intKey] == ",fixed") {
+            if (isset($arrTemp[4][$intKey]) && $arrTemp[4][$intKey] == ",fixed") {
                 $strContent = uniStrReplace(
                     $strSearchString,
                     _webpath_."/image.php?image=".urlencode($arrTemp[1][$intKey])."&amp;fixedWidth=".$arrTemp[2][$intKey]."&amp;fixedHeight=".$arrTemp[3][$intKey],
@@ -63,13 +65,14 @@ class ScriptletImagehelper implements interface_scriptlet {
      * Define the context the scriptlet is applied to.
      * A combination of contexts is allowed using an or-concatenation.
      * Examples:
-     *   return interface_scriptlet::BIT_CONTEXT_ADMIN
-     *   return interface_scriptlet::BIT_CONTEXT_ADMIN | BIT_CONTEXT_ADMIN::BIT_CONTEXT_PORTAL_ELEMENT
+     *   return ScriptletInterface::BIT_CONTEXT_ADMIN
+     *   return ScriptletInterface::BIT_CONTEXT_ADMIN | ScriptletInterface::BIT_CONTEXT_PORTAL_ELEMENT
      *
      * @return mixed
      */
-    public function getProcessingContext() {
-        return interface_scriptlet::BIT_CONTEXT_PORTAL_ELEMENT;
+    public function getProcessingContext()
+    {
+        return ScriptletInterface::BIT_CONTEXT_PORTAL_ELEMENT;
     }
 
 }

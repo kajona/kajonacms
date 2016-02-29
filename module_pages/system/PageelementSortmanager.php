@@ -24,7 +24,7 @@ class PageelementSortmanager extends CommonSortmanager
      *
      * @param bool $arrRestrictionModules
      *
-     * @see class_module_pages_pageelement::deleteObjectInternal()
+     * @see PagesPageelement::deleteObjectInternal()
      * @return mixed|void
      */
     function fixSortOnDelete($arrRestrictionModules = false)

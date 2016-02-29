@@ -17,7 +17,6 @@ use Kajona\System\Admin\Formentries\FormentryDate;
 use Kajona\System\Admin\Formentries\FormentryHidden;
 use Kajona\System\Admin\Formentries\FormentryText;
 use Kajona\System\System\Carrier;
-use \Kajona\System\System\Date;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Link;
 use Kajona\System\System\OrmBase;
@@ -384,12 +383,20 @@ abstract class ElementAdmin extends AdminController implements SearchPortalobjec
      */
     private function getValidatorInstance($strName)
     {
-        $strClassname = "class_".$strName."_validator";
-        if (Resourceloader::getInstance()->getPathForFile("/system/validators/".$strClassname.".php")) {
-            return new $strClassname();
+
+        if (class_exists($strName)) {
+            return new $strName();
+        }
+
+        if (uniStrpos($strName, "class_") === false) {
+            $strName = "class_".$strName."_validator";
+        }
+
+        if (Resourceloader::getInstance()->getPathForFile("/system/validators/".$strName.".php")) {
+            return new $strName();
         }
         else {
-            throw new Exception("failed to load validator of type ".$strClassname, Exception::$level_ERROR);
+            throw new Exception("failed to load validator of type ".$strName, Exception::$level_ERROR);
         }
     }
 
@@ -547,7 +554,7 @@ abstract class ElementAdmin extends AdminController implements SearchPortalobjec
     /**
      * The label of the first config-value.
      * Overwrite this method if the element makes use of a config-value.
-     * The value itself may be read by accessing the instance of class_module_pages_pageelement
+     * The value itself may be read by accessing the instance of PagesPageelement
      * out of the admin-/portal-element-instance directly.
      *
      * @return string
@@ -560,7 +567,7 @@ abstract class ElementAdmin extends AdminController implements SearchPortalobjec
     /**
      * The label of the second config-value.
      * Overwrite this method if the element makes use of a config-value.
-     * The value itself may be read by accessing the instance of class_module_pages_pageelement
+     * The value itself may be read by accessing the instance of PagesPageelement
      * out of the admin-/portal-element-instance directly.
      *
      * @return string
@@ -573,7 +580,7 @@ abstract class ElementAdmin extends AdminController implements SearchPortalobjec
     /**
      * The label of the third config-value.
      * Overwrite this method if the element makes use of a config-value.
-     * The value itself may be read by accessing the instance of class_module_pages_pageelement
+     * The value itself may be read by accessing the instance of PagesPageelement
      * out of the admin-/portal-element-instance directly.
      *
      * @return string
@@ -625,7 +632,7 @@ abstract class ElementAdmin extends AdminController implements SearchPortalobjec
      */
     public function getElementDescription()
     {
-        $strName = uniSubstr(get_class($this), uniStrlen("class_"), -6);
+        $strName = uniSubstr(get_class($this), uniStrlen("class_"), -6);//TODO class name parsing
         $strDesc = $this->getLang($strName."_description");
         if ($strDesc == "!".$strName."_description!") {
             $strDesc = "";
@@ -666,7 +673,7 @@ abstract class ElementAdmin extends AdminController implements SearchPortalobjec
      *
      * @return void
      */
-    public final function setDoValidation($bitDoValidation)
+    final public function setDoValidation($bitDoValidation)
     {
         $this->bitDoValidation = $bitDoValidation;
     }
@@ -683,7 +690,7 @@ abstract class ElementAdmin extends AdminController implements SearchPortalobjec
      *
      * @todo
      */
-    protected final function addOptionalFormElement($strContent)
+    final protected function addOptionalFormElement($strContent)
     {
         $this->strSystemFormElements .= $strContent;
     }

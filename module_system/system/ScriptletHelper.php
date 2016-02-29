@@ -28,7 +28,7 @@ class ScriptletHelper
      * @param int $intContext context-selector used to find the matching scriptlets to apply. if not given, all contexts are applied - worst case!
      *
      * @return string
-     * @see interface_scriptlet
+     * @see ScriptletInterface
      */
     public function processString($strContent, $intContext = null)
     {

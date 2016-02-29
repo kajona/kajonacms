@@ -1,8 +1,10 @@
 <?php
+namespace Kajona\Maps\Test;
 
 // includes
-require_once __DIR__."/../../../core/module_system/system/Testbase.php";
-class class_test_geocoder extends \Kajona\System\System\Testbase {
+use Kajona\Maps\System\Geocoder;
+
+class GeocoderTest extends \Kajona\System\System\Testbase {
 
     public function test() {
 
@@ -34,7 +36,7 @@ class class_test_geocoder extends \Kajona\System\System\Testbase {
 
 
     private function processResult($intGeocoder, $arrAddresses) {
-        $objGeocoder = new class_geocoder($intGeocoder); //0 = Google Maps; 1 = Yahoo! Maps
+        $objGeocoder = new Geocoder($intGeocoder); //0 = Google Maps; 1 = Yahoo! Maps
 
         $intGeocodedAddresses = 0;
         foreach($arrAddresses as $intI => $oneAddress) {

@@ -2,8 +2,6 @@
 
 namespace Kajona\System\Tests;
 
-require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
-
 use Kajona\News\System\NewsNews;
 use Kajona\System\Admin\AdminFormgenerator;
 use Kajona\System\System\SystemModule;

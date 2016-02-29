@@ -9,8 +9,6 @@
 
 namespace Kajona\System\Admin;
 
-use class_module_tags_favorite;
-use class_module_tags_tag;
 use Kajona\System\Admin\Formentries\FormentryCheckboxarray;
 use Kajona\System\Admin\Formentries\FormentryObjectlist;
 use Kajona\System\System\AdminGridableInterface;
@@ -35,6 +33,8 @@ use Kajona\System\System\SystemModule;
 use Kajona\System\System\SystemSetting;
 use Kajona\System\System\Toolkit;
 use Kajona\System\System\UserUser;
+use Kajona\Tags\System\TagsFavorite;
+use Kajona\Tags\System\TagsTag;
 
 
 /**
@@ -1317,12 +1317,11 @@ class ToolkitAdmin extends Toolkit
      *
      * @param AdminListableInterface|ModelInterface|Model $objEntry
      * @param string $strActions
-     * @param int $intCount
      * @param bool $bitCheckbox
      *
      * @return string
      */
-    public function simpleAdminList(AdminListableInterface $objEntry, $strActions, $intCount, $bitCheckbox = false)
+    public function simpleAdminList(AdminListableInterface $objEntry, $strActions, $bitCheckbox = false)
     {
         $strImage = $objEntry->getStrIcon();
         if (is_array($strImage)) {
@@ -1342,7 +1341,6 @@ class ToolkitAdmin extends Toolkit
             $objEntry->getStrDisplayName(),
             $strImage,
             $strActions,
-            $intCount,
             $objEntry->getStrAdditionalInfo(),
             $objEntry->getStrLongDescription(),
             $bitCheckbox,
@@ -1358,7 +1356,6 @@ class ToolkitAdmin extends Toolkit
      * @param string $strName
      * @param string $strIcon
      * @param string $strActions
-     * @param int $intCount
      * @param string $strAdditionalInfo
      * @param string $strDescription
      * @param bool $bitCheckbox
@@ -1366,7 +1363,7 @@ class ToolkitAdmin extends Toolkit
      *
      * @return string
      */
-    public function genericAdminList($strId, $strName, $strIcon, $strActions, $intCount, $strAdditionalInfo = "", $strDescription = "", $bitCheckbox = false, $strCssAddon = "", $strDeleted = "")
+    public function genericAdminList($strId, $strName, $strIcon, $strActions, $strAdditionalInfo = "", $strDescription = "", $bitCheckbox = false, $strCssAddon = "", $strDeleted = "")
     {
         $arrTemplate = array();
         $arrTemplate["listitemid"] = $strId;
@@ -1409,7 +1406,7 @@ class ToolkitAdmin extends Toolkit
 
     /**
      *
-     * @param \class_admin_batchaction[] $arrActions
+     * @param AdminBatchaction[] $arrActions
      *
      * @return string
      */
@@ -2564,13 +2561,13 @@ HTML;
     /**
      * Renders a single tag (including the options to remove the tag again)
      *
-     * @param class_module_tags_tag $objTag
+     * @param TagsTag $objTag
      * @param string $strTargetid
      * @param string $strAttribute
      *
      * @return string
      */
-    public function getTagEntry(class_module_tags_tag $objTag, $strTargetid, $strAttribute)
+    public function getTagEntry(TagsTag $objTag, $strTargetid, $strAttribute)
     {
 
         if (Carrier::getInstance()->getParam("delete") != "false") {
@@ -2588,7 +2585,7 @@ HTML;
                     KAJONA.admin.tags.createFavoriteDisabledIcon = '".addslashes(AdminskinHelper::getAdminImage("icon_favoriteDisabled", Carrier::getInstance()->getObjLang()->getLang("tag_favorite_add", "tags")))."';
                 });</script>";
 
-            $strImage = class_module_tags_favorite::getAllFavoritesForUserAndTag(Carrier::getInstance()->getObjSession()->getUserID(), $objTag->getSystemid()) != null ?
+            $strImage = TagsFavorite::getAllFavoritesForUserAndTag(Carrier::getInstance()->getObjSession()->getUserID(), $objTag->getSystemid()) != null ?
                 AdminskinHelper::getAdminImage("icon_favorite", Carrier::getInstance()->getObjLang()->getLang("tag_favorite_remove", "tags")) :
                 AdminskinHelper::getAdminImage("icon_favoriteDisabled", Carrier::getInstance()->getObjLang()->getLang("tag_favorite_add", "tags"));
 

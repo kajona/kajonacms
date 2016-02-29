@@ -15,7 +15,7 @@ $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => 
 
 //editable entries
 $lang["_workflows_trigger_authkey_"]     = "Auth-Key";
-$lang["_workflows_trigger_authkey_hint"] = "Use the auth-key as a secret when triggering the workflow-engine. Only if the passed auth-key matches the saved auth-key, the workflows will be triggered. This avoids that third-party clients could trigger the workflows (DOS-attack).<br />Use the following URL to trigger the workflow engine, e.g. using a cron-job: <br />"._xmlpath_."?module=workflows&action=trigger&authkey=".class_module_system_setting::getConfigValue("_workflows_trigger_authkey_")."";
+$lang["_workflows_trigger_authkey_hint"] = "Use the auth-key as a secret when triggering the workflow-engine. Only if the passed auth-key matches the saved auth-key, the workflows will be triggered. This avoids that third-party clients could trigger the workflows (DOS-attack).<br />Use the following URL to trigger the workflow engine, e.g. using a cron-job: <br />"._xmlpath_."?module=workflows&action=trigger&authkey=".\Kajona\System\System\SystemSetting::getConfigValue("_workflows_trigger_authkey_")."";
 $lang["action_edit_handler"]             = "Edit default values";
 $lang["action_instantiate_handler"]      = "Create a new workflow instance";
 $lang["action_list_handlers"]            = "Workflow handlers";

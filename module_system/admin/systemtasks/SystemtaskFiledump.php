@@ -18,7 +18,8 @@ use Kajona\System\System\Zip;
  *
  * @package module_system
  */
-class SystemtaskFiledump extends SystemtaskBase implements AdminSystemtaskInterface {
+class SystemtaskFiledump extends SystemtaskBase implements AdminSystemtaskInterface
+{
 
     private $arrFoldersToInclude = array(
         "/files",
@@ -33,52 +34,53 @@ class SystemtaskFiledump extends SystemtaskBase implements AdminSystemtaskInterf
 
 
     /**
-     * @see interface_admin_systemtask::getGroupIdenitfier()
-     * @return string
+     * @inheritdoc
      */
-    public function getGroupIdentifier() {
+    public function getGroupIdentifier()
+    {
         return "";
     }
 
     /**
-     * @see interface_admin_systemtask::getStrInternalTaskName()
-     * @return string
+     * @inheritdoc
      */
-    public function getStrInternalTaskName() {
+    public function getStrInternalTaskName()
+    {
         return "filedump";
     }
 
     /**
-     * @see interface_admin_systemtask::getStrTaskName()
-     * @return string
+     * @inheritdoc
      */
-    public function getStrTaskName() {
+    public function getStrTaskName()
+    {
         return $this->getLang("systemtask_filedump_name");
     }
 
     /**
-     * @see interface_admin_systemtask::executeTask()
-     * @return string
+     * @inheritdoc
      */
-    public function executeTask() {
+    public function executeTask()
+    {
 
-        if(!SystemModule::getModuleByName("system")->rightRight2())
+        if (!SystemModule::getModuleByName("system")->rightRight2()) {
             return $this->getLang("commons_error_permissions");
+        }
 
-        $strFilename = "/backup_" . time() . ".zip";
+        $strFilename = "/backup_".time().".zip";
 
         $objZip = new Zip();
         $objZip->openArchiveForWriting($strFilename);
-        foreach($this->arrFoldersToInclude as $strOneFolder) {
+        foreach ($this->arrFoldersToInclude as $strOneFolder) {
             $objZip->addFolder($strOneFolder);
         }
 
-        foreach($this->arrFilesToInclude as $strOneFile) {
+        foreach ($this->arrFilesToInclude as $strOneFile) {
             $objZip->addFile($strOneFile);
         }
 
-        if($objZip->closeArchive()) {
-            return $this->getLang("systemtask_filedump_success") . $strFilename;
+        if ($objZip->closeArchive()) {
+            return $this->getLang("systemtask_filedump_success").$strFilename;
         }
         else {
             return $this->getLang("systemtask_filedump_error");

@@ -13,7 +13,7 @@ namespace Kajona\System\System;
  * A objectlist restriction may be used to create where restrictions for the objectList and objectCount queries.
  * Therefore you may pass the name of a property, the comparator and, finally, the expecteed value of the property.
  * Example:
- *  $objQuery->addWhereRestriction(new OrmObjectlistPropertyRestriction("strTitle", class_orm_comparator_enum::Equal(), "abc"));
+ *  $objQuery->addWhereRestriction(new OrmObjectlistPropertyRestriction("strTitle", OrmComparatorEnum::Equal(), "abc"));
  *
  * @package module_system
  * @author sidler@mulchprod.de
@@ -35,7 +35,7 @@ class OrmObjectlistPropertyRestriction extends OrmObjectlistRestriction
      * @param OrmComparatorEnum $objComparator
      * @param $strValue
      */
-    function __construct($strProperty, OrmComparatorEnum $objComparator, $strValue)
+    public function __construct($strProperty, OrmComparatorEnum $objComparator, $strValue)
     {
 
         $this->arrParams = array($strValue);
@@ -64,11 +64,11 @@ class OrmObjectlistPropertyRestriction extends OrmObjectlistRestriction
     /**
      * @param string $strWhere
      *
-     * @throws class_orm_exception
+     * @throws OrmException
      */
     public function setStrWhere($strWhere)
     {
-        throw new class_orm_exception("Setting a where restriction for property restrictions is not supported", Exception::$level_ERROR);
+        throw new OrmException("Setting a where restriction for property restrictions is not supported", OrmException::$level_ERROR);
     }
 
     /**

@@ -635,7 +635,6 @@ HTML;
         if ($this->getSystemid() == "") {
             //Load the repos
             $arrObjRepos = MediamanagerRepo::getObjectList();
-            $intI = 0;
             //Print every repo
             /** @var MediamanagerRepo $objOneRepo */
             foreach ($arrObjRepos as $objOneRepo) {
@@ -653,7 +652,7 @@ HTML;
                         )
                     );
 
-                    $strReturn .= $this->objToolkit->simpleAdminList($objOneRepo, $strActions, $intI++);
+                    $strReturn .= $this->objToolkit->simpleAdminList($objOneRepo, $strActions);
                 }
             }
 
@@ -749,11 +748,10 @@ HTML;
         $arrContent = $objFilesystem->getCompleteList($strFolder, array(), array(), $arrExcludeFolder, true, false);
 
         $strReturn .= $this->objToolkit->listHeader();
-        $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("commons_path"), "", $strFolder, 1);
+        $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("commons_path"), "", $strFolder);
         $strReturn .= $this->objToolkit->listFooter();
         $strReturn .= $this->objToolkit->divider();
 
-        $intCounter = 0;
         //Show Folders
         //Folder to jump one back up
         $arrFolderStart = array("/files");
@@ -770,7 +768,7 @@ HTML;
                     "icon_folderActionLevelup"
                 )
             );
-            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", AdminskinHelper::getAdminImage("icon_folderOpen"), $strAction, $intCounter++);
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", AdminskinHelper::getAdminImage("icon_folderOpen"), $strAction);
         }
         if ($arrContent["nrFolders"] != 0) {
             foreach ($arrContent["folders"] as $strFolderCur) {
@@ -788,7 +786,7 @@ HTML;
                     "<a href=\"#\" title=\"".$this->getLang("commons_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strFormElement."', '".$strFolder."/".$strFolderCur."']]);\">"
                     .AdminskinHelper::getAdminImage("icon_accept")
                 );
-                $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $strFolderCur, AdminskinHelper::getAdminImage("icon_folderOpen"), $strAction, $intCounter++);
+                $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $strFolderCur, AdminskinHelper::getAdminImage("icon_folderOpen"), $strAction);
             }
         }
         if ($bitHit) {

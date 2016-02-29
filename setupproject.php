@@ -13,7 +13,7 @@ class class_project_setup {
         
         self::$strRealPath = __DIR__."/../";
 
-        echo "<b>Kajona V4 project setup.</b>\nCreates the folder-structure required to build a new project.\n\n";
+        echo "<b>Kajona V5 project setup.</b>\nCreates the folder-structure required to build a new project.\n\n";
 
         $strCurFolder = __DIR__;
 
@@ -26,8 +26,8 @@ class class_project_setup {
 
 
         $arrExcludedModules = array();
-        if(is_file(self::$strRealPath."project/system/config/packageconfig.php")) {
-            include self::$strRealPath."project/system/config/packageconfig.php";
+        if(is_file(self::$strRealPath."project/packageconfig.php")) {
+            include self::$strRealPath."project/packageconfig.php";
         }
 
         //Module-Constants
@@ -58,11 +58,10 @@ class class_project_setup {
         self::makeWritable("/project/log");
         self::checkDir("/project/dbdumps");
         self::makeWritable("/project/dbdumps");
-        self::checkDir("/project/lang");
-        self::checkDir("/project/system");
-        self::checkDir("/project/system/config");
-        self::makeWritable("/project/system/config");
-        self::checkDir("/project/portal");
+        self::checkDir("/project/module_system");
+        self::checkDir("/project/module_system/system");
+        self::checkDir("/project/module_system/system/config");
+        self::makeWritable("/project/module_system/system/config");
         self::checkDir("/project/temp");
         self::makeWritable("/project/temp");
         self::checkDir("/templates");
@@ -103,7 +102,7 @@ class class_project_setup {
         }
 
 
-        echo "\n<b>Kajona V4 template setup.</b>\nCreates the default-template-pack required to render pages.\n";
+        echo "\n<b>Kajona V5 template setup.</b>\nCreates the default-template-pack required to render pages.\n";
         echo "Files already existing are NOT overwritten.\n";
 
 
@@ -127,7 +126,7 @@ class class_project_setup {
         }
 
 
-        echo "\n<b>Kajona V4 htaccess setup</b>\n";
+        echo "\n<b>Kajona V5 htaccess setup</b>\n";
         self::createAllowHtaccess("/files/cache/.htaccess");
         self::createAllowHtaccess("/files/images/.htaccess");
         self::createAllowHtaccess("/files/public/.htaccess");
@@ -147,7 +146,7 @@ class class_project_setup {
     private static function createLangProjectEntry() {
         $strContent = <<<TXT
 
-Kajona V4 lang subsystem.
+Kajona V5 lang subsystem.
 
     Since Kajona V4, it is possible to change the default-lang files by deploying them inside the projects'
     lang-folder.
@@ -158,10 +157,10 @@ Kajona V4 lang subsystem.
 
     /core/module_packagemanager/lang/module_packagemanager/lang_packagemanager_en.php -> \$lang["modul_titel"].
 
-    To change the entry to "Packages" or "Modules" copy the original lang-file into the matching folder
+    To change the entry to "Packages" or "Modules" create a blank php-file into the matching folder
     under the project root. Using the example above, that would be:
 
-    /project/lang/module_packagemanager/lang_packagemanager_en.php
+    /project/module_packagemanager/lang/module_packagemanager/lang_packagemanager_en.php
 
     Now change the entry
     \$lang["modul_titel"] = "Packagemanagement";
@@ -172,7 +171,7 @@ Kajona V4 lang subsystem.
 
 
 TXT;
-        file_put_contents(self::$strRealPath."/project/lang/readme.txt", $strContent);
+        file_put_contents(self::$strRealPath."/project/lang_readme.txt", $strContent);
     }
 
     private static function createDefaultTemplateEntry() {
@@ -288,13 +287,13 @@ TXT;
                         if (is_file($composerFile)) {
                             $arrOutput = array();
                             $intReturn = 0;
-                            exec('composer install --prefer-dist --no-dev --working-dir '.dirname($composerFile), $arrOutput, $intReturn);
+                            exec('composer install --prefer-dist --working-dir '.dirname($composerFile), $arrOutput, $intReturn);
                             if($intReturn == 127) {
-                                echo "<span style='color: red;'>composer was not found. please run 'composer install --prefer-dist --no-dev --working-dir ".dirname($composerFile)."' manually</span>\n";
+                                echo "<span style='color: red;'>composer was not found. please run 'composer install --prefer-dist --working-dir ".dirname($composerFile)."' manually</span>\n";
                                 continue;
                             }
                             if($intReturn == 1) {
-                                echo "<span style='color: red;'>composer error. please run 'composer install --prefer-dist --no-dev --working-dir ".dirname($composerFile)."' manually</span>\n";
+                                echo "<span style='color: red;'>composer error. please run 'composer install --prefer-dist --working-dir ".dirname($composerFile)."' manually</span>\n";
 
                                 if(!is_writable(dirname($composerFile))) {
                                     echo "<span style='color: red;'>    target folder ".dirname($composerFile)." is not writable</span>\n";

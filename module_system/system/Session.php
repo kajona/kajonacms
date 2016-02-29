@@ -15,9 +15,8 @@ namespace Kajona\System\System;
  *
  * @package module_system
  * @author sidler@mulchprod.de
- * @todo mark final again
  */
- class Session
+final class Session
 {
 
     private $objDB;
@@ -470,7 +469,7 @@ namespace Kajona\System\System;
                 $bitReturn = $this->internalLoginHelper($objUser);
             }
         }
-        catch (class_authentication_exception $objEx) {
+        catch (AuthenticationException $objEx) {
             $bitReturn = false;
         }
 
@@ -583,7 +582,7 @@ namespace Kajona\System\System;
             setcookie(session_name(), '', time() - 42000);
         }
         // Finally, destroy the session.
-        session_destroy();
+        @session_destroy();
         //start a new one
         $this->sessionStart();
         //and create a new sessid

@@ -1,8 +1,6 @@
 <?php
 namespace Kajona\Packageserver\Tests;
 
-require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
-
 use FilesystemIterator;
 use Kajona\Mediamanager\System\MediamanagerFile;
 use Kajona\Mediamanager\System\MediamanagerRepo;

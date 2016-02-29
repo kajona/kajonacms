@@ -378,8 +378,8 @@ function getLinkAdminDialog($strModule, $strAction, $strParams = "", $strText = 
  * @param bool $bitNoAlt
  *
  * @return string
- * @deprecated replaced by class_adminskin_helper::getAdminImage()
- * @see class_adminskin_helper::getAdminImage()
+ * @deprecated replaced by AdminskinHelper::getAdminImage()
+ * @see AdminskinHelper::getAdminImage()
  */
 function getImageAdmin($strImage, $strAlt = "", $bitNoAlt = false)
 {
@@ -921,7 +921,7 @@ function getFileExtension($strPath)
  * @param string $strAddress
  *
  * @return bool
- * @deprecated use class_email_validator instead
+ * @deprecated use EmailValidator instead
  */
 function checkEmailaddress($strAddress)
 {
@@ -935,7 +935,7 @@ function checkEmailaddress($strAddress)
  * @param int $intNumber
  *
  * @return bool
- * @deprecated use class_numeric_validator instead
+ * @deprecated use NumericValidator instead
  */
 function checkNumber($intNumber)
 {
@@ -970,8 +970,8 @@ function checkFolder($strPath)
  *
  * @return bool
  *
- * @deprecated replaced by @link{class_text_validator}
- * @see interface_validator
+ * @deprecated replaced by @link{TextValidator}
+ * @see ValidatorInterface
  */
 function checkText($strText, $intMin = 1, $intMax = 0)
 {
@@ -1022,13 +1022,13 @@ function validateSystemid($strID)
 }
 
 /**
- * Wrapper to dbSafeString of class_db
+ * Wrapper to dbSafeString of Database
  *
  * @param string $strString
  * @param bool|string $bitHtmlEntities escape html-entities?
  *
- * @deprecated use class_db::dbSafeString() instead
- * @see class_db::dbSafeString($strString, $bitHtmlEntities = true)
+ * @deprecated use Database::dbSafeString() instead
+ * @see Database::dbSafeString($strString, $bitHtmlEntities = true)
  * @return string
  */
 function dbsafeString($strString, $bitHtmlEntities = true)

@@ -20,7 +20,7 @@ echo "+-------------------------------------------------------------------------
 $intI = 0;
 foreach(Ldap::getAllInstances() as $objOneLdap) {
 
-    $arrCfg = Config::getInstance("ldap.php")->getConfig($objOneLdap->getIntCfgNr());
+    $arrCfg = Config::getInstance("module_ldap")->getConfig($objOneLdap->getIntCfgNr());
     echo "Connecting to ldap at ".$arrCfg["ldap_server"]."\n";
 
     echo "Searching for bind-user ".$arrCfg["ldap_bind_username"]."\n";

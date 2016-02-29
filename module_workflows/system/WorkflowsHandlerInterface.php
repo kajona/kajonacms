@@ -73,12 +73,12 @@ interface WorkflowsHandlerInterface
 
     /**
      * This method should schedule the workflow.
-     * Do this by setting the trigger-date in class class_module_workflows_workflow
+     * Do this by setting the trigger-date in class WorkflowsWorkflow
      *
      * This method is called by the controller. The workflows' state is set to scheduled afterwards.
      * The workflow-object itself is updated automatically, so no need to be done right here.
      *
-     * @see class_module_workflows_workflow::setObjTriggerDate
+     * @see WorkflowsWorkflow::setObjTriggerDate
      * @return void
      */
     public function schedule();

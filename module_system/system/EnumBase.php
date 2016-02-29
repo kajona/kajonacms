@@ -65,7 +65,7 @@ abstract class EnumBase
      *
      * @param string $strName
      *
-     * @throws class_exception
+     * @throws Exception
      * @return EnumBase
      */
     public static function __callStatic($strName, $arrArguments)

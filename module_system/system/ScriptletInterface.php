@@ -4,6 +4,7 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 namespace Kajona\System\System;
+
 /**
  * Scriptlets are a way to realize common helper-methods, e.g. in order to convert placeholders
  * to "real" content.
@@ -14,14 +15,17 @@ namespace Kajona\System\System;
  * @package module_system
  * @since 4.0
  */
-interface ScriptletInterface {
+interface ScriptletInterface
+{
 
     /**
      * Processes the content.
      * Make sure to return the string again, otherwise the output will remain blank.
      *
      * @abstract
+     *
      * @param string $strContent
+     *
      * @return string
      */
     public function processContent($strContent);
@@ -30,8 +34,9 @@ interface ScriptletInterface {
      * Define the context the scriptlet is applied to.
      * A combination of contexts is allowed using an or-concatenation.
      * Examples:
-     *   return interface_scriptlet::BIT_CONTEXT_ADMIN
-     *   return interface_scriptlet::BIT_CONTEXT_ADMIN | BIT_CONTEXT_ADMIN::BIT_CONTEXT_PORTAL_ELEMENT
+     *   return ScriptletInterface::BIT_CONTEXT_ADMIN
+     *   return ScriptletInterface::BIT_CONTEXT_ADMIN | ScriptletInterface::BIT_CONTEXT_PORTAL_ELEMENT
+     *
      * @return mixed
      */
     public function getProcessingContext();

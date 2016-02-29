@@ -7,7 +7,7 @@
 /**
  * @deprecated
  */
-class class_module_workflows_todo_provider_base extends Kajona\Workflows\System\WorkflowsTodoProviderBase
+abstract class class_module_workflows_todo_provider_base extends Kajona\Workflows\System\WorkflowsTodoProviderBase
 {
 
 }

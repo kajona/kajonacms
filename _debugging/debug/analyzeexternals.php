@@ -6,7 +6,12 @@
 *-------------------------------------------------------------------------------------------------------*
 *   $Id$                                           *
 ********************************************************************************************************/
+namespace Kajona\Debugging\Debug;
 
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use RecursiveRegexIterator;
+use RegexIterator;
 
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";

@@ -34,8 +34,7 @@ class SystemtaskStatsHostnamelookupreset extends SystemtaskBase implements Admin
     }
 
     /**
-     * @see interface_admin_systemtast::getGroupIdenitfier()
-     * @return string
+     * @inheritdoc
      */
     public function getGroupIdentifier()
     {
@@ -43,8 +42,7 @@ class SystemtaskStatsHostnamelookupreset extends SystemtaskBase implements Admin
     }
 
     /**
-     * @see interface_admin_systemtast::getStrInternalTaskName()
-     * @return string
+     * @inheritdoc
      */
     public function getStrInternalTaskName()
     {
@@ -52,8 +50,7 @@ class SystemtaskStatsHostnamelookupreset extends SystemtaskBase implements Admin
     }
 
     /**
-     * @see interface_admin_systemtast::getStrTaskName()
-     * @return string
+     * @inheritdoc
      */
     public function getStrTaskName()
     {
@@ -61,8 +58,7 @@ class SystemtaskStatsHostnamelookupreset extends SystemtaskBase implements Admin
     }
 
     /**
-     * @see interface_admin_systemtast::executeTask()
-     * @return string
+     * @inheritdoc
      */
     public function executeTask()
     {
@@ -81,8 +77,7 @@ class SystemtaskStatsHostnamelookupreset extends SystemtaskBase implements Admin
     }
 
     /**
-     * @see interface_admin_systemtast::getAdminForm()
-     * @return string
+     * @inheritdoc
      */
     public function getAdminForm()
     {

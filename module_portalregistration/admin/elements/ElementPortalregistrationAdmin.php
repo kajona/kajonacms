@@ -7,10 +7,10 @@
 
 namespace Kajona\Portalregistration\Admin\Elements;
 
-use class_formentry_textrow;
-use class_module_user_group;
 use Kajona\Pages\Admin\AdminElementInterface;
 use Kajona\Pages\Admin\ElementAdmin;
+use Kajona\System\Admin\Formentries\FormentryTextrow;
+use Kajona\System\System\UserGroup;
 
 
 /**
@@ -58,7 +58,7 @@ class ElementPortalregistrationAdmin extends ElementAdmin implements AdminElemen
     public function getAdminForm() {
         $objForm = parent::getAdminForm();
 
-        $arrGroups = class_module_user_group::getObjectList();
+        $arrGroups = UserGroup::getObjectList();
         $arrGroupsDD = array();
         foreach($arrGroups as $objOneGroup) {
             if($objOneGroup->getStrSubsystem() == "kajona") {
@@ -67,7 +67,7 @@ class ElementPortalregistrationAdmin extends ElementAdmin implements AdminElemen
         }
         $objForm->getField("group")->setArrKeyValues($arrGroupsDD);
 
-        $objForm->addField(new class_formentry_textrow("hint"))->setStrValue($this->getLang("portalregistration_hint"));
+        $objForm->addField(new FormentryTextrow("hint"))->setStrValue($this->getLang("portalregistration_hint"));
         $objForm->setFieldToPosition("hint", 1);
         return $objForm;
     }

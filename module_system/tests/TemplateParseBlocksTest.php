@@ -2,13 +2,10 @@
 
 namespace Kajona\System\Tests;
 
-require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
-
 use Kajona\System\System\TemplateBlockContainer;
 use Kajona\System\System\TemplateBlocksParser;
 use Kajona\System\System\TemplateKajonaSections;
 use Kajona\System\System\Testbase;
-
 
 /**
  * Class class_test_templateTest

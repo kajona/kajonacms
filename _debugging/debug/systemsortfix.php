@@ -7,6 +7,13 @@
 *   $Id$                                           *
 ********************************************************************************************************/
 
+namespace Kajona\Debugging\Debug;
+
+use Kajona\Pages\System\PagesPage;
+use Kajona\Pages\System\PagesPageelement;
+use Kajona\System\System\Objectfactory;
+use Kajona\System\System\SystemCommon;
+
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
 echo "|                                                                               |\n";
@@ -15,7 +22,6 @@ echo "|                                                                         
 echo "| Analyzes the sort-values of the system-table and tries to fix them.           |\n";
 echo "+-------------------------------------------------------------------------------+\n";
 
-$objDb = \Kajona\System\System\Carrier::getInstance()->getObjDB();
 
 echo "scanning system-table...\n";
 echo "traversing internal tree structure...\n\n";
@@ -40,7 +46,7 @@ echo "+-------------------------------------------------------------------------
 
 
 function validateSingleLevelSort($strParentId) {
-    $objCommon = new class_module_system_common($strParentId);
+    $objCommon = new SystemCommon($strParentId);
 
     if($objCommon->getIntModuleNr() == _pages_modul_id_ || $objCommon->getIntModuleNr() == _pages_folder_id_) {
         $strQuery = "SELECT system_id
@@ -61,9 +67,9 @@ function validateSingleLevelSort($strParentId) {
     echo "<div style='padding-left: 25px;'>";
     for($intI = 1; $intI <= count($arrNodes); $intI++) {
 
-        $objCurNode = class_objectfactory::getInstance()->getObject($arrNodes[$intI-1]);
+        $objCurNode = Objectfactory::getInstance()->getObject($arrNodes[$intI-1]);
         if($objCurNode == null) {
-            $objCommon = new class_module_system_common($arrNodes[$intI-1]);
+            $objCommon = new SystemCommon($arrNodes[$intI-1]);
             $strCurLevel = "<span style='color: red'>error loading node for: ".$intI." @ ".$arrNodes[$intI-1]." - ".$objCommon->getStrRecordClass()."</span>";
             echo "<div>".$strCurLevel."</div>";
         }
@@ -84,7 +90,7 @@ function validateSingleLevelSort($strParentId) {
 
         echo "<div>".$strCurLevel."</div>";
 
-        if($objCurNode instanceof class_module_pages_page) {
+        if($objCurNode instanceof PagesPage) {
             validateSinglePage($objCurNode);
         }
         validateSingleLevelSort($objCurNode->getSystemid());
@@ -93,8 +99,8 @@ function validateSingleLevelSort($strParentId) {
 }
 
 
-function validateSinglePage(class_module_pages_page $objPage) {
-    $arrElements = class_module_pages_pageelement::getAllElementsOnPage($objPage->getSystemid());
+function validateSinglePage(PagesPage $objPage) {
+    $arrElements = PagesPageelement::getAllElementsOnPage($objPage->getSystemid());
 
     $intI = 0;
     $strPrevPlaceholder = "";

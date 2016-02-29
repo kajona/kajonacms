@@ -16,7 +16,8 @@ use Kajona\System\System\Exception;
  *
  * @package module_system
  */
-interface DbDriverInterface {
+interface DbDriverInterface
+{
 
     /**
      * This method makes sure to connect to the database properly
@@ -26,6 +27,7 @@ interface DbDriverInterface {
      * @param string $strPass
      * @param string $strDbName
      * @param int $intPort
+     *
      * @return bool
      * @throws Exception
      */
@@ -33,6 +35,7 @@ interface DbDriverInterface {
 
     /**
      * Closes the connection to the database
+     *
      * @return void
      */
     public function dbclose();
@@ -42,12 +45,13 @@ interface DbDriverInterface {
      * For most databases, this will create s.th. like
      * INSERT INTO $strTable ($arrColumns) VALUES (?, ?), (?, ?)...
      * Please note that this method is used to create the query itself, based on the Kajona-internal syntax.
-     * The query is fired to the database by class_db
+     * The query is fired to the database by Database
      *
      * @param string $strTable
      * @param string[] $arrColumns
      * @param array $arrValueSets
      * @param Database $objDb
+     *
      * @return bool
      */
     public function triggerMultiInsert($strTable, $arrColumns, $arrValueSets, Database $objDb);
@@ -58,6 +62,7 @@ interface DbDriverInterface {
      *
      * @param string $strQuery
      * @param array $arrParams
+     *
      * @return bool
      * @since 3.4
      */
@@ -69,6 +74,7 @@ interface DbDriverInterface {
      *
      * @param string $strQuery
      * @param array $arrParams
+     *
      * @since 3.4
      * @return array
      */
@@ -84,6 +90,7 @@ interface DbDriverInterface {
      * @param array $arrParams
      * @param int $intStart
      * @param int $intEnd
+     *
      * @return array
      * @since 3.4
      */
@@ -112,6 +119,7 @@ interface DbDriverInterface {
      * array ("columnName", "columnType")
      *
      * @param string $strTableName
+     *
      * @return array
      */
     public function getColumnsOfTable($strTableName);
@@ -123,15 +131,15 @@ interface DbDriverInterface {
      * The array of fields should have the following structure
      * $array[string columnName] = array(string datatype, boolean isNull [, default (only if not null)])
      * whereas datatype is one of the following:
-     * 		int
+     *        int
      *      long
-     * 		double
-     * 		char10
-     * 		char20
-     * 		char100
-     * 		char254
+     *        double
+     *        char10
+     *        char20
+     *        char100
+     *        char254
      *      char500
-     * 		text
+     *        text
      *      longtext
      *
      * @param string $strName
@@ -139,12 +147,14 @@ interface DbDriverInterface {
      * @param array $arrKeys array of primary keys
      * @param array $arrIndices array of additional indices
      * @param bool $bitTxSafe Should the table support transactions?
+     *
      * @return bool
      */
     public function createTable($strName, $arrFields, $arrKeys, $arrIndices = array(), $bitTxSafe = true);
 
     /**
      * Renames a table
+     *
      * @param $strOldName
      * @param $strNewName
      *
@@ -181,6 +191,7 @@ interface DbDriverInterface {
 
     /**
      * Removes a column from a table
+     *
      * @param $strTable
      * @param $strColumn
      *
@@ -191,6 +202,7 @@ interface DbDriverInterface {
 
     /**
      * Starts a transaction
+     *
      * @return void
      * @since 4.6
      */
@@ -198,6 +210,7 @@ interface DbDriverInterface {
 
     /**
      * Ends a successful operation by committing the transaction
+     *
      * @return void
      * @since 4.6
      */
@@ -205,6 +218,7 @@ interface DbDriverInterface {
 
     /**
      * Ends a non-successful transaction by using a rollback
+     *
      * @return void
      */
     public function transactionRollback();
@@ -235,6 +249,7 @@ interface DbDriverInterface {
      * Imports the given db-dump file to the database. The filename ist relative to _realpath_
      *
      * @param string $strFilename
+     *
      * @return bool
      */
     public function dbImport($strFilename);
@@ -244,6 +259,7 @@ interface DbDriverInterface {
      * E.g. needed by the mysql-drivers
      *
      * @param string $strColumn
+     *
      * @return string
      */
     public function encloseColumnName($strColumn);
@@ -253,6 +269,7 @@ interface DbDriverInterface {
      * E.g. needed by the mysql-drivers
      *
      * @param string $strTable
+     *
      * @return string
      */
     public function encloseTableName($strTable);
@@ -261,8 +278,9 @@ interface DbDriverInterface {
      * Returns the db-specific datatype for the kajona internal datatype.
      *
      * @param string $strType
+     *
      * @return string
-     * @see class_db_datatypes
+     * @see DbDatatypes
      */
     public function getDatatype($strType);
 
@@ -278,6 +296,7 @@ interface DbDriverInterface {
 
     /**
      * @param string $strValue
+     *
      * @return mixed
      */
     public function escape($strValue);

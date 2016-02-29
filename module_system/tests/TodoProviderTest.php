@@ -2,8 +2,6 @@
 
 namespace Kajona\System\Tests;
 
-require_once __DIR__ . "/../../../core/module_system/system/Testbase.php";
-
 use Kajona\Dashboard\System\TodoProviderInterface;
 use Kajona\System\System\Pluginmanager;
 use Kajona\System\System\Testbase;
@@ -33,7 +31,7 @@ class TodoProviderTest extends Testbase
                 $this->assertTrue(!empty($strCategoryLabel));
 
                 foreach ($arrTodos as $objTodo) {
-                    $this->assertInstanceOf('class_todo_entry', $objTodo);
+                    $this->assertInstanceOf('Kajpna\\Dashboard\\System\\TodoEntry', $objTodo);
                 }
             }
         }
