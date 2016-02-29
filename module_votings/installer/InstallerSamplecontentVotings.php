@@ -7,19 +7,20 @@
 
 namespace Kajona\Votings\Installer;
 
-use Kajona\Pages\System\PagesElement;
+use Kajona\Pages\Admin\Elements\ElementPlaintextAdmin;
 use Kajona\Pages\System\PagesFolder;
-use Kajona\Pages\System\PagesPage;
-use Kajona\Pages\System\PagesPageelement;
+use Kajona\Samplecontent\System\SamplecontentContentHelper;
 use Kajona\System\System\Database;
 use Kajona\System\System\SamplecontentInstallerInterface;
+use Kajona\Votings\Admin\Elements\ElementVotingsAdmin;
 use Kajona\Votings\System\VotingsAnswer;
 use Kajona\Votings\System\VotingsVoting;
 
 /**
  *
  */
-class InstallerSamplecontentVotings implements SamplecontentInstallerInterface {
+class InstallerSamplecontentVotings implements SamplecontentInstallerInterface
+{
 
     /**
      * @var Database
@@ -28,30 +29,35 @@ class InstallerSamplecontentVotings implements SamplecontentInstallerInterface {
     private $strContentLanguage;
 
 
-    public function install() {
+    public function install()
+    {
         $strReturn = "";
 
         //fetch navifolder-id
         $strNaviFolderId = "";
         $arrFolder = PagesFolder::getFolderList();
-        foreach($arrFolder as $objOneFolder)
-            if($objOneFolder->getStrName() == "mainnavigation")
+        foreach ($arrFolder as $objOneFolder) {
+            if ($objOneFolder->getStrName() == "mainnavigation") {
                 $strNaviFolderId = $objOneFolder->getSystemid();
+            }
+        }
 
 
         $strReturn .= "Creating voting\n";
 
         $objVoting = new VotingsVoting();
-        if($this->strContentLanguage == "de")
+        if ($this->strContentLanguage == "de") {
             $objVoting->setStrTitle("Wie gefällt Ihnen unsere neue Webseite?");
-        else
+        }
+        else {
             $objVoting->setStrTitle("How do you like our new website?");
+        }
 
         $objVoting->updateObjectToDb();
         $objAnswer1 = new VotingsAnswer();
         $objAnswer2 = new VotingsAnswer();
         $objAnswer3 = new VotingsAnswer();
-        if($this->strContentLanguage == "de") {
+        if ($this->strContentLanguage == "de") {
             $objAnswer1->setStrText("Gefällt mir sehr gut!");
             $objAnswer2->setStrText("Ausbaufähig...");
             $objAnswer3->setStrText("Brennt im Kühlschrank immer Licht?");
@@ -67,85 +73,60 @@ class InstallerSamplecontentVotings implements SamplecontentInstallerInterface {
         $objAnswer3->updateObjectToDb($objVoting->getSystemid());
 
 
-
         $strReturn .= "Creating voting-page\n";
-        $objPage = new PagesPage();
-        $objPage->setStrName("votings");
-        $objPage->setStrBrowsername("Votings");
-        $objPage->setStrTemplate("standard.tpl");
-        $objPage->updateObjectToDb($strNaviFolderId);
 
-        $strFaqsPageId = $objPage->getSystemid();
+        $objHelper = new SamplecontentContentHelper();
 
-        $strReturn .= "ID of new page: ".$strFaqsPageId."\n";
-        $strReturn .= "Adding votings-element 1 to new page\n";
-        if(PagesElement::getElement("faqs") != null) {
-            $objPagelement = new PagesPageelement();
-            $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
-            $objPagelement->setStrName("special");
-            $objPagelement->setStrElement("votings");
-            $objPagelement->updateObjectToDb($strFaqsPageId);
-            $strElementId = $objPagelement->getSystemid();
-            $strQuery = "UPDATE "._dbprefix_."element_universal
-                            SET ".$this->objDB->encloseColumnName("int1")." = ?,
-                                ".$this->objDB->encloseColumnName("char1")." = ?,
-                                ".$this->objDB->encloseColumnName("char2")." = ?
-                          WHERE content_id = ? ";
-            if($this->objDB->_pQuery($strQuery, array(0, $objVoting->getSystemid(), "votings.tpl", $strElementId)))
-                $strReturn .= "faqselement created.\n";
-            else
-                $strReturn .= "Error creating faqselement.\n";
-        }
+        $objPage = $objHelper->createPage("votings", "Votings", $strNaviFolderId);
+        $strReturn .= "ID of new page: ".$objPage->getSystemid()."\n";
 
-        $strReturn .= "Adding votings-element 2 to new page\n";
-        if(PagesElement::getElement("faqs") != null) {
-            $objPagelement = new PagesPageelement();
-            $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
-            $objPagelement->setStrName("special");
-            $objPagelement->setStrElement("votings");
-            $objPagelement->updateObjectToDb($strFaqsPageId);
-            $strElementId = $objPagelement->getSystemid();
-            $strQuery = "UPDATE "._dbprefix_."element_universal
-                            SET ".$this->objDB->encloseColumnName("int1")." = ?,
-                                ".$this->objDB->encloseColumnName("char1")." = ?,
-                                ".$this->objDB->encloseColumnName("char2")." = ?
-                          WHERE content_id = ? ";
-            if($this->objDB->_pQuery($strQuery, array(1, $objVoting->getSystemid(), "votings.tpl", $strElementId)))
-                $strReturn .= "faqselement created.\n";
-            else
-                $strReturn .= "Error creating faqselement.\n";
-        }
+        $objBlocks = $objHelper->createBlocksElement("Headline", $objPage);
+        $objBlock = $objHelper->createBlockElement("Headline", $objBlocks);
 
         $strReturn .= "Adding headline-element to new page\n";
-        
-        if(PagesElement::getElement("row") != null) {
-            $objPagelement = new PagesPageelement();
-            $objPagelement->setStrPlaceholder("headline_row");
-            $objPagelement->setStrName("headline");
-            $objPagelement->setStrElement("row");
-            $objPagelement->updateObjectToDb($strFaqsPageId);
-            $strElementId = $objPagelement->getSystemid();
-            $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                             SET paragraph_title = ?
-                           WHERE content_id = ?";
-            if($this->objDB->_pQuery($strQuery, array("Votings", $strElementId)))
-                $strReturn .= "Headline element created.\n";
-            else
-                $strReturn .= "Error creating headline element.\n";
-        }
+        $objHeadline = $objHelper->createPageElement("headline_plaintext", $objBlock);
+        /** @var ElementPlaintextAdmin $objHeadlineAdmin */
+        $objHeadlineAdmin = $objHeadline->getConcreteAdminInstance();
+        $objHeadlineAdmin->setStrText("Votings");
+        $objHeadlineAdmin->updateForeignElement();
+
+
+        $objBlocks = $objHelper->createBlocksElement("Special Content", $objPage);
+        $objBlock = $objHelper->createBlockElement("Votings", $objBlocks);
+
+        $objVotingElement = $objHelper->createPageElement("votings_votings", $objBlock);
+        /** @var ElementVotingsAdmin $objVotingsAdmin */
+        $objVotingsAdmin = $objVotingElement->getConcreteAdminInstance();
+        $objVotingsAdmin->setStrChar1($objVoting->getSystemid());
+        $objVotingsAdmin->setStrChar2("votings.tpl");
+        $objVotingsAdmin->setIntInt1(0);
+        $objVotingsAdmin->updateForeignElement();
+
+        $objBlock = $objHelper->createBlockElement("Votings", $objBlocks);
+
+        $objVotingElement = $objHelper->createPageElement("votings_votings", $objBlock);
+        /** @var ElementVotingsAdmin $objVotingsAdmin */
+        $objVotingsAdmin = $objVotingElement->getConcreteAdminInstance();
+        $objVotingsAdmin->setStrChar1($objVoting->getSystemid());
+        $objVotingsAdmin->setStrChar2("votings.tpl");
+        $objVotingsAdmin->setIntInt1(1);
+        $objVotingsAdmin->updateForeignElement();
 
         return $strReturn;
     }
 
-    public function setObjDb($objDb) {
+    public function setObjDb($objDb)
+    {
         $this->objDB = $objDb;
     }
 
-    public function setStrContentlanguage($strContentlanguage) {
+    public function setStrContentlanguage($strContentlanguage)
+    {
         $this->strContentLanguage = $strContentlanguage;
     }
 
-    public function getCorrespondingModule() {
+    public function getCorrespondingModule()
+    {
         return "faqs";
     }
 

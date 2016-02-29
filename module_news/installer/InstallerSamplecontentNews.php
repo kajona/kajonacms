@@ -7,13 +7,16 @@
 
 namespace Kajona\News\Installer;
 
+use Kajona\News\Admin\Elements\ElementNewsAdmin;
 use Kajona\News\System\NewsCategory;
 use Kajona\News\System\NewsFeed;
 use Kajona\News\System\NewsNews;
+use Kajona\Pages\Admin\Elements\ElementPlaintextAdmin;
 use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
+use Kajona\Samplecontent\System\SamplecontentContentHelper;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Database;
 use Kajona\System\System\Rights;
@@ -111,129 +114,82 @@ class InstallerSamplecontentNews implements SamplecontentInstallerInterface {
                 $objPagelement->setStrName("mastertopnews");
                 $objPagelement->setStrElement("news");
                 $objPagelement->updateObjectToDb($this->strMasterID);
-                $strElementId = $objPagelement->getSystemid();
-                $strQuery = "UPDATE "._dbprefix_."element_news
-                                SET news_category=?,
-                                    news_view = ?,
-                                    news_mode = ?,
-                                    news_order = ?,
-                                    news_amount = ?,
-                                    news_detailspage = ?,
-                                    news_template = ?
-                                WHERE content_id = ?";
-                if($this->objDB->_pQuery($strQuery, array($strCategoryID, 0, 0, 0, 10, "newsdetails", "demo.tpl", $strElementId)))
-                    $strReturn .= "Newselement created.\n";
-                else
-                    $strReturn .= "Error creating newselement.\n";
+                /** @var ElementNewsAdmin $objAdminInstance */
+                $objAdminInstance = $objPagelement->getConcreteAdminInstance();
+                $objAdminInstance->setStrCategory($strCategoryID);
+                $objAdminInstance->setIntView(0);
+                $objAdminInstance->setIntListMode(0);
+                $objAdminInstance->setIntOrder(0);
+                $objAdminInstance->setIntAmount(10);
+                $objAdminInstance->setStrDetailspage("newsdetails");
+                $objAdminInstance->setStrTemplate("demo.tpl");
+                $objAdminInstance->updateForeignElement();
             }
         }
         $strReturn .= "Creating news-detail\n";
-        $objPage = new PagesPage();
-        $objPage->setStrName("newsdetails");
-        $objPage->setStrBrowsername("News");
-        $objPage->setStrTemplate("standard.tpl");
-        $objPage->updateObjectToDb();
-        $strNewsdetailsId = $objPage->getSystemid();
-        $strReturn .= "ID of new page: ".$strNewsdetailsId."\n";
-        $strReturn .= "Adding newsdetails to new page\n";
-        
-        if(PagesElement::getElement("news") != null) {
-            $objPagelement = new PagesPageelement();
-            $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
-            $objPagelement->setStrName("special");
-            $objPagelement->setStrElement("news");
-            $objPagelement->updateObjectToDb($strNewsdetailsId);
-            $strElementId = $objPagelement->getSystemid();
-            $strQuery = "UPDATE "._dbprefix_."element_news
-                            SET news_category=?,
-                                news_view = ?,
-                                news_mode = ?,
-                                news_order = ?,
-                                news_amount = ?,
-                                news_detailspage = ?,
-                                news_template = ?
-                            WHERE content_id = ?";
-            if($this->objDB->_pQuery($strQuery, array($strCategoryID, 1, 0, 0, 20, "index", "demo.tpl", $strElementId)))
-                $strReturn .= "Newselement created.\n";
-            else
-                $strReturn .= "Error creating newselement.\n";
-        
-        }
+
+        $objHelper = new SamplecontentContentHelper();
+
+        $objPage = $objHelper->createPage("newsdetails", "News", $strNaviFolderId);
+        $strReturn .= "ID of new page: ".$objPage->getSystemid()."\n";
+
+        $objBlocks = $objHelper->createBlocksElement("Headline", $objPage);
+        $objBlock = $objHelper->createBlockElement("Headline", $objBlocks);
 
         $strReturn .= "Adding headline-element to new page\n";
-        
-        if(PagesElement::getElement("row") != null) {
-            $objPagelement = new PagesPageelement();
-            $objPagelement->setStrPlaceholder("headline_row");
-            $objPagelement->setStrName("headline");
-            $objPagelement->setStrElement("row");
-            $objPagelement->updateObjectToDb($strNewsdetailsId);
-            $strElementId = $objPagelement->getSystemid();
-            $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                                SET paragraph_title = ?
-                                WHERE content_id = ?";
-            if($this->objDB->_pQuery($strQuery, array("News", $strElementId)))
-                $strReturn .= "Headline element created.\n";
-            else
-                $strReturn .= "Error creating headline element.\n";
-
-        }
+        $objHeadline = $objHelper->createPageElement("headline_plaintext", $objBlock);
+        /** @var ElementPlaintextAdmin $objHeadlineAdmin */
+        $objHeadlineAdmin = $objHeadline->getConcreteAdminInstance();
+        $objHeadlineAdmin->setStrText("News");
+        $objHeadlineAdmin->updateForeignElement();
 
 
+        $objBlocks = $objHelper->createBlocksElement("Special Content", $objPage);
+        $objBlock = $objHelper->createBlockElement("News", $objBlocks);
+
+        $objElement = $objHelper->createPageElement("news_news", $objBlock);
+        /** @var ElementNewsAdmin $objAdminInstance */
+        $objAdminInstance = $objElement->getConcreteAdminInstance();
+        $objAdminInstance->setStrCategory($strCategoryID);
+        $objAdminInstance->setIntView(1);
+        $objAdminInstance->setIntListMode(0);
+        $objAdminInstance->setIntOrder(0);
+        $objAdminInstance->setIntAmount(20);
+        $objAdminInstance->setStrDetailspage("index");
+        $objAdminInstance->setStrTemplate("demo.tpl");
+        $objAdminInstance->updateForeignElement();
 
 
 
         $strReturn .= "Creating news-list-pge\n";
-        $objPage = new PagesPage();
-        $objPage->setStrName("news");
-        $objPage->setStrBrowsername("News");
-        $objPage->setStrTemplate("standard.tpl");
-        $objPage->updateObjectToDb($strNaviFolderId);
-        $strNewslistId = $objPage->getSystemid();
-        $strReturn .= "ID of new page: ".$strNewsdetailsId."\n";
-        $strReturn .= "Adding newsdetails to new page\n";
+        $objPage = $objHelper->createPage("news", "News", $strNaviFolderId);
+        $strReturn .= "ID of new page: ".$objPage->getSystemid()."\n";
 
-        if(PagesElement::getElement("news") != null) {
-            $objPagelement = new PagesPageelement();
-            $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
-            $objPagelement->setStrName("special");
-            $objPagelement->setStrElement("news");
-            $objPagelement->updateObjectToDb($strNewslistId);
-            $strElementId = $objPagelement->getSystemid();
-            $strQuery = "UPDATE "._dbprefix_."element_news
-                            SET news_category=?,
-                                news_view = ?,
-                                news_mode = ?,
-                                news_order = ?,
-                                news_amount = ?,
-                                news_detailspage = ?,
-                                news_template = ?
-                            WHERE content_id = ?";
-            if($this->objDB->_pQuery($strQuery, array($strCategoryID, 0, 0, 0, 20, "newsdetails", "demo.tpl", $strElementId)))
-                $strReturn .= "Newselement created.\n";
-            else
-                $strReturn .= "Error creating newselement.\n";
-
-        }
+        $objBlocks = $objHelper->createBlocksElement("Headline", $objPage);
+        $objBlock = $objHelper->createBlockElement("Headline", $objBlocks);
 
         $strReturn .= "Adding headline-element to new page\n";
+        $objHeadline = $objHelper->createPageElement("headline_plaintext", $objBlock);
+        /** @var ElementPlaintextAdmin $objHeadlineAdmin */
+        $objHeadlineAdmin = $objHeadline->getConcreteAdminInstance();
+        $objHeadlineAdmin->setStrText("News");
+        $objHeadlineAdmin->updateForeignElement();
 
-        if(PagesElement::getElement("row") != null) {
-            $objPagelement = new PagesPageelement();
-            $objPagelement->setStrPlaceholder("headline_row");
-            $objPagelement->setStrName("headline");
-            $objPagelement->setStrElement("row");
-            $objPagelement->updateObjectToDb($strNewslistId);
-            $strElementId = $objPagelement->getSystemid();
-            $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                                SET paragraph_title = ?
-                                WHERE content_id = ?";
-            if($this->objDB->_pQuery($strQuery, array("Newslist", $strElementId)))
-                $strReturn .= "Headline element created.\n";
-            else
-                $strReturn .= "Error creating headline element.\n";
 
-        }
+        $objBlocks = $objHelper->createBlocksElement("Special Content", $objPage);
+        $objBlock = $objHelper->createBlockElement("News", $objBlocks);
+
+        $objElement = $objHelper->createPageElement("news_news", $objBlock);
+        /** @var ElementNewsAdmin $objAdminInstance */
+        $objAdminInstance = $objElement->getConcreteAdminInstance();
+        $objAdminInstance->setStrCategory($strCategoryID);
+        $objAdminInstance->setIntView(0);
+        $objAdminInstance->setIntListMode(0);
+        $objAdminInstance->setIntOrder(0);
+        $objAdminInstance->setIntAmount(20);
+        $objAdminInstance->setStrDetailspage("newsdetails");
+        $objAdminInstance->setStrTemplate("demo.tpl");
+        $objAdminInstance->updateForeignElement();
 
 
 
@@ -248,13 +204,12 @@ class InstallerSamplecontentNews implements SamplecontentInstallerInterface {
         else
             $objNewsFeed->setStrDesc("This is a Kajona demo news feed");
 
-        $objNewsFeed->setStrPage($objPage->getStrName());
+        $objNewsFeed->setStrPage("newsdetails");
         $objNewsFeed->setStrCat("0");
         $objNewsFeed->setIntAmount(25);
         $objNewsFeed->updateObjectToDb();
         $strNewsFeedId = $objNewsFeed->getSystemid();
         $strReturn .= "ID of new news-feed: ".$strNewsFeedId."\n";
-
 
         $strReturn .= "Adding rating permissions...\n";
         Carrier::getInstance()->getObjRights()->addGroupToRight(SystemSetting::getConfigValue("_guests_group_id_"), SystemModule::getModuleByName("news")->getSystemid(), Rights::$STR_RIGHT_RIGHT3);

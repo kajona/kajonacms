@@ -6,10 +6,12 @@
 ********************************************************************************************************/
 
 namespace Kajona\Postacomment\Installer;
-use Kajona\Pages\System\PagesElement;
+
+use Kajona\Pages\Admin\Elements\ElementPlaintextAdmin;
+use Kajona\Pages\Admin\Elements\ElementRichtextAdmin;
 use Kajona\Pages\System\PagesFolder;
-use Kajona\Pages\System\PagesPage;
-use Kajona\Pages\System\PagesPageelement;
+use Kajona\Postacomment\Admin\Elements\ElementPostacommentAdmin;
+use Kajona\Samplecontent\System\SamplecontentContentHelper;
 use Kajona\System\System\Database;
 use Kajona\System\System\SamplecontentInstallerInterface;
 
@@ -17,7 +19,8 @@ use Kajona\System\System\SamplecontentInstallerInterface;
  * Installer of the postacomment samplecontent
  *
  */
-class InstallerSamplecontentPostacomment implements SamplecontentInstallerInterface  {
+class InstallerSamplecontentPostacomment implements SamplecontentInstallerInterface
+{
 
     /**
      * @var Database
@@ -29,117 +32,77 @@ class InstallerSamplecontentPostacomment implements SamplecontentInstallerInterf
      * Does the hard work: installs the module and registers needed constants
      *
      */
-    public function install() {
+    public function install()
+    {
         $strReturn = "";
 
         //fetch navifolder-id
         $strNaviFolderId = "";
         $arrFolder = PagesFolder::getFolderList();
-        foreach($arrFolder as $objOneFolder) {
-            if($objOneFolder->getStrName() == "mainnavigation") {
+        foreach ($arrFolder as $objOneFolder) {
+            if ($objOneFolder->getStrName() == "mainnavigation") {
                 $strNaviFolderId = $objOneFolder->getSystemid();
             }
         }
 
 
         $strReturn .= "Creating new postacomment page...\n";
+        $objHelper = new SamplecontentContentHelper();
 
-        $objPage = new PagesPage();
-        $objPage->setStrName("postacomment");
-        $objPage->setStrBrowsername("Postacomment");
-        $objPage->setStrTemplate("standard.tpl");
-        $objPage->updateObjectToDb($strNaviFolderId);
+        $objPage = $objHelper->createPage("postacomment", "Postacomment", $strNaviFolderId);
+        $strReturn .= "ID of new page: ".$objPage->getSystemid()."\n";
 
-        $strPostacommentPageID = $objPage->getSystemid();
-        $strReturn .= "ID of new page: ".$strPostacommentPageID."\n";
-        $strReturn .= "Adding pagelement to new page\n";
-
-        if(PagesElement::getElement("postacomment") != null) {
-            $objPagelement = new PagesPageelement();
-            $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
-            $objPagelement->setStrName("special");
-            $objPagelement->setStrElement("postacomment");
-            $objPagelement->updateObjectToDb($strPostacommentPageID);
-            $strElementId = $objPagelement->getSystemid();
-
-            $strQuery = "UPDATE "._dbprefix_."element_universal
-                                SET char1 = ?
-                                WHERE content_id = ?";
-
-            if($this->objDB->_pQuery($strQuery, array("postacomment_ajax.tpl", $strElementId))) {
-                $strReturn .= "Postacomment element created.\n";
-            }
-            else {
-                $strReturn .= "Error creating Postacomment element.\n";
-            }
-        }
+        $objBlocks = $objHelper->createBlocksElement("Headline", $objPage);
+        $objBlock = $objHelper->createBlockElement("Headline", $objBlocks);
 
         $strReturn .= "Adding headline-element to new page\n";
-        if(PagesElement::getElement("row") != null) {
-            $objPagelement = new PagesPageelement();
-            $objPagelement->setStrPlaceholder("headline_row");
-            $objPagelement->setStrName("headline");
-            $objPagelement->setStrElement("row");
-            $objPagelement->updateObjectToDb($strPostacommentPageID);
-            $strElementId = $objPagelement->getSystemid();
-            $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                                SET paragraph_title = ?
-                                WHERE content_id = ?";
-            if($this->objDB->_pQuery($strQuery, array("Postacomment Sample", $strElementId))) {
-                $strReturn .= "Headline element created.\n";
-            }
-            else {
-                $strReturn .= "Error creating headline element.\n";
-            }
-        }
+        $objHeadline = $objHelper->createPageElement("headline_plaintext", $objBlock);
+        /** @var ElementPlaintextAdmin $objHeadlineAdmin */
+        $objHeadlineAdmin = $objHeadline->getConcreteAdminInstance();
+        $objHeadlineAdmin->setStrText("Postacomment");
+        $objHeadlineAdmin->updateForeignElement();
+
+
+        $objBlocks = $objHelper->createBlocksElement("Footer Area", $objPage);
+        $objBlock = $objHelper->createBlockElement("Postacomment", $objBlocks);
+
+        $objCommentEl = $objHelper->createPageElement("postacomment_postacomment", $objBlock);
+        /** @var ElementPostacommentAdmin $objCommentElAdmin */
+        $objCommentElAdmin = $objCommentEl->getConcreteAdminInstance();
+        $objCommentElAdmin->setStrChar1("postacomment_ajax.tpl");
+        $objCommentElAdmin->updateForeignElement();
+
 
         $strReturn .= "Adding paragraph-element to new page\n";
-        if(PagesElement::getElement("paragraph") != null) {
-            $objPagelement = new PagesPageelement();
-            $objPagelement->setStrPlaceholder("text_paragraph");
-            $objPagelement->setStrName("text");
-            $objPagelement->setStrElement("paragraph");
-            $objPagelement->updateObjectToDb($strPostacommentPageID);
-            $strElementId = $objPagelement->getSystemid();
+        $objBlocks = $objHelper->createBlocksElement("Page Intro", $objPage);
+        $objBlock = $objHelper->createBlockElement("Text Only", $objBlocks);
 
-            $arrParams = array();
-            if($this->strContentLanguage == "de") {
-                $arrParams[] = "";
-                $arrParams[] = "Über das unten stehende Formular kann dieser Seite ein Kommentar hinzugefügt werden.";
-                $arrParams[] = $strElementId;
-            }
-            else {
-                $arrParams[] = "";
-                $arrParams[] = "By using the form below, comments may be added to the current page. ";
-                $arrParams[] = $strElementId;
-            }
-
-            $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                                    SET paragraph_title = ?,
-                                        paragraph_content = ?
-                                  WHERE content_id = ? ";
-
-            if($this->objDB->_pQuery($strQuery, $arrParams)) {
-                $strReturn .= "Paragraph element created.\n";
-            }
-            else {
-                $strReturn .= "Error creating paragraph element.\n";
-            }
+        $objRichtextEl = $objHelper->createPageElement("content_richtext", $objBlock);
+        /** @var ElementRichtextAdmin $objRichtextElAdmin */
+        $objRichtextElAdmin = $objRichtextEl->getConcreteAdminInstance();
+        if ($this->strContentLanguage == "de") {
+            $objRichtextElAdmin->setStrText("Über das unten stehende Formular kann dieser Seite ein Kommentar hinzugefügt werden.");
         }
-
+        else {
+            $objRichtextElAdmin->setStrText("By using the form below, comments may be added to the current page. ");
+        }
+        $objRichtextElAdmin->updateForeignElement();
 
         return $strReturn;
     }
 
-    public function setObjDb($objDb) {
+    public function setObjDb($objDb)
+    {
         $this->objDB = $objDb;
     }
 
-    public function setStrContentlanguage($strContentlanguage) {
+    public function setStrContentlanguage($strContentlanguage)
+    {
         $this->strContentLanguage = $strContentlanguage;
     }
 
-    public function getCorrespondingModule() {
+    public function getCorrespondingModule()
+    {
         return "postacomment";
     }
 

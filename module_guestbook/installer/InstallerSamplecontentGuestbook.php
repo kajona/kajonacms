@@ -7,11 +7,11 @@
 
 namespace Kajona\Guestbook\Installer;
 
+use Kajona\Guestbook\Admin\Elements\ElementGuestbookAdmin;
 use Kajona\Guestbook\System\GuestbookGuestbook;
-use Kajona\Pages\System\PagesElement;
+use Kajona\Pages\Admin\Elements\ElementPlaintextAdmin;
 use Kajona\Pages\System\PagesFolder;
-use Kajona\Pages\System\PagesPage;
-use Kajona\Pages\System\PagesPageelement;
+use Kajona\Samplecontent\System\SamplecontentContentHelper;
 use Kajona\System\System\Database;
 use Kajona\System\System\SamplecontentInstallerInterface;
 
@@ -57,58 +57,32 @@ class InstallerSamplecontentGuestbook implements SamplecontentInstallerInterface
 
 
         $strReturn .= "Creating new guestbook page...\n";
+        $objHelper = new SamplecontentContentHelper();
 
-        $objPage = new PagesPage();
-        $objPage->setStrName("guestbook");
-        $objPage->setStrBrowsername("Guestbook");
-        $objPage->setStrTemplate("standard.tpl");
-        $objPage->updateObjectToDb($strNaviFolderId);
+        $objPage = $objHelper->createPage("guestbook", "Guestbook", $strNaviFolderId);
+        $strReturn .= "ID of new page: ".$objPage->getSystemid()."\n";
 
-        $strGuestbookpageID = $objPage->getSystemid();
-        $strReturn .= "ID of new page: ".$strGuestbookpageID."\n";
-        $strReturn .= "Adding pagelement to new page\n";
-
-        if (PagesElement::getElement("guestbook") != null) {
-            $objPagelement = new PagesPageelement();
-            $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
-            $objPagelement->setStrName("special");
-            $objPagelement->setStrElement("guestbook");
-            $objPagelement->updateObjectToDb($strGuestbookpageID);
-            $strElementId = $objPagelement->getSystemid();
-            $strQuery = "UPDATE "._dbprefix_."element_guestbook
-                            SET guestbook_id = ?,
-                                guestbook_template = ?,
-                                guestbook_amount = ?
-                            WHERE content_id = ?";
-            if ($this->objDB->_pQuery($strQuery, array($strGuestbookID, "guestbook.tpl", 5, $strElementId))) {
-                $strReturn .= "Guestbookelement created.\n";
-            }
-            else {
-                $strReturn .= "Error creating Guestbookelement.\n";
-            }
-
-        }
+        $objBlocks = $objHelper->createBlocksElement("Headline", $objPage);
+        $objBlock = $objHelper->createBlockElement("Headline", $objBlocks);
 
         $strReturn .= "Adding headline-element to new page\n";
+        $objElement = $objHelper->createPageElement("headline_plaintext", $objBlock);
+        /** @var ElementPlaintextAdmin $objHeadlineAdmin */
+        $objHeadlineAdmin = $objElement->getConcreteAdminInstance();
+        $objHeadlineAdmin->setStrText("Guestbook");
+        $objHeadlineAdmin->updateForeignElement();
 
-        if (PagesElement::getElement("row") != null) {
-            $objPagelement = new PagesPageelement();
-            $objPagelement->setStrPlaceholder("headline_row");
-            $objPagelement->setStrName("headline");
-            $objPagelement->setStrElement("row");
-            $objPagelement->updateObjectToDb($strGuestbookpageID);
-            $strElementId = $objPagelement->getSystemid();
-            $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                                SET paragraph_title = ?
-                                WHERE content_id = ?";
-            if ($this->objDB->_pQuery($strQuery, array("Guestbook", $strElementId))) {
-                $strReturn .= "Headline element created.\n";
-            }
-            else {
-                $strReturn .= "Error creating headline element.\n";
-            }
-        }
 
+        $objBlocks = $objHelper->createBlocksElement("Special Content", $objPage);
+        $objBlock = $objHelper->createBlockElement("Guestbook", $objBlocks);
+
+        $objMediamanager = $objHelper->createPageElement("guestbook_guestbook", $objBlock);
+        /** @var ElementGuestbookAdmin $objGbAdmin */
+        $objGbAdmin = $objMediamanager->getConcreteAdminInstance();
+        $objGbAdmin->setStrGuestbook($strGuestbookID);
+        $objGbAdmin->setStrTemplate("guestbook.tpl");
+        $objGbAdmin->setIntAmount(5);
+        $objGbAdmin->updateForeignElement();
 
         return $strReturn;
     }

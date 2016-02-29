@@ -269,19 +269,11 @@
                     </div>
                 </kajona-block>
 
-            </kajona-blocks>
-
-
-
-            <kajona-blocks kajona-name="Footer">
-
-                <kajona-block kajona-name="Footer">
+                <kajona-block kajona-name="Footer Text">
                     <p>%%footer_plaintext%%</p>
                 </kajona-block>
 
             </kajona-blocks>
-
-
 
         </div>
 

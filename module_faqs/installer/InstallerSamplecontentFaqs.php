@@ -7,11 +7,12 @@
 
 namespace Kajona\Faqs\Installer;
 
+use Kajona\Faqs\Admin\Elements\ElementFaqsAdmin;
 use Kajona\Faqs\System\FaqsFaq;
-use Kajona\Pages\System\PagesElement;
+use Kajona\Pages\Admin\Elements\ElementPlaintextAdmin;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
-use Kajona\Pages\System\PagesPageelement;
+use Kajona\Samplecontent\System\SamplecontentContentHelper;
 use Kajona\System\System\SamplecontentInstallerInterface;
 
 /**
@@ -36,10 +37,11 @@ class InstallerSamplecontentFaqs implements SamplecontentInstallerInterface
         //fetch navifolder-id
         $strNaviFolderId = "";
         $arrFolder = PagesFolder::getFolderList();
-        foreach ($arrFolder as $objOneFolder)
+        foreach ($arrFolder as $objOneFolder) {
             if ($objOneFolder->getStrName() == "mainnavigation") {
                 $strNaviFolderId = $objOneFolder->getSystemid();
             }
+        }
 
 
         //search the index page
@@ -58,7 +60,8 @@ class InstallerSamplecontentFaqs implements SamplecontentInstallerInterface
 
             $objFaq2->setStrQuestion("Wer entwickelt Kajona, wo gibt es weitere Infos?");
             $objFaq2->setStrAnswer("Kajona wird von einer Open Source Community entwickelt. Da Kajona ständig weiterentwickelt wird, sind wir jederzeit auf der Suche nach Helfern, seien es Programmierer, Grafiker, Betatester und auch Anwender. Weitere Informationen hierzu finden Sie auf <a href=\"http://www.kajona.de\">www.kajona.de</a>.");
-        } else {
+        }
+        else {
             $objFaq1->setStrQuestion("What is Kajona?");
             $objFaq1->setStrAnswer("Kajona is an open source content management system based on PHP and a database. Due to it's modular design, it can be extended and adopted very easily.");
 
@@ -72,52 +75,31 @@ class InstallerSamplecontentFaqs implements SamplecontentInstallerInterface
 
 
         $strReturn .= "Creating faqs-page\n";
-        $objPage = new PagesPage();
-        $objPage->setStrName("faqs");
-        $objPage->setStrBrowsername("FAQs");
-        $objPage->setStrTemplate("standard.tpl");
-        $objPage->updateObjectToDb($strNaviFolderId);
+        $objHelper = new SamplecontentContentHelper();
 
-        $strFaqsPageId = $objPage->getSystemid();
+        $objPage = $objHelper->createPage("faqs", "FAQs", $strNaviFolderId);
+        $strReturn .= "ID of new page: ".$objPage->getSystemid()."\n";
 
-        $strReturn .= "ID of new page: " . $strFaqsPageId . "\n";
-        $strReturn .= "Adding faqs-element to new page\n";
-        if (PagesElement::getElement("faqs") != null) {
-            $objPagelement = new PagesPageelement();
-            $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
-            $objPagelement->setStrName("special");
-            $objPagelement->setStrElement("faqs");
-            $objPagelement->updateObjectToDb($strFaqsPageId);
-            $strElementId = $objPagelement->getSystemid();
-            $strQuery = "UPDATE " . _dbprefix_ . "element_faqs
-                            SET faqs_category= ?,
-                                faqs_template = ?
-                          WHERE content_id = ? ";
-            if ($this->objDB->_pQuery($strQuery, array(0, "demo_foldable.tpl", $strElementId))) {
-                $strReturn .= "faqselement created.\n";
-            } else {
-                $strReturn .= "Error creating faqselement.\n";
-            }
-        }
+        $objBlocks = $objHelper->createBlocksElement("Headline", $objPage);
+        $objBlock = $objHelper->createBlockElement("Headline", $objBlocks);
 
         $strReturn .= "Adding headline-element to new page\n";
+        $objHeadline = $objHelper->createPageElement("headline_plaintext", $objBlock);
+        /** @var ElementPlaintextAdmin $objHeadlineAdmin */
+        $objHeadlineAdmin = $objHeadline->getConcreteAdminInstance();
+        $objHeadlineAdmin->setStrText("FAQs");
+        $objHeadlineAdmin->updateForeignElement();
 
-        if (PagesElement::getElement("row") != null) {
-            $objPagelement = new PagesPageelement();
-            $objPagelement->setStrPlaceholder("headline_row");
-            $objPagelement->setStrName("headline");
-            $objPagelement->setStrElement("row");
-            $objPagelement->updateObjectToDb($strFaqsPageId);
-            $strElementId = $objPagelement->getSystemid();
-            $strQuery = "UPDATE " . _dbprefix_ . "element_paragraph
-                             SET paragraph_title = ?
-                           WHERE content_id = ?";
-            if ($this->objDB->_pQuery($strQuery, array("FAQs", $strElementId))) {
-                $strReturn .= "Headline element created.\n";
-            } else {
-                $strReturn .= "Error creating headline element.\n";
-            }
-        }
+
+        $objBlocks = $objHelper->createBlocksElement("Special Content", $objPage);
+        $objBlock = $objHelper->createBlockElement("Faqs", $objBlocks);
+
+        $objFaqElement = $objHelper->createPageElement("faqs_faqs", $objBlock);
+        /** @var ElementFaqsAdmin $objFaqElementAdmin */
+        $objFaqElementAdmin = $objFaqElement->getConcreteAdminInstance();
+        $objFaqElementAdmin->setStrCategory(0);
+        $objFaqElementAdmin->setStrTemplate("demo_foldable.tpl");
+        $objFaqElementAdmin->updateForeignElement();
 
         return $strReturn;
     }

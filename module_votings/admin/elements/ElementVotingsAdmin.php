@@ -21,7 +21,8 @@ use Kajona\Votings\System\VotingsVoting;
  *
  * @targetTable element_universal.content_id
  */
-class ElementVotingsAdmin extends ElementAdmin implements AdminElementInterface {
+class ElementVotingsAdmin extends ElementAdmin implements AdminElementInterface
+{
 
     /**
      * @var string
@@ -55,15 +56,16 @@ class ElementVotingsAdmin extends ElementAdmin implements AdminElementInterface 
     private $intInt1;
 
 
-
-    public function getAdminForm() {
+    public function getAdminForm()
+    {
         $objForm = parent::getAdminForm();
 
         $arrRawVotings = VotingsVoting::getObjectList(true);
         $arrVotings = array();
 
-        foreach ($arrRawVotings as $objOneVoting)
+        foreach ($arrRawVotings as $objOneVoting) {
             $arrVotings[$objOneVoting->getSystemid()] = $objOneVoting->getStrTitle();
+        }
 
         $objForm->getField("char1")->setArrKeyValues($arrVotings);
 
@@ -73,47 +75,50 @@ class ElementVotingsAdmin extends ElementAdmin implements AdminElementInterface 
     /**
      * @param string $strChar2
      */
-    public function setStrChar2($strChar2) {
+    public function setStrChar2($strChar2)
+    {
         $this->strChar2 = $strChar2;
     }
 
     /**
      * @return string
      */
-    public function getStrChar2() {
+    public function getStrChar2()
+    {
         return $this->strChar2;
     }
 
     /**
      * @param string $strChar1
      */
-    public function setStrChar1($strChar1) {
+    public function setStrChar1($strChar1)
+    {
         $this->strChar1 = $strChar1;
     }
 
     /**
      * @return string
      */
-    public function getStrChar1() {
+    public function getStrChar1()
+    {
         return $this->strChar1;
     }
 
     /**
      * @param string $intInt1
      */
-    public function setIntInt1($intInt1) {
+    public function setIntInt1($intInt1)
+    {
         $this->intInt1 = $intInt1;
     }
 
     /**
      * @return string
      */
-    public function getIntInt1() {
+    public function getIntInt1()
+    {
         return $this->intInt1;
     }
-
-
-
 
 
 }

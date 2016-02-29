@@ -7,10 +7,14 @@
 
 namespace Kajona\Formular\Installer;
 
+use Kajona\Formular\Admin\Elements\ElementFormularAdmin;
+use Kajona\Pages\Admin\Elements\ElementPlaintextAdmin;
+use Kajona\Pages\Admin\Elements\ElementRichtextAdmin;
 use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
+use Kajona\Samplecontent\System\SamplecontentContentHelper;
 use Kajona\System\System\Database;
 use Kajona\System\System\SamplecontentInstallerInterface;
 use Kajona\System\System\SystemSetting;
@@ -45,106 +49,52 @@ class InstallerSamplecontentFormular implements SamplecontentInstallerInterface 
 
         $strReturn .= "Creating new page contact...\n";
 
-        $objPage = new PagesPage();
-        $objPage->setStrName("contact");
-        $objPage->setStrBrowsername("Contact");
-        $objPage->setStrTemplate("standard.tpl");
-        $objPage->updateObjectToDb($strNaviFolderId);
+        $objHelper = new SamplecontentContentHelper();
 
-        $strPageId = $objPage->getSystemid();
-        $strReturn .= "ID of new page: ".$strPageId."\n";
-        $strReturn .= "Adding pagelement to new page\n";
+        $objPage = $objHelper->createPage("contact", "Contact", $strNaviFolderId);
+        $strReturn .= "ID of new page: ".$objPage->getSystemid()."\n";
 
-        if(PagesElement::getElement("form") != null) {
-            $objPagelement = new PagesPageelement();
-            $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
-            $objPagelement->setStrName("special");
-            $objPagelement->setStrElement("form");
-            $objPagelement->updateObjectToDb($strPageId);
-            $strElementId = $objPagelement->getSystemid();
-
-            $arrParams = array();
-            if($this->strContentLanguage == "de") {
-                $arrParams[] = "FormularContact.php";
-                $arrParams[] = SystemSetting::getConfigValue("_system_admin_email_");
-                $arrParams[] = "contact.tpl";
-                $arrParams[] = $strElementId;
-            }
-            else {
-                $arrParams[] = "FormularContact.php";
-                $arrParams[] = SystemSetting::getConfigValue("_system_admin_email_");
-                $arrParams[] = "contact.tpl";
-                $arrParams[] = $strElementId;
-            }
-
-            $strQuery = "UPDATE "._dbprefix_."element_formular
-                        SET formular_class = ?,
-                            formular_email = ?,
-                            formular_template = ?
-                        WHERE content_id = ?";
-
-            if($this->objDB->_pQuery($strQuery, $arrParams))
-                $strReturn .= "Contact element created.\n";
-            else
-                $strReturn .= "Error creating Contact element.\n";
-
-        }
-
+        $objBlocks = $objHelper->createBlocksElement("Headline", $objPage);
+        $objBlock = $objHelper->createBlockElement("Headline", $objBlocks);
 
         $strReturn .= "Adding headline-element to new page\n";
-        if(PagesElement::getElement("row") != null) {
-            $objPagelement = new PagesPageelement();
-            $objPagelement->setStrPlaceholder("headline_row");
-            $objPagelement->setStrName("headline");
-            $objPagelement->setStrElement("row");
-            $objPagelement->updateObjectToDb($strPageId);
-            $strElementId = $objPagelement->getSystemid();
-            $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                                SET paragraph_title = ?
-                                WHERE content_id = ?";
-            if($this->objDB->_pQuery($strQuery, array("Contact", $strElementId)))
-                $strReturn .= "Headline element created.\n";
-            else
-                $strReturn .= "Error creating headline element.\n";
+        $objHeadline = $objHelper->createPageElement("headline_plaintext", $objBlock);
+        /** @var ElementPlaintextAdmin $objHeadlineAdmin */
+        $objHeadlineAdmin = $objHeadline->getConcreteAdminInstance();
+        $objHeadlineAdmin->setStrText("Contact");
+        $objHeadlineAdmin->updateForeignElement();
 
+
+        $objBlocks = $objHelper->createBlocksElement("Special Content", $objPage);
+        $objBlock = $objHelper->createBlockElement("Form", $objBlocks);
+
+        $objFormEl = $objHelper->createPageElement("contact_form", $objBlock);
+        /** @var ElementFormularAdmin $objFormAdmin */
+        $objFormAdmin = $objFormEl->getConcreteAdminInstance();
+        $objFormAdmin->setStrClass("FormularContact.php");;
+        $objFormAdmin->setStrTemplate("contact.tpl");
+        $objFormAdmin->setStrEmail(SystemSetting::getConfigValue("_system_admin_email_"));
+        $objFormAdmin->updateForeignElement();
+
+
+
+
+        $objBlocks = $objHelper->createBlocksElement("Footer Area", $objPage);
+        $objBlock = $objHelper->createBlockElement("Footer Text", $objBlocks);
+
+        $objTextEl = $objHelper->createPageElement("footer_plaintext", $objBlock);
+        /** @var ElementRichtextAdmin $objTextAdmin */
+        $objTextAdmin = $objFormEl->getConcreteAdminInstance();
+        if($this->strContentLanguage == "de") {
+            $objTextAdmin->setStrText("Hinweis: Das Formular sendet per default die Anfragen an die E-Mail Adresse des Administrators.<br />
+                                Um diese Adresse zu ändern öffnen Sie bitte die Seite in der Administration und bearbeiten das Seitenelement &quot;Formular&quot;.<br /><br />");
         }
-
-        $strReturn .= "Adding paragraph-element to new page\n";
-        if(PagesElement::getElement("paragraph") != null) {
-            $objPagelement = new PagesPageelement();
-            $objPagelement->setStrPlaceholder("content_paragraph|image");
-            $objPagelement->setStrName("content");
-            $objPagelement->setStrElement("paragraph");
-            $objPagelement->updateObjectToDb($strPageId);
-            $strElementId = $objPagelement->getSystemid();
-
-            $arrParams = array();
-            if($this->strContentLanguage == "de") {
-                $arrParams[] = "";
-                $arrParams[] = "Hinweis: Das Formular sendet per default die Anfragen an die E-Mail Adresse des Administrators.<br />
-                                Um diese Adresse zu ändern öffnen Sie bitte die Seite in der Administration und bearbeiten das Seitenelement &quot;Formular&quot;.<br /><br />";
-                $arrParams[] = "";
-                $arrParams[] = $strElementId;
-            }
-            else {
-                $arrParams[] = "";
-                $arrParams[] = "Note: By default, the form sends the messages to the administators email-address.<br />
-                               To change this address, open the current page using the administration and edit the page-element &quot;form&quot;.<br /><br />";
-                $arrParams[] = "";
-                $arrParams[] = $strElementId;
-            }
-
-            $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                                SET paragraph_title = ?,
-                                    paragraph_content = ?,
-                                    paragraph_image = ?
-                                WHERE content_id = ?";
-
-            if($this->objDB->_pQuery($strQuery, $arrParams, array(true, false)))
-                $strReturn .= "Paragraph element created.\n";
-            else
-                $strReturn .= "Error creating paragraph element.\n";
+        else {
+            $objTextAdmin->setStrText("Note: By default, the form sends the messages to the administators email-address.<br />
+                               To change this address, open the current page using the administration and edit the page-element &quot;form&quot;.<br /><br />");
         }
+        $objTextAdmin->updateForeignElement();
+
         return $strReturn;
     }
 

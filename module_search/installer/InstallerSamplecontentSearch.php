@@ -9,10 +9,13 @@ namespace Kajona\Search\Installer;
 
 use Kajona\Navigation\System\NavigationPoint;
 use Kajona\Navigation\System\NavigationTree;
+use Kajona\Pages\Admin\Elements\ElementPlaintextAdmin;
 use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
+use Kajona\Samplecontent\System\SamplecontentContentHelper;
+use Kajona\Search\Admin\Elements\ElementSearchAdmin;
 use Kajona\System\System\Database;
 use Kajona\System\System\Exception;
 use Kajona\System\System\SamplecontentInstallerInterface;
@@ -40,124 +43,73 @@ class InstallerSamplecontentSearch implements SamplecontentInstallerInterface
     public function install() {
         $strReturn = "";
 
-        //fetch navifolder-id
-
-        //navigations installed?
-        $objModule = null;
-        try {
-            $objModule = SystemModule::getModuleByName("pages", true);
-        }
-        catch(Exception $objException) {
-            $objModule = null;
-        }
-        if($objModule != null) {
+        //pages installed?
+        if(SystemModule::getModuleByName("pages", true) != null) {
 
             $strSystemFolderId = "";
             $arrFolder = PagesFolder::getFolderList();
-            foreach($arrFolder as $objOneFolder) {
-                if($objOneFolder->getStrName() == "_system")
+            foreach ($arrFolder as $objOneFolder) {
+                if ($objOneFolder->getStrName() == "_system") {
                     $strSystemFolderId = $objOneFolder->getSystemid();
+                }
             }
 
             //search the master page
             $objMaster = PagesPage::getPageByName("master");
-            if($objMaster != null)
+            if ($objMaster != null) {
                 $this->strMasterID = $objMaster->getSystemid();
+            }
 
 
             $strReturn .= "Adding search-element to master page\n";
 
-            if($this->strMasterID != "" && PagesElement::getElement("search") != null) {
+            if ($this->strMasterID != "" && PagesElement::getElement("search") != null) {
                 $objPagelement = new PagesPageelement();
                 $objPagelement->setStrPlaceholder("mastersearch_search");
                 $objPagelement->setStrName("mastersearch");
                 $objPagelement->setStrElement("search");
                 $objPagelement->updateObjectToDb($this->strMasterID);
-                $strElementId = $objPagelement->getSystemid();
-                $strQuery = "UPDATE "._dbprefix_."element_search
-                                        SET search_template = ?,
-                                            search_amount = ?,
-                                            search_page = ?
-                                        WHERE content_id = ?";
-                if($this->objDB->_pQuery($strQuery, array("search_ajax_small.tpl", 0, "search", $strElementId)))
-                    $strReturn .= "Search element created.\n";
-                else
-                    $strReturn .= "Error creating search element.\n";
+                /** @var ElementSearchAdmin $objSearchAdmin */
+                $objSearchAdmin = $objPagelement->getConcreteAdminInstance();
+                $objSearchAdmin->setStrTemplate("search_ajax_small.tpl");
+                $objSearchAdmin->setIntAmount(0);
+                $objSearchAdmin->setStrPage("search");
+                $objSearchAdmin->updateForeignElement();
             }
 
             $strReturn .= "Creating search page\n";
-            $objPage = new PagesPage();
-            $objPage->setStrName("search");
+            $objHelper = new SamplecontentContentHelper();
 
-            if($this->strContentLanguage == "de")
-                $objPage->setStrBrowsername("Suchergebnisse");
-            else
-                $objPage->setStrBrowsername("Search results");
+            $objPage = $objHelper->createPage("search", $this->strContentLanguage == "de" ? " Suche" : "Search", $strSystemFolderId);
+            $strReturn .= "ID of new page: ".$objPage->getSystemid()."\n";
 
-            $objPage->setStrTemplate("standard.tpl");
-            $objPage->updateObjectToDb($strSystemFolderId);
-            $strSearchresultsId = $objPage->getSystemid();
-            $strReturn .= "ID of new page: ".$strSearchresultsId."\n";
-            $strReturn .= "Adding search-element to new page\n";
-
-            if(PagesElement::getElement("search") != null) {
-                $objPagelement = new PagesPageelement();
-                $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
-                $objPagelement->setStrName("special");
-                $objPagelement->setStrElement("search");
-                $objPagelement->updateObjectToDb($strSearchresultsId);
-                $strElementId = $objPagelement->getSystemid();
-                $strQuery = "UPDATE "._dbprefix_."element_search
-                                        SET search_template = ?,
-                                            search_amount = ?,
-                                            search_page = ?
-                                        WHERE content_id = ?";
-                if($this->objDB->_pQuery($strQuery, array("search_ajax.tpl", 0, "", $strElementId)))
-                    $strReturn .= "Search element created.\n";
-                else
-                    $strReturn .= "Error creating search element.\n";
-            }
-
+            $objBlocks = $objHelper->createBlocksElement("Headline", $objPage);
+            $objBlock = $objHelper->createBlockElement("Headline", $objBlocks);
 
             $strReturn .= "Adding headline-element to new page\n";
-            if(PagesElement::getElement("row") != null) {
-                $objPagelement = new PagesPageelement();
-                $objPagelement->setStrPlaceholder("headline_row");
-                $objPagelement->setStrName("headline");
-                $objPagelement->setStrElement("row");
-                $objPagelement->updateObjectToDb($strSearchresultsId);
-                $strElementId = $objPagelement->getSystemid();
+            $objHeadline = $objHelper->createPageElement("headline_plaintext", $objBlock);
+            /** @var ElementPlaintextAdmin $objHeadlineAdmin */
+            $objHeadlineAdmin = $objHeadline->getConcreteAdminInstance();
+            $objHeadlineAdmin->setStrText($this->strContentLanguage == "de" ? " Suche" : "Search");
+            $objHeadlineAdmin->updateForeignElement();
 
-                $arrParams = array();
-                if($this->strContentLanguage == "de") {
-                    $arrParams = array("Suchergebnisse", $strElementId);
-                }
-                else {
-                    $arrParams = array("Search results", $strElementId);
-                }
 
-                $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                                        SET paragraph_title = ?
-                                        WHERE content_id = ?";
+            $objBlocks = $objHelper->createBlocksElement("Special Content", $objPage);
+            $objBlock = $objHelper->createBlockElement("Search", $objBlocks);
 
-                if($this->objDB->_pQuery($strQuery, $arrParams))
-                    $strReturn .= "Headline element created.\n";
-                else
-                    $strReturn .= "Error creating headline element.\n";
-            }
+            $objSearchElement = $objHelper->createPageElement("search_search", $objBlock);
+            /** @var ElementSearchAdmin $objSearchAdminElement */
+            $objSearchAdminElement = $objSearchElement->getConcreteAdminInstance();
+            $objSearchAdminElement->setStrTemplate("search_ajax.tpl");
+            $objSearchAdminElement->setIntAmount(10);
+            $objSearchAdminElement->updateForeignElement();
+
         }
 
         $strReturn .= "Creating navigation point.\n";
 
         //navigations installed?
-        $objModule = null;
-        try {
-            $objModule = SystemModule::getModuleByName("navigation", true);
-        }
-        catch(Exception $objException) {
-            $objModule = null;
-        }
-        if($objModule != null) {
+        if(SystemModule::getModuleByName("navigation", true) != null) {
 
             $objNavi = NavigationTree::getNavigationByName("portalnavigation");
             $strTreeId = $objNavi->getSystemid();

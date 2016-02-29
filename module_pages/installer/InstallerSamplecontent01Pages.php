@@ -477,7 +477,6 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
         $objGallery->setStrViewFilter(".jpg,.png,.gif,.jpeg");
         $objGallery->updateObjectToDb();
         $objGallery->syncRepo();
-        $strGalleryID = $objGallery->getSystemid();
 
         $strReturn .= "Modify rights to allow guests to rate images...\n";
         Carrier::getInstance()->getObjRights()->addGroupToRight(SystemSetting::getConfigValue("_guests_group_id_"), $objGallery->getSystemid(), "right3");
@@ -518,8 +517,8 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
         $objMediamangerAdmin->updateForeignElement();
 
 
-        $objBlocks = $objHelper->createBlocksElement("Footer", $objPage);
-        $objBlock = $objHelper->createBlockElement("Footer", $objBlocks);
+        $objBlocks = $objHelper->createBlocksElement("Footer Area", $objPage);
+        $objBlock = $objHelper->createBlockElement("Footer Text", $objBlocks);
 
         $objRichtext = $objHelper->createPageElement("footer_plaintext", $objBlock);
         /** @var ElementRichtextAdmin $objRichtextAdmin */
