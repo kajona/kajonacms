@@ -14,10 +14,7 @@ use Kajona\Mediamanager\System\MediamanagerRepo;
 use Kajona\Pages\Admin\Elements\ElementImageAdmin;
 use Kajona\Pages\Admin\Elements\ElementPlaintextAdmin;
 use Kajona\Pages\Admin\Elements\ElementRichtextAdmin;
-use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesFolder;
-use Kajona\Pages\System\PagesPage;
-use Kajona\Pages\System\PagesPageelement;
 use Kajona\Samplecontent\System\SamplecontentContentHelper;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Database;
@@ -38,8 +35,6 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
      */
     private $objDB;
     private $strContentLanguage;
-    private $strIndexID;
-    private $strMasterID;
 
     public function install()
     {
@@ -166,7 +161,6 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
         $objRichtextAdmin->updateForeignElement();
 
 
-
         $objHeadline = $objHelper->createPageElement("headlineright_plaintext", $objBlock);
         /** @var ElementPlaintextAdmin $objHeadlineAdmin */
         $objHeadlineAdmin = $objHeadline->getConcreteAdminInstance();
@@ -212,11 +206,9 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
         $objRichtextAdmin->updateForeignElement();
 
 
-
         $strReturn .= "Creating master-page\n";
         $objMasterPage = $objHelper->createPage("master", "master", $strSystemFolderID, "master.tpl");
         $strReturn .= "ID of new page: ".$objMasterPage->getSystemid()."\n";
-
 
 
         $strReturn .= "Creating error-site...\n";
@@ -252,7 +244,6 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
             $objRichtextAdmin->setStrText("Maybe the requested page doesn\'t exist anymore.<br />Please try it again later.");
         }
         $objRichtextAdmin->updateForeignElement();
-
 
 
         $strReturn .= "Creating imprint-site...\n";
@@ -297,8 +288,6 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
                                Site powered by <a href=\"http://www.kajona.de\" target=\"_blank\" title=\"Kajona CMS - empowering your content\">Kajona</a><br /><a href=\"http://www.kajona.de\" target=\"_blank\" title=\"Kajona CMS - empowering your content\"><img src=\"_webpath_/templates/default/pics/default/kajona_poweredby.png\" alt=\"Kajona\" /></a><br />");
         }
         $objRichtextAdmin->updateForeignElement();
-
-
 
 
         $strReturn .= "Creating sample page...\n";
@@ -392,8 +381,6 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
         $objImageAdmin->updateForeignElement();
 
 
-
-
         return $strReturn;
     }
 
@@ -456,7 +443,6 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
         $objMediamangerAdmin->setStrRepo($objDownloads->getSystemid());
         $objMediamangerAdmin->setStrTemplate("downloads.tpl");
         $objMediamangerAdmin->updateForeignElement();
-
 
 
         return $strReturn;
@@ -530,7 +516,6 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
         $objMediamangerAdmin->setIntTextX(15);
         $objMediamangerAdmin->setIntTextY(15);
         $objMediamangerAdmin->updateForeignElement();
-
 
 
         $objBlocks = $objHelper->createBlocksElement("Footer", $objPage);

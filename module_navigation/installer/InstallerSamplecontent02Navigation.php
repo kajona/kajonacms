@@ -7,12 +7,15 @@
 
 namespace Kajona\Navigation\Installer;
 
+use Kajona\Navigation\Admin\Elements\ElementNavigationAdmin;
 use Kajona\Navigation\System\NavigationPoint;
 use Kajona\Navigation\System\NavigationTree;
+use Kajona\Pages\Admin\Elements\ElementPlaintextAdmin;
 use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
+use Kajona\Samplecontent\System\SamplecontentContentHelper;
 use Kajona\System\System\Database;
 use Kajona\System\System\SamplecontentInstallerInterface;
 
@@ -20,7 +23,8 @@ use Kajona\System\System\SamplecontentInstallerInterface;
  * Installer of the navigation samplecontent
  *
  */
-class InstallerSamplecontent02Navigation implements SamplecontentInstallerInterface {
+class InstallerSamplecontent02Navigation implements SamplecontentInstallerInterface
+{
 
     /**
      * @var Database
@@ -35,19 +39,23 @@ class InstallerSamplecontent02Navigation implements SamplecontentInstallerInterf
      *
      * @return string
      */
-    public function install() {
+    public function install()
+    {
 
         //search the master page
         $objMaster = PagesPage::getPageByName("master");
-        if($objMaster != null)
+        if ($objMaster != null) {
             $this->strMasterID = $objMaster->getSystemid();
+        }
 
         //fetch navifolder-id
         $strNaviFolderId = "";
         $arrFolder = PagesFolder::getFolderList();
-        foreach($arrFolder as $objOneFolder)
-            if($objOneFolder->getStrName() == "mainnavigation")
+        foreach ($arrFolder as $objOneFolder) {
+            if ($objOneFolder->getStrName() == "mainnavigation") {
                 $strNaviFolderId = $objOneFolder->getSystemid();
+            }
+        }
 
 
         $strReturn = "";
@@ -74,115 +82,89 @@ class InstallerSamplecontent02Navigation implements SamplecontentInstallerInterf
         $objNaviPoint->updateObjectToDb($strTreePortalId);
 
 
-
-        if($this->strMasterID != "") {
+        if ($this->strMasterID != "") {
             $strReturn .= "Adding mainnavigation to master page\n";
             $strReturn .= "ID of master page: ".$this->strMasterID."\n";
 
-            if(PagesElement::getElement("navigation") != null) {
+            if (PagesElement::getElement("navigation") != null) {
                 $objPagelement = new PagesPageelement();
                 $objPagelement->setStrPlaceholder("mastermainnavi_navigation");
                 $objPagelement->setStrName("mastermainnavi");
                 $objPagelement->setStrElement("navigation");
                 $objPagelement->updateObjectToDb($this->strMasterID);
-                $strElementId = $objPagelement->getSystemid();
-                $strQuery = "UPDATE "._dbprefix_."element_navigation
-                                SET navigation_id= ?,
-                                    navigation_template = ?
-                                WHERE content_id = ?";
-                if($this->objDB->_pQuery($strQuery, array($strTreeId, "mainnavi.tpl", $strElementId)))
-                    $strReturn .= "Navigation element created.\n";
-                else
-                    $strReturn .= "Error creating navigation element.\n";
+
+                /** @var ElementNavigationAdmin $objElement */
+                $objElement = $objPagelement->getConcreteAdminInstance();
+                $objElement->setStrRepo($strTreeId);
+                $objElement->setStrTemplate("mainnavi.tpl");
+                $objElement->updateForeignElement();
             }
 
             $strReturn .= "Adding portalnavigation to master page\n";
             $strReturn .= "ID of master page: ".$this->strMasterID."\n";
 
-            if(PagesElement::getElement("navigation") != null) {
+            if (PagesElement::getElement("navigation") != null) {
                 $objPagelement = new PagesPageelement();
                 $objPagelement->setStrPlaceholder("masterportalnavi_navigation");
                 $objPagelement->setStrName("masterportalnavi");
                 $objPagelement->setStrElement("navigation");
                 $objPagelement->updateObjectToDb($this->strMasterID);
-                $strElementId = $objPagelement->getSystemid();
-                $strQuery = "UPDATE "._dbprefix_."element_navigation
-                                SET navigation_id= ?,
-                                    navigation_template = ?
-                                WHERE content_id = ?";
-                if($this->objDB->_pQuery($strQuery, array($strTreePortalId, "portalnavi.tpl", $strElementId)))
-                    $strReturn .= "Navigation element created.\n";
-                else
-                    $strReturn .= "Error creating navigation element.\n";
+
+                /** @var ElementNavigationAdmin $objElement */
+                $objElement = $objPagelement->getConcreteAdminInstance();
+                $objElement->setStrRepo($strTreePortalId);
+                $objElement->setStrTemplate("portalnavi.tpl");
+                $objElement->updateForeignElement();
 
             }
 
             $strReturn .= "Adding pathnavigation to master page\n";
             $strReturn .= "ID of master page: ".$this->strMasterID."\n";
 
-            if(PagesElement::getElement("navigation") != null) {
+            if (PagesElement::getElement("navigation") != null) {
                 $objPagelement = new PagesPageelement();
                 $objPagelement->setStrPlaceholder("masterpathnavi_navigation");
                 $objPagelement->setStrName("masterpathnavi");
                 $objPagelement->setStrElement("navigation");
                 $objPagelement->updateObjectToDb($this->strMasterID);
-                $strElementId = $objPagelement->getSystemid();
-                $strQuery = "UPDATE "._dbprefix_."element_navigation
-                                SET navigation_id= ?,
-                                    navigation_template = ?
-                                WHERE content_id = ?";
-                if($this->objDB->_pQuery($strQuery, array($strTreeId, "breadcrumbnavi.tpl", $strElementId)))
-                    $strReturn .= "Navigation element created.\n";
-                else
-                    $strReturn .= "Error creating navigation element.\n";
+
+                /** @var ElementNavigationAdmin $objElement */
+                $objElement = $objPagelement->getConcreteAdminInstance();
+                $objElement->setStrRepo($strTreeId);
+                $objElement->setStrTemplate("breadcrumbnavi.tpl");
+                $objElement->updateForeignElement();
 
             }
         }
 
         $strReturn .= "Creating simple sitemap...\n";
-        $objPage = new PagesPage();
-        $objPage->setStrName("sitemap");
-        $objPage->setStrBrowsername("Sitemap");
-        $objPage->setStrTemplate("standard.tpl");
-        $objPage->updateObjectToDb();
-        $strSitemapId = $objPage->getSystemid();
-        $strReturn .= "ID of new page: ".$strSitemapId."\n";
-        $strReturn .= "Adding sitemap to new page\n";
 
-        if(PagesElement::getElement("navigation") != null) {
-            $objPagelement = new PagesPageelement();
-            $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
-            $objPagelement->setStrName("special");
-            $objPagelement->setStrElement("navigation");
-            $objPagelement->updateObjectToDb($strSitemapId);
-            $strElementId = $objPagelement->getSystemid();
-            $strQuery = "UPDATE "._dbprefix_."element_navigation
-                            SET navigation_id=?,
-                                navigation_template = ?
-                                WHERE content_id = ?";
-            if($this->objDB->_pQuery($strQuery, array($strTreeId, "sitemap.tpl", $strElementId)))
-                $strReturn .= "Sitemapelement created.\n";
-            else
-                $strReturn .= "Error creating sitemapelement.\n";
+        $objHelper = new SamplecontentContentHelper();
 
-        }
+        $objPage = $objHelper->createPage("sitemap", "Sitemap", $strTreePortalId);
+        $strReturn .= "ID of new page: ".$objPage->getSystemid()."\n";
+
+        $objBlocks = $objHelper->createBlocksElement("Headline", $objPage);
+        $objBlock = $objHelper->createBlockElement("Headline", $objBlocks);
 
         $strReturn .= "Adding headline-element to new page\n";
-        if(PagesElement::getElement("row") != null) {
-            $objPagelement = new PagesPageelement();
-            $objPagelement->setStrPlaceholder("headline_row");
-            $objPagelement->setStrName("headline");
-            $objPagelement->setStrElement("row");
-            $objPagelement->updateObjectToDb($strSitemapId);
-            $strElementId = $objPagelement->getSystemid();
-            $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                            SET paragraph_title = ?
-                          WHERE content_id = ? ";
-            if($this->objDB->_pQuery($strQuery, array("Sitemap", $strElementId)))
-                $strReturn .= "Headline element created.\n";
-            else
-                $strReturn .= "Error creating headline element.\n";
-        }
+        $objHeadline = $objHelper->createPageElement("headline_plaintext", $objBlock);
+        /** @var ElementPlaintextAdmin $objHeadlineAdmin */
+        $objHeadlineAdmin = $objHeadline->getConcreteAdminInstance();
+        $objHeadlineAdmin->setStrText("Sitemap");
+        $objHeadlineAdmin->updateForeignElement();
+
+
+        $objBlocks = $objHelper->createBlocksElement("Special Content", $objPage);
+        $objBlock = $objHelper->createBlockElement("Sitemap", $objBlocks);
+
+        $objNavigation = $objHelper->createPageElement("sitemap_navigation", $objBlock);
+        /** @var ElementNavigationAdmin $objElement */
+        $objElement = $objNavigation->getConcreteAdminInstance();
+        $objElement->setStrRepo($strTreeId);
+        $objElement->setStrTemplate("sitemap.tpl");
+        $objElement->updateForeignElement();
+
 
         $strReturn .= "Creating navigation points\n";
         $objNaviPoint = new NavigationPoint();
@@ -192,10 +174,12 @@ class InstallerSamplecontent02Navigation implements SamplecontentInstallerInterf
         $strReturn .= "ID of new navigation point ".$objNaviPoint->getSystemid().".\n";
 
         $objNaviPoint = new NavigationPoint();
-        if($this->strContentLanguage == "de")
+        if ($this->strContentLanguage == "de") {
             $objNaviPoint->setStrName("Impressum");
-        else
+        }
+        else {
             $objNaviPoint->setStrName("Imprint");
+        }
         $objNaviPoint->setStrPageI("imprint");
         $objNaviPoint->updateObjectToDb($strTreePortalId);
         $strReturn .= "ID of new navigation point ".$objNaviPoint->getSystemid().".\n";
@@ -204,15 +188,18 @@ class InstallerSamplecontent02Navigation implements SamplecontentInstallerInterf
         return $strReturn;
     }
 
-    public function setObjDb($objDb) {
+    public function setObjDb($objDb)
+    {
         $this->objDB = $objDb;
     }
 
-    public function setStrContentlanguage($strContentlanguage) {
+    public function setStrContentlanguage($strContentlanguage)
+    {
         $this->strContentLanguage = $strContentlanguage;
     }
 
-    public function getCorrespondingModule() {
+    public function getCorrespondingModule()
+    {
         return "navigation";
     }
 }
