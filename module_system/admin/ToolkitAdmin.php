@@ -1317,12 +1317,11 @@ class ToolkitAdmin extends Toolkit
      *
      * @param AdminListableInterface|ModelInterface|Model $objEntry
      * @param string $strActions
-     * @param int $intCount
      * @param bool $bitCheckbox
      *
      * @return string
      */
-    public function simpleAdminList(AdminListableInterface $objEntry, $strActions, $intCount, $bitCheckbox = false)
+    public function simpleAdminList(AdminListableInterface $objEntry, $strActions, $bitCheckbox = false)
     {
         $strImage = $objEntry->getStrIcon();
         if (is_array($strImage)) {
@@ -1342,7 +1341,6 @@ class ToolkitAdmin extends Toolkit
             $objEntry->getStrDisplayName(),
             $strImage,
             $strActions,
-            $intCount,
             $objEntry->getStrAdditionalInfo(),
             $objEntry->getStrLongDescription(),
             $bitCheckbox,
@@ -1358,7 +1356,6 @@ class ToolkitAdmin extends Toolkit
      * @param string $strName
      * @param string $strIcon
      * @param string $strActions
-     * @param int $intCount
      * @param string $strAdditionalInfo
      * @param string $strDescription
      * @param bool $bitCheckbox
@@ -1366,7 +1363,7 @@ class ToolkitAdmin extends Toolkit
      *
      * @return string
      */
-    public function genericAdminList($strId, $strName, $strIcon, $strActions, $intCount, $strAdditionalInfo = "", $strDescription = "", $bitCheckbox = false, $strCssAddon = "", $strDeleted = "")
+    public function genericAdminList($strId, $strName, $strIcon, $strActions, $strAdditionalInfo = "", $strDescription = "", $bitCheckbox = false, $strCssAddon = "", $strDeleted = "")
     {
         $arrTemplate = array();
         $arrTemplate["listitemid"] = $strId;

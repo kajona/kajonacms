@@ -442,7 +442,6 @@ class SystemAdmin extends AdminSimple implements AdminInterface
             }
         }
 
-        $intI = 0;
         //loop over the found files and group them
         $arrTaskGroups = array();
         /** @var AdminSystemtaskInterface|SystemtaskBase $objTask */
@@ -481,8 +480,7 @@ class SystemAdmin extends AdminSimple implements AdminInterface
                     generateSystemid(),
                     $objOneTask->getStrTaskname(),
                     AdminskinHelper::getAdminImage("icon_systemtask"),
-                    $this->objToolkit->listButton($strLink),
-                    $intI++
+                    $this->objToolkit->listButton($strLink)
                 );
             }
             $strReturn .= $this->objToolkit->listFooter();
@@ -617,7 +615,6 @@ JS;
                 $objOneRecord instanceof ModelInterface ? $objOneRecord->getStrDisplayName() : get_class($objOneRecord),
                 $strImage,
                 $strActions,
-                0,
                 get_class($objOneRecord),
                 $this->getLang("locked_record_info", array(dateToString(new Date($objOneRecord->getIntLockTime())), $objLockUser->getStrDisplayName()))
             );
@@ -683,7 +680,6 @@ JS;
                 $objOneRecord instanceof ModelInterface ? $objOneRecord->getStrDisplayName() : get_class($objOneRecord),
                 $strImage,
                 $strActions,
-                0,
                 "Systemid / Previd: " . $objOneRecord->getStrSystemid() . " / " . $objOneRecord->getStrPrevId()
             );
         }

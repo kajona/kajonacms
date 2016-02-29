@@ -63,7 +63,6 @@ class FolderviewAdmin extends AdminController implements AdminInterface
             $strReturn .= "<script type=\"text/javascript\">window.opener.KAJONA.admin.folderview.selectCallbackCKEditorFuncNum = ".(int)$this->getParam("CKEditorFuncNum").";</script>";
         }
 
-        $intCounter = 1;
         $strReturn .= $this->objToolkit->listHeader();
 
         if (SystemModule::getModuleByName("pages") !== null) {
@@ -77,7 +76,7 @@ class FolderviewAdmin extends AdminController implements AdminInterface
                     "icon_folderActionOpen"
                 )
             );
-            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("wysiwygPagesBrowser"), "", $strAction, $intCounter++);
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("wysiwygPagesBrowser"), "", $strAction);
         }
 
         $strRepoId = SystemSetting::getConfigValue("_mediamanager_default_filesrepoid_");
@@ -92,7 +91,7 @@ class FolderviewAdmin extends AdminController implements AdminInterface
                     "icon_folderActionOpen"
                 )
             );
-            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("wysiwygFilesBrowser"), "", $strAction, $intCounter++);
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("wysiwygFilesBrowser"), "", $strAction);
         }
 
         $strRepoId = SystemSetting::getConfigValue("_mediamanager_default_imagesrepoid_");
@@ -107,7 +106,7 @@ class FolderviewAdmin extends AdminController implements AdminInterface
                     "icon_folderActionOpen"
                 )
             );
-            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("wysiwygImagesBrowser"), "", $strAction, $intCounter++);
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("wysiwygImagesBrowser"), "", $strAction);
         }
 
         if (SystemModule::getModuleByName("mediamanager") !== null) {
@@ -121,7 +120,7 @@ class FolderviewAdmin extends AdminController implements AdminInterface
                     "icon_folderActionOpen"
                 )
             );
-            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("wysiwygRepoBrowser"), "", $strAction, $intCounter++);
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("wysiwygRepoBrowser"), "", $strAction);
         }
 
         $strReturn .= $this->objToolkit->listFooter();

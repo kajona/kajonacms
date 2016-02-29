@@ -203,7 +203,6 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
                 $arrLanguages = LanguagesLanguage::getObjectList();
 
                 $strReturn .= $this->objToolkit->listHeader();
-                $intI = 0;
                 $intNrOfUnassigned = 0;
                 $arrMaintainedLanguages = array();
                 foreach ($arrLanguages as $objOneLanguage) {
@@ -216,13 +215,13 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
                         $strNewsName = $objNews->getStrTitle();
                         $strActions .= $this->objToolkit->listButton(Link::getLinkAdmin($this->getArrModule("modul"), "removeFromLanguageset", "&systemid=".$objNews->getSystemid(), "", $this->getLang("languageset_remove"), "icon_delete"));
                         $strReturn .= $this->objToolkit->genericAdminList(
-                            $objOneLanguage->getSystemid(), $this->getLang("lang_".$objOneLanguage->getStrName(), "languages").": ".$strNewsName, getImageAdmin("icon_language"), $strActions, $intI++
+                            $objOneLanguage->getSystemid(), $this->getLang("lang_".$objOneLanguage->getStrName(), "languages").": ".$strNewsName, getImageAdmin("icon_language"), $strActions
                         );
                     }
                     else {
                         $intNrOfUnassigned++;
                         $strReturn .= $this->objToolkit->genericAdminList(
-                            $objOneLanguage->getSystemid(), $this->getLang("lang_".$objOneLanguage->getStrName(), "languages").": ".$this->getLang("languageset_news_na"), getImageAdmin("icon_language"), $strActions, $intI++
+                            $objOneLanguage->getSystemid(), $this->getLang("lang_".$objOneLanguage->getStrName(), "languages").": ".$this->getLang("languageset_news_na"), getImageAdmin("icon_language"), $strActions
                         );
                     }
 

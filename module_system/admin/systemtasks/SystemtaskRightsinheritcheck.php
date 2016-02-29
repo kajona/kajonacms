@@ -68,7 +68,7 @@ class SystemtaskRightsinheritcheck extends SystemtaskBase implements AdminSystem
         if (count($arrReturn) > 0) {
             $strReturn .= $this->objToolkit->listHeader();
             foreach ($arrReturn as $objOneEntry) {
-                $strReturn .= $this->objToolkit->genericAdminList($objOneEntry->getSystemid(), $objOneEntry->getStrDisplayName(), "", "", 0, $objOneEntry->getSystemid(), get_class($objOneEntry));
+                $strReturn .= $this->objToolkit->genericAdminList($objOneEntry->getSystemid(), $objOneEntry->getStrDisplayName(), "", "", $objOneEntry->getSystemid(), get_class($objOneEntry));
             }
             $strReturn .= $this->objToolkit->listFooter();
         }

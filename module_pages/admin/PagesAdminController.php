@@ -1072,8 +1072,6 @@ JS;
     protected function actionPagesFolderBrowser()
     {
         $strReturn = "";
-        $intCounter = 1;
-
         $this->setArrModuleEntry("template", "/folderview.tpl");
 
         if ($this->getParam("CKEditorFuncNum") != "") {
@@ -1127,7 +1125,7 @@ JS;
                 );
             }
 
-            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", getImageAdmin("icon_folderOpen"), $strAction, $intCounter++);
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "..", getImageAdmin("icon_folderOpen"), $strAction);
         }
 
         if (count($arrFolder) > 0 && $strPageid == "0") {
@@ -1143,7 +1141,7 @@ JS;
                             "icon_folderActionOpen"
                         )
                     );
-                    $strReturn .= $this->objToolkit->simpleAdminList($objSingleFolder, $strAction, $intCounter++);
+                    $strReturn .= $this->objToolkit->simpleAdminList($objSingleFolder, $strAction);
                 }
                 else {
                     $strAction = $this->objToolkit->listButton(
@@ -1159,7 +1157,7 @@ JS;
                     $strAction .= $this->objToolkit->listButton(
                         "<a href=\"#\" title=\"".$this->getLang("commons_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."_id', '".$objSingleFolder->getSystemid()."'], ['".$strElement."', '".$objSingleFolder->getStrName()."']]); \">".AdminskinHelper::getAdminImage("icon_accept")
                     );
-                    $strReturn .= $this->objToolkit->simpleAdminList($objSingleFolder, $strAction, $intCounter++);
+                    $strReturn .= $this->objToolkit->simpleAdminList($objSingleFolder, $strAction);
                 }
             }
 
@@ -1206,7 +1204,7 @@ JS;
                             );
                         }
 
-                        $strReturn .= $this->objToolkit->simpleAdminList($objSinglePage, $strAction, $intCounter++);
+                        $strReturn .= $this->objToolkit->simpleAdminList($objSinglePage, $strAction);
                     }
                     else {
                         if (count(PagesFolder::getPagesInFolder($objSinglePage->getSystemid())) == 0) {
@@ -1239,7 +1237,7 @@ JS;
                         $strAction .= $this->objToolkit->listButton(
                             "<a href=\"#\" title=\"".$this->getLang("select_page")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."_id', '".$objSinglePage->getSystemid()."'],['".$strElement."', '".$arrSinglePage["name2"]."']]);\">".AdminskinHelper::getAdminImage("icon_accept")."</a>"
                         );
-                        $strReturn .= $this->objToolkit->simpleAdminList($objSinglePage, $strAction, $intCounter++);
+                        $strReturn .= $this->objToolkit->simpleAdminList($objSinglePage, $strAction);
 
                     }
                 }
@@ -1268,7 +1266,7 @@ JS;
                     $strAction = $this->objToolkit->listButton(
                         "<a href=\"#\" title=\"".$this->getLang("seite_uebernehmen")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."', '".$arrSinglePage["name2"]."']]);\">".AdminskinHelper::getAdminImage("icon_accept")."</a>"
                     );
-                    $strReturn .= $this->objToolkit->simpleAdminList($objOnePageelement, $strAction, $intCounter++);
+                    $strReturn .= $this->objToolkit->simpleAdminList($objOnePageelement, $strAction);
                 }
                 $strReturn .= $this->objToolkit->listFooter();
             }

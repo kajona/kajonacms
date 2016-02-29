@@ -199,7 +199,7 @@ abstract class AdminSimple extends AdminController {
 
         if($strListActions != "") {
             $strReturn .= $this->objToolkit->listHeader();
-            $strReturn .= $this->objToolkit->genericAdminList("", "", "", $strListActions, 0);
+            $strReturn .= $this->objToolkit->genericAdminList("", "", "", $strListActions);
             $strReturn .= $this->objToolkit->listFooter();
         }
 
@@ -250,7 +250,6 @@ abstract class AdminSimple extends AdminController {
      */
     protected final function renderList(ArraySectionIterator $objArraySectionIterator, $bitSortable = false, $strListIdentifier = "", $bitAllowTreeDrop = false, $strPagerAddon = "", Closure $objFilter = null) {
         $strReturn = "";
-        $intI = 0;
 
         $strListId = generateSystemid();
 
@@ -263,7 +262,7 @@ abstract class AdminSimple extends AdminController {
             $strReturn .= $this->objToolkit->listHeader();
 
         if($this->renderLevelUpAction($strListIdentifier) != "") {
-            $strReturn .= $this->objToolkit->genericAdminList("", "", "", $this->objToolkit->listButton($this->renderLevelUpAction($strListIdentifier)), $intI++);
+            $strReturn .= $this->objToolkit->genericAdminList("", "", "", $this->objToolkit->listButton($this->renderLevelUpAction($strListIdentifier)));
         }
 
         $arrMassActions = $this->getBatchActionHandlers($strListIdentifier);
@@ -277,7 +276,7 @@ abstract class AdminSimple extends AdminController {
                 if($objFilter($objOneIterable) === false) {
                     if($bitSortable) {
                         //inject hidden dummy row for a proper sorting
-                        $strReturn .= $this->objToolkit->genericAdminList($objOneIterable->getSystemid(), "", "", "", 0, "", "", false, "hidden");
+                        $strReturn .= $this->objToolkit->genericAdminList($objOneIterable->getSystemid(), "", "", "", "", "", false, "hidden");
                     }
                     $intTotalNrOfElements--;
                     continue;
@@ -286,14 +285,14 @@ abstract class AdminSimple extends AdminController {
             elseif(!$objOneIterable->rightView()) {
                 if($bitSortable) {
                     //inject hidden dummy row for a proper sorting
-                    $strReturn .= $this->objToolkit->genericAdminList($objOneIterable->getSystemid(), "", "", "", 0, "", "", false, "hidden");
+                    $strReturn .= $this->objToolkit->genericAdminList($objOneIterable->getSystemid(), "", "", "", "", "", false, "hidden");
                 }
                 $intTotalNrOfElements--;
                 continue;
             }
 
             $strActions = $this->getActionIcons($objOneIterable, $strListIdentifier);
-            $strReturn .= $this->objToolkit->simpleAdminList($objOneIterable, $strActions, $intI++, count($arrMassActions) > 0);
+            $strReturn .= $this->objToolkit->simpleAdminList($objOneIterable, $strActions, count($arrMassActions) > 0);
 
         }
 
@@ -304,7 +303,7 @@ abstract class AdminSimple extends AdminController {
             $strBatchActions .= $this->objToolkit->renderBatchActionHandlers($arrMassActions);
 
         if($strNewActions != "" || $strBatchActions != "")
-            $strReturn .= $this->objToolkit->genericAdminList("batchActionSwitch", $strBatchActions, "", $strNewActions, $intI, "", "", $strBatchActions != "");
+            $strReturn .= $this->objToolkit->genericAdminList("batchActionSwitch", $strBatchActions, "", $strNewActions, "", "", $strBatchActions != "");
 
         if($bitSortable)
             $strReturn .= $this->objToolkit->dragableListFooter($strListId);

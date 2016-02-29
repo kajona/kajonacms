@@ -351,7 +351,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
         $strReturn .= $this->objToolkit->listHeader();
         $arrChanges = SystemPwchangehistory::getHistoryByUser($objUser->getStrSystemid());
         foreach ($arrChanges as $objChange) {
-            $strReturn .= $this->objToolkit->simpleAdminList($objChange, "", 0);
+            $strReturn .= $this->objToolkit->simpleAdminList($objChange);
         }
         $strReturn .= $this->objToolkit->listFooter();
 
@@ -1084,7 +1084,6 @@ class UserAdmin extends AdminSimple implements AdminInterface
             $objIterator->setArraySection($objSourceGroup->getUserIdsForGroup($objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
             $strReturn .= $this->objToolkit->listHeader();
-            $intI = 0;
             foreach ($objIterator as $strSingleMemberId) {
                 $objSingleMember = new UserUser($strSingleMemberId);
 
@@ -1096,7 +1095,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
                         Link::getLinkAdminHref($this->getArrModule("modul"), "groupMemberDelete", "&groupid=".$objGroup->getSystemid()."&userid=".$objSingleMember->getSystemid())
                     );
                 }
-                $strReturn .= $this->objToolkit->genericAdminList($objSingleMember->getSystemid(), $objSingleMember->getStrDisplayName(), getImageAdmin("icon_user"), $strAction, $intI++);
+                $strReturn .= $this->objToolkit->genericAdminList($objSingleMember->getSystemid(), $objSingleMember->getStrDisplayName(), getImageAdmin("icon_user"), $strAction);
             }
             $strReturn .= $this->objToolkit->listFooter().$this->objToolkit->getPageview($objIterator, "user", "groupMember", "systemid=".$this->getSystemid());
         }
@@ -1268,7 +1267,7 @@ HTML;
         $strReturn = $this->objToolkit->listHeader();
         foreach ($objUser->getObjSourceUser()->getGroupIdsForUser() as $strOneId) {
             $objGroup = new UserGroup($strOneId);
-            $strReturn .= $this->objToolkit->genericAdminList($strOneId, $objGroup->getStrDisplayName(), AdminskinHelper::getAdminImage("icon_group"), "", 0);
+            $strReturn .= $this->objToolkit->genericAdminList($strOneId, $objGroup->getStrDisplayName(), AdminskinHelper::getAdminImage("icon_group"), "");
         }
         $strReturn .= $this->objToolkit->listFooter();
         return $strReturn;
@@ -1428,7 +1427,6 @@ HTML;
             //show groups
             $arrUsers = UserGroup::getObjectList();
             $strReturn .= $this->objToolkit->listHeader();
-            $intI = 0;
             foreach ($arrUsers as $objSingleGroup) {
                 $strAction = "";
                 $strAction .= $this->objToolkit->listButton(
@@ -1448,7 +1446,7 @@ HTML;
                     );
                 }
 
-                $strReturn .= $this->objToolkit->simpleAdminList($objSingleGroup, $strAction, $intI++);
+                $strReturn .= $this->objToolkit->simpleAdminList($objSingleGroup, $strAction);
 
             }
         }
@@ -1457,7 +1455,6 @@ HTML;
             $objGroup = new UserGroup($this->getSystemid());
             $arrUsers = $objGroup->getObjSourceGroup()->getUserIdsForGroup();
             $strReturn .= $this->objToolkit->listHeader();
-            $intI = 0;
 
             $strReturn .= $this->objToolkit->genericAdminList(
                 generateSystemid(),
@@ -1472,8 +1469,7 @@ HTML;
                         $this->getLang("user_list_parent"),
                         "icon_folderActionLevelup"
                     )
-                ),
-                $intI++
+                )
             );
 
             $strCheckId = $this->getParam("checkid");
@@ -1504,7 +1500,7 @@ HTML;
                         "<a href=\"#\" title=\"".$this->getLang("user_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strFormElement."', '".addslashes($objSingleUser->getStrUsername())."'], ['".$strFormElement."_id', '".$objSingleUser->getSystemid()."']]);\">".getImageAdmin("icon_accept")
                     );
                 }
-                $strReturn .= $this->objToolkit->simpleAdminList($objSingleUser, $strAction, $intI++);
+                $strReturn .= $this->objToolkit->simpleAdminList($objSingleUser, $strAction);
 
             }
         }

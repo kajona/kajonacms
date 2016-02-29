@@ -270,7 +270,7 @@ class SearchAdmin extends AdminSimple implements AdminInterface
         if(count($arrMappedObjects) > 0) {
             $strReturn .= $this->objToolkit->listHeader();
             foreach ($arrMappedObjects as $objOneObject) {
-                $strReturn .= $this->objToolkit->simpleAdminList($objOneObject, $this->getActionIcons($objOneObject, "searchResultList"), 0);
+                $strReturn .= $this->objToolkit->simpleAdminList($objOneObject, $this->getActionIcons($objOneObject, "searchResultList"));
             }
             $strReturn .= $this->objToolkit->listFooter();
         }

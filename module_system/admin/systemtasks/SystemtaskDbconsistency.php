@@ -57,7 +57,6 @@ class SystemtaskDbconsistency extends SystemtaskBase implements AdminSystemtaskI
             return $this->getLang("commons_error_permissions");
         }
 
-        $intI = 0;
         $strReturn = "";
         $objWorker = new SystemWorker();
 
@@ -68,17 +67,17 @@ class SystemtaskDbconsistency extends SystemtaskBase implements AdminSystemtaskI
         if (count($arrCorruptedRecords) > 0) {
             //ohoh. errors found. create tow tables
             $strReturn .= $this->objToolkit->listHeader();
-            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("systemtask_dbconsistency_firstlevel_error"), getImageAdmin("icon_disabled"), "", ++$intI);
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("systemtask_dbconsistency_firstlevel_error"), getImageAdmin("icon_disabled"), "");
             foreach ($arrCorruptedRecords as $arrRow) {
                 $objRecord = Objectfactory::getInstance()->getObject($arrRow["system_id"]);
-                $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $arrRow["system_id"]." (".uniStrTrim(($objRecord != null ? $objRecord->getStrDisplayName() : $arrRow["system_comment"]), 20).")", "", "", $intI);
+                $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $arrRow["system_id"]." (".uniStrTrim(($objRecord != null ? $objRecord->getStrDisplayName() : $arrRow["system_comment"]), 20).")", "", "");
             }
             $strReturn .= $this->objToolkit->listFooter();
         }
         else {
             //no errors found
             $strReturn .= $this->objToolkit->listHeader();
-            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("systemtask_dbconsistency_firstlevel_ok"), getImageAdmin("icon_enabled"), "", ++$intI);
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("systemtask_dbconsistency_firstlevel_ok"), getImageAdmin("icon_enabled"), "");
             $strReturn .= $this->objToolkit->listFooter();
         }
 
@@ -89,16 +88,16 @@ class SystemtaskDbconsistency extends SystemtaskBase implements AdminSystemtaskI
         if (count($arrCorruptedRecords) > 0) {
             //ohoh. errors found. create tow tables
             $strReturn .= $this->objToolkit->listHeader();
-            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("systemtask_dbconsistency_curprev_error"), getImageAdmin("icon_disabled"), "", ++$intI);
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("systemtask_dbconsistency_curprev_error"), getImageAdmin("icon_disabled"), "");
             foreach ($arrCorruptedRecords as $strID => $strComment) {
-                $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $strID." (".$strComment.")", "", "", $intI);
+                $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $strID." (".$strComment.")", "", "");
             }
             $strReturn .= $this->objToolkit->listFooter();
         }
         else {
             //no errors found
             $strReturn .= $this->objToolkit->listHeader();
-            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("systemtask_dbconsistency_curprev_ok"), getImageAdmin("icon_enabled"), "", ++$intI);
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("systemtask_dbconsistency_curprev_ok"), getImageAdmin("icon_enabled"), "");
             $strReturn .= $this->objToolkit->listFooter();
         }
 
@@ -108,17 +107,17 @@ class SystemtaskDbconsistency extends SystemtaskBase implements AdminSystemtaskI
         if (count($arrCorruptedRecords) > 0) {
             //ohoh. errors found. create tow tables
             $strReturn .= $this->objToolkit->listHeader();
-            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("systemtask_dbconsistency_right_error"), getImageAdmin("icon_disabled"), "", ++$intI);
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("systemtask_dbconsistency_right_error"), getImageAdmin("icon_disabled"), "");
             foreach ($arrCorruptedRecords as $arrOneRecords) {
                 $objRecord = Objectfactory::getInstance()->getObject($arrOneRecords["system_id"]);
-                $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $arrOneRecords["right_id"]." (".uniStrTrim(($objRecord != null ? $objRecord->getStrDisplayName() : $arrOneRecords["system_comment"]), 20).")", "", "", $intI);
+                $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $arrOneRecords["right_id"]." (".uniStrTrim(($objRecord != null ? $objRecord->getStrDisplayName() : $arrOneRecords["system_comment"]), 20).")", "", "");
             }
             $strReturn .= $this->objToolkit->listFooter();
         }
         else {
             //no errors found
             $strReturn .= $this->objToolkit->listHeader();
-            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("systemtask_dbconsistency_right_ok"), getImageAdmin("icon_enabled"), "", ++$intI);
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("systemtask_dbconsistency_right_ok"), getImageAdmin("icon_enabled"), "");
             $strReturn .= $this->objToolkit->listFooter();
         }
 
@@ -128,16 +127,16 @@ class SystemtaskDbconsistency extends SystemtaskBase implements AdminSystemtaskI
         if (count($arrCorruptedRecords) > 0) {
             //ohoh. errors found. create tow tables
             $strReturn .= $this->objToolkit->listHeader();
-            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("systemtask_dbconsistency_date_error"), getImageAdmin("icon_disabled"), "", ++$intI);
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("systemtask_dbconsistency_date_error"), getImageAdmin("icon_disabled"), "");
             foreach ($arrCorruptedRecords as $arrOneRecords) {
-                $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $arrOneRecords["system_date_id"], "", "", $intI);
+                $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $arrOneRecords["system_date_id"], "", "");
             }
             $strReturn .= $this->objToolkit->listFooter();
         }
         else {
             //no errors found
             $strReturn .= $this->objToolkit->listHeader();
-            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("systemtask_dbconsistency_date_ok"), getImageAdmin("icon_enabled"), "", ++$intI);
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("systemtask_dbconsistency_date_ok"), getImageAdmin("icon_enabled"), "");
             $strReturn .= $this->objToolkit->listFooter();
         }
 

@@ -109,7 +109,6 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
         $objArraySectionIterator->setArraySection($objArrayIterator->getElementsOnPage((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1)));
 
         $strReturn .= $this->objToolkit->listHeader();
-        $intI = 0;
         /** @var PackagemanagerMetadata $objOneMetadata */
         foreach ($objArraySectionIterator as $objOneMetadata) {
 
@@ -160,7 +159,7 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
                 }); });
             </script>";
 
-            $strReturn .= $this->objToolkit->simpleAdminList($objOneMetadata, $strActions, $intI++);
+            $strReturn .= $this->objToolkit->simpleAdminList($objOneMetadata, $strActions);
         }
 
         $strAddActions = "";
@@ -169,7 +168,7 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
                 Link::getLinkAdminDialog($this->getArrModule("modul"), "addPackage", "", $this->getLang("action_upload_package"), $this->getLang("action_upload_package"), "icon_new", $this->getLang("action_upload_package"))
             );
         }
-        $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "", "", $strAddActions, $intI);
+        $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "", "", $strAddActions);
 
         $strReturn .= $this->objToolkit->listFooter();
 
@@ -561,14 +560,12 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
             // in addition this reduces the workload on both, client, server and remote repositories
 
             $strReturn .= $this->objToolkit->listHeader();
-            $intI = 0;
             foreach ($arrContentProvider as $objOneProvider) {
                 $strReturn .= $this->objToolkit->genericAdminList(
                     generateSystemid(),
                     $objOneProvider->getDisplayTitle(),
                     AdminskinHelper::getAdminImage("icon_systemtask"),
-                    Link::getLinkAdmin("packagemanager", "addPackage", "&provider=".get_class($objOneProvider), $this->getLang("provider_select"), $this->getLang("provider_select"), "icon_accept"),
-                    $intI++
+                    Link::getLinkAdmin("packagemanager", "addPackage", "&provider=".get_class($objOneProvider), $this->getLang("provider_select"), $this->getLang("provider_select"), "icon_accept")
                 );
             }
             $strReturn .= $this->objToolkit->listFooter();
