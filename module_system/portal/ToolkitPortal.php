@@ -7,7 +7,6 @@
 
 namespace Kajona\System\Portal;
 
-use Kajona\System\Admin\Systemtasks\AdminSystemtaskInterface;
 use Kajona\System\System\AdminskinHelper;
 use Kajona\System\System\ArrayIterator;
 use Kajona\System\System\ArraySectionIterator;

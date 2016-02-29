@@ -15,7 +15,6 @@ use Kajona\Pages\Portal\PortalElementInterface;
 use Kajona\Pages\System\PagesPage;
 use Kajona\System\System\Link;
 use Kajona\System\System\Objectfactory;
-use Kajona\System\System\SystemModule;
 use Kajona\Tags\System\TagsTag;
 
 /**

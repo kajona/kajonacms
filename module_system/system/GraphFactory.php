@@ -8,8 +8,6 @@
 
 namespace Kajona\System\System;
 
-use ReflectionClass;
-
 
 /**
  * Generates a graph-instance based on the current config.

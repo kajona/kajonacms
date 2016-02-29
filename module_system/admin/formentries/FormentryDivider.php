@@ -8,7 +8,6 @@ namespace Kajona\System\Admin\Formentries;
 
 use Kajona\System\Admin\FormentryInterface;
 use Kajona\System\System\Carrier;
-use Kajona\System\System\Validators\DateValidator;
 use Kajona\System\System\Validators\DummyValidator;
 
 

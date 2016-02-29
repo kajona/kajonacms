@@ -10,8 +10,6 @@ namespace Kajona\System\System;
 require_once __DIR__."/PharModule.php";
 require_once __DIR__."/BootstrapCache.php";
 
-use Kajona\System\System\BootstrapCache;
-use Kajona\System\System\PharModule;
 use ReflectionClass;
 
 /**

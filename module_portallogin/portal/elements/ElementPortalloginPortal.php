@@ -7,7 +7,6 @@
 
 namespace Kajona\Portallogin\Portal\Elements;
 
-use \Kajona\System\System\Date;
 use Kajona\Pages\Portal\ElementPortal;
 use Kajona\Pages\Portal\PortalElementInterface;
 use Kajona\System\System\Link;

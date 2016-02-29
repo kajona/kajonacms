@@ -2,8 +2,6 @@
 
 namespace Kajona\System\System;
 
-use \Kajona\System\System\Date;
-
 /**
  * Util class for processing strings.
  *

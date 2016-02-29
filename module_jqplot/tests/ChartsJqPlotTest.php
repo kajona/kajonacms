@@ -2,6 +2,7 @@
 
 namespace Kajona\Jqplot\Tests;
 
+use Kajona\Jqplot\System\GraphJqplot;
 use Kajona\System\System\GraphFactory;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\SystemSetting;
