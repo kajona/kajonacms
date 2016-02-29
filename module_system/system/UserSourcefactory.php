@@ -254,19 +254,20 @@ class UserSourcefactory
      */
     public function getUsersource($strName)
     {
-        //TODO class name parsing
         $strName = trim($strName);
         if ($strName == "") {
+            throw new Exception("no login provider given", Exception::$level_ERROR);
+        }
+
+        $strFilename = "UsersourcesSource".ucfirst($strName).".php";
+        $strFilename = Resourceloader::getInstance()->getPathForFile("/system/usersources/".$strFilename);
+
+        if ($strFilename == null) {
             throw new Exception("login provider ".$strName." not existing", Exception::$level_ERROR);
         }
 
-        $strClassname = "class_usersources_source_".$strName;//TODO namespace
-        if (!class_exists($strClassname)) {
-            throw new Exception("login provider ".$strName." not existing", Exception::$level_ERROR);
-        }
+        return Classloader::getInstance()->getInstanceFromFilename($strFilename, '', 'Kajona\System\System\Usersources\UsersourcesUsersourceInterface');
 
-        $objSubsystem = new $strClassname();
-        return $objSubsystem;
     }
 
     /**

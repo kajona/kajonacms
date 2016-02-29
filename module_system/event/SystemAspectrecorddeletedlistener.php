@@ -33,7 +33,7 @@ class SystemAspectrecorddeletedlistener implements GenericeventListenerInterface
         //unwrap arguments
         list($strSystemid, $strSourceClass) = $arrArguments;
 
-        if($strSourceClass == "Kajona\\System\\System\\SystemAspect") { //TODO test class check
+        if($strSourceClass == 'Kajona\System\System\SystemAspect') {
 
             //if we have just one aspect remaining, set this one as default
             if(SystemAspect::getObjectCount() == 1) {

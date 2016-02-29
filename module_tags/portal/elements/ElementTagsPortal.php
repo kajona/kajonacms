@@ -66,8 +66,8 @@ class ElementTagsPortal extends ElementPortal implements PortalElementInterface 
                         $strLinks .= $this->fillTemplate(array("taglink" => $strLink), $strTemplateTaglinkID);
                     }
 
-                    if(SystemModule::getModuleByName("news") != null && $objRecord->getIntModuleNr() == _news_module_id_) {
-                        //TODO: fix after news integration, move to search link target interface handler
+                    if(get_class($objRecord) == 'Kajona\News\System\NewsNews') {
+                        //TODO: move to search link target interface handler
                         $objNews = new NewsNews($objRecord->getSystemid());
                         $strLink = Link::getLinkPortal("newsdetails", "", "_self", $objNews->getStrTitle(), "newsDetail", "&highlight=".urlencode($objTag->getStrName()), $objRecord->getSystemid(), "", "", $objNews->getStrTitle());
                         $strLinks .= $this->fillTemplate(array("taglink" => $strLink), $strTemplateTaglinkID);
