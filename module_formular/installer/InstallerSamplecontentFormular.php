@@ -82,9 +82,9 @@ class InstallerSamplecontentFormular implements SamplecontentInstallerInterface 
         $objBlocks = $objHelper->createBlocksElement("Footer Area", $objPage);
         $objBlock = $objHelper->createBlockElement("Footer Text", $objBlocks);
 
-        $objTextEl = $objHelper->createPageElement("footer_plaintext", $objBlock);
+        $objTextEl = $objHelper->createPageElement("footer_richtext", $objBlock);
         /** @var ElementRichtextAdmin $objTextAdmin */
-        $objTextAdmin = $objFormEl->getConcreteAdminInstance();
+        $objTextAdmin = $objTextEl->getConcreteAdminInstance();
         if($this->strContentLanguage == "de") {
             $objTextAdmin->setStrText("Hinweis: Das Formular sendet per default die Anfragen an die E-Mail Adresse des Administrators.<br />
                                 Um diese Adresse zu ändern öffnen Sie bitte die Seite in der Administration und bearbeiten das Seitenelement &quot;Formular&quot;.<br /><br />");

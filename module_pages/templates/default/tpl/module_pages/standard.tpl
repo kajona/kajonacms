@@ -270,7 +270,7 @@
                 </kajona-block>
 
                 <kajona-block kajona-name="Footer Text">
-                    <p>%%footer_plaintext%%</p>
+                    <p>%%footer_richtext%%</p>
                 </kajona-block>
 
             </kajona-blocks>

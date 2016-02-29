@@ -67,9 +67,9 @@ class InstallerSamplecontentRssfeed implements SamplecontentInstallerInterface
 
 
         $objBlocks = $objHelper->createBlocksElement("Special Content", $objPage);
-        $objBlock = $objHelper->createBlockElement("Gallery", $objBlocks);
+        $objBlock = $objHelper->createBlockElement("Feed", $objBlocks);
 
-        $objElement = $objHelper->createPageElement("gallery_gallery", $objBlock);
+        $objElement = $objHelper->createPageElement("feed_rssfeed", $objBlock);
         /** @var ElementRssfeedAdmin $objRssAdminEl */
         $objRssAdminEl = $objElement->getConcreteAdminInstance();
         $objRssAdminEl->setStrChar1("rssfeed.tpl");

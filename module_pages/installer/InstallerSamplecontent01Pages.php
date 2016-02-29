@@ -520,7 +520,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
         $objBlocks = $objHelper->createBlocksElement("Footer Area", $objPage);
         $objBlock = $objHelper->createBlockElement("Footer Text", $objBlocks);
 
-        $objRichtext = $objHelper->createPageElement("footer_plaintext", $objBlock);
+        $objRichtext = $objHelper->createPageElement("footer_richtext", $objBlock);
         /** @var ElementRichtextAdmin $objRichtextAdmin */
         $objRichtextAdmin = $objRichtext->getConcreteAdminInstance();
         $objRichtextAdmin->setStrText($this->strContentLanguage == "de" ? "Alle Beispielbilder &copy; by kajona.de" : "All sample images &copy; by kajona.de");

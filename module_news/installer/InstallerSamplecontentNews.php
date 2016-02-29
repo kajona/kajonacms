@@ -29,7 +29,8 @@ use Kajona\System\System\SystemSetting;
  * Installer of the news samplecontenht
  *
  */
-class InstallerSamplecontentNews implements SamplecontentInstallerInterface {
+class InstallerSamplecontentNews implements SamplecontentInstallerInterface
+{
     /**
      * @var Database
      */
@@ -43,25 +44,35 @@ class InstallerSamplecontentNews implements SamplecontentInstallerInterface {
      * Does the hard work: installs the module and registers needed constants
      *
      */
-    public function install() {
+    public function install()
+    {
         $strReturn = "";
 
 
         //fetch navifolder-id
         $strNaviFolderId = "";
+        $strSystemFolderId = "";
         $arrFolder = PagesFolder::getFolderList();
-        foreach($arrFolder as $objOneFolder)
-            if($objOneFolder->getStrName() == "mainnavigation")
+        foreach ($arrFolder as $objOneFolder) {
+            if ($objOneFolder->getStrName() == "mainnavigation") {
                 $strNaviFolderId = $objOneFolder->getSystemid();
+            }
+
+            if ($objOneFolder->getStrName() == "_system") {
+                $strSystemFolderId = $objOneFolder->getSystemid();
+            }
+        }
 
         //search the index page
         $objIndex = PagesPage::getPageByName("index");
         $objMaster = PagesPage::getPageByName("master");
-        if($objIndex != null)
+        if ($objIndex != null) {
             $this->strIndexID = $objIndex->getSystemid();
+        }
 
-        if($objMaster != null)
+        if ($objMaster != null) {
             $this->strMasterID = $objMaster->getSystemid();
+        }
 
         $strReturn .= "Creating new category...\n";
         $objNewsCategory = new NewsCategory();
@@ -72,7 +83,7 @@ class InstallerSamplecontentNews implements SamplecontentInstallerInterface {
         $strReturn .= "Creating news\n";
         $objNews = new NewsNews();
 
-        if($this->strContentLanguage == "de") {
+        if ($this->strContentLanguage == "de") {
             $objNews->setStrTitle("Erfolgreich installiert");
             $objNews->setStrText("Eine weitere Installation von Kajona V3 war erfolgreich. Für weitere Infomationen zu Kajona besuchen Sie www.kajona.de.");
             $objNews->setStrIntro("Kajona wurde erfolgreich installiert...");
@@ -104,11 +115,10 @@ class InstallerSamplecontentNews implements SamplecontentInstallerInterface {
         $strReturn .= "ID of new news: ".$strNewsId."\n";
 
 
-
         $strReturn .= "Adding news element to the master-page...\n";
-        if($this->strMasterID != "") {
-            
-            if(PagesElement::getElement("news") != null) {
+        if ($this->strMasterID != "") {
+
+            if (PagesElement::getElement("news") != null) {
                 $objPagelement = new PagesPageelement();
                 $objPagelement->setStrPlaceholder("mastertopnews_news");
                 $objPagelement->setStrName("mastertopnews");
@@ -130,7 +140,7 @@ class InstallerSamplecontentNews implements SamplecontentInstallerInterface {
 
         $objHelper = new SamplecontentContentHelper();
 
-        $objPage = $objHelper->createPage("newsdetails", "News", $strNaviFolderId);
+        $objPage = $objHelper->createPage("newsdetails", "News", $strSystemFolderId);
         $strReturn .= "ID of new page: ".$objPage->getSystemid()."\n";
 
         $objBlocks = $objHelper->createBlocksElement("Headline", $objPage);
@@ -158,7 +168,6 @@ class InstallerSamplecontentNews implements SamplecontentInstallerInterface {
         $objAdminInstance->setStrDetailspage("index");
         $objAdminInstance->setStrTemplate("demo.tpl");
         $objAdminInstance->updateForeignElement();
-
 
 
         $strReturn .= "Creating news-list-pge\n";
@@ -192,17 +201,18 @@ class InstallerSamplecontentNews implements SamplecontentInstallerInterface {
         $objAdminInstance->updateForeignElement();
 
 
-
         $strReturn .= "Creating news-feed\n";
         $objNewsFeed = new NewsFeed();
         $objNewsFeed->setStrTitle("kajona news");
         $objNewsFeed->setStrUrlTitle("kajona_news");
         $objNewsFeed->setStrLink("http://www.kajona.de");
 
-        if($this->strContentLanguage == "de")
+        if ($this->strContentLanguage == "de") {
             $objNewsFeed->setStrDesc("Dies ist ein Kajona demo news feed");
-        else
+        }
+        else {
             $objNewsFeed->setStrDesc("This is a Kajona demo news feed");
+        }
 
         $objNewsFeed->setStrPage("newsdetails");
         $objNewsFeed->setStrCat("0");
@@ -217,15 +227,18 @@ class InstallerSamplecontentNews implements SamplecontentInstallerInterface {
         return $strReturn;
     }
 
-    public function setObjDb($objDb) {
+    public function setObjDb($objDb)
+    {
         $this->objDB = $objDb;
     }
 
-    public function setStrContentlanguage($strContentlanguage) {
+    public function setStrContentlanguage($strContentlanguage)
+    {
         $this->strContentLanguage = $strContentlanguage;
     }
 
-    public function getCorrespondingModule() {
+    public function getCorrespondingModule()
+    {
         return "news";
     }
 
