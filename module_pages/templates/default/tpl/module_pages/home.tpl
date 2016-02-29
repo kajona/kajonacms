@@ -63,7 +63,7 @@
                     <p>%%content_richtext%%</p>
                 </kajona-block>
 
-                <kajona-block kajona-name="Two Column Header and Text">
+                <kajona-block kajona-name="Two Columns Header and Text">
 
                     <div class="row">
                         <div class="col-sm-6">
@@ -74,6 +74,22 @@
                         <div class="col-sm-6">
                             <h3>%%headlineright_plaintext%%</h3>
                             <p>%%contentright_richtext%%</p>
+                        </div>
+                    </div>
+
+                </kajona-block>
+
+
+                <kajona-block kajona-name="Two Columns Large Text and Image">
+
+                    <div class="row">
+                        <div class="col-sm-9">
+                            <h3>%%headlineleft_plaintext%%</h3>
+                            <p>%%contentleft_richtext%%</p>
+                        </div>
+
+                        <div class="col-sm-3">
+                            %%imageright_image%%
                         </div>
                     </div>
 
@@ -98,6 +114,11 @@
                         </div>
                     </div>
 
+                </kajona-block>
+
+
+                <kajona-block kajona-name="Text Only">
+                    <p>%%content_richtext%%</p>
                 </kajona-block>
 
             </kajona-blocks>
@@ -131,7 +152,7 @@
                 <kajona-block kajona-name="Gallery">
                     <div class="row">
                         <div class="col-sm-12">
-                            %%galler_gallery%%
+                            %%gallery_gallery%%
                         </div>
                     </div>
                 </kajona-block>
@@ -265,32 +286,6 @@
     <p class="text-xs-center">%%copyright%%</p>
 
 </div>
-<style type="text/css">
-<!---->
-    /*h3 {*/
-        /*margin-top: 2rem;*/
-    /*}*/
-
-    /*.row {*/
-        /*margin-bottom: 1rem;*/
-    /*}*/
-    /*.row .row {*/
-        /*margin-top: 1rem;*/
-        /*margin-bottom: 0;*/
-    /*}*/
-    /*[class*="col-"] {*/
-        /*padding-top: 1rem;*/
-        /*padding-bottom: 1rem;*/
-        /*background-color: rgba(86,61,124,.15);*/
-        /*border: 1px solid rgba(86,61,124,.2);*/
-    /*}*/
-
-    /*hr {*/
-        /*margin-top: 2rem;*/
-        /*margin-bottom: 2rem;*/
-    /*}*/
-
-</style>
 
 <script src="_webpath_/templates/default/js/tether.min.js?_system_browser_cachebuster_"></script>
 <script src="_webpath_/templates/default/js/bootstrap.min.js?_system_browser_cachebuster_"></script>
