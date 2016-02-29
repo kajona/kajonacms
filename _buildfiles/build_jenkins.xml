@@ -594,10 +594,10 @@
 
     <target name="generateDoxygenDocs">
         <echo>Generating PHP API Docs</echo>
-        <chmod file="${basedir}/doxygenfilter.php" perm="700"/>
+        <!--<chmod file="${basedir}/doxygenfilter.php" perm="700"/>-->
         <exec executable="bash" dir="${basedir}${projectPath}">
             <arg line="-c"/>
-            <arg line="' ( cat ${basedir}/doxygen.cfg ; echo \'INPUT=${basedir}${projectPath}\' ; echo \'INPUT_FILTER=${basedir}/doxygenfilter.php\' ; echo \'OUTPUT_DIRECTORY=${basedir}/build/api\' ) | doxygen - '"/>
+            <arg line="' ( cat ${basedir}/doxygen.cfg ; echo \'INPUT=${basedir}${projectPath}\' ; echo \'OUTPUT_DIRECTORY=${basedir}/build/api\' ) | doxygen - '"/>
         </exec>
     </target>
 
