@@ -549,7 +549,7 @@ abstract class Root
             return false;
         }
 
-        if ($this instanceof \VersionableInterface) {
+        if ($this instanceof VersionableInterface) {
             $objChanges = new SystemChangelog();
             $objChanges->createLogEntry($this, SystemChangelog::$STR_ACTION_DELETE);
         }
