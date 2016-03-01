@@ -257,7 +257,7 @@ abstract class FilterBase
             $strModule = $this->getArrModule();
         }
 
-        $objFilterForm = new AdminFormgeneratorFilter("", $this);
+        $objFilterForm = new AdminFormgeneratorFilter("filter", $this);//do not change form name because of property generation
         $strTargetURI = Link::getLinkAdminHref($strModule, $strAction, $strAdditionalParams, $bitEncodedAmpersand);
 
         $strFilter = $objFilterForm->renderForm($strTargetURI);

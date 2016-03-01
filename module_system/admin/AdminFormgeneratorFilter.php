@@ -62,7 +62,7 @@ class AdminFormgeneratorFilter extends AdminFormgenerator
         $objFilter = $this->getObjSourceobject();
 
         //1. Check if post request was send?
-        if ($objCarrier->getParam("{$this->getStrFormname()}setcontentfilter") == "true") {
+        if ($objCarrier->getParam($this->getEntryNameForField("setcontentfilter")) == "true") {
             $objCarrier->setParam("pv", "1");
 
             // 1.2 Check if filter was reset?
@@ -120,7 +120,7 @@ class AdminFormgeneratorFilter extends AdminFormgenerator
 
         // clear params
         foreach($arrParamsSuffix as $strSuffix) {
-            $objCarrier->setParam("{$this->getStrFormname()}{$strSuffix}", "");
+            $objCarrier->setParam($this->getEntryNameForField($strSuffix), "");
         }
     }
 }
