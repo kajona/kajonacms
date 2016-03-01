@@ -27,6 +27,8 @@ abstract class FilterBase
     const STR_COMPAREOPERATOR_LE = "LE";
     const STR_COMPAREOPERATOR_NE = "NE";
     const STR_COMPAREOPERATOR_LIKE = "LIKE";
+    const STR_COMPAREOPERATOR_IN = "IN";
+    const STR_COMPAREOPERATOR_NOTIN = "NOTIN";
 
     /**
      * Returns the ID of the filter.
@@ -34,14 +36,42 @@ abstract class FilterBase
      *
      * @return string
      */
-    abstract public function getFilterId();
+    final public static function getFilterId() {
+        return get_called_class();
+    }
 
     /**
      * Returns the module name.
      *
-     * @return string
+     * @param $strKey
+     *
+     * @return mixed
      */
-    abstract public function getArrModule();
+    abstract public function getArrModule($strKey = "");
+
+
+    /**
+     * Creates a new filter object or retrieves a filter object from the session.
+     *
+     * @return self
+     */
+    public static function getOrCreateFromSession()
+    {
+        /** @var FilterBase $objFilter */
+        $strCalledClass = get_called_class();
+        $objFilter = new $strCalledClass();
+
+        if(Session::getInstance()->sessionIsset($objFilter::getFilterId())) {
+            $objFilter = Session::getInstance()->getSession($objFilter::getFilterId());
+        }
+        else {
+            Session::getInstance()->setSession($objFilter::getFilterId(), $objFilter);
+        }
+
+        return $objFilter;
+    }
+
+
 
     /**
      * Generates ORM restrictions based on the properties of the filter.
@@ -57,20 +87,20 @@ abstract class FilterBase
         $arrPropertiesFilterComparator = $objReflection->getPropertiesWithAnnotation(self::STR_ANNOTATION_FILTER_COMPARE_OPERATOR);
 
         $arrValues = get_object_vars($this);
-        foreach ($arrProperties as $strAttributeName => $strAttributeValue) {
-            if (isset($arrValues[$strAttributeName])) {
+        foreach($arrProperties as $strAttributeName => $strAttributeValue) {
+            if(isset($arrValues[$strAttributeName])) {
                 $strTableColumn = $strAttributeValue;
                 $strGetter = $objReflection->getGetter($strAttributeName);
 
                 $enumFilterCompareOperator = null;
-                if (array_key_exists($strAttributeName, $arrPropertiesFilterComparator)) {
+                if(array_key_exists($strAttributeName, $arrPropertiesFilterComparator)) {
                     $enumFilterCompareOperator = $this->getFilterCompareOperator($arrPropertiesFilterComparator[$strAttributeName]);
                 }
 
-                if ($strGetter !== null) {
+                if($strGetter !== null) {
                     $strValue = $this->$strGetter();
-                    if ($strValue !== null && $strValue !== "") {
-                        $objRestriction = self::getORMRestriction($strValue, $strTableColumn, $enumFilterCompareOperator);
+                    if($strValue !== null && $strValue !== "") {
+                        $objRestriction = $this->getSingleOrmRestriction($strAttributeName, $strValue, $strTableColumn, $enumFilterCompareOperator);
                         if($objRestriction !== null) {
                             $arrRestriction[] = $objRestriction;
                         }
@@ -83,53 +113,73 @@ abstract class FilterBase
     }
 
     /**
+     * Override this method to add specific logic for certain filter attributes
+     *
+     * @param $strAttributeName
      * @param $strValue
      * @param $strTableColumn
      * @param OrmComparatorEnum|null $enumFilterCompareOperator
      * @param string $strCondition
+     *
+     * @return OrmObjectlistInRestriction|OrmObjectlistRestriction|null
+     */
+    protected function getSingleOrmRestriction($strAttributeName, $strValue, $strTableColumn, OrmComparatorEnum $enumFilterCompareOperator = null, $strCondition = "AND")
+    {
+        return self::getORMRestriction($strValue, $strTableColumn, $enumFilterCompareOperator);
+    }
+
+    /**
+     * @param $strValue
+     * @param $strTableColumn
+     * @param OrmComparatorEnum|null $enumFilterCompareOperator
+     * @param string $strCondition
+     *
      * @return OrmObjectlistInRestriction|OrmObjectlistRestriction|null
      * @throws class_orm_exception
      */
-    public static function getORMRestriction($strValue, $strTableColumn, OrmComparatorEnum $enumFilterCompareOperator = null, $strCondition = "AND") {
+    public final static function getORMRestriction($strValue, $strTableColumn, OrmComparatorEnum $enumFilterCompareOperator = null, $strCondition = "AND")
+    {
 
-        if (is_string($strValue)) {
-            if (validateSystemid($strValue)) {
+        if(is_string($strValue)) {
+            if(validateSystemid($strValue)) {
                 $strCompareOperator = $enumFilterCompareOperator === null ? "=" : $enumFilterCompareOperator->getEnumAsSqlString();
-               return new OrmObjectlistRestriction("$strCondition $strTableColumn $strCompareOperator ?", $strValue);
-            } else {
+                return new OrmObjectlistRestriction("$strCondition $strTableColumn $strCompareOperator ?", array($strValue));
+            }
+            else {
                 $strCompareOperator = $enumFilterCompareOperator === null ? "LIKE" : $enumFilterCompareOperator->getEnumAsSqlString();
-               return new OrmObjectlistRestriction("$strCondition $strTableColumn $strCompareOperator ?", "%" . $strValue . "%");
+                return new OrmObjectlistRestriction("$strCondition $strTableColumn $strCompareOperator ?", array("%".$strValue."%"));
             }
         }
-        elseif (is_int($strValue) || is_float($strValue)) {
+        elseif(is_int($strValue) || is_float($strValue)) {
             $strCompareOperator = $enumFilterCompareOperator === null ? "=" : $enumFilterCompareOperator->getEnumAsSqlString();
-           return new OrmObjectlistRestriction("$strCondition $strTableColumn $strCompareOperator ?", $strValue);
+            return new OrmObjectlistRestriction("$strCondition $strTableColumn $strCompareOperator ?", array($strValue));
         }
-        elseif (is_bool($strValue)) {
+        elseif(is_bool($strValue)) {
             $strCompareOperator = $enumFilterCompareOperator === null ? "=" : $enumFilterCompareOperator->getEnumAsSqlString();
-           return new OrmObjectlistRestriction("$strCondition $strTableColumn $strCompareOperator ?", $strValue ? 1 : 0);
+            return new OrmObjectlistRestriction("$strCondition $strTableColumn $strCompareOperator ?", $strValue ? array(1) : array(0));
         }
-        elseif (is_array($strValue)) {
-           return new OrmObjectlistInRestriction($strTableColumn, $strValue, $strCondition);
+        elseif(is_array($strValue)) {
+            $strCompareOperator = $enumFilterCompareOperator === null ? OrmObjectlistInRestriction::STR_CONDITION_IN : $enumFilterCompareOperator->getEnumAsSqlString();
+            return new OrmObjectlistInRestriction($strTableColumn, $strValue, $strCondition, $strCompareOperator);
         }
-        elseif ($strValue instanceof Date) {
+        elseif($strValue instanceof Date) {
             $strValue = clone $strValue;
             $strCompareOperator = $enumFilterCompareOperator === null ? "=" : $enumFilterCompareOperator->getEnumAsSqlString();
 
             if($enumFilterCompareOperator !== null) {
-                if ($enumFilterCompareOperator->equals(OrmComparatorEnum::GreaterThen())
+                if($enumFilterCompareOperator->equals(OrmComparatorEnum::GreaterThen())
                     || $enumFilterCompareOperator->equals(OrmComparatorEnum::GreaterThenEquals())
                 ) {
                     $strValue->setBeginningOfDay();
                 }
-                if ($enumFilterCompareOperator->equals(OrmComparatorEnum::LessThen())
+                if($enumFilterCompareOperator->equals(OrmComparatorEnum::LessThen())
                     || $enumFilterCompareOperator->equals(OrmComparatorEnum::LessThenEquals())
                 ) {
                     $strValue->setEndOfDay();
                 }
             }
 
-           return new OrmObjectlistRestriction("$strCondition $strTableColumn $strCompareOperator ?", $strValue->getLongTimestamp());
+            return new OrmObjectlistRestriction("$strCondition $strTableColumn $strCompareOperator ?", array($strValue->getLongTimestamp()));
         }
 
         return null;
@@ -143,7 +193,7 @@ abstract class FilterBase
     public function addWhereRestrictions(OrmObjectlist $objORM)
     {
         $objRestrictions = $this->getOrmRestrictions();
-        foreach ($objRestrictions as $objRestriction) {
+        foreach($objRestrictions as $objRestriction) {
             $objORM->addWhereRestriction($objRestriction);
         }
     }
@@ -158,7 +208,7 @@ abstract class FilterBase
     private function getFilterCompareOperator($strFilterCompareType)
     {
 
-        switch ($strFilterCompareType) {
+        switch($strFilterCompareType) {
             case self::STR_COMPAREOPERATOR_EQ:
                 return OrmComparatorEnum::Equal();
             case self::STR_COMPAREOPERATOR_GT:
@@ -173,6 +223,10 @@ abstract class FilterBase
                 return OrmComparatorEnum::NotEqual();
             case self::STR_COMPAREOPERATOR_LIKE:
                 return OrmComparatorEnum::Like();
+            case self::STR_COMPAREOPERATOR_IN:
+                return OrmComparatorEnum::In();
+            case self::STR_COMPAREOPERATOR_NOTIN:
+                return OrmComparatorEnum::NotIn();
             default:
                 return null;
         }
@@ -184,7 +238,30 @@ abstract class FilterBase
      *
      * @param AdminFormgeneratorFilter $objFilterForm
      */
-    public function updateFilterForm(AdminFormgeneratorFilter $objFilterForm) {
+    public function updateFilterForm(AdminFormgeneratorFilter $objFilterForm)
+    {
 
+    }
+
+    /**
+     * Generates a filter form based on the filter object.
+     *
+     * @param string $strAction
+     * @param null $strModule
+     *
+     * @return string
+     */
+    public function renderForm($strAction = "list", $strModule= null, $strAdditionalParams = "", $bitEncodedAmpersand = true)
+    {
+        if($strModule === null) {
+            $strModule = $this->getArrModule();
+        }
+
+        $objFilterForm = new AdminFormgeneratorFilter("", $this);
+        $strTargetURI = Link::getLinkAdminHref($strModule, $strAction, $strAdditionalParams, $bitEncodedAmpersand);
+
+        $strFilter = $objFilterForm->renderForm($strTargetURI);
+
+        return $strFilter;
     }
 }
