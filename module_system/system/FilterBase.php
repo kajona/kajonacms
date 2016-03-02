@@ -65,6 +65,10 @@ abstract class FilterBase
         $objFilter = new $strCalledClass();
         $strSessionId = $objFilter::getFilterId();
 
+        if(Carrier::getInstance()->getParam("reset") != "") {
+            Session::getInstance()->sessionUnset($strSessionId);
+        }
+
         if(Session::getInstance()->sessionIsset($strSessionId)) {
             $objFilter = Session::getInstance()->getSession($strSessionId);
             $objFilter = clone $objFilter;
