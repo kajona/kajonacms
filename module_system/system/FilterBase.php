@@ -6,7 +6,9 @@
 
 namespace Kajona\System\System;
 
+use Kajona\Jsonapi\System\ObjectSerializer;
 use Kajona\System\Admin\AdminFormgeneratorFilter;
+use Serializable;
 
 
 /**
@@ -52,6 +54,7 @@ abstract class FilterBase
 
     /**
      * Creates a new filter object or retrieves a filter object from the session.
+     * If retrieved from session a clone is being returned.
      *
      * @return self
      */
@@ -60,9 +63,11 @@ abstract class FilterBase
         /** @var FilterBase $objFilter */
         $strCalledClass = get_called_class();
         $objFilter = new $strCalledClass();
+        $strSessionId = $objFilter::getFilterId();
 
-        if(Session::getInstance()->sessionIsset($objFilter::getFilterId())) {
-            $objFilter = Session::getInstance()->getSession($objFilter::getFilterId());
+        if(Session::getInstance()->sessionIsset($strSessionId)) {
+            $objFilter = Session::getInstance()->getSession($strSessionId);
+            $objFilter = clone $objFilter;
         }
 
         return $objFilter;
@@ -250,15 +255,26 @@ abstract class FilterBase
             $strModule = $this->getArrModule();
         }
 
-        $objFilter = clone $this;
-        Session::getInstance()->sessionUnset($objFilter->getFilterId());
-
-        $objFilterForm = new AdminFormgeneratorFilter("filter", $objFilter);//do not change form name because of property generation
+        //1. Create filter form
+        $objFilterForm = new AdminFormgeneratorFilter("filter", $this);//do not change form name because of property generation
         $strTargetURI = Link::getLinkAdminHref($strModule, $strAction, $strAdditionalParams, $bitEncodedAmpersand);
         $strFilter = $objFilterForm->renderForm($strTargetURI);
 
-        Session::getInstance()->setSession($objFilter->getFilterId(), $objFilter);
+        //2. Update session
+        $this->writeFilterToSession();
 
         return $strFilter;
+    }
+
+    /**
+     * Write the filter to the session.
+     * A clone of the filter is being written to the session.
+     *
+     * @throws Exception
+     */
+    public function writeFilterToSession() {
+        $objFilter = clone $this;
+        $strSessionId = $objFilter::getFilterId();
+        Session::getInstance()->setSession($strSessionId, $objFilter);
     }
 }
