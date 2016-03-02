@@ -64,9 +64,6 @@ abstract class FilterBase
         if(Session::getInstance()->sessionIsset($objFilter::getFilterId())) {
             $objFilter = Session::getInstance()->getSession($objFilter::getFilterId());
         }
-        else {
-            Session::getInstance()->setSession($objFilter::getFilterId(), $objFilter);
-        }
 
         return $objFilter;
     }
@@ -86,24 +83,20 @@ abstract class FilterBase
         $arrProperties = $objReflection->getPropertiesWithAnnotation(OrmBase::STR_ANNOTATION_TABLECOLUMN);
         $arrPropertiesFilterComparator = $objReflection->getPropertiesWithAnnotation(self::STR_ANNOTATION_FILTER_COMPARE_OPERATOR);
 
-        $arrValues = get_object_vars($this);
-        foreach($arrProperties as $strAttributeName => $strAttributeValue) {
-            if(isset($arrValues[$strAttributeName])) {
-                $strTableColumn = $strAttributeValue;
-                $strGetter = $objReflection->getGetter($strAttributeName);
+        foreach($arrProperties as $strAttributeName => $strTableColumn) {
+            $strGetter = $objReflection->getGetter($strAttributeName);
 
-                $enumFilterCompareOperator = null;
-                if(array_key_exists($strAttributeName, $arrPropertiesFilterComparator)) {
-                    $enumFilterCompareOperator = $this->getFilterCompareOperator($arrPropertiesFilterComparator[$strAttributeName]);
-                }
+            $enumFilterCompareOperator = null;
+            if(array_key_exists($strAttributeName, $arrPropertiesFilterComparator)) {
+                $enumFilterCompareOperator = $this->getFilterCompareOperator($arrPropertiesFilterComparator[$strAttributeName]);
+            }
 
-                if($strGetter !== null) {
-                    $strValue = $this->$strGetter();
-                    if($strValue !== null && $strValue !== "") {
-                        $objRestriction = $this->getSingleOrmRestriction($strAttributeName, $strValue, $strTableColumn, $enumFilterCompareOperator);
-                        if($objRestriction !== null) {
-                            $arrRestriction[] = $objRestriction;
-                        }
+            if($strGetter !== null) {
+                $strValue = $this->$strGetter();
+                if($strValue !== null && $strValue !== "") {
+                    $objRestriction = $this->getSingleOrmRestriction($strAttributeName, $strValue, $strTableColumn, $enumFilterCompareOperator);
+                    if($objRestriction !== null) {
+                        $arrRestriction[] = $objRestriction;
                     }
                 }
             }
@@ -257,10 +250,14 @@ abstract class FilterBase
             $strModule = $this->getArrModule();
         }
 
-        $objFilterForm = new AdminFormgeneratorFilter("filter", $this);//do not change form name because of property generation
-        $strTargetURI = Link::getLinkAdminHref($strModule, $strAction, $strAdditionalParams, $bitEncodedAmpersand);
+        $objFilter = clone $this;
+        Session::getInstance()->sessionUnset($objFilter->getFilterId());
 
+        $objFilterForm = new AdminFormgeneratorFilter("filter", $objFilter);//do not change form name because of property generation
+        $strTargetURI = Link::getLinkAdminHref($strModule, $strAction, $strAdditionalParams, $bitEncodedAmpersand);
         $strFilter = $objFilterForm->renderForm($strTargetURI);
+
+        Session::getInstance()->setSession($objFilter->getFilterId(), $objFilter);
 
         return $strFilter;
     }

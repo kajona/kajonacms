@@ -62,7 +62,7 @@ class AdminFormgeneratorFilter extends AdminFormgenerator
         $objFilter = $this->getObjSourceobject();
 
         //1. Check if post request was send?
-        if ($objCarrier->getParam($this->getEntryNameForField("setcontentfilter")) == "true") {
+        if ($objCarrier->getParam($this->getFormElementName("setcontentfilter")) == "true") {
             $objCarrier->setParam("pv", "1");
 
             // 1.2 Check if filter was reset?
@@ -75,9 +75,6 @@ class AdminFormgeneratorFilter extends AdminFormgenerator
         $this->generateFieldsFromObject();
         $this->updateSourceObject();
         $this->addField(new FormentryHidden($this->getStrFormname(), "setcontentfilter"))->setStrValue("true");
-
-        // 3 Update session with filter object
-        Session::getInstance()->setSession($objFilter->getFilterId(), $this->getObjSourceobject());
 
         // 4. Update Filterform (specific filter form handling)
         $objFilter->updateFilterForm($this);
@@ -120,7 +117,25 @@ class AdminFormgeneratorFilter extends AdminFormgenerator
 
         // clear params
         foreach($arrParamsSuffix as $strSuffix) {
-            $objCarrier->setParam($this->getEntryNameForField($strSuffix), "");
+            $objCarrier->setParam($this->getFormElementName($strSuffix), "");
         }
     }
+
+    /**
+     * If a formname is set, this method return <formname>_<fieldname>, else the given <fieldname>
+     *
+     * @param $strFieldName
+     *
+     * @return string
+     */
+    private function getFormElementName($strFieldName) {
+        $strName = $strFieldName;
+
+        if($this->getStrFormname() != "") {
+            $strName = $this->getStrFormname() . "_" . $strFieldName;
+        }
+
+        return $strName;
+    }
+
 }

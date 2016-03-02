@@ -841,24 +841,6 @@ class AdminFormgenerator
     }
 
     /**
-     * Gets the entryname of the field for the given fieldname.
-     * Returns null if field does not exist.
-     *
-     * @param $strFieldName
-     *
-     * @return null|string
-     */
-    public function getEntryNameForField($strFieldName) {
-
-        $objField = $this->getField($strFieldName);
-        if($objField != null) {
-            return $objField->getStrEntryName();
-        }
-
-        return null;
-    }
-
-    /**
      * @param string $strMethod
      * @throws Exception
      */
