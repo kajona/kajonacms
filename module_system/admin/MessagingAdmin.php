@@ -115,7 +115,7 @@ JS;
             $bitAlwaysEnabled = $objOneProvider instanceof MessageproviderExtendedInterface && $objOneProvider->isAlwaysActive();
             $bitAlwaysMail = $objOneProvider instanceof MessageproviderExtendedInterface && $objOneProvider->isAlwaysByMail();
 
-            $strClassname = uniStrReplace("\\", "", get_class($objOneProvider));
+            $strClassname = uniStrReplace("\\", "-", get_class($objOneProvider));
 
             $arrRows[] = array(
                 $objOneProvider->getStrName(),
@@ -218,15 +218,15 @@ JS;
         foreach ($arrMessageproviders as $objOneProvider) {
             $objConfig = MessagingConfig::getConfigForUserAndProvider($this->objSession->getUserID(), $objOneProvider);
 
-            $strClassname = uniStrReplace("\\", "", get_class($objOneProvider));
+            $strClassname = uniStrReplace("\\", "-", get_class($objOneProvider));
 
             //only update the message provider which is set in the param "messageprovidertype"
             if ($this->getParam("messageprovidertype") == $strClassname) {
-                if ($this->getParam(get_class($objOneProvider)."_bymail") != "") {
-                    $bitA = $this->getParam(get_class($objOneProvider)."_bymail") == "true";
+                if ($this->getParam($strClassname."_bymail") != "") {
+                    $bitA = $this->getParam($strClassname."_bymail") == "true";
                     $objConfig->setBitBymail($bitA);
                     $objConfig->updateObjectToDb();
-                    $strMessage = $objOneProvider->getStrName()." ".$this->getLang("provider_bymail")."=".$this->getParam(get_class($objOneProvider)."_bymail");
+                    $strMessage = $objOneProvider->getStrName()." ".$this->getLang("provider_bymail")."=".$this->getParam($strClassname."_bymail");
                     break;
 
                 }
@@ -234,7 +234,7 @@ JS;
                     $bitA = $this->getParam($strClassname."_enabled") == "true";
                     $objConfig->setBitEnabled($bitA);
                     $objConfig->updateObjectToDb();
-                    $strMessage = $objOneProvider->getStrName()." ".$this->getLang("provider_enabled")."=".$this->getParam(get_class($objOneProvider)."_enabled");
+                    $strMessage = $objOneProvider->getStrName()." ".$this->getLang("provider_enabled")."=".$this->getParam($strClassname."_enabled");
                     break;
                 }
             }
