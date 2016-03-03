@@ -534,6 +534,7 @@
 
             <fileset dir="${basedir}${projectPath}">
                 <include name="**/*.php" />
+                <exclude name="**/vendor/**" />
                 <modified />
             </fileset>
         </apply>
