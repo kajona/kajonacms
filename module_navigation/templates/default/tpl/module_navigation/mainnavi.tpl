@@ -20,11 +20,11 @@
 </level_1_inactive>
 
 <level_1_inactive_withchilds>
-<li class="nav-item"><a href="%%href%%" target="%%target%%" class="nav-link">%%text%% &downarrow;</a>%%level2%%</li>
+<li class="nav-item"><a href="%%href%%" target="%%target%%" class="nav-link">%%text%%</a>%%level2%%</li>
 </level_1_inactive_withchilds>
 
 <level_1_active_withchilds>
-<li class="nav-item"><a href="%%href%%" target="%%target%%" class="nav-link">%%text%% &downarrow;</a>%%level2%%</li>
+<li class="nav-item"><a href="%%href%%" target="%%target%%" class="nav-link">%%text%%</a>%%level2%%</li>
 </level_1_active_withchilds>
 
 

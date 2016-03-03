@@ -170,13 +170,13 @@ class NewsPortal extends PortalController implements PortalInterface {
                 $strReturn .= PagesPortaleditor::addPortaleditorContentWrapper($strOneNews, $objOneNews->getSystemid());
 
                 PagesPortaleditor::getInstance()->registerAction(
-                    new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), Link::getLinkAdminHref($this->getArrModule("module"), "editNews", "&systemid={$objOneNews->getSystemid()}"), $objOneNews->getSystemid())
+                    new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), Link::getLinkAdminHref($this->getArrModule("module"), "editNews", "&pe=1&systemid={$objOneNews->getSystemid()}"), $objOneNews->getSystemid())
                 );
                 PagesPortaleditor::getInstance()->registerAction(
                     new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::DELETE(), Link::getLinkAdminHref($this->getArrModule("module"), "delete", "&systemid={$objOneNews->getSystemid()}"), $objOneNews->getSystemid())
                 );
                 PagesPortaleditor::getInstance()->registerAction(
-                    new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::CREATE(), Link::getLinkAdminHref($this->getArrModule("module"), "newNews", ""), $objOneNews->getSystemid())
+                    new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::CREATE(), Link::getLinkAdminHref($this->getArrModule("module"), "newNews", "&pe=1"), $objOneNews->getSystemid())
                 );
             }
         }
