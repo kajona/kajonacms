@@ -14,6 +14,7 @@ use Kajona\System\Portal\PortalController;
 use Kajona\System\Portal\PortalInterface;
 use Kajona\System\System\ArraySectionIterator;
 use Kajona\System\System\Exception;
+use Kajona\System\System\Link;
 use Kajona\System\System\MessagingMessagehandler;
 use Kajona\System\System\Rights;
 use Kajona\System\System\UserGroup;
@@ -45,6 +46,9 @@ class GuestbookPortal extends PortalController implements PortalInterface
         $strReturn = "";
         $arrTemplate = array();
         $arrTemplate["liste_posts"] = "";
+
+        $objBook = new GuestbookGuestbook($this->arrElementData["guestbook_id"]);
+
         //Load all posts
         $objArraySectionIterator = new ArraySectionIterator(GuestbookPost::getPostsCount($this->arrElementData["guestbook_id"], true));
         $objArraySectionIterator->setIntElementsPerPage($this->arrElementData["guestbook_amount"]);
@@ -53,7 +57,7 @@ class GuestbookPortal extends PortalController implements PortalInterface
             GuestbookPost::getPosts($this->arrElementData["guestbook_id"], true, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos())
         );
 
-        $arrObjPosts = $this->objToolkit->simplePager($objArraySectionIterator, $this->getLang("commons_next"), $this->getLang("commons_back"), "", $this->getPagename());
+        $arrObjPosts = $this->objToolkit->simplePager($objArraySectionIterator, $this->getLang("commons_next"), $this->getLang("commons_back"), "", $this->getPagename(), "", "pv", "/module_guestbook/".$this->arrElementData["guestbook_template"]);
 
         //and put posts into a template
         /** @var GuestbookPost $objOnePost */
@@ -73,7 +77,10 @@ class GuestbookPortal extends PortalController implements PortalInterface
         }
 
         //link to the post-form & pageview links
-        $arrTemplate["link_newentry"] = getLinkPortal(($this->getParam("page") ? $this->getParam("page") : ""), "", "", $this->getLang("eintragen"), "insertGuestbook");
+        if ($objBook->rightRight1()) {
+            $strTemplateID = $this->objTemplate->readTemplate("/module_guestbook/".$this->arrElementData["guestbook_template"], "insert_link");
+            $arrTemplate["link_newentry"] = $this->fillTemplate(array("link_href" => Link::getLinkPortalHref(($this->getParam("page") ? $this->getParam("page") : ""), "", "insertGuestbook")), $strTemplateID);
+        }
         $arrTemplate["link_forward"] = $arrObjPosts["strForward"];
         $arrTemplate["link_pages"] = $arrObjPosts["strPages"];
         $arrTemplate["link_back"] = $arrObjPosts["strBack"];
@@ -87,31 +94,34 @@ class GuestbookPortal extends PortalController implements PortalInterface
     /**
      * Creates a form to handle a new post
      *
-     * @param array $arrTemplateOld
-     *
-     * @internal param mixed $arrTemplate values to fill in
      * @return string
      */
-    protected function actionInsertGuestbook($arrTemplateOld = array())
+    protected function actionInsertGuestbook()
     {
         $strReturn = "";
         $strTemplateID = $this->objTemplate->readTemplate("/module_guestbook/".$this->arrElementData["guestbook_template"], "entry_form");
 
         $strErrors = "";
+        $arrErrorFields = array();
         if (count($this->arrErrors) > 0) {
             $strErrorTemplateID = $this->objTemplate->readTemplate("/module_guestbook/".$this->arrElementData["guestbook_template"], "error_row");
-            foreach ($this->arrErrors as $strOneError) {
+            foreach ($this->arrErrors as $strKey => $strOneError) {
                 $strErrors .= $this->fillTemplate(array("error" => $strOneError), $strErrorTemplateID);
+                $arrErrorFields[] = "'{$strKey}'";
             }
+
+            $strErrorWrapperTemplateID = $this->objTemplate->readTemplate("/module_guestbook/".$this->arrElementData["guestbook_template"], "errors");
+            $strErrors = $this->fillTemplate(array("error_list" => $strErrors), $strErrorWrapperTemplateID);
         }
 
         //update elements
         $arrTemplate = array();
-        $arrTemplate["eintragen_fehler"] = $this->getParam("eintragen_fehler").$strErrors;
+        $arrTemplate["validation_errors"] = $strErrors;
         $arrTemplate["gb_post_name"] = $this->getParam("gb_post_name");
         $arrTemplate["gb_post_email"] = $this->getParam("gb_post_email");
         $arrTemplate["gb_post_text"] = $this->getParam("gb_post_text");
         $arrTemplate["gb_post_page"] = $this->getParam("gb_post_page");
+        $arrTemplate["error_fields"] = implode(",", $arrErrorFields);
 
         foreach ($arrTemplate as $strKey => $strValue) {
             if (uniStrpos($strKey, "gb_post_") !== false) {
@@ -137,7 +147,7 @@ class GuestbookPortal extends PortalController implements PortalInterface
 
         if (!$this->validateData()) {
             $this->setParam("eintragen_fehler", $this->getLang("eintragen_fehler"));
-            return $this->actionInsertGuestbook($this->getAllParams());
+            return $this->actionInsertGuestbook();
         }
 
         $objBook = new GuestbookGuestbook($this->arrElementData["guestbook_id"]);
@@ -196,22 +206,23 @@ class GuestbookPortal extends PortalController implements PortalInterface
         //Check captachcode
         if ($this->getParam("gb_post_captcha") != $this->objSession->getCaptchaCode() || $this->getParam("gb_post_captcha") == "") {
             $bitReturn = false;
+            $this->arrErrors["form_captcha"] = $this->getLang("insert_error_captcha");
         }
 
         //Check mailaddress
         $objMailValidator = new EmailValidator();
         if (!$objMailValidator->validate($this->getParam("gb_post_email"))) {
-            $this->arrErrors[] = $this->getLang("insert_error_email");
+            $this->arrErrors["gb_post_email"] = $this->getLang("insert_error_email");
             $bitReturn = false;
         }
 
         if (uniStrlen($this->getParam("gb_post_name")) == 0) {
-            $this->arrErrors[] = $this->getLang("insert_error_name");
+            $this->arrErrors["gb_post_name"] = $this->getLang("insert_error_name");
             $bitReturn = false;
         }
 
         if (uniStrlen($this->getParam("gb_post_text")) == 0) {
-            $this->arrErrors[] = $this->getLang("insert_error_post");
+            $this->arrErrors["gb_post_text"] = $this->getLang("insert_error_post");
             $bitReturn = false;
         }
 
