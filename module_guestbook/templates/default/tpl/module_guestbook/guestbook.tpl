@@ -58,7 +58,7 @@
     </div>
 </post>
 
-<!-- available placeholders: validation_errors, error_fields, gb_post_name, gb_post_email, gb_post_text, gb_post_page, action -->
+<!-- available placeholders: validation_errors, error_fields, gb_post_name, gb_post_email, gb_post_text, gb_post_page, action, error_fields -->
 <entry_form>
     %%validation_errors%%
     <form name="form1" method="post" action="%%action%%" accept-charset="UTF-8" class="guestbookForm">

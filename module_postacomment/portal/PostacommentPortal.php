@@ -89,11 +89,8 @@ class PostacommentPortal extends PortalController implements PortalInterface
             $strAdd .= "&pv=".$this->getParam("pv");
         }
 
-        $arrComments = $this->objToolkit->simplePager($objArraySectionIterator, $this->getLang("commons_next"), $this->getLang("commons_back"), "", $this->getPagename(), $strAdd, "pvPAC");
-
-
+        $arrComments = $this->objToolkit->simplePager($objArraySectionIterator, $this->getLang("commons_next"), $this->getLang("commons_back"), "", $this->getPagename(), $strAdd, "pvPAC", "/module_postacomment/".$this->arrElementData["char1"]);
         $strTemplateID = $this->objTemplate->readTemplate("/module_postacomment/".$this->arrElementData["char1"], "postacomment_post");
-
 
         if (!$objArraySectionIterator->valid()) {
             $strPosts .= $this->getLang("postacomment_empty");
@@ -118,7 +115,6 @@ class PostacommentPortal extends PortalController implements PortalInterface
                         $objOnePost->getFloatRating(), $objOnePost->getIntRatingHits(), $objOnePost->getSystemid(), $objOnePost->isRateableByUser(), $objOnePost->rightRight2()
                     );
                 }
-
 
                 $strOnePost .= $this->objTemplate->fillTemplate($arrOnePost, $strTemplateID, false);
 
@@ -182,91 +178,6 @@ class PostacommentPortal extends PortalController implements PortalInterface
         return $strReturn;
     }
 
-
-    /**
-     * Saves a post to the databases
-     *
-     * @permissions right1
-     * @return string
-     */
-    protected function actionPostComment()
-    {
-
-        if (!$this->validateForm()) {
-            return $this->actionList();
-        }
-
-        $strSystemidfilter = "";
-        if ($this->getSystemid() != "") {
-            $strSystemidfilter = $this->getSystemid();
-        }
-
-        if (PagesPage::getPageByName($this->getPagename()) !== null) {
-            $strPagefilter = PagesPage::getPageByName($this->getPagename())->getSystemid();
-        }
-        else {
-            $strPagefilter = "";
-        }
-
-        $objPost = new PostacommentPost();
-        $objPost->setStrUsername($this->getParam("comment_name"));
-        $objPost->setStrTitle($this->getParam("comment_subject"));
-        $objPost->setStrComment($this->getParam("comment_message"));
-
-        $objPost->setStrAssignedPage($strPagefilter);
-        $objPost->setStrAssignedSystemid($strSystemidfilter);
-        $objPost->setStrAssignedLanguage($this->getStrPortalLanguage());
-
-        $objPost->updateObjectToDb();
-
-        $this->flushCompletePagesCache();
-
-
-        $strMailtext = $this->getLang("new_comment_mail")."\r\n\r\n".$objPost->getStrComment()."\r\n";
-        $strMailtext .= Link::getLinkAdminHref("postacomment", "edit", "&systemid=".$objPost->getSystemid(), false);
-        $objMessageHandler = new MessagingMessagehandler();
-        $arrGroups = array();
-        $allGroups = UserGroup::getObjectList();
-        foreach ($allGroups as $objOneGroup) {
-            if (Rights::getInstance()->checkPermissionForGroup($objOneGroup->getSystemid(), Rights::$STR_RIGHT_EDIT, $this->getObjModule()->getSystemid())) {
-                $arrGroups[] = $objOneGroup;
-            }
-        }
-
-
-        $objMessage = new MessagingMessage();
-        $objMessage->setStrBody($strMailtext);
-        $objMessage->setObjMessageProvider(new MessageproviderPostacomment());
-        $objMessageHandler->sendMessageObject($objMessage, $arrGroups);
-
-        $this->portalReload(_indexpath_."?".$this->getHistory(1)/*."#comments"*/);
-        return "";
-    }
-
-    /**
-     * Validates the form data provided by the user
-     *
-     * @return bool
-     */
-    private function validateForm()
-    {
-        $bitReturn = true;
-
-        $strTemplateId = $this->objTemplate->readTemplate("/module_postacomment/".$this->arrElementData["char1"], "validation_error_row");
-        if (uniStrlen($this->getParam("comment_name")) < 2) {
-            $bitReturn = false;
-            $this->strErrors .= $this->objTemplate->fillTemplate(array("error" => $this->getLang("validation_name")), $strTemplateId);
-        }
-        if (uniStrlen($this->getParam("comment_message")) < 2) {
-            $bitReturn = false;
-            $this->strErrors .= $this->objTemplate->fillTemplate(array("error" => $this->getLang("validation_message")), $strTemplateId);
-        }
-        if ($this->objSession->getCaptchaCode() != $this->getParam("form_captcha") || $this->getParam("form_captcha") == "") {
-            $bitReturn = false;
-            $this->strErrors .= $this->objTemplate->fillTemplate(array("error" => $this->getLang("validation_code")), $strTemplateId);
-        }
-        return $bitReturn;
-    }
 
 
     /**

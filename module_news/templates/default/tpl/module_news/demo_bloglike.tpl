@@ -98,4 +98,3 @@
 <pager_entry_active>
     <li class="page-item active"><a href="%%pageHref%%" class="page-link">[%%pageNumber%%]</a></li>
 </pager_entry_active>
-e>

@@ -36,6 +36,7 @@ class PostacommentPortalXml extends PortalController implements XmlPortalInterfa
 {
 
     private $strErrors;
+    private $arrErrorFields = array();
 
     /**
      * saves a post in the database and returns the post as html.
@@ -62,6 +63,7 @@ class PostacommentPortalXml extends PortalController implements XmlPortalInterfa
             $arrForm["comment_systemid"] = $this->getParam("comment_systemid");
             $arrForm["comment_page"] = $this->getParam("comment_page");
             $arrForm["validation_errors"] = $this->strErrors;
+            $arrForm["error_fields"] = implode(",", $this->arrErrorFields);
 
             foreach ($arrForm as $strKey => $strValue) {
                 if (uniStrpos($strKey, "comment_") !== false) {
@@ -128,6 +130,7 @@ class PostacommentPortalXml extends PortalController implements XmlPortalInterfa
             $arrOnePost["postacomment_post_systemid"] = $objPost->getSystemid();
             $arrOnePost["postacomment_post_date"] = timeToString($objPost->getIntDate(), true);
 
+
             $strTemplateID = $this->objTemplate->readTemplate("/module_postacomment/".$this->getParam("comment_template"), "postacomment_post");
             $strXMLContent .= $this->objTemplate->fillTemplate($arrOnePost, $strTemplateID);
         }
@@ -150,15 +153,22 @@ class PostacommentPortalXml extends PortalController implements XmlPortalInterfa
         if (uniStrlen($this->getParam("comment_name")) < 2) {
             $bitReturn = false;
             $this->strErrors .= $this->objTemplate->fillTemplate(array("error" => $this->getLang("validation_name")), $strTemplateId);
+            $this->arrErrorFields[] = "'comment_name_{$this->getParam("comment_systemid")}'";
         }
         if (uniStrlen($this->getParam("comment_message")) < 2) {
             $bitReturn = false;
             $this->strErrors .= $this->objTemplate->fillTemplate(array("error" => $this->getLang("validation_message")), $strTemplateId);
+            $this->arrErrorFields[] = "'comment_message_{$this->getParam("comment_systemid")}'";
         }
         if ($this->objSession->getCaptchaCode() != $this->getParam("form_captcha") || $this->getParam("form_captcha") == "") {
             $bitReturn = false;
             $this->strErrors .= $this->objTemplate->fillTemplate(array("error" => $this->getLang("validation_code")), $strTemplateId);
+            $this->arrErrorFields[] = "'form_captcha_{$this->getParam("comment_systemid")}'";
         }
+
+        $strErrorWrapperTemplateID = $this->objTemplate->readTemplate("/module_postacomment/".$this->getParam("comment_template"), "errors");
+        $this->strErrors = $this->fillTemplate(array("error_list" => $this->strErrors), $strErrorWrapperTemplateID);
+
         return $bitReturn;
     }
 }
