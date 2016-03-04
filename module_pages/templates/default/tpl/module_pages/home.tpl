@@ -41,7 +41,7 @@
 <div class="container">
 
     <div class="row">
-        <div class="col-sm-3">%%mastermainnavi_navigation%%</div>
+        <div class="col-sm-3"><div>%%mastermainnavi_navigation%%</div><div>%%mastertopnews_news%%</div></div>
         <div class="col-sm-9">
 
 

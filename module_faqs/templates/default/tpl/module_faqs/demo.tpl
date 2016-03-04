@@ -3,7 +3,7 @@
 <!-- available placeholders: faq_categories -->
 <faqs_list>
     <div class="faqsList">
-        <br />%%faq_categories%%
+        %%faq_categories%%
     </div>
 </faqs_list>
 
@@ -11,22 +11,25 @@
 <faq_category>
     <div class="faqCategory">
         <div class="faqCategoryTitle"><h3 data-kajona-editable="%%strSystemid%%#strTitle#plain">%%strTitle%%</h3></div>
-        %%faq_faqs%%
+        <div id="accordion" role="tablist" aria-multiselectable="true">
+            %%faq_faqs%%
+        </div>
     </div>
 </faq_category>
 
-<!-- available placeholders: strQuestion, strAnswer, strSystemid, faq_rating (if module rating installed) -->
+<!-- available placeholders: strQuestion, strAnswer, strSystemid, faq_rating (if module rating is installed) -->
 <faq_faq>
-    <div class="faqFaq">
-        <div class="faqFaqQuestion">
-            <table cellpadding="0" cellspacing="0">
-                <tr>
-                    <td><img src="_webpath_/templates/default/pics/default/icon_question.gif" /></td>
-                    <td style="padding-left: 2px;" data-kajona-editable="%%strSystemid%%#strQuestion#plain">%%strQuestion%%</td>
-                </tr>
-            </table>
-        </div>
-        <div class="faqFaqAnswer"><a name="%%faq_systemid%%"></a><span data-kajona-editable="%%strSystemid%%#strAnswer">%%strAnswer%%</span></div>
-    </div>
-</faq_faq>
 
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="heading%%strSystemid%%">
+            <span class="pull-right">%%faq_rating%%</span>
+            <h4 class="panel-title">
+                <span data-kajona-editable="%%strSystemid%%#strQuestion#plain">%%strQuestion%%</span>
+            </h4>
+        </div>
+        <div id="collapse%%strSystemid%%" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading%%strSystemid%%">
+            <span data-kajona-editable="%%strSystemid%%#strAnswer">%%strAnswer%%</span>
+        </div>
+    </div>
+
+</faq_faq>

@@ -260,7 +260,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
         $objHeadlineAdmin->setStrText($this->strContentLanguage == "de" ? "Impressum" : "Imprint");
         $objHeadlineAdmin->updateForeignElement();
 
-        $objBlocks = $objHelper->createBlocksElement("Page Intro", $objErrorPage);
+        $objBlocks = $objHelper->createBlocksElement("Page Intro", $objImprintPage);
         $objBlock = $objHelper->createBlockElement("Text Only", $objBlocks);
         $objRichtext = $objHelper->createPageElement("content_richtext", $objBlock);
         /** @var ElementRichtextAdmin $objRichtextAdmin */
