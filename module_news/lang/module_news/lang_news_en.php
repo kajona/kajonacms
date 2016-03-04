@@ -65,6 +65,7 @@ $lang["news_locked"]                     = "Newsrecord is locked";
 $lang["news_mehr"]                       = "[read more]";
 $lang["news_unlock"]                     = "Unlock newsrecord";
 $lang["news_zurueck"]                    = "Go back";
+$lang["news_comments"]                   = "Comments created:";
 $lang["quickhelp_edit_category"]         = "At the moment you just can define the title of a category.";
 $lang["quickhelp_edit_feed"]             = "You can change the properties of new and existing news feeds here. <br />The details view is used when a subscriber requests a news message. You can delimit the number of news by setting the feed category.<br />You can set the URL of the feed in the field 'Feed URL title' e.g. /newsnfacts.rss. The title should only contain letters and figures (a-z, A-Z, 0-9).";
 $lang["quickhelp_edit_languageset"]      = "To realize a languageswitch in the portal, the news-items have to be grouped within so called languagesets.  Based on those sets Kajona is able to provide a languageswitch.";

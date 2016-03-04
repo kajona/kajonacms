@@ -5,15 +5,11 @@
 
 <!-- available placeholders: news, link_forward, link_pages, link_back -->
 <news_list_wrapper>
-    <div class="newsListContainer">%%news%%</div>
-    <div>
-        <table border="0">
-            <tr>
-                <td align="left">%%link_back%%</td>
-                <td align="center">%%link_pages%%</td>
-                <td align="right">%%link_forward%%</td>
-            </tr>
-        </table>
+    <div class="newsListContainer">
+        %%news%%
+        <nav class="text-xs-center">
+            <ul class=" pagination pagination-sm">%%link_back%% %%link_pages%% %%link_forward%%</ul>
+        </nav>
     </div>
 </news_list_wrapper>
 
@@ -22,25 +18,25 @@
     strSystemid, intLmTime, longCreateDate, strTitle, strImage, intHits, strIntro, strText, objDateStart, objDateEnd, objDateSpecial, objDateTimeStart, objDateTimeEnd, objDateTimeSpecial
 -->
 <news_list>
-<div class="newsListBlog">
-    <div class="newsListHeader">
-        <div class="newsListTitle">
-            <h2 data-kajona-editable="%%strSystemid%%#strTitle#plain">%%strTitle%%</h2>
+    <div class="card">
+        <div class="card-header">
+            <span class="pull-right">%%objDateStart%%</span>
+            <h4><a href="%%news_more_link_href%%" data-kajona-editable="%%strSystemid%%#strTitle#plain">%%strTitle%%</a></h4>
         </div>
-        <div class="newsListMore">%%objDateStart%%</div>
-        <div class="clearer"></div>
-    </div>
-    <div class="newsListTeaser">
-        <div>
-            <p class="newsTeaser" data-kajona-editable="%%strSystemid%%#strIntro#plain">%%strIntro%%</p>
-            <p data-kajona-editable="%%strSystemid%%#strText">%%strText%%</p>
-            <div><a href="#" onclick="KAJONA.util.fold('pac_%%strSystemid%%'); return false;">Comments: %%news_nrofcomments%%</a></div>
+        <div class="card-block">
+            <p class="lead"><span data-kajona-editable="%%strSystemid%%#strIntro#plain">%%strIntro%%</span></p>
+            <div data-kajona-editable="%%strSystemid%%#strText">%%strText%%</div>
+        </div>
+        <div class="card-block">
+            <div class="card-link">%%news_categories%%</div>
+        </div>
+        <div class="card-footer">
+            <div><a href="#" onclick="KAJONA.util.fold('pac_%%strSystemid%%'); return false;">[lang,news_comments,news] %%news_nrofcomments%%</a></div>
             <div id="pac_%%strSystemid%%" style="display: none;">
                 %%news_commentlist%%
             </div>
         </div>
     </div>
-</div>
 </news_list>
 
 
@@ -48,56 +44,58 @@
     strSystemid, intLmTime, longCreateDate, strTitle, strImage, intHits, strIntro, strText, objDateStart, objDateEnd, objDateSpecial, objDateTimeStart, objDateTimeEnd, objDateTimeSpecial
 -->
 <news_list_image>
-<div class="newsListBlog">
-    <div class="newsListHeader">
-        <div class="newsListTitle">
-            <h2 data-kajona-editable="%%strSystemid%%#strTitle#plain">%%strTitle%%</h2>
+    <div class="card">
+        <div class="card-header">
+            <span class="pull-right">%%objDateStart%%</span>
+            <h4><a href="%%news_more_link_href%%" data-kajona-editable="%%strSystemid%%#strTitle#plain">%%strTitle%%</a></h4>
         </div>
-        <div class="newsListMore">%%objDateStart%%</div>
-        <div class="clearer"></div>
-    </div>
-    <div class="newsListTeaser">
-        <div>
-            <img src="[img,%%strImage%%,300,500]" alt="%%news_title%%" />
-            <p class="newsTeaser" data-kajona-editable="%%strSystemid%%#strIntro#plain">%%strIntro%%</p>
-            <p data-kajona-editable="%%strSystemid%%#strText">%%strText%%</p>
-            <div><a href="#" onclick="KAJONA.util.fold('pac_%%strSystemid%%'); return false;">Comments: %%news_nrofcomments%%</a></div>
+        <div class="card-block">
+            <p class="lead" data-kajona-editable="%%strSystemid%%#strIntro#plain">%%strIntro%%</p>
+            <img src="[img,%%strImage%%,300,500]" alt="%%strTitle%%" class="pull-right img-fluid"/>
+            <div data-kajona-editable="%%strSystemid%%#strText">%%strText%%</div>
+        </div>
+        <div class="card-block">
+            <div class="card-link">%%news_categories%%</div>
+        </div>
+        <div class="card-footer">
+            <div><a href="#" onclick="KAJONA.util.fold('pac_%%strSystemid%%'); return false;">[lang,news_comments,news] %%news_nrofcomments%%</a></div>
             <div id="pac_%%strSystemid%%" style="display: none;">
                 %%news_commentlist%%
             </div>
         </div>
     </div>
-</div>
+
 </news_list_image>
 
 
 <!-- available placeholders: strTitle -->
 <categories_category>
-    <li>%%strTitle%%</li>
+    <span class="label label-default">%%strTitle%%</span>
 </categories_category>
 
 <!-- available placeholders: categories -->
 <categories_wrapper>
-    [lang,news_categories,news]<ul class="newsCategories">%%categories%%</ul>
+    [lang,news_categories,news]%%categories%%
 </categories_wrapper>
 
 
 <!-- available placeholders: pageHref -->
 <pager_fwd>
-    <a href="%%pageHref%%">[lang,commons_next,system]</a>
+    <li class="page-item"><a href="%%pageHref%%" class="page-link">[lang,commons_next,system]</a></li>
 </pager_fwd>
 
 <!-- available placeholders: pageHref -->
 <pager_back>
-    <a href="%%pageHref%%">[lang,commons_back,system]</a>
+    <li class="page-item"><a href="%%pageHref%%" class="page-link">[lang,commons_back,system]</a></li>
 </pager_back>
 
 <!-- available placeholders: pageHref, pageNumber -->
 <pager_entry>
-    <a href="%%pageHref%%">[%%pageNumber%%]</a>
+    <li class="page-item"><a href="%%pageHref%%" class="page-link">[%%pageNumber%%]</a></li>
 </pager_entry>
 
 <!-- available placeholders: pageHref, pageNumber -->
 <pager_entry_active>
-    <span style="font-weight: bold"><a href="%%pageHref%%">[%%pageNumber%%]</a></span>
+    <li class="page-item active"><a href="%%pageHref%%" class="page-link">[%%pageNumber%%]</a></li>
 </pager_entry_active>
+e>

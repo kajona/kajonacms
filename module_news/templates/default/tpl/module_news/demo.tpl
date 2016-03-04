@@ -17,6 +17,7 @@
 <news_list>
 <div class="card">
     <div class="card-header">
+        <span class="pull-right">%%objDateStart%%</span>
         <h4><a href="%%news_more_link_href%%" data-kajona-editable="%%strSystemid%%#strTitle#plain">%%strTitle%%</a></h4>
     </div>
     <div class="card-block">
@@ -24,7 +25,6 @@
     </div>
     <div class="card-footer">
         <span>%%news_more_link%%</span>
-        <span class="pull-right">%%objDateStart%%</span>
     </div>
 </div>
 </news_list>
@@ -36,6 +36,7 @@
 <news_list_image>
 <div class="card">
     <div class="card-header">
+        <span class="pull-right">%%objDateStart%%</span>
         <h4><a href="%%news_more_link_href%%" data-kajona-editable="%%strSystemid%%#strTitle#plain">%%strTitle%%</a></h4>
         <div class="clearer"></div>
     </div>
@@ -45,12 +46,10 @@
         </div>
         <div class="col-xs-12 col-md-3">
             <img src="[img,%%strImage%%,150,150]" alt="%%news_title%%" class="img-fluid"/>
-
         </div>
     </div>
     <div class="card-footer">
         <span>%%news_more_link%%</span>
-        <span class="pull-right">%%objDateStart%%</span>
     </div>
 </div>
 </news_list_image>
@@ -141,4 +140,3 @@
 <pager_entry_active>
     <li class="page-item active"><a href="%%pageHref%%" class="page-link">[%%pageNumber%%]</a></li>
 </pager_entry_active>
->
