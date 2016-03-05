@@ -114,7 +114,7 @@
 
     &:hover {
 
-        padding-top: 5px; //@jaky: wie kann man das besser machen? es geht darum, dass sich die toolbars von elementen nicht überlagern, z.B. bei der Liste von Faqs
+        //padding-top: 5px; //@jaky: wie kann man das besser machen? es geht darum, dass sich die toolbars von elementen nicht überlagern, z.B. bei der Liste von Faqs
 
         display: block !important;
         //outline: 1px solid @peColorHover !important;
@@ -146,6 +146,8 @@
         .opacity(1) !important;
 
         .peActionToolbarActionContainer {
+            line-height: 15px;
+
 
             background-color: @peButtonToolbarBackground;
             a {
@@ -188,6 +190,12 @@
             border-left: 7px solid transparent;
             border-right: 7px solid transparent;
             border-bottom: 7px solid @peButtonToolbarBackground;
+        }
+
+        &.caretRight {
+            .peActionToolbarCaretBottom {
+                float: right;
+            }
         }
     }
 

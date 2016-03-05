@@ -121,10 +121,10 @@ class PostacommentPortal extends PortalController implements PortalInterface
                 //Add pe code
                 $strPosts .= PagesPortaleditor::addPortaleditorContentWrapper($strOnePost, $objOnePost->getSystemid());
                 PagesPortaleditor::getInstance()->registerAction(
-                    new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), Link::getLinkAdminHref($this->getArrModule("module"), "edit", "&systemid={$objOnePost->getSystemid()}"), $objOnePost->getSystemid())
+                    new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), Link::getLinkAdminHref($this->getArrModule("module"), "edit", "&pe=1&systemid={$objOnePost->getSystemid()}"), $objOnePost->getSystemid())
                 );
                 PagesPortaleditor::getInstance()->registerAction(
-                    new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::DELETE(), Link::getLinkAdminHref($this->getArrModule("module"), "delete", "&systemid={$objOnePost->getSystemid()}"), $objOnePost->getSystemid())
+                    new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::DELETE(), Link::getLinkAdminHref($this->getArrModule("module"), "delete", "&pe=1&systemid={$objOnePost->getSystemid()}"), $objOnePost->getSystemid())
                 );
             }
         }

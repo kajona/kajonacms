@@ -96,7 +96,7 @@ class FaqsPortal extends PortalController implements PortalInterface
                     $strFaqs .= PagesPortaleditor::addPortaleditorContentWrapper($strOneFaq, $objOneFaq->getSystemid());
 
                     PagesPortaleditor::getInstance()->registerAction(
-                        new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), Link::getLinkAdminHref($this->getArrModule("module"), "editFaq", "&systemid={$objOneFaq->getSystemid()}"), $objOneFaq->getSystemid())
+                        new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), Link::getLinkAdminHref($this->getArrModule("module"), "editFaq", "&pe=1&systemid={$objOneFaq->getSystemid()}"), $objOneFaq->getSystemid())
                     );
 
                     PagesPortaleditor::getInstance()->registerAction(
@@ -104,7 +104,7 @@ class FaqsPortal extends PortalController implements PortalInterface
                     );
 
                     PagesPortaleditor::getInstance()->registerAction(
-                        new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::CREATE(), Link::getLinkAdminHref($this->getArrModule("module"), "newFaq"), $objOneFaq->getSystemid())
+                        new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::CREATE(), Link::getLinkAdminHref($this->getArrModule("module"), "newFaq", "&pe=1"), $objOneFaq->getSystemid())
                     );
                 }
             }

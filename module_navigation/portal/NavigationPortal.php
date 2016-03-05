@@ -103,12 +103,12 @@ class NavigationPortal extends PortalController implements PortalInterface
         //only add the code, if not auto-generated
         if (!validateSystemid($objNavigation->getStrFolderId())) {
             PagesPortaleditor::getInstance()->registerAction(
-                new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), Link::getLinkAdminHref($this->getArrModule("module"), "list", "&systemid={$this->arrElementData['navigation_id']}"), $this->arrElementData["navigation_id"])
+                new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), Link::getLinkAdminHref($this->getArrModule("module"), "list", "&pe=1&systemid={$this->arrElementData['navigation_id']}"), $this->arrElementData["navigation_id"])
             );
         }
         else {
             PagesPortaleditor::getInstance()->registerAction(
-                new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), Link::getLinkAdminHref("pages", "list", "&systemid={$objNavigation->getStrFolderId()}"), $objNavigation->getStrFolderId())
+                new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), Link::getLinkAdminHref("pages", "list", "&pe=1&systemid={$objNavigation->getStrFolderId()}"), $objNavigation->getStrFolderId())
             );
         }
 
