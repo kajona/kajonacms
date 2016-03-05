@@ -1103,7 +1103,7 @@ class Database
     }
 
     /**
-     * For some database vendors we need to escape the backslash character even if we are using prepared statments. This
+     * For some database vendors we need to escape the backslash character even if we are using prepared statements. This
      * method unifies the behaviour. In order to select a column which contains a backslash you need to escape the value
      * with this method
      *

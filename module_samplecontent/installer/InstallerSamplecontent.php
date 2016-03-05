@@ -37,23 +37,21 @@ class InstallerSamplecontent extends InstallerBase implements InstallerRemovable
         $this->strContentLanguage = $this->objSession->getAdminLanguage();
 	}
 
-    public function install() {
-		$strReturn = "Installing ".$this->objMetadata->getStrTitle()."...\n";
-
-		//Register the module
-        $strReturn .= "\nRegistering module\n";
-        $this->registerModule($this->objMetadata->getStrTitle(), _samplecontent_modul_id_, "", "", $this->objMetadata->getStrVersion() , false);
-
-		//search for installers available
-        $arrTempInstaller = Resourceloader::getInstance()->getFolderContent("/installer", array(".php"), false, null, function(&$strFilename, $strPath) {
+    /**
+     * @return array
+     */
+    public static function getSamplecontentInstallers()
+    {
+        //search for installers available
+        $arrTempInstaller = Resourceloader::getInstance()->getFolderContent("/installer", array(".php"), false, null, function (&$strFilename, $strPath) {
             $objInstance = Classloader::getInstance()->getInstanceFromFilename($strPath, "Kajona\\System\\System\\SamplecontentInstallerInterface");
 
             //See if a legacy class was stored in the file
-            if($objInstance == null) {
+            if ($objInstance == null) {
                 $strClass = uniSubstr($strFilename, 0, -4);
                 $strClass = "class_".$strClass;
 
-                if(in_array($strClass, get_declared_classes())) {
+                if (in_array($strClass, get_declared_classes())) {
                     $strFilename = new $strClass();
                 }
                 else {
@@ -65,21 +63,33 @@ class InstallerSamplecontent extends InstallerBase implements InstallerRemovable
             }
         });
 
-
-        foreach($arrTempInstaller as $objInstaller) {
-            if($objInstaller !== null) {
+        $arrInstaller = array();
+        foreach ($arrTempInstaller as $objInstaller) {
+            if ($objInstaller !== null) {
                 $arrInstaller[uniStrReplace("class_", "", get_class($objInstaller))] = $objInstaller;
             }
         }
 
 
-        uksort($arrInstaller, function($strA, $strB) {
+        uksort($arrInstaller, function ($strA, $strB) {
 
             $strNameA = uniStrrpos($strA, "\\") !== false ? uniSubstr($strA, uniStrrpos($strA, "\\") + 1) : $strA;
             $strNameB = uniStrrpos($strB, "\\") !== false ? uniSubstr($strB, uniStrrpos($strB, "\\") + 1) : $strB;
 
             return strcmp(strtolower($strNameA), strtolower($strNameB));
         });
+        return $arrInstaller;
+    }
+
+    public function install() {
+		$strReturn = "Installing ".$this->objMetadata->getStrTitle()."...\n";
+
+		//Register the module
+        $strReturn .= "\nRegistering module\n";
+        $this->registerModule($this->objMetadata->getStrTitle(), _samplecontent_modul_id_, "", "", $this->objMetadata->getStrVersion() , false);
+
+        $arrInstaller = self::getSamplecontentInstallers();
+
 
         $strReturn .= "Loading installers...\n";
         /** @var $objInstaller SamplecontentInstallerInterface|InstallerBase */

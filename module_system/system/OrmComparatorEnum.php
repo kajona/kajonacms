@@ -18,6 +18,8 @@ namespace Kajona\System\System;
  * @method static OrmComparatorEnum Equal()
  * @method static OrmComparatorEnum NotEqual()
  * @method static OrmComparatorEnum Like()
+ * @method static OrmComparatorEnum In()
+ * @method static OrmComparatorEnum NotIn()
  *
  *
  * @package module_system
@@ -33,7 +35,7 @@ class OrmComparatorEnum extends EnumBase
      */
     protected function getArrValues()
     {
-        return array("GreaterThen", "GreaterThenEquals", "LessThen", "LessThenEquals", "Equal", "NotEqual", "Like");
+        return array("GreaterThen", "GreaterThenEquals", "LessThen", "LessThenEquals", "Equal", "NotEqual", "Like", "In", "NotIn");
     }
 
 
@@ -65,6 +67,14 @@ class OrmComparatorEnum extends EnumBase
 
         if ($this->equals(OrmComparatorEnum::Like())) {
             return "LIKE";
+        }
+
+        if ($this->equals(OrmComparatorEnum::In())) {
+            return "IN";
+        }
+
+        if ($this->equals(OrmComparatorEnum::NotIn())) {
+            return "NOT IN";
         }
 
         throw new class_orm_exception("Unknown sql comparator", Exception::$level_ERROR);

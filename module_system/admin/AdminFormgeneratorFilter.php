@@ -62,40 +62,30 @@ class AdminFormgeneratorFilter extends AdminFormgenerator
         $objFilter = $this->getObjSourceobject();
 
         //1. Check if post request was send?
-        if ($objCarrier->getParam("{$objFilter->getFilterId()}_setcontentfilter") == "true") {
+        if ($objCarrier->getParam($this->getFormElementName("setcontentfilter")) == "true") {
             $objCarrier->setParam("pv", "1");
-        } else {
-            // Get the values from the session
-            $objSessionObject = Session::getInstance()->getSession($objFilter->getFilterId());
-            if ($objSessionObject instanceof FilterBase) {
-                $this->setObjSourceobject($objSessionObject);
+
+            // 1.2 Check if filter was reset?
+            if ($objCarrier->getParam("reset") != "") {
+                $this->resetParams();
             }
         }
 
-        // 2. Check if filter was reset?
-        if ($objCarrier->getParam("reset") != "") {
-            $this->resetParams();
-        }
-
-        // 3. Init the form
+        // 2. Init the form
         $this->generateFieldsFromObject();
         $this->updateSourceObject();
         $this->addField(new FormentryHidden($this->getStrFormname(), "setcontentfilter"))->setStrValue("true");
+
+        // 4. Update Filterform (specific filter form handling)
         $objFilter->updateFilterForm($this);
 
-        // 4. Keep filter object in separate variable
-        $objFilter = $this->getObjSourceobject();
-
-        // 5. Update session with filter object
-        Session::getInstance()->setSession($objFilter->getFilterId(), $objFilter);
-
-        // 6. Set form method to GET
+        // 5. Set form method to GET
         $this->setStrMethod(self::STR_METHOD_GET);
 
-        // 7. Render filter form.
+        // 6. Render filter form.
         $strReturn = parent::renderForm($strTargetURI, AdminFormgenerator::BIT_BUTTON_SUBMIT | AdminFormgenerator::BIT_BUTTON_RESET);
 
-        // 8. Display filter active/inactive
+        // 7. Display filter active/inactive
         $bitFilterActive = false;
         foreach ($this->getArrFields() as $objOneField) {
             if (!$objOneField instanceof FormentryHidden) {
@@ -103,8 +93,8 @@ class AdminFormgeneratorFilter extends AdminFormgenerator
             }
         }
 
-        // 9. Render folder toggle
-        $arrFolder = $objToolkit->getLayoutFolderPic($strReturn, $objLang->getLang("filter_show_hide", "agp_commons").($bitFilterActive ? $objLang->getLang("commons_filter_active", "system") : ""), "icon_folderOpen", "icon_folderClosed", false);
+        // 8. Render folder toggle
+        $arrFolder = $objToolkit->getLayoutFolderPic($strReturn, $objLang->getLang("filter_show_hide", "system").($bitFilterActive ? $objLang->getLang("commons_filter_active", "system") : ""), "icon_folderOpen", "icon_folderClosed", false);
         $strReturn = $objToolkit->getFieldset($arrFolder[1], $arrFolder[0]);
 
         return $strReturn;
@@ -127,25 +117,25 @@ class AdminFormgeneratorFilter extends AdminFormgenerator
 
         // clear params
         foreach($arrParamsSuffix as $strSuffix) {
-            $objCarrier->setParam("{$this->getStrFormname()}_{$strSuffix}", "");
+            $objCarrier->setParam($this->getFormElementName($strSuffix), "");
         }
     }
 
     /**
-     * Generates a filter based on the given filter object.
+     * If a formname is set, this method return <formname>_<fieldname>, else the given <fieldname>
      *
-     * @param FilterBase $objFilter
-     * @param string $strAction
+     * @param $strFieldName
+     *
      * @return string
      */
-    public static function generateFilterForm(FilterBase $objFilter, $strAction = "list")
-    {
-        $objFilterForm = new AdminFormgeneratorFilter($objFilter->getFilterId(), $objFilter);
-        $strTarget = Link::getLinkAdminHref($objFilter->getArrModule(), $strAction);
+    private function getFormElementName($strFieldName) {
+        $strName = $strFieldName;
 
-        $strFilter = $objFilterForm->renderForm($strTarget);
+        if($this->getStrFormname() != "") {
+            $strName = $this->getStrFormname() . "_" . $strFieldName;
+        }
 
-        return $strFilter;
+        return $strName;
     }
 
 }

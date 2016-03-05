@@ -151,12 +151,7 @@ class FilterBaseA extends FilterBase
     protected $strFilter9;
 
 
-    public function getFilterId()
-    {
-        return "filter";
-    }
-
-    public function getArrModule()
+    public function getArrModule($strKey = "")
     {
         return "module";
     }

@@ -89,6 +89,8 @@ $lang["commons_validator_int_validationmessage"] = "The field must contain integ
 $lang["commons_validator_numeric_validationmessage"] = "The field must contain numeric values";
 $lang["commons_validator_posint_validationmessage"] = "The field must contain positive integer values";
 $lang["commons_yes"]                     = "Yes";
+$lang["commons_filter_active"]            = "<span class='smaller pull-right'><i class=\"fa fa-filter\"></i> List-filter in use</span>";
+$lang["filter_show_hide"]                = "Show/hide filter";
 
 $lang["commons_remove_assignment"]                     = "Remove assignment";
 $lang["commons_add_assignment"]                     = "Add assignment";

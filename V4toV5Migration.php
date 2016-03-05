@@ -86,8 +86,8 @@ class V4toV5Migration
 
                 $strLegacyFile = array_search($strSourceClass.".php", $arrLegacyFiles);
                 if ($strLegacyFile === false) {
-                    echo "<b>Failed to find legacy class for ".$strLegacyFile.", aborting update </b>\n";
-                    die;
+                    echo "<b>Failed to find legacy class for ".$strSourceClass.", skipping update </b>\n";
+                    continue;
                 }
 
                 $strNewName = $this->getNewNameFromLegacyClass($strLegacyFile);
