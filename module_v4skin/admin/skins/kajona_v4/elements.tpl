@@ -1423,33 +1423,37 @@ pe_iconbar, pe_disable
     <!-- KAJONA_BUILD_LESS_END -->
 
 
-    <div class="modal fade" id="peDialog">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <div id="folderviewDialog_loading" class="peLoadingContainer loadingContainerBackground"></div>
-                <div class="modal-body" id="peDialog_content">
-                    <!-- filled by js -->
+    <div class="kajona-pe-wrap">
+        <div class="modal fade" id="peDialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div id="folderviewDialog_loading" class="peLoadingContainer loadingContainerBackground"></div>
+                    <div class="modal-body" id="peDialog_content">
+                        <!-- filled by js -->
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="delDialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h3 id="delDialog_title"><!-- filled by js --></h3>
-                </div>
-                <div class="modal-body" id="delDialog_content">
-                    <!-- filled by js -->
-                </div>
-                <div class="modal-footer">
-                    <a href="#" class="btn btn-default" data-dismiss="modal" id="delDialog_cancelButton">[lang,dialog_cancelButton,system]</a>
-                    <a href="#" class="btn btn-default btn-primary" id="delDialog_confirmButton">confirm</a>
+    <div class="kajona-pe-wrap">
+        <div class="modal fade" id="delDialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h3 id="delDialog_title"><!-- filled by js --></h3>
+                    </div>
+                    <div class="modal-body" id="delDialog_content">
+                        <!-- filled by js -->
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#" class="btn btn-default" data-dismiss="modal" id="delDialog_cancelButton">[lang,dialog_cancelButton,system]</a>
+                        <a href="#" class="btn btn-default btn-primary" id="delDialog_confirmButton">confirm</a>
+                    </div>
                 </div>
             </div>
         </div>

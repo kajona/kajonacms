@@ -427,35 +427,36 @@ body *[data-kajona-editable] {
 }
 
 /* DIALOGS / MODALS / BACKDROPS */
-.modal {
-    text-align: left;
+.kajona-pe-wrap {
+    .modal {
+        text-align: left;
 
-    iframe {
-        border: none;
-    }
+        iframe {
+            border: none;
+        }
 
-    .modal-header {
-        border: none;
-        padding: 15px 15px 0 15px;
-        h3 {
-            margin: 0;
+        .modal-header {
+            border: none;
+            padding: 15px 15px 0 15px;
+            h3 {
+                margin: 0;
+            }
+        }
+
+        .modal-footer {
+            padding: 0 15px 15px 15px;
+            border-top: none;
+        }
+
+        .modal-body {
+            max-height: none;
+        }
+
+        .btn-primary {
+            color: #fff;
         }
     }
-
-    .modal-footer {
-        padding: 0 15px 15px 15px;
-        border-top: none;
-    }
-
-    .modal-body {
-        max-height: none;
-    }
-
-    .btn-primary {
-        color: #fff;
-    }
 }
-
 
 /* TOOLTIPS */
 .qtip {
