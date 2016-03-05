@@ -7,14 +7,12 @@
             [lang,commons_title,elements] %%feed_title%% (%%feed_link%%)<br />
             [lang,commons_description,elements] %%feed_description%%
         </p>
-        <ul>%%feed_content%%</ul>
+        <dl>%%feed_content%%</dl>
     </div>
 </rssfeed_feed>
 
-<!-- available placeholders: post_date, post_link, post_title, post_description -->
+<!-- available placeholders: post_date, post_datetime, post_link, post_title, post_description -->
 <rssfeed_post>
-    <li>
-        <div><a href="%%post_link%%" target="_blank">%%post_title%%</a> (%%post_date%%)</div>
-        <div>%%post_description%%</div>
-    </li>
+        <dt><a href="%%post_link%%" target="_blank">%%post_title%%</a> <span class="text-muted">(%%post_date%%)</span></dt>
+        <dd>%%post_description%%</dd>
 </rssfeed_post>

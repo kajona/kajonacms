@@ -11,6 +11,7 @@ namespace Kajona\Rssfeed\Portal\Elements;
 
 use Kajona\Pages\Portal\ElementPortal;
 use Kajona\Pages\Portal\PortalElementInterface;
+use Kajona\System\System\Date;
 use Kajona\System\System\Remoteloader;
 use Kajona\System\System\XmlParser;
 
@@ -76,15 +77,19 @@ class ElementRssfeedPortal extends ElementPortal implements PortalElementInterfa
                     if(isset($arrFeed["rss"][0]["channel"][0]["item"]) && is_array($arrFeed["rss"][0]["channel"][0]["item"])) {
                         foreach($arrFeed["rss"][0]["channel"][0]["item"] as $arrOneItem) {
 
-                            $strDate = (isset($arrOneItem["pubDate"][0]["value"]) ? $arrOneItem["pubDate"][0]["value"] : "");
-                            if($strDate != "") {
-                                $intDate = strtotime($strDate);
+                            $strDateTime = (isset($arrOneItem["pubDate"][0]["value"]) ? $arrOneItem["pubDate"][0]["value"] : "");
+                            $strDate = "";
+                            if($strDateTime != "") {
+                                $intDate = strtotime($strDateTime);
                                 if($intDate > 0) {
-                                    $strDate = timeToString($intDate);
+                                    $objDate = new Date($intDate);
+                                    $strDateTime = dateToString($objDate, true);
+                                    $strDate = dateToString($objDate, false);
                                 }
                             }
 
                             $arrMessage = array();
+                            $arrMessage["post_datetime"] = $strDateTime;
                             $arrMessage["post_date"] = $strDate;
                             $arrMessage["post_title"] = (isset($arrOneItem["title"][0]["value"]) ? $arrOneItem["title"][0]["value"] : "");
                             $arrMessage["post_description"] = (isset($arrOneItem["description"][0]["value"]) ? $arrOneItem["description"][0]["value"] : "");
@@ -115,15 +120,19 @@ class ElementRssfeedPortal extends ElementPortal implements PortalElementInterfa
                     if(isset($arrFeed["feed"][0]["entry"]) && is_array($arrFeed["feed"][0]["entry"])) {
                         foreach($arrFeed["feed"][0]["entry"] as $arrOneItem) {
 
-                            $strDate = (isset($arrOneItem["updated"][0]["value"]) ? $arrOneItem["updated"][0]["value"] : "");
-                            if($strDate != "") {
-                                $intDate = strtotime($strDate);
+                            $strDateTime = (isset($arrOneItem["updated"][0]["value"]) ? $arrOneItem["updated"][0]["value"] : "");
+                            $strDate = "";
+                            if($strDateTime != "") {
+                                $intDate = strtotime($strDateTime);
                                 if($intDate > 0) {
-                                    $strDate = timeToString($intDate);
+                                    $objDate = new Date($intDate);
+                                    $strDateTime = dateToString($objDate, true);
+                                    $strDate = dateToString($objDate, false);
                                 }
                             }
 
                             $arrMessage = array();
+                            $arrMessage["post_datetime"] = $strDateTime;
                             $arrMessage["post_date"] = $strDate;
                             $arrMessage["post_title"] = (isset($arrOneItem["title"][0]["value"]) ? $arrOneItem["title"][0]["value"] : "");
                             $arrMessage["post_description"] = (isset($arrOneItem["summary"][0]["value"]) ? $arrOneItem["summary"][0]["value"] : "");
