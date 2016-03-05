@@ -85,7 +85,7 @@ class MediamanagerPortal extends PortalController implements PortalInterface
 
         $strReturn = PagesPortaleditor::addPortaleditorContentWrapper($strReturn, $strRelevantSystemid);
         PagesPortaleditor::getInstance()->registerAction(
-            new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), Link::getLinkAdminHref($this->getArrModule("module"), "openFolder", "&systemid={$strRelevantSystemid}"), $strRelevantSystemid)
+            new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), Link::getLinkAdminHref($this->getArrModule("module"), "openFolder", "&pe=1&systemid={$strRelevantSystemid}"), $strRelevantSystemid)
         );
 
         return $strReturn;
