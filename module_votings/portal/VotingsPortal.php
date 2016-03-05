@@ -28,7 +28,7 @@ use Kajona\Votings\System\VotingsVoting;
 class VotingsPortal extends PortalController implements PortalInterface {
 
     private $STR_COOKIE_NAME = "kajona_voting";
-    private $arrCookieValues = array();
+    private static $arrCookieValues = null;
 
     /**
      * Constructor
@@ -40,7 +40,9 @@ class VotingsPortal extends PortalController implements PortalInterface {
 
         // save a cookie to store the voting
         $objCookie = new Cookie();
-        $this->arrCookieValues = explode(",", $objCookie->getCookie($this->STR_COOKIE_NAME));
+        if(self::$arrCookieValues == null) {
+            self::$arrCookieValues = explode(",", $objCookie->getCookie($this->STR_COOKIE_NAME));
+        }
 
         //any actions to perform before? e.g. voting...
         if($this->getAction() == "submitVoting") {
@@ -88,7 +90,7 @@ class VotingsPortal extends PortalController implements PortalInterface {
                     }
 
                     //already voted before?
-                    if(in_array($objVoting->getSystemid(), $this->arrCookieValues)) {
+                    if(in_array($objVoting->getSystemid(), self::$arrCookieValues)) {
                         $strVotingContent = $this->getLang("error_voted");
                     }
                     else if(!$bitDatesAllow) {
@@ -198,7 +200,7 @@ class VotingsPortal extends PortalController implements PortalInterface {
         if($objVoting->getSystemid() == $this->getParam("systemid")) {
 
             //recheck permissions
-            if(!in_array($objVoting->getSystemid(), $this->arrCookieValues)) {
+            if(!in_array($objVoting->getSystemid(), self::$arrCookieValues)) {
                 //load the submitted answer
                 $strAnswerID = $this->getParam("voting_" . $objVoting->getSystemid());
                 if(validateSystemid($strAnswerID)) {
@@ -206,10 +208,10 @@ class VotingsPortal extends PortalController implements PortalInterface {
                     $objAnswer->setIntHits($objAnswer->getIntHits() + 1);
                     $objAnswer->updateObjectToDb();
 
-                    $this->arrCookieValues[] = $objVoting->getSystemid();
+                    self::$arrCookieValues[] = $objVoting->getSystemid();
 
                     $objCookie = new Cookie();
-                    $objCookie->setCookie($this->STR_COOKIE_NAME, implode(",", $this->arrCookieValues));
+                    $objCookie->setCookie($this->STR_COOKIE_NAME, implode(",", self::$arrCookieValues));
 
                 }
             }
