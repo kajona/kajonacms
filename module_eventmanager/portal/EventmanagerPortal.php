@@ -23,7 +23,6 @@ use Kajona\System\System\UserUser;
 use Kajona\System\System\Validators\EmailValidator;
 use Kajona\System\System\Validators\TextValidator;
 
-
 /**
  * Portal-class of the eventmanager. Handles the printing of eventmanager lists / detail
  *
@@ -191,8 +190,8 @@ class EventmanagerPortal extends PortalController implements PortalInterface {
         $strReturn = "";
         $objEvent = new EventmanagerEvent($this->getSystemid());
         $objMapper = new TemplateMapper($objEvent);
-        
-        
+
+
         //legacy support
         $objMapper->addPlaceholder("title", $objEvent->getStrTitle());
         $objMapper->addPlaceholder("description", $objEvent->getStrDescription());
@@ -278,13 +277,19 @@ class EventmanagerPortal extends PortalController implements PortalInterface {
         }
 
         $strErrors = "";
+        $arrErrorFields = array();
         if(count($arrErrors) > 0) {
             $strErrTemplate = $this->objTemplate->readTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "error_row");
-            foreach($arrErrors as $strOneError) {
+            foreach($arrErrors as $strKey => $strOneError) {
                 $strErrors .= "" . $this->objTemplate->fillTemplate(array("error" => $strOneError), $strErrTemplate);
+                $arrErrorFields[] = "'{$strKey}'";
             }
+
+            $strErrorWrapperTemplateID = $this->objTemplate->readTemplate("/module_eventmanager/".$this->arrElementData["char1"], "errors");
+            $strErrors = $this->fillTemplate(array("error_list" => $strErrors), $strErrorWrapperTemplateID);
         }
         $objMapper->addPlaceholder("formErrors", $strErrors);
+        $objMapper->addPlaceholder("error_fields", implode(",", $arrErrorFields));
 
         $strReturn .= $objMapper->writeToTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_register".($bitIsLoggedin ? "_loggedin" : ""));
 
@@ -321,19 +326,19 @@ class EventmanagerPortal extends PortalController implements PortalInterface {
         $objMailValidator = new EmailValidator();
 
         if(!$bitIsLoggedin && !$objTextValidator->validate($this->getParam("forename"), 3))
-            $arrErrors[] = $this->getLang("noForename");
+            $arrErrors["forename"] = $this->getLang("noForename");
 
         if(!$bitIsLoggedin && !$objTextValidator->validate($this->getParam("lastname"), 3))
-            $arrErrors[] = $this->getLang("noLastname");
+            $arrErrors["lastname"] = $this->getLang("noLastname");
 
 
         if(!$bitIsLoggedin && !$objMailValidator->validate($this->getParam("email")))
-            $arrErrors[] = $this->getLang("invalidEmailadress");
+            $arrErrors["email"] = $this->getLang("invalidEmailadress");
 
 
         //Check captachcode
         if(!$bitIsLoggedin && ($this->getParam("form_captcha") == "" || $this->getParam("form_captcha") != $this->objSession->getCaptchaCode()))
-            $arrErrors[] = $this->getLang("commons_captcha");
+            $arrErrors["form_captcha"] = $this->getLang("commons_captcha");
 
 
         if(count($arrErrors) != 0)
