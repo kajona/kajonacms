@@ -521,5 +521,9 @@ Therefore you may pass the name of a property of the defined target class of the
          $objOrm->getObjectList("Kajona\\Pages\\System\PagesPage");
 
 
+## Orm escaping
 
-
+If you want to select a value containing a backslash (i.e. a PHP class 
+name) you have to use the `escape` method of the `Kajona\System\System\Database`
+class. This is only needed for the `LIKE` operator. If you use the `=`
+or `IN` operator it is not required.
