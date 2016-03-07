@@ -15,7 +15,7 @@ describe('module_messaging', function() {
         expect($('#Kajona-Packagemanager-System-Messageproviders-MessageproviderPackageupdate_bymail').getAttribute('checked')).toBe(null);
 
         //click the enable button
-        browser.driver.findElement(by.css('.bootstrap-switch-id-Kajona-Packagemanager-System-Messageproviders-MessageproviderPackageupdate_bymail')).click();
+        browser.driver.findElement(by.css('bootstrap-switch-id-Kajona-Packagemanager-System-Messageproviders-MessageproviderPackageupdate_bymail')).click();
         browser.manage().timeouts().pageLoadTimeout(2000);
         browser.get('http://127.0.0.1:8080/index.php?admin=1&module=messaging&action=config');
 
