@@ -75,7 +75,7 @@ class BootstrapCache
     public function __destruct()
     {
         foreach($this->getCacheNames() as $strOneType) {
-            if(isset(self::$arrCacheSavesRequired[$strOneType]) && class_config::getInstance()->getConfig("bootstrapcache_".$strOneType) === true && isset(self::$arrCaches[$strOneType])) {
+            if(isset(self::$arrCacheSavesRequired[$strOneType]) && Config::getInstance()->getConfig("bootstrapcache_".$strOneType) === true && isset(self::$arrCaches[$strOneType])) {
                 CacheManager::getInstance()->addValue(__CLASS__.$strOneType, self::$arrCaches[$strOneType]);
             }
         }
