@@ -24,6 +24,9 @@ class ElementBlocksPortal extends ElementPortal implements PortalElementInterfac
 {
 
 
+    private $arrBlocks = null;
+
+
     /**
      * Does a little "make-up" to the contents
      *
@@ -31,33 +34,74 @@ class ElementBlocksPortal extends ElementPortal implements PortalElementInterfac
      */
     public function loadData()
     {
-
         $strReturn = "";
-
-        //load elements below
-        $arrElementsOnBlocks = PagesPageelement::getElementsOnPage($this->getSystemid(), !PagesPortaleditor::isActive(), $this->getStrPortalLanguage());
-
-        if (count($arrElementsOnBlocks) == 0) {
-            return "";
-        }
-
-        $objPageData = PagesPage::getPageByName($this->getPagename());
-
-        $objPlaceholders = $this->objTemplate->parsePageTemplate("/module_pages/".$objPageData->getStrTemplate(), Template::INT_ELEMENT_MODE_REGULAR);
-
-        foreach ($objPlaceholders->getArrBlocks() as $objOneBlock) {
-            if ($objOneBlock->getStrName() == $this->arrElementData["page_element_ph_name"]) {
-
-                foreach ($arrElementsOnBlocks as $objOneElement) {
-                    /** @var  ElementBlockPortal $objElement */
-                    $objElement = $objOneElement->getConcretePortalInstance();
-                    $strReturn .= $objElement->getRenderedElementOutput(PagesPortaleditor::isActive());
-                }
-
-            }
+        foreach ($this->getBlockElements() as $objElement) {
+            $strReturn .= $objElement->getRenderedElementOutput(PagesPortaleditor::isActive());
         }
 
         return $strReturn;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCachetimeInSeconds()
+    {
+        $intDefault = null;
+
+        foreach($this->getBlockElements() as $objOneElement) {
+            $intElCachetime = $objOneElement->getCachetimeInSeconds();
+            if($intDefault === null || $intElCachetime < $intDefault) {
+                $intDefault = (int)$objOneElement->getCachetimeInSeconds();
+            }
+
+            if($intDefault === 0) {
+                break;
+            }
+        }
+
+
+        return $intDefault !== null ? $intDefault : 0;
+    }
+
+
+    /**
+     * @return ElementBlockPortal[]
+     */
+    private function getBlockElements()
+    {
+
+        if($this->arrBlocks == null) {
+            $this->arrBlocks = array();
+
+            //load elements below
+            $arrElementsOnBlocks = PagesPageelement::getElementsOnPage($this->getSystemid(), !PagesPortaleditor::isActive(), $this->getStrPortalLanguage());
+
+            if (count($arrElementsOnBlocks) == 0) {
+                return array();
+            }
+
+            $objPageData = PagesPage::getPageByName($this->getPagename());
+
+            $objPlaceholders = $this->objTemplate->parsePageTemplate("/module_pages/".$objPageData->getStrTemplate(), Template::INT_ELEMENT_MODE_REGULAR);
+
+            foreach ($objPlaceholders->getArrBlocks() as $objOneBlock) {
+                if ($objOneBlock->getStrName() == $this->arrElementData["page_element_ph_name"]) {
+
+                    foreach ($arrElementsOnBlocks as $objOneElement) {
+                        /** @var  ElementBlockPortal $objElement */
+                        $objElement = $objOneElement->getConcretePortalInstance();
+                        $this->arrBlocks[] = $objElement;
+                    }
+
+                }
+            }
+
+
+        }
+
+        return $this->arrBlocks;
+
     }
 
     protected function addPortalEditorCode($strElementOutput)

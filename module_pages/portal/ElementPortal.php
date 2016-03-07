@@ -191,11 +191,17 @@ abstract class ElementPortal extends PortalController
      * content-generation is triggered again.
      *
      * @param string $strElementOutput
+     * @todo move to new cache provider
+     * @todo only one cachesum, plz
      *
      * @since 3.3.1
      */
     private function saveElementToCache($strElementOutput)
     {
+        $intCachetimeInSeconds = $this->getCachetimeInSeconds();
+        if($intCachetimeInSeconds > 0) {
+            return;
+        }
 
         //strip the data-editable values - no use case for regular page views
         $strElementOutput = preg_replace('/data-kajona-editable=\"([a-zA-Z0-9#_]*)\"/i', "", $strElementOutput);
@@ -203,9 +209,18 @@ abstract class ElementPortal extends PortalController
         //load the matching cache-entry
         $objCacheEntry = Cache::getCachedEntry(__CLASS__, $this->getCacheHash1(), $this->getCacheHash2(), $this->getStrPortalLanguage(), true);
         $objCacheEntry->setStrContent($strElementOutput);
-        $objCacheEntry->setIntLeasetime(time() + $this->objElementData->getIntCachetime());
+        $objCacheEntry->setIntLeasetime(time() + $intCachetimeInSeconds);
 
         $objCacheEntry->updateObjectToDb();
+    }
+
+    /**
+     * Returns the number of seconds the current element will be cached in the pagecache.
+     * @return int
+     */
+    public function getCachetimeInSeconds()
+    {
+        return $this->objElementData->getIntCachetime();
     }
 
     /**

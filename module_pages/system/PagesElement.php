@@ -148,8 +148,23 @@ class PagesElement extends \Kajona\System\System\Model implements \Kajona\System
      */
     public function rightEdit()
     {
+        if($this->getStrName() == "blocks" || $this->getStrName() == "block") {
+            return false;
+        }
         return true;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function rightDelete()
+    {
+        if($this->getStrName() == "blocks" || $this->getStrName() == "block") {
+            return false;
+        }
+        return parent::rightDelete();
+    }
+
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
