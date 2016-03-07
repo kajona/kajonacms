@@ -6,10 +6,7 @@
 
 namespace Kajona\Packageserver\System;
 
-use class_carrier;
-use class_date;
-use class_model;
-use interface_model;
+use Kajona\System\System\Carrier;
 
 
 /**
@@ -20,7 +17,8 @@ use interface_model;
  * @module mediamanager
  * @moduleId _packagemanager_module_id_
  */
-class PackageserverLog extends class_model implements interface_model {
+class PackageserverLog extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface
+{
 
     /**
      * Generates an entry in the logtable
@@ -29,8 +27,9 @@ class PackageserverLog extends class_model implements interface_model {
      * @param $strIp
      * @param $strHostname
      */
-    public static function generateDlLog($strQueryParams, $strIp, $strHostname) {
-        $objDB = class_carrier::getInstance()->getObjDB();
+    public static function generateDlLog($strQueryParams, $strIp, $strHostname)
+    {
+        $objDB = Carrier::getInstance()->getObjDB();
         $strQuery = "INSERT INTO "._dbprefix_."packageserver_log
 	                   (log_id, log_query, log_ip, log_hostname, log_date) VALUES
 	                   (?, ?, ?, ?, ?)";
@@ -42,7 +41,7 @@ class PackageserverLog extends class_model implements interface_model {
                 $strQueryParams,
                 $strIp,
                 $strHostname,
-                class_date::getCurrentTimestamp()
+                \Kajona\System\System\Date::getCurrentTimestamp()
             )
         );
     }
@@ -57,11 +56,12 @@ class PackageserverLog extends class_model implements interface_model {
      *
      * @return mixed AS ARRAY
      */
-    public static function getLogData($intStart = null, $intEnd = null) {
+    public static function getLogData($intStart = null, $intEnd = null)
+    {
         $strQuery = "SELECT *
 					  FROM "._dbprefix_."packageserver_log
 					  ORDER BY log_date DESC";
-        return class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
+        return Carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
     }
 
     /**
@@ -69,7 +69,8 @@ class PackageserverLog extends class_model implements interface_model {
      *
      * @return int
      */
-    public function getLogDataCount() {
+    public function getLogDataCount()
+    {
         $strQuery = "SELECT COUNT(*)
 					  FROM "._dbprefix_."packageserver_log";
         $arrTemp = $this->objDB->getPRow($strQuery, array());
@@ -83,7 +84,8 @@ class PackageserverLog extends class_model implements interface_model {
      *
      * @return string
      */
-    public function getStrDisplayName() {
+    public function getStrDisplayName()
+    {
         return "";
     }
 }

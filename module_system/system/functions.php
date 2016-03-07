@@ -9,7 +9,16 @@
 
 require_once (__DIR__."/StringUtil.php");
 
+use Kajona\System\System\AdminskinHelper;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Date;
+use Kajona\System\System\HttpStatuscodes;
+use Kajona\System\System\Link;
+use Kajona\System\System\ResponseObject;
 use Kajona\System\System\StringUtil;
+use Kajona\System\System\Validators\EmailValidator;
+use Kajona\System\System\Validators\NumericValidator;
+use Kajona\System\System\Validators\TextValidator;
 
 /**
  * @package module_system
@@ -34,7 +43,7 @@ if (!defined("_mbstringloaded_")) {
  * @param string $strKey
  *
  * @return string
- * @deprecated use @link{class_carrier::getInstance()->getParam("")} instead
+ * @deprecated use @link{Carrier::getInstance()->getParam("")} instead
  */
 function getGet($strKey)
 {
@@ -73,7 +82,7 @@ function getArrayFiles()
  * @param string $strKey
  *
  * @return bool
- * @deprecated use class_carrier::issetParam
+ * @deprecated use Carrier::issetParam
  */
 function issetGet($strKey)
 {
@@ -91,7 +100,7 @@ function issetGet($strKey)
  * @param string $strKey
  *
  * @return string
- * @deprecated use @link{class_carrier::getInstance()->getParam("")} instead
+ * @deprecated use @link{Carrier::getInstance()->getParam("")} instead
  */
 function getPost($strKey)
 {
@@ -119,7 +128,7 @@ function getArrayPost()
  * @param string $strKey
  *
  * @return bool
- * @deprecated use class_carrier::issetParam
+ * @deprecated use Carrier::issetParam
  */
 function issetPost($strKey)
 {
@@ -174,13 +183,13 @@ function getServer($strKey)
  * Returns all params passed during startup by get, post or files
  *
  * @return array
- * @deprecated use class_carrier::getAllParams() instead
- * @see class_carrier::getAllParams()
+ * @deprecated use Carrier::getAllParams() instead
+ * @see Carrier::getAllParams()
  * @todo remove
  */
 function getAllPassedParams()
 {
-    return class_carrier::getAllParams();
+    return Carrier::getAllParams();
 }
 
 /**
@@ -189,7 +198,7 @@ function getAllPassedParams()
  * @param string $strKey
  *
  * @return bool
- * @deprecated use class_carrier::issetParam
+ * @deprecated use Carrier::issetParam
  */
 function issetServer($strKey)
 {
@@ -253,7 +262,7 @@ function getCookie($strKey)
  */
 function getLinkAdminManual($strLinkContent, $strText, $strAlt = "", $strImage = "", $strImageId = "", $strLinkId = "", $bitTooltip = true, $strCss = "")
 {
-    return class_link::getLinkAdminManual($strLinkContent, $strText, $strAlt, $strImage, $strImageId, $strLinkId, $bitTooltip, $strCss);
+    return Link::getLinkAdminManual($strLinkContent, $strText, $strAlt, $strImage, $strImageId, $strLinkId, $bitTooltip, $strCss);
 }
 
 /**
@@ -274,7 +283,7 @@ function getLinkAdminManual($strLinkContent, $strText, $strAlt = "", $strImage =
  */
 function getLinkAdmin($strModule, $strAction, $strParams = "", $strText = "", $strAlt = "", $strImage = "", $bitTooltip = true, $strCss = "")
 {
-    return class_link::getLinkAdmin($strModule, $strAction, $strParams, $strText, $strAlt, $strImage, $bitTooltip, $strCss);
+    return Link::getLinkAdmin($strModule, $strAction, $strParams, $strText, $strAlt, $strImage, $bitTooltip, $strCss);
 }
 
 /**
@@ -291,7 +300,7 @@ function getLinkAdmin($strModule, $strAction, $strParams = "", $strText = "", $s
  */
 function getLinkAdminHref($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = true)
 {
-    return class_link::getLinkAdminHref($strModule, $strAction, $strParams, $bitEncodedAmpersand);
+    return Link::getLinkAdminHref($strModule, $strAction, $strParams, $bitEncodedAmpersand);
 }
 
 /**
@@ -308,7 +317,7 @@ function getLinkAdminHref($strModule, $strAction = "", $strParams = "", $bitEnco
  */
 function getLinkAdminXml($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = false)
 {
-    return class_link::getLinkAdminXml($strModule, $strAction, $strParams, $bitEncodedAmpersand);
+    return Link::getLinkAdminXml($strModule, $strAction, $strParams, $bitEncodedAmpersand);
 }
 
 
@@ -333,7 +342,7 @@ function getLinkAdminXml($strModule, $strAction = "", $strParams = "", $bitEncod
  */
 function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "", $strAlt = "", $strImage = "", $intWidth = "500", $intHeight = "500", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false)
 {
-    return class_link::getLinkAdminPopup($strModule, $strAction, $strParams, $strText, $strAlt, $strImage, $intWidth, $intHeight, $strTitle, $bitTooltip, $bitPortalEditor);
+    return Link::getLinkAdminPopup($strModule, $strAction, $strParams, $strText, $strAlt, $strImage, $intWidth, $intHeight, $strTitle, $bitTooltip, $bitPortalEditor);
 }
 
 /**
@@ -358,7 +367,7 @@ function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "
  */
 function getLinkAdminDialog($strModule, $strAction, $strParams = "", $strText = "", $strAlt = "", $strImage = "", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false, $strOnClick = "", $intWidth = null, $intHeight = null)
 {
-    return class_link::getLinkAdminDialog($strModule, $strAction, $strParams, $strText, $strAlt, $strImage, $strTitle, $bitTooltip, $bitPortalEditor, $strOnClick, $intWidth, $intHeight);
+    return Link::getLinkAdminDialog($strModule, $strAction, $strParams, $strText, $strAlt, $strImage, $strTitle, $bitTooltip, $bitPortalEditor, $strOnClick, $intWidth, $intHeight);
 }
 
 /**
@@ -369,12 +378,12 @@ function getLinkAdminDialog($strModule, $strAction, $strParams = "", $strText = 
  * @param bool $bitNoAlt
  *
  * @return string
- * @deprecated replaced by class_adminskin_helper::getAdminImage()
- * @see class_adminskin_helper::getAdminImage()
+ * @deprecated replaced by AdminskinHelper::getAdminImage()
+ * @see AdminskinHelper::getAdminImage()
  */
 function getImageAdmin($strImage, $strAlt = "", $bitNoAlt = false)
 {
-    return class_adminskin_helper::getAdminImage($strImage, $strAlt, $bitNoAlt);
+    return AdminskinHelper::getAdminImage($strImage, $strAlt, $bitNoAlt);
 }
 
 /**
@@ -388,7 +397,7 @@ function getImageAdmin($strImage, $strAlt = "", $bitNoAlt = false)
  */
 function getRightsImageAdminName($strSystemid)
 {
-    if (class_carrier::getInstance()->getObjRights()->isInherited($strSystemid)) {
+    if (Carrier::getInstance()->getObjRights()->isInherited($strSystemid)) {
         return "icon_key_inherited";
     }
     else {
@@ -414,11 +423,11 @@ function phpSizeToBytes($strBytes)
         $intReturn = str_replace("m", "", $strBytes);
         $intReturn = $intReturn * 1024 * 1024;
     }
-    else if (strpos($strBytes, "k") !== false) {
+    elseif (strpos($strBytes, "k") !== false) {
         $intReturn = str_replace("m", "", $strBytes);
         $intReturn = $intReturn * 1024;
     }
-    else if (strpos($strBytes, "g") !== false) {
+    elseif (strpos($strBytes, "g") !== false) {
         $intReturn = str_replace("m", "", $strBytes);
         $intReturn = $intReturn * 1024 * 1024 * 1024;
     }
@@ -471,10 +480,10 @@ function timeToString($intTime, $bitLong = true)
     $strReturn = "";
     if ($intTime > 0) {
         if ($bitLong) {
-            $strReturn = date(class_carrier::getInstance()->getObjLang()->getLang("dateStyleLong", "system"), $intTime);
+            $strReturn = date(Carrier::getInstance()->getObjLang()->getLang("dateStyleLong", "system"), $intTime);
         }
         else {
-            $strReturn = date(class_carrier::getInstance()->getObjLang()->getLang("dateStyleShort", "system"), $intTime);
+            $strReturn = date(Carrier::getInstance()->getObjLang()->getLang("dateStyleShort", "system"), $intTime);
         }
     }
     return $strReturn;
@@ -483,7 +492,7 @@ function timeToString($intTime, $bitLong = true)
 /**
  * Converts a dateobject to a readable string
  *
- * @param class_date $objDate
+ * @param Date $objDate
  * @param bool $bitLong
  * @param string $strFormat if given, the passed format will be used, otherwise the format defined in the i18n files
  *                          usable placeholders are: d, m, y, h, i, s
@@ -495,19 +504,19 @@ function dateToString($objDate, $bitLong = true, $strFormat = "")
     $strReturn = "";
 
     //if the $objDate is a string, convert it to date object
-    if ($objDate != null && !$objDate instanceof class_date && uniEreg("([0-9]){14}", $objDate)) {
-        $objDate = new class_date($objDate);
+    if ($objDate != null && !$objDate instanceof Date && uniEreg("([0-9]){14}", $objDate)) {
+        $objDate = new Date($objDate);
     }
 
-    if ($objDate instanceof class_date) {
+    if ($objDate instanceof Date) {
 
         //convert to a current date
         if ($strFormat == "") {
             if ($bitLong) {
-                $strReturn = uniStrtolower(class_carrier::getInstance()->getObjLang()->getLang("dateStyleLong", "system"));
+                $strReturn = uniStrtolower(Carrier::getInstance()->getObjLang()->getLang("dateStyleLong", "system"));
             }
             else {
-                $strReturn = uniStrtolower(class_carrier::getInstance()->getObjLang()->getLang("dateStyleShort", "system"));
+                $strReturn = uniStrtolower(Carrier::getInstance()->getObjLang()->getLang("dateStyleShort", "system"));
             }
         }
         else {
@@ -538,8 +547,8 @@ function dateToString($objDate, $bitLong = true, $strFormat = "")
  */
 function numberFormat($floatNumber, $intNrOfDecimals = 2)
 {
-    $strDecChar = class_carrier::getInstance()->getObjLang()->getLang("numberStyleDecimal", "system");
-    $strThousandsChar = class_carrier::getInstance()->getObjLang()->getLang("numberStyleThousands", "system");
+    $strDecChar = Carrier::getInstance()->getObjLang()->getLang("numberStyleDecimal", "system");
+    $strThousandsChar = Carrier::getInstance()->getObjLang()->getLang("numberStyleThousands", "system");
     return number_format((float)$floatNumber, $intNrOfDecimals, $strDecChar, $strThousandsChar);
 }
 
@@ -610,7 +619,7 @@ function rgb2hex($arrRGB)
  */
 function getLinkPortal($strPageI, $strPageE, $strTarget = "_self", $strText = "", $strAction = "", $strParams = "", $strSystemid = "", $strCssClass = "", $strLanguage = "", $strSeoAddon = "")
 {
-    return class_link::getLinkPortal($strPageI, $strPageE, $strTarget, $strText, $strAction, $strParams, $strSystemid, $strCssClass, $strLanguage, $strSeoAddon);
+    return Link::getLinkPortal($strPageI, $strPageE, $strTarget, $strText, $strAction, $strParams, $strSystemid, $strCssClass, $strLanguage, $strSeoAddon);
 }
 
 /**
@@ -630,7 +639,7 @@ function getLinkPortal($strPageI, $strPageE, $strTarget = "_self", $strText = ""
  */
 function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParams = "", $strSystemid = "", $strLanguage = "", $strSeoAddon = "")
 {
-    return class_link::getLinkPortalHref($strPageI, $strPageE, $strAction, $strParams, $strSystemid, $strLanguage, $strSeoAddon);
+    return Link::getLinkPortalHref($strPageI, $strPageE, $strAction, $strParams, $strSystemid, $strLanguage, $strSeoAddon);
 }
 
 /**
@@ -651,7 +660,7 @@ function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParam
  */
 function getLinkPortalPopup($strPageI, $strPageE, $strAction = "", $strParams = "", $strSystemid = "", $strTitle = "", $intWidth = "500", $intHeight = "500")
 {
-    return class_link::getLinkPortalPopup($strPageI, $strPageE, $strAction, $strParams, $strSystemid, $strTitle, $intWidth, $intHeight);
+    return Link::getLinkPortalPopup($strPageI, $strPageE, $strAction, $strParams, $strSystemid, $strTitle, $intWidth, $intHeight);
 }
 
 /**
@@ -912,11 +921,11 @@ function getFileExtension($strPath)
  * @param string $strAddress
  *
  * @return bool
- * @deprecated use class_email_validator instead
+ * @deprecated use EmailValidator instead
  */
 function checkEmailaddress($strAddress)
 {
-    $objValidator = new class_email_validator();
+    $objValidator = new EmailValidator();
     return $objValidator->validate($strAddress);
 }
 
@@ -926,11 +935,11 @@ function checkEmailaddress($strAddress)
  * @param int $intNumber
  *
  * @return bool
- * @deprecated use class_numeric_validator instead
+ * @deprecated use NumericValidator instead
  */
 function checkNumber($intNumber)
 {
-    $objValidator = new class_numeric_validator();
+    $objValidator = new NumericValidator();
     return $objValidator->validate($intNumber);
 }
 
@@ -961,12 +970,12 @@ function checkFolder($strPath)
  *
  * @return bool
  *
- * @deprecated replaced by @link{class_text_validator}
- * @see interface_validator
+ * @deprecated replaced by @link{TextValidator}
+ * @see ValidatorInterface
  */
 function checkText($strText, $intMin = 1, $intMax = 0)
 {
-    $objValidator = new class_text_validator();
+    $objValidator = new TextValidator();
     return $objValidator->validate($strText);
 }
 
@@ -1013,18 +1022,18 @@ function validateSystemid($strID)
 }
 
 /**
- * Wrapper to dbSafeString of class_db
+ * Wrapper to dbSafeString of Database
  *
  * @param string $strString
  * @param bool|string $bitHtmlEntities escape html-entities?
  *
- * @deprecated use class_db::dbSafeString() instead
- * @see class_db::dbSafeString($strString, $bitHtmlEntities = true)
+ * @deprecated use Database::dbSafeString() instead
+ * @see Database::dbSafeString($strString, $bitHtmlEntities = true)
  * @return string
  */
 function dbsafeString($strString, $bitHtmlEntities = true)
 {
-    return class_carrier::getInstance()->getObjDB()->dbsafeString($strString, $bitHtmlEntities);
+    return Carrier::getInstance()->getObjDB()->dbsafeString($strString, $bitHtmlEntities);
 }
 
 /**
@@ -1199,8 +1208,8 @@ function uniStrTrim($strString, $intLength, $strAdd = "…")
  */
 function setConditionalGetHeaders($strChecksum)
 {
-    class_response_object::getInstance()->addHeader("ETag: ".$strChecksum);
-    class_response_object::getInstance()->addHeader("Cache-Control: max-age=86400, must-revalidate");
+    ResponseObject::getInstance()->addHeader("ETag: ".$strChecksum);
+    ResponseObject::getInstance()->addHeader("Cache-Control: max-age=86400, must-revalidate");
 
 }
 
@@ -1218,9 +1227,9 @@ function checkConditionalGetHeaders($strChecksum)
     if (issetServer("HTTP_IF_NONE_MATCH")) {
         if (getServer("HTTP_IF_NONE_MATCH") == $strChecksum) {
             //strike. no further actions needed.
-            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_NOT_MODIFIED);
-            class_response_object::getInstance()->addHeader("ETag: ".$strChecksum);
-            class_response_object::getInstance()->addHeader("Cache-Control: max-age=86400, must-revalidate");
+            ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_NOT_MODIFIED);
+            ResponseObject::getInstance()->addHeader("ETag: ".$strChecksum);
+            ResponseObject::getInstance()->addHeader("Cache-Control: max-age=86400, must-revalidate");
 
             return true;
         }
@@ -1253,10 +1262,10 @@ function strToInt($strString) {
 }
 
 /**
- * Converts a string to a class_date
+ * Converts a string to a Date
  *
  * @param $strString
- * @return class_date|null
+ * @return Date|null
  * @deprecated (use Kajona\System\System\StringUtil::strToDate instead)
  */
 function strToDate($strString) {

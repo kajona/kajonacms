@@ -103,8 +103,8 @@ KAJONA.admin.portaleditor = {
         else {
             //add it as the last element to the placeholder itself
             strDataPlaceholder = strDataPlaceholder.replace(/\|/g, '\\|');
-            if($('div.pePlaceholderWrapper[data-placeholder='+strDataPlaceholder+']')) {
-                $('div.pePlaceholderWrapper[data-placeholder='+strDataPlaceholder+']').append($($objContent));
+            if($('div.pePlaceholderWrapper[data-placeholder=\''+strDataPlaceholder+'\']')) {
+                $('div.pePlaceholderWrapper[data-placeholder=\''+strDataPlaceholder+'\']').append($($objContent));
             }
 
             else if($("#menuContainer_"+strDataPlaceholder)) {
@@ -220,7 +220,7 @@ KAJONA.admin.portaleditor.RTE.SaveIndicator = function($objSourceElement) {
 
         objDiv = $('<div>').addClass('peProgressIndicator peSaving');
         $('body').append(objDiv);
-        objDiv.css('left', objSourceElement.position().left+objSourceElement.width()).css('top', objSourceElement.position().top);
+        objDiv.css('left', objSourceElement.offset().left+objSourceElement.width()).css('top', objSourceElement.offset().top);
     };
 
     this.addClass = function(strClass) {
@@ -731,10 +731,18 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
     show : function(element) {
         var $objEl = $(element);
         if($objEl.children('.peActionToolbar')) {
-            $objEl.children('.peActionToolbar')
-                .css('top', ($objEl.position().top) - 35)
-                .css('left', ($objEl.position().left))
-                .addClass('peShown');
+            if($objEl.data('element') == 'block') {
+                $objEl.children('.peActionToolbar')
+                    .css('top', ($objEl.position().top) - 35)
+                    .css('right', 20)
+                    .addClass('peShown').addClass('caretRight');
+            }
+            else {
+                $objEl.children('.peActionToolbar')
+                    .css('top', ($objEl.position().top) - 35)
+                    .css('left', ($objEl.position().left))
+                    .addClass('peShown');
+            }
         }
 
     },

@@ -4,6 +4,10 @@
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
+namespace Kajona\Debugging\Debug;
+
+use Kajona\System\System\SystemSetting;
+use Kajona\System\System\UserSourcefactory;
 
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
@@ -16,20 +20,20 @@ if(issetPost("dodelete")) {
     $strUsername = getPost("username");
     $strPassword = getPost("password");
 
-    $objUsersource = new class_module_user_sourcefactory();
+    $objUsersource = new UserSourcefactory();
     $objUser = $objUsersource->getUserByUsername($strUsername);
     echo "Authenticating user...\n";
     if($objUsersource->authenticateUser($strUsername, $strPassword)) {
         echo " ... authenticated.\n";
         $arrGroupIds = $objUser->getArrGroupIds();
-        if(in_array(class_module_system_setting::getConfigValue("_admins_group_id_"), $arrGroupIds)) {
+        if(in_array(SystemSetting::getConfigValue("_admins_group_id_"), $arrGroupIds)) {
             echo "User is member of admin-group.\n";
 
-            $arrTables = class_carrier::getInstance()->getObjDB()->getTables();
+            $arrTables = \Kajona\System\System\Carrier::getInstance()->getObjDB()->getTables();
             foreach($arrTables as $strOneTable) {
                 $strQuery = "DROP TABLE " . $strOneTable;
                 echo " executing " . $strQuery . "\n";
-                class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array());
+                \Kajona\System\System\Carrier::getInstance()->getObjDB()->_pQuery($strQuery, array());
             }
 
         }
@@ -44,7 +48,7 @@ if(issetPost("dodelete")) {
 }
 else {
 
-    $arrTables = class_carrier::getInstance()->getObjDB()->getTables();
+    $arrTables = \Kajona\System\System\Carrier::getInstance()->getObjDB()->getTables();
 
     echo "ATTENTION: This script will delete all tables of you current installation.\n\n";
     echo "To perform this action, you have to provide the credentials of a member of the admin-group.\n\n";

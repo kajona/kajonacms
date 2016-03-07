@@ -6,12 +6,12 @@
 
 namespace Kajona\Pages\System;
 
-use class_common_sortmanager;
+use Kajona\System\System\CommonSortmanager;
 
 /**
  * A sort-manager for pages & folders
  */
-class PagesSortmanager extends class_common_sortmanager
+class PagesSortmanager extends CommonSortmanager
 {
 
     public function setAbsolutePosition($intNewPosition, $arrRestrictionModules = false)

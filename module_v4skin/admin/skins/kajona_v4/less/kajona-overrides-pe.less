@@ -33,7 +33,7 @@
     position: fixed;
     top: 0;
     right: -200px;
-    width: 220px;
+    width: 230px;
     height: 100%;
     display: block !important;
 	line-height: 17px;
@@ -108,10 +108,13 @@
 .peAddButton, .peElementWrapper,
 [data-systemid] {
 
-    //todo: not an elegant solution at all
-    padding-top: 5px;
+    .peElementWrapper {
+        min-height: 10px;
+    }
 
     &:hover {
+
+        //padding-top: 5px; //@jaky: wie kann man das besser machen? es geht darum, dass sich die toolbars von elementen nicht überlagern, z.B. bei der Liste von Faqs
 
         display: block !important;
         //outline: 1px solid @peColorHover !important;
@@ -139,21 +142,24 @@
     .peActionToolbar {
         position: absolute;
         display: none;
-        z-index: 400;
+        z-index: 4000;
         .opacity(1) !important;
 
         .peActionToolbarActionContainer {
+            line-height: 15px;
+
 
             background-color: @peButtonToolbarBackground;
             a {
                 color: #fff;
                 display: inline-block;
-                width: 20px;
+                width: 25px;
                 text-align: center;
                 padding: 5px;
                 font-size: 13px;
                 font-weight:normal;
                 cursor: pointer;
+                text-decoration: none;
 
                 i {
                     font-size: 16px;
@@ -164,6 +170,7 @@
                 }
 
                 &:hover {
+                    text-decoration: none;
                     background-color: @peButtonToolbarBackgroundHover;
                 }
             }
@@ -183,6 +190,12 @@
             border-left: 7px solid transparent;
             border-right: 7px solid transparent;
             border-bottom: 7px solid @peButtonToolbarBackground;
+        }
+
+        &.caretRight {
+            .peActionToolbarCaretBottom {
+                float: right;
+            }
         }
     }
 
@@ -422,35 +435,36 @@ body *[data-kajona-editable] {
 }
 
 /* DIALOGS / MODALS / BACKDROPS */
-.modal {
-    text-align: left;
+.kajona-pe-wrap {
+    .modal {
+        text-align: left;
 
-    iframe {
-        border: none;
-    }
+        iframe {
+            border: none;
+        }
 
-    .modal-header {
-        border: none;
-        padding: 15px 15px 0 15px;
-        h3 {
-            margin: 0;
+        .modal-header {
+            border: none;
+            padding: 15px 15px 0 15px;
+            h3 {
+                margin: 0;
+            }
+        }
+
+        .modal-footer {
+            padding: 0 15px 15px 15px;
+            border-top: none;
+        }
+
+        .modal-body {
+            max-height: none;
+        }
+
+        .btn-primary {
+            color: #fff;
         }
     }
-
-    .modal-footer {
-        padding: 0 15px 15px 15px;
-        border-top: none;
-    }
-
-    .modal-body {
-        max-height: none;
-    }
-
-    .btn-primary {
-        color: #fff;
-    }
 }
-
 
 /* TOOLTIPS */
 .qtip {

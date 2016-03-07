@@ -6,6 +6,10 @@
 *-------------------------------------------------------------------------------------------------------*
 *   $Id$                                           *
 ********************************************************************************************************/
+namespace Kajona\Debugging\Debug;
+
+use Kajona\System\System\Classloader;
+use Kajona\System\System\Filesystem;
 
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
@@ -33,6 +37,8 @@ foreach($arrOccurences as $strSearch => $intHit) {
     echo str_pad($strSearch, 40)." ".$intHit." Hits\n";
 }
 
+echo "\n";
+echo str_pad("Total Hits", 40)." ".array_sum($arrOccurences)." Hits\n";
 
 
 
@@ -47,8 +53,8 @@ echo "+-------------------------------------------------------------------------
 function DEBUG_getLegacyClassNames()
 {
     $arrReturn = array();
-    $arrModules = class_classloader::getInstance()->getArrModules();
-    $objFilesystem = new class_filesystem();
+    $arrModules = Classloader::getInstance()->getArrModules();
+    $objFilesystem = new Filesystem();
 
     foreach($arrModules as $strPath => $strModule) {
         $strFolder = _realpath_.$strPath."/legacy";
@@ -67,8 +73,8 @@ function DEBUG_getLegacyClassNames()
 
 function DEBUG_walkFolderRecursive($strStartFolder, $arrSearchPatterns, &$arrOccurences)
 {
-    $objFilesystem = new class_filesystem();
-    $arrFilesAndFolders = $objFilesystem->getCompleteList($strStartFolder, array(".php"), array(), array(".", "..", ".svn", ".git", "vendor", "legacy"));
+    $objFilesystem = new Filesystem();
+    $arrFilesAndFolders = $objFilesystem->getCompleteList($strStartFolder, array(".php", ".md"), array(), array(".", "..", ".svn", ".git", "vendor", "legacy", "buildproject"));
 
     foreach($arrFilesAndFolders["files"] as $arrOneFile) {
         $strFilename = $arrOneFile["filename"];
@@ -92,6 +98,8 @@ function DEBUG_walkFolderRecursive($strStartFolder, $arrSearchPatterns, &$arrOcc
             echo "\n";
         }
 
+        ob_flush();
+        flush();
 
     }
 

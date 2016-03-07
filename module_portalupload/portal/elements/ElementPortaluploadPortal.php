@@ -7,18 +7,16 @@
 
 namespace Kajona\Portalupload\Portal\Elements;
 
-use class_carrier;
-use class_element_portal;
-use class_filesystem;
-use class_http_responsetypes;
-use class_http_statuscodes;
-use class_link;
-use class_module_mediamanager_file;
-use class_module_mediamanager_repo;
-use class_objectfactory;
-use class_response_object;
+use Kajona\Mediamanager\System\MediamanagerFile;
+use Kajona\Mediamanager\System\MediamanagerRepo;
 use Kajona\Pages\Portal\ElementPortal;
 use Kajona\Pages\Portal\PortalElementInterface;
+use Kajona\System\System\Filesystem;
+use Kajona\System\System\HttpResponsetypes;
+use Kajona\System\System\HttpStatuscodes;
+use Kajona\System\System\Link;
+use Kajona\System\System\Objectfactory;
+use Kajona\System\System\ResponseObject;
 
 
 /**
@@ -59,7 +57,7 @@ class ElementPortaluploadPortal extends ElementPortal implements PortalElementIn
     private function uploadForm($formErrors = "") {
         $strReturn = "";
         //validate the rights
-        $objFilemanagerRepo = new class_module_mediamanager_repo($this->arrElementData["char2"]);
+        $objFilemanagerRepo = new MediamanagerRepo($this->arrElementData["char2"]);
 
 
         if($objFilemanagerRepo->rightRight1()) {
@@ -84,8 +82,8 @@ class ElementPortaluploadPortal extends ElementPortal implements PortalElementIn
 
             $strAllowedFileRegex = uniStrReplace(array(".", ","), array("", "|"), $objFilemanagerRepo->getStrUploadFilter());
 
-            $arrTemplate["formAction"] = class_link::getLinkPortalHref($this->getPagename(), "", $this->getAction(), "", $strDlFolderId);
-            $arrTemplate["maxFileSize"] = class_carrier::getInstance()->getObjConfig()->getPhpMaxUploadSize();
+            $arrTemplate["formAction"] = Link::getLinkPortalHref($this->getPagename(), "", $this->getAction(), "", $strDlFolderId);
+            $arrTemplate["maxFileSize"] = \Kajona\System\System\Carrier::getInstance()->getObjConfig()->getPhpMaxUploadSize();
             $arrTemplate["acceptFileTypes"] = $strAllowedFileRegex != "" ? "/(\.|\/)(".$strAllowedFileRegex.")$/i" : "''";
             $arrTemplate["elementId"] = $this->arrElementData["content_id"];
             $arrTemplate["mediamanagerRepoId"] = $objFilemanagerRepo->getSystemid();
@@ -107,17 +105,17 @@ class ElementPortaluploadPortal extends ElementPortal implements PortalElementIn
      * @return string
      */
     private function doAjaxUpload() {
-        class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JSON);
+        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
 
         $strUpload = $this->doUpload(true);
 
         if($strUpload === true)
             $strUpload = $this->getLang("portaluploadSuccess");
         else
-            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_FORBIDDEN);
+            ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_FORBIDDEN);
 
         $this->flushCompletePagesCache();
-        class_response_object::getInstance()->sendHeaders();
+        ResponseObject::getInstance()->sendHeaders();
         echo json_encode($strUpload);
         die();
     }
@@ -134,24 +132,24 @@ class ElementPortaluploadPortal extends ElementPortal implements PortalElementIn
         $strReturn = "";
 
         //prepare the folder to be used as a target-folder for the upload
-        $objFilemanagerRepo = new class_module_mediamanager_repo($this->arrElementData["char2"]);
+        $objFilemanagerRepo = new MediamanagerRepo($this->arrElementData["char2"]);
         $objDownloadfolder = null;
 
         //add a special subfolder?
         $strPath = $objFilemanagerRepo->getStrPath();
         if($this->getParam("portaluploadDlfolder") != "") {
-            /** @var $objDownloadfolder class_module_mediamanager_file */
-            $objDownloadfolder = class_objectfactory::getInstance()->getObject($this->getParam("portaluploadDlfolder"));
+            /** @var $objDownloadfolder MediamanagerFile */
+            $objDownloadfolder = Objectfactory::getInstance()->getObject($this->getParam("portaluploadDlfolder"));
 
             //check if the folder is within the current repo
-            /** @var $objTemp class_module_mediamanager_file */
+            /** @var $objTemp MediamanagerFile */
             $objTemp = $objDownloadfolder;
-            while(validateSystemid($objTemp->getSystemid()) && ($objTemp instanceof class_module_mediamanager_file || $objTemp instanceof class_module_mediamanager_repo)) {
+            while(validateSystemid($objTemp->getSystemid()) && ($objTemp instanceof MediamanagerFile || $objTemp instanceof MediamanagerRepo)) {
                 if($objTemp->getSystemid() == $this->arrElementData["char2"]) {
                     $strPath = $objDownloadfolder->getStrFilename();
                     break;
                 }
-                $objTemp = class_objectfactory::getInstance()->getObject($objTemp->getPrevId());
+                $objTemp = Objectfactory::getInstance()->getObject($objTemp->getPrevId());
 
             }
         }
@@ -164,7 +162,7 @@ class ElementPortaluploadPortal extends ElementPortal implements PortalElementIn
 
             $strTarget = $strPath . "/" . createFilename($arrSource["name"]);
 
-            $objFilesystem = new class_filesystem();
+            $objFilesystem = new Filesystem();
             if($objFilesystem->isWritable($strPath)) {
 
                 //Check file for correct filters
@@ -174,8 +172,8 @@ class ElementPortaluploadPortal extends ElementPortal implements PortalElementIn
                     if($objFilesystem->copyUpload($strTarget, $arrSource["tmp_name"])) {
 
                         //upload was successfull. try to sync the downloads-archive.
-                        if($objDownloadfolder != null && $objDownloadfolder instanceof class_module_mediamanager_file)
-                            class_module_mediamanager_file::syncRecursive($objDownloadfolder->getSystemid(), $objDownloadfolder->getStrFilename());
+                        if($objDownloadfolder != null && $objDownloadfolder instanceof MediamanagerFile)
+                            MediamanagerFile::syncRecursive($objDownloadfolder->getSystemid(), $objDownloadfolder->getStrFilename());
                         else
                             $objFilemanagerRepo->syncRepo();
 
@@ -186,9 +184,9 @@ class ElementPortaluploadPortal extends ElementPortal implements PortalElementIn
 
                         //reload the site to display the new file
                         if(validateSystemid($this->getParam("portaluploadDlfolder")))
-                            $this->portalReload(class_link::getLinkPortalHref($this->getPagename(), "", "mediaFolder", "uploadSuccess=1", $this->getParam("portaluploadDlfolder")));
+                            $this->portalReload(Link::getLinkPortalHref($this->getPagename(), "", "mediaFolder", "uploadSuccess=1", $this->getParam("portaluploadDlfolder")));
                         else
-                            $this->portalReload(class_link::getLinkPortalHref($this->getPagename(), "", "", $this->getAction(), "uploadSuccess=1", $this->getSystemid()));
+                            $this->portalReload(Link::getLinkPortalHref($this->getPagename(), "", "", $this->getAction(), "uploadSuccess=1", $this->getSystemid()));
                     }
                     else {
                         $strReturn .= $this->uploadForm($this->getLang("portaluploadCopyUploadError"));

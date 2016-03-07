@@ -6,12 +6,9 @@
 ********************************************************************************************************/
 
 
-
 namespace Kajona\Ezchart\System;
-require_once __DIR__."/../vendor/autoload.php";
+require_once __DIR__ . "/../vendor/autoload.php";
 
-use class_exception;
-use class_graph_commons;
 use ezcGraph;
 use ezcGraphArrayDataSet;
 use ezcGraphAxisRotatedLabelRenderer;
@@ -25,7 +22,9 @@ use ezcGraphLineChart;
 use ezcGraphPieChart;
 use ezcGraphRenderer2d;
 use ezcGraphRenderer3d;
-use interface_graph;
+use Kajona\System\System\Exception;
+use Kajona\System\System\GraphCommons;
+use Kajona\System\System\GraphInterface;
 
 /**
  * This class could be used to create graphs based on the ez components API.
@@ -35,7 +34,7 @@ use interface_graph;
  * @since 3.4
  * @author sidler@mulchprod.de
  */
-class GraphEzc implements interface_graph
+class GraphEzc implements GraphInterface
 {
 
 
@@ -115,10 +114,10 @@ class GraphEzc implements interface_graph
      *      $objGraph->addBarChartSet(array(1,2,4,5) "serie 1");
      *
      * //datapoints array
-     *      $objDataPoint1 = new class_graph_datapoint(1);
-     *      $objDataPoint2 = new class_graph_datapoint(2);
-     *      $objDataPoint3 = new class_graph_datapoint(4);
-     *      $objDataPoint4 = new class_graph_datapoint(5);
+     *      $objDataPoint1 = new GraphDatapoint(1);
+     *      $objDataPoint2 = new GraphDatapoint(2);
+     *      $objDataPoint3 = new GraphDatapoint(4);
+     *      $objDataPoint4 = new GraphDatapoint(5);
      *
      *      //set action handler example
      *      $objDataPoint1->setObjActionHandler("<javascript code here>");
@@ -127,17 +126,17 @@ class GraphEzc implements interface_graph
      *      $objGraph->addBarChartSet(array($objDataPoint1, $objDataPoint2, $objDataPoint3, $objDataPoint4) "serie 1");
      *
      *
-     * @param array $arrValues - an array with simple values or an array of data points (class_graph_datapoint).
+     * @param array $arrValues - an array with simple values or an array of data points (GraphDatapoint).
      *                           The advantage of a data points are that action handlers can be defined for each data point which will be executed when clicking on the data point in the chart.
      * @param string $strLegend
      * @param bool $bitWriteValues Enables the rendering of values on top of the graphs
      *
-     * @throws class_exception
+     * @throws Exception
      * @return void
      */
     public function addBarChartSet($arrValues, $strLegend, $bitWriteValues = false)
     {
-        $arrDataPoints = class_graph_commons::convertArrValuesToDataPointArray($arrValues);
+        $arrDataPoints = GraphCommons::convertArrValuesToDataPointArray($arrValues);
 
         if ($this->intCurrentGraphMode > 0) {
             //only allow this method to be called again if in bar-mode
@@ -145,7 +144,7 @@ class GraphEzc implements interface_graph
                 && $this->intCurrentGraphMode != $this->GRAPH_TYPE_STACKEDBAR
                 && $this->intCurrentGraphMode != $this->GRAPH_TYPE_HORIZONTALBAR
             ) {
-                throw new class_exception("Chart already initialized", class_exception::$level_ERROR);
+                throw new Exception("Chart already initialized", Exception::$level_ERROR);
             }
         }
 
@@ -191,10 +190,10 @@ class GraphEzc implements interface_graph
      *      $objGraph->addStackedBarChartSet(array(1,2,4,5) "serie 2");
      *
      * //datapoints array
-     *      $objDataPoint1 = new class_graph_datapoint(1);
-     *      $objDataPoint2 = new class_graph_datapoint(2);
-     *      $objDataPoint3 = new class_graph_datapoint(4);
-     *      $objDataPoint4 = new class_graph_datapoint(5);
+     *      $objDataPoint1 = new GraphDatapoint(1);
+     *      $objDataPoint2 = new GraphDatapoint(2);
+     *      $objDataPoint3 = new GraphDatapoint(4);
+     *      $objDataPoint4 = new GraphDatapoint(5);
      *
      *      //set action handler example
      *      $objDataPoint1->setObjActionHandler("<javascript code here>");
@@ -203,22 +202,22 @@ class GraphEzc implements interface_graph
      *      $objGraph->addStackedBarChartSet(array($objDataPoint1, $objDataPoint2, $objDataPoint3, $objDataPoint4) "serie 1");
      *
      *
-     * @param array $arrValues - an array with simple values or an array of data points (class_graph_datapoint).
+     * @param array $arrValues - an array with simple values or an array of data points (GraphDatapoint).
      *                           The advantage of a data points are that action handlers can be defined for each data point which will be executed when clicking on the data point in the chart.
      * @param string $strLegend
      *
-     * @throws class_exception
+     * @throws Exception
      * @return void
      */
     public function addStackedBarChartSet($arrValues, $strLegend)
     {
-        $arrDataPoints = class_graph_commons::convertArrValuesToDataPointArray($arrValues);
+        $arrDataPoints = GraphCommons::convertArrValuesToDataPointArray($arrValues);
 
 
         if ($this->intCurrentGraphMode > 0) {
             //only allow this method to be called again if in stackedbar-mode
             if ($this->intCurrentGraphMode != $this->GRAPH_TYPE_STACKEDBAR) {
-                throw new class_exception("Chart already initialized", class_exception::$level_ERROR);
+                throw new Exception("Chart already initialized", Exception::$level_ERROR);
             }
         }
 
@@ -240,7 +239,7 @@ class GraphEzc implements interface_graph
         $this->intMinValue -= $intMin;
 
         $this->intCurrentGraphMode = $this->GRAPH_TYPE_STACKEDBAR;
-        $this->addBarChartSet(class_graph_commons::getDataPointFloatValues($arrDataPoints), $strLegend);
+        $this->addBarChartSet(GraphCommons::getDataPointFloatValues($arrDataPoints), $strLegend);
         $this->intCurrentGraphMode = $this->GRAPH_TYPE_STACKEDBAR;
 
     }
@@ -262,10 +261,10 @@ class GraphEzc implements interface_graph
      *      $objGraph->addLinePlot(array(1,4,6,7,4), "serie 1");
      *
      * //datapoints array
-     *      $objDataPoint1 = new class_graph_datapoint(1);
-     *      $objDataPoint2 = new class_graph_datapoint(2);
-     *      $objDataPoint3 = new class_graph_datapoint(4);
-     *      $objDataPoint4 = new class_graph_datapoint(5);
+     *      $objDataPoint1 = new GraphDatapoint(1);
+     *      $objDataPoint2 = new GraphDatapoint(2);
+     *      $objDataPoint3 = new GraphDatapoint(4);
+     *      $objDataPoint4 = new GraphDatapoint(5);
      *
      *      //set action handler example
      *      $objDataPoint1->setObjActionHandler("<javascript code here>");
@@ -274,21 +273,21 @@ class GraphEzc implements interface_graph
      *      $objGraph->addLinePlot(array($objDataPoint1, $objDataPoint2, $objDataPoint3, $objDataPoint4) "serie 1");
      *
      *
-     * @param array $arrValues - an array with simple values or an array of data points (class_graph_datapoint).
+     * @param array $arrValues - an array with simple values or an array of data points (GraphDatapoint).
      *                           The advantage of a data points are that action handlers can be defined for each data point which will be executed when clicking on the data point in the chart.
      * @param string $strLegend the name of the single plot
      *
-     * @throws class_exception
+     * @throws Exception
      * @return void
      */
     public function addLinePlot($arrValues, $strLegend)
     {
-        $arrDataPoints = class_graph_commons::convertArrValuesToDataPointArray($arrValues);
+        $arrDataPoints = GraphCommons::convertArrValuesToDataPointArray($arrValues);
 
         if ($this->intCurrentGraphMode > 0) {
             //in bar mode, its ok. just place on top
             if ($this->intCurrentGraphMode != $this->GRAPH_TYPE_LINE && $this->intCurrentGraphMode != $this->GRAPH_TYPE_BAR) {
-                throw new class_exception("Chart already initialized", class_exception::$level_ERROR);
+                throw new Exception("Chart already initialized", Exception::$level_ERROR);
             }
         }
 
@@ -304,8 +303,7 @@ class GraphEzc implements interface_graph
             $strAxisLabel = $this->getArrXAxisEntry($intCounter);
             if ($strAxisLabel != "") {
                 $arrEntries[$strAxisLabel] = $floatValue;
-            }
-            else {
+            } else {
                 $arrEntries[$intCounter + 1] = $floatValue;
             }
 
@@ -343,10 +341,10 @@ class GraphEzc implements interface_graph
      *      $objChart->createPieChart(array(2,6,7,3), array("val 1", "val 2", "val 3", "val 4"));
      *
      * //datapoints array
-     *      $objDataPoint1 = new class_graph_datapoint(1);
-     *      $objDataPoint2 = new class_graph_datapoint(2);
-     *      $objDataPoint3 = new class_graph_datapoint(4);
-     *      $objDataPoint4 = new class_graph_datapoint(5);
+     *      $objDataPoint1 = new GraphDatapoint(1);
+     *      $objDataPoint2 = new GraphDatapoint(2);
+     *      $objDataPoint3 = new GraphDatapoint(4);
+     *      $objDataPoint4 = new GraphDatapoint(5);
      *
      *      //set action handler example
      *      $objDataPoint1->setObjActionHandler("<javascript code here>");
@@ -355,19 +353,19 @@ class GraphEzc implements interface_graph
      *      $objGraph->createPieChart(array($objDataPoint1, $objDataPoint2, $objDataPoint3, $objDataPoint4) , array("val 1", "val 2", "val 3", "val 4"), "serie 1");
      *
      *
-     * @param array $arrValues - an array with simple values or an array of data points (class_graph_datapoint).
+     * @param array $arrValues - an array with simple values or an array of data points (GraphDatapoint).
      *                           The advantage of a data points are that action handlers can be defined for each data point which will be executed when clicking on the data point in the chart.
      * @param array $arrLegends
      *
-     * @throws class_exception
+     * @throws Exception
      * @return void
      */
     public function createPieChart($arrValues, $arrLegends)
     {
-        $arrDataPoints = class_graph_commons::convertArrValuesToDataPointArray($arrValues);
+        $arrDataPoints = GraphCommons::convertArrValuesToDataPointArray($arrValues);
 
         if ($this->intCurrentGraphMode > 0) {
-            throw new class_exception("Chart already initialized", class_exception::$level_ERROR);
+            throw new Exception("Chart already initialized", Exception::$level_ERROR);
         }
 
         $this->intCurrentGraphMode = $this->GRAPH_TYPE_PIE;
@@ -381,7 +379,7 @@ class GraphEzc implements interface_graph
         $objData = new ezcGraphArrayDataSet($arrEntries);
         $objData->highlight = true;
 
-        $this->arrDataSets[generateSystemid().""] = array("data" => $objData);
+        $this->arrDataSets[generateSystemid() . ""] = array("data" => $objData);
     }
 
 
@@ -389,7 +387,7 @@ class GraphEzc implements interface_graph
      * Creates the object and prepares it for rendering.
      * Does all the calculation like borders, margins, paddings ....
      *
-     * @throws class_exception
+     * @throws Exception
      * @return void
      */
     private function preGraphCreation()
@@ -406,8 +404,7 @@ class GraphEzc implements interface_graph
 
             if ($this->bit3d === null || $this->bit3d === true) {
                 $this->objGraph->renderer = new ezcGraphRenderer3d();
-            }
-            else {
+            } else {
                 $this->objGraph->renderer = new ezcGraphRenderer2d();
             }
 
@@ -424,15 +421,12 @@ class GraphEzc implements interface_graph
                 $this->objGraph->renderer->options->pieChartHeight = 15;
             }
             $this->objGraph->renderer->options->dataBorder = .0;
-        }
-
-        elseif ($this->intCurrentGraphMode == $this->GRAPH_TYPE_BAR || $this->intCurrentGraphMode == $this->GRAPH_TYPE_STACKEDBAR) {
+        } elseif ($this->intCurrentGraphMode == $this->GRAPH_TYPE_BAR || $this->intCurrentGraphMode == $this->GRAPH_TYPE_STACKEDBAR) {
             $this->objGraph = new ezcGraphBarChart();
 
             if ($this->bit3d === null || $this->bit3d === true) {
                 $this->objGraph->renderer = new ezcGraphRenderer3d();
-            }
-            else {
+            } else {
                 $this->objGraph->renderer = new ezcGraphRenderer2d();
             }
 
@@ -447,9 +441,7 @@ class GraphEzc implements interface_graph
                 $this->objGraph->renderer->options->barChartGleam = .5;
                 $this->objGraph->renderer->options->depth = .05;
             }
-        }
-
-        elseif ($this->intCurrentGraphMode == $this->GRAPH_TYPE_HORIZONTALBAR) {
+        } elseif ($this->intCurrentGraphMode == $this->GRAPH_TYPE_HORIZONTALBAR) {
             $this->objGraph = new ezcGraphHorizontalBarChart();
             $this->objGraph->palette = $objPalette;
             $this->objGraph->renderer = new ezcGraphHorizontalRenderer();
@@ -458,14 +450,11 @@ class GraphEzc implements interface_graph
             if ($this->bit3d === null || $this->bit3d === true) {
                 //no 3d supported for horizontal bar charts
             }
-        }
-
-        elseif ($this->intCurrentGraphMode == $this->GRAPH_TYPE_LINE) {
+        } elseif ($this->intCurrentGraphMode == $this->GRAPH_TYPE_LINE) {
             $this->objGraph = new ezcGraphLineChart();
             if ($this->bit3d === true) {
                 $this->objGraph->renderer = new ezcGraphRenderer3d();
-            }
-            else {
+            } else {
                 $this->objGraph->renderer = new ezcGraphRenderer2d();
             }
 
@@ -493,7 +482,7 @@ class GraphEzc implements interface_graph
 
 
         if ($this->objGraph == null) {
-            throw new class_exception("trying to render unitialized graph", class_exception::$level_FATALERROR);
+            throw new Exception("trying to render unitialized graph", Exception::$level_FATALERROR);
         }
 
 
@@ -501,7 +490,7 @@ class GraphEzc implements interface_graph
         $this->objGraph->title = $this->strGraphTitle;
 
         //set the font properties
-        $this->objGraph->options->font = _realpath_.$this->strFont;
+        $this->objGraph->options->font = _realpath_ . $this->strFont;
         $this->objGraph->options->font->color = $this->strFontColor;
         $this->objGraph->options->font->maxFontSize = 9;
 
@@ -522,8 +511,7 @@ class GraphEzc implements interface_graph
             //place the legend at the bottom by default
             if ($this->bitLegendPositionBottom) {
                 $this->objGraph->legend->position = ezcGraph::BOTTOM;
-            }
-            else {
+            } else {
                 $this->objGraph->legend->position = ezcGraph::RIGHT;
             }
 
@@ -534,8 +522,7 @@ class GraphEzc implements interface_graph
             $this->objGraph->renderer->options->legendSymbolGleam = .1;
             $this->objGraph->renderer->options->legendSymbolGleamSize = .9;
             $this->objGraph->renderer->options->legendSymbolGleamColor = '#FFFFFF';
-        }
-        else {
+        } else {
             $this->objGraph->legend = false;
         }
 
@@ -586,8 +573,7 @@ class GraphEzc implements interface_graph
         //choose the renderer based on the extensions available
         if (extension_loaded("cairo")) {
             $this->objGraph->driver = new ezcGraphCairoOODriver();
-        }
-        else {
+        } else {
             $this->objGraph->driver = new ezcGraphGdDriver();
         }
 
@@ -621,7 +607,7 @@ class GraphEzc implements interface_graph
         $this->preGraphCreation();
 
         if (strpos($strFilename, _realpath_) === false) {
-            $strFilename = _realpath_.$strFilename;
+            $strFilename = _realpath_ . $strFilename;
         }
 
         $this->objGraph->render($this->intWidth, $this->intHeight, $strFilename);
@@ -639,9 +625,9 @@ class GraphEzc implements interface_graph
      */
     public function renderGraph()
     {
-        $strFilename = _images_cachepath_."/".generateSystemid().".png";
+        $strFilename = _images_cachepath_ . "/" . generateSystemid() . ".png";
         $this->saveGraph($strFilename);
-        return "<img src=\""._webpath_."/".$strFilename."\" alt=\"".$this->strGraphTitle."\" />";
+        return "<img src=\"" . _webpath_ . "/" . $strFilename . "\" alt=\"" . $this->strGraphTitle . "\" />";
     }
 
 

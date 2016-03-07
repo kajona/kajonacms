@@ -33,7 +33,7 @@ $lang["_system_portal_disablepage_"]     = "Página temporária";
 $lang["_system_portal_disablepage_hint"] = "Esta página é visualizada, se o sistema(portal) se encontrar desactivado.";
 $lang["_system_release_time_"]           = "Duração da sessão";
 $lang["_system_release_time_hint"]       = "Depois deste tempo em segundos a sesão torna-se inválida.";
-$lang["about_part1"]                     = "<h2>Kajona V4 - Sistema de Gestão de Conteúdos em Código Aberto</h2>Kajona V 4.7, Nome de código \"springtide\"<br /><br /><a href=\"http://www.kajona.de\" target=\"_blank\">www.kajona.de</a><br /><a href=\"mailto:info@kajona.de\" target=\"_blank\">info@kajona.de</a><br /><br />Para mais informações, suporte ou sugestões, Por favor visite o nosso endereço.<br />Suporte adicional é dado no nosso <a href=\"http://board.kajona.de/\" target=\"_blank\">fórum</a>.";
+$lang["about_part1"]                     = "<h2>Kajona V5 - Sistema de Gestão de Conteúdos em Código Aberto</h2>Kajona V 4.7, Nome de código \"springtide\"<br /><br /><a href=\"http://www.kajona.de\" target=\"_blank\">www.kajona.de</a><br /><a href=\"mailto:info@kajona.de\" target=\"_blank\">info@kajona.de</a><br /><br />Para mais informações, suporte ou sugestões, Por favor visite o nosso endereço.<br />Suporte adicional é dado no nosso <a href=\"http://board.kajona.de/\" target=\"_blank\">fórum</a>.";
 $lang["about_part2_header"]              = "<h2>Responsável do projecto</h2>";
 $lang["about_part2a_header"]             = "<h2>Contribuições / Programadores</h2>";
 $lang["about_part2b_header"]             = "<h2>Traduções</h2>";

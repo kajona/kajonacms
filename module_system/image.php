@@ -4,7 +4,25 @@
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
+namespace Kajona\System;
 
+use Kajona\Mediamanager\System\MediamanagerFile;
+use Kajona\Pages\System\PagesPageelement;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\CoreEventdispatcher;
+use Kajona\System\System\HttpStatuscodes;
+use Kajona\System\System\Image2;
+use Kajona\System\System\Imageplugins\ImageLine;
+use Kajona\System\System\Imageplugins\ImageOverlay;
+use Kajona\System\System\Imageplugins\ImageRectangle;
+use Kajona\System\System\Imageplugins\ImageScale;
+use Kajona\System\System\Imageplugins\ImageScaleAndCrop;
+use Kajona\System\System\Imageplugins\ImageText;
+use Kajona\System\System\RequestEntrypointEnum;
+use Kajona\System\System\ResponseObject;
+use Kajona\System\System\Session;
+use Kajona\System\System\SystemEventidentifier;
+use Kajona\System\System\SystemModule;
 
 /**
  * This class can be used to create fast "on-the-fly" resizes of images
@@ -22,9 +40,9 @@
  * The params maxWidth, maxHeight and quality are optional. If fixedWidth and fixedHeight
  * are set, maxWidth and maxHeight won't be used.
  *
- * @package module_system
  */
-class class_flyimage {
+class Flyimage
+{
 
     private $strFilename;
     private $intMaxWidth = 0;
@@ -40,31 +58,37 @@ class class_flyimage {
     /**
      * constructor, init the parent-class
      */
-    public function __construct() {
+    public function __construct()
+    {
         //find the params to use
         $this->strFilename = urldecode(getGet("image"));
         //avoid directory traversing
         $this->strFilename = str_replace("../", "", $this->strFilename);
 
         $this->intMaxHeight = (int)getGet("maxHeight");
-        if($this->intMaxHeight < 0)
+        if ($this->intMaxHeight < 0) {
             $this->intMaxHeight = 0;
+        }
 
         $this->intMaxWidth = (int)getGet("maxWidth");
-        if($this->intMaxWidth < 0)
+        if ($this->intMaxWidth < 0) {
             $this->intMaxWidth = 0;
+        }
 
         $this->intFixedHeight = (int)getGet("fixedHeight");
-        if($this->intFixedHeight < 0 || $this->intFixedHeight > 2000)
+        if ($this->intFixedHeight < 0 || $this->intFixedHeight > 2000) {
             $this->intFixedHeight = 0;
+        }
 
         $this->intFixedWidth = (int)getGet("fixedWidth");
-        if($this->intFixedWidth < 0 || $this->intFixedWidth > 2000)
+        if ($this->intFixedWidth < 0 || $this->intFixedWidth > 2000) {
             $this->intFixedWidth = 0;
+        }
 
         $this->intQuality = (int)getGet("quality");
-        if($this->intQuality <= 0 || $this->intQuality > 100)
+        if ($this->intQuality <= 0 || $this->intQuality > 100) {
             $this->intQuality = 90;
+        }
 
 
         $this->strSystemid = getGet("systemid");
@@ -74,52 +98,56 @@ class class_flyimage {
 
     /**
      * Here happens the magic: creating the image and sending it to the browser
+     *
      * @return void
      */
-    public function generateImage() {
+    public function generateImage()
+    {
 
         //switch the different modes - may be want to generate a detailed image-view
-        if(validateSystemid($this->strSystemid) && validateSystemid($this->strElementId)) {
-            class_carrier::getInstance()->getObjConfig()->loadConfigsDatabase(class_carrier::getInstance()->getObjDB());
+        if (validateSystemid($this->strSystemid) && validateSystemid($this->strElementId)) {
+            Carrier::getInstance()->getObjConfig()->loadConfigsDatabase(Carrier::getInstance()->getObjDB());
             $this->generateMediamanagerImage();
         }
         else {
-            class_carrier::getInstance()->getObjSession()->sessionClose();
+            Carrier::getInstance()->getObjSession()->sessionClose();
             $this->resizeImage();
         }
     }
 
     /**
      * Wrapper to load a single element and generate the image
+     *
      * @return void
      */
-    private function generateMediamanagerImage() {
-        if(class_module_system_module::getModuleByName("mediamanager") !== null) {
+    private function generateMediamanagerImage()
+    {
+        if (SystemModule::getModuleByName("mediamanager") !== null) {
 
-            $objElement = new class_module_pages_pageelement($this->strElementId);
+            $objElement = new PagesPageelement($this->strElementId);
             $objPortalElement = $objElement->getConcretePortalInstance();
 
-            $objFile = new class_module_mediamanager_file($this->strSystemid);
+            $objFile = new MediamanagerFile($this->strSystemid);
 
-            if(!$objFile->rightView()) {
-                class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_FORBIDDEN);
-                class_response_object::getInstance()->sendHeaders();
+            if (!$objFile->rightView()) {
+                ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_FORBIDDEN);
+                ResponseObject::getInstance()->sendHeaders();
                 return;
             }
 
             $arrElementData = $objPortalElement->getElementContent($objElement->getSystemid());
 
-            class_session::getInstance()->sessionClose();
+            Session::getInstance()->sessionClose();
             if (is_file(_realpath_.$objFile->getStrFilename())) {
-                $objImage = new class_image2();
+                $objImage = new Image2();
                 $objImage->load($objFile->getStrFilename());
-                $objImage->addOperation(new class_image_scale($arrElementData["gallery_maxw_d"], $arrElementData["gallery_maxh_d"]));
-                $objImage->addOperation(new class_image_text($arrElementData["gallery_text"], $arrElementData["gallery_text_x"], $arrElementData["gallery_text_y"], 10, "#ffffff"));
+                $objImage->addOperation(new ImageScale($arrElementData["gallery_maxw_d"], $arrElementData["gallery_maxh_d"]));
+                $objImage->addOperation(new ImageText($arrElementData["gallery_text"], $arrElementData["gallery_text_x"], $arrElementData["gallery_text_y"], 10, "#ffffff"));
 
-                if(is_file(_realpath_.$arrElementData["gallery_overlay"])) {
-                    $objImageOverlay = new class_image2();
+                if (is_file(_realpath_.$arrElementData["gallery_overlay"])) {
+                    $objImageOverlay = new Image2();
                     $objImageOverlay->load($arrElementData["gallery_overlay"]);
-                    $objImage->addOperation(new class_image_overlay($arrElementData["gallery_overlay"], $arrElementData["gallery_text_x"], $arrElementData["gallery_text_y"]));
+                    $objImage->addOperation(new ImageOverlay($arrElementData["gallery_overlay"], $arrElementData["gallery_text_x"], $arrElementData["gallery_text_y"]));
                 }
                 $objImage->setJpegQuality((int)$this->intQuality);
                 $objImage->sendToBrowser();
@@ -128,31 +156,33 @@ class class_flyimage {
 
         }
 
-        class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_NOT_FOUND);
-        class_response_object::getInstance()->sendHeaders();
+        ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_NOT_FOUND);
+        ResponseObject::getInstance()->sendHeaders();
     }
 
     /**
      * Wrapper to the real, fast resizing
+     *
      * @return void
      */
-    private function resizeImage() {
+    private function resizeImage()
+    {
         //Load the image-dimensions
-        if(is_file(_realpath_ . $this->strFilename) && (uniStrpos($this->strFilename, "/files") !== false || uniStrpos($this->strFilename, "/templates") !== false)) {
+        if (is_file(_realpath_.$this->strFilename) && (uniStrpos($this->strFilename, "/files") !== false || uniStrpos($this->strFilename, "/templates") !== false)) {
 
             //check headers, maybe execution could be terminated right here
-            if(checkConditionalGetHeaders(md5(md5_file(_realpath_ . $this->strFilename) . $this->intMaxWidth . $this->intMaxHeight . $this->intFixedWidth . $this->intFixedHeight))) {
-                class_response_object::getInstance()->sendHeaders();
+            if (checkConditionalGetHeaders(md5(md5_file(_realpath_.$this->strFilename).$this->intMaxWidth.$this->intMaxHeight.$this->intFixedWidth.$this->intFixedHeight))) {
+                ResponseObject::getInstance()->sendHeaders();
                 return;
             }
 
-            $objImage = new class_image2();
+            $objImage = new Image2();
             $objImage->load($this->strFilename);
-            $objImage->addOperation(new class_image_scale_and_crop($this->intFixedWidth, $this->intFixedHeight));
-            $objImage->addOperation(new class_image_scale($this->intMaxWidth, $this->intMaxHeight));
+            $objImage->addOperation(new ImageScaleAndCrop($this->intFixedWidth, $this->intFixedHeight));
+            $objImage->addOperation(new ImageScale($this->intMaxWidth, $this->intMaxHeight));
 
             //send the headers for conditional gets
-            setConditionalGetHeaders(md5(md5_file(_realpath_ . $this->strFilename) . $this->intMaxWidth . $this->intMaxHeight . $this->intFixedWidth . $this->intFixedHeight));
+            setConditionalGetHeaders(md5(md5_file(_realpath_.$this->strFilename).$this->intMaxWidth.$this->intMaxHeight.$this->intFixedWidth.$this->intFixedHeight));
 
             //TODO: add expires header for browser caching (optional)
             /*
@@ -169,8 +199,8 @@ class class_flyimage {
         }
 
 
-        class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_NOT_FOUND);
-        class_response_object::getInstance()->sendHeaders();
+        ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_NOT_FOUND);
+        ResponseObject::getInstance()->sendHeaders();
     }
 
 
@@ -183,16 +213,21 @@ class class_flyimage {
      *
      * @return void
      */
-    public function generateCaptchaImage() {
-        if($this->intMaxWidth == 0 || $this->intMaxWidth > 500)
+    public function generateCaptchaImage()
+    {
+        if ($this->intMaxWidth == 0 || $this->intMaxWidth > 500) {
             $intWidth = 200;
-        else
+        }
+        else {
             $intWidth = $this->intMaxWidth;
+        }
 
-        if($this->intMaxHeight == 0 || $this->intMaxHeight > 500)
+        if ($this->intMaxHeight == 0 || $this->intMaxHeight > 500) {
             $intHeight = 50;
-        else
+        }
+        else {
             $intHeight = $this->intMaxHeight;
+        }
 
         $intMinfontSize = 15;
         $intMaxFontSize = 22;
@@ -208,31 +243,31 @@ class class_flyimage {
         srand((double)microtime() * 1000000);
 
         //v2 version
-        $objImage2 = new class_image2();
+        $objImage2 = new Image2();
         $objImage2->create($intWidth, $intHeight);
-        $objImage2->addOperation(new class_image_rectangle(0, 0, $intWidth, $intHeight, "#FFFFFF"));
+        $objImage2->addOperation(new ImageRectangle(0, 0, $intWidth, $intHeight, "#FFFFFF"));
 
         //draw vertical lines
         $intStart = 5;
-        while($intStart < $intWidth - 5) {
-            $objImage2->addOperation(new class_image_line($intStart, 0, $intStart, $intWidth, $this->generateGreyLikeColor()));
+        while ($intStart < $intWidth - 5) {
+            $objImage2->addOperation(new ImageLine($intStart, 0, $intStart, $intWidth, $this->generateGreyLikeColor()));
             $intStart += rand(10, 17);
         }
         //draw horizontal lines
         $intStart = 5;
-        while($intStart < $intHeight - 5) {
-            $objImage2->addOperation(new class_image_line(0, $intStart, $intWidth, $intStart, $this->generateGreyLikeColor()));
+        while ($intStart < $intHeight - 5) {
+            $objImage2->addOperation(new ImageLine(0, $intStart, $intWidth, $intStart, $this->generateGreyLikeColor()));
             $intStart += rand(10, 17);
         }
 
         //draw floating horizontal lines
-        for($intI = 0; $intI <= 3; $intI++) {
+        for ($intI = 0; $intI <= 3; $intI++) {
             $intXPrev = 0;
             $intYPrev = rand(0, $intHeight);
-            while($intXPrev <= $intWidth) {
+            while ($intXPrev <= $intWidth) {
                 $intNewX = rand($intXPrev, $intXPrev + 50);
                 $intNewY = rand(0, $intHeight);
-                $objImage2->addOperation(new class_image_line($intXPrev, $intYPrev, $intNewX, $intNewY, $this->generateGreyLikeColor()));
+                $objImage2->addOperation(new ImageLine($intXPrev, $intYPrev, $intNewX, $intNewY, $this->generateGreyLikeColor()));
                 $intXPrev = $intNewX;
                 $intYPrev = $intNewY;
             }
@@ -242,7 +277,7 @@ class class_flyimage {
         $intNumberOfChars = floor($intWidth / $intWidthPerChar);
 
         //place characters in the image
-        for($intI = 0; $intI < $intNumberOfChars; $intI++) {
+        for ($intI = 0; $intI < $intNumberOfChars; $intI++) {
             //character to place
             $strCurrentChar = $strCharsPossible[rand(0, (uniStrlen($strCharsPossible) - 1))];
             $strCharactersPlaced .= $strCurrentChar;
@@ -258,23 +293,23 @@ class class_flyimage {
             //the angle
             $intAngle = rand(-30, 30);
             //place the background character
-            $objImage2->addOperation(new class_image_text($strCurrentChar, $intX, $intY, $intSize, "rgb(".$intCol1.",".$intCol2.",".$intCol3.")", "dejavusans.ttf", $intAngle));
+            $objImage2->addOperation(new ImageText($strCurrentChar, $intX, $intY, $intSize, "rgb(".$intCol1.",".$intCol2.",".$intCol3.")", "dejavusans.ttf", $intAngle));
             //place the foreground charater
-            $objImage2->addOperation(new class_image_text($strCurrentChar, $intX + $intForegroundOffset, $intY + $intForegroundOffset, $intSize, "rgb(".($intCol1+50).",".($intCol2+50).",".($intCol3+50).")", "dejavusans.ttf", $intAngle));
+            $objImage2->addOperation(new ImageText($strCurrentChar, $intX + $intForegroundOffset, $intY + $intForegroundOffset, $intSize, "rgb(".($intCol1 + 50).",".($intCol2 + 50).",".($intCol3 + 50).")", "dejavusans.ttf", $intAngle));
         }
 
         //register placed string to session
-        class_carrier::getInstance()->getObjSession()->setCaptchaCode($strCharactersPlaced);
+        Carrier::getInstance()->getObjSession()->setCaptchaCode($strCharactersPlaced);
 
         //and send it to the browser
 
         //force no-cache headers
-        class_response_object::getInstance()->addHeader("Expires: Thu, 19 Nov 1981 08:52:00 GMT", true);
-        class_response_object::getInstance()->addHeader("Cache-Control: no-store, no-cache, must-revalidate, private", true);
-        class_response_object::getInstance()->addHeader("Pragma: no-cache", true);
+        ResponseObject::getInstance()->addHeader("Expires: Thu, 19 Nov 1981 08:52:00 GMT");
+        ResponseObject::getInstance()->addHeader("Cache-Control: no-store, no-cache, must-revalidate, private");
+        ResponseObject::getInstance()->addHeader("Pragma: no-cache");
 
         $objImage2->setUseCache(false);
-        $objImage2->sendToBrowser(class_image2::FORMAT_JPG);
+        $objImage2->sendToBrowser(Image2::FORMAT_JPG);
     }
 
     /**
@@ -282,7 +317,8 @@ class class_flyimage {
      *
      * @return int color-id in image
      */
-    private function generateGreyLikeColor() {
+    private function generateGreyLikeColor()
+    {
         return "rgb(".(rand(150, 230).", ".rand(150, 230).", ".rand(150, 230).")");
     }
 
@@ -291,20 +327,21 @@ class class_flyimage {
      *
      * @return string
      */
-    public function getImageFilename() {
+    public function getImageFilename()
+    {
         return $this->strFilename;
     }
 }
 
 define("_autotesting_", false);
 
-$objImage = new class_flyimage();
-if($objImage->getImageFilename() == "kajonaCaptcha") {
+$objImage = new Flyimage();
+if ($objImage->getImageFilename() == "kajonaCaptcha") {
     $objImage->generateCaptchaImage();
 }
 else {
     $objImage->generateImage();
 }
 
-class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array(class_request_entrypoint_enum::IMAGE()));
+CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array(RequestEntrypointEnum::IMAGE()));
 

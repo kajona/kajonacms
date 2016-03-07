@@ -9,25 +9,25 @@
 
 namespace Kajona\Pages\Admin;
 
-use class_admin_controller;
-use class_admin_formgenerator;
-use class_carrier;
-use class_date;
-use class_exception;
-use class_formentry_date;
-use class_formentry_hidden;
-use class_formentry_template;
-use class_formentry_text;
-use class_orm_base;
-use class_orm_objectinit;
-use class_orm_objectlist;
-use class_orm_objectupdate;
-use class_orm_rowcache;
-use class_reflection;
-use class_resourceloader;
-use class_search_result;
-use interface_search_portalobject;
-use interface_validator;
+use Kajona\Pages\Admin\Formentries\FormentryTemplate;
+use Kajona\Search\System\SearchResult;
+use Kajona\System\Admin\AdminController;
+use Kajona\System\Admin\AdminFormgenerator;
+use Kajona\System\Admin\Formentries\FormentryDate;
+use Kajona\System\Admin\Formentries\FormentryHidden;
+use Kajona\System\Admin\Formentries\FormentryText;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Exception;
+use Kajona\System\System\Link;
+use Kajona\System\System\OrmBase;
+use Kajona\System\System\OrmObjectinit;
+use Kajona\System\System\OrmObjectlist;
+use Kajona\System\System\OrmObjectupdate;
+use Kajona\System\System\OrmRowcache;
+use Kajona\System\System\Reflection;
+use Kajona\System\System\Resourceloader;
+use Kajona\System\System\SearchPortalobjectInterface;
+use Kajona\System\System\ValidatorInterface;
 
 /**
  * The base class for all page-elements
@@ -38,7 +38,7 @@ use interface_validator;
  * @module elements
  * @moduleId _pages_elemente_modul_id_
  */
-abstract class ElementAdmin extends class_admin_controller implements interface_search_portalobject
+abstract class ElementAdmin extends AdminController implements SearchPortalobjectInterface
 {
 
     const STR_ANNOTATION_ELEMENTCONTENTTITLE = "@elementContentTitle";
@@ -48,7 +48,7 @@ abstract class ElementAdmin extends class_admin_controller implements interface_
     protected $arrParamData = array();
 
     /**
-     * @var class_admin_formgenerator
+     * @var AdminFormgenerator
      */
     private $objAdminForm = null;
 
@@ -79,19 +79,19 @@ abstract class ElementAdmin extends class_admin_controller implements interface_
 
 
     /**
-     * @return class_admin_formgenerator|null
+     * @return AdminFormgenerator|null
      */
     public function getAdminForm()
     {
         if ($this->objAdminForm == null) {
-            $objAnnotations = new class_reflection($this);
-            $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(class_orm_base::STR_ANNOTATION_TARGETTABLE);
+            $objAnnotations = new Reflection($this);
+            $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(OrmBase::STR_ANNOTATION_TARGETTABLE);
             if (count($arrTargetTables) == 0) {
                 return null;
             }
 
 
-            $this->objAdminForm = new class_admin_formgenerator("", $this);
+            $this->objAdminForm = new AdminFormgenerator("", $this);
             $this->objAdminForm->generateFieldsFromObject();
         }
 
@@ -116,11 +116,11 @@ abstract class ElementAdmin extends class_admin_controller implements interface_
      * Hook-method to modify the form generated based on the current elements' annotations
      * Overwrite if required.
      *
-     * @param class_admin_formgenerator $objForm
+     * @param AdminFormgenerator $objForm
      *
-     * @return class_admin_formgenerator
+     * @return AdminFormgenerator
      */
-    protected function updateEditForm(class_admin_formgenerator $objForm)
+    protected function updateEditForm(AdminFormgenerator $objForm)
     {
         return $objForm;
     }
@@ -136,8 +136,8 @@ abstract class ElementAdmin extends class_admin_controller implements interface_
     {
 
         //split modes - legacy definitions or coooooool declarative processing
-        $objAnnotations = new class_reflection($this);
-        $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(class_orm_base::STR_ANNOTATION_TARGETTABLE);
+        $objAnnotations = new Reflection($this);
+        $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(OrmBase::STR_ANNOTATION_TARGETTABLE);
         if (count($arrTargetTables) == 0) {
             return $this->generateLegacyEdit($strMode);
         }
@@ -145,7 +145,7 @@ abstract class ElementAdmin extends class_admin_controller implements interface_
 
         if ($strMode == "edit") {
             $this->loadElementData();
-            $objORM = new class_orm_objectinit($this);
+            $objORM = new OrmObjectinit($this);
             $objORM->initObjectFromDb();
         }
 
@@ -159,13 +159,13 @@ abstract class ElementAdmin extends class_admin_controller implements interface_
 
         $objStartDate = null;
         if (isset($this->arrElementData["system_date_start"]) && $this->arrElementData["system_date_start"] > 0) {
-            $objStartDate = new class_date($this->arrElementData["system_date_start"]);
+            $objStartDate = new \Kajona\System\System\Date($this->arrElementData["system_date_start"]);
             $bitShow = true;
         }
 
         $objEndDate = null;
         if (isset($this->arrElementData["system_date_end"]) && $this->arrElementData["system_date_end"] > 0) {
-            $objEndDate = new class_date($this->arrElementData["system_date_end"]);
+            $objEndDate = new \Kajona\System\System\Date($this->arrElementData["system_date_end"]);
             $bitShow = true;
         }
 
@@ -176,35 +176,35 @@ abstract class ElementAdmin extends class_admin_controller implements interface_
 
         // hide template chooser when there is only one template available
         foreach ($objForm->getArrFields() as $objOneField) {
-            if ($objOneField instanceof class_formentry_template && count($objOneField->getArrKeyValues()) <= 1) {
+            if ($objOneField instanceof FormentryTemplate && count($objOneField->getArrKeyValues()) <= 1) {
                 $objForm->addFieldToHiddenGroup($objOneField);
             }
         }
 
-        $objForm->addFieldToHiddenGroup(new class_formentry_text("", "page_element_ph_title"))->setStrLabel($this->getLang("page_element_ph_title", "pages"))->setStrValue($strInternalTitle);
-        $objForm->addFieldToHiddenGroup(new class_formentry_date("", "start"))->setStrLabel($this->getLang("page_element_start", "pages"))->setStrValue($objStartDate);
-        $objForm->addFieldToHiddenGroup(new class_formentry_date("", "end"))->setStrLabel($this->getLang("page_element_end", "pages"))->setStrValue($objEndDate);
+        $objForm->addFieldToHiddenGroup(new FormentryText("", "page_element_ph_title"))->setStrLabel($this->getLang("page_element_ph_title", "pages"))->setStrValue($strInternalTitle);
+        $objForm->addFieldToHiddenGroup(new FormentryDate("", "start"))->setStrLabel($this->getLang("page_element_start", "pages"))->setStrValue($objStartDate);
+        $objForm->addFieldToHiddenGroup(new FormentryDate("", "end"))->setStrLabel($this->getLang("page_element_end", "pages"))->setStrValue($objEndDate);
         $objForm->setBitHiddenElementsVisible($bitShow);
         $objForm->setStrHiddenGroupTitle($this->getLang("page_element_system_folder", "pages"));
 
         //Language is placed right here instead as a hidden field
         if ($strMode == "edit") {
-            $objForm->addField(new class_formentry_hidden("", "page_element_ph_language"))->setStrValue($this->arrElementData["page_element_ph_language"]);
+            $objForm->addField(new FormentryHidden("", "page_element_ph_language"))->setStrValue($this->arrElementData["page_element_ph_language"]);
         }
         else {
-            $objForm->addField(new class_formentry_hidden("", "page_element_ph_language"))->setStrValue($this->getLanguageToWorkOn());
+            $objForm->addField(new FormentryHidden("", "page_element_ph_language"))->setStrValue($this->getLanguageToWorkOn());
         }
 
-        $objForm->addField(new class_formentry_hidden("", "placeholder"))->setStrValue($this->getParam("placeholder"));
-        $objForm->addField(new class_formentry_hidden("", "systemid"))->setStrValue($this->getSystemid());
-        $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue($strMode);
-        $objForm->addField(new class_formentry_hidden("", "element"))->setStrValue($this->getParam("element"));
-        $objForm->addField(new class_formentry_hidden("", "blocks"))->setStrValue($this->getParam("blocks"));
-        $objForm->addField(new class_formentry_hidden("", "block"))->setStrValue($this->getParam("block"));
+        $objForm->addField(new FormentryHidden("", "placeholder"))->setStrValue($this->getParam("placeholder"));
+        $objForm->addField(new FormentryHidden("", "systemid"))->setStrValue($this->getSystemid());
+        $objForm->addField(new FormentryHidden("", "mode"))->setStrValue($strMode);
+        $objForm->addField(new FormentryHidden("", "element"))->setStrValue($this->getParam("element"));
+        $objForm->addField(new FormentryHidden("", "blocks"))->setStrValue($this->getParam("blocks"));
+        $objForm->addField(new FormentryHidden("", "block"))->setStrValue($this->getParam("block"));
 
         //An finally the submit Button
         if ($this->getParam("pe") != "") {
-            $objForm->addField(new class_formentry_hidden("", "peClose"))->setStrValue("1")->setStrEntryName("peClose");
+            $objForm->addField(new FormentryHidden("", "peClose"))->setStrValue("1")->setStrEntryName("peClose");
         }
 
         $strReturn = $objForm->renderForm(getLinkAdminHref("pages_content", "saveElement"));
@@ -245,13 +245,13 @@ abstract class ElementAdmin extends class_admin_controller implements interface_
 
         $objStartDate = null;
         if (isset($arrElementData["system_date_start"]) && $arrElementData["system_date_start"] > 0) {
-            $objStartDate = new class_date($arrElementData["system_date_start"]);
+            $objStartDate = new \Kajona\System\System\Date($arrElementData["system_date_start"]);
             $bitShow = true;
         }
 
         $objEndDate = null;
         if (isset($arrElementData["system_date_end"]) && $arrElementData["system_date_end"] > 0) {
-            $objEndDate = new class_date($arrElementData["system_date_end"]);
+            $objEndDate = new \Kajona\System\System\Date($arrElementData["system_date_end"]);
             $bitShow = true;
         }
 
@@ -347,7 +347,7 @@ abstract class ElementAdmin extends class_admin_controller implements interface_
             $strValue = $this->getParam($strFieldname);
 
             if ($strType == "date") {
-                $objDate = new class_date("0");
+                $objDate = new \Kajona\System\System\Date("0");
                 $objDate->generateDateFromParams($strFieldname, $this->getAllParams());
                 $strValue = $objDate;
             }
@@ -377,18 +377,26 @@ abstract class ElementAdmin extends class_admin_controller implements interface_
      *
      * @param string $strName
      *
-     * @return interface_validator
-     * @throws class_exception
+     * @return ValidatorInterface
+     * @throws Exception
      * @deprecated
      */
     private function getValidatorInstance($strName)
     {
-        $strClassname = "class_".$strName."_validator";
-        if (class_resourceloader::getInstance()->getPathForFile("/system/validators/".$strClassname.".php")) {
-            return new $strClassname();
+
+        if (class_exists($strName)) {
+            return new $strName();
+        }
+
+        if (uniStrpos($strName, "class_") === false) {
+            $strName = "class_".$strName."_validator";
+        }
+
+        if (Resourceloader::getInstance()->getPathForFile("/system/validators/".$strName.".php")) {
+            return new $strName();
         }
         else {
-            throw new class_exception("failed to load validator of type ".$strClassname, class_exception::$level_ERROR);
+            throw new Exception("failed to load validator of type ".$strName, Exception::$level_ERROR);
         }
     }
 
@@ -401,17 +409,17 @@ abstract class ElementAdmin extends class_admin_controller implements interface_
     public final function loadElementData()
     {
 
-        $objAnnotations = new class_reflection($this);
-        $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(class_orm_base::STR_ANNOTATION_TARGETTABLE);
+        $objAnnotations = new Reflection($this);
+        $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(OrmBase::STR_ANNOTATION_TARGETTABLE);
         $strTargetTable = "";
         if (count($arrTargetTables) != 0) {
 
-            $arrCachedRow = class_orm_rowcache::getCachedInitRow($this->getSystemid());
+            $arrCachedRow = OrmRowcache::getCachedInitRow($this->getSystemid());
             if ($arrCachedRow !== null && !isset($arrCachedRow["content_id"])) {
-                class_orm_rowcache::removeSingleRow($this->getSystemid());
+                OrmRowcache::removeSingleRow($this->getSystemid());
             }
 
-            $objORM = new class_orm_objectinit($this);
+            $objORM = new OrmObjectinit($this);
             $objORM->initObjectFromDb();
             $arrTables = explode(".", $arrTargetTables[0]);
             $strTargetTable = _dbprefix_.$arrTables[0];
@@ -421,7 +429,7 @@ abstract class ElementAdmin extends class_admin_controller implements interface_
             $strTargetTable = $this->getArrModule("table");
         }
 
-        $objORM = new class_orm_objectlist();
+        $objORM = new OrmObjectlist();
         //Element-Table given?
         if ($strTargetTable != "") {
             $strQuery = "SELECT *
@@ -454,22 +462,22 @@ abstract class ElementAdmin extends class_admin_controller implements interface_
     					   AND system_id = ? ";
 
         }
-        $this->arrElementData = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getSystemid()));
-        class_orm_rowcache::addSingleInitRow($this->arrElementData);
+        $this->arrElementData = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getSystemid()));
+        OrmRowcache::addSingleInitRow($this->arrElementData);
         return $this->arrElementData;
     }
 
 
     /**
-     * @throws class_exception
+     * @throws Exception
      * @return void
      */
     public function updateForeignElement()
     {
-        $objAnnotations = new class_reflection($this);
-        $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(class_orm_base::STR_ANNOTATION_TARGETTABLE);
+        $objAnnotations = new Reflection($this);
+        $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(OrmBase::STR_ANNOTATION_TARGETTABLE);
         if (count($arrTargetTables) != 0) {
-            $objORM = new class_orm_objectupdate($this);
+            $objORM = new OrmObjectupdate($this);
             $objORM->updateStateToDb();
         }
 
@@ -478,7 +486,7 @@ abstract class ElementAdmin extends class_admin_controller implements interface_
         if ($strElementTableColumns != "") {
 
             //open new tx
-            class_carrier::getInstance()->getObjDB()->transactionBegin();
+            Carrier::getInstance()->getObjDB()->transactionBegin();
 
             $arrElementParams = $this->getArrParamData();
 
@@ -495,7 +503,7 @@ abstract class ElementAdmin extends class_admin_controller implements interface_
                     }
 
                     $arrParams[] = $strColumnValue;
-                    $arrInserts[] = " ".class_carrier::getInstance()->getObjDB()->encloseColumnName($strTableColumnName)." = ? ";
+                    $arrInserts[] = " ".Carrier::getInstance()->getObjDB()->encloseColumnName($strTableColumnName)." = ? ";
                 }
 
                 $strRowUpdates = implode(", ", $arrInserts);
@@ -505,22 +513,22 @@ abstract class ElementAdmin extends class_admin_controller implements interface_
 
                 $arrParams[] = $this->getSystemid();
 
-                if (!class_carrier::getInstance()->getObjDB()->_pQuery($strUpdateQuery, $arrParams)) {
-                    class_carrier::getInstance()->getObjDB()->transactionRollback();
+                if (!Carrier::getInstance()->getObjDB()->_pQuery($strUpdateQuery, $arrParams)) {
+                    Carrier::getInstance()->getObjDB()->transactionRollback();
                 }
                 else {
-                    class_carrier::getInstance()->getObjDB()->transactionCommit();
+                    Carrier::getInstance()->getObjDB()->transactionCommit();
                 }
             }
             else {
-                throw new class_exception("Element has invalid tableRows value!!!", class_exception::$level_ERROR);
+                throw new Exception("Element has invalid tableRows value!!!", Exception::$level_ERROR);
             }
         }
         else {
             //To remain backwards-compatible:
             //Call the save-method of the element instead or if the element wants to update its data specially
             if (method_exists($this, "actionSave") && !$this->actionSave($this->getSystemid())) {
-                throw new class_exception("Element returned error saving to database!!!", class_exception::$level_ERROR);
+                throw new Exception("Element returned error saving to database!!!", Exception::$level_ERROR);
             }
         }
     }
@@ -532,8 +540,8 @@ abstract class ElementAdmin extends class_admin_controller implements interface_
      */
     public function getTable()
     {
-        $objAnnotations = new class_reflection($this);
-        $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(class_orm_base::STR_ANNOTATION_TARGETTABLE);
+        $objAnnotations = new Reflection($this);
+        $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(OrmBase::STR_ANNOTATION_TARGETTABLE);
         if (count($arrTargetTables) != 0) {
             $arrTable = explode(".", $arrTargetTables[0]);
             return _dbprefix_.$arrTable[0];
@@ -546,7 +554,7 @@ abstract class ElementAdmin extends class_admin_controller implements interface_
     /**
      * The label of the first config-value.
      * Overwrite this method if the element makes use of a config-value.
-     * The value itself may be read by accessing the instance of class_module_pages_pageelement
+     * The value itself may be read by accessing the instance of PagesPageelement
      * out of the admin-/portal-element-instance directly.
      *
      * @return string
@@ -559,7 +567,7 @@ abstract class ElementAdmin extends class_admin_controller implements interface_
     /**
      * The label of the second config-value.
      * Overwrite this method if the element makes use of a config-value.
-     * The value itself may be read by accessing the instance of class_module_pages_pageelement
+     * The value itself may be read by accessing the instance of PagesPageelement
      * out of the admin-/portal-element-instance directly.
      *
      * @return string
@@ -572,7 +580,7 @@ abstract class ElementAdmin extends class_admin_controller implements interface_
     /**
      * The label of the third config-value.
      * Overwrite this method if the element makes use of a config-value.
-     * The value itself may be read by accessing the instance of class_module_pages_pageelement
+     * The value itself may be read by accessing the instance of PagesPageelement
      * out of the admin-/portal-element-instance directly.
      *
      * @return string
@@ -600,7 +608,7 @@ abstract class ElementAdmin extends class_admin_controller implements interface_
      */
     public function getContentTitle()
     {
-        $objAnnotations = new class_reflection($this);
+        $objAnnotations = new Reflection($this);
         $arrProperties = $objAnnotations->getPropertiesWithAnnotation(ElementAdmin::STR_ANNOTATION_ELEMENTCONTENTTITLE);
         if (count($arrProperties) > 0) {
             $this->loadElementData();
@@ -624,7 +632,7 @@ abstract class ElementAdmin extends class_admin_controller implements interface_
      */
     public function getElementDescription()
     {
-        $strName = uniSubstr(get_class($this), uniStrlen("class_"), -6);
+        $strName = uniSubstr(get_class($this), uniStrlen("class_"), -6);//TODO class name parsing
         $strDesc = $this->getLang($strName."_description");
         if ($strDesc == "!".$strName."_description!") {
             $strDesc = "";
@@ -665,7 +673,7 @@ abstract class ElementAdmin extends class_admin_controller implements interface_
      *
      * @return void
      */
-    public final function setDoValidation($bitDoValidation)
+    final public function setDoValidation($bitDoValidation)
     {
         $this->bitDoValidation = $bitDoValidation;
     }
@@ -682,7 +690,7 @@ abstract class ElementAdmin extends class_admin_controller implements interface_
      *
      * @todo
      */
-    protected final function addOptionalFormElement($strContent)
+    final protected function addOptionalFormElement($strContent)
     {
         $this->strSystemFormElements .= $strContent;
     }
@@ -717,14 +725,14 @@ abstract class ElementAdmin extends class_admin_controller implements interface_
      * make sure the link is a valid portal page.
      * If you want to suppress the entry from the result, return an empty string instead.
      *
-     * @param class_search_result $objResult
+     * @param SearchResult $objResult
      *
      * @see getLinkPortalHref()
      * @return mixed
      */
-    public function updateSearchResult(class_search_result $objResult)
+    public function updateSearchResult(SearchResult $objResult)
     {
-        $objORM = new class_orm_objectlist();
+        $objORM = new OrmObjectlist();
         //load the matching site of the current page-element
         $strQuery = "SELECT page_name, page_id, pageproperties_browsername
 						 FROM "._dbprefix_."page_element,
@@ -738,10 +746,10 @@ abstract class ElementAdmin extends class_admin_controller implements interface_
 						   ".$objORM->getDeletedWhereRestriction()."
 						   AND system_status = 1";
 
-        $arrPage = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getSystemid()));
+        $arrPage = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getSystemid()));
 
         if (isset($arrPage["page_name"])) {
-            $objResult->setStrPagelink(class_link::getLinkPortal($arrPage["page_name"], "", "_self", $arrPage["pageproperties_browsername"], "", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8"))));
+            $objResult->setStrPagelink(Link::getLinkPortal($arrPage["page_name"], "", "_self", $arrPage["pageproperties_browsername"], "", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8"))));
             $objResult->setStrPagename($arrPage["page_name"]);
         }
 

@@ -1,35 +1,35 @@
 <?php
 
 namespace Kajona\System\Tests;
-use class_testbase;
 
-require_once (__DIR__."/../../module_system/system/class_testbase.php");
+use Kajona\System\System\Filesystem;
+use Kajona\System\System\TemplateFileParser;
+use Kajona\System\System\Testbase;
 
-class TemplateIncludeTest extends class_testbase
+class TemplateIncludeTest extends Testbase
 {
 
     public function testTemplateIncludes()
     {
 
-        $objFilesystem = new \class_filesystem();
+        $objFilesystem = new Filesystem();
         $objFilesystem->folderCreate("/templates/default/tpl/test", true);
 
-        file_put_contents(_realpath_."/templates/default/tpl/test/test1.tpl", "
+        file_put_contents(_realpath_ . "/templates/default/tpl/test/test1.tpl", "
             page template
 
             [KajonaTemplateInclude,/test/test2.tpl]
         ");
 
-        $this->assertFileExists(_realpath_."/templates/default/tpl/test/test1.tpl");
+        $this->assertFileExists(_realpath_ . "/templates/default/tpl/test/test1.tpl");
 
 
+        file_put_contents(_realpath_ . "/templates/default/tpl/test/test2.tpl", "template 2");
 
-        file_put_contents(_realpath_."/templates/default/tpl/test/test2.tpl", "template 2");
-
-        $this->assertFileExists(_realpath_."/templates/default/tpl/test/test2.tpl");
+        $this->assertFileExists(_realpath_ . "/templates/default/tpl/test/test2.tpl");
 
 
-        $objParser = new \class_template_file_parser();
+        $objParser = new TemplateFileParser();
         $strContent = $objParser->readTemplate("/test/test1.tpl");
 
         $this->assertEquals($strContent, "

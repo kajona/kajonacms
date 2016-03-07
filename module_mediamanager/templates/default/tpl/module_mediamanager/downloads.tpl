@@ -2,24 +2,24 @@
 
 <!-- available placeholders: systemid, folderlist, filelist, pathnavigation, link_back, link_pages, link_forward -->
 <list>
-    <div class="mmPathnavigation">%%pathnavigation%%</div>
-    <p>
-        <table cellspacing="0" class="portalList">
-            %%folderlist%%
-        </table>
-    </p>
-    <p>
-        <table cellspacing="0" class="portalList">
-            %%filelist%%
-        </table>
-    </p>
-    %%link_back%% %%link_pages%% %%link_forward%%
+    <ol class="breadcrumb">%%pathnavigation%%</ol>
+    <table class="table table-striped">
+        %%folderlist%%
+    </table>
+    <table class="table table-striped">
+        %%filelist%%
+    </table>
+
+
+    <nav class="text-xs-center">
+        <ul class=" pagination pagination-sm">%%link_back%% %%link_pages%% %%link_forward%%</ul>
+    </nav>
 </list>
 
     <!-- available placeholders: folder_name, folder_id, folder_description, folder_subtitle, folder_href, folder_preview -->
 <folderlist>
-    <tr class="portalListRow1">
-        <td class="image"><img src="_webpath_/templates/default/pics/default/icon_folderClosed.gif" /></td>
+    <tr>
+        <td class="image"><i class="fa fa-folder"></i></td>
         <td class="title"><a href="%%folder_href%%" data-kajona-editable="%%folder_id%%#strName#plain">%%folder_name%%</a></td>
     </tr>
     <tr class="portalListRow2">
@@ -43,11 +43,11 @@
 -->
 <filelist_file>
     <tr class="portalListRow1">
-        <td class="image"><img src="_webpath_/templates/default/pics/default/icon_downloads.gif" /></td>
+        <td class="image"><i class="fa fa-cloud-download"></i></td>
         <td class="title"><a href="%%file_details_href%%" data-kajona-editable="%%file_id%%#strName#plain">%%file_name%%</a></td>
         <td class="center">%%file_size%%</td>
         <td class="actions">%%file_link%%</td>
-        <td class="rating">%%file_rating%%</td>
+        <td class="rating text-xs-right">%%file_rating%%</td>
     </tr>
     <tr class="portalListRow2">
         <td></td>
@@ -59,7 +59,7 @@
 
 <!-- available placeholders: pathnavigation_point -->
 <pathnavigation_level>
-%%pathnavigation_point%% >
+    <li>%%pathnavigation_point%%</li>
 </pathnavigation_level>
 
 
@@ -96,3 +96,27 @@
 <img_preview>
     <img src="[img,%%img_filename%%,150,100]" alt="%%img_title%%" />
 </img_preview>
+
+
+
+
+<!-- available placeholders: pageHref -->
+<pager_fwd>
+    <li class="page-item"><a href="%%pageHref%%" class="page-link">[lang,commons_next,system]</a></li>
+</pager_fwd>
+
+<!-- available placeholders: pageHref -->
+<pager_back>
+    <li class="page-item"><a href="%%pageHref%%" class="page-link">[lang,commons_back,system]</a></li>
+</pager_back>
+
+<!-- available placeholders: pageHref, pageNumber -->
+<pager_entry>
+    <li class="page-item"><a href="%%pageHref%%" class="page-link">[%%pageNumber%%]</a></li>
+</pager_entry>
+
+<!-- available placeholders: pageHref, pageNumber -->
+<pager_entry_active>
+    <li class="page-item active"><a href="%%pageHref%%" class="page-link">[%%pageNumber%%]</a></li>
+</pager_entry_active>
+

@@ -10,7 +10,7 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["eintragen"]                       = "Registar";
+$lang["insert_link"]                       = "Registar";
 $lang["eintragen_fehler"]                = "Por favor introduza todos os valores";
 $lang["insert_error_email"]              = "Correio electrónico inexistente";
 $lang["insert_error_name"]               = "Nome inexistente";

@@ -7,6 +7,8 @@
 *   $Id$                                     *
 ********************************************************************************************************/
 
+namespace Kajona\Debugging\Debug;
+
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
 echo "|                                                                               |\n";
@@ -15,12 +17,12 @@ echo "|                                                                         
 echo "+-------------------------------------------------------------------------------+\n";
 
 
-$arrEntries = class_cache::getAllCacheEntries();
+$arrEntries = \Kajona\System\System\Cache::getAllCacheEntries();
 
 $arrData = array();
 $arrHeader = array();
 
-$objText = class_carrier::getInstance()->getObjLang();
+$objText = \Kajona\System\System\Carrier::getInstance()->getObjLang();
 
 $arrHeader[] = "Leasetime";
 $arrHeader[] = "Source";

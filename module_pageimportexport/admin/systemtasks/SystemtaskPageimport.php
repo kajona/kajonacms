@@ -7,18 +7,18 @@
 
 namespace Kajona\Pageimportexport\Admin\Systemtasks;
 
-use class_carrier;
-use class_filesystem;
-use class_logger;
-use class_module_languages_language;
-use class_module_system_module;
-use class_objectfactory;
-use class_systemtask_base;
-use class_xml_parser;
-use interface_admin_systemtask;
 use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
+use Kajona\System\Admin\Systemtasks\AdminSystemtaskInterface;
+use Kajona\System\Admin\Systemtasks\SystemtaskBase;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Filesystem;
+use Kajona\System\System\LanguagesLanguage;
+use Kajona\System\System\Logger;
+use Kajona\System\System\Objectfactory;
+use Kajona\System\System\SystemModule;
+use Kajona\System\System\XmlParser;
 
 
 /**
@@ -27,7 +27,7 @@ use Kajona\Pages\System\PagesPageelement;
  * @package module_pageimportexport
  * @author sidler@mulchprod.de
  */
-class SystemtaskPageimport extends class_systemtask_base implements interface_admin_systemtask
+class SystemtaskPageimport extends SystemtaskBase implements AdminSystemtaskInterface
 {
 
 
@@ -43,8 +43,7 @@ class SystemtaskPageimport extends class_systemtask_base implements interface_ad
     }
 
     /**
-     * @see interface_admin_systemtask::getGroupIdenitfier()
-     * @return string
+     * @inheritdoc
      */
     public function getGroupIdentifier()
     {
@@ -52,8 +51,7 @@ class SystemtaskPageimport extends class_systemtask_base implements interface_ad
     }
 
     /**
-     * @see interface_admin_systemtask::getStrInternalTaskName()
-     * @return string
+     * @inheritdoc
      */
     public function getStrInternalTaskName()
     {
@@ -61,8 +59,7 @@ class SystemtaskPageimport extends class_systemtask_base implements interface_ad
     }
 
     /**
-     * @see interface_admin_systemtask::getStrTaskName()
-     * @return string
+     * @inheritdoc
      */
     public function getStrTaskName()
     {
@@ -70,19 +67,18 @@ class SystemtaskPageimport extends class_systemtask_base implements interface_ad
     }
 
     /**
-     * @see interface_admin_systemtask::executeTask()
-     * @return string
+     * @inheritdoc
      */
     public function executeTask()
     {
 
-        if (!class_module_system_module::getModuleByName("pages")->rightEdit()) {
+        if (!SystemModule::getModuleByName("pages")->rightEdit()) {
             return $this->getLang("commons_error_permissions");
         }
 
         $strReturn = "";
 
-        $objFilesystem = new class_filesystem();
+        $objFilesystem = new Filesystem();
         $strTarget = $this->getParam("pageimport_file");
         $strError = $this->getParam("pageimport_error");
         $strTopFolderId = $this->getParam("topFolderId");
@@ -93,7 +89,7 @@ class SystemtaskPageimport extends class_systemtask_base implements interface_ad
             if ($strError != "upload") {
 
                 //parse using the kajona xml parser
-                $objXML = new class_xml_parser();
+                $objXML = new XmlParser();
                 $objXML->loadFile($strTarget);
 
                 $arrXML = $objXML->xmlToArray();
@@ -124,8 +120,7 @@ class SystemtaskPageimport extends class_systemtask_base implements interface_ad
     }
 
     /**
-     * @see interface_admin_systemtask::getAdminForm()
-     * @return string
+     * @inheritdoc
      */
     public function getAdminForm()
     {
@@ -136,21 +131,20 @@ class SystemtaskPageimport extends class_systemtask_base implements interface_ad
     }
 
     /**
-     * @see interface_admin_systemtask::getSubmitParams()
-     * @return string
+     * @inheritdoc
      */
     public function getSubmitParams()
     {
         $arrFile = $this->getParam("pageimport_file");
         $strError = "";
 
-        $objFilesystem = new class_filesystem();
+        $objFilesystem = new Filesystem();
         $strTarget = "/import_".generateSystemid().".xml";
 
         $strSuffix = uniStrtolower(uniSubstr($arrFile["name"], uniStrrpos($arrFile["name"], ".")));
         if ($strSuffix == ".xml") {
             if ($objFilesystem->copyUpload($strTarget, $arrFile["tmp_name"])) {
-                class_logger::getInstance()->addLogRow("uploaded file ".$strTarget, class_logger::$levelInfo);
+                Logger::getInstance()->addLogRow("uploaded file ".$strTarget, Logger::$levelInfo);
             }
             else {
                 $strError = "upload";
@@ -189,7 +183,7 @@ class SystemtaskPageimport extends class_systemtask_base implements interface_ad
             }
         }
         elseif (validateSystemid($arrMetadata["previd"][0]["value"])) {
-            $objRoot = class_objectfactory::getInstance()->getObject($arrMetadata["previd"][0]["value"]);
+            $objRoot = Objectfactory::getInstance()->getObject($arrMetadata["previd"][0]["value"]);
             if ($objRoot !== null) {
                 $strPrevId = $arrMetadata["previd"][0]["value"];
             }
@@ -207,7 +201,7 @@ class SystemtaskPageimport extends class_systemtask_base implements interface_ad
                 $strPrevId = $objPage->getPrevId();
                 $objPage->deleteObject();
             }
-            class_carrier::getInstance()->getObjDB()->flushQueryCache();
+            Carrier::getInstance()->getObjDB()->flushQueryCache();
         }
 
 
@@ -220,14 +214,14 @@ class SystemtaskPageimport extends class_systemtask_base implements interface_ad
         $strReturn .= "created page ".$objPage->getStrName()."\n";
 
         //save propertysets
-        $objLanguages = new class_module_languages_language();
+        $objLanguages = new LanguagesLanguage();
         $strCurrentLanguage = $objLanguages->getStrAdminLanguageToWorkOn();
 
         $arrPropertysets = $arrMetadata["pageproperties"][0]["propertyset"];
 
         foreach ($arrPropertysets as $arrOnePropSet) {
 
-            class_carrier::getInstance()->getObjDB()->flushQueryCache();
+            Carrier::getInstance()->getObjDB()->flushQueryCache();
 
             $objLanguages->setStrAdminLanguageToWorkOn($arrOnePropSet["attributes"]["language"]);
 
@@ -281,12 +275,12 @@ class SystemtaskPageimport extends class_systemtask_base implements interface_ad
                 unset($arrValues["content_id"]);
 
                 //and build the query itself
-                $strQuery = "UPDATE ".class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_.$strTable)." SET ";
+                $strQuery = "UPDATE ".Carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_.$strTable)." SET ";
 
                 $arrInsertValues = array();
                 $arrEscapes = array();
 
-                $arrColumns = class_carrier::getInstance()->getObjDB()->getColumnsOfTable(_dbprefix_.$strTable);
+                $arrColumns = Carrier::getInstance()->getObjDB()->getColumnsOfTable(_dbprefix_.$strTable);
                 $arrColumns = array_map(function ($arrColumn) {
                     return $arrColumn["columnName"];
                 }, $arrColumns);
@@ -295,7 +289,7 @@ class SystemtaskPageimport extends class_systemtask_base implements interface_ad
                     if(!in_array($strColumn, $arrColumns)) {
                         continue;
                     }
-                    $strQuery .= class_carrier::getInstance()->getObjDB()->encloseColumnName($strColumn)." = ? ,";
+                    $strQuery .= Carrier::getInstance()->getObjDB()->encloseColumnName($strColumn)." = ? ,";
 
                     $arrInsertValues[] = $strValue;
                     $arrEscapes[] = false;
@@ -305,7 +299,7 @@ class SystemtaskPageimport extends class_systemtask_base implements interface_ad
                 $strQuery .= " WHERE content_id = ?";
                 $arrInsertValues[] = $objElement->getSystemid();
 
-                class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, $arrInsertValues, $arrEscapes);
+                Carrier::getInstance()->getObjDB()->_pQuery($strQuery, $arrInsertValues, $arrEscapes);
                 $strReturn .= "created element ".$objElement->getStrName()."\n";
 
             }

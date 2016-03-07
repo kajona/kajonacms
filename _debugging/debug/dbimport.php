@@ -4,6 +4,9 @@
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
+namespace Kajona\Debugging\Debug;
+
+use Kajona\System\System\Filesystem;
 
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
@@ -14,7 +17,7 @@ echo "+-------------------------------------------------------------------------
 
 if(issetPost("doimport")) {
     $strFilename = getPost("dumpname");
-    $objDb = class_carrier::getInstance()->getObjDB();
+    $objDb = \Kajona\System\System\Carrier::getInstance()->getObjDB();
     echo "importing ".$strFilename."\n";
     if($objDb->importDb($strFilename))
         echo "\n<span style='color: green;font-weight:bold;'>import successfull.</span>\n";
@@ -24,7 +27,7 @@ if(issetPost("doimport")) {
 else {
     echo "Searching for dumps in dbdumps under: "._projectpath_."\n";
 
-    $objFilesystem = new class_filesystem();
+    $objFilesystem = new Filesystem();
     if($objFilesystem->isWritable("/project/dbdumps")) {
         echo "Searching dbdumps available...\n";
 

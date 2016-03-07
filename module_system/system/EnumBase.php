@@ -6,7 +6,6 @@
 
 namespace Kajona\System\System;
 
-use class_exception;
 
 /**
  * The enum base class may be used to create php-based enum approaches.
@@ -43,7 +42,7 @@ abstract class EnumBase
      *
      * @return string[]
      */
-     abstract protected function getArrValues();
+    abstract protected function getArrValues();
 
     /**
      * @var string
@@ -66,14 +65,14 @@ abstract class EnumBase
      *
      * @param string $strName
      *
-     * @throws class_exception
+     * @throws Exception
      * @return EnumBase
      */
     public static function __callStatic($strName, $arrArguments)
     {
         $objEnum = new static($strName);
         if (!in_array($strName, $objEnum->getArrValues())) {
-            throw new class_exception($strName." is not allowed for enum ".get_called_class(), class_exception::$level_FATALERROR);
+            throw new Exception($strName." is not allowed for enum ".get_called_class(), Exception::$level_FATALERROR);
         }
 
         return $objEnum;

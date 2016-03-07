@@ -6,11 +6,14 @@
 *-------------------------------------------------------------------------------------------------------*
 *   $Id$                                     *
 ********************************************************************************************************/
+namespace Kajona\Debugging\Debug;
+
+use Kajona\Navigation\System\NavigationPoint;
+use Kajona\Navigation\System\NavigationTree;
+use Kajona\System\System\SystemAspect;
 
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
-echo "|                                                                               |\n";
-echo "| CACHEVIEW                                                                     |\n";
 echo "|                                                                               |\n";
 echo "+-------------------------------------------------------------------------------+\n";
 
@@ -18,13 +21,13 @@ echo "Creating 200 records with sortmanager...\n";
 
 $arrTimestampStart = gettimeofday();
 
-$objNaviTree = new class_module_navigation_tree();
+$objNaviTree = new NavigationTree();
 $objNaviTree->updateObjectToDb();
 
-/** @var class_model[] $arrRecords */
+/** @var \Kajona\System\System\Model[] $arrRecords */
 $arrRecords = array();
 for($intI = 0; $intI < 200; $intI++) {
-    $objPoint = new class_module_navigation_point();
+    $objPoint = new NavigationPoint();
     $objPoint->updateObjectToDb($objNaviTree->getSystemid());
     $arrRecords[] = $objPoint;
 }
@@ -62,13 +65,13 @@ echo "\n\nCreating 200 records without sortmanager...\n";
 
 $arrTimestampStart = gettimeofday();
 
-$objRootAspect = new class_module_system_aspect();
+$objRootAspect = new SystemAspect();
 $objRootAspect->updateObjectToDb();
 
-/** @var class_model[] $arrRecords */
+/** @var \Kajona\System\System\Model[] $arrRecords */
 $arrRecords = array();
 for($intI = 0; $intI < 200; $intI++) {
-    $objAspect = new class_module_system_aspect();
+    $objAspect = new SystemAspect();
     $objAspect->updateObjectToDb($objRootAspect->getSystemid());
     $arrRecords[] = $objAspect;
 }
@@ -97,10 +100,10 @@ $intTimeUsed = (($arrTimestampEnde['sec'] * 1000000 + $arrTimestampEnde['usec'])
 
 
 echo  "\n\n<b>PHP-Time:</b>                              " . number_format($intTimeUsed, 6) . " sec \n";
-echo  "<b>Queries db/cachesize/cached/fired:</b>     " . class_carrier::getInstance()->getObjDB()->getNumber() . "/" .
-    class_carrier::getInstance()->getObjDB()->getCacheSize() . "/" .
-    class_carrier::getInstance()->getObjDB()->getNumberCache() . "/" .
-    (class_carrier::getInstance()->getObjDB()->getNumber() - class_carrier::getInstance()->getObjDB()->getNumberCache()) . "\n";
+echo  "<b>Queries db/cachesize/cached/fired:</b>     " . \Kajona\System\System\Carrier::getInstance()->getObjDB()->getNumber() . "/" .
+    \Kajona\System\System\Carrier::getInstance()->getObjDB()->getCacheSize() . "/" .
+    \Kajona\System\System\Carrier::getInstance()->getObjDB()->getNumberCache() . "/" .
+    (\Kajona\System\System\Carrier::getInstance()->getObjDB()->getNumber() - \Kajona\System\System\Carrier::getInstance()->getObjDB()->getNumberCache()) . "\n";
 
 
 

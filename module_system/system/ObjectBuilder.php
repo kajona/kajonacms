@@ -14,6 +14,8 @@ use Pimple\Container;
  */
 class ObjectBuilder
 {
+    const ANNOTATION_INJECT = "@inject";
+
     /**
      * @var Container
      */
@@ -38,7 +40,7 @@ class ObjectBuilder
     public function factory($strClass, array $arrArguments = array())
     {
         // create new instance without constructor
-        $objReflection = new \class_reflection($strClass);
+        $objReflection = new Reflection($strClass);
         $objObject = $objReflection->newInstanceWithoutConstructor();
 
         // inject dependencies
@@ -60,8 +62,8 @@ class ObjectBuilder
     public function resolveDependencies($objObject)
     {
         // read inject annotations
-        $objReflection = new \class_reflection($objObject);
-        $arrValues = $objReflection->getPropertiesWithAnnotation("@Inject");
+        $objReflection = new Reflection($objObject);
+        $arrValues = $objReflection->getPropertiesWithAnnotation(self::ANNOTATION_INJECT);
 
         // inject dependencies
         foreach ($arrValues as $strPropertyName => $strValue) {

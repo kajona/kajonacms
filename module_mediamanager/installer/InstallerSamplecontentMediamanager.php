@@ -6,14 +6,14 @@
 
 namespace Kajona\Mediamanager\Installer;
 
-use class_module_mediamanager_repo;
-use class_module_system_setting;
-use interface_sc_installer;
+use Kajona\Mediamanager\System\MediamanagerRepo;
+use Kajona\System\System\SamplecontentInstallerInterface;
+use Kajona\System\System\SystemSetting;
 
 /**
  * Installer of the mediamanager samplecontent
  */
-class InstallerSamplecontentMediamanager implements interface_sc_installer  {
+class InstallerSamplecontentMediamanager implements SamplecontentInstallerInterface  {
 
     private $objDB;
     private $strContentLanguage;
@@ -31,7 +31,7 @@ class InstallerSamplecontentMediamanager implements interface_sc_installer  {
             mkdir(_realpath_._filespath_."/images/upload", 0777, true);
 
         $strReturn .= "Creating new picture repository\n";
-        $objRepo = new class_module_mediamanager_repo();
+        $objRepo = new MediamanagerRepo();
 
         if($this->strContentLanguage == "de")
             $objRepo->setStrTitle("Hochgeladene Bilder");
@@ -47,7 +47,7 @@ class InstallerSamplecontentMediamanager implements interface_sc_installer  {
         $strReturn .= "ID of new repo: ".$objRepo->getSystemid()."\n";
 
         $strReturn .= "Setting the repository as the default images repository\n";
-        $objSetting = class_module_system_setting::getConfigByName("_mediamanager_default_imagesrepoid_");
+        $objSetting = SystemSetting::getConfigByName("_mediamanager_default_imagesrepoid_");
         $objSetting->setStrValue($objRepo->getSystemid());
         $objSetting->updateObjectToDb();
 
@@ -56,7 +56,7 @@ class InstallerSamplecontentMediamanager implements interface_sc_installer  {
             mkdir(_realpath_._filespath_."/public", 0777, true);
 
         $strReturn .= "Creating new file repository\n";
-        $objRepo = new class_module_mediamanager_repo();
+        $objRepo = new MediamanagerRepo();
 
         if($this->strContentLanguage == "de")
             $objRepo->setStrTitle("Hochgeladene Dateien");
@@ -71,7 +71,7 @@ class InstallerSamplecontentMediamanager implements interface_sc_installer  {
         $strReturn .= "ID of new repo: ".$objRepo->getSystemid()."\n";
 
         $strReturn .= "Setting the repository as the default files repository\n";
-        $objSetting = class_module_system_setting::getConfigByName("_mediamanager_default_filesrepoid_");
+        $objSetting = SystemSetting::getConfigByName("_mediamanager_default_filesrepoid_");
         $objSetting->setStrValue($objRepo->getSystemid());
         $objSetting->updateObjectToDb();
 

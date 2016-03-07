@@ -7,13 +7,12 @@
 
 namespace Kajona\Userlist\Portal\Elements;
 
-use class_csv;
-use class_date;
-use class_module_user_group;
-use class_module_user_user;
-use class_usersources_user_kajona;
 use Kajona\Pages\Portal\ElementPortal;
 use Kajona\Pages\Portal\PortalElementInterface;
+use Kajona\System\System\Csv;
+use Kajona\System\System\UserGroup;
+use Kajona\System\System\Usersources\UsersourcesUserKajona;
+use Kajona\System\System\UserUser;
 
 
 /**
@@ -22,13 +21,15 @@ use Kajona\Pages\Portal\PortalElementInterface;
  * @author sidler@mulchprod.de
  * @targetTable element_universal.content_id
  */
-class ElementUserlistPortal extends ElementPortal implements PortalElementInterface {
+class ElementUserlistPortal extends ElementPortal implements PortalElementInterface
+{
 
 
-    public function loadData() {
+    public function loadData()
+    {
         $strReturn = "";
 
-        if($this->getAction() == "exportToCsv") {
+        if ($this->getAction() == "exportToCsv") {
             $strReturn .= $this->export2csv();
         }
         else {
@@ -40,10 +41,11 @@ class ElementUserlistPortal extends ElementPortal implements PortalElementInterf
     }
 
 
-    private function export2csv() {
+    private function export2csv()
+    {
         $arrUser = $this->loadUserlist();
 
-        $objCsv = new class_csv(";");
+        $objCsv = new Csv(";");
         $objCsv->setArrMapping(
             array(
                 $this->getLang("userlistName"),
@@ -59,9 +61,9 @@ class ElementUserlistPortal extends ElementPortal implements PortalElementInterf
         );
 
         $arrCsvValues = array();
-        foreach($arrUser as $objOneUser) {
+        foreach ($arrUser as $objOneUser) {
             $objTargetUser = $objOneUser->getObjSourceUser();
-            if($objTargetUser instanceof class_usersources_user_kajona) {
+            if ($objTargetUser instanceof UsersourcesUserKajona) {
                 $arrRow = array();
                 $arrRow[] = $objTargetUser->getStrName();
                 $arrRow[] = $objTargetUser->getStrForename();
@@ -71,7 +73,7 @@ class ElementUserlistPortal extends ElementPortal implements PortalElementInterf
                 $arrRow[] = $objTargetUser->getStrCity();
                 $arrRow[] = $objTargetUser->getStrTel();
                 $arrRow[] = $objTargetUser->getStrMobile();
-                $arrRow[] = uniStrlen($objTargetUser->getLongDate()) > 5 ? dateToString(new class_date($objTargetUser->getLongDate()), false) : "";
+                $arrRow[] = uniStrlen($objTargetUser->getLongDate()) > 5 ? dateToString(new \Kajona\System\System\Date($objTargetUser->getLongDate()), false) : "";
 
                 $arrCsvValues[] = $arrRow;
             }
@@ -87,7 +89,8 @@ class ElementUserlistPortal extends ElementPortal implements PortalElementInterf
     /**
      * @return string
      */
-    private function getUserlist() {
+    private function getUserlist()
+    {
         $strReturn = "";
 
         $strTemplateWrapperID = $this->objTemplate->readTemplate("/module_userlist/".$this->arrElementData["char1"], "userlist_wrapper");
@@ -97,9 +100,9 @@ class ElementUserlistPortal extends ElementPortal implements PortalElementInterf
 
         $strRows = "";
 
-        foreach($arrUserFinal as $objOneUser) {
+        foreach ($arrUserFinal as $objOneUser) {
             $objTargetUser = $objOneUser->getObjSourceUser();
-            if($objTargetUser instanceof class_usersources_user_kajona) {
+            if ($objTargetUser instanceof UsersourcesUserKajona) {
                 $arrRow = array();
                 $arrRow["userName"] = $objTargetUser->getStrName();
                 $arrRow["userForename"] = $objTargetUser->getStrForename();
@@ -109,7 +112,7 @@ class ElementUserlistPortal extends ElementPortal implements PortalElementInterf
                 $arrRow["userCity"] = $objTargetUser->getStrCity();
                 $arrRow["userPhone"] = $objTargetUser->getStrTel();
                 $arrRow["userMobile"] = $objTargetUser->getStrMobile();
-                $arrRow["userBirthday"] = uniStrlen($objTargetUser->getLongDate()) > 5 ? dateToString(new class_date($objTargetUser->getLongDate()), false) : "";
+                $arrRow["userBirthday"] = uniStrlen($objTargetUser->getLongDate()) > 5 ? dateToString(new \Kajona\System\System\Date($objTargetUser->getLongDate()), false) : "";
                 $strRows .= $this->fillTemplate($arrRow, $strTemplateRowID);
             }
 
@@ -123,36 +126,37 @@ class ElementUserlistPortal extends ElementPortal implements PortalElementInterf
     }
 
     /**
-     * @return class_module_user_user[]
+     * @return UserUser[]
      */
-    private function loadUserlist() {
+    private function loadUserlist()
+    {
         //load all users given
         $arrUser = array();
-        if(validateSystemid($this->arrElementData["char2"])) {
-            $objGroup = new class_module_user_group($this->arrElementData["char2"]);
+        if (validateSystemid($this->arrElementData["char2"])) {
+            $objGroup = new UserGroup($this->arrElementData["char2"]);
             $arrUserId = $objGroup->getObjSourceGroup()->getUserIdsForGroup();
-            foreach($arrUserId as $strOneUser) {
-                $arrUser[] = new class_module_user_user($strOneUser);
+            foreach ($arrUserId as $strOneUser) {
+                $arrUser[] = new UserUser($strOneUser);
             }
         }
         else {
-            $arrUser = class_module_user_user::getObjectList();
+            $arrUser = UserUser::getObjectList();
         }
 
         //filter against inactive?
         $arrUserFinal = array();
-        if($this->arrElementData["int1"] == "1") {
-            foreach($arrUser as /** @var class_module_user_user */
-                    $objOneUser) {
-                if($objOneUser->getIntActive() == "1") {
+        if ($this->arrElementData["int1"] == "1") {
+            foreach ($arrUser as /** @var UserUser */
+                     $objOneUser) {
+                if ($objOneUser->getIntActive() == "1") {
                     $arrUserFinal[] = $objOneUser;
                 }
             }
         }
-        elseif($this->arrElementData["int1"] == "2") {
-            foreach($arrUser as /** @var class_module_user_user */
-                    $objOneUser) {
-                if($objOneUser->getIntActive() == "0") {
+        elseif ($this->arrElementData["int1"] == "2") {
+            foreach ($arrUser as /** @var UserUser */
+                     $objOneUser) {
+                if ($objOneUser->getIntActive() == "0") {
                     $arrUserFinal[] = $objOneUser;
                 }
             }

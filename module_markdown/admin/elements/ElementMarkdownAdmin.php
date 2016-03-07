@@ -9,8 +9,6 @@
 
 namespace Kajona\Markdown\Admin\Elements;
 
-use class_element_admin;
-use interface_admin_element;
 use Kajona\Pages\Admin\AdminElementInterface;
 use Kajona\Pages\Admin\ElementAdmin;
 
@@ -22,7 +20,8 @@ use Kajona\Pages\Admin\ElementAdmin;
  *
  * @targetTable element_universal.content_id
  */
-class ElementMarkdownAdmin extends ElementAdmin implements AdminElementInterface {
+class ElementMarkdownAdmin extends ElementAdmin implements AdminElementInterface
+{
 
     /**
      * @var string
@@ -46,38 +45,37 @@ class ElementMarkdownAdmin extends ElementAdmin implements AdminElementInterface
     private $strSourceUrl = "";
 
 
-
     /**
      * @return string
      */
-    public function getStrSourceUrl() {
+    public function getStrSourceUrl()
+    {
         return $this->strSourceUrl;
     }
 
     /**
      * @param string $strSourceUrl
      */
-    public function setStrSourceUrl($strSourceUrl) {
+    public function setStrSourceUrl($strSourceUrl)
+    {
         $this->strSourceUrl = $strSourceUrl;
     }
 
     /**
      * @return string
      */
-    public function getStrTemplate() {
+    public function getStrTemplate()
+    {
         return $this->strTemplate;
     }
 
     /**
      * @param string $strTemplate
      */
-    public function setStrTemplate($strTemplate) {
+    public function setStrTemplate($strTemplate)
+    {
         $this->strTemplate = $strTemplate;
     }
-
-
-
-
 
 
 }

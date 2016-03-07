@@ -7,44 +7,46 @@
 
 namespace Kajona\Tagto\Installer;
 
-use class_installer_base;
-use class_module_system_module;
-use interface_installer_removable;
 use Kajona\Pages\System\PagesElement;
+use Kajona\System\System\InstallerBase;
+use Kajona\System\System\InstallerRemovableInterface;
+use Kajona\System\System\SystemModule;
 
 /**
  * Installer to install a tagto-element to use in the portal
  *
  * @moduleId _tagto_module_id_
  */
-class InstallerTagto extends class_installer_base implements interface_installer_removable {
+class InstallerTagto extends InstallerBase implements InstallerRemovableInterface
+{
 
-	public function install() {
-		$strReturn = "";
+    public function install()
+    {
+        $strReturn = "";
 
         //register the module
         $this->registerModule($this->objMetadata->getStrTitle(), _tagto_module_id_, "", "", $this->objMetadata->getStrVersion(), false);
 
 
         //Register the element
-		$strReturn .= "Registering tagto-element...\n";
-		//check, if not already existing
+        $strReturn .= "Registering tagto-element...\n";
+        //check, if not already existing
         $objElement = PagesElement::getElement("tagto");
-        if($objElement == null) {
-		    $objElement = new PagesElement();
-		    $objElement->setStrName("tagto");
-		    $objElement->setStrClassAdmin("ElementTagtoAdmin.php");
-		    $objElement->setStrClassPortal("ElementTagtoPortal.php");
-		    $objElement->setIntCachetime(3600*24*30);
-		    $objElement->setIntRepeat(0);
+        if ($objElement == null) {
+            $objElement = new PagesElement();
+            $objElement->setStrName("tagto");
+            $objElement->setStrClassAdmin("ElementTagtoAdmin.php");
+            $objElement->setStrClassPortal("ElementTagtoPortal.php");
+            $objElement->setIntCachetime(3600 * 24 * 30);
+            $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->objMetadata->getStrVersion());
-			$objElement->updateObjectToDb();
-			$strReturn .= "Element registered...\n";
-		}
+            $objElement->updateObjectToDb();
+            $strReturn .= "Element registered...\n";
+        }
         else {
             $strReturn .= "Element already installed!...\n";
 
-            if($objElement->getStrVersion() < 5) {
+            if ($objElement->getStrVersion() < 5) {
                 $strReturn .= "Updating element version!...\n";
                 $objElement->setStrVersion("5.0");
                 $objElement->updateObjectToDb();
@@ -57,11 +59,12 @@ class InstallerTagto extends class_installer_base implements interface_installer
     /**
      * @return string
      */
-    public function update() {
+    public function update()
+    {
         $strReturn = "";
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "5.0") {
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if ($arrModule["module_version"] == "5.0") {
             $strReturn .= "Updating 5.0 to 5.1...\n";
             $this->updateElementAndModule("5.1");
         }
@@ -72,7 +75,8 @@ class InstallerTagto extends class_installer_base implements interface_installer
     /**
      * @inheritdoc
      */
-    public function isRemovable() {
+    public function isRemovable()
+    {
         return true;
     }
 
@@ -80,7 +84,8 @@ class InstallerTagto extends class_installer_base implements interface_installer
     /**
      * @inheritdoc
      */
-    public function remove(&$strReturn) {
+    public function remove(&$strReturn)
+    {
         return $this->removeModuleAndElement($strReturn);
     }
 }

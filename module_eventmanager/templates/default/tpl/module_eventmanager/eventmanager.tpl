@@ -31,8 +31,9 @@
     <div class="eventmanagerList">
         <div class="eventmanagerFilter">
             <form name="eventmanagerFilter" method="post" action="%%formaction%%" accept-charset="UTF-8" autocomplete="off">
-                <div><label for="event_filter_status">[lang,filter_status,eventmanager]</label>
-                    <select name="event_filter_status" id="event_filter_status"  class="inputText">
+                <fieldset class="form-group">
+                    <label for="event_filter_status">[lang,filter_status,eventmanager]</label>
+                    <select name="event_filter_status" id="event_filter_status"  class="form-control">
                         <option value="">[lang,event_status_all,eventmanager]</option>
                         <option value="0">[lang,event_status_0,eventmanager]</option>
                         <option value="1">[lang,event_status_1,eventmanager]</option>
@@ -40,16 +41,27 @@
                         <option value="3">[lang,event_status_3,eventmanager]</option>
                         <option value="4">[lang,event_status_4,eventmanager]</option>
                     </select>
-                </div>
-                <div><label for="event_filter_date_from">[lang,filter_date_from,eventmanager]</label>
-                    <input type="text" id="event_filter_date_from" name="event_filter_date_from" value="%%event_filter_date_from%%" />
-                </div>
-                <div><label for="event_filter_date_to">[lang,filter_date_to,eventmanager]</label>
-                    <input type="text" id="event_filter_date_to" name="event_filter_date_to" value="%%event_filter_date_to%%" />
-                </div>
+                </fieldset>
+                <fieldset class="form-group">
+                    <label for="event_filter_date_from">[lang,filter_date_from,eventmanager]</label>
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <input type="text" id="event_filter_date_from" name="event_filter_date_from" value="%%event_filter_date_from%%" class="form-control-sm form-control" />
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset class="form-group">
+                    <label for="event_filter_date_to">[lang,filter_date_to,eventmanager]</label>
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <input type="text" id="event_filter_date_to" name="event_filter_date_to" value="%%event_filter_date_to%%" class="form-control-sm form-control" />
+                        </div>
+                    </div>
+                </fieldset>
 
-                <div><label for="Submit"></label><input type="submit" name="Submit" id="Submit" value="[lang,filter_button,eventmanager]" class="button" /></div>
-
+                <fieldset class="form-group">
+                    <button type="submit" class="btn btn-primary">[lang,filter_button,eventmanager]</button>
+                </fieldset>
 
                 <script type="text/javascript">
                     $('#event_filter_status').val('%%event_filter_status%%');
@@ -68,10 +80,10 @@
 
             </form>
         </div>
-        <table width="90%">
+        <table class="table table-striped">
             %%events%%
         </table>
-        <p><a href="%%rssurl%%">[lang,rssfeed,eventmanager]</a></p>
+        <p><a href="%%rssurl%%" class="btn btn-info-outline"><i class="fa fa-rss"></i> [lang,rssfeed,eventmanager]</a></p>
     </div>
 </event_list>
 
@@ -90,26 +102,36 @@
     <div class="eventmanagerDetails">
         <h2 data-kajona-editable="%%strSystemid%%#strTitle#plain">%%strTitle%%</h2>
         <p data-kajona-editable="%%strSystemid%%#strDescription">%%strDescription%%</p>
-        <table>
-            <tr><td>[lang,location,eventmanager]</td><td data-kajona-editable="%%strSystemid%%#strLocation#plain">%%strLocation%%</td></tr>
-            <tr><td>[lang,dateTimeFrom,eventmanager]</td><td>%%dateTimeFrom%%</td></tr>
-            <tr><td>[lang,dateTimeUntil,eventmanager]</td><td>%%dateTimeUntil%%</td></tr>
-            <tr><td>[lang,maximumParticipants,eventmanager]</td><td data-kajona-editable="%%strSystemid%%#intParticipantsLimit#plain">%%intParticipantsLimit%%</td></tr>
-            <tr><td>[lang,currentParticipants,eventmanager]</td><td>%%currentParticipants%%</td></tr>
-            <tr><td>[lang,form_eventmanager_eventstatus,eventmanager]</td><td>[lang,event_status_%%intEventStatus%%,eventmanager]</td></tr>
-        </table>
+        <div class="row">
+            <div class="col-md-4 text-xs-right">[lang,location,eventmanager]</div><div class="col-md-8" data-kajona-editable="%%strSystemid%%#strLocation#plain">%%strLocation%%</div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 text-xs-right">[lang,dateTimeFrom,eventmanager]</div><div class="col-md-8">%%dateTimeFrom%%</div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 text-xs-right">[lang,dateTimeUntil,eventmanager]</div><div class="col-md-8">%%dateTimeUntil%%</div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 text-xs-right">[lang,maximumParticipants,eventmanager]</div><div class="col-md-8" data-kajona-editable="%%strSystemid%%#intParticipantsLimit#plain">%%intParticipantsLimit%%</div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 text-xs-right">[lang,currentParticipants,eventmanager]</div><div class="col-md-8">%%currentParticipants%%</div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 text-xs-right">[lang,form_eventmanager_eventstatus,eventmanager]</div><div class="col-md-8">[lang,event_status_%%intEventStatus%%,eventmanager]</div>
+        </div>
         %%registerLink%%
     </div>
 </event_details>
 
 <!-- available placeholders: strTitle, strDescription, intLocation, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, registerLinkHref, intMaximumParticipants -->
 <event_details_registerlink>
-    <a href="%%registerLinkHref%%">[lang,registerlink,eventmanager]</a>
+    <a href="%%registerLinkHref%%" class="btn btn-info-outline">[lang,registerlink,eventmanager]</a>
 </event_details_registerlink>
 
 <!-- available placeholders: strTitle, strDescription, strLocation, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, registerLinkHref, intMaximumParticipants -->
 <event_details_updatelink>
-<a href="%%registerLinkHref%%">[lang,updatelink,eventmanager]</a>
+<a href="%%registerLinkHref%%" class="btn btn-info-outline">[lang,updatelink,eventmanager]</a>
 </event_details_updatelink>
 
 <!-- available placeholders: strTitle, strLocation, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, formaction -->
@@ -117,24 +139,58 @@
 <event_register>
     <div>
         <h2>%%title%%</h2>
-        <table>
-            <tr><td>[lang,dateTimeFrom,eventmanager]</td><td>%%dateTimeFrom%%</td></tr>
-            <tr><td>[lang,dateTimeUntil,eventmanager]</td><td>%%dateTimeUntil%%</td></tr>
-        </table>
+        <div class="row">
+            <div class="col-md-4 text-xs-right">[lang,dateTimeFrom,eventmanager]</div><div class="col-md-8">%%dateTimeFrom%%</div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 text-xs-right">[lang,dateTimeUntil,eventmanager]</div><div class="col-md-8">%%dateTimeUntil%%</div>
+        </div>
+
         <hr />
         
+        %%formErrors%%
         <form name="formEventRegistration" method="post" action="%%formaction%%" accept-charset="UTF-8" autocomplete="off">
-            %%formErrors%%
-            <div><label for="forename">[lang,forename,eventmanager]</label><input type="text" name="forename" id="forename" value="%%forename%%" class="inputText" /></div>
-            <div><label for="lastname">[lang,lastname,eventmanager]</label><input type="text" name="lastname" id="lastname" value="%%lastname%%" class="inputText" /></div>
-            <div><label for="email">[lang,email,eventmanager]</label><input type="text" name="email" id="email" value="%%email%%" class="inputText" /></div>
-            <div><label for="phone">[lang,phone,eventmanager]</label><input type="text" name="phone" id="phone" value="%%phone%%" class="inputText" /></div>
-            <div><label for="comment">[lang,comment,eventmanager]</label><textarea name="comment" id="comment" class="inputTextarea">%%comment%%</textarea></div>
-            <div><label for="kajonaCaptcha_eventreg"></label><span id="kajonaCaptcha_eventreg"><script type="text/javascript">KAJONA.portal.loadCaptcha('eventreg', 180);</script></span> (<a href="#" onclick="KAJONA.portal.loadCaptcha('eventreg', 180); return false;">[lang,commons_captcha_reload,eventmanager]</a>)</div>
-            <div><label for="form_captcha">[lang,commons_captcha,eventmanager]</label><input type="text" name="form_captcha" id="form_captcha" class="inputText" autocomplete="off" /></div>
-            <div><label for="Submit"></label><input type="submit" name="Submit" id="Submit" value="[lang,registerSubmit,eventmanager]" class="button" /></div>
-        </form>
+            <fieldset class="form-group">
+                <label for="forename">[lang,forename,eventmanager]</label><input type="text" name="forename" id="forename" value="%%forename%%" class="form-control" />
+            </fieldset>
+            <fieldset class="form-group">
+                <label for="lastname">[lang,lastname,eventmanager]</label><input type="text" name="lastname" id="lastname" value="%%lastname%%" class="form-control" />
+            </fieldset>
+            <fieldset class="form-group">
+                <label for="email">[lang,email,eventmanager]</label><input type="text" name="email" id="email" value="%%email%%" class="form-control" />
+            </fieldset>
+            <fieldset class="form-group">
+                <label for="phone">[lang,phone,eventmanager]</label><input type="text" name="phone" id="phone" value="%%phone%%" class="form-control" />
+            </fieldset>
+            <fieldset class="form-group">
+                <label for="comment">[lang,comment,eventmanager]</label><textarea name="comment" id="comment" class="form-control">%%comment%%</textarea>
+            </fieldset>
 
+            <fieldset class="form-group">
+                <label for="form_captcha">[lang,commons_captcha,elements]</label>
+
+                <div class="row">
+                    <div class="col-xs-3">
+                        <input type="text" name="form_captcha" id="form_captcha" class="form-control" autocomplete="off" />
+                        <small class="text-muted"><a href="#" onclick="KAJONA.portal.loadCaptcha('eventreg', 180); return false;">[lang,commons_captcha_reload,elements]</a></small>
+                    </div>
+                    <div class="col-xs-6">
+                        <span id="kajonaCaptcha_eventreg"><script type="text/javascript">KAJONA.portal.loadCaptcha('eventreg', 180);</script></span>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class="form-group">
+                <button type="submit" class="btn btn-primary">[lang,registerSubmit,eventmanager]</button>
+            </fieldset>
+        </form>
+        <!-- custom bootstrap error rendering, update if required -->
+        <script type="text/javascript">
+            $.each([%%error_fields%%], function(index, value) {
+                $('#'+value).addClass('form-control-danger');
+                $('#'+value).closest('.form-group').addClass('has-danger');
+            });
+        </script>
     </div>
 </event_register>
 
@@ -145,27 +201,43 @@
 <event_register_loggedin>
 <div>
     <h2>%%title%%</h2>
-    <table>
-        <tr><td>[lang,dateTimeFrom,eventmanager]</td><td>%%dateTimeFrom%%</td></tr>
-        <tr><td>[lang,dateTimeUntil,eventmanager]</td><td>%%dateTimeUntil%%</td></tr>
-    </table>
+    <div class="row">
+        <div class="col-md-2 text-xs-right">[lang,dateTimeFrom,eventmanager]</div><div class="col-md-10">%%dateTimeFrom%%</div>
+    </div>
+    <div class="row">
+        <div class="col-md-2 text-xs-right">[lang,dateTimeUntil,eventmanager]</div><div class="col-md-10">%%dateTimeUntil%%</div>
+    </div>
     <hr />
 
+    %%formErrors%%
     <form name="formEventRegistration" method="post" action="%%formaction%%" accept-charset="UTF-8" autocomplete="off">
-        %%formErrors%%
-        <div><label for="">[lang,username,eventmanager]</label>%%username%%</div>
-        <div><label for="comment">[lang,comment,eventmanager]</label><textarea name="comment" id="comment" class="inputTextarea">%%comment%%</textarea></div>
-        <div>
+        <fieldset class="form-group">
+            <label>[lang,username,eventmanager]</label><span class="form-control">%%username%%</span>
+        </fieldset>
+        <fieldset class="form-group">
+            <label for="comment">[lang,comment,eventmanager]</label><textarea name="comment" id="comment" class="form-control">%%comment%%</textarea>
+        </fieldset>
+        <fieldset class="form-group">
             <label for="participant_status">[lang,participant_status,eventmanager]</label>
-            <select name="participant_status" id="participant_status">
+            <select name="participant_status" id="participant_status" class="form-control">
                 <option value="1">[lang,participant_status_1,eventmanager]</option>
                 <option value="2">[lang,participant_status_2,eventmanager]</option>
                 <option value="3">[lang,participant_status_3,eventmanager]</option>
             </select>
             <script type="text/javascript">$('#participant_status').val('%%participant_status%%')</script>
-        </div>
-        <div><label for="Submit"></label><input type="submit" name="Submit" value="[lang,registerSubmit,eventmanager]" class="button" /></div>
+        </fieldset>
+        <fieldset class="form-group">
+            <button type="submit" class="btn btn-primary">[lang,registerSubmit,eventmanager]</button>
+        </fieldset>
     </form>
+
+    <!-- custom bootstrap error rendering, update if required -->
+    <script type="text/javascript">
+        $.each([%%error_fields%%], function(index, value) {
+            $('#'+value).addClass('form-control-danger');
+            $('#'+value).closest('.form-group').addClass('has-danger');
+        });
+    </script>
 
 </div>
 </event_register_loggedin>
@@ -173,10 +245,18 @@
 <event_register_message>
     <div>
         <h2>%%title%%</h2>
-        <p>%%message%%</p>
+        <div class="alert alert-success" role="alert">%%message%%</div>
     </div>
 </event_register_message>
 
 <error_row>
     &bull; %%error%%<br />
 </error_row>
+
+
+<!-- available placeholders: error_list -->
+<errors>
+    <div class="alert alert-danger" role="alert">
+        <ul>%%error_list%%</ul>
+    </div>
+</errors>

@@ -7,22 +7,24 @@
 
 namespace Kajona\Directorybrowser\Installer;
 
-use class_installer_base;
-use class_module_system_module;
-use interface_installer_removable;
 use Kajona\Pages\System\PagesElement;
+use Kajona\System\System\InstallerBase;
+use Kajona\System\System\InstallerRemovableInterface;
+use Kajona\System\System\SystemModule;
 
 /**
  * Installer to install a directorybrowser-element to use in the portal
  *
  * @moduleId _directorybrowser_module_id_
  */
-class InstallerDirectorybrowser extends class_installer_base implements interface_installer_removable {
+class InstallerDirectorybrowser extends InstallerBase implements InstallerRemovableInterface
+{
 
     /**
      * @inheritdoc
      */
-	public function install() {
+    public function install()
+    {
         $strReturn = "";
 
         //register the module
@@ -32,11 +34,11 @@ class InstallerDirectorybrowser extends class_installer_base implements interfac
         $strReturn .= "Registering directorybrowser-element...\n";
         //check, if not already existing
         $objElement = PagesElement::getElement($this->objMetadata->getStrTitle());
-        if($objElement == null) {
+        if ($objElement == null) {
             $objElement = new PagesElement();
             $objElement->setStrName($this->objMetadata->getStrTitle());
-            $objElement->setStrClassAdmin("class_element_directorybrowser_admin.php");
-            $objElement->setStrClassPortal("class_element_directorybrowser_portal.php");
+            $objElement->setStrClassAdmin("ElementDirectorybrowserAdmin.php");
+            $objElement->setStrClassPortal("ElementDirectorybrowserPortal.php");
             $objElement->setIntCachetime(3600);
             $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->objMetadata->getStrVersion());
@@ -46,7 +48,7 @@ class InstallerDirectorybrowser extends class_installer_base implements interfac
         else {
             $strReturn .= "Element already installed!...\n";
 
-            if($objElement->getStrVersion() < 2) {
+            if ($objElement->getStrVersion() < 2) {
                 $strReturn .= "Updating element version!...\n";
                 $objElement->setStrVersion("2.0");
                 $objElement->updateObjectToDb();
@@ -56,24 +58,25 @@ class InstallerDirectorybrowser extends class_installer_base implements interfac
     }
 
 
-
-	public function update() {
+    public function update()
+    {
         $strReturn = "";
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "2.0") {
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if ($arrModule["module_version"] == "2.0") {
             $strReturn .= "Updating 2.0 to 2.1...\n";
             $this->updateElementAndModule("2.1");
         }
 
         return $strReturn."\n\n";
-	}
+    }
 
 
     /**
      * @inheritdoc
      */
-    public function isRemovable() {
+    public function isRemovable()
+    {
         return true;
     }
 
@@ -81,10 +84,10 @@ class InstallerDirectorybrowser extends class_installer_base implements interfac
     /**
      * @inheritdoc
      */
-    public function remove(&$strReturn) {
+    public function remove(&$strReturn)
+    {
         return $this->removeModuleAndElement($strReturn);
     }
-
 
 
 }

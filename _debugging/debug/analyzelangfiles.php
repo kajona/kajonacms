@@ -7,6 +7,9 @@
 *   $Id$                                           *
 ********************************************************************************************************/
 
+namespace Kajona\Debugging\Debug;
+
+use Kajona\System\System\Resourceloader;
 
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
@@ -76,7 +79,7 @@ echo "</table>";
 
 
 function debug_parse_foldercontent($strSourceFolder, &$arrEntries) {
-    $arrContent = class_resourceloader::getInstance()->getFolderContent($strSourceFolder, array(), true);
+    $arrContent = Resourceloader::getInstance()->getFolderContent($strSourceFolder, array(), true);
     foreach($arrContent as $strPath => $strOneEntry) {
         if($strOneEntry == "." || $strOneEntry == "..")
             continue;
@@ -118,7 +121,7 @@ function debug_get_langhelper(&$arrEntries, $strModul, $strKey) {
 
     }
 
-    $objOneHelper = new debug_class_lang_helper();
+    $objOneHelper = new DebugLangHelper();
     $objOneHelper->strModul = $strModul;
     $objOneHelper->strKey = $strKey;
     $arrEntries[] = $objOneHelper;
@@ -148,7 +151,7 @@ function debug_sort( $objA, $objB ) {
 
 
 
-class debug_class_lang_helper {
+class DebugLangHelper {
     public $strModul;
     public $strKey;
     public $strDe;

@@ -9,9 +9,9 @@
 
 namespace Kajona\Directorybrowser\Portal\Elements;
 
-use class_filesystem;
 use Kajona\Pages\Portal\ElementPortal;
 use Kajona\Pages\Portal\PortalElementInterface;
+use Kajona\System\System\Filesystem;
 
 
 /**
@@ -33,7 +33,7 @@ class ElementDirectorybrowserPortal extends ElementPortal implements PortalEleme
         $strReturn = "";
 
         //Load all files in the folder
-        $objFilesystem = new class_filesystem();
+        $objFilesystem = new Filesystem();
         $arrFiles = $objFilesystem->getFilelist($this->arrElementData["char2"]);
 
 

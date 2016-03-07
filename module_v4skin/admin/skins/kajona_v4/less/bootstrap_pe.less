@@ -4,14 +4,366 @@
 
 @import "../fonts/fontawesome/less/font-awesome.less";
 @import "../fonts/fontawesome/less/spinning.less";
-@import "close.less";
-@import "buttons.less";
-//@import "button-groups.less";
 
-//@import "../css/dropit.css";
-@import "dropdowns.less";
-@import "modals.less";
 
+//@import "close.less";
+.kajona-pe-wrap {
+    .close {
+        float: right;
+        font-size: (@font-size-base * 1.5);
+        font-weight: @close-font-weight;
+        line-height: 1;
+        color: @close-color;
+        text-shadow: @close-text-shadow;
+        .opacity(.2);
+
+        &:hover,
+        &:focus {
+            color: @close-color;
+            text-decoration: none;
+            cursor: pointer;
+            .opacity(.5);
+        }
+
+        // Additional properties for button version
+        // iOS requires the button element instead of an anchor tag.
+        // If you want the anchor version, it requires `href="#"`.
+        // See https://developer.mozilla.org/en-US/docs/Web/Events/click#Safari_Mobile
+        button& {
+            padding: 0;
+            cursor: pointer;
+            background: transparent;
+            border: 0;
+            -webkit-appearance: none;
+        }
+    }
+}
+
+
+//@import "buttons.less";
+.kajona-pe-wrap {
+    .btn {
+        display: inline-block;
+        margin-bottom: 0; // For input.btn
+        font-weight: @btn-font-weight;
+        text-align: center;
+        vertical-align: middle;
+        touch-action: manipulation;
+        cursor: pointer;
+        background-image: none; // Reset unusual Firefox-on-Android default style; see https://github.com/necolas/normalize.css/issues/214
+        border: 1px solid transparent;
+        white-space: nowrap;
+        .button-size(@padding-base-vertical; @padding-base-horizontal; @font-size-base; @line-height-base; @btn-border-radius-base);
+        .user-select(none);
+
+        &,
+        &:active,
+        &.active {
+            &:focus,
+            &.focus {
+                .tab-focus();
+            }
+        }
+
+        &:hover,
+        &:focus,
+        &.focus {
+            color: @btn-default-color;
+            text-decoration: none;
+        }
+
+        &:active,
+        &.active {
+            outline: 0;
+            background-image: none;
+            .box-shadow(inset 0 3px 5px rgba(0, 0, 0, .125));
+        }
+
+        &.disabled,
+        &[disabled],
+        fieldset[disabled] & {
+            cursor: @cursor-disabled;
+            .opacity(.65);
+            .box-shadow(none);
+        }
+
+        a& {
+            &.disabled,
+            fieldset[disabled] & {
+                pointer-events: none; // Future-proof disabling of clicks on `<a>` elements
+            }
+        }
+    }
+
+    // Alternate buttons
+    // --------------------------------------------------
+
+    .btn-default {
+        .button-variant(@btn-default-color; @btn-default-bg; @btn-default-border);
+    }
+    .btn-primary {
+        .button-variant(@btn-primary-color; @btn-primary-bg; @btn-primary-border);
+    }
+    // Success appears as green
+    .btn-success {
+        .button-variant(@btn-success-color; @btn-success-bg; @btn-success-border);
+    }
+    // Info appears as blue-green
+    .btn-info {
+        .button-variant(@btn-info-color; @btn-info-bg; @btn-info-border);
+    }
+    // Warning appears as orange
+    .btn-warning {
+        .button-variant(@btn-warning-color; @btn-warning-bg; @btn-warning-border);
+    }
+    // Danger and error appear as red
+    .btn-danger {
+        .button-variant(@btn-danger-color; @btn-danger-bg; @btn-danger-border);
+    }
+
+    // Link buttons
+    // -------------------------
+
+    // Make a button look and behave like a link
+    .btn-link {
+        color: @link-color;
+        font-weight: normal;
+        border-radius: 0;
+
+        &,
+        &:active,
+        &.active,
+        &[disabled],
+        fieldset[disabled] & {
+            background-color: transparent;
+            .box-shadow(none);
+        }
+        &,
+        &:hover,
+        &:focus,
+        &:active {
+            border-color: transparent;
+        }
+        &:hover,
+        &:focus {
+            color: @link-hover-color;
+            text-decoration: @link-hover-decoration;
+            background-color: transparent;
+        }
+        &[disabled],
+        fieldset[disabled] & {
+            &:hover,
+            &:focus {
+                color: @btn-link-disabled-color;
+                text-decoration: none;
+            }
+        }
+    }
+
+    // Button Sizes
+    // --------------------------------------------------
+
+    .btn-lg {
+        // line-height: ensure even-numbered height of button next to large input
+        .button-size(@padding-large-vertical; @padding-large-horizontal; @font-size-large; @line-height-large; @btn-border-radius-large);
+    }
+    .btn-sm {
+        // line-height: ensure proper height of button next to small input
+        .button-size(@padding-small-vertical; @padding-small-horizontal; @font-size-small; @line-height-small; @btn-border-radius-small);
+    }
+    .btn-xs {
+        .button-size(@padding-xs-vertical; @padding-xs-horizontal; @font-size-small; @line-height-small; @btn-border-radius-small);
+    }
+
+    // Block button
+    // --------------------------------------------------
+
+    .btn-block {
+        display: block;
+        width: 100%;
+    }
+
+    // Vertically space out multiple block buttons
+    .btn-block + .btn-block {
+        margin-top: 5px;
+    }
+
+    // Specificity overrides
+    input[type="submit"],
+    input[type="reset"],
+    input[type="button"] {
+        &.btn-block {
+            width: 100%;
+        }
+    }
+}
+
+//@import "dropdowns.less";
+//@import "modals.less";
+.kajona-pe-wrap {
+    //
+    // Modals
+    // --------------------------------------------------
+
+    // .modal-open      - body class for killing the scroll
+    // .modal           - container to scroll within
+    // .modal-dialog    - positioning shell for the actual modal
+    // .modal-content   - actual modal w/ bg and corners and shit
+
+    // Kill the scroll on the body
+    .modal-open {
+        overflow: hidden;
+    }
+
+    // Container that the modal scrolls within
+    .modal {
+        display: none;
+        overflow: hidden;
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: @zindex-modal;
+        -webkit-overflow-scrolling: touch;
+
+        // Prevent Chrome on Windows from adding a focus outline. For details, see
+        // https://github.com/twbs/bootstrap/pull/10951.
+        outline: 0;
+
+        // When fading in the modal, animate it to slide down
+        &.fade .modal-dialog {
+            .translate(0, -25%);
+            .transition-transform(~"0.3s ease-out");
+        }
+        &.in .modal-dialog {
+            .translate(0, 0)
+        }
+    }
+    .modal-open .modal {
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    // Shell div to position the modal with bottom padding
+    .modal-dialog {
+        position: relative;
+        width: auto;
+        margin: 10px;
+    }
+
+    // Actual modal
+    .modal-content {
+        position: relative;
+        background-color: @modal-content-bg;
+        border: 1px solid @modal-content-fallback-border-color; //old browsers fallback (ie8 etc)
+        border: 1px solid @modal-content-border-color;
+        border-radius: @border-radius-large;
+        .box-shadow(0 3px 9px rgba(0, 0, 0, .5));
+        background-clip: padding-box;
+        // Remove focus outline from opened modal
+        outline: 0;
+    }
+
+    // Modal background
+    .modal-backdrop {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: @zindex-modal-background;
+        background-color: @modal-backdrop-bg;
+        // Fade for backdrop
+        &.fade {
+            .opacity(0);
+        }
+        &.in {
+            .opacity(@modal-backdrop-opacity);
+        }
+    }
+
+    // Modal header
+    // Top section of the modal w/ title and dismiss
+    .modal-header {
+        padding: @modal-title-padding;
+        border-bottom: 1px solid @modal-header-border-color;
+        min-height: (@modal-title-padding + @modal-title-line-height);
+    }
+    // Close icon
+    .modal-header .close {
+        margin-top: -2px;
+    }
+
+    // Title text within header
+    .modal-title {
+        margin: 0;
+        line-height: @modal-title-line-height;
+    }
+
+    // Modal body
+    // Where all modal content resides (sibling of .modal-header and .modal-footer)
+    .modal-body {
+        position: relative;
+        padding: @modal-inner-padding;
+    }
+
+    // Footer (for actions)
+    .modal-footer {
+        padding: @modal-inner-padding;
+        text-align: right; // right align buttons
+        border-top: 1px solid @modal-footer-border-color;
+        &:extend(.clearfix all); // clear it in case folks use .pull-* classes on buttons
+
+        // Properly space out buttons
+        .btn + .btn {
+            margin-left: 5px;
+            margin-bottom: 0; // account for input[type="submit"] which gets the bottom margin like all other inputs
+        }
+        // but override that for button groups
+        .btn-group .btn + .btn {
+            margin-left: -1px;
+        }
+        // and override it for block buttons as well
+        .btn-block + .btn-block {
+            margin-left: 0;
+        }
+    }
+
+    // Measure scrollbar width for padding body during modal show/hide
+    .modal-scrollbar-measure {
+        position: absolute;
+        top: -9999px;
+        width: 50px;
+        height: 50px;
+        overflow: scroll;
+    }
+
+    // Scale up the modal
+    @media (min-width: @screen-sm-min) {
+        // Automatically set modal's width for larger viewports
+        .modal-dialog {
+            width: @modal-md;
+            margin: 30px auto;
+        }
+
+        .modal-content {
+            .box-shadow(0 5px 15px rgba(0, 0, 0, .5));
+        }
+
+        // Modal sizes
+        .modal-sm {
+            width: @modal-sm;
+        }
+    }
+
+    @media (min-width: @screen-md-min) {
+        .modal-lg {
+            width: @modal-lg;
+        }
+    }
+
+}
 
 
 // Utility classes

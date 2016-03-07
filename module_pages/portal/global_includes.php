@@ -27,11 +27,11 @@
 
 //---Kajona head parts, please leave them as they are----------------------------------------------------
 
-    $arrGlobal["kajona_head"]           = "    <script type=\"text/javascript\" src=\""._webpath_."/templates/default/js/jquery/jquery.min.js?".class_module_system_setting::getConfigValue("_system_browser_cachebuster_")."\"></script>\n";
-    $arrGlobal["kajona_head"]          .= "    <script type=\"text/javascript\">KAJONA_LANGUAGE = '".class_carrier::getInstance()->getObjLang()->getStrTextLanguage()."'; KAJONA_WEBPATH = '"._webpath_."'; KAJONA_BROWSER_CACHEBUSTER = '".class_module_system_setting::getConfigValue("_system_browser_cachebuster_")."';</script>\n";
-    $arrGlobal["kajona_head"]          .= "    <script type=\"text/javascript\">KAJONA_PHARMAP = ".json_encode(array_values(class_classloader::getInstance()->getArrPharModules())).";</script>";
-    $arrGlobal["kajona_head"]		   .= "    <script type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getWebPathForModule("module_system")."/system/scripts/loader.js?".class_module_system_setting::getConfigValue("_system_browser_cachebuster_")."\"></script>\n";
-    $arrGlobal["kajona_head"]		   .= "    <script type=\"text/javascript\" src=\""._webpath_."/templates/default/js/kajona.js?".class_module_system_setting::getConfigValue("_system_browser_cachebuster_")."\"></script>\n";
+    $arrGlobal["kajona_head"]           = "    <script type=\"text/javascript\" src=\""._webpath_."/templates/default/js/jquery/jquery.min.js?".\Kajona\System\System\SystemSetting::getConfigValue("_system_browser_cachebuster_")."\"></script>\n";
+    $arrGlobal["kajona_head"]          .= "    <script type=\"text/javascript\">KAJONA_LANGUAGE = '".\Kajona\System\System\Carrier::getInstance()->getObjLang()->getStrTextLanguage()."'; KAJONA_WEBPATH = '"._webpath_."'; KAJONA_BROWSER_CACHEBUSTER = '".\Kajona\System\System\SystemSetting::getConfigValue("_system_browser_cachebuster_")."';</script>\n";
+    $arrGlobal["kajona_head"]          .= "    <script type=\"text/javascript\">KAJONA_PHARMAP = ".json_encode(array_values(\Kajona\System\System\Classloader::getInstance()->getArrPharModules())).";</script>";
+    $arrGlobal["kajona_head"]		   .= "    <script type=\"text/javascript\" src=\""._webpath_.\Kajona\System\System\Resourceloader::getInstance()->getWebPathForModule("module_system")."/system/scripts/loader.js?".\Kajona\System\System\SystemSetting::getConfigValue("_system_browser_cachebuster_")."\"></script>\n";
+    $arrGlobal["kajona_head"]		   .= "    <script type=\"text/javascript\" src=\""._webpath_."/templates/default/js/kajona.js?".\Kajona\System\System\SystemSetting::getConfigValue("_system_browser_cachebuster_")."\"></script>\n";
     $arrGlobal["kajona_head"]          .= "    <meta http-equiv=\"content-language\" content=\"".$this->getStrPortalLanguage()."\" />\n";
     $arrGlobal["kajona_head"]          .= "    <meta name=\"generator\" content=\"Kajona, www.kajona.de\" />";
 

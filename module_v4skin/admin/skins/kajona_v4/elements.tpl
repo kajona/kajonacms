@@ -186,7 +186,7 @@ Loads the script-helper and adds the table to the drag-n-dropable tables getting
             delay: KAJONA.util.isTouchDevice() ? 500 : 0
         });
 
-        $('#%%listid%% > tbody:has(tr[data-systemid!=""]) > tr').each(function(index) {
+        $('#%%listid%% > tbody:has(tr[data-systemid!=""][data-deleted=""]) > tr').each(function(index) {
             $(this).find("td.listsorthandle").css('cursor', 'move').append("<i class='fa fa-arrows-v'></i>");
             KAJONA.admin.tooltip.addTooltip($(this).find("td.listsorthandle"), "[lang,commons_sort_vertical,system]");
 
@@ -226,7 +226,7 @@ Currently, there are two modes: with and without a description.
 
 <generallist>
     <tbody class="%%cssaddon%%">
-        <tr data-systemid="%%listitemid%%">
+        <tr data-systemid="%%listitemid%%" data-deleted="%%deleted%%">
             <td class="treedrag"></td>
             <td class="listsorthandle"></td>
             <td class="listcheckbox">%%checkbox%%</td>
@@ -241,7 +241,7 @@ Currently, there are two modes: with and without a description.
 
 <generallist_desc>
     <tbody class="generalListSet %%cssaddon%%">
-        <tr data-systemid="%%listitemid%%">
+        <tr data-systemid="%%listitemid%%" data-deleted="%%deleted%%">
             <td rowspan="2" class="treedrag"></td>
             <td rowspan="2" class="listsorthandle"></td>
             <td rowspan="2" class="listcheckbox">%%checkbox%%</td>
@@ -539,14 +539,31 @@ Upload-Field
 <input_upload>
     <div class="form-group">
         <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
-        <div class="col-sm-6">
+        <div class="col-sm-2">
             <input type="file" name="%%name%%" id="%%name%%" class="form-control %%class%%">
             <span class="help-block">
                 %%maxSize%%
             </span>
         </div>
+        <div class="col-sm-4">
+            <div class="form-control" style="white-space:nowrap;overflow:hidden;">
+                <a href="%%fileHref%%" id="%%name%%">%%fileName%%</a>
+            </div>
+        </div>
     </div>
 </input_upload>
+
+Download-Field
+<input_upload_disabled>
+    <div class="form-group">
+        <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
+        <div class="col-sm-6">
+            <div class="form-control %%class%%">
+                <a href="%%fileHref%%" id="%%name%%">%%fileName%%</a>
+            </div>
+        </div>
+    </div>
+</input_upload_disabled>
 
 Upload-Field for multiple files with progress bar
 <input_upload_multiple>
@@ -571,7 +588,7 @@ Upload-Field for multiple files with progress bar
                 </button>
 
                 <span class="fileupload-process"></span>
-                <div class="alert alert-info">
+                <div class="alert alert-info" id="drop-%%uploadId%%">
                     [lang,upload_dropArea,mediamanager]<br />
                      %%allowedExtensions%%
                 </div>
@@ -586,7 +603,7 @@ Upload-Field for multiple files with progress bar
                 <div class="progress-extended">&nbsp;</div>
             </div>
 
-        <table class="table admintable table-striped-tbody files"></table>
+        <table class="table admintable table-striped-tbody files" id="files-%%uploadId%%"></table>
     </div>
 
 <script type="text/javascript">
@@ -616,9 +633,10 @@ Upload-Field for multiple files with progress bar
                     $('#%%name%%').fileupload({
                         url: '_webpath_/xml.php?admin=1&module=mediamanager&action=fileUpload',
                         dataType: 'json',
+                        dropZone: $('#drop-%%uploadId%%'),
                         autoUpload: false,
                         paramName : '%%name%%',
-                        filesContainer: $('table.files'),
+                        filesContainer: $('#files-%%uploadId%%'),
                         formData: [
                             {name: 'systemid', value: '%%mediamanagerRepoId%%'},
                             {name: 'inputElement', value : '%%name%%'},
@@ -1405,33 +1423,37 @@ pe_iconbar, pe_disable
     <!-- KAJONA_BUILD_LESS_END -->
 
 
-    <div class="modal fade" id="peDialog">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <div id="folderviewDialog_loading" class="peLoadingContainer loadingContainerBackground"></div>
-                <div class="modal-body" id="peDialog_content">
-                    <!-- filled by js -->
+    <div class="kajona-pe-wrap">
+        <div class="modal fade" id="peDialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div id="folderviewDialog_loading" class="peLoadingContainer loadingContainerBackground"></div>
+                    <div class="modal-body" id="peDialog_content">
+                        <!-- filled by js -->
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="delDialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h3 id="delDialog_title"><!-- filled by js --></h3>
-                </div>
-                <div class="modal-body" id="delDialog_content">
-                    <!-- filled by js -->
-                </div>
-                <div class="modal-footer">
-                    <a href="#" class="btn btn-default" data-dismiss="modal" id="delDialog_cancelButton">[lang,dialog_cancelButton,system]</a>
-                    <a href="#" class="btn btn-default btn-primary" id="delDialog_confirmButton">confirm</a>
+    <div class="kajona-pe-wrap">
+        <div class="modal fade" id="delDialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h3 id="delDialog_title"><!-- filled by js --></h3>
+                    </div>
+                    <div class="modal-body" id="delDialog_content">
+                        <!-- filled by js -->
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#" class="btn btn-default" data-dismiss="modal" id="delDialog_cancelButton">[lang,dialog_cancelButton,system]</a>
+                        <a href="#" class="btn btn-default btn-primary" id="delDialog_confirmButton">confirm</a>
+                    </div>
                 </div>
             </div>
         </div>

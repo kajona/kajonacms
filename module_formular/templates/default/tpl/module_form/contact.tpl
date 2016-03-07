@@ -1,17 +1,55 @@
 <contactform>
 <form name="formContact" method="post" action="%%formaction%%" accept-charset="UTF-8">
-	%%formular_fehler%%
-	<div><label for="absender_name">[lang,formContact_name,elements]</label><input type="text" name="absender_name" id="absender_name" value="%%absender_name%%" class="inputText" /></div>
-	<div><label for="absender_email">[lang,formContact_email,elements]</label><input type="text" name="absender_email" id="absender_email" value="%%absender_email%%" class="inputText" /></div>
-	<div><label for="absender_nachricht">[lang,formContact_message,elements]</label><textarea name="absender_nachricht" id="absender_nachricht" class="inputTextarea">%%absender_nachricht%%</textarea></div><br />
-	<div><label for="kajonaCaptcha_contact"></label><span id="kajonaCaptcha_contact"><script type="text/javascript">KAJONA.portal.loadCaptcha('contact', 180);</script></span> (<a href="#" onclick="KAJONA.portal.loadCaptcha('contact', 180); return false;">[lang,commons_captcha_reload,elements]</a>)</div>
-	<div><label for="form_captcha">[lang,commons_captcha,elements]</label><input type="text" name="form_captcha" id="form_captcha" class="inputText" autocomplete="off" /></div><br />
-	<div><label for="Submit"></label><input type="submit" name="Submit" value="[lang,formContact_send,elements]" class="button" /></div><br />
+	%%error_list%%
+
+	<fieldset class="form-group">
+		<label for="absender_name">[lang,formContact_name,elements]</label>
+		<input type="text" name="absender_name" id="absender_name" value="%%absender_name%%" class="form-control" />
+	</fieldset>
+
+	<fieldset class="form-group">
+		<label for="absender_email">[lang,formContact_email,elements]</label>
+		<input type="text" name="absender_email" id="absender_email" value="%%absender_email%%" class="form-control" />
+	</fieldset>
+
+	<fieldset class="form-group">
+		<label for="absender_nachricht">[lang,formContact_message,elements]</label>
+		<textarea name="absender_nachricht" id="absender_nachricht" class="form-control">%%absender_nachricht%%</textarea>
+	</fieldset>
+
+
+
+	<fieldset class="form-group">
+		<label for="form_captcha">[lang,commons_captcha,elements]</label>
+
+		<div class="row">
+			<div class="col-xs-3">
+				<input type="text" name="form_captcha" id="form_captcha" class="form-control" autocomplete="off" />
+				<small class="text-muted"><a href="#" onclick="KAJONA.portal.loadCaptcha('contact', 180); return false;">[lang,commons_captcha_reload,elements]</a></small>
+			</div>
+			<div class="col-xs-6">
+				<span id="kajonaCaptcha_contact"><script type="text/javascript">KAJONA.portal.loadCaptcha('contact', 180);</script></span>
+			</div>
+		</div>
+	</fieldset>
+
+	<fieldset class="form-group">
+		<button type="submit" class="btn btn-primary">[lang,formContact_send,elements]</button>
+	</fieldset>
+
+	<!-- custom bootstrap error rendering, update if required -->
+	<script type="text/javascript">
+		$.each([%%error_fields%%], function(index, value) {
+			$('#'+value).addClass('form-control-danger');
+			$('#'+value).closest('.form-group').addClass('has-danger');
+		});
+	</script>
+
 </form>
 </contactform>
 
 <email>
-Folgende Anfrage wurde ueber das Kontaktformular erstellt:
+The following message was sent using the contactform:
 
 [lang,formContact_name,elements]
 	%%absender_name%%
@@ -22,8 +60,10 @@ Folgende Anfrage wurde ueber das Kontaktformular erstellt:
 </email>
 
 <errors>
-[lang,formContact_errors,elements]<br />
-<ul>%%liste_fehler%%</ul>
+	<div class="alert alert-danger" role="alert">
+		[lang,formContact_errors,elements]
+		<ul>%%error_list%%</ul>
+	</div>
 </errors>
 
 <errorrow>

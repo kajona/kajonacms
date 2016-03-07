@@ -6,15 +6,16 @@
 
 namespace Kajona\Pages\System;
 
-use class_common_sortmanager;
-use class_logger;
+use Kajona\System\System\CommonSortmanager;
+use Kajona\System\System\Logger;
+
 
 /**
  * Class PageelementSortmanager
  *
  * @author sidler
  */
-class PageelementSortmanager extends class_common_sortmanager
+class PageelementSortmanager extends CommonSortmanager
 {
 
 
@@ -23,7 +24,7 @@ class PageelementSortmanager extends class_common_sortmanager
      *
      * @param bool $arrRestrictionModules
      *
-     * @see class_module_pages_pageelement::deleteObjectInternal()
+     * @see PagesPageelement::deleteObjectInternal()
      * @return mixed|void
      */
     function fixSortOnDelete($arrRestrictionModules = false)
@@ -47,7 +48,7 @@ class PageelementSortmanager extends class_common_sortmanager
 
     public function setAbsolutePosition($intNewPosition, $arrRestrictionModules = false)
     {
-        class_logger::getInstance()->addLogRow("move ".$this->objSource->getSystemid()." to new pos ".$intNewPosition, class_logger::$levelInfo);
+        Logger::getInstance()->addLogRow("move ".$this->objSource->getSystemid()." to new pos ".$intNewPosition, Logger::$levelInfo);
         $this->objDB->flushQueryCache();
 
         //No caching here to allow multiple shiftings per request

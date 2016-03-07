@@ -47,7 +47,7 @@ $lang["_system_email_forcesender_"]      = "Default Absender erzwingen";
 $lang["_system_email_forcesender_hint"]  = "Manche E-Mail Gateways stellen nur E-Mails einer bestimmten Abender-Adresse zu. Der Versand aller Mails von der Default-Absender-Adresse kann hiermit erzwungen werden.";
 $lang["_system_email_defaultsender_"]    = "Standard E-Mail Absender";
 $lang["_system_email_defaultsender_hint"]    = "Sofern eine Mail keine Von-Adresse eingetragen hat wird die hier genannte Adresse verwendet.";
-$lang["about_part1"]                     = "<h2>Kajona V4 - Open Source Content Management System</h2>Kajona V 4.7, Codename \"springtide\"<br /><br /><a href=\"http://www.kajona.de\" target=\"_blank\">www.kajona.de</a><br /><a href=\"mailto:info@kajona.de\" target=\"_blank\">info@kajona.de</a><br /><br />Für weitere Infomationen, Support oder bei Anregungen besuchen Sie einfach unsere Webseite.<br />Support erhalten Sie auch in unserem <a href=\"http://board.kajona.de/\" target=\"_blank\">Forum</a>.";
+$lang["about_part1"]                     = "<h2>Kajona V5 - Open Source Content Management System</h2>Kajona V 4.7, Codename \"springtide\"<br /><br /><a href=\"http://www.kajona.de\" target=\"_blank\">www.kajona.de</a><br /><a href=\"mailto:info@kajona.de\" target=\"_blank\">info@kajona.de</a><br /><br />Für weitere Infomationen, Support oder bei Anregungen besuchen Sie einfach unsere Webseite.<br />Support erhalten Sie auch in unserem <a href=\"http://board.kajona.de/\" target=\"_blank\">Forum</a>.";
 $lang["about_part2_header"]              = "<h2>Entwicklungsleitung</h2>";
 $lang["about_part2a_header"]             = "<h2>Contributors / Entwickler</h2>";
 $lang["about_part2b_header"]             = "<h2>Übersetzungen</h2>";
@@ -280,6 +280,7 @@ $lang["update_nodom"]                    = "Diese PHP-Installation unterstützt 
 $lang["update_nofilefound"]              = "Die Liste der Updates konnte nicht geladen werden.<br />Gründe hierfür können sein, dass auf diesem System der PHP-Config-Wert 'allow_url_fopen' auf 'off' gesetzt wurde, oder das System keine Unterstützung für Sockets bietet.";
 $lang["update_nourlfopen"]               = "Für diese Funktion muss der Wert &apos;allow_url_fopen&apos; in der PHP-Konfiguration auf &apos;on&apos; gesetzt sein!";
 $lang["uploadmaxsize"]                   = "Upload Max Size";
+$lang["uploadfile"]                      = "Ausgewählte Datei";
 $lang["uploads"]                         = "Uploads";
 $lang["version"]                         = "Version";
 $lang["warnung_settings"]                = "ACHTUNG!!!<br />Bei folgenden Einstellungen können falsche Werte das System unbrauchbar machen!";

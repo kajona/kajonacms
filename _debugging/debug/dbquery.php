@@ -5,6 +5,8 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Debugging\Debug;
+
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
 echo "|                                                                               |\n";
@@ -18,7 +20,7 @@ if(issetPost("doquery")) {
     if(get_magic_quotes_gpc() == 1)
         $strQuery = stripslashes($strQuery);
 
-	$objDb = class_carrier::getInstance()->getObjDB();
+	$objDb = \Kajona\System\System\Carrier::getInstance()->getObjDB();
 	echo "query to run ".$strQuery."\n";
 
 	if($objDb->_query($strQuery))

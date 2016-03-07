@@ -64,6 +64,7 @@ $lang["news_list_empty"]                 = "Momentan sind keine News vorhanden."
 $lang["news_locked"]                     = "Newsdatensatz ist gesperrt";
 $lang["news_mehr"]                       = "[weiterlesen]";
 $lang["news_unlock"]                     = "Newsdatensatz entsperren";
+$lang["news_comments"]                   = "Angelegte Kommentare:";
 $lang["news_zurueck"]                    = "Zurück";
 $lang["quickhelp_edit_category"]         = "Für eine neue oder bereits vorhanden Kategorie kann momentan lediglich ein Titel vergeben werden.";
 $lang["quickhelp_edit_feed"]             = "Mit Hilfe des aktuellen Formulars können die Eigenschaften eines vorhandenen, oder eines anzulegenden Newsfeeds verändert werden.<br />Die Seite 'Detailansicht' wird dann aufgerufen, wenn ein Abonnent des Newsfeeds die Detaildarstellung der Newsmeldung anfordert. Mit der Einstellung 'Kategorie des Feeds' können die im Feed anzuzeigenden Newsmeldungen eingeschränkt werden. <br />Über das Feld URL-Titel wird ein Titel des Feeds festgelegt, anhand dessen der Feed im Internet erreicht werden kann, z.B. /newsnfacts.rss. Dieser Titel sollte nur aus Buchstaben und Ziffern bestehen (a-z, A-Z, 0-9).";

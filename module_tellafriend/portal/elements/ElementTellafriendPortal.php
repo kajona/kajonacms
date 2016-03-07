@@ -7,13 +7,13 @@
 
 namespace Kajona\Tellafriend\Portal\Elements;
 
-use class_email_validator;
-use class_link;
-use class_mail;
-use class_scriptlet_helper;
-use class_text_validator;
 use Kajona\Pages\Portal\ElementPortal;
 use Kajona\Pages\Portal\PortalElementInterface;
+use Kajona\System\System\Link;
+use Kajona\System\System\Mail;
+use Kajona\System\System\ScriptletHelper;
+use Kajona\System\System\Validators\EmailValidator;
+use Kajona\System\System\Validators\TextValidator;
 
 
 /**
@@ -22,7 +22,8 @@ use Kajona\Pages\Portal\PortalElementInterface;
  * @author sidler@mulchprod.de
  * @targetTable element_tellafriend.content_id
  */
-class ElementTellafriendPortal extends ElementPortal implements PortalElementInterface {
+class ElementTellafriendPortal extends ElementPortal implements PortalElementInterface
+{
 
     private $arrError = array();
 
@@ -31,14 +32,15 @@ class ElementTellafriendPortal extends ElementPortal implements PortalElementInt
      *
      * @return string the prepared html-output
      */
-    public function loadData() {
+    public function loadData()
+    {
         $strReturn = "";
         //display form or send an email?
-        if($this->getParam("action") != "sendTellafriend") {
+        if ($this->getParam("action") != "sendTellafriend") {
             $strReturn .= $this->tellafriendForm();
         }
         else {
-            if(!$this->validateForm()) {
+            if (!$this->validateForm()) {
                 $strReturn .= $this->tellafriendForm();
             }
             else {
@@ -53,14 +55,15 @@ class ElementTellafriendPortal extends ElementPortal implements PortalElementInt
      *
      * @return string
      */
-    private function tellafriendForm() {
+    private function tellafriendForm()
+    {
         $arrTemplate = array();
         //any errors to print?
-        if(count($this->arrError) > 0) {
+        if (count($this->arrError) > 0) {
             $strError = "";
             //Collect errors
             $strTemplateErrorID = $this->objTemplate->readTemplate("/module_tellafriend/".$this->arrElementData["tellafriend_template"], "errorrow");
-            foreach($this->arrError as $strOneError) {
+            foreach ($this->arrError as $strOneError) {
                 $strError .= $this->fillTemplate(array("error" => $strOneError), $strTemplateErrorID);
             }
             //and the complete errorform
@@ -85,34 +88,35 @@ class ElementTellafriendPortal extends ElementPortal implements PortalElementInt
      *
      * @return bool
      */
-    private function validateForm() {
+    private function validateForm()
+    {
         $bitReturn = true;
 
-        $objMailValidator = new class_email_validator();
-        $objTextValidator = new class_text_validator();
+        $objMailValidator = new EmailValidator();
+        $objTextValidator = new TextValidator();
 
-        if(!$objMailValidator->validate($this->getParam("tellafriend_sender"))) {
+        if (!$objMailValidator->validate($this->getParam("tellafriend_sender"))) {
             $bitReturn = false;
             $this->arrError[] = $this->getLang("tellafriend_sender");
         }
 
-        if(!$objMailValidator->validate($this->getParam("tellafriend_receiver"))) {
+        if (!$objMailValidator->validate($this->getParam("tellafriend_receiver"))) {
             $bitReturn = false;
             $this->arrError[] = $this->getLang("tellafriend_receiver");
         }
 
-        if(!$objTextValidator->validate($this->getParam("tellafriend_sender_name"))) {
+        if (!$objTextValidator->validate($this->getParam("tellafriend_sender_name"))) {
             $bitReturn = false;
             $this->arrError[] = $this->getLang("tellafriend_sender_name");
         }
 
-        if(!$objTextValidator->validate($this->getParam("tellafriend_receiver_name"))) {
+        if (!$objTextValidator->validate($this->getParam("tellafriend_receiver_name"))) {
             $bitReturn = false;
             $this->arrError[] = $this->getLang("tellafriend_receiver_name");
         }
 
         //Check captachcode
-        if($this->getParam("form_captcha") != $this->objSession->getCaptchaCode()) {
+        if ($this->getParam("form_captcha") != $this->objSession->getCaptchaCode()) {
             $bitReturn = false;
             $this->arrError[] = $this->getLang("fehler_captcha");
         }
@@ -123,9 +127,11 @@ class ElementTellafriendPortal extends ElementPortal implements PortalElementInt
 
     /**
      * Creates an email to send to a friend
+     *
      * @return void
      */
-    private function sendForm() {
+    private function sendForm()
+    {
         //load url the user visited before
         $strUrl = $this->getHistory(2);
         $arrUrl = explode("&", $strUrl);
@@ -133,19 +139,19 @@ class ElementTellafriendPortal extends ElementPortal implements PortalElementInt
         $strSystemid = "";
         $strParams = "";
         $strAction = "";
-        foreach($arrUrl as $arrOnePart) {
+        foreach ($arrUrl as $arrOnePart) {
             $arrPair = explode("=", $arrOnePart);
-            if($arrPair[0] == "page") {
+            if ($arrPair[0] == "page") {
                 $strPage = $arrPair[1];
             }
-            elseif($arrPair[0] == "systemid") {
+            elseif ($arrPair[0] == "systemid") {
                 $strSystemid = $arrPair[1];
             }
-            elseif($arrPair[0] == "action") {
+            elseif ($arrPair[0] == "action") {
                 $strAction = $arrPair[1];
             }
             //everything but the language command
-            elseif($arrPair[0] != "language") {
+            elseif ($arrPair[0] != "language") {
                 $strParams .= "&".$arrPair[0]."=".$arrPair[1];
             }
 
@@ -161,25 +167,25 @@ class ElementTellafriendPortal extends ElementPortal implements PortalElementInt
 
 
         $strEmailBody = $this->fillTemplate($arrMessage, $strMailTemplateID);
-        $objScriptlet = new class_scriptlet_helper();
+        $objScriptlet = new ScriptletHelper();
         $strEmailBody = $objScriptlet->processString($strEmailBody);
 
         //TODO: check if we have to remove critical characters here?
         $strSubject = $this->fillTemplate(array("tellafriend_sender_name" => htmlStripTags($this->getParam("tellafriend_sender_name"))), $this->objTemplate->readTemplate("/module_tellafriend/".$this->arrElementData["tellafriend_template"], "email_subject"));
 
         //TODO: check if we have to remove critical characters here?
-        $objEmail = new class_mail();
+        $objEmail = new Mail();
         $objEmail->setSender($this->getParam("tellafriend_sender"));
         $objEmail->setSenderName($this->getParam("tellafriend_sender_name"));
         $objEmail->addTo($this->getParam("tellafriend_receiver"));
         $objEmail->setSubject($strSubject);
         $objEmail->setHtml($strEmailBody);
 
-        if($objEmail->sendMail()) {
-            $this->portalReload(class_link::getLinkPortalHref($this->arrElementData["tellafriend_success"]));
+        if ($objEmail->sendMail()) {
+            $this->portalReload(Link::getLinkPortalHref($this->arrElementData["tellafriend_success"]));
         }
         else {
-            $this->portalReload(class_link::getLinkPortalHref($this->arrElementData["tellafriend_error"]));
+            $this->portalReload(Link::getLinkPortalHref($this->arrElementData["tellafriend_error"]));
         }
     }
 }

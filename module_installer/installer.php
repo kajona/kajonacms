@@ -5,6 +5,25 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+
+namespace Kajona\Installer;
+
+use Kajona\Packagemanager\System\PackagemanagerManager;
+use Kajona\Packagemanager\System\PackagemanagerMetadata;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Classloader;
+use Kajona\System\System\Cookie;
+use Kajona\System\System\CoreEventdispatcher;
+use Kajona\System\System\Exception;
+use Kajona\System\System\Lang;
+use Kajona\System\System\RequestEntrypointEnum;
+use Kajona\System\System\ResponseObject;
+use Kajona\System\System\ScriptletHelper;
+use Kajona\System\System\Session;
+use Kajona\System\System\SystemEventidentifier;
+use Kajona\System\System\SystemModule;
+use Kajona\System\System\Template;
+
 /**
  * Class representing a graphical installer.
  * Loads all sub-installers
@@ -12,12 +31,12 @@
  * @author sidler@mulchprod.de
  * @package module_system
  */
-class class_installer {
+class Installer {
 
     private $STR_PROJECT_CONFIG_FILE = "";
 
     /**
-     * @var class_module_packagemanager_metadata[]
+     * @var PackagemanagerMetadata[]
      */
     private $arrMetadata;
     private $strOutput = "";
@@ -30,38 +49,38 @@ class class_installer {
     /**
      * Instance of template-engine
      *
-     * @var class_template
+     * @var Template
      */
     private $objTemplates;
 
     /**
      * text-object
      *
-     * @var class_lang
+     * @var Lang
      */
     private $objLang;
 
     /**
      * session
      *
-     * @var class_session
+     * @var Session
      */
     private $objSession;
 
 
     public function __construct() {
         //start up system
-        $this->objTemplates = class_carrier::getInstance()->getObjTemplate();
-        $this->objLang = class_carrier::getInstance()->getObjLang();
+        $this->objTemplates = Carrier::getInstance()->getObjTemplate();
+        $this->objLang = Carrier::getInstance()->getObjLang();
         //init session-support
-        $this->objSession = class_carrier::getInstance()->getObjSession();
+        $this->objSession = Carrier::getInstance()->getObjSession();
 
         //set a different language?
         if(issetGet("language")) {
-            if(in_array(getGet("language"), explode(",", class_carrier::getInstance()->getObjConfig()->getConfig("adminlangs")))) {
+            if(in_array(getGet("language"), explode(",", Carrier::getInstance()->getObjConfig()->getConfig("adminlangs")))) {
                 $this->objLang->setStrTextLanguage(getGet("language"));
                 //and save to a cookie
-                $objCookie = new class_cookie();
+                $objCookie = new Cookie();
                 $objCookie->setCookie("adminlanguage", getGet("language"));
 
             }
@@ -71,7 +90,7 @@ class class_installer {
             $this->objLang->setStrTextLanguage($this->objSession->getAdminLanguage(true));
         }
 
-        $this->STR_PROJECT_CONFIG_FILE = _realpath_."/project/system/config/config.php";
+        $this->STR_PROJECT_CONFIG_FILE = _realpath_."/project/module_system/system/config/config.php";
     }
 
 
@@ -121,7 +140,7 @@ class class_installer {
         if($this->strOutput != "") {
             $strContent = $this->renderOutput();
         }
-        class_response_object::getInstance()->setStrContent($strContent);
+        ResponseObject::getInstance()->setStrContent($strContent);
     }
 
     /**
@@ -133,7 +152,7 @@ class class_installer {
 
 
         $arrFilesAndFolders = array(
-            "/project/system/config",
+            "/project/module_system/system/config",
             "/project/dbdumps",
             "/project/log",
             "/project/temp",
@@ -143,7 +162,7 @@ class class_installer {
             "/files/downloads",
             "/templates/default"
         );
-        $arrFilesAndFolders = array_merge($arrFilesAndFolders, array_map(function($strValue) { return "/".$strValue; }, class_classloader::getInstance()->getCoreDirectories()));
+        $arrFilesAndFolders = array_merge($arrFilesAndFolders, array_map(function($strValue) { return "/".$strValue; }, Classloader::getInstance()->getCoreDirectories()));
 
         $arrModules = array(
             "mbstring",
@@ -157,10 +176,10 @@ class class_installer {
         $strReturn .= $this->getLang("installer_phpcheck_lang");
 
         //link to different languages
-        $arrLangs = explode(",", class_carrier::getInstance()->getObjConfig()->getConfig("adminlangs"));
+        $arrLangs = explode(",", Carrier::getInstance()->getObjConfig()->getConfig("adminlangs"));
         $intLangCount = 1;
         foreach($arrLangs as $strOneLang) {
-            $strReturn .= "<a href=\""._webpath_."/installer.php?language=".$strOneLang."\">".class_carrier::getInstance()->getObjLang()->getLang("lang_".$strOneLang, "user")."</a>";
+            $strReturn .= "<a href=\""._webpath_."/installer.php?language=".$strOneLang."\">".Carrier::getInstance()->getObjLang()->getLang("lang_".$strOneLang, "user")."</a>";
             if($intLangCount++ < count($arrLangs)) {
                 $strReturn .= " | ";
             }
@@ -201,7 +220,7 @@ class class_installer {
         $strReturn = "";
 
         if($this->checkDefaultValues()) {
-            class_response_object::getInstance()->setStrRedirectUrl(_webpath_."/installer.php?step=loginData");
+            ResponseObject::getInstance()->setStrRedirectUrl(_webpath_."/installer.php?step=loginData");
             return;
         }
 
@@ -211,7 +230,7 @@ class class_installer {
 
 
             //try to validate the data passed
-            $bitCxCheck = class_carrier::getInstance()->getObjDB()->validateDbCxData(
+            $bitCxCheck = Carrier::getInstance()->getObjDB()->validateDbCxData(
                 $_POST["driver"],
                 $_POST["hostname"],
                 $_POST["username"],
@@ -223,13 +242,7 @@ class class_installer {
 
             if($bitCxCheck) {
                 $strFileContent = "<?php\n";
-                $strFileContent .= "/*\n Kajona V4 config-file.\n If you want to overwrite additional settings, copy them from /core/module_system/system/config/config.php into this file.\n*/";
-                $strFileContent .= "if(is_dir(__DIR__.\"/../../../core/module_system/\")) {\n";
-                $strFileContent .= "  include __DIR__.'/../../../core/module_system/system/config/config.php';\n";
-                $strFileContent .= "}\n";
-                $strFileContent .= "else {\n";
-                $strFileContent .= "  include 'phar://'.__DIR__.'/../../../core/module_system.phar/system/config/config.php';\n";
-                $strFileContent .= "}\n";
+                $strFileContent .= "/*\n Kajona V5 config-file.\n If you want to overwrite additional settings, copy them from /core/module_system/system/config/config.php into this file.\n*/";
                 $strFileContent .= "\n\n\n";
                 $strFileContent .= "  \$config['dbhost']               = '".$_POST["hostname"]."';                   //Server name \n";
                 $strFileContent .= "  \$config['dbusername']           = '".$_POST["username"]."';                   //Username \n";
@@ -244,10 +257,10 @@ class class_installer {
                 file_put_contents($this->STR_PROJECT_CONFIG_FILE, $strFileContent);
 
                 // flush cache after config was written
-                class_classloader::getInstance()->flushCache();
+                Classloader::getInstance()->flushCache();
 
                 // and reload
-                class_response_object::getInstance()->setStrRedirectUrl(_webpath_."/installer.php?step=loginData");
+                ResponseObject::getInstance()->setStrRedirectUrl(_webpath_."/installer.php?step=loginData");
                 $this->strOutput = "";
                 return;
             }
@@ -329,7 +342,7 @@ class class_installer {
                 $this->objSession->setSession("install_password", $strPassword);
                 $this->objSession->setSession("install_email", $strEmail);
                 $this->strOutput = "";
-                class_response_object::getInstance()->setStrRedirectUrl(_webpath_."/installer.php?step=modeSelect");
+                ResponseObject::getInstance()->setStrRedirectUrl(_webpath_."/installer.php?step=modeSelect");
                 return;
             }
         }
@@ -350,7 +363,7 @@ class class_installer {
     public function modeSelect() {
 
         if($this->isInstalled()) {
-            class_response_object::getInstance()->setStrRedirectUrl(_webpath_."/installer.php?step=install");
+            ResponseObject::getInstance()->setStrRedirectUrl(_webpath_."/installer.php?step=install");
             return;
         }
 
@@ -373,7 +386,7 @@ class class_installer {
      */
     public function loadInstaller() {
 
-        $objManager = new class_module_packagemanager_manager();
+        $objManager = new PackagemanagerManager();
         $arrModules = $objManager->getAvailablePackages();
 
         $this->arrMetadata = array();
@@ -392,7 +405,7 @@ class class_installer {
         $strReturn = "";
         $strInstallLog = "";
 
-        $objManager = new class_module_packagemanager_manager();
+        $objManager = new PackagemanagerManager();
 
         //module-installs to loop?
         if(isset($_POST["moduleInstallBox"]) && is_array($_POST["moduleInstallBox"])) {
@@ -411,7 +424,7 @@ class class_installer {
 
         }
 
-        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_ORMCACHE | class_carrier::INT_CACHE_TYPE_OBJECTFACTORY | class_carrier::INT_CACHE_TYPE_MODULES);
+        Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBQUERIES | Carrier::INT_CACHE_TYPE_ORMCACHE | Carrier::INT_CACHE_TYPE_OBJECTFACTORY | Carrier::INT_CACHE_TYPE_MODULES);
         $this->loadInstaller();
 
 
@@ -447,10 +460,10 @@ class class_installer {
             //check missing modules
             $arrModules = $objHandler->getObjMetadata()->getArrRequiredModules();
             foreach($arrModules as $strOneModule => $strVersion) {
-                if(trim($strOneModule) != "" && class_module_system_module::getModuleByName(trim($strOneModule)) === null) {
+                if(trim($strOneModule) != "" && SystemModule::getModuleByName(trim($strOneModule)) === null) {
 
                     //check if a corresponding module is available
-                    $objPackagemanager = new class_module_packagemanager_manager();
+                    $objPackagemanager = new PackagemanagerManager();
                     $objPackage = $objPackagemanager->getPackage($strOneModule);
 
                     if($objPackage === null || $objPackage->getBitProvidesInstaller() || version_compare($strVersion, $objPackage->getStrVersion(), ">")) {
@@ -459,7 +472,7 @@ class class_installer {
 
                 }
 
-                else if(version_compare($strVersion, class_module_system_module::getModuleByName(trim($strOneModule))->getStrVersion(), ">")) {
+                else if(version_compare($strVersion, SystemModule::getModuleByName(trim($strOneModule))->getStrVersion(), ">")) {
                     $arrTemplate["module_hint"] .= $this->getLang("installer_systemversion_needed").$strOneModule." >= ".$strVersion."<br />";
                 }
             }
@@ -496,7 +509,7 @@ class class_installer {
         $strReturn = "";
         $strInstallLog = "";
 
-        $objManager = new class_module_packagemanager_manager();
+        $objManager = new PackagemanagerManager();
 
         //Is there a module to be installed or updated?
         if(isset($_GET["update"])) {
@@ -554,7 +567,7 @@ class class_installer {
                 $strRequired = "";
                 $arrModules = $objHandler->getObjMetadata()->getArrRequiredModules();
                 foreach($arrModules as $strOneModule => $strVersion) {
-                    if(trim($strOneModule) != "" && class_module_system_module::getModuleByName(trim($strOneModule)) === null)
+                    if(trim($strOneModule) != "" && SystemModule::getModuleByName(trim($strOneModule)) === null)
                         $strRequired .= $strOneModule.", ";
                 }
 
@@ -571,7 +584,7 @@ class class_installer {
 
         if(!$bitInstallerFound) {
             $this->strOutput = "";
-            class_response_object::getInstance()->setStrRedirectUrl(_webpath_."/installer.php?step=finish");
+            ResponseObject::getInstance()->setStrRedirectUrl(_webpath_."/installer.php?step=finish");
             return;
         }
 
@@ -613,9 +626,10 @@ class class_installer {
         $strReturn = "";
 
         $strReturn .= "Searching for packages to be installed...\n";
-        $objManager = new class_module_packagemanager_manager();
+        $objManager = new PackagemanagerManager();
         $arrPackageMetadata = $objManager->getAvailablePackages();
 
+        /** @var PackagemanagerMetadata[] $arrPackagesToInstall */
         $arrPackagesToInstall = array();
         $objSamplecontent = null;
         foreach($arrPackageMetadata as $objOneMetadata) {
@@ -678,7 +692,7 @@ class class_installer {
      */
     private function renderOutput() {
 
-        class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_ENDPROCESSING, array());
+        CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_REQUEST_ENDPROCESSING, array());
 
         if($this->strLogfile != "") {
             $strTemplateID = $this->objTemplates->readTemplate("/module_installer/installer.tpl", "installer_log", true);
@@ -751,7 +765,7 @@ class class_installer {
      * @return string
      */
     private function callScriptlets($strContent) {
-        $objHelper = new class_scriptlet_helper();
+        $objHelper = new ScriptletHelper();
         return $objHelper->processString($strContent);
     }
 
@@ -803,12 +817,12 @@ class class_installer {
 
     private function isInstalled() {
         try {
-            $objUser = class_module_system_module::getModuleByName("user");
+            $objUser = SystemModule::getModuleByName("user");
             if($objUser != null) {
                 return true;
             }
         }
-        catch(class_exception $objE) {
+        catch(Exception $objE) {
         }
 
         return false;
@@ -820,10 +834,10 @@ class class_installer {
 define("_admin_", false);
 
 //Creating the Installer-Object
-$objInstaller = new class_installer();
+$objInstaller = new Installer();
 $objInstaller->action();
-class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_ENDPROCESSING, array());
-class_response_object::getInstance()->sendHeaders();
-class_response_object::getInstance()->sendContent();
-class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array(class_request_entrypoint_enum::INSTALLER()));
+CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_REQUEST_ENDPROCESSING, array());
+ResponseObject::getInstance()->sendHeaders();
+ResponseObject::getInstance()->sendContent();
+CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array(RequestEntrypointEnum::INSTALLER()));
 

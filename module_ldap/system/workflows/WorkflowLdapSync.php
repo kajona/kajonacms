@@ -8,11 +8,10 @@
 
 namespace Kajona\Ldap\System\Workflows;
 
-use class_carrier;
-use class_date;
-use class_module_workflows_workflow;
-use class_usersources_source_ldap;
-use interface_workflows_handler;
+use Kajona\Ldap\System\Usersources\UsersourcesSourceLdap;
+use Kajona\System\System\Carrier;
+use Kajona\Workflows\System\WorkflowsHandlerInterface;
+use Kajona\Workflows\System\WorkflowsWorkflow;
 
 
 /**
@@ -20,65 +19,63 @@ use interface_workflows_handler;
  *
  * @package module_ldap
  */
-class WorkflowLdapSync implements interface_workflows_handler {
+class WorkflowLdapSync implements WorkflowsHandlerInterface
+{
 
 
     /**
-     * @var class_module_workflows_workflow
+     * @var WorkflowsWorkflow
      */
     private $objWorkflow = null;
 
     /**
-     * @see interface_workflows_handler::getConfigValueNames()
-     * @return string[]
+     * @inheritdoc
      */
-    public function getConfigValueNames() {
-        return array(
-
-        );
+    public function getConfigValueNames()
+    {
+        return array();
     }
 
     /**
-     * @param string $strVal1
-     * @param string $strVal2
-     * @param string $strVal3
-     *
-     * @see interface_workflows_handler::setConfigValues()
-     * @return void
+     * @inheritdoc
      */
-    public function setConfigValues($strVal1, $strVal2, $strVal3) {
+    public function setConfigValues($strVal1, $strVal2, $strVal3)
+    {
 
     }
 
     /**
-     * @see interface_workflows_handler::getDefaultValues()
-     * @return string[]
+     * @inheritdoc
      */
-    public function getDefaultValues() {
+    public function getDefaultValues()
+    {
         return array(); // by default there are 24h between each sync
     }
 
     /**
-     * @param class_module_workflows_workflow $objWorkflow
+     * @param WorkflowsWorkflow $objWorkflow
      * @return void
      */
-    public function setObjWorkflow($objWorkflow) {
+    public function setObjWorkflow($objWorkflow)
+    {
         $this->objWorkflow = $objWorkflow;
     }
 
     /**
      * @return string
      */
-    public function getStrName() {
-        return class_carrier::getInstance()->getObjLang()->getLang("workflow_ldapsync_title", "ldap");
+    public function getStrName()
+    {
+        return Carrier::getInstance()->getObjLang()->getLang("workflow_ldapsync_title", "ldap");
     }
 
 
     /**
      * @return bool
      */
-    public function execute() {
-        $objUsersources = new class_usersources_source_ldap();
+    public function execute()
+    {
+        $objUsersources = new UsersourcesSourceLdap();
         $objUsersources->updateUserData();
 
         //trigger again
@@ -89,7 +86,8 @@ class WorkflowLdapSync implements interface_workflows_handler {
      * void implementation
      * @return void
      */
-    public function onDelete() {
+    public function onDelete()
+    {
 
     }
 
@@ -98,8 +96,9 @@ class WorkflowLdapSync implements interface_workflows_handler {
      * schedule the workflow
      * @return void
      */
-    public function schedule() {
-        $objDate = new class_date();
+    public function schedule()
+    {
+        $objDate = new \Kajona\System\System\Date();
         $objDate->setNextDay();
         $objDate->setIntHour(3);
         $objDate->setIntMin(20);
@@ -110,15 +109,17 @@ class WorkflowLdapSync implements interface_workflows_handler {
      * void implementation
      * @return void
      */
-    public function getUserInterface() {
-       
+    public function getUserInterface()
+    {
+
     }
 
     /**
      * @param array $arrParams
      * @return void
      */
-    public function processUserInput($arrParams) {
+    public function processUserInput($arrParams)
+    {
         return;
 
     }
@@ -126,10 +127,10 @@ class WorkflowLdapSync implements interface_workflows_handler {
     /**
      * @return bool
      */
-    public function providesUserInterface() {
+    public function providesUserInterface()
+    {
         return false;
     }
 
 
-    
 }

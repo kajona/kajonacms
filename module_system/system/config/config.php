@@ -46,7 +46,7 @@ $config['dbport']               = "%%defaultport%%";               //Database po
 
     $config['adminlangs']           = "de,en,pt,ru,bg,sv";             //Available languages for the administration
 
-    $config['admintoolkit']         = "class_toolkit_admin";           //The admin-toolkit class to use. If you created your own implementation,
+    $config['admintoolkit']         = "ToolkitAdmin";                  //The admin-toolkit class to use. If you created your own implementation,
                                                                        //e.g. by extending the Kajona-class, set the name of the class here.
 
     $config['https_header']         = "HTTPS";                         //Http-header used to validate if the current connection is encrypted by https.

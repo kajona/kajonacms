@@ -6,7 +6,12 @@
 *-------------------------------------------------------------------------------------------------------*
 *   $Id$                                           *
 ********************************************************************************************************/
+namespace Kajona\Debugging\Debug;
 
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use RecursiveRegexIterator;
+use RegexIterator;
 
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
@@ -65,4 +70,4 @@ foreach($arrExternals as $intI => $objContent) {
 }
 echo "<style>table,td,tr,th { border:1px solid grey;border-spacing: 0px; border-collapse: collapse;}</style>";
 
-echo class_carrier::getInstance()->getObjToolkit("admin")->dataTable($arrHeader, $arrUserRows);
+echo \Kajona\System\System\Carrier::getInstance()->getObjToolkit("admin")->dataTable($arrHeader, $arrUserRows);

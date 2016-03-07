@@ -18,7 +18,8 @@ use Kajona\Pages\Admin\ElementAdmin;
  *
  * @targetTable element_universal.content_id
  */
-class ElementBlockAdmin extends ElementAdmin implements AdminElementInterface {
+class ElementBlockAdmin extends ElementAdmin implements AdminElementInterface
+{
 
 
 }
