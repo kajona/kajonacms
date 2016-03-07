@@ -77,8 +77,8 @@ class Lang
     {
         //save texts to session
         if($this->bitSaveToCache) {
-            CacheManager::getInstance()->addValue("textSessionCache", $this->arrTexts, class_config::getInstance()->getConfig("textcachetime"));
-            CacheManager::getInstance()->addValue("textSessionFallbackCache", $this->arrFallbackTextEntrys, class_config::getInstance()->getConfig("textcachetime"));
+            CacheManager::getInstance()->addValue("textSessionCache", $this->arrTexts, Config::getInstance()->getConfig("textcachetime"));
+            CacheManager::getInstance()->addValue("textSessionFallbackCache", $this->arrFallbackTextEntrys, Config::getInstance()->getConfig("textcachetime"));
         }
     }
 

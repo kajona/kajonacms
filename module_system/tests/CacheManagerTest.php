@@ -63,7 +63,7 @@ class CacheManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \class_exception
+     * @expectedException Exception
      */
     public function testInvalidType()
     {

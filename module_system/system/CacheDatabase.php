@@ -9,7 +9,7 @@ namespace Kajona\System\System;
 use Doctrine\Common\Cache\CacheProvider;
 
 /**
- * Cache provider which uses the class_cache model
+ * Cache provider which uses the Cache model
  *
  * @author christoph.kappestein@gmail.com
  * @since 5.0
@@ -34,8 +34,8 @@ class CacheDatabase extends CacheProvider
             return $this->arrCache[$id];
         }
 
-        $objCache = \class_cache::getCachedEntry(self::CACHE_SOURCE, $id);
-        if ($objCache instanceof \class_cache) {
+        $objCache = Cache::getCachedEntry(self::CACHE_SOURCE, $id);
+        if ($objCache instanceof Cache) {
             return unserialize($objCache->getStrContent());
         }
 
@@ -51,7 +51,7 @@ class CacheDatabase extends CacheProvider
 
     public function doSave($id, $data, $lifeTime = 0)
     {
-        $objCache = \class_cache::createNewInstance(self::CACHE_SOURCE);
+        $objCache = Cache::createNewInstance(self::CACHE_SOURCE);
         $objCache->setStrContent(serialize($data));
         $objCache->setStrHash1($this->getCacheKey($id));
         $objCache->setIntLeasetime(time() + $lifeTime);
@@ -60,12 +60,12 @@ class CacheDatabase extends CacheProvider
 
     public function doDelete($id)
     {
-        \class_cache::flushCache(self::CACHE_SOURCE, $this->getCacheKey($id));
+        Cache::flushCache(self::CACHE_SOURCE, $this->getCacheKey($id));
     }
 
     public function doFlush()
     {
-        \class_cache::flushCache(self::CACHE_SOURCE);
+        Cache::flushCache(self::CACHE_SOURCE);
     }
 
     public function doGetStats()

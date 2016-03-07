@@ -17,7 +17,7 @@ use Doctrine\Common\Cache\PhpFileCache;
 
 /**
  * Cache manager which can store and retrieve values from different cache systems. The API is compatible to the
- * class_apc_cache but it is possible to specifiy different cache systems.
+ * ApcCache but it is possible to specifiy different cache systems.
  *
  * <code>
  * $strData = CacheManager::getInstance()->getValue('[key]');
@@ -57,7 +57,7 @@ class CacheManager
     const TYPE_APC = 2;
 
     /**
-     * Uses the class_cache to store the data in a database table
+     * Uses the Cache to store the data in a database table
      *
      * @var integer
      */
@@ -202,7 +202,7 @@ class CacheManager
         } elseif (count($arrDriver) > 1) {
             $objCache = new ChainCache($arrDriver);
         } else {
-            throw new \class_exception("Invalid cache type", \class_exception::$level_ERROR);
+            throw new Exception("Invalid cache type", Exception::$level_ERROR);
         }
 
         if ($objCache instanceof CacheProvider) {
