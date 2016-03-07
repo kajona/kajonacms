@@ -1,5 +1,11 @@
 {
-    "require": {
-      "zetacomponents/graph": "1.5.*"
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://buildpackages.kajona.de:5443/"
     }
+  ],
+  "require": {
+    "zetacomponents/graph": "1.5.*"
+  }
 }

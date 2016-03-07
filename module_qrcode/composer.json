@@ -1,5 +1,11 @@
 {
-    "require": {
-      "aferrandini/phpqrcode": "1.0.1"
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://buildpackages.kajona.de:5443/"
     }
+  ],
+  "require": {
+    "aferrandini/phpqrcode": "1.0.1"
+  }
 }

@@ -1,9 +1,15 @@
 {
-    "require": {
-        "pimple/pimple": "^3.0",
-        "doctrine/cache": "^1.6"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^4.8"
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://buildpackages.kajona.de:5443/"
     }
+  ],
+  "require": {
+    "pimple/pimple": "^3.0",
+    "doctrine/cache": "^1.6"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^4.8"
+  }
 }

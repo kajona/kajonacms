@@ -1,5 +1,11 @@
 {
-    "require": {
-      "tecnick.com/tcpdf": "6.2.8"
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://buildpackages.kajona.de:5443/"
     }
+  ],
+  "require": {
+    "tecnick.com/tcpdf": "6.2.8"
+  }
 }

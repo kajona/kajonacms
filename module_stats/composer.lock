@@ -4,7 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "984ada1c418dcc357d5085cda524bf89",
+    "hash": "9721eba9f673688660413b8f88b8d320",
+    "content-hash": "928ed6024abefe80a88320765f46cb4a",
     "packages": [
         {
             "name": "garetjax/phpbrowscap",
@@ -15,10 +16,10 @@
                 "reference": "ed661716d0d9158bac6ab3b074b18b70f8d18bef"
             },
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/GaretJax/phpbrowscap/zipball/ed661716d0d9158bac6ab3b074b18b70f8d18bef",
+                "type": "tar",
+                "url": "https://buildpackages.kajona.de:5443//dist/garetjax-phpbrowscap-ed661716d0d9158bac6ab3b074b18b70f8d18bef-zip-5f9fa6.tar",
                 "reference": "ed661716d0d9158bac6ab3b074b18b70f8d18bef",
-                "shasum": ""
+                "shasum": "a11d8cb33b887d2d284893426f932b7584077aae"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -29,7 +30,6 @@
                     "phpbrowscap": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT License"
             ],
@@ -47,6 +47,10 @@
                 "get_browser",
                 "user agent"
             ],
+            "support": {
+                "source": "https://github.com/GaretJax/phpbrowscap/tree/2.0",
+                "issues": "https://github.com/GaretJax/phpbrowscap/issues"
+            },
             "time": "2014-02-04 09:18:51"
         }
     ],

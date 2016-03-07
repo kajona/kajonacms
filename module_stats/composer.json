@@ -1,5 +1,11 @@
 {
-    "require": {
-      "garetjax/phpbrowscap": "2.0"
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://buildpackages.kajona.de:5443/"
     }
+  ],
+  "require": {
+    "garetjax/phpbrowscap": "2.0"
+  }
 }

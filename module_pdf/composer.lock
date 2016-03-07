@@ -4,7 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "551b53b177c8f8eed8cfd3e35f1658a5",
+    "hash": "69ecbe1ca694ed49af3540b62b751122",
+    "content-hash": "3008d4ecf52e4ba30de1c5ac9f12b0f5",
     "packages": [
         {
             "name": "tecnick.com/tcpdf",
@@ -67,6 +68,7 @@
                 "pdf417",
                 "qrcode"
             ],
+            "abandoned": "tecnickcom/tcpdf",
             "time": "2015-04-29 16:13:58"
         }
     ],

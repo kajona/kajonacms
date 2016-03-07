@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "bfbae26ab42f0660aea0835a6220a85f",
-    "content-hash": "8f82f6f4dfc9b39520ab5c380a832e01",
+    "hash": "7d934ce300bc7832d24b4544af9d042d",
+    "content-hash": "0d77b2fd221e40323ce8e87f42dfb032",
     "packages": [
         {
             "name": "doctrine/cache",
@@ -16,10 +16,10 @@
                 "reference": "f8af318d14bdb0eff0336795b428b547bd39ccb6"
             },
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/cache/zipball/f8af318d14bdb0eff0336795b428b547bd39ccb6",
+                "type": "tar",
+                "url": "https://buildpackages.kajona.de:5443//dist/doctrine-cache-f8af318d14bdb0eff0336795b428b547bd39ccb6-zip-1c5416.tar",
                 "reference": "f8af318d14bdb0eff0336795b428b547bd39ccb6",
-                "shasum": ""
+                "shasum": "2fe072d46f2161bd1527dc7ab927f101d8921bc0"
             },
             "require": {
                 "php": "~5.5|~7.0"
@@ -43,11 +43,19 @@
                     "Doctrine\\Common\\Cache\\": "lib/Doctrine/Common/Cache"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Doctrine\\Tests\\": "tests/Doctrine/Tests"
+                }
+            },
             "license": [
                 "MIT"
             ],
             "authors": [
+                {
+                    "name": "Guilherme Blanco",
+                    "email": "guilhermeblanco@gmail.com"
+                },
                 {
                     "name": "Roman Borschel",
                     "email": "roman@code-factory.org"
@@ -55,10 +63,6 @@
                 {
                     "name": "Benjamin Eberlei",
                     "email": "kontakt@beberlei.de"
-                },
-                {
-                    "name": "Guilherme Blanco",
-                    "email": "guilhermeblanco@gmail.com"
                 },
                 {
                     "name": "Jonathan Wage",
@@ -75,6 +79,10 @@
                 "cache",
                 "caching"
             ],
+            "support": {
+                "source": "https://github.com/doctrine/cache/tree/v1.6.0",
+                "issues": "https://github.com/doctrine/cache/issues"
+            },
             "time": "2015-12-31 16:37:02"
         },
         {
@@ -86,10 +94,10 @@
                 "reference": "a30f7d6e57565a2e1a316e1baf2a483f788b258a"
             },
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/silexphp/Pimple/zipball/a30f7d6e57565a2e1a316e1baf2a483f788b258a",
+                "type": "tar",
+                "url": "https://buildpackages.kajona.de:5443//dist/pimple-pimple-a30f7d6e57565a2e1a316e1baf2a483f788b258a-zip-9c6676.tar",
                 "reference": "a30f7d6e57565a2e1a316e1baf2a483f788b258a",
-                "shasum": ""
+                "shasum": "e7bfca47266555fe1ecd778697939d885e335724"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -105,7 +113,6 @@
                     "Pimple": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -121,6 +128,10 @@
                 "container",
                 "dependency injection"
             ],
+            "support": {
+                "source": "https://github.com/silexphp/Pimple/tree/v3.0.2",
+                "issues": "https://github.com/silexphp/Pimple/issues"
+            },
             "time": "2015-09-11 15:10:35"
         }
     ],

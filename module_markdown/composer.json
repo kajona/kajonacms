@@ -1,5 +1,11 @@
 {
-    "require": {
-        "erusev/parsedown": "1.5.3"
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://buildpackages.kajona.de:5443/"
     }
+  ],
+  "require": {
+    "erusev/parsedown": "1.5.3"
+  }
 }
