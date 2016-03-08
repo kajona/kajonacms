@@ -36,6 +36,8 @@ class ObjectBuilder
      *
      * @param string $strClass
      * @param array $arrArguments
+     *
+     * @return object
      */
     public function factory($strClass, array $arrArguments = array())
     {

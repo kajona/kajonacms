@@ -374,7 +374,7 @@ abstract class AbstractController
      *
      * @return void
      */
-    protected final function setStrLangBase($strLangbase)
+    final protected function setStrLangBase($strLangbase)
     {
         $this->strLangBase = $strLangbase;
     }
@@ -391,19 +391,6 @@ abstract class AbstractController
         /** @var CacheManager $objCache */
         $objCache = Carrier::getInstance()->getContainer()->offsetGet("cache_manager");
         $objCache->flushCache();
-    }
-
-    /**
-     * Removes one page from the cache
-     *
-     * @deprecated use flushCompletePagesCache() instead
-     * @return bool
-     */
-    public function flushPageFromPagesCache()
-    {
-        //since the navigation may depend on page-internal characteristics, the complete cache is
-        //flushed instead of only flushing the current page
-        self::flushCompletePagesCache();
     }
 
 

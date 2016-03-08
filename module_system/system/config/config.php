@@ -109,7 +109,6 @@ $config['dbport']               = "%%defaultport%%";               //Database po
     $debug['dbnumber']              = false;                           //Counts the number of queries passed to the db / retrieved from the cache
     $debug['templatenr']            = false;                           //Counts the number of templates retrieved from the cache
     $debug['memory']                = false;                           //Displays the memory used by Kajona to generate the current page
-    $debug['cache']                 = false;                           //Counts the internal cache-hits and requests to save s.th. to the cache
 
     $debug['dblog']                 = false;                           //Logs all queries sent to the db into a logfile. If set to true, the
                                                                        //debuglogging has to be set to 3, since queries are leveled as information

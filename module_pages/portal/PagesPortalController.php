@@ -438,7 +438,7 @@ class PagesPortalController extends PortalController implements PortalInterface
         }
 
         return sha1(
-            "".
+            __CLASS__.
             $strGuestId.
             $this->getPagename().
             $this->getAction().

@@ -215,7 +215,7 @@ abstract class ElementPortal extends PortalController
         }
 
         return sha1(
-            "".
+            __CLASS__.
             $strGuestId.
             $this->getAction().
             $this->strCacheAddon.
