@@ -38,7 +38,6 @@
     <div class="card-header">
         <span class="pull-right">%%objDateStart%%</span>
         <h4><a href="%%news_more_link_href%%" data-kajona-editable="%%strSystemid%%#strTitle#plain">%%strTitle%%</a></h4>
-        <div class="clearer"></div>
     </div>
     <div class="card-block row">
         <div class="col-xs-9">

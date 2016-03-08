@@ -132,7 +132,7 @@ class InstallerSamplecontentNews implements SamplecontentInstallerInterface
                 $objAdminInstance->setIntOrder(0);
                 $objAdminInstance->setIntAmount(10);
                 $objAdminInstance->setStrDetailspage("newsdetails");
-                $objAdminInstance->setStrTemplate("demo.tpl");
+                $objAdminInstance->setStrTemplate("demo_teaserlist.tpl");
                 $objAdminInstance->updateForeignElement();
             }
         }

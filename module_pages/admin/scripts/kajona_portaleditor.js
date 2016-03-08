@@ -731,19 +731,22 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
     show : function(element) {
         var $objEl = $(element);
         if($objEl.children('.peActionToolbar')) {
+
             if($objEl.data('element') == 'block') {
                 $objEl.children('.peActionToolbar')
-                    .css('top', ($objEl.position().top) - 35)
+                    .css('top', ($objEl.position().top) - 32)
                     .css('right', 20)
                     .addClass('peShown').addClass('caretRight');
             }
             else {
                 $objEl.children('.peActionToolbar')
-                    .css('top', ($objEl.position().top) - 35)
+                    .css('top', ($objEl.position().top) - 32)
                     .css('left', ($objEl.position().left))
                     .addClass('peShown');
             }
+
         }
+
 
     },
 
