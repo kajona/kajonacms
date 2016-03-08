@@ -125,7 +125,7 @@ class Config
         if (is_file($strFile)) {
             include $strFile;
         } elseif (strpos(__DIR__, '.phar') !== false) {
-            include 'phar://'.$strFile;
+            include $strFile;
         }
 
         // project config
@@ -133,7 +133,7 @@ class Config
         if (is_file($strFile)) {
             include $strFile;
         } elseif (strpos(__DIR__, '.phar') !== false) {
-            include 'phar://'.$strFile;
+            include $strFile;
         }
 
         return isset($config[$strEntryName]) ? $config[$strEntryName] : "";
