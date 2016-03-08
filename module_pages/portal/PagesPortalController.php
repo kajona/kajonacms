@@ -82,6 +82,9 @@ class PagesPortalController extends PortalController implements PortalInterface
             $this->objSession->setSession("pe_disable", "false");
         }
 
+
+        //TODO: load page from cache
+
         //If we reached up till here, we can begin loading the elements to fill
         if (PagesPortaleditor::isActive()) {
             $arrElementsOnPage = PagesPageelement::getElementsOnPage($objPageData->getSystemid(), false, $this->getStrPortalLanguage());
@@ -92,7 +95,6 @@ class PagesPortalController extends PortalController implements PortalInterface
 
         //If there's a master-page, load elements on that, too
         $objMasterData = PagesPage::getPageByName("master");
-        $bitEditPermissionOnMasterPage = false;
         if ($objMasterData != null) {
             if (PagesPortaleditor::isActive()) {
                 $arrElementsOnMaster = PagesPageelement::getElementsOnPage($objMasterData->getSystemid(), false, $this->getStrPortalLanguage());
@@ -103,10 +105,6 @@ class PagesPortalController extends PortalController implements PortalInterface
 
             //and merge them
             $arrElementsOnPage = array_merge($arrElementsOnPage, $arrElementsOnMaster);
-            if ($objMasterData->rightEdit()) {
-                $bitEditPermissionOnMasterPage = true;
-            }
-
         }
 
         //load the merged placeholder-list
@@ -283,7 +281,7 @@ class PagesPortalController extends PortalController implements PortalInterface
         $strPageContent = $this->objTemplate->deleteBlocksFromTemplate($strPageContent);
 
         //add portaleditor main code
-        $strPageContent = $this->renderPortalEditorCode($objPageData, $bitEditPermissionOnMasterPage, $strPageContent);
+        $strPageContent = PagesPortaleditor::injectPortalEditorPageCode($objPageData, $strPageContent);
 
         //insert the copyright headers. Due to our licence, you are NOT allowed to remove those lines.
         $strHeader = "<!--\n";
@@ -305,6 +303,10 @@ class PagesPortalController extends PortalController implements PortalInterface
         else {
             $strPageContent = $strHeader.$strPageContent;
         }
+
+        //and cache the whole page
+        //TODO save page to cache
+
 
         return $strPageContent;
     }
@@ -406,130 +408,30 @@ class PagesPortalController extends PortalController implements PortalInterface
     }
 
 
+
+
+
     /**
-     * Adds the portal-editor code to the current page-output - if all requirements are given
+     * @param PagesPageelement[] $arrElementsOnPage
      *
-     * @param PagesPage $objPageData
-     * @param bool $bitEditPermissionOnMasterPage
-     * @param string $strPageContent
-     *
-     * @return string
-     * @todo move this to an external class
+     * @return int|null
      */
-    private function renderPortalEditorCode(PagesPage $objPageData, $bitEditPermissionOnMasterPage, $strPageContent)
+    private function getPageCacheTime(array $arrElementsOnPage)
     {
-        //add the portaleditor toolbar
-        if (SystemSetting::getConfigValue("_pages_portaleditor_") == "false") {
-            return $strPageContent;
+        $intCachetime = null;
+
+        foreach($arrElementsOnPage as $objOneElement) {
+            /** @var  ElementPortal $objElement */
+            $objElement = $objOneElement->getConcretePortalInstance();
+
+            $intElementCachetime = $objElement->getCachetimeInSeconds();
+            if($intCachetime === null || $intElementCachetime < $intCachetime) {
+                $intCachetime = $intElementCachetime;
+            }
         }
 
-        if (!$this->objSession->isAdmin()) {
-            return $strPageContent;
-        }
-
-        if (!$objPageData->rightEdit() && !$bitEditPermissionOnMasterPage) {
-            return $strPageContent;
-        }
-
-        AdminskinHelper::defineSkinWebpath();
-
-        //save back the current portal text language and set the admin-one
-        $strPortalLanguage = Carrier::getInstance()->getObjLang()->getStrTextLanguage();
-        Carrier::getInstance()->getObjLang()->setStrTextLanguage($this->objSession->getAdminLanguage());
-
-        $strPeToolbar = "";
-
-        $strConfigFile = "'config_kajona_standard.js'";
-        if (is_file(_realpath_."/project/admin/scripts/ckeditor/config_kajona_standard.js")) {
-            $strConfigFile = "KAJONA_WEBPATH+'/project/admin/scripts/ckeditor/config_kajona_standard.js'";
-        }
-
-        //Add an iconbar
-        $strPageEditUrl = Link::getLinkAdminHref("pages_content", "list", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage, false);
-        $strEditUrl = Link::getLinkAdminHref("pages", "editPage", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage."&pe=1");
-        $strNewUrl = Link::getLinkAdminHref("pages", "newPage", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage."&pe=1");
-
-        $strEditDate = timeToString($objPageData->getIntLmTime(), false);
-        $strPageStatus = ($objPageData->getIntRecordStatus() == 1 ? $this->getLang("systemtask_systemstatus_active", "system") : $this->getLang("systemtask_systemstatus_inactive", "system"));
-
-        $bitSetEnabled = $this->objSession->getSession("pe_disable") != "true" ? 'false' : 'true';
-
-        $strPeToolbar .= "<script type='text/javascript'>
-
-        KAJONA.portal.loader.loadFile([
-            '/core/module_pages/admin/scripts/kajona_portaleditor.js',
-            '/core/module_system/admin/scripts/jqueryui/jquery-ui.custom.min.js',
-            '/core/module_system/system/scripts/lang.js',
-            '/core/module_system/admin/scripts/jqueryui/css/smoothness/jquery-ui.custom.css'
-        ], function() {
-
-            KAJONA.admin.peToolbarActions = [
-                new KAJONA.admin.portaleditor.toolbar.Action('pages:pe_on_off', '', 'fa-power-off', function() { KAJONA.admin.portaleditor.switchEnabled({$bitSetEnabled}); }),
-                new KAJONA.admin.portaleditor.toolbar.Separator(),                
-                new KAJONA.admin.portaleditor.toolbar.Action('pages:pe_status_page', '{$objPageData->getStrName()}','fa-file-o','' ),
-                new KAJONA.admin.portaleditor.toolbar.Action('pages:pe_status_status','{$strPageStatus}','fa-eye',''),
-                new KAJONA.admin.portaleditor.toolbar.Action('pages:pe_status_autor','{$objPageData->getLastEditUser()}','fa-user',''),
-                new KAJONA.admin.portaleditor.toolbar.Action('pages:pe_status_time','{$strEditDate}','fa-clock-o',''),
-                new KAJONA.admin.portaleditor.toolbar.Separator(),
-                new KAJONA.admin.portaleditor.toolbar.Action('pages:pe_icon_page','','fa-pencil',function() { KAJONA.admin.portaleditor.openDialog('{$strEditUrl}'); return false;}),
-                new KAJONA.admin.portaleditor.toolbar.Action('pages:pe_icon_new','','fa-plus-circle',function() { KAJONA.admin.portaleditor.openDialog('{$strNewUrl}'); return false;}),
-                new KAJONA.admin.portaleditor.toolbar.Action('pages:pe_icon_edit','','fa-file-o',function() { document.location = '{$strPageEditUrl}';}),
-                new KAJONA.admin.portaleditor.toolbar.Separator()
-            ];
-
-            KAJONA.admin.actions = ".PagesPortaleditor::getInstance()->convertToJs().";
-            KAJONA.portal.loader.loadFile([
-                '/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap.min.js',
-                '/core/module_v4skin/admin/skins/kajona_v4/js/kajona_dialog.js'
-            ], function() {
-                KAJONA.admin.portaleditor.peDialog = new KAJONA.admin.ModalDialog('peDialog', 0, true, true);
-                KAJONA.admin.portaleditor.delDialog = new KAJONA.admin.ModalDialog('delDialog', 1, false, false);
-            });
-
-            KAJONA.admin.portaleditor.RTE.config = {
-                language : '".(Session::getInstance()->getAdminLanguage() != "" ? Session::getInstance()->getAdminLanguage() : "en")."',
-                filebrowserBrowseUrl : '".uniStrReplace("&amp;", "&", Link::getLinkAdminHref("folderview", "browserChooser", "&form_element=ckeditor"))."',
-                filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", Link::getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid=".SystemSetting::getConfigValue("_mediamanager_default_imagesrepoid_")."&form_element=ckeditor&bit_link=1"))."',
-                customConfig : {$strConfigFile},
-                resize_minWidth : 640,
-                filebrowserWindowWidth : 400,
-                filebrowserWindowHeight : 500,
-                filebrowserImageWindowWidth : 400,
-                filebrowserImageWindowWindowHeight : 500
-            };
-
-            $(function() {
-                KAJONA.admin.portaleditor.initPortaleditor();
-                KAJONA.admin.portaleditor.elementActionToolbar.init();
-                KAJONA.admin.portaleditor.globalToolbar.init();
-                KAJONA.admin.tooltip.initTooltip();
-                KAJONA.util.lang.initializeProperties();
-            });
-        });
-        </script>";
-
-
-        //Load portaleditor styles
-        $strPeToolbar .= $this->objToolkit->getPeToolbar();
-
-        $objScriptlets = new ScriptletHelper();
-        $strPeToolbar = $objScriptlets->processString($strPeToolbar, ScriptletInterface::BIT_CONTEXT_ADMIN);
-
-        //The toolbar has to be added right after the body-tag - to generate correct html-code
-        $strTemp = uniSubstr($strPageContent, uniStrpos($strPageContent, "<body"));
-        //find closing bracket
-        $intTemp = uniStrpos($strTemp, ">") + 1;
-        //and insert the code
-        $strPageContent = uniSubstr($strPageContent, 0, uniStrpos($strPageContent, "<body") + $intTemp).$strPeToolbar.uniSubstr($strPageContent, uniStrpos($strPageContent, "<body") + $intTemp);
-
-
-        //reset the portal texts language
-        Carrier::getInstance()->getObjLang()->setStrTextLanguage($strPortalLanguage);
-
-
-        return $strPageContent;
+        return $intCachetime !== null ? $intCachetime : 0;
     }
-
 
     /**
      * Sets the passed text as an additional title information.

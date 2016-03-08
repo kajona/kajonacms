@@ -85,6 +85,27 @@ class ElementBlockPortal extends ElementPortal implements PortalElementInterface
         return $strReturn;
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function getCachetimeInSeconds()
+    {
+        $arrElementsOnBlock = PagesPageelement::getElementsOnPage($this->getSystemid(), true, $this->getStrPortalLanguage());
+        $intCachetime = null;
+        foreach($arrElementsOnBlock as $objOneElement) {
+            $intElTime = $objOneElement->getConcretePortalInstance()->getCachetimeInSeconds();
+            if($intCachetime === null || $intElTime < $intCachetime) {
+                $intCachetime = (int)$intElTime;
+            }
+
+            if($intCachetime === 0) {
+                break;
+            }
+        }
+
+        return $intCachetime !== null ? $intCachetime : 0;
+    }
+
 
     /**
      * @throws Exception

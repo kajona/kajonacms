@@ -252,6 +252,7 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
      * Please note, that due to performance issues the foreign content is not loaded in the step!
      *
      * @return ElementPortal
+     * @todo cache the returned object in order to speed up multiple executions
      */
     public function getConcretePortalInstance()
     {
