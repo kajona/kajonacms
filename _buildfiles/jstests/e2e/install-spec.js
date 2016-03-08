@@ -9,7 +9,7 @@ describe('installation', function() {
         // wait max 5 minutes for the installation
         browser.manage().timeouts().pageLoadTimeout(60000 * 5);
 
-        browser.get('http://127.0.0.1:8080/installer.php');
+        browser.get('installer.php');
 
         browser.driver.findElement(by.css('.btn-primary')).click();
 
