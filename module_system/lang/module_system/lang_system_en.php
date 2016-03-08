@@ -297,3 +297,11 @@ $lang["systemtask_permissions_groupid"]     = "Relevant group";
 $lang["systemtask_permissions_finished"]     = "Finished execution";
 $lang["systemtask_permissions_name"]     = "Set permissions recursively";
 $lang["generic_changelog_no_systemid"]  = "Calling this action is only possible with a valid systemid. Please enter the systemid to be investigated.";
+
+$lang["cache_apc"]  = "APC";
+$lang["cache_filesystem"]  = "Filesystem";
+$lang["cache_hits"]  = "Hits";
+$lang["cache_misses"]  = "Misses";
+$lang["cache_uptime"]  = "Uptime";
+$lang["cache_usage"]  = "Usage";
+$lang["cache_available"]  = "Available";

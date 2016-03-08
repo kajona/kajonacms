@@ -290,3 +290,12 @@ $lang["systemtask_permissions_groupid"]     = "Relevante Gruppe";
 $lang["systemtask_permissions_finished"]     = "Ausführung abgeschlossen";
 $lang["systemtask_permissions_name"]     = "Rechte rekursiv setzen";
 $lang["generic_changelog_no_systemid"]  = "Diese Aktion kann nur mit einer gültigen Systemid aufgerufen werden. Bitte eine entsprechende Systemid angeben.";
+
+$lang["cache"]  = "Cache";
+$lang["cache_apc"]  = "APC";
+$lang["cache_filesystem"]  = "Filesystem";
+$lang["cache_hits"]  = "Hits";
+$lang["cache_misses"]  = "Misses";
+$lang["cache_uptime"]  = "Uptime";
+$lang["cache_usage"]  = "Usage";
+$lang["cache_available"]  = "Available";

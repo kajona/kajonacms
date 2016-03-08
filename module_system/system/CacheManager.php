@@ -144,6 +144,17 @@ class CacheManager
     }
 
     /**
+     * Returns stats informations for a specific type
+     *
+     * @param integer $intType
+     * @return array|null
+     */
+    public function getStats($intType)
+    {
+        return $this->getCache($intType)->getStats();
+    }
+
+    /**
      * Returns a specific cache system
      *
      * @param integer $intType
