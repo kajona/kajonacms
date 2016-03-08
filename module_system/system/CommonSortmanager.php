@@ -276,7 +276,7 @@ class CommonSortmanager implements SortmanagerInterface
         }
 
         //flush the cache
-        $this->objSource->flushCompletePagesCache();
+        Carrier::getInstance()->getContainer()->offsetGet("cache_manager")->flushCache();
         Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBQUERIES | Carrier::INT_CACHE_TYPE_ORMCACHE);
         $this->objSource->setIntSort($intNewPosition);
     }

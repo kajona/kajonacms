@@ -1033,7 +1033,7 @@ abstract class Root
      *
      * @return string The ID used/generated
      *
-     * * @todo find ussages and make private
+     * @todo find usages and make private
      */
     private function createSystemRecord($strPrevId, $strComment)
     {
@@ -1548,12 +1548,12 @@ abstract class Root
             Logger::getInstance()->addLogRow("deleted system-record with id ".$strSystemid, Logger::$levelInfo);
         }
         else {
-            $this->objDB->transactionRollback();;
+            $this->objDB->transactionRollback();
             Logger::getInstance()->addLogRow("deletion of system-record with id ".$strSystemid." failed", Logger::$levelWarning);
         }
 
         //flush the cache
-        $this->flushCompletePagesCache();
+        Carrier::getInstance()->getContainer()->offsetGet("cache_manager")->flushCache();
 
         return $bitResult;
     }
@@ -1664,35 +1664,7 @@ abstract class Root
     }
 
 
-
-
-    // --- PageCache Features -------------------------------------------------------------------------------
-
-    /**
-     * Deletes the complete Pages-Cache
-     *
-     * @todo reenable
-     * @return bool
-     */
-    public function flushCompletePagesCache()
-    {
-        return Cache::flushCache();
-    }
-
-    /**
-     * Removes one page from the cache
-     *
-     * @param string $strPagename
-     * @todo reenable
-     * @return bool
-     */
-    public function flushPageFromPagesCache($strPagename)
-    {
-        return $this->flushCompletePagesCache();
-    }
-
-
-    // --- Portal-Language ----------------------------------------------------------------------------------
+    // --- Portal-Language ------------------------------------------------------------------------------
 
     /**
      * Returns the language to display contents on the portal
@@ -1706,8 +1678,7 @@ abstract class Root
     }
 
 
-
-    // --- Admin-Language ----------------------------------------------------------------------------------
+    // --- Admin-Language -------------------------------------------------------------------------------
 
     /**
      * Returns the language to display contents or to edit contents on adminside
@@ -1715,13 +1686,11 @@ abstract class Root
      *
      * @return string
      */
-    public final function getStrAdminLanguageToWorkOn()
+    final public function getStrAdminLanguageToWorkOn()
     {
         $objLanguage = new LanguagesLanguage();
         return $objLanguage->getAdminLanguage();
     }
-
-
 
 
     // --- GETTERS / SETTERS ----------------------------------------------------------------------------

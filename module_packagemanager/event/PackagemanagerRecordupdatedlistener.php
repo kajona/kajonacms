@@ -8,6 +8,8 @@ namespace Kajona\Packagemanager\Event;
 
 use Kajona\Packagemanager\System\PackagemanagerTemplate;
 use Kajona\System\System\Cache;
+use Kajona\System\System\CacheManager;
+use Kajona\System\System\Carrier;
 use Kajona\System\System\CoreEventdispatcher;
 use Kajona\System\System\GenericeventListenerInterface;
 use Kajona\System\System\OrmComparatorEnum;
@@ -62,7 +64,9 @@ class PackagemanagerRecordupdatedlistener implements GenericeventListenerInterfa
                     $objSetting->updateObjectToDb();
                 }
 
-                Cache::flushCache();
+                /** @var CacheManager $objCache */
+                $objCache = Carrier::getInstance()->getContainer()->offsetGet("cache_manager");
+                $objCache->flushCache();
             }
         }
 

@@ -18,6 +18,7 @@ use Kajona\Pages\System\PagesPortaleditorPlaceholderAction;
 use Kajona\Pages\System\PagesPortaleditorSystemidAction;
 use Kajona\System\Portal\PortalController;
 use Kajona\System\System\Cache;
+use Kajona\System\System\CacheManager;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Exception;
 use Kajona\System\System\LanguagesLanguage;
@@ -160,15 +161,9 @@ abstract class ElementPortal extends PortalController
      */
     private function getElementOutputFromCache()
     {
-        $strReturn = false;
-
-        //load the matching cache-entry
-        $objCacheEntry = Cache::getCachedEntry(__CLASS__, $this->getCacheHash1(), $this->getCacheHash2(), $this->getStrPortalLanguage());
-        if ($objCacheEntry != null && $this->onLoadFromCache()) {
-            $strReturn = $objCacheEntry->getStrContent();
-        }
-
-        return $strReturn;
+        /** @var CacheManager $objCache */
+        $objCache = Carrier::getInstance()->getContainer()->offsetGet("cache_manager");
+        return $objCache->getValue($this->getCacheHashSum());
     }
 
     /**
@@ -191,8 +186,6 @@ abstract class ElementPortal extends PortalController
      * content-generation is triggered again.
      *
      * @param string $strElementOutput
-     * @todo move to new cache provider
-     * @todo only one cachesum, plz
      *
      * @since 3.3.1
      */
@@ -206,12 +199,31 @@ abstract class ElementPortal extends PortalController
         //strip the data-editable values - no use case for regular page views
         $strElementOutput = preg_replace('/data-kajona-editable=\"([a-zA-Z0-9#_]*)\"/i', "", $strElementOutput);
 
-        //load the matching cache-entry
-        $objCacheEntry = Cache::getCachedEntry(__CLASS__, $this->getCacheHash1(), $this->getCacheHash2(), $this->getStrPortalLanguage(), true);
-        $objCacheEntry->setStrContent($strElementOutput);
-        $objCacheEntry->setIntLeasetime(time() + $intCachetimeInSeconds);
+        /** @var CacheManager $objCache */
+        $objCache = Carrier::getInstance()->getContainer()->offsetGet("cache_manager");
+        $objCache->addValue($this->getCacheHashSum(), $strElementOutput, $intCachetimeInSeconds);
 
-        $objCacheEntry->updateObjectToDb();
+    }
+
+
+    private function getCacheHashSum()
+    {
+        $strGuestId = "";
+        //when browsing the site as a guest, drop the userid
+        if ($this->objSession->isLoggedin()) {
+            $strGuestId = $this->objSession->getUserID();
+        }
+
+        return sha1(
+            __CLASS__.
+            $strGuestId.
+            $this->getAction().
+            $this->strCacheAddon.
+            $this->getParam("pv").
+            $this->getSystemid().
+            $this->getParam("systemid").
+            $this->getParam("highlight")
+        );
     }
 
     /**
@@ -221,35 +233,6 @@ abstract class ElementPortal extends PortalController
     public function getCachetimeInSeconds()
     {
         return $this->objElementData->getIntCachetime();
-    }
-
-    /**
-     * Generates the hash2 sum of the cached entry
-     *
-     * @return string
-     * @since 3.3.1
-     */
-    private function getCacheHash2()
-    {
-
-        $strGuestId = "";
-        //when browsing the site as a guest, drop the userid
-        if ($this->objSession->isLoggedin()) {
-            $strGuestId = $this->objSession->getUserID();
-        }
-
-        return sha1("".$strGuestId.$this->getAction().$this->strCacheAddon.$this->getParam("pv").$this->getSystemid().$this->getParam("systemid").$this->getParam("highlight"));
-    }
-
-    /**
-     * Generates the hash1 sum of the cached entry
-     *
-     * @return string
-     * @since 3.3.1
-     */
-    private function getCacheHash1()
-    {
-        return $this->getPagename();
     }
 
 

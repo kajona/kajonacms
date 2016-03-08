@@ -9,6 +9,8 @@
 namespace Kajona\Packagemanager\System;
 
 use Kajona\System\System\Cache;
+use Kajona\System\System\CacheManager;
+use Kajona\System\System\Carrier;
 use Kajona\System\System\Classloader;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Filesystem;
@@ -141,7 +143,9 @@ class PackagemanagerPackagemanagerPharmodule extends PackagemanagerPackagemanage
             $strReturn .= $objInstance->installOrUpdate();
         }
 
-        Cache::flushCache();
+        /** @var CacheManager $objCache */
+        $objCache = Carrier::getInstance()->getContainer()->offsetGet("cache_manager");
+        $objCache->flushCache();
         $this->updateDefaultTemplate();
 
         return $strReturn;

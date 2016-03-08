@@ -6,6 +6,8 @@
 
 namespace Kajona\Pages\System;
 
+use Kajona\System\System\CacheManager;
+use Kajona\System\System\Carrier;
 use Kajona\System\System\CommonSortmanager;
 use Kajona\System\System\Logger;
 
@@ -127,8 +129,8 @@ class PageelementSortmanager extends CommonSortmanager
             }
         }
 
-        //flush the cache
-        $this->objSource->flushCompletePagesCache();
+        //flush the cachees
+        Carrier::getInstance()->getContainer()->offsetGet("cache_manager")->flushCache();
         $this->objDB->flushQueryCache();
         $this->objSource->setIntSort($intNewPosition);
     }

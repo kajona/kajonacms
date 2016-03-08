@@ -7,6 +7,8 @@
 
 namespace Kajona\Rating\System;
 
+use Kajona\System\System\CacheManager;
+use Kajona\System\System\Carrier;
 use Kajona\System\System\Cookie;
 use Kajona\System\System\Logger;
 use Kajona\System\System\OrmObjectlist;
@@ -113,7 +115,7 @@ class RatingRate extends \Kajona\System\System\Model implements \Kajona\System\S
         $objCookie->setCookie(RatingRate::RATING_COOKIE, getCookie(RatingRate::RATING_COOKIE).$this->getSystemid().",");
 
         //flush the page-cache to have all pages rendered using the correct values
-        $this->flushCompletePagesCache();
+        Carrier::getInstance()->getContainer()->offsetGet("cache_manager")->flushCache();
 
         return true;
     }

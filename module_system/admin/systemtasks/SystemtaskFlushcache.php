@@ -9,7 +9,6 @@
 
 namespace Kajona\System\Admin\Systemtasks;
 
-use Kajona\System\System\Cache;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\SystemSetting;
 use Kajona\System\System\CacheManager;

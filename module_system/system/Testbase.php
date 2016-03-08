@@ -45,10 +45,6 @@ abstract class Testbase extends PHPUnit_Framework_TestCase
         $strDebug .= "Memory/Max Memory:                   ".bytesToString(memory_get_usage())."/".bytesToString(memory_get_peak_usage())." \n";
         $strDebug .= "Classes Loaded:                      ".Classloader::getInstance()->getIntNumberOfClassesLoaded()." \n";
 
-        //and check the cache-stats
-        $strDebug .= "Cache requests/hits/saves/cachesize: ".
-            Cache::getIntRequests()."/".Cache::getIntHits()."/".Cache::getIntSaves()."/".Cache::getIntCachesize()." \n";
-
         //echo get_called_class()."\n".$strDebug."\n";
     }
 

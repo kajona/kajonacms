@@ -410,12 +410,6 @@ class RequestDispatcher
                 $strDebug .= "<b>Classes Loaded:</b> ".Classloader::getInstance()->getIntNumberOfClassesLoaded()." ";
             }
 
-            //and check the cache-stats
-            if (_cache_ === true) {
-                $strDebug .= "<b>Cache requests/hits/saves/cachesize:</b> ".
-                    Cache::getIntRequests()."/".Cache::getIntHits()."/".Cache::getIntSaves()."/".Cache::getIntCachesize()." ";
-            }
-
             if (_xmlLoader_ === true) {
                 ResponseObject::getInstance()->addHeader("Kajona Debug: ".$strDebug);
             }

@@ -14,8 +14,7 @@ use Kajona\Pages\System\PagesPortaleditorActionEnum;
 use Kajona\Pages\System\PagesPortaleditorPlaceholderAction;
 use Kajona\System\Portal\PortalController;
 use Kajona\System\Portal\PortalInterface;
-use Kajona\System\System\AdminskinHelper;
-use Kajona\System\System\Cache;
+use Kajona\System\System\CacheManager;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Exception;
 use Kajona\System\System\HttpStatuscodes;
@@ -24,9 +23,6 @@ use Kajona\System\System\Link;
 use Kajona\System\System\Logger;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\ResponseObject;
-use Kajona\System\System\ScriptletHelper;
-use Kajona\System\System\ScriptletInterface;
-use Kajona\System\System\Session;
 use Kajona\System\System\SystemSetting;
 use Kajona\System\System\Template;
 
@@ -83,7 +79,14 @@ class PagesPortalController extends PortalController implements PortalInterface
         }
 
 
-        //TODO: load page from cache
+        if (!PagesPortaleditor::isActive()) {
+            /** @var CacheManager $objCache */
+            $objCache = Carrier::getInstance()->getContainer()->offsetGet("cache_manager");
+            $strPageContent = $objCache->getValue($this->getPageCacheHashSum());
+            if ($strPageContent !== false) {
+                return $strPageContent;
+            }
+        }
 
         //If we reached up till here, we can begin loading the elements to fill
         if (PagesPortaleditor::isActive()) {
@@ -121,23 +124,7 @@ class PagesPortalController extends PortalController implements PortalInterface
             $arrPlaceholders[] = $arrOneRawPlaceholder["placeholder"];
         }
 
-
-        //Initialize the caches internal cache :)
-        Cache::fillInternalCache("ElementPortal", $this->getPagename(), null, $this->getStrPortalLanguage()); //TODO move to cache handler, use namespace
-
-
-        //try to load the additional title from cache
-        $strAdditionalTitleFromCache = "";
-        $intMaxCacheDuration = 0; //TODO find a better cache sum, in v4 determined by the elements
-        $objCachedTitle = Cache::getCachedEntry(__CLASS__, $this->getPagename(), $this->generateHash2Sum(), $this->getStrPortalLanguage());
-        if ($objCachedTitle != null) {
-            $strAdditionalTitleFromCache = $objCachedTitle->getStrContent();
-            self::$strAdditionalTitle = $strAdditionalTitleFromCache;
-        }
-
         $arrPlaceholderWithElements = array();
-
-        //copy for the portaleditor
 
         //Iterate over all elements and pass control to them
         //Get back the filled element
@@ -246,16 +233,6 @@ class PagesPortalController extends PortalController implements PortalInterface
         }
 
 
-        //check if the additional title has to be saved to the cache
-        if (self::$strAdditionalTitle != "" && self::$strAdditionalTitle != $strAdditionalTitleFromCache) {
-            $objCacheEntry = Cache::getCachedEntry(__CLASS__, $this->getPagename(), $this->generateHash2Sum(), $this->getStrPortalLanguage(), true);
-            $objCacheEntry->setStrContent(self::$strAdditionalTitle);
-            $objCacheEntry->setIntLeasetime(time() + $intMaxCacheDuration);
-
-            $objCacheEntry->updateObjectToDb();
-        }
-
-
         $arrTemplate["description"] = $objPageData->getStrDesc();
         $arrTemplate["keywords"] = $objPageData->getStrKeywords();
         $arrTemplate["title"] = $objPageData->getStrBrowsername();
@@ -305,8 +282,12 @@ class PagesPortalController extends PortalController implements PortalInterface
         }
 
         //and cache the whole page
-        //TODO save page to cache
-
+        $intPageCacheTime = $this->getPageCacheTime($arrElementsOnPage);
+        if ($intPageCacheTime > 0) {
+            /** @var CacheManager $objCache */
+            $objCache = Carrier::getInstance()->getContainer()->offsetGet("cache_manager");
+            $objCache->addValue($this->getPageCacheHashSum(), $strPageContent, $intPageCacheTime);
+        }
 
         return $strPageContent;
     }
@@ -408,9 +389,6 @@ class PagesPortalController extends PortalController implements PortalInterface
     }
 
 
-
-
-
     /**
      * @param PagesPageelement[] $arrElementsOnPage
      *
@@ -420,12 +398,12 @@ class PagesPortalController extends PortalController implements PortalInterface
     {
         $intCachetime = null;
 
-        foreach($arrElementsOnPage as $objOneElement) {
+        foreach ($arrElementsOnPage as $objOneElement) {
             /** @var  ElementPortal $objElement */
             $objElement = $objOneElement->getConcretePortalInstance();
 
             $intElementCachetime = $objElement->getCachetimeInSeconds();
-            if($intCachetime === null || $intElementCachetime < $intCachetime) {
+            if ($intCachetime === null || $intElementCachetime < $intCachetime) {
                 $intCachetime = $intElementCachetime;
             }
         }
@@ -451,7 +429,7 @@ class PagesPortalController extends PortalController implements PortalInterface
     /**
      * @return string
      */
-    private function generateHash2Sum()
+    private function getPageCacheHashSum()
     {
         $strGuestId = "";
         //when browsing the site as a guest, drop the userid
@@ -459,7 +437,16 @@ class PagesPortalController extends PortalController implements PortalInterface
             $strGuestId = $this->objSession->getUserID();
         }
 
-        return sha1("".$strGuestId.$this->getAction().$this->getParam("pv").$this->getSystemid().$this->getParam("systemid").$this->getParam("highlight"));
+        return sha1(
+            __CLASS__.
+            $strGuestId.
+            $this->getPagename().
+            $this->getAction().
+            $this->getParam("pv").
+            $this->getSystemid().
+            $this->getParam("systemid").
+            $this->getParam("highlight")
+        );
     }
 
 }

@@ -64,8 +64,6 @@ class class_debug_helper
         echo "<b>Memory/Max Memory:</b>                     ".bytesToString(memory_get_usage())."/".bytesToString(memory_get_peak_usage())." \n";
         echo "<b>Classes Loaded:</b>                        ".\Kajona\System\System\Classloader::getInstance()->getIntNumberOfClassesLoaded()." \n";
 
-        echo "<b>Cache requests/hits/saves/cachesize:</b>   ".
-            \Kajona\System\System\Cache::getIntRequests()."/".\Kajona\System\System\Cache::getIntHits()."/".\Kajona\System\System\Cache::getIntSaves()."/".\Kajona\System\System\Cache::getIntCachesize()." \n";
         echo "</pre>";
 
     }

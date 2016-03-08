@@ -23,6 +23,7 @@ namespace Kajona\System\System;
  *  - content
  *  - leasetime (otherwise the entry will be invalid as soon as saved to the database)
  *
+ * @internal Replaced by CacheManager
  * @package module_system
  * @author sidler@mulchprod.de
  * @since 3.3.1

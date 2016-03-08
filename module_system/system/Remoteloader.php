@@ -62,8 +62,17 @@ class Remoteloader
      */
     private $intMaxCachetime = 3600;
 
+    /**
+     * @inject cache_manager
+     * @var CacheManager
+     */
+    private $objCachemanager = null;
+
+
     public function __construct()
     {
+        $objBuilder = new ObjectBuilder(Carrier::getInstance()->getContainer());
+        $objBuilder->resolveDependencies($this);
         $this->intMaxCachetime = SystemSetting::getConfigValue("_remoteloader_max_cachetime_");
     }
 
@@ -84,7 +93,7 @@ class Remoteloader
 
         //check all needed params
         if ((int)$this->intPort < 0 || $this->strHost == "" || $this->strProtocolHeader == "") {
-            throw new Exception("Not all needed values given", Exception::$level_ERROR);
+            throw new Exception("Not all required values given", Exception::$level_ERROR);
         }
 
         //first try: load it via the cache
@@ -138,13 +147,15 @@ class Remoteloader
         //throw a general error?
         if ($strReturn === false) {
             Logger::getInstance(Logger::REMOTELOADER)->addLogRow(
-                "remoteloader failed. protocol: ".$this->strProtocolHeader." host: ".$this->strHost." port: ".$this->intPort." params: ".$this->strQueryParams, Logger::$levelWarning
+                "remoteloader failed. protocol: ".$this->strProtocolHeader." host: ".$this->strHost." port: ".$this->intPort." params: ".$this->strQueryParams,
+                Logger::$levelWarning
             );
             throw new Exception("Error loading the remote content", Exception::$level_ERROR);
         }
 
         Logger::getInstance(Logger::REMOTELOADER)->addLogRow(
-            "new remote-request succeeded. protocol: ".$this->strProtocolHeader." host: ".$this->strHost." port: ".$this->intPort." params: ".$this->strQueryParams, Logger::$levelInfo
+            "new remote-request succeeded. protocol: ".$this->strProtocolHeader." host: ".$this->strHost." port: ".$this->intPort." params: ".$this->strQueryParams,
+            Logger::$levelInfo
         );
 
         return $strReturn;
@@ -157,7 +168,7 @@ class Remoteloader
      */
     private function buildCacheChecksum()
     {
-        return md5($this->strProtocolHeader.$this->strHost.$this->intPort.$this->strQueryParams);
+        return sha1(__CLASS__.$this->strProtocolHeader.$this->strHost.$this->intPort.$this->strQueryParams);
     }
 
     /**
@@ -172,15 +183,7 @@ class Remoteloader
             return false;
         }
 
-        $strReturn = false;
-
-        //try to find an entry in the cache
-        $objCachedEntry = Cache::getCachedEntry(__CLASS__, $this->buildCacheChecksum());
-        if ($objCachedEntry != null) {
-            $strReturn = $objCachedEntry->getStrContent();
-        }
-
-        return $strReturn;
+        return $this->objCachemanager->getValue($this->buildCacheChecksum());
     }
 
     /**
@@ -214,7 +217,8 @@ class Remoteloader
             $this->strHost.
             ($this->intPort > 0 ? ":".$this->intPort : "").
             $this->strQueryParams,
-            false, $objCtx
+            false,
+            $objCtx
         );
 
         return $strReturn;
@@ -404,23 +408,7 @@ class Remoteloader
             return true;
         }
 
-        //create a cache-instance
-        $objCache = Cache::getCachedEntry(__CLASS__, $this->buildCacheChecksum(), "", "", true);
-        $objCache->setStrContent($strResponse);
-        $objCache->setIntLeasetime(time() + (int)$this->intMaxCachetime);
-
-        return $objCache->updateObjectToDb();
-
-    }
-
-    /**
-     * Deletes all entries currently saved to the cache
-     *
-     * @return bool
-     */
-    public function flushCache()
-    {
-        return Cache::flushCache(__CLASS__);
+        return $this->objCachemanager->addValue($this->buildCacheChecksum(), $strResponse, (int)$this->intMaxCachetime);
     }
 
     /**
