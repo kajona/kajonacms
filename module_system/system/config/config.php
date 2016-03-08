@@ -60,15 +60,14 @@ $config['dbport']               = "%%defaultport%%";               //Database po
 
 //--caching ---------------------------------------------------------------------------------------------
 
-//TODO: will be replaced by the CacheManager
-    $config['textcachetime']        = 10;                              //Number of seconds language-files are cached. Cached entries are shared between sessions. Reduce this amount during
+    $config['textcachetime']        = 300;                             //Number of seconds language-files are cached. Cached entries are shared between sessions. Reduce this amount during
                                                                        //development (probably changing the lang-files a lot) and set it to a high value as soon as the website is in
-                                                                       //production. Requires APC. Attention: 0 = infinite!
+                                                                       //production. Attention: 0 = infinite!
 
 //TODO: will be replaced by the CacheManager
     $config['templatecachetime']    = 10;                              //Number of seconds templates are cached. Cached entries are shared between sessions. Reduce this amount during
                                                                        //development (probably changing the templates a lot) and set it to a high value as soon as the website is in
-                                                                       //production. Requires APC. Attention: 0 = infinite!
+                                                                       //production. Attention: 0 = infinite!
 
 
     $config['bootstrapcache_pharsums']       = true;                   //Enables the detection of phar-changes in order to redeploy the static contents. Should be disabled for non-phar installations only.

@@ -9,7 +9,6 @@
 
 namespace Kajona\System\System;
 
-use Kajona\System\System\CacheManager;
 
 /**
  * Class managing access to lang-files
@@ -62,12 +61,12 @@ class Lang
     private function __construct()
     {
         //load texts from session
-        $this->arrTexts = CacheManager::getInstance()->getValue("textSessionCache");
+        $this->arrTexts = CacheManager::getInstance()->getValue(__CLASS__."textSessionCache");
         if($this->arrTexts === false) {
             $this->arrTexts = array();
         }
 
-        $this->arrFallbackTextEntrys = CacheManager::getInstance()->getValue("textSessionFallbackCache");
+        $this->arrFallbackTextEntrys = CacheManager::getInstance()->getValue(__CLASS__."textSessionFallbackCache");
         if($this->arrFallbackTextEntrys === false) {
             $this->arrFallbackTextEntrys = array();
         }
@@ -77,8 +76,8 @@ class Lang
     {
         //save texts to session
         if($this->bitSaveToCache) {
-            CacheManager::getInstance()->addValue("textSessionCache", $this->arrTexts, Config::getInstance()->getConfig("textcachetime"));
-            CacheManager::getInstance()->addValue("textSessionFallbackCache", $this->arrFallbackTextEntrys, Config::getInstance()->getConfig("textcachetime"));
+            CacheManager::getInstance()->addValue(__CLASS__."textSessionCache", $this->arrTexts, Config::getInstance()->getConfig("textcachetime"));
+            CacheManager::getInstance()->addValue(__CLASS__."textSessionFallbackCache", $this->arrFallbackTextEntrys, Config::getInstance()->getConfig("textcachetime"));
         }
     }
 
@@ -101,20 +100,6 @@ class Lang
         }
 
         return self::$objLang;
-    }
-
-    /**
-     * @param $strText
-     * @param $strModule
-     * @param $strArea
-     *
-     * @return string
-     * @deprecated use getLang() instead
-     */
-    public function getText($strText, $strModule, $strArea)
-    {
-        Logger::getInstance(Logger::SYSTEMLOG)->addLogRow("deprecated Lang::getText call, params: ".$strText.", ".$strModule.", ".$strArea, Logger::$levelWarning);
-        return $this->getLang($strText, $strModule);
     }
 
     /**

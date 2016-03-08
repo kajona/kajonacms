@@ -1,14 +1,13 @@
 <?php
 
-namespace Kajona\Jqplot\Tests;
+namespace Kajona\Jqplot\Debug;
 
 use Kajona\Jqplot\System\GraphJqplot;
 use Kajona\System\System\GraphFactory;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\SystemSetting;
-use Kajona\System\System\Testbase;
 
-class ChartsJqPlotTest extends Testbase
+class ChartsJqPlot
 {
 
     public function testCharts()
@@ -25,6 +24,7 @@ class ChartsJqPlotTest extends Testbase
         echo "<script language=\"javascript\" type=\"text/javascript\" src=\"" . _webpath_ . Resourceloader::getInstance()->getCorePathForModule("module_system") . "/module_system/admin/scripts/jquery/jquery.min.js\"></script>";
         echo "<script language=\"javascript\" type=\"text/javascript\" src=\"" . _webpath_ . Resourceloader::getInstance()->getCorePathForModule("module_system") . "/module_system/system/scripts/loader.js\"></script>";
         echo "<script language=\"javascript\" type=\"text/javascript\" src=\"" . _webpath_ . Resourceloader::getInstance()->getCorePathForModule("module_system") . "/module_system/admin/scripts/kajona.js\"></script>";
+        echo "<script type=\"text/javascript\">KAJONA_PHARMAP = ".json_encode(array_values(\Kajona\System\System\Classloader::getInstance()->getArrPharModules())).";</script>";
         echo "<script language=\"javascript\" type=\"text/javascript\" src=\"" . _webpath_ . Resourceloader::getInstance()->getCorePathForModule("module_system") . "/module_system/admin/scripts/jqueryui/jquery-ui.custom.min.js\"></script>";
 
         //jqPlot
@@ -292,4 +292,8 @@ class ChartsJqPlotTest extends Testbase
         echo $objGraph->renderGraph();
     }
 }
+
+
+$objCharts = new ChartsJqPlot();
+$objCharts->testCharts();
 
