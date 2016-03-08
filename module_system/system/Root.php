@@ -1670,20 +1670,20 @@ abstract class Root
 
     /**
      * Deletes the complete Pages-Cache
-     *
-     * @todo reenable
+     * @todo remove from Root
      * @return bool
      */
     public function flushCompletePagesCache()
     {
-        return Cache::flushCache();
+        /** @var CacheManager $objCache */
+        $objCache = Carrier::getInstance()->getContainer()->offsetGet("cache_manager");
+        $objCache->flushCache();
     }
 
     /**
      * Removes one page from the cache
-     *
+     * @todo remove from Root
      * @param string $strPagename
-     * @todo reenable
      * @return bool
      */
     public function flushPageFromPagesCache($strPagename)

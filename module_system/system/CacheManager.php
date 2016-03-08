@@ -101,7 +101,7 @@ class CacheManager
     /**
      * @param string $strKey
      * @param int $intType
-     * @return mixed
+     * @return @return mixed The cached data or FALSE, if no cache entry exists for the given id.
      */
     public function getValue($strKey, $intType = null)
     {

@@ -385,12 +385,12 @@ abstract class AbstractController
 
     /**
      * Deletes the complete Pages-Cache
-     *
-     * @return bool
      */
     public function flushCompletePagesCache()
     {
-        return Cache::flushCache("Kajona\\Pages\\Portal\\ElementPortal");
+        /** @var CacheManager $objCache */
+        $objCache = Carrier::getInstance()->getContainer()->offsetGet("cache_manager");
+        $objCache->flushCache();
     }
 
     /**
@@ -403,7 +403,7 @@ abstract class AbstractController
     {
         //since the navigation may depend on page-internal characteristics, the complete cache is
         //flushed instead of only flushing the current page
-        return self::flushCompletePagesCache();
+        self::flushCompletePagesCache();
     }
 
 
