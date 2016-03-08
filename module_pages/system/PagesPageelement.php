@@ -9,8 +9,10 @@ namespace Kajona\Pages\System;
 
 use Kajona\Pages\Admin\ElementAdmin;
 use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\Portal\PortalElementInterface;
 use Kajona\System\System\AdminListableInterface;
 use Kajona\System\System\Cache;
+use Kajona\System\System\CacheManager;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Classloader;
 use Kajona\System\System\Exception;
@@ -36,6 +38,9 @@ use Kajona\System\System\Resourceloader;
  */
 class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, AdminListableInterface
 {
+
+    /** @var PortalElementInterface|ElementPortal  */
+    private $objConcretePortalInstance = null;
 
 
     /**
@@ -252,10 +257,14 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
      * Please note, that due to performance issues the foreign content is not loaded in the step!
      *
      * @return ElementPortal
-     * @todo cache the returned object in order to speed up multiple executions
      */
     public function getConcretePortalInstance()
     {
+
+        if($this->objConcretePortalInstance != null) {
+            return $this->objConcretePortalInstance;
+        }
+
 
         if ($this->getStrClassPortal() == "") {
             //Build the class-name based on the linked element
@@ -273,6 +282,8 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
         //and finally create the object
         /** @var $objInstance ElementPortal */
         $objInstance->setSystemid($this->getSystemid());
+        $this->objConcretePortalInstance = $objInstance;
+
         return $objInstance;
     }
 
@@ -591,8 +602,9 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
         //Delete from page_element table
         parent::deleteObjectFromDatabase();
 
-        //Loading the data of the corresponding site
-        Cache::flushCache();
+        /** @var CacheManager $objCache */
+        $objCache = Carrier::getInstance()->getContainer()->offsetGet("cache_manager");
+        $objCache->flushCache();
 
         return true;
     }
