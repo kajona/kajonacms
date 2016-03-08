@@ -101,7 +101,7 @@ class CacheManager
     /**
      * @param string $strKey
      * @param int $intType
-     * @return @return mixed The cached data or FALSE, if no cache entry exists for the given id.
+     * @return mixed The cached data or FALSE, if no cache entry exists for the given id.
      */
     public function getValue($strKey, $intType = null)
     {
@@ -111,7 +111,9 @@ class CacheManager
     /**
      * @param string $strKey
      * @param mixed $objValue
-     * @param int $intTtl
+     * @param int $intTtl The lifetime in number of seconds for this cache entry.
+     *                         If zero (the default), the entry never expires (although it may be deleted from the cache
+     *                         to make place for other entries).
      * @param int $intType
      * @return bool
      */

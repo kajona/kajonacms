@@ -16,8 +16,6 @@ namespace Kajona\System\System;
  *
  * @author sidler@mulchprod.de
  * @since 5.0
- *
- * @todo make the caches configurable
  */
 class BootstrapCache
 {
@@ -68,7 +66,7 @@ class BootstrapCache
         require_once __DIR__ . "/CacheManager.php";
 
         foreach($this->getCacheNames() as $strOneType) {
-            self::$arrCaches[$strOneType] = CacheManager::getInstance()->getValue(__CLASS__.$strOneType);
+            self::$arrCaches[$strOneType] = CacheManager::getInstance()->getValue(__CLASS__.$strOneType, CacheManager::TYPE_FILESYSTEM);
         }
     }
 
@@ -76,7 +74,7 @@ class BootstrapCache
     {
         foreach($this->getCacheNames() as $strOneType) {
             if(isset(self::$arrCacheSavesRequired[$strOneType]) && Config::getInstance()->getConfig("bootstrapcache_".$strOneType) === true && isset(self::$arrCaches[$strOneType])) {
-                CacheManager::getInstance()->addValue(__CLASS__.$strOneType, self::$arrCaches[$strOneType]);
+                CacheManager::getInstance()->addValue(__CLASS__.$strOneType, self::$arrCaches[$strOneType], 0, CacheManager::TYPE_FILESYSTEM);
             }
         }
     }
