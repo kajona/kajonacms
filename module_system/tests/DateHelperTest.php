@@ -416,18 +416,39 @@ class DateHelperTest extends Testbase
     {
         $objHelper = new DateHelper();
         $this->assertEquals(0, $objHelper->calcNumberOfWorkingDaysBetween(new Date(20150801000000), new Date(20150801000000)));
-        $this->assertEquals(23, $objHelper->calcNumberOfWorkingDaysBetween(new Date(20150701000000), new Date(20150801000000)));
+        $this->assertEquals(23, $objHelper->calcNumberOfWorkingDaysBetween(new Date(20150701000000), new Date(20150801020001)));
 
-        $this->assertEquals(23, $objHelper->calcNumberOfWorkingDaysBetween(new Date(20150701000000), new Date(20150731000000)));
-        $this->assertEquals(21, $objHelper->calcNumberOfWorkingDaysBetween(new Date(20150801000000), new Date(20150831000000)));
-        $this->assertEquals(22, $objHelper->calcNumberOfWorkingDaysBetween(new Date(20150901000000), new Date(20150930000000)));
-        $this->assertEquals(66, $objHelper->calcNumberOfWorkingDaysBetween(new Date(20150701000000), new Date(20150930000000)));
+        $this->assertEquals(22, $objHelper->calcNumberOfWorkingDaysBetween(new Date(20150701000000), new Date(20150731000000)));
+        $this->assertEquals(20, $objHelper->calcNumberOfWorkingDaysBetween(new Date(20150801000000), new Date(20150831000000)));
+        $this->assertEquals(21, $objHelper->calcNumberOfWorkingDaysBetween(new Date(20150901000000), new Date(20150930000000)));
+        $this->assertEquals(65, $objHelper->calcNumberOfWorkingDaysBetween(new Date(20150701000000), new Date(20150930000000)));
 
-        $this->assertEquals(count($objHelper->getWorkingDays(7, 2015)), $objHelper->calcNumberOfWorkingDaysBetween(new Date(20150701000000), new Date(20150731000000)));
-        $this->assertEquals(count($objHelper->getWorkingDays(8, 2015)), $objHelper->calcNumberOfWorkingDaysBetween(new Date(20150801000000), new Date(20150831000000)));
-        $this->assertEquals(count($objHelper->getWorkingDays(9, 2015)), $objHelper->calcNumberOfWorkingDaysBetween(new Date(20150901000000), new Date(20150930000000)));
+        //With included enddate
+        $this->assertEquals(count($objHelper->getWorkingDays(7, 2015)), $objHelper->calcNumberOfWorkingDaysBetween(new Date(20150701000000), new Date(20150731000000), true));
+        $this->assertEquals(count($objHelper->getWorkingDays(8, 2015)), $objHelper->calcNumberOfWorkingDaysBetween(new Date(20150801000000), new Date(20150831000000), true));
+        $this->assertEquals(count($objHelper->getWorkingDays(9, 2015)), $objHelper->calcNumberOfWorkingDaysBetween(new Date(20150901000000), new Date(20150930000000), true));
 
 
+    }
+
+
+    public function testCalcDaysBetween()
+    {
+        $objHelper = new DateHelper();
+        $this->assertEquals(0, $objHelper->calcNumberOfDaysBetween(new Date(20150801000000), new Date(20150801000000)));
+        $this->assertEquals(31, $objHelper->calcNumberOfDaysBetween(new Date(20150701000000), new Date(20150801000001)));
+
+        $this->assertEquals(30, $objHelper->calcNumberOfDaysBetween(new Date(20150701000000), new Date(20150731000000)));
+        $this->assertEquals(31, $objHelper->calcNumberOfDaysBetween(new Date(20150701000000), new Date(20150731000000), true));
+
+        $this->assertEquals(30, $objHelper->calcNumberOfDaysBetween(new Date(20150801000000), new Date(20150831000000)));
+        $this->assertEquals(31, $objHelper->calcNumberOfDaysBetween(new Date(20150801000000), new Date(20150831000000), true));
+
+        $this->assertEquals(29, $objHelper->calcNumberOfDaysBetween(new Date(20150901000000), new Date(20150930000000)));
+        $this->assertEquals(30, $objHelper->calcNumberOfDaysBetween(new Date(20150901000000), new Date(20150930000000), true));
+
+        $this->assertEquals(91, $objHelper->calcNumberOfDaysBetween(new Date(20150701000000), new Date(20150930000000)));
+        $this->assertEquals(92, $objHelper->calcNumberOfDaysBetween(new Date(20150701000000), new Date(20150930000000), true));
     }
 
 
