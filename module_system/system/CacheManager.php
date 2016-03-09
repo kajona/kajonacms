@@ -149,9 +149,11 @@ class CacheManager
     }
 
     /**
-     * Flushes the complete cache of the given namespace
+     * Flushes the complete cache for the given namespace. Note in most cases that does not delete the actual data
+     * instead an internal version number is increased which is always appended to the cache key
      *
      * @param integer $intType
+     * @param string $strNamespace
      */
     public function flushCache($intType = null, $strNamespace = self::NS_GLOBAL)
     {
@@ -159,6 +161,31 @@ class CacheManager
         if ($objCache instanceof ClearableCache) {
             $objCache->deleteAll();
         }
+    }
+
+    /**
+     * Removes the complete cache for a specific type. This actually deletes the data thus the method should be used
+     * carefully
+     *
+     * @param integer $intType
+     * @param string $strNamespace
+     */
+    public function flushAll($intType = null)
+    {
+        $arrTypes = self::getAvailableDriver();
+
+        foreach ($arrTypes as $intKey => $strLabel) {
+            if ($intType !== null && $intType != $intKey) {
+                continue;
+            }
+
+            $objCache = $this->getCache($intKey, null);
+            if ($objCache instanceof FlushableCache) {
+                $objCache->flushAll();
+            }
+        }
+
+        $this->arrSystems = array();
     }
 
     /**
@@ -184,10 +211,11 @@ class CacheManager
             $intType = self::TYPE_APC | self::TYPE_FILESYSTEM;
         }
 
-        if (isset($this->arrSystems[$intType . $strNamespace])) {
-            return $this->arrSystems[$intType . $strNamespace];
+        $strKey = $intType . '-' . $strNamespace;
+        if (isset($this->arrSystems[$strKey])) {
+            return $this->arrSystems[$strKey];
         } else {
-            return $this->arrSystems[$intType . $strNamespace] = $this->buildDriver($intType, $strNamespace);
+            return $this->arrSystems[$strKey] = $this->buildDriver($intType, $strNamespace);
         }
     }
 

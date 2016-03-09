@@ -55,18 +55,31 @@ class CacheManagerTest extends \PHPUnit_Framework_TestCase
     public function testFlushCache()
     {
         $objCacheManager = new CacheManager();
-        $strValue = $objCacheManager->getValue("foo", CacheManager::TYPE_ARRAY);
-        $this->assertFalse($strValue);
+
+        $this->assertFalse($objCacheManager->getValue("foo", CacheManager::TYPE_ARRAY));
 
         $objCacheManager->addValue("foo", "bar", 180, CacheManager::TYPE_ARRAY);
 
-        $strValue = $objCacheManager->getValue("foo", CacheManager::TYPE_ARRAY);
-        $this->assertEquals("bar", $strValue);
+        $this->assertEquals("bar", $objCacheManager->getValue("foo", CacheManager::TYPE_ARRAY));
 
         $objCacheManager->flushCache(CacheManager::TYPE_ARRAY);
 
-        $strValue = $objCacheManager->getValue("foo", CacheManager::TYPE_ARRAY);
-        $this->assertFalse($strValue);
+        $this->assertFalse($objCacheManager->getValue("foo", CacheManager::TYPE_ARRAY));
+    }
+
+    public function testFlushAll()
+    {
+        $objCacheManager = new CacheManager();
+
+        $this->assertFalse($objCacheManager->getValue("foo", CacheManager::TYPE_ARRAY));
+
+        $objCacheManager->addValue("foo", "bar", 180, CacheManager::TYPE_ARRAY);
+
+        $this->assertEquals("bar", $objCacheManager->getValue("foo", CacheManager::TYPE_ARRAY));
+
+        $objCacheManager->flushAll(CacheManager::TYPE_ARRAY);
+
+        $this->assertFalse($objCacheManager->getValue("foo", CacheManager::TYPE_ARRAY));
     }
 
     /**
@@ -77,12 +90,11 @@ class CacheManagerTest extends \PHPUnit_Framework_TestCase
     public function testTypes($intType)
     {
         $objCacheManager = new CacheManager();
-        $strValue = $objCacheManager->getValue("foo", $intType);
-        $this->assertFalse($strValue);
+
+        $this->assertFalse($objCacheManager->getValue("foo", $intType));
 
         // this call should com from the internal cache
-        $strValue = $objCacheManager->getValue("foo", CacheManager::TYPE_ARRAY);
-        $this->assertFalse($strValue);
+        $this->assertFalse($objCacheManager->getValue("foo", CacheManager::TYPE_ARRAY));
     }
 
     /**
