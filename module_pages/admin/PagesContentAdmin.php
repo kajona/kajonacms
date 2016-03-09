@@ -32,6 +32,7 @@ use Kajona\System\System\Resourceloader;
 use Kajona\System\System\ResponseObject;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\Template;
+use Kajona\System\System\TemplateBlockContainer;
 
 /**
  * This class is used to edit the content of a page. So, to create / delete / modify elements on a
@@ -493,7 +494,8 @@ HTML;
             //create dummy elements, therefore parse the template
             /** @var PagesPage $objPage */
             $objPage = Objectfactory::getInstance()->getObject($this->getSystemid());
-            $objTemplate = Template::getInstance()->parsePageTemplate("/module_pages/".$objPage->getStrTemplate());
+            /** @var TemplateBlockContainer $objTemplate */
+            $objTemplate = Carrier::getInstance()->getContainer()->offsetGet("template")->parsePageTemplate("/module_pages/".$objPage->getStrTemplate());
             foreach ($objTemplate->getArrBlocks() as $objOneBlocks) {
                 foreach ($objOneBlocks->getArrBlocks() as $objOneBlock) {
                     if ($objOneBlocks->getStrName() == $objBlocksElement->getStrName() && $objOneBlock->getStrName() == $objBlockElement->getStrName()) {

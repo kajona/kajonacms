@@ -60,7 +60,12 @@ class ServiceProvider implements ServiceProviderInterface
         };
 
         $objContainer['template'] = function ($c) {
-            return Template::getInstance();
+            return new Template(
+                new TemplateFileParser(),
+                new TemplateSectionParser(),
+                new TemplatePlaceholderParser(),
+                new TemplateBlocksParser()
+            );
         };
 
         $objContainer['lang'] = function ($c) {
@@ -79,7 +84,7 @@ class ServiceProvider implements ServiceProviderInterface
             return Logger::getInstance();
         };
 
-        $objContainer['cache_manager'] = function($c){
+        $objContainer['cache_manager'] = function ($c) {
             return new CacheManager();
         };
     }

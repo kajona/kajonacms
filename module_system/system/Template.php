@@ -14,6 +14,7 @@ use Kajona\System\System\Scriptlets\ScriptletXConstants;
 
 /**
  * This class does all the template stuff as loading, parsing, etc..
+ * An instance should be resolved by the service container
  *
  * @package module_system
  * @author sidler@mulchprod.de
@@ -37,6 +38,7 @@ class Template
 
     /** @var  TemplateFileParser */
     private $objFileParser;
+
     /** @var  TemplateSectionParser */
     private $objSectionParser;
 
@@ -47,26 +49,35 @@ class Template
     private $objBlocksParser;
 
     /**
-     * @inheritDoc
+     * @param TemplateFileParser $objFileParser
+     * @param TemplateSectionParser $objSectionParser
+     * @param TemplatePlaceholderParser $objPlaceholderParser
+     * @param TemplateBlocksParser $objBlocksParser
      */
-    private function __construct()
+    public function __construct(TemplateFileParser $objFileParser, TemplateSectionParser $objSectionParser, TemplatePlaceholderParser $objPlaceholderParser, TemplateBlocksParser $objBlocksParser)
     {
-        $this->objFileParser = new TemplateFileParser();
-        $this->objSectionParser = new TemplateSectionParser();
-        $this->objPlaceholderParser = new TemplatePlaceholderParser();
-        $this->objBlocksParser = new TemplateBlocksParser();
+        $this->objFileParser = $objFileParser;
+        $this->objSectionParser = $objSectionParser;
+        $this->objPlaceholderParser = $objPlaceholderParser;
+        $this->objBlocksParser = $objBlocksParser;
     }
 
 
     /**
      * Returns one instance of the template object, using a singleton pattern
      *
+     * @param TemplateFileParser $objFileParser
+     * @param TemplateSectionParser $objSectionParser
+     * @param TemplatePlaceholderParser $objPlaceholderParser
+     * @param TemplateBlocksParser $objBlocksParser
+     *
      * @return Template The template object
+     * @deprecated
      */
-    public static function getInstance()
+    public static function getInstance(TemplateFileParser $objFileParser, TemplateSectionParser $objSectionParser, TemplatePlaceholderParser $objPlaceholderParser, TemplateBlocksParser $objBlocksParser)
     {
         if (self::$objTemplate == null) {
-            self::$objTemplate = new Template();
+            self::$objTemplate = new Template($objFileParser, $objSectionParser, $objPlaceholderParser, $objBlocksParser);
         }
 
         return self::$objTemplate;
@@ -102,10 +113,16 @@ class Template
     }
 
 
-
+    /**
+     * Parses the passed template string and returns the contained blocks and elements.
+     * The contained blocks and elements are nested within a root TemplateBlockContainer element
+     * @param $strContent
+     * @param int $intMode
+     *
+     * @return TemplateBlockContainer
+     */
     public function parsePageTemplateString($strContent, $intMode = Template::INT_ELEMENT_MODE_REGULAR)
     {
-
 
         //read top level placeholder
         $arrPlaceholder = $this->objPlaceholderParser->getElements($this->removeSection($strContent, TemplateKajonaSections::BLOCKS), $intMode);
@@ -132,13 +149,29 @@ class Template
         return $objRoot;
     }
 
+    /**
+     * Runs both, the loading of a template from the filesystem and the parsing of
+     * the content of the file.
+     * @param $strName
+     * @param int $intMode
+     *
+     * @return TemplateBlockContainer
+     */
     public function parsePageTemplate($strName, $intMode = Template::INT_ELEMENT_MODE_REGULAR)
     {
         $strTemplate = $this->objFileParser->readTemplate($strName);
         return $this->parsePageTemplateString($strTemplate, $intMode);
     }
 
-
+    /**
+     * Reads the blocks from a passed template. Does both, the loading from the filesystem and the
+     * parsing of the loaded string.
+     *
+     * @param $strTemplateFile
+     * @param string $strSection
+     *
+     * @return TemplateBlockContainer[]
+     */
     public function getBlocksElementsFromTemplate($strTemplateFile, $strSection = "")
     {
         $strTemplate = $this->objFileParser->readTemplate($strTemplateFile);
@@ -150,6 +183,12 @@ class Template
         return $this->objBlocksParser->readBlocks($strTemplate, TemplateKajonaSections::BLOCKS);
     }
 
+    /**
+     * Parses the single block elements from a blocks-string
+     * @param $strBlock
+     *
+     * @return TemplateBlockContainer[]
+     */
     public function getBlockElementsFromBlock($strBlock)
     {
         return $this->objBlocksParser->readBlocks($strBlock, TemplateKajonaSections::BLOCK);
@@ -158,27 +197,26 @@ class Template
     /**
      * Helper to parse a single section out of a given template
      *
-     * @param $strTemplate
+     * @param $strTemplateContent
      * @param $strSection
      *
      * @return string|null
      */
-    public function getSectionFromTemplate($strTemplate, $strSection, $bitKeepSectionTag = false)
+    public function getSectionFromTemplate($strTemplateContent, $strSection, $bitKeepSectionTag = false)
     {
-        return $this->objSectionParser->readSection($strTemplate, $strSection, $bitKeepSectionTag);
+        return $this->objSectionParser->readSection($strTemplateContent, $strSection, $bitKeepSectionTag);
     }
 
 
     /**
      * Fills a template with values passed in an array.
-     * As an optional parameter an instance of LangWrapper can be passed
-     * to fill placeholders matching the schema %%lang_...%% automatically.
      *
      * @param mixed $arrContent
      * @param string $strIdentifier
      * @param bool $bitRemovePlaceholder
      *
      * @return string The filled template
+     * @deprecated switch to filesystem based methods instead
      */
     public function fillTemplate($arrContent, $strIdentifier, $bitRemovePlaceholder = true)
     {
@@ -203,20 +241,19 @@ class Template
 
     /**
      * Fills a template with values passed in an array.
-     * As an optional parameter an instance of LangWrapper can be passed
-     * to fill placeholders matching the schema %%lang_...%% automatically.
+     * Does both, the loading of the file from the filesystem and the replacement of the placeholders.
      *
      * @param $arrPlaceholderContent
-     * @param $strTemplateFile
+     * @param $strTemplateFilename
      * @param string $strSection
      * @param bool $bitRemovePlaceholder
      *
      * @return string The filled template
      */
-    public function fillTemplateFile($arrPlaceholderContent, $strTemplateFile, $strSection = "", $bitRemovePlaceholder = true)
+    public function fillTemplateFile($arrPlaceholderContent, $strTemplateFilename, $strSection = "", $bitRemovePlaceholder = true)
     {
 
-        $strTemplate = $this->objFileParser->readTemplate($strTemplateFile);
+        $strTemplate = $this->objFileParser->readTemplate($strTemplateFilename);
 
         if ($strSection != "") {
             $strTemplate = $this->objSectionParser->readSection($strTemplate, $strSection);
@@ -232,19 +269,34 @@ class Template
         return $strTemplate;
     }
 
-
-    public function fillBlocksToTemplateFile($arrBlocks, $strTemplateFile, $strBlocksDefinition = TemplateKajonaSections::BLOCKS)
+    /**
+     * Replaces the given blocks within the passed template string
+     *
+     * @param $arrBlocks
+     * @param $strTemplateContent
+     * @param string $strBlocksDefinition
+     *
+     * @return mixed
+     */
+    public function fillBlocksToTemplateFile($arrBlocks, $strTemplateContent, $strBlocksDefinition = TemplateKajonaSections::BLOCKS)
     {
-        return $this->objBlocksParser->fillBlocks($strTemplateFile, $arrBlocks, $strBlocksDefinition);
+        return $this->objBlocksParser->fillBlocks($strTemplateContent, $arrBlocks, $strBlocksDefinition);
     }
 
-
-    public function deleteBlocksFromTemplate($strTemplate, $strBlockDefinition = TemplateKajonaSections::BLOCKS)
+    /**
+     * Removes all blocks from teh passed tempalte-string
+     *
+     * @param $strTemplateContent
+     * @param string $strBlockDefinition
+     *
+     * @return mixed
+     */
+    public function deleteBlocksFromTemplate($strTemplateContent, $strBlockDefinition = TemplateKajonaSections::BLOCKS)
     {
-        foreach($this->objBlocksParser->readBlocks($strTemplate, $strBlockDefinition) as $objOneContainer) {
-            $strTemplate = uniStrReplace($objOneContainer->getStrFullSection(), "", $strTemplate);
+        foreach($this->objBlocksParser->readBlocks($strTemplateContent, $strBlockDefinition) as $objOneContainer) {
+            $strTemplateContent = uniStrReplace($objOneContainer->getStrFullSection(), "", $strTemplateContent);
         }
-        return $strTemplate;
+        return $strTemplateContent;
     }
 
 
@@ -333,9 +385,18 @@ class Template
             && $this->objPlaceholderParser->containsPlaceholder($this->arrTemplateIdMap[$strIdentifier], $strPlaceholdername));
     }
 
-    public function providesPlaceholder($strTemplate, $strSection)
+    /**
+     * Validates if the passed templates-string provides a given section
+     * Does both, the loading from the filesystem and the parsing itself
+     *
+     * @param $strTemplateFilename
+     * @param $strSection
+     *
+     * @return bool
+     */
+    public function providesSection($strTemplateFilename, $strSection)
     {
-        return $this->objSectionParser->containsSection($this->objFileParser->readTemplate($strTemplate), $strSection);
+        return $this->objSectionParser->containsSection($this->objFileParser->readTemplate($strTemplateFilename), $strSection);
     }
 
     /**
@@ -345,6 +406,7 @@ class Template
      * @param $strSection
      *
      * @return bool
+     * @deprecated
      */
     public function containsSection($strIdentifier, $strSection)
     {

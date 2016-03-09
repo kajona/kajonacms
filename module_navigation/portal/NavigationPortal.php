@@ -536,12 +536,12 @@ class NavigationPortal extends PortalController implements PortalInterface
 
         //BUT: if we received an empty string and are in the situation of a first or last point, then maybe the template
         //     didn't supply a first / last section. so we'll try to load a regular point
-        if(!$this->objTemplate->providesPlaceholder("/module_navigation/".$this->arrElementData["navigation_template"], $strSection."_withchilds") && ($bitFirst || $bitLast)) {
+        if(!$this->objTemplate->providesSection("/module_navigation/".$this->arrElementData["navigation_template"], $strSection."_withchilds") && ($bitFirst || $bitLast)) {
             $strSection = "level_".$intLevel."_".($bitActive ? "active" : "inactive");
         }
 
         //add the _withchilds suffix additionally
-        if($bitHasChildEntries && $this->objTemplate->providesPlaceholder("/module_navigation/".$this->arrElementData["navigation_template"], $strSection."_withchilds")) {
+        if($bitHasChildEntries && $this->objTemplate->providesSection("/module_navigation/".$this->arrElementData["navigation_template"], $strSection."_withchilds")) {
             $strSection .= "_withchilds"; //FIXME: to the docs, plz
         }
 

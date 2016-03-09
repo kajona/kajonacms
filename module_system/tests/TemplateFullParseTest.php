@@ -2,6 +2,7 @@
 
 namespace Kajona\System\Tests;
 
+use Kajona\System\System\Carrier;
 use Kajona\System\System\Template;
 use Kajona\System\System\Testbase;
 
@@ -60,8 +61,8 @@ class TemplateFullParseTest extends Testbase
 
 HTML;
 
-
-        $objTemplate = Template::getInstance();
+        /** @var Template $objTemplate */
+        $objTemplate = Carrier::getInstance()->getContainer()->offsetGet("template");
         $arrBlocks = $objTemplate->parsePageTemplateString($strTemplate, Template::INT_ELEMENT_MODE_REGULAR);
 
         $this->assertEquals(count($arrBlocks->getArrBlocks()), 2);

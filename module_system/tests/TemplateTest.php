@@ -2,6 +2,7 @@
 
 namespace Kajona\System\Tests;
 
+use Kajona\System\System\Carrier;
 use Kajona\System\System\Template;
 use Kajona\System\System\Testbase;
 
@@ -22,8 +23,8 @@ class TemplateTest extends Testbase
         </list>
 HTML;
 
-
-        $objTemplate = Template::getInstance();
+        /** @var Template $objTemplate */
+        $objTemplate = Carrier::getInstance()->getContainer()->offsetGet("template");
         $strTemplateID = $objTemplate->setTemplate($strTemplate);
 
         $this->assertTrue($objTemplate->containsSection($strTemplateID, "list"));
@@ -60,7 +61,8 @@ HTML;
 HTML;
 
 
-        $objTemplate = Template::getInstance();
+        /** @var Template $objTemplate */
+        $objTemplate = Carrier::getInstance()->getContainer()->offsetGet("template");
         $strTemplateID = $objTemplate->setTemplate($strTemplate);
 
         $this->assertTrue($objTemplate->containsSection($strTemplateID, "list1"));
@@ -87,7 +89,8 @@ HTML;
             test %%ende%%
 HTML;
 
-        $objTemplate = Template::getInstance();
+        /** @var Template $objTemplate */
+        $objTemplate = Carrier::getInstance()->getContainer()->offsetGet("template");
         $objTemplate->setTemplate($strTemplate);
         $strContent = trim($objTemplate->fillCurrentTemplate(array("ende" => "filled")));
         $this->assertEquals("test filled", $strContent);
@@ -104,7 +107,8 @@ HTML;
 HTML;
 
 
-        $objTemplate = Template::getInstance();
+        /** @var Template $objTemplate */
+        $objTemplate = Carrier::getInstance()->getContainer()->offsetGet("template");
         $strTemplateID = $objTemplate->setTemplate($strTemplate);
 
         $this->assertTrue($objTemplate->containsSection($strTemplateID, "list"));
@@ -191,8 +195,8 @@ c", $objTemplate->removeSection($strTemplate3, "list"));
 HTML;
 
 
-        $objTemplate = Template::getInstance();
-
+        /** @var Template $objTemplate */
+        $objTemplate = Carrier::getInstance()->getContainer()->offsetGet("template");
 
         $strSectionID = $objTemplate->setTemplate($objTemplate->getSectionFromTemplate($strTemplate, "list"));
 
