@@ -18,6 +18,31 @@ namespace Kajona\System\System;
 class TemplateBlocksParser
 {
 
+    private $arrBlocksCache = array();
+
+
+    /**
+     * @inheritDoc
+     */
+    public function __construct()
+    {
+        $this->arrBlocksCache = Carrier::getInstance()->getContainer()->offsetGet("cache_manager")->getValue(__CLASS__);
+        if($this->arrBlocksCache === false) {
+            $this->arrBlocksCache = array();
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function __destruct()
+    {
+        if(Config::getInstance()->getConfig("templatecachetime") >=0) {
+            Carrier::getInstance()->getContainer()->offsetGet("cache_manager")->addValue(__CLASS__, $this->arrBlocksCache, Config::getInstance()->getConfig("templatecachetime"));
+        }
+    }
+
+
     /**
      * @param $strTemplate
      * @param string $strBlockDefinition
@@ -26,6 +51,12 @@ class TemplateBlocksParser
      */
     public function readBlocks($strTemplate, $strBlockDefinition = TemplateKajonaSections::BLOCKS)
     {
+        $strHash = sha1($strTemplate.$strBlockDefinition);
+        if(isset($this->arrBlocksCache[$strHash])) {
+            return $this->arrBlocksCache[$strHash];
+        }
+
+
         $arrBlocks = array();
 
 
@@ -61,7 +92,7 @@ class TemplateBlocksParser
             }
         }
 
-        //find closing tag
+        $this->arrBlocksCache[$strHash] = $arrBlocks;
 
         return $arrBlocks;
     }

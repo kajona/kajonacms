@@ -441,7 +441,7 @@ class PagesPortalController extends PortalController implements PortalInterface
             __CLASS__.
             $strGuestId.
             $this->getPagename().
-            $this->getAction().
+            $this->getParam("action").
             $this->getParam("pv").
             $this->getSystemid().
             $this->getParam("systemid").

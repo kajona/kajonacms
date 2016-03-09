@@ -21,6 +21,27 @@ class TemplateSectionParser
 
     private $arrCacheTemplateSection = array();
 
+    /**
+     * @inheritDoc
+     */
+    public function __construct()
+    {
+        $this->arrCacheTemplateSection = Carrier::getInstance()->getContainer()->offsetGet("cache_manager")->getValue(__CLASS__);
+        if($this->arrCacheTemplateSection === false) {
+            $this->arrCacheTemplateSection = array();
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function __destruct()
+    {
+        if(Config::getInstance()->getConfig("templatecachetime") >=0) {
+            Carrier::getInstance()->getContainer()->offsetGet("cache_manager")->addValue(__CLASS__, $this->arrCacheTemplateSection, Config::getInstance()->getConfig("templatecachetime"));
+        }
+    }
+
 
     public function readSection($strTemplate, $strSection, $bitKeepSectionTag = false)
     {

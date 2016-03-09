@@ -18,6 +18,31 @@ namespace Kajona\System\System;
 class TemplatePlaceholderParser
 {
 
+    private $arrPlaceholderCache = array();
+
+
+    /**
+     * @inheritDoc
+     */
+    public function __construct()
+    {
+        $this->arrPlaceholderCache = Carrier::getInstance()->getContainer()->offsetGet("cache_manager")->getValue(__CLASS__);
+        if($this->arrPlaceholderCache === false) {
+            $this->arrPlaceholderCache = array();
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function __destruct()
+    {
+        if(Config::getInstance()->getConfig("templatecachetime") >=0) {
+            Carrier::getInstance()->getContainer()->offsetGet("cache_manager")->addValue(__CLASS__, $this->arrPlaceholderCache, Config::getInstance()->getConfig("templatecachetime"));
+        }
+    }
+
+
     /**
      * Deletes placeholder in the string
      *
@@ -35,7 +60,7 @@ class TemplatePlaceholderParser
      * Checks if the template referenced by the identifier contains the placeholder provided
      * by the second param.
      *
-     * @param string $strIdentifier
+     * @param $strTemplate
      * @param string $strPlaceholdername
      *
      * @return bool
@@ -57,13 +82,19 @@ class TemplatePlaceholderParser
     /**
      * Returns the elements in a given template
      *
-     * @param string $strIdentifier
+     * @param $strTemplate
      * @param int $intMode 0 = regular page, 1 = master page
      *
      * @return mixed
      */
     public function getElements($strTemplate, $intMode = 0)
     {
+
+        $strHash = sha1($strTemplate.$intMode);
+        if (isset($this->arrPlaceholderCache[$strHash])) {
+            return $this->arrPlaceholderCache[$strHash];
+        }
+
         $arrReturn = array();
 
         //search placeholders
@@ -102,6 +133,7 @@ class TemplatePlaceholderParser
 
         }
 
+        $this->arrPlaceholderCache[$strHash] = $arrReturn;
         return $arrReturn;
     }
 

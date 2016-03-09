@@ -20,11 +20,32 @@ class TemplateFileParser
 
     private $arrCacheTemplates = array();
 
+    /**
+     * @inheritDoc
+     */
+    public function __construct()
+    {
+        $this->arrCacheTemplates = Carrier::getInstance()->getContainer()->offsetGet("cache_manager")->getValue(__CLASS__);
+        if($this->arrCacheTemplates === false) {
+            $this->arrCacheTemplates = array();
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function __destruct()
+    {
+        if(Config::getInstance()->getConfig("templatecachetime") >=0) {
+            Carrier::getInstance()->getContainer()->offsetGet("cache_manager")->addValue(__CLASS__, $this->arrCacheTemplates, Config::getInstance()->getConfig("templatecachetime"));
+        }
+    }
+
 
     public function readTemplate($strTemplateFilename)
     {
         $strFilename = $this->getPathForTemplate($strTemplateFilename);
-        $strHash = md5($strFilename);
+        $strHash = sha1($strFilename);
 
         if (isset($this->arrCacheTemplates[$strHash])) {
             return $this->arrCacheTemplates[$strHash];
@@ -57,6 +78,8 @@ class TemplateFileParser
         $strName = Resourceloader::getInstance()->getTemplate($strTemplate, true);
         return $strName;
     }
+
+
 
 
 }
