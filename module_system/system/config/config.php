@@ -94,7 +94,6 @@
 
     $debug['time']                  = false;                           //Calculates the time needed to create the requested page
     $debug['dbnumber']              = false;                           //Counts the number of queries passed to the db / retrieved from the cache
-    $debug['templatenr']            = false;                           //Counts the number of templates retrieved from the cache
     $debug['memory']                = false;                           //Displays the memory used by Kajona to generate the current page
 
     $debug['dblog']                 = false;                           //Logs all queries sent to the db into a logfile. If set to true, the

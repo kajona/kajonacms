@@ -19,13 +19,15 @@ class TemplateBlocksParser
 {
 
     private $arrBlocksCache = array();
+    private $bitCacheInit = false;
 
 
-    /**
-     * @inheritDoc
-     */
-    public function __construct()
+    private function cacheInit()
     {
+        if($this->bitCacheInit) {
+            return;
+        }
+        $this->bitCacheInit = true;
         $this->arrBlocksCache = Carrier::getInstance()->getContainer()->offsetGet("cache_manager")->getValue(__CLASS__);
         if($this->arrBlocksCache === false) {
             $this->arrBlocksCache = array();
@@ -51,6 +53,7 @@ class TemplateBlocksParser
      */
     public function readBlocks($strTemplate, $strBlockDefinition = TemplateKajonaSections::BLOCKS)
     {
+        $this->cacheInit();
         $strHash = sha1($strTemplate.$strBlockDefinition);
         if(isset($this->arrBlocksCache[$strHash])) {
             return $this->arrBlocksCache[$strHash];

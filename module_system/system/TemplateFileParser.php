@@ -19,12 +19,16 @@ class TemplateFileParser
 {
 
     private $arrCacheTemplates = array();
+    private $bitCacheInit = false;
 
-    /**
-     * @inheritDoc
-     */
-    public function __construct()
+
+    private function cacheInit()
     {
+        if($this->bitCacheInit) {
+            return;
+        }
+        $this->bitCacheInit = true;
+
         $this->arrCacheTemplates = Carrier::getInstance()->getContainer()->offsetGet("cache_manager")->getValue(__CLASS__);
         if($this->arrCacheTemplates === false) {
             $this->arrCacheTemplates = array();
@@ -44,6 +48,7 @@ class TemplateFileParser
 
     public function readTemplate($strTemplateFilename)
     {
+        $this->cacheInit();
         $strFilename = $this->getPathForTemplate($strTemplateFilename);
         $strHash = sha1($strFilename);
 

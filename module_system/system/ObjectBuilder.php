@@ -5,7 +5,7 @@ namespace Kajona\System\System;
 use Pimple\Container;
 
 /**
- * Class which can create new objects and resolves all properties with an @Inject annotation. So you get an object
+ * Class which can create new objects and resolves all properties with an @inject annotation. So you get an object
  * containing all needed services without the need to manually use constructor or setter injection
  *
  * @package Kajona\System\System
@@ -38,6 +38,10 @@ class ObjectBuilder
      * @param array $arrArguments
      *
      * @return object
+     *
+     * @todo the constructor call should get obsolte. by convention the constructor shouldn't require access to properties injected by the dependency container. Currently used e.g. in AdminController.
+     *       We need to scan all classes making use of the DI and update them accordingly, afterwards the constructor call will be removed
+     *
      */
     public function factory($strClass, array $arrArguments = array())
     {
@@ -50,7 +54,14 @@ class ObjectBuilder
 
         // call the constructor after the dependencies are added because the constructor probably uses them
         if (is_callable(array($objObject, "__construct"))) {
-            call_user_func_array(array($objObject, "__construct"), $arrArguments);
+
+            if(empty($arrArguments)) {
+                $objObject->__construct();
+            }
+            else {
+                call_user_func_array(array($objObject, "__construct"), $arrArguments);
+
+            }
         }
 
         return $objObject;

@@ -19,13 +19,15 @@ class TemplatePlaceholderParser
 {
 
     private $arrPlaceholderCache = array();
+    private $bitCacheInit = false;
 
 
-    /**
-     * @inheritDoc
-     */
-    public function __construct()
+    private function cacheInit()
     {
+        if($this->bitCacheInit) {
+            return;
+        }
+        $this->bitCacheInit = true;
         $this->arrPlaceholderCache = Carrier::getInstance()->getContainer()->offsetGet("cache_manager")->getValue(__CLASS__);
         if($this->arrPlaceholderCache === false) {
             $this->arrPlaceholderCache = array();
@@ -89,7 +91,7 @@ class TemplatePlaceholderParser
      */
     public function getElements($strTemplate, $intMode = 0)
     {
-
+        $this->cacheInit();
         $strHash = sha1($strTemplate.$intMode);
         if (isset($this->arrPlaceholderCache[$strHash])) {
             return $this->arrPlaceholderCache[$strHash];

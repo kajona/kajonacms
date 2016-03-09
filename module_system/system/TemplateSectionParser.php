@@ -20,12 +20,16 @@ class TemplateSectionParser
 {
 
     private $arrCacheTemplateSection = array();
+    private $bitCacheInit = false;
 
-    /**
-     * @inheritDoc
-     */
-    public function __construct()
+
+    private function cacheInit()
     {
+        if($this->bitCacheInit) {
+            return;
+        }
+        $this->bitCacheInit = true;
+
         $this->arrCacheTemplateSection = Carrier::getInstance()->getContainer()->offsetGet("cache_manager")->getValue(__CLASS__);
         if($this->arrCacheTemplateSection === false) {
             $this->arrCacheTemplateSection = array();
@@ -45,6 +49,7 @@ class TemplateSectionParser
 
     public function readSection($strTemplate, $strSection, $bitKeepSectionTag = false)
     {
+        $this->cacheInit();
         $strHash = sha1($strTemplate.$strSection.$bitKeepSectionTag);
 
         if (isset($this->arrCacheTemplateSection[$strHash])) {

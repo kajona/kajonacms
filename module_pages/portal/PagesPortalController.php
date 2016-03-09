@@ -47,6 +47,7 @@ class PagesPortalController extends PortalController implements PortalInterface
      */
     private static $strAdditionalTitle = "";
 
+
     /**
      * @param array|mixed $arrElementData
      */
@@ -79,15 +80,6 @@ class PagesPortalController extends PortalController implements PortalInterface
         }
 
 
-        if (!PagesPortaleditor::isActive()) {
-            /** @var CacheManager $objCache */
-            $objCache = Carrier::getInstance()->getContainer()->offsetGet("cache_manager");
-            $strPageContent = $objCache->getValue($this->getPageCacheHashSum());
-            if ($strPageContent !== false) {
-                return $strPageContent;
-            }
-        }
-
         //If we reached up till here, we can begin loading the elements to fill
         if (PagesPortaleditor::isActive()) {
             $arrElementsOnPage = PagesPageelement::getElementsOnPage($objPageData->getSystemid(), false, $this->getStrPortalLanguage());
@@ -95,6 +87,8 @@ class PagesPortalController extends PortalController implements PortalInterface
         else {
             $arrElementsOnPage = PagesPageelement::getElementsOnPage($objPageData->getSystemid(), true, $this->getStrPortalLanguage());
         }
+
+
 
         //If there's a master-page, load elements on that, too
         $objMasterData = PagesPage::getPageByName("master");
@@ -109,6 +103,22 @@ class PagesPortalController extends PortalController implements PortalInterface
             //and merge them
             $arrElementsOnPage = array_merge($arrElementsOnPage, $arrElementsOnMaster);
         }
+
+
+        $strPageCacheHashSum = null;
+        $intPageCacheTime = 0;
+        if (!PagesPortaleditor::isActive()) {
+
+            list($strPageCacheHashSum, $intPageCacheTime) = $this->getPageCacheValues($arrElementsOnPage);
+
+            /** @var CacheManager $objCache */
+            $objCache = Carrier::getInstance()->getContainer()->offsetGet("cache_manager");
+            $strPageContent = $objCache->getValue($strPageCacheHashSum);
+            if ($strPageContent !== false) {
+                return $strPageContent;
+            }
+        }
+
 
         //load the merged placeholder-list
         $objPlaceholders = $this->objTemplate->parsePageTemplate("/module_pages/".$objPageData->getStrTemplate(), Template::INT_ELEMENT_MODE_MASTER);
@@ -282,11 +292,11 @@ class PagesPortalController extends PortalController implements PortalInterface
         }
 
         //and cache the whole page
-        $intPageCacheTime = $this->getPageCacheTime($arrElementsOnPage);
-        if ($intPageCacheTime > 0) {
+        //TODO: remove this caching?
+        if (!PagesPortaleditor::isActive() && $intPageCacheTime > 0) {
             /** @var CacheManager $objCache */
             $objCache = Carrier::getInstance()->getContainer()->offsetGet("cache_manager");
-            $objCache->addValue($this->getPageCacheHashSum(), $strPageContent, $intPageCacheTime);
+            $objCache->addValue($strPageCacheHashSum, $strPageContent, $intPageCacheTime);
         }
 
         return $strPageContent;
@@ -389,27 +399,6 @@ class PagesPortalController extends PortalController implements PortalInterface
     }
 
 
-    /**
-     * @param PagesPageelement[] $arrElementsOnPage
-     *
-     * @return int|null
-     */
-    private function getPageCacheTime(array $arrElementsOnPage)
-    {
-        $intCachetime = null;
-
-        foreach ($arrElementsOnPage as $objOneElement) {
-            /** @var  ElementPortal $objElement */
-            $objElement = $objOneElement->getConcretePortalInstance();
-
-            $intElementCachetime = $objElement->getCachetimeInSeconds();
-            if ($intCachetime === null || $intElementCachetime < $intCachetime) {
-                $intCachetime = $intElementCachetime;
-            }
-        }
-
-        return $intCachetime !== null ? $intCachetime : 0;
-    }
 
     /**
      * Sets the passed text as an additional title information.
@@ -427,9 +416,11 @@ class PagesPortalController extends PortalController implements PortalInterface
     }
 
     /**
+     * @param PagesPageelement[] $arrElementsOnPage
+     *
      * @return string
      */
-    private function getPageCacheHashSum()
+    private function getPageCacheValues(array $arrElementsOnPage)
     {
         $strGuestId = "";
         //when browsing the site as a guest, drop the userid
@@ -437,9 +428,26 @@ class PagesPortalController extends PortalController implements PortalInterface
             $strGuestId = $this->objSession->getUserID();
         }
 
-        return sha1(
+        $strElementHash = "";
+        $intCachetime = null;
+
+        foreach ($arrElementsOnPage as $objOneElement) {
+            /** @var  ElementPortal $objElement */
+            $objElementInstance = $objOneElement->getConcretePortalInstance();
+
+            $strElementHash .= $objElementInstance->getCacheHashSum();
+
+            $intElementCachetime = $objElementInstance->getCachetimeInSeconds();
+            if ($intCachetime === null || $intElementCachetime < $intCachetime) {
+                $intCachetime = $intElementCachetime;
+            }
+
+        }
+
+        $strHash = sha1(
             __CLASS__.
             $strGuestId.
+            $strElementHash.
             $this->getPagename().
             $this->getParam("action").
             $this->getParam("pv").
@@ -447,6 +455,8 @@ class PagesPortalController extends PortalController implements PortalInterface
             $this->getParam("systemid").
             $this->getParam("highlight")
         );
+
+        return array($strHash, $intCachetime);
     }
 
 }

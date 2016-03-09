@@ -35,7 +35,7 @@ class TemplateMapper
     /**
      * @param null $objObject
      */
-    function __construct($objObject = null)
+    public function __construct($objObject = null)
     {
         $this->objObject = $objObject;
 
