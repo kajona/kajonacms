@@ -132,8 +132,6 @@ class Config
         $strFile = __DIR__."/../../../project/system/config/config.php";
         if (is_file($strFile)) {
             include $strFile;
-        } elseif (strpos(__DIR__, '.phar') !== false) {
-            include $strFile;
         }
 
         return isset($config[$strEntryName]) ? $config[$strEntryName] : "";
