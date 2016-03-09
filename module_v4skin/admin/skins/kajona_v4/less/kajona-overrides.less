@@ -490,6 +490,17 @@ footer {
 
 }
 
+.autocomplete-default-background {
+    border: 2px solid red;
+    &:before {
+        font-size: @font-size-base + 10;
+        content: @fa-var-spinner;
+        color: @kajona-brand-color;
+        font-family: fontawesome;
+        animation: fa-spin 2s infinite linear;
+    }
+}
+
 .ui-corner-all {
     border-radius: 0;
 }
@@ -959,7 +970,7 @@ footer {
             .statusicon {
                 &:before {
                     content: @fa-var-spinner;
-                    animation: fa-spin 1s infinite steps(8);
+                    animation: fa-spin 2s infinite linear;
                 }
             }
         }
@@ -1614,6 +1625,7 @@ table.form-control {
         content: @fa-var-spinner;
         color: @kajona-brand-color;
         font-family: fontawesome;
+        animation: fa-spin 2s infinite linear;
     }
 }
 

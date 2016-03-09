@@ -45,6 +45,21 @@ class ElementBlocksPortal extends ElementPortal implements PortalElementInterfac
     /**
      * @inheritDoc
      */
+    public function getCacheHashSum()
+    {
+        $strSum = "";
+        $arrElementsOnBlock = PagesPageelement::getElementsOnPage($this->getSystemid(), true, $this->getStrPortalLanguage());
+        $intCachetime = null;
+        foreach($arrElementsOnBlock as $objOneElement) {
+            $strSum .= $objOneElement->getConcretePortalInstance()->getCacheHashSum();
+        }
+
+        return sha1($strSum);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getCachetimeInSeconds()
     {
         $intDefault = null;

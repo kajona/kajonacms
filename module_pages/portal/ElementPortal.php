@@ -192,7 +192,7 @@ abstract class ElementPortal extends PortalController
     private function saveElementToCache($strElementOutput)
     {
         $intCachetimeInSeconds = $this->getCachetimeInSeconds();
-        if($intCachetimeInSeconds > 0) {
+        if($intCachetimeInSeconds <= 0) {
             return;
         }
 
@@ -206,7 +206,7 @@ abstract class ElementPortal extends PortalController
     }
 
 
-    private function getCacheHashSum()
+    public function getCacheHashSum()
     {
         $strGuestId = "";
         //when browsing the site as a guest, drop the userid

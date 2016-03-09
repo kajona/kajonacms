@@ -59,8 +59,6 @@ class class_debug_helper
             \Kajona\System\System\Carrier::getInstance()->getObjDB()->getNumberCache()."/".
             (\Kajona\System\System\Carrier::getInstance()->getObjDB()->getNumber() - \Kajona\System\System\Carrier::getInstance()->getObjDB()->getNumberCache())."\n";
 
-        echo "<b>Templates cached:</b>                      ".\Kajona\System\System\Carrier::getInstance()->getObjTemplate()->getNumberCacheSize()." \n";
-
         echo "<b>Memory/Max Memory:</b>                     ".bytesToString(memory_get_usage())."/".bytesToString(memory_get_peak_usage())." \n";
         echo "<b>Classes Loaded:</b>                        ".\Kajona\System\System\Classloader::getInstance()->getIntNumberOfClassesLoaded()." \n";
 

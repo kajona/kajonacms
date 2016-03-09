@@ -399,11 +399,6 @@ class RequestDispatcher
                     (Carrier::getInstance()->getObjDB()->getNumber() - Carrier::getInstance()->getObjDB()->getNumberCache())." ";
             }
 
-            //anything to say about the templates?
-            if (_templatenr_ === true) {
-                $strDebug .= "<b>Templates cached:</b> ".Carrier::getInstance()->getObjTemplate()->getNumberCacheSize()." ";
-            }
-
             //memory
             if (_memory_ === true) {
                 $strDebug .= "<b>Memory/Max Memory:</b> ".bytesToString(memory_get_usage())."/".bytesToString(memory_get_peak_usage())." ";

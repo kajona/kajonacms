@@ -38,9 +38,6 @@ abstract class Testbase extends PHPUnit_Framework_TestCase
             Carrier::getInstance()->getObjDB()->getNumberCache()."/".
             (Carrier::getInstance()->getObjDB()->getNumber() - Carrier::getInstance()->getObjDB()->getNumberCache())." \n";
 
-        //anything to say about the templates?
-        $strDebug .= "Templates cached:                    ".Carrier::getInstance()->getObjTemplate()->getNumberCacheSize()." \n";
-
         //memory
         $strDebug .= "Memory/Max Memory:                   ".bytesToString(memory_get_usage())."/".bytesToString(memory_get_peak_usage())." \n";
         $strDebug .= "Classes Loaded:                      ".Classloader::getInstance()->getIntNumberOfClassesLoaded()." \n";

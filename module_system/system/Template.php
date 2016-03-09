@@ -477,15 +477,5 @@ class Template
         return isset($this->arrTemplateIdMap[$strTemplateId]) && $this->arrTemplateIdMap[$strTemplateId] != "";
     }
 
-    /**
-     * Returns the number of cached template sections
-     *
-     * @return int
-     * @deprecated
-     */
-    public function getNumberCacheSize()
-    {
-        return count($this->arrTemplateIdMap);
-    }
 }
 
