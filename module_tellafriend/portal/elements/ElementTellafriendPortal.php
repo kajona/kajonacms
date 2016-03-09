@@ -62,16 +62,13 @@ class ElementTellafriendPortal extends ElementPortal implements PortalElementInt
         if (count($this->arrError) > 0) {
             $strError = "";
             //Collect errors
-            $strTemplateErrorID = $this->objTemplate->readTemplate("/module_tellafriend/".$this->arrElementData["tellafriend_template"], "errorrow");
             foreach ($this->arrError as $strOneError) {
-                $strError .= $this->fillTemplate(array("error" => $strOneError), $strTemplateErrorID);
+                $strError .= $this->objTemplate->fillTemplateFile(array("error" => $strOneError), "/module_tellafriend/".$this->arrElementData["tellafriend_template"], "errorrow");
             }
             //and the complete errorform
-            $strTemplateErrorFormid = $this->objTemplate->readTemplate("/module_tellafriend/".$this->arrElementData["tellafriend_template"], "errors");
-            $arrTemplate["tellafriend_errors"] = $this->fillTemplate(array("liste_fehler" => $strError), $strTemplateErrorFormid);
+            $arrTemplate["tellafriend_errors"] = $this->objTemplate->fillTemplateFile(array("liste_fehler" => $strError), "/module_tellafriend/".$this->arrElementData["tellafriend_template"]);
         }
 
-        $strTemplateID = $this->objTemplate->readTemplate("/module_tellafriend/".$this->arrElementData["tellafriend_template"], "tellafriend_form");
         $arrTemplate["tellafriend_sender"] = htmlToString($this->getParam("tellafriend_sender"), true);
         $arrTemplate["tellafriend_sender_name"] = htmlToString($this->getParam("tellafriend_sender_name"), true);
         $arrTemplate["tellafriend_receiver"] = htmlToString($this->getParam("tellafriend_receiver"), true);
@@ -80,7 +77,7 @@ class ElementTellafriendPortal extends ElementPortal implements PortalElementInt
         $arrTemplate["tellafriend_action"] = "sendTellafriend";
 
         $arrTemplate["action"] = getLinkPortalHref($this->getPagename());
-        return $this->fillTemplate($arrTemplate, $strTemplateID);
+        return $this->objTemplate->fillTemplateFile($arrTemplate, "/module_tellafriend/".$this->arrElementData["tellafriend_template"], "tellafriend_form");
     }
 
     /**
@@ -163,15 +160,14 @@ class ElementTellafriendPortal extends ElementPortal implements PortalElementInt
         $arrMessage["tellafriend_receiver_name"] = htmlStripTags($this->getParam("tellafriend_receiver_name"));
         $arrMessage["tellafriend_sender_name"] = htmlStripTags($this->getParam("tellafriend_sender_name"));
         $arrMessage["tellafriend_message"] = htmlStripTags($this->getParam("tellafriend_message"));
-        $strMailTemplateID = $this->objTemplate->readTemplate("/element_tellafriend/".$this->arrElementData["tellafriend_template"], "email_html");
 
 
-        $strEmailBody = $this->fillTemplate($arrMessage, $strMailTemplateID);
+        $strEmailBody = $this->objTemplate->fillTemplateFile($arrMessage, "/element_tellafriend/".$this->arrElementData["tellafriend_template"], "email_html");
         $objScriptlet = new ScriptletHelper();
         $strEmailBody = $objScriptlet->processString($strEmailBody);
 
         //TODO: check if we have to remove critical characters here?
-        $strSubject = $this->fillTemplate(array("tellafriend_sender_name" => htmlStripTags($this->getParam("tellafriend_sender_name"))), $this->objTemplate->readTemplate("/module_tellafriend/".$this->arrElementData["tellafriend_template"], "email_subject"));
+        $strSubject = $this->objTemplate->fillTemplateFile(array("tellafriend_sender_name" => htmlStripTags($this->getParam("tellafriend_sender_name"))), "/module_tellafriend/".$this->arrElementData["tellafriend_template"], "email_subject");
 
         //TODO: check if we have to remove critical characters here?
         $objEmail = new Mail();

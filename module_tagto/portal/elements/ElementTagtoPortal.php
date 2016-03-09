@@ -17,7 +17,8 @@ use Kajona\Pages\Portal\PortalElementInterface;
  * @author sidler@mulchprod.de
  * @targetTable element_universal.content_id
  */
-class ElementTagtoPortal extends ElementPortal implements PortalElementInterface {
+class ElementTagtoPortal extends ElementPortal implements PortalElementInterface
+{
 
 
     /**
@@ -25,16 +26,16 @@ class ElementTagtoPortal extends ElementPortal implements PortalElementInterface
      *
      * @return string the prepared html-output
      */
-    public function loadData() {
+    public function loadData()
+    {
         //actions or systemids passed? pagename?
         $strSystemid = $this->getParam("systemid");
         $strActions = $this->getParam("action");
         $strPageName = $this->getPagename();
 
         //load the template
-        $strTemplateID = $this->objTemplate->readTemplate("/module_tagto/".$this->arrElementData["char1"], "tagtos");
         $strLink = getLinkPortalHref($strPageName, "", $strActions, "", $strSystemid);
-        $strReturn = $this->fillTemplate(array("pageurl" => $strLink), $strTemplateID);
+        $strReturn = $this->objTemplate->fillTemplateFile(array("pageurl" => $strLink), "/module_tagto/".$this->arrElementData["char1"], "tagtos");
 
         return $strReturn;
     }

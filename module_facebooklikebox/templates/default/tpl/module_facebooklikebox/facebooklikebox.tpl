@@ -4,7 +4,7 @@
 
      DON'T FORGET TO ADD YOUR PROFILE ID!
      Feel free to adjust the code to your needs.
-     The Like Box can be styled via the css file /portal/css/element_facebooklikebox.css.
+     The Like Box can be styled via the css file /tempaltes/default//css/element_facebooklikebox.css.
      Increase the cache-buster in the CSS url to flush Facebooks cache (done via the backend).
 -->
 <facebooklikebox>

@@ -81,9 +81,7 @@ class TemplateMapper
     public function writeToTemplate($strTemplate, $strSection, $bitRemovePlaceholder = true)
     {
         $objTemplate = Carrier::getInstance()->getObjTemplate();
-        $strIdentifier = $objTemplate->readTemplate($strTemplate, $strSection);
-
-        return $objTemplate->fillTemplate($this->arrMapping, $strIdentifier, $bitRemovePlaceholder);
+        return $objTemplate->fillTemplateFile($this->arrMapping, $strTemplate, $strSection, $bitRemovePlaceholder);
     }
 
     /**

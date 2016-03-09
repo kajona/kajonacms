@@ -184,8 +184,7 @@ class MediamanagerPortal extends PortalController implements PortalInterface
         }
         //Print remaining files
         if (count($arrRemainingFiles) > 0) {
-            $strTemplateID = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["repo_template"], "filelist");
-            $arrWrappingTemplate["filelist"] .= $this->objTemplate->fillTemplate($arrRemainingFiles, $strTemplateID, false);
+            $arrWrappingTemplate["filelist"] .= $this->objTemplate->fillTemplateFile($arrRemainingFiles, "/module_mediamanager/".$this->arrElementData["repo_template"], "filelist", false);
         }
 
         //and load the sourrounding template
@@ -194,9 +193,8 @@ class MediamanagerPortal extends PortalController implements PortalInterface
             $arrWrappingTemplate["link_pages"] = $arrPagerContent["strPages"];
             $arrWrappingTemplate["link_back"] = $arrPagerContent["strBack"];
         }
-        $strTemplateID = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["repo_template"], "list");
         $arrWrappingTemplate["pathnavigation"] = $this->generatePathnavi();
-        $strReturn .= $this->fillTemplate($arrWrappingTemplate, $strTemplateID);
+        $strReturn .= $this->objTemplate->fillTemplateFile($arrWrappingTemplate, "/module_mediamanager/".$this->arrElementData["repo_template"], "list");
 
         $strReturn = $this->addPortaleditorCode($strReturn);
         return $strReturn;
@@ -268,14 +266,12 @@ class MediamanagerPortal extends PortalController implements PortalInterface
         $arrFileTemplate["file_details_href"] = Link::getLinkPortalHref($this->getPagename(), "", "fileDetails", "", $objOneFile->getSystemid(), $this->getStrPortalLanguage(), $objOneFile->getStrName());
 
         //render the single file
-        $strTemplateID = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["repo_template"], "filelist_file");
-        $strCurrentImage = $this->objTemplate->fillTemplate($arrFileTemplate, $strTemplateID);
+        $strCurrentImage = $this->objTemplate->fillTemplateFile($arrFileTemplate, "/module_mediamanager/".$this->arrElementData["repo_template"], "filelist_file");
         $arrRemainingFiles["file_".$intFileCounter % $intNrOfFilesPerRow] = $strCurrentImage;
 
         //already rendered enough files?
         if (count($arrRemainingFiles) == $intNrOfFilesPerRow) {
-            $strTemplateID = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["repo_template"], "filelist");
-            $strTemp = $this->objTemplate->fillTemplate($arrRemainingFiles, $strTemplateID);
+            $strTemp = $this->objTemplate->fillTemplateFile($arrRemainingFiles, "/module_mediamanager/".$this->arrElementData["repo_template"], "filelist");
             $arrRemainingFiles = array();
             return $strTemp;
         }
@@ -309,13 +305,10 @@ class MediamanagerPortal extends PortalController implements PortalInterface
             }
         }
 
-        $strTemplateFolderID = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["repo_template"], "folderlist");
-        $strTemplateFolderPreviewID = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["repo_template"], "folderlist_preview");
-
-        return $this->objTemplate->fillTemplate(
+        return $this->objTemplate->fillTemplateFile(
             $arrFolder,
-            (isset($arrFolder["folder_preview_image_src"]) && $this->objTemplate->isValidTemplate($strTemplateFolderPreviewID) ? $strTemplateFolderPreviewID : $strTemplateFolderID),
-            false
+            "/module_mediamanager/".$this->arrElementData["repo_template"],
+            (isset($arrFolder["folder_preview_image_src"]) && $this->objTemplate->providesSection("/module_mediamanager/".$this->arrElementData["repo_template"], "folderlist_preview") ? "folderlist_preview" : "folderlist")
         );
 
     }
@@ -429,8 +422,7 @@ class MediamanagerPortal extends PortalController implements PortalInterface
             );
         }
 
-        $strTemplateID = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["repo_template"], "filedetail");
-        $strReturn = $this->fillTemplate($arrDetailsTemplate, $strTemplateID);
+        $strReturn = $this->objTemplate->fillTemplateFile($arrDetailsTemplate, "/module_mediamanager/".$this->arrElementData["repo_template"], "filedetail");
 
         //Add pe code
         $strReturn = PagesPortaleditor::addPortaleditorContentWrapper($strReturn, $objFile->getSystemid());
@@ -470,8 +462,7 @@ class MediamanagerPortal extends PortalController implements PortalInterface
             "file_filename"    => $objCurFile->getStrFilename(),
             "file_elementid"   => $this->arrElementData["content_id"]
         );
-        $strStripTemplate = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["repo_template"], "filedetail_strip");
-        return $this->objTemplate->fillTemplate($arrTemplate, $strStripTemplate);
+        return $this->objTemplate->fillTemplateFile($arrTemplate, "/module_mediamanager/".$this->arrElementData["repo_template"], "filedetail_strip");
     }
 
 
@@ -580,15 +571,13 @@ class MediamanagerPortal extends PortalController implements PortalInterface
                 $arrTemplate["pathnavigation_point"] = Link::getLinkPortal($this->getPagename(), "", "_self", $objData->getStrDisplayName(), "mediaFolder", "", $objData->getSystemid(), "", "", $objData->getStrDisplayName());
             }
 
-            $strTemplateID = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["repo_template"], "pathnavigation_level");
-            $strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
+            $strReturn .= $this->objTemplate->fillTemplateFile($arrTemplate, "/module_mediamanager/".$this->arrElementData["repo_template"], "pathnavigation_level");
 
             while (!$objData instanceof MediamanagerRepo) {
                 $objData = Objectfactory::getInstance()->getObject($objData->getPrevId());
 
                 $arrTemplate["pathnavigation_point"] = Link::getLinkPortal($this->getPagename(), "", "_self", $objData->getStrDisplayName(), "mediaFolder", "", $objData->getSystemid());
-                $strTemplateID = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["repo_template"], "pathnavigation_level");
-                $strReturn = $this->fillTemplate($arrTemplate, $strTemplateID).$strReturn;
+                $strReturn = $this->objTemplate->fillTemplateFile($arrTemplate, "/module_mediamanager/".$this->arrElementData["repo_template"], "pathnavigation_level").$strReturn;
             }
 
         }
@@ -697,10 +686,8 @@ class MediamanagerPortal extends PortalController implements PortalInterface
     private function getFilesPerRow($strTemplate)
     {
 
-        $strTemplateID = $this->objTemplate->readTemplate("/module_mediamanager/".$strTemplate, "filelist");
-        $arrElements = $this->objTemplate->getElements($strTemplateID);
+        $arrElements = $this->objTemplate->getElementsFromTemplateFile("/module_mediamanager/".$strTemplate, "filelist");
         return count($arrElements);
-
     }
 
 

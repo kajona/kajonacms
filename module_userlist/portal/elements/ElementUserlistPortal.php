@@ -92,12 +92,7 @@ class ElementUserlistPortal extends ElementPortal implements PortalElementInterf
     private function getUserlist()
     {
         $strReturn = "";
-
-        $strTemplateWrapperID = $this->objTemplate->readTemplate("/module_userlist/".$this->arrElementData["char1"], "userlist_wrapper");
-        $strTemplateRowID = $this->objTemplate->readTemplate("/module_userlist/".$this->arrElementData["char1"], "userlist_row");
-
         $arrUserFinal = $this->loadUserlist();
-
         $strRows = "";
 
         foreach ($arrUserFinal as $objOneUser) {
@@ -113,14 +108,13 @@ class ElementUserlistPortal extends ElementPortal implements PortalElementInterf
                 $arrRow["userPhone"] = $objTargetUser->getStrTel();
                 $arrRow["userMobile"] = $objTargetUser->getStrMobile();
                 $arrRow["userBirthday"] = uniStrlen($objTargetUser->getLongDate()) > 5 ? dateToString(new \Kajona\System\System\Date($objTargetUser->getLongDate()), false) : "";
-                $strRows .= $this->fillTemplate($arrRow, $strTemplateRowID);
+                $strRows .= $this->objTemplate->fillTemplateFile($arrRow, "/module_userlist/".$this->arrElementData["char1"], "userlist_row");
             }
 
         }
 
         $strLink = getLinkPortalHref($this->getPagename(), "", "exportToCsv");
-
-        $strReturn .= $this->fillTemplate(array("userlist_rows" => $strRows, "csvHref" => $strLink), $strTemplateWrapperID);
+        $strReturn .= $this->objTemplate->fillTemplateFile(array("userlist_rows" => $strRows, "csvHref" => $strLink), "/module_userlist/".$this->arrElementData["char1"], "userlist_wrapper");
 
         return $strReturn;
     }

@@ -450,6 +450,27 @@ class Template
         return $this->objPlaceholderParser->getElements($strTemplate, $intMode);
     }
 
+
+    /**
+     * Returns the elements in a given template
+     *
+     * @param $strTemplateFile
+     * @param string $strSection
+     * @param int $intMode 0 = regular page, 1 = master page
+     *
+     * @return mixed
+     */
+    public function getElementsFromTemplateFile($strTemplateFile, $strSection = "", $intMode = 0)
+    {
+
+        $strTemplate = $this->objFileParser->readTemplate($strTemplateFile);
+        if ($strSection != "") {
+            $strTemplate = $this->objSectionParser->readSection($strTemplate, $strSection);
+        }
+
+        return $this->objPlaceholderParser->getElements($strTemplate, $intMode);
+    }
+
     /**
      * Sets the passed template as the current temp-template
      *

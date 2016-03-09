@@ -35,8 +35,6 @@ class ElementMapsPortal extends ElementPortal implements PortalElementInterface 
             $strTemplate = "maps.tpl";
         }
 
-        $strTemplateID = $this->objTemplate->readTemplate("/module_maps/".$strTemplate, "map");
-
         $floatLat = "0.0";
         $floatLng = "0.0";
 
@@ -52,7 +50,7 @@ class ElementMapsPortal extends ElementPortal implements PortalElementInterface 
         $this->arrElementData["infotext"] = str_replace(array("\r", "\r\n", "\n"), '', $this->arrElementData["text"]);
         $this->arrElementData["systemid"] = $this->getSystemid();
 
-        $strReturn .= $this->fillTemplate($this->arrElementData, $strTemplateID);
+        $strReturn .= $this->objTemplate->fillTemplateFile($this->arrElementData, "/module_maps/".$strTemplate, "map");
 
         return $strReturn;
     }

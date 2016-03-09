@@ -67,7 +67,6 @@ class LoginAdmin extends AdminController implements AdminInterface
         }
 
         //Loading a small login-form
-        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "login_form");
         $arrTemplate = array();
         $strForm = "";
         $strForm .= $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "adminLogin"));
@@ -84,7 +83,7 @@ class LoginAdmin extends AdminController implements AdminInterface
             $arrTemplate["error"] = $this->getLang("login_loginError", "user");
         }
 
-        $strReturn = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+        $strReturn = $this->objTemplate->fillTemplateFile($arrTemplate, "/elements.tpl", "login_form");
 
 
         return $strReturn;
@@ -108,7 +107,6 @@ class LoginAdmin extends AdminController implements AdminInterface
         if ($objUser->getStrAuthcode() != "" && $this->getParam("authcode") == $objUser->getStrAuthcode() && $objUser->getStrUsername() != "") {
             if ($this->getParam("reset") == "") {
                 //Loading a small form to change the password
-                $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "login_form");
                 $arrTemplate = array();
                 $strForm = "";
                 $strForm .= $this->objToolkit->getTextRow($this->getLang("login_password_form_intro", "user"));
@@ -130,7 +128,7 @@ class LoginAdmin extends AdminController implements AdminInterface
                     $arrTemplate["error"] = $this->getLang("login_loginError", "user");
                 }
 
-                $strReturn = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+                $strReturn = $this->objTemplate->fillTemplateFile($arrTemplate, "/elements.tpl", "login_form");
             }
             else {
                 //check the submitted passwords.

@@ -83,20 +83,16 @@ class ElementLanguageswitchPortal extends ElementPortal implements PortalElement
             $arrTemplate["langname_short"] = $objOneLanguage->getStrName();
             $arrTemplate["langname_long"] = $this->getLang("lang_".$objOneLanguage->getStrName());
 
-            $strTemplateRowID = $this->objTemplate->readTemplate("/module_languageswitch/".$this->arrElementData["char1"], "languageswitch_entry");
-            $strTemplateActiveRowID = $this->objTemplate->readTemplate("/module_languageswitch/".$this->arrElementData["char1"], "languageswitch_entry_active");
-
             if ($objOneLanguage->getStrName() == $this->getStrPortalLanguage()) {
-                $strRows .= $this->fillTemplate($arrTemplate, $strTemplateActiveRowID);
+                $strRows .= $this->objTemplate->fillTemplateFile($arrTemplate, "/module_languageswitch/".$this->arrElementData["char1"], "languageswitch_entry_active");
             }
             else {
-                $strRows .= $this->fillTemplate($arrTemplate, $strTemplateRowID);
+                $strRows .= $this->objTemplate->fillTemplateFile($arrTemplate, "/module_languageswitch/".$this->arrElementData["char1"], "languageswitch_entry");
             }
 
         }
 
-        $strTemplateWrapperID = $this->objTemplate->readTemplate("/module_languageswitch/".$this->arrElementData["char1"], "languageswitch_wrapper");
-        return $this->fillTemplate(array("languageswitch_entries" => $strRows), $strTemplateWrapperID);
+        return $this->objTemplate->fillTemplateFile(array("languageswitch_entries" => $strRows), "/module_languageswitch/".$this->arrElementData["char1"], "languageswitch_wrapper");
     }
 
 }

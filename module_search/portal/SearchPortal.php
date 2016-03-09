@@ -28,7 +28,8 @@ use Kajona\System\System\Link;
  * @module search
  * @moduleId _search_module_id_
  */
-class SearchPortal extends PortalController implements PortalInterface {
+class SearchPortal extends PortalController implements PortalInterface
+{
 
     private $objSearchSearch;
 
@@ -37,16 +38,18 @@ class SearchPortal extends PortalController implements PortalInterface {
      *
      * @param mixed $arrElementData
      */
-    public function __construct($arrElementData = array(), $strSystemid = "") {
+    public function __construct($arrElementData = array(), $strSystemid = "")
+    {
         parent::__construct($arrElementData, $strSystemid);
 
-        if(isset($arrElementData["search_query_id"]) && $arrElementData["search_query_id"] != "")
+        if (isset($arrElementData["search_query_id"]) && $arrElementData["search_query_id"] != "") {
             $this->setAction("search");
+        }
 
         $this->objSearchSearch = new SearchSearch();
 
 
-        if($this->getParam("searchterm") != "") {
+        if ($this->getParam("searchterm") != "") {
             $this->objSearchSearch->setStrQuery(htmlToString(urldecode($this->getParam("searchterm")), true));
         }
     }
@@ -60,8 +63,6 @@ class SearchPortal extends PortalController implements PortalInterface {
      */
     protected function actionList()
     {
-        $strTemplateID = $this->objTemplate->readTemplate("/module_search/" . $this->arrElementData["search_template"], "search_form");
-
         $arrTemplate = array();
 
         if ($this->arrElementData["search_query_id"] != "") {
@@ -69,11 +70,12 @@ class SearchPortal extends PortalController implements PortalInterface {
         }
 
         $strPage = $this->arrElementData["search_page"];
-        if($strPage == "")
+        if ($strPage == "") {
             $strPage = $this->getPagename();
+        }
 
         $arrTemplate["action"] = Link::getLinkPortalHref($strPage, "", "search");
-        return $this->fillTemplate($arrTemplate, $strTemplateID);
+        return $this->objTemplate->fillTemplateFile($arrTemplate, "/module_search/".$this->arrElementData["search_template"], "search_form");
     }
 
 
@@ -83,7 +85,8 @@ class SearchPortal extends PortalController implements PortalInterface {
      * @return string
      * @permissions view
      */
-    protected function actionSearch() {
+    protected function actionSearch()
+    {
         $strReturn = "";
         //Read the config
         $arrTemplate = array();
@@ -116,20 +119,20 @@ class SearchPortal extends PortalController implements PortalInterface {
 
         );
 
-        $strRowTemplateID = $this->objTemplate->readTemplate("/module_search/".$this->arrElementData["search_template"], "search_hitlist_hit");
-
         /** @var $objHit SearchResult */
-        foreach($objArraySectionIterator as $objHit) {
+        foreach ($objArraySectionIterator as $objHit) {
 
-            if($objHit->getStrPagename() == "master")
+            if ($objHit->getStrPagename() == "master") {
                 continue;
+            }
 
             $objPage = PagesPage::getPageByName($objHit->getStrPagename());
-            if($objPage === null || !$objPage->rightView() || $objPage->getIntRecordStatus() != 1)
+            if ($objPage === null || !$objPage->rightView() || $objPage->getIntRecordStatus() != 1) {
                 continue;
+            }
 
             $arrRow = array();
-            if(($objHit->getStrPagelink() == ""))
+            if (($objHit->getStrPagelink() == "")) {
                 $arrRow["page_link"] = getLinkPortal(
                     $objHit->getStrPagename(),
                     "",
@@ -138,10 +141,12 @@ class SearchPortal extends PortalController implements PortalInterface {
                     "",
                     "&highlight=".urlencode(html_entity_decode($this->objSearchSearch->getStrQuery(), ENT_QUOTES, "UTF-8"))."#".uniStrtolower(urlencode(html_entity_decode($this->objSearchSearch->getStrQuery(), ENT_QUOTES, "UTF-8")))
                 );
-            else
+            }
+            else {
                 $arrRow["page_link"] = $objHit->getStrPagelink();
+            }
             $arrRow["page_description"] = uniStrTrim($objHit->getStrDescription(), 200);
-            $arrTemplate["hitlist"] .= $this->objTemplate->fillTemplate($arrRow, $strRowTemplateID, false);
+            $arrTemplate["hitlist"] .= $this->objTemplate->fillTemplateFile($arrRow, "/module_search/".$this->arrElementData["search_template"], "search_hitlist_hit", false);
         }
 
         //Collect global data
@@ -151,9 +156,7 @@ class SearchPortal extends PortalController implements PortalInterface {
         $arrTemplate["link_back"] = $arrHitsFilter["strBack"];
         $arrTemplate["link_overview"] = $arrHitsFilter["strPages"];
 
-        $strTemplateID = $this->objTemplate->readTemplate("/module_search/".$this->arrElementData["search_template"], "search_hitlist");
-
-        return $strReturn.$this->fillTemplate($arrTemplate, $strTemplateID);
+        return $strReturn.$this->objTemplate->fillTemplateFile($arrTemplate, "/module_search/".$this->arrElementData["search_template"], "search_hitlist");
     }
 
 }

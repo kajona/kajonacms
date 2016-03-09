@@ -229,24 +229,11 @@ abstract class AdminController extends AbstractController
 
         //Loading the desired Template
         //if requested the pe, load different template
-        $strTemplateID = "";
+        $strTemplate = AdminskinHelper::getPathForSkin($this->objSession->getAdminSkin()).$this->getArrModule("template");
         if ($this->getParam("peClose") == 1 || $this->getParam("pe") == 1) {
-            //add suffix
-            try {
-                $strTemplate = "/folderview.tpl";
-                $strTemplateID = $this->objTemplate->readTemplate($strTemplate, "", false, true);
-            }
-            catch (Exception $objException) {
-                //An error occurred. In most cases, this is because the user ist not logged in, so the login-template was requested.
-                if ($this->getArrModule("template") == "/login.tpl") {
-                    throw new Exception("You have to be logged in to use the portal editor!!!", Exception::$level_ERROR);
-                }
-            }
+            $strTemplate = "/folderview.tpl";
         }
-        else {
-            $strTemplateID = $this->objTemplate->readTemplate(AdminskinHelper::getPathForSkin($this->objSession->getAdminSkin()).$this->getArrModule("template"), "", true);
-        }
-        return $this->objTemplate->fillTemplate($this->arrOutput, $strTemplateID);
+        return $this->objTemplate->fillTemplateFile($this->arrOutput, $strTemplate);
     }
 
     /**

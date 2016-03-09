@@ -22,10 +22,12 @@ use Kajona\System\System\Toolkit;
  * @package module_system
  * @author sidler@mulchprod.de
  */
-class ToolkitPortal extends Toolkit {
+class ToolkitPortal extends Toolkit
+{
 
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
 
@@ -49,19 +51,22 @@ class ToolkitPortal extends Toolkit {
      *                                   [strBack]    = link to the previous page
      *                                   [strPages] = Pager ( [0][1] ...)
      */
-    public function pager($intNumber, $intPage = 1, $strForward = "next", $strBack = "back", $strAction = "list", $strPage = "", $arrData = array(), $strAdd = "", $strPvParam = "pv") {
+    public function pager($intNumber, $intPage = 1, $strForward = "next", $strBack = "back", $strAction = "list", $strPage = "", $arrData = array(), $strAdd = "", $strPvParam = "pv")
+    {
 
-        if($intPage <= 0)
+        if ($intPage <= 0) {
             $intPage = 1;
+        }
 
-        if((int)$intNumber <= 0)
+        if ((int)$intNumber <= 0) {
             $intNumber = 100;
+        }
 
         $arrReturn = array(
-            "arrData"        => array(),
-            "strForward"     => "",
-            "strBack"        => "",
-            "strPages"       => ""
+            "arrData"    => array(),
+            "strForward" => "",
+            "strBack"    => "",
+            "strPages"   => ""
         );
 
         //create array-iterator
@@ -69,7 +74,7 @@ class ToolkitPortal extends Toolkit {
         $objIterator->setIntElementsPerPage($intNumber);
 
         //Anything to create?
-        if($objIterator->getNrOfPages() == 1) {
+        if ($objIterator->getNrOfPages() == 1) {
             $arrReturn["arrData"] = $arrData;
         }
         else {
@@ -80,32 +85,36 @@ class ToolkitPortal extends Toolkit {
             $arrReturn["arrData"] = $objIterator->getElementsOnPage($intPage);
 
             //FowardLink
-            if($intPage < $objIterator->getNrOfPages())
+            if ($intPage < $objIterator->getNrOfPages()) {
                 $strLinkForward = Link::getLinkPortal($strPage, "", null, $strForward, $strAction, "&".$strPvParam."=".($intPage + 1).$strAdd);
+            }
             //BackLink
-            if($intPage > 1)
+            if ($intPage > 1) {
                 $strLinkBack = Link::getLinkPortal($strPage, "", null, $strBack, $strAction, "&".$strPvParam."=".($intPage - 1).$strAdd);
+            }
 
             //just load the current +-6 pages and the first/last +-3
             $intCounter2 = 1;
-            for($intI = 1; $intI <= $objIterator->getNrOfPages(); $intI++) {
+            for ($intI = 1; $intI <= $objIterator->getNrOfPages(); $intI++) {
                 $bitDisplay = false;
-                if($intCounter2 <= 3) {
+                if ($intCounter2 <= 3) {
                     $bitDisplay = true;
                 }
-                elseif($intCounter2 >= ($objIterator->getNrOfPages() - 3)) {
+                elseif ($intCounter2 >= ($objIterator->getNrOfPages() - 3)) {
                     $bitDisplay = true;
                 }
-                elseif($intCounter2 >= ($intPage - 6) && $intCounter2 <= ($intPage + 6)) {
+                elseif ($intCounter2 >= ($intPage - 6) && $intCounter2 <= ($intPage + 6)) {
                     $bitDisplay = true;
                 }
 
 
-                if($bitDisplay) {
-                    if($intI == $intPage)
+                if ($bitDisplay) {
+                    if ($intI == $intPage) {
                         $strLinkPages .= "  <strong>".Link::getLinkPortal($strPage, "", null, "[".$intI."]", $strAction, "&".$strPvParam."=".$intI.$strAdd)."</strong>";
-                    else
+                    }
+                    else {
                         $strLinkPages .= "  ".Link::getLinkPortal($strPage, "", null, "[".$intI."]", $strAction, "&".$strPvParam."=".$intI.$strAdd);
+                    }
                 }
                 $intCounter2++;
             }
@@ -137,34 +146,19 @@ class ToolkitPortal extends Toolkit {
      *                                   [strBack]    = link to the previous page
      *                                   [strPages] = Pager ( [0][1] ...)
      */
-    public function simplePager($objArraySectionIterator, $strForward = "next", $strBack = "back", $strAction = "list", $strPage = "", $strAdd = "", $strPvParam = "pv", $strTemplate = "") {
+    public function simplePager($objArraySectionIterator, $strForward = "next", $strBack = "back", $strAction = "list", $strPage = "", $strAdd = "", $strPvParam = "pv", $strTemplate = "")
+    {
 
         $arrReturn = array(
-            "arrData"        => array(),
-            "strForward"     => "",
-            "strBack"        => "",
-            "strPages"       => ""
+            "arrData"    => array(),
+            "strForward" => "",
+            "strBack"    => "",
+            "strPages"   => ""
         );
 
 
         //read the template-sections, of given
-        $bitTemplate = false;
-        $strFwdId = "";
-        $strBackId = "";
-        $strEntryId = "";
-        $strEntryActiveId = "";
-        if($strTemplate != "") {
-            $strTemplateIdentifier = $this->objTemplate->readTemplate($strTemplate);
-            $bitTemplate = $this->objTemplate->containsSection($strTemplateIdentifier, "pager_fwd") &&
-                $this->objTemplate->containsSection($strTemplateIdentifier, "pager_back") &&
-                $this->objTemplate->containsSection($strTemplateIdentifier, "pager_entry") &&
-                $this->objTemplate->containsSection($strTemplateIdentifier, "pager_entry_active");
-
-            $strFwdId = $this->objTemplate->readTemplate($strTemplate, "pager_fwd");
-            $strBackId = $this->objTemplate->readTemplate($strTemplate, "pager_back");
-            $strEntryId = $this->objTemplate->readTemplate($strTemplate, "pager_entry");
-            $strEntryActiveId = $this->objTemplate->readTemplate($strTemplate, "pager_entry_active");
-        }
+        $bitTemplate = $strTemplate != "";
 
         $strLinkPages = "";
         $strLinkForward = "";
@@ -175,57 +169,65 @@ class ToolkitPortal extends Toolkit {
         $intPage = $objArraySectionIterator->getPageNumber();
 
         //FowardLink
-        if($intPage < $objArraySectionIterator->getNrOfPages()) {
-            if($bitTemplate)
-                $strLinkForward = $this->objTemplate->fillTemplate(array("pageHref" => Link::getLinkPortalHref($strPage, "", $strAction, "&".$strPvParam."=".($intPage + 1).$strAdd)), $strFwdId);
-            else
+        if ($intPage < $objArraySectionIterator->getNrOfPages()) {
+            if ($bitTemplate) {
+                $strLinkForward = $this->objTemplate->fillTemplate(array("pageHref" => Link::getLinkPortalHref($strPage, "", $strAction, "&".$strPvParam."=".($intPage + 1).$strAdd)), $strTemplate, "pager_fwd");
+            }
+            else {
                 $strLinkForward = Link::getLinkPortal($strPage, "", null, $strForward, $strAction, "&".$strPvParam."=".($intPage + 1).$strAdd);
+            }
 
         }
         //BackLink
-        if($intPage > 1) {
-            if($bitTemplate)
-                $strLinkBack = $this->objTemplate->fillTemplate(array("pageHref" => Link::getLinkPortalHref($strPage, "", $strAction, "&".$strPvParam."=".($intPage - 1).$strAdd)), $strBackId);
-            else
+        if ($intPage > 1) {
+            if ($bitTemplate) {
+                $strLinkBack = $this->objTemplate->fillTemplateFile(array("pageHref" => Link::getLinkPortalHref($strPage, "", $strAction, "&".$strPvParam."=".($intPage - 1).$strAdd)), $strTemplate, "pager_back");
+            }
+            else {
                 $strLinkBack = Link::getLinkPortal($strPage, "", null, $strBack, $strAction, "&".$strPvParam."=".($intPage - 1).$strAdd);
+            }
 
         }
 
 
         //just load the current +-6 pages and the first/last +-3
         $intCounter2 = 1;
-        for($intI = 1; $intI <= $objArraySectionIterator->getNrOfPages(); $intI++) {
+        for ($intI = 1; $intI <= $objArraySectionIterator->getNrOfPages(); $intI++) {
             $bitDisplay = false;
-            if($intCounter2 <= 3) {
+            if ($intCounter2 <= 3) {
                 $bitDisplay = true;
             }
-            elseif($intCounter2 >= ($objArraySectionIterator->getNrOfPages() - 3)) {
+            elseif ($intCounter2 >= ($objArraySectionIterator->getNrOfPages() - 3)) {
                 $bitDisplay = true;
             }
-            elseif($intCounter2 >= ($intPage - 6) && $intCounter2 <= ($intPage + 6)) {
+            elseif ($intCounter2 >= ($intPage - 6) && $intCounter2 <= ($intPage + 6)) {
                 $bitDisplay = true;
             }
 
 
-            if($bitDisplay) {
+            if ($bitDisplay) {
 
-                if($bitTemplate) {
-                    if($intI == $intPage)
-                        $strLinkPages .= $this->objTemplate->fillTemplate(array("pageHref" => Link::getLinkPortalHref($strPage, "", $strAction, "&".$strPvParam."=".$intI.$strAdd), "pageNumber" => $intI), $strEntryActiveId);
-                    else
-                        $strLinkPages .= $this->objTemplate->fillTemplate(array("pageHref" => Link::getLinkPortalHref($strPage, "", $strAction, "&".$strPvParam."=".$intI.$strAdd), "pageNumber" => $intI), $strEntryId);
+                if ($bitTemplate) {
+                    if ($intI == $intPage) {
+                        $strLinkPages .= $this->objTemplate->fillTemplateFile(array("pageHref" => Link::getLinkPortalHref($strPage, "", $strAction, "&".$strPvParam."=".$intI.$strAdd), "pageNumber" => $intI), $strTemplate, "pager_entry_active");
+                    }
+                    else {
+                        $strLinkPages .= $this->objTemplate->fillTemplateFile(array("pageHref" => Link::getLinkPortalHref($strPage, "", $strAction, "&".$strPvParam."=".$intI.$strAdd), "pageNumber" => $intI), $strTemplate, "pager_entry");
+                    }
                 }
                 else {
-                    if($intI == $intPage)
+                    if ($intI == $intPage) {
                         $strLinkPages .= "  <strong>".Link::getLinkPortal($strPage, "", null, "[".$intI."]", $strAction, "&".$strPvParam."=".$intI.$strAdd)."</strong>";
-                    else
+                    }
+                    else {
                         $strLinkPages .= "  ".Link::getLinkPortal($strPage, "", null, "[".$intI."]", $strAction, "&".$strPvParam."=".$intI.$strAdd);
+                    }
                 }
             }
             $intCounter2++;
         }
 
-        if($objArraySectionIterator->getNrOfPages() > 1) {
+        if ($objArraySectionIterator->getNrOfPages() > 1) {
             $arrReturn["strForward"] = $strLinkForward;
             $arrReturn["strBack"] = $strLinkBack;
             $arrReturn["strPages"] = $strLinkPages;
@@ -240,16 +242,12 @@ class ToolkitPortal extends Toolkit {
     /**
      * Creates the portaleditor toolbar at top of the page
      *
-     * @param array $arrContent
-     *
      * @return string
      */
-    public function getPeToolbar() {
-
+    public function getPeToolbar()
+    {
         $strAdminSkin = Carrier::getInstance()->getObjSession()->getAdminSkin();
-        $strTemplateID = $this->objTemplate->readTemplate(AdminskinHelper::getPathForSkin($strAdminSkin)."/elements.tpl", "pe_toolbar", true);
-        $strReturn = $this->objTemplate->fillTemplate(array(), $strTemplateID);
-
+        $strReturn = $this->objTemplate->fillTemplateFile(array(), AdminskinHelper::getPathForSkin($strAdminSkin)."/elements.tpl", "pe_toolbar");
         return $strReturn;
     }
 

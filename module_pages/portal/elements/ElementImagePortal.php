@@ -41,14 +41,6 @@ class ElementImagePortal extends ElementPortal implements PortalElementInterface
             $strTemplate = "image.tpl";
         }
 
-        //choose template section
-        if ($this->arrElementData["image_link"] != "") {
-            $strTemplateID = $this->objTemplate->readTemplate("/element_image/".$strTemplate, "image_link");
-        }
-        else {
-            $strTemplateID = $this->objTemplate->readTemplate("/element_image/".$strTemplate, "image");
-        }
-
         $this->arrElementData["image_src"] = $this->arrElementData["image_image"];
 
         //TODO: rename db columns as well and remove this two lines
@@ -67,7 +59,7 @@ class ElementImagePortal extends ElementPortal implements PortalElementInterface
         }
 
 
-        $strReturn .= $this->fillTemplate($this->arrElementData, $strTemplateID);
+        $strReturn .= $this->objTemplate->fillTemplateFile($this->arrElementData, "/element_image/".$strTemplate, $this->arrElementData["image_link"] != "" ? "image_link" : "image");
 
         return $strReturn;
     }

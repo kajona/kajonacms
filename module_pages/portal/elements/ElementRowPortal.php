@@ -40,10 +40,7 @@ class ElementRowPortal extends ElementPortal implements PortalElementInterface
             $strTemplate = "row.tpl";
         }
 
-        $strTemplateID = $this->objTemplate->readTemplate("/element_row/".$strTemplate, "row");
-
-        $strReturn .= $this->fillTemplate($this->arrElementData, $strTemplateID);
-
+        $strReturn .= $this->objTemplate->fillTemplateFile($this->arrElementData, "/element_row/".$strTemplate, "row");
         return $strReturn;
     }
 

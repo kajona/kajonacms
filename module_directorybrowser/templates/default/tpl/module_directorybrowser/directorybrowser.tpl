@@ -2,7 +2,7 @@
 
 <!-- available placeholders: files -->
 <directorybrowser_wrapper>
-    <table style="width: 100%">
+    <table class="table table-striped">
         <tr>
             <th>[lang,directorybrowser_name,elements]</th>
             <th>[lang,directorybrowser_size,elements]</th>

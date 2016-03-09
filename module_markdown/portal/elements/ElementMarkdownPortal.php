@@ -45,10 +45,9 @@ class ElementMarkdownPortal extends ElementPortal implements PortalElementInterf
         $objMarkdown = new Parsedown();
         $strParsed = $objMarkdown->text($strFile);
 
-        return $this->objTemplate->fillTemplate(
+        return $this->objTemplate->fillTemplateFile(
             array("markdown_content" => $strParsed, "markdown_url" => $this->arrElementData["char2"]),
-            $this->objTemplate->readTemplate("/module_markdown/".$this->arrElementData["char1"], "markdown"),
-            true
+            "/module_markdown/".$this->arrElementData["char1"], "markdown"
         );
     }
 

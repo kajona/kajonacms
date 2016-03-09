@@ -122,11 +122,9 @@ class FaqsPortal extends PortalController implements PortalInterface
 
         //wrap list container around
         //wrap category around
-        $strListTemplateID = $this->objTemplate->readTemplate("/module_faqs/" . $this->arrElementData["faqs_template"], "faqs_list");
         $arrTemplate = array();
         $arrTemplate["faq_categories"] = $strCats;
-
-        $strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strListTemplateID);
+        $strReturn .= $this->objTemplate->fillTemplateFile($arrTemplate, "/module_faqs/" . $this->arrElementData["faqs_template"], "faqs_list");
 
 
         return $strReturn;

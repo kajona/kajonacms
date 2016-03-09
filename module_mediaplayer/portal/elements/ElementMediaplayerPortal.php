@@ -17,7 +17,8 @@ use Kajona\Pages\Portal\PortalElementInterface;
  * @author sidler@mulchprod.de
  * @targetTable element_universal.content_id
  */
-class ElementMediaplayerPortal extends ElementPortal implements PortalElementInterface {
+class ElementMediaplayerPortal extends ElementPortal implements PortalElementInterface
+{
 
 
     /**
@@ -25,7 +26,8 @@ class ElementMediaplayerPortal extends ElementPortal implements PortalElementInt
      *
      * @return string the prepared html-output
      */
-    public function loadData() {
+    public function loadData()
+    {
 
         $arrTemplate = array();
         $arrTemplate["systemid"] = $this->getSystemid();
@@ -34,8 +36,7 @@ class ElementMediaplayerPortal extends ElementPortal implements PortalElementInt
         $arrTemplate["width"] = $this->arrElementData["int1"];
         $arrTemplate["height"] = $this->arrElementData["int2"];
 
-        $strTemplateID = $this->objTemplate->readTemplate("/module_mediaplayer/".$this->arrElementData["char3"], "mediaplayer");
-        $strReturn = $this->fillTemplate($arrTemplate, $strTemplateID);
+        $strReturn = $this->objTemplate->fillTemplateFile($arrTemplate, "/module_mediaplayer/".$this->arrElementData["char3"], "mediaplayer");
 
         return $strReturn;
     }

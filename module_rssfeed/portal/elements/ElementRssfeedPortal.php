@@ -24,21 +24,24 @@ use Kajona\System\System\XmlParser;
  *
  * @targetTable element_universal.content_id
  */
-class ElementRssfeedPortal extends ElementPortal implements PortalElementInterface {
+class ElementRssfeedPortal extends ElementPortal implements PortalElementInterface
+{
 
     /**
      * Loads the feed and displays it
      *
      * @return string the prepared html-output
      */
-    public function loadData() {
+    public function loadData()
+    {
         $strReturn = "";
         $strFeed = "";
         try {
             $objRemoteloader = new Remoteloader();
 
-            if(uniStrtolower(uniSubstr($this->arrElementData["char2"], 0, 8)) == "https://")
+            if (uniStrtolower(uniSubstr($this->arrElementData["char2"], 0, 8)) == "https://") {
                 $objRemoteloader->setStrProtocolHeader("https://");
+            }
 
             $this->arrElementData["char2"] = uniStrReplace("&amp;", "&", $this->arrElementData["char2"]);
 
@@ -46,16 +49,13 @@ class ElementRssfeedPortal extends ElementPortal implements PortalElementInterfa
             $objRemoteloader->setIntPort(0);
             $strFeed = $objRemoteloader->getRemoteContent();
         }
-        catch(\Kajona\System\System\Exception $objExeption) {
+        catch (\Kajona\System\System\Exception $objExeption) {
             $strFeed = "";
         }
 
-        $strFeedTemplateID = $this->objTemplate->readTemplate("/module_rssfeed/" . $this->arrElementData["char1"], "rssfeed_feed");
-        $strPostTemplateID = $this->objTemplate->readTemplate("/module_rssfeed/" . $this->arrElementData["char1"], "rssfeed_post");
-
         $strContent = "";
         $arrTemplate = array();
-        if(uniStrlen($strFeed) == 0) {
+        if (uniStrlen($strFeed) == 0) {
             $strContent = $this->getLang("rssfeed_errorloading");
         }
         else {
@@ -64,24 +64,24 @@ class ElementRssfeedPortal extends ElementPortal implements PortalElementInterfa
 
             $arrFeed = $objXmlparser->xmlToArray();
 
-            if(count($arrFeed) >= 1) {
+            if (count($arrFeed) >= 1) {
 
                 //rss feed
-                if(isset($arrFeed["rss"])) {
+                if (isset($arrFeed["rss"])) {
 
                     $arrTemplate["feed_title"] = $arrFeed["rss"][0]["channel"][0]["title"][0]["value"];
                     $arrTemplate["feed_link"] = $arrFeed["rss"][0]["channel"][0]["link"][0]["value"];
                     $arrTemplate["feed_description"] = $arrFeed["rss"][0]["channel"][0]["description"][0]["value"];
                     $intCounter = 0;
 
-                    if(isset($arrFeed["rss"][0]["channel"][0]["item"]) && is_array($arrFeed["rss"][0]["channel"][0]["item"])) {
-                        foreach($arrFeed["rss"][0]["channel"][0]["item"] as $arrOneItem) {
+                    if (isset($arrFeed["rss"][0]["channel"][0]["item"]) && is_array($arrFeed["rss"][0]["channel"][0]["item"])) {
+                        foreach ($arrFeed["rss"][0]["channel"][0]["item"] as $arrOneItem) {
 
                             $strDateTime = (isset($arrOneItem["pubDate"][0]["value"]) ? $arrOneItem["pubDate"][0]["value"] : "");
                             $strDate = "";
-                            if($strDateTime != "") {
+                            if ($strDateTime != "") {
                                 $intDate = strtotime($strDateTime);
-                                if($intDate > 0) {
+                                if ($intDate > 0) {
                                     $objDate = new Date($intDate);
                                     $strDateTime = dateToString($objDate, true);
                                     $strDate = dateToString($objDate, false);
@@ -95,9 +95,9 @@ class ElementRssfeedPortal extends ElementPortal implements PortalElementInterfa
                             $arrMessage["post_description"] = (isset($arrOneItem["description"][0]["value"]) ? $arrOneItem["description"][0]["value"] : "");
                             $arrMessage["post_link"] = (isset($arrOneItem["link"][0]["value"]) ? $arrOneItem["link"][0]["value"] : "");
 
-                            $strContent .= $this->fillTemplate($arrMessage, $strPostTemplateID);
+                            $strContent .= $this->objTemplate->fillTemplateFile($arrMessage, "/module_rssfeed/".$this->arrElementData["char1"], "rssfeed_post");
 
-                            if(++$intCounter >= $this->arrElementData["int1"]) {
+                            if (++$intCounter >= $this->arrElementData["int1"]) {
                                 break;
                             }
 
@@ -110,21 +110,21 @@ class ElementRssfeedPortal extends ElementPortal implements PortalElementInterfa
                 }
 
                 //atom feed
-                if(isset($arrFeed["feed"]) && isset($arrFeed["feed"][0]["entry"])) {
+                if (isset($arrFeed["feed"]) && isset($arrFeed["feed"][0]["entry"])) {
 
                     $arrTemplate["feed_title"] = $arrFeed["feed"][0]["title"][0]["value"];
                     $arrTemplate["feed_link"] = $arrFeed["feed"][0]["link"][0]["attributes"]["href"];
                     $arrTemplate["feed_description"] = $arrFeed["feed"][0]["subtitle"][0]["value"];
                     $intCounter = 0;
 
-                    if(isset($arrFeed["feed"][0]["entry"]) && is_array($arrFeed["feed"][0]["entry"])) {
-                        foreach($arrFeed["feed"][0]["entry"] as $arrOneItem) {
+                    if (isset($arrFeed["feed"][0]["entry"]) && is_array($arrFeed["feed"][0]["entry"])) {
+                        foreach ($arrFeed["feed"][0]["entry"] as $arrOneItem) {
 
                             $strDateTime = (isset($arrOneItem["updated"][0]["value"]) ? $arrOneItem["updated"][0]["value"] : "");
                             $strDate = "";
-                            if($strDateTime != "") {
+                            if ($strDateTime != "") {
                                 $intDate = strtotime($strDateTime);
-                                if($intDate > 0) {
+                                if ($intDate > 0) {
                                     $objDate = new Date($intDate);
                                     $strDateTime = dateToString($objDate, true);
                                     $strDate = dateToString($objDate, false);
@@ -138,9 +138,9 @@ class ElementRssfeedPortal extends ElementPortal implements PortalElementInterfa
                             $arrMessage["post_description"] = (isset($arrOneItem["summary"][0]["value"]) ? $arrOneItem["summary"][0]["value"] : "");
                             $arrMessage["post_link"] = (isset($arrOneItem["link"][0]["attributes"]["href"]) ? $arrOneItem["link"][0]["attributes"]["href"] : "");
 
-                            $strContent .= $this->fillTemplate($arrMessage, $strPostTemplateID);
+                            $strContent .= $this->objTemplate->fillTemplateFile($arrMessage, "/module_rssfeed/".$this->arrElementData["char1"], "rssfeed_post");
 
-                            if(++$intCounter >= $this->arrElementData["int1"]) {
+                            if (++$intCounter >= $this->arrElementData["int1"]) {
                                 break;
                             }
 
@@ -158,7 +158,7 @@ class ElementRssfeedPortal extends ElementPortal implements PortalElementInterfa
         }
 
         $arrTemplate["feed_content"] = $strContent;
-        $strReturn .= $this->fillTemplate($arrTemplate, $strFeedTemplateID);
+        $strReturn .= $this->objTemplate->fillTemplateFile($arrTemplate, "/module_rssfeed/".$this->arrElementData["char1"], "rssfeed_feed");
 
         return $strReturn;
     }

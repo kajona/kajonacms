@@ -90,7 +90,6 @@ class PostacommentPortal extends PortalController implements PortalInterface
         }
 
         $arrComments = $this->objToolkit->simplePager($objArraySectionIterator, $this->getLang("commons_next"), $this->getLang("commons_back"), "", $this->getPagename(), $strAdd, "pvPAC", "/module_postacomment/".$this->arrElementData["char1"]);
-        $strTemplateID = $this->objTemplate->readTemplate("/module_postacomment/".$this->arrElementData["char1"], "postacomment_post");
 
         if (!$objArraySectionIterator->valid()) {
             $strPosts .= $this->getLang("postacomment_empty");
@@ -116,7 +115,7 @@ class PostacommentPortal extends PortalController implements PortalInterface
                     );
                 }
 
-                $strOnePost .= $this->objTemplate->fillTemplate($arrOnePost, $strTemplateID, false);
+                $strOnePost .= $this->objTemplate->fillTemplateFile($arrOnePost, "/module_postacomment/".$this->arrElementData["char1"], "postacomment_post", false);
 
                 //Add pe code
                 $strPosts .= PagesPortaleditor::addPortaleditorContentWrapper($strOnePost, $objOnePost->getSystemid());
@@ -131,7 +130,6 @@ class PostacommentPortal extends PortalController implements PortalInterface
 
         //Create form
         if ($this->getObjModule()->rightRight1()) {
-            $strTemplateID = $this->objTemplate->readTemplate("/module_postacomment/".$this->arrElementData["char1"], "postacomment_form");
             $arrForm = array();
 
             if ($this->getParam("comment_name") == "" && $this->objSession->isLoggedin()) {
@@ -153,15 +151,12 @@ class PostacommentPortal extends PortalController implements PortalInterface
                 }
             }
 
-            $strForm .= $this->objTemplate->fillTemplate($arrForm, $strTemplateID, false);
+            $strForm .= $this->objTemplate->fillTemplateFile($arrForm, "/module_postacomment/".$this->arrElementData["char1"], "postacomment_form", false);
 
             //button to show the form
-            $strTemplateNewButtonID = $this->objTemplate->readTemplate("/module_postacomment/".$this->arrElementData["char1"], "postacomment_new_button");
-            $strNewButton = $this->objTemplate->fillTemplate(array("comment_systemid" => $this->getSystemid()), $strTemplateNewButtonID, false);
+            $strNewButton = $this->objTemplate->fillTemplateFile(array("comment_systemid" => $this->getSystemid()), "/module_postacomment/".$this->arrElementData["char1"], "postacomment_new_button", false);
         }
         //add sourrounding list template
-        $strTemplateID = $this->objTemplate->readTemplate("/module_postacomment/".$this->arrElementData["char1"], "postacomment_list");
-
 
         //link to the post-form & pageview links
         $arrTemplate = array();
@@ -173,7 +168,7 @@ class PostacommentPortal extends PortalController implements PortalInterface
         $arrTemplate["postacomment_systemid"] = $this->getSystemid();
         $arrTemplate["postacomment_list"] = $strPosts;
 
-        $strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
+        $strReturn .= $this->objTemplate->fillTemplateFile($arrTemplate, "/module_postacomment/".$this->arrElementData["char1"], "postacomment_list");
 
         return $strReturn;
     }

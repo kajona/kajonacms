@@ -245,6 +245,17 @@
                     </div>
                 </kajona-block>
 
+                <kajona-block kajona-name="Dirbrowser">
+                    %%test_directorybrowser%%
+                </kajona-block>
+                <kajona-block kajona-name="fb">
+                    %%test_facebooklikebox%%
+                </kajona-block>
+
+                <kajona-block kajona-name="ls">
+                    %%test_languageswitch%%
+                </kajona-block>
+
             </kajona-blocks>
 
             <kajona-blocks kajona-name="Footer Area">
