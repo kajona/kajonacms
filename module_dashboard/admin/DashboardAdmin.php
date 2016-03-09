@@ -23,6 +23,7 @@ use Kajona\System\System\Exception;
 use Kajona\System\System\Link;
 use Kajona\System\System\Session;
 use Kajona\System\System\SystemAspect;
+use Kajona\System\System\SystemJSTreeConfig;
 
 /**
  * The dashboard admin class
@@ -194,68 +195,37 @@ JS;
      * @permissions view
      */
     protected function actionTodo() {
-        $arrContent = array();
 
-        // overall tab
-        $strCategory = $this->getParam("listfilter_category");
-        $strSearch = $this->getParam("listfilter_search");
-        $strDate = $this->getParam("listfilter_date");
-        if (!empty($strCategory)) {
-            $strLink = Link::getLinkAdminXml("dashboard", "todoCategory", "&category=" . $strCategory . "&search=" . urlencode($strSearch) . "&date=" . $strDate);
-        } else {
-            $strLink = Link::getLinkAdminXml("dashboard", "todoCategory", "&search=" . urlencode($strSearch) . "&date=" . $strDate);
-        }
+        $objConfig = new SystemJSTreeConfig();
+        $objConfig->setBitDndEnabled(false);
+        $objConfig->setStrNodeEndpoint(Link::getLinkAdminXml("dashboard", "treeEndpoint"));
 
-        $arrContent[$this->getLang("todo_overall_tasks")] = $strLink;
+        $strContent = $this->getListTodoFilter();
+        $strContent .= "<div id='todo-table'></div>";
+        $strContent .= "<script type=\"text/javascript\">";
+        $strContent .= <<<JS
+            KAJONA.admin.loader.loadFile(['/core/module_dashboard/admin/scripts/dashboard.js'], function(){
+                KAJONA.admin.dashboard.todo.loadCategory('', '');
+            });
+JS;
 
-        // each category
-        $arrCategories = TodoRepository::getAllCategories();
-        foreach ($arrCategories as $strProviderName => $arrTaskCategories) {
-            foreach ($arrTaskCategories as $strKey => $strCategoryName) {
-                $arrContent[$strCategoryName] = Link::getLinkAdminXml("dashboard", "todoCategory", "&category=" . $strKey);
-            }
-        }
+        $strContent .= "</script>";
 
-        $strReturn = $this->getListTodoFilter();
-        $strReturn .= $this->objToolkit->getTabbedContent($arrContent);
-
-        return $strReturn;
+        return $this->objToolkit->getTreeview($objConfig, $strContent);
     }
 
 
     protected function getListTodoFilter()
     {
-        $strReturn = "";
-
         // create the form
         $objFormgenerator = new AdminFormgenerator("listfilter", null);
-
-        // provider
-        $arrProvider = array();
-        $arrCategories = TodoRepository::getAllCategories();
-        foreach ($arrCategories as $strProviderName => $arrTaskCategories) {
-            foreach ($arrTaskCategories as $strKey => $strCategoryName) {
-                $arrProvider[$strKey] = $strProviderName . " / " . $strCategoryName;
-            }
-        }
-
-        $objFormgenerator->addField(new FormentryDropdown("listfilter", "category"))
-            ->setStrLabel($this->getLang("filter_category"))
-            ->setArrKeyValues(array_merge(array("" => $this->getLang("filter_all_categories")), $arrProvider));
+        $objFormgenerator->setStrOnSubmit("KAJONA.admin.dashboard.todo.formSearch();return false");
 
         $objFormgenerator->addField(new FormentryText("listfilter", "search"))
             ->setStrLabel($this->getLang("filter_search"));
 
-        $objFormgenerator->addField(new FormentryDate("listfilter", "date"))
-            ->setStrLabel($this->getLang("filter_date"));
-
         //render filter
-        $strReturn .= $objFormgenerator->renderForm(Link::getLinkAdminHref("dashboard", "todo"), AdminFormgenerator::BIT_BUTTON_SUBMIT);
-
-        $bitFilterActive = $this->getParam("listfilter_category") != "" || $this->getParam("listfilter_search") != "" || $this->getParam("listfilter_date") != "";
-
-        $arrFolder = $this->objToolkit->getLayoutFolderPic($strReturn, $this->getLang("filter_show_hide", "agp_commons").($bitFilterActive ? $this->getLang("commons_filter_active") : ""), "icon_folderOpen", "icon_folderClosed", false);
-        $strReturn = $this->objToolkit->getFieldset($arrFolder[1], $arrFolder[0]);
+        $strReturn = $objFormgenerator->renderForm(Link::getLinkAdminHref("dashboard", "todo"), AdminFormgenerator::BIT_BUTTON_SUBMIT);
 
         return $strReturn;
     }

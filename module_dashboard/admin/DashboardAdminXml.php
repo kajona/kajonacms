@@ -12,6 +12,7 @@ namespace Kajona\Dashboard\Admin;
 use Kajona\Dashboard\System\DashboardWidget;
 use Kajona\Dashboard\System\EventEntry;
 use Kajona\Dashboard\System\EventRepository;
+use Kajona\Dashboard\System\TodoJstreeNodeLoader;
 use Kajona\Dashboard\System\TodoRepository;
 use Kajona\System\Admin\AdminController;
 use Kajona\System\Admin\XmlAdminInterface;
@@ -22,6 +23,7 @@ use Kajona\System\System\HttpStatuscodes;
 use Kajona\System\System\ResponseObject;
 use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemChangelog;
+use Kajona\System\System\SystemJSTreeBuilder;
 
 /**
  * admin-class of the dashboard-module
@@ -172,7 +174,11 @@ class DashboardAdminXml extends AdminController implements XmlAdminInterface {
         if (empty($strCategory)) {
             $arrTodos = TodoRepository::getAllOpenTodos();
         } else {
-            $arrTodos = TodoRepository::getOpenTodos($strCategory, false);
+            $arrCategories = explode(',', $strCategory);
+            $arrTodos = array();
+            foreach ($arrCategories as $strCategory) {
+                $arrTodos = array_merge($arrTodos, TodoRepository::getOpenTodos($strCategory, false));
+            }
         }
 
         if (empty($arrTodos)) {
@@ -219,5 +225,20 @@ class DashboardAdminXml extends AdminController implements XmlAdminInterface {
         }
 
         return $this->objToolkit->dataTable($arrHeaders, $arrValues);
+    }
+
+    /**
+     * @return string
+     * @permissions view
+     */
+    protected function actionTreeEndpoint()
+    {
+        $objJsTreeLoader = new SystemJSTreeBuilder(
+            new TodoJstreeNodeLoader()
+        );
+
+        $arrReturn = $objJsTreeLoader->getJson(array(""), true);
+        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
+        return $arrReturn;
     }
 }

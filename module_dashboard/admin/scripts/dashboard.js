@@ -78,3 +78,25 @@ KAJONA.admin.dashboard = {
 
     }
 };
+
+KAJONA.admin.dashboard.todo = {
+
+    selectedCategory: "",
+
+    loadCategory: function(category, search){
+        if (search == '') {
+            $('#listfilter_search').val('');
+        }
+        this.selectedCategory = category;
+        $('#todo-table').html('<div class="loadingContainer"></div>');
+        KAJONA.admin.ajax.genericAjaxCall('dashboard', 'todoCategory', '&category=' + category + '&search=' + search, function(data) {
+            $('#todo-table').html(data);
+        });
+    },
+
+    formSearch: function(){
+        this.loadCategory(this.selectedCategory, $('#listfilter_search').val());
+    }
+
+};
+
