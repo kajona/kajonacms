@@ -11,6 +11,7 @@ use Doctrine\Common\Cache\ApcuCache;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\CacheProvider;
 use Doctrine\Common\Cache\ChainCache;
+use Doctrine\Common\Cache\ClearableCache;
 use Doctrine\Common\Cache\FilesystemCache;
 use Doctrine\Common\Cache\FlushableCache;
 use Doctrine\Common\Cache\PhpFileCache;
@@ -79,6 +80,21 @@ class CacheManager
     const TYPE_PHPFILE = 16;
 
     /**
+     * Namespace of the global cache. This cache is flushed more often in case changes happen to the db
+     *
+     * @var string
+     */
+    const NS_GLOBAL = 'global';
+
+    /**
+     * Namespace of the bootstrap cache. The bootstrap cache contains cache values which are rarely removed it contains
+     * i.e. the class map or annotations values
+     *
+     * @var string
+     */
+    const NS_BOOTSTRAP = 'bootstrap';
+
+    /**
      * @var array
      */
     protected $arrSystems = array();
@@ -103,9 +119,9 @@ class CacheManager
      * @param int $intType
      * @return mixed The cached data or FALSE, if no cache entry exists for the given id.
      */
-    public function getValue($strKey, $intType = null)
+    public function getValue($strKey, $intType = null, $strNamespace = self::NS_GLOBAL)
     {
-        return $this->getCache($intType)->fetch($strKey);
+        return $this->getCache($intType, $strNamespace)->fetch($strKey);
     }
 
     /**
@@ -117,9 +133,9 @@ class CacheManager
      * @param int $intType
      * @return bool
      */
-    public function addValue($strKey, $objValue, $intTtl = 180, $intType = null)
+    public function addValue($strKey, $objValue, $intTtl = 180, $intType = null, $strNamespace = self::NS_GLOBAL)
     {
-        return $this->getCache($intType)->save($strKey, $objValue, $intTtl);
+        return $this->getCache($intType, $strNamespace)->save($strKey, $objValue, $intTtl);
     }
 
     /**
@@ -127,21 +143,21 @@ class CacheManager
      * @param int $intType
      * @return bool
      */
-    public function removeValue($strKey, $intType = null)
+    public function removeValue($strKey, $intType = null, $strNamespace = self::NS_GLOBAL)
     {
-        return $this->getCache($intType)->delete($strKey);
+        return $this->getCache($intType, $strNamespace)->delete($strKey);
     }
 
     /**
-     * Flushes the complete cache if its supported
+     * Flushes the complete cache of the given namespace
      *
      * @param integer $intType
      */
-    public function flushCache($intType = null)
+    public function flushCache($intType = null, $strNamespace = self::NS_GLOBAL)
     {
-        $objCache = $this->getCache($intType);
-        if ($objCache instanceof FlushableCache) {
-            $objCache->flushAll();
+        $objCache = $this->getCache($intType, $strNamespace);
+        if ($objCache instanceof ClearableCache) {
+            $objCache->deleteAll();
         }
     }
 
@@ -153,7 +169,7 @@ class CacheManager
      */
     public function getStats($intType)
     {
-        return $this->getCache($intType)->getStats();
+        return $this->getCache($intType, null)->getStats();
     }
 
     /**
@@ -162,20 +178,20 @@ class CacheManager
      * @param integer $intType
      * @return \Doctrine\Common\Cache\Cache
      */
-    protected function getCache($intType = null)
+    protected function getCache($intType, $strNamespace)
     {
         if (empty($intType)) {
             $intType = self::TYPE_APC | self::TYPE_FILESYSTEM;
         }
 
-        if (isset($this->arrSystems[$intType])) {
-            return $this->arrSystems[$intType];
+        if (isset($this->arrSystems[$intType . $strNamespace])) {
+            return $this->arrSystems[$intType . $strNamespace];
         } else {
-            return $this->arrSystems[$intType] = $this->buildDriver($intType);
+            return $this->arrSystems[$intType . $strNamespace] = $this->buildDriver($intType, $strNamespace);
         }
     }
 
-    protected function buildDriver($intType)
+    protected function buildDriver($intType, $strNamespace)
     {
         require_once __DIR__ . '/../vendor/autoload.php';
         $arrDriver = array();
@@ -219,7 +235,7 @@ class CacheManager
         }
 
         if ($objCache instanceof CacheProvider) {
-            $objCache->setNamespace($this->strSystemKey);
+            $objCache->setNamespace($this->strSystemKey . $strNamespace);
         }
 
         return $objCache;
