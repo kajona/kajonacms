@@ -161,7 +161,7 @@ b
 c
 HTML;
 
-        $objTemplate = Template::getInstance();
+        $objTemplate = Carrier::getInstance()->getContainer()->offsetGet("template");
         $this->assertEquals(
             "a
 
