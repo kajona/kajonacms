@@ -15,18 +15,41 @@ class CacheManagerTest extends \PHPUnit_Framework_TestCase
     public function testCacheGetAddRemove()
     {
         $objCacheManager = new CacheManager();
-        $strValue = $objCacheManager->getValue("foo", CacheManager::TYPE_ARRAY);
-        $this->assertFalse($strValue);
+
+        $this->assertFalse($objCacheManager->getValue("foo", CacheManager::TYPE_ARRAY));
 
         $objCacheManager->addValue("foo", "bar", 180, CacheManager::TYPE_ARRAY);
 
-        $strValue = $objCacheManager->getValue("foo", CacheManager::TYPE_ARRAY);
-        $this->assertEquals("bar", $strValue);
+        $this->assertEquals("bar", $objCacheManager->getValue("foo", CacheManager::TYPE_ARRAY));
 
         $objCacheManager->removeValue("foo", CacheManager::TYPE_ARRAY);
 
-        $strValue = $objCacheManager->getValue("foo", CacheManager::TYPE_ARRAY);
-        $this->assertFalse($strValue);
+        $this->assertFalse($objCacheManager->getValue("foo", CacheManager::TYPE_ARRAY));
+    }
+
+    public function testCacheGetAddRemoveNamespace()
+    {
+        $strKey = __METHOD__;
+        $objCacheManager = new CacheManager();
+
+        $this->assertFalse($objCacheManager->getValue($strKey, CacheManager::TYPE_ARRAY, CacheManager::NS_GLOBAL));
+        $this->assertFalse($objCacheManager->getValue($strKey, CacheManager::TYPE_ARRAY, CacheManager::NS_BOOTSTRAP));
+
+        $objCacheManager->addValue($strKey, "foo", 180, CacheManager::TYPE_ARRAY, CacheManager::NS_GLOBAL);
+        $objCacheManager->addValue($strKey, "bar", 180, CacheManager::TYPE_ARRAY, CacheManager::NS_BOOTSTRAP);
+
+        $this->assertEquals("foo", $objCacheManager->getValue($strKey, CacheManager::TYPE_ARRAY, CacheManager::NS_GLOBAL));
+        $this->assertEquals("bar", $objCacheManager->getValue($strKey, CacheManager::TYPE_ARRAY, CacheManager::NS_BOOTSTRAP));
+
+        // check whether we can flush items only for a specific namespace and flush not the complete cache
+        $objCacheManager->flushCache(CacheManager::TYPE_ARRAY, CacheManager::NS_GLOBAL);
+
+        $this->assertEquals(false, $objCacheManager->getValue($strKey, CacheManager::TYPE_ARRAY, CacheManager::NS_GLOBAL));
+        $this->assertEquals("bar", $objCacheManager->getValue($strKey, CacheManager::TYPE_ARRAY, CacheManager::NS_BOOTSTRAP));
+
+        $objCacheManager->removeValue($strKey, CacheManager::TYPE_ARRAY, CacheManager::NS_BOOTSTRAP);
+
+        $this->assertEquals(false, $objCacheManager->getValue($strKey, CacheManager::TYPE_ARRAY, CacheManager::NS_BOOTSTRAP));
     }
 
     public function testFlushCache()
