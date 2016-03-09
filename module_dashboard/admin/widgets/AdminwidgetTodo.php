@@ -9,8 +9,12 @@
 
 namespace Kajona\Dashboard\Admin\Widgets;
 
+use AGP\Commons\System\ArtemeonCommon;
+use Kajona\Dashboard\System\DashboardWidget;
 use Kajona\Dashboard\System\TodoRepository;
 use Kajona\System\System\Link;
+use Kajona\System\System\SystemAspect;
+use Kajona\System\System\SystemModule;
 
 /**
  * @package module_dashboard
@@ -114,6 +118,11 @@ class AdminwidgetTodo extends Adminwidget implements AdminwidgetInterface
      */
     public function onFistLogin($strUserid)
     {
+        $objDashboard = new DashboardWidget();
+        $objDashboard->setStrColumn("column1");
+        $objDashboard->setStrUser($strUserid);
+        $objDashboard->setStrClass(__CLASS__);
+        return $objDashboard->updateObjectToDb(DashboardWidget::getWidgetsRootNodeForUser($strUserid));
     }
 
     /**

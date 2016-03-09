@@ -98,7 +98,13 @@ class TodoRepository
         $arrCategories = array();
         foreach ($arrPlugins as $objPlugin) {
             if ($objPlugin instanceof TodoProviderInterface && $objPlugin->rightView()) {
-                $arrCategories[$objPlugin->getName()] = $objPlugin->getCategories();
+
+                if(!array_key_exists($objPlugin->getName(), $arrCategories)) {
+                    $arrCategories[$objPlugin->getName()] = $objPlugin->getCategories();
+                }
+                else {
+                    $arrCategories[$objPlugin->getName()] = array_merge($arrCategories[$objPlugin->getName()], $objPlugin->getCategories());
+                }
             }
         }
 
