@@ -37,7 +37,7 @@ $(function () {
     $('#globalSearchInput').catcomplete({
 
         minLength: 2,
-        delay: 700,
+        delay: 500,
 
         //source: '_skinwebpath_/search.json',
         source: function(request, response) {
@@ -64,11 +64,11 @@ $(function () {
             results: function() {}
         },
         search: function(event, ui) {
-            $(this).css("background-image", "url("+KAJONA_WEBPATH+"/core/module_v4skin/admin/skins/kajona_v4/img/loading-small.gif)").css("background-repeat", "no-repeat").
-            css("background-position", "right center");
+            $(this).parent().find('.input-group-addon').html('<i class="fa fa-spinner fa-spin"></i></span>');
         },
         response: function(event, ui) {
-            $(this).css("background-image", "none");
+            //$(this).css("background-image", "none");
+            $(this).parent().find('.input-group-addon').html('<i class="fa fa-search"></i></span>');
         }
     });
 
@@ -153,11 +153,11 @@ KAJONA.v4skin = {
                 event.stopPropagation();
                 return false;
             }
-            $objCur.css('background-image', 'url('+KAJONA_WEBPATH+'/core/module_v4skin/admin/skins/kajona_v4/img/loading-small.gif)');
+            $objCur.parent().find('.loading-feedback').html('<i class="fa fa-spinner fa-spin"></i>');
         };
 
         this.response = function(event, ui) {
-            $(this).css('background-image', 'none');
+            $(this).parent().find('.loading-feedback').html('');
         };
 
         this.focus = function(event, ui) {
@@ -176,7 +176,8 @@ KAJONA.v4skin = {
 
         this.create = function( event, ui ) {
             var $objCur = $(this);
-            $objCur.css('background-image', 'url('+KAJONA_WEBPATH+'/core/module_v4skin/admin/skins/kajona_v4/img/loading-small-still.gif)').css('background-repeat', 'no-repeat').css('background-position', 'right center');
+            $objCur.closest('.form-group').addClass('has-feedback');
+            $objCur.after("<span class='form-control-feedback loading-feedback'><i class='fa fa-keyboard-o'></i></span>");
         }
     },
 

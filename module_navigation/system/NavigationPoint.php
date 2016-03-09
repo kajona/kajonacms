@@ -51,7 +51,7 @@ class NavigationPoint extends Model implements ModelInterface, AdminListableInte
      * @var string
      * @tableColumn navigation.navigation_page_e
      * @tableColumnDatatype char254
-     * @fieldType file
+     * @fieldType objecttags
      * @fieldLabel navigation_page_e
      *
      * @addSearchIndex

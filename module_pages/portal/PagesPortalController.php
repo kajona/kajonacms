@@ -81,6 +81,7 @@ class PagesPortalController extends PortalController implements PortalInterface
 
 
         //If we reached up till here, we can begin loading the elements to fill
+        //TODO: merge with data from master-page, load blocks and blocks automatically within a single, complex join
         if (PagesPortaleditor::isActive()) {
             $arrElementsOnPage = PagesPageelement::getElementsOnPage($objPageData->getSystemid(), false, $this->getStrPortalLanguage());
         }

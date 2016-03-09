@@ -891,10 +891,10 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
                         event.stopPropagation();
                         return false;
                     }
-                    $(this).closest('ul.tag-editor').css('background-image', 'url('+KAJONA_WEBPATH+'/core/module_v4skin/admin/skins/kajona_v4/img/loading-small.gif)');
+                    $(this).closest('ul.tag-editor').parent().find('.loading-feedback').html('<i class="fa fa-spinner fa-spin"></i>');
                 };
                 objConfig.response = function(event, ui) {
-                    $(this).closest('ul.tag-editor').css('background-image', 'none');
+                    $(this).closest('ul.tag-editor').parent().find('.loading-feedback').html('');
                 };
                 objConfig.select = function(event, ui) {
                     var found = false;
@@ -961,7 +961,8 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
                     });
                 }
             });
-                $objInput.parent().find('ul.tag-editor').css('background-image', 'url('+KAJONA_WEBPATH+'/core/module_v4skin/admin/skins/kajona_v4/img/loading-small-still.gif)').css('background-repeat', 'no-repeat').css('background-position', 'right center');
+                $objInput.parent().find('ul.tag-editor').after("<span class='form-control-feedback loading-feedback' style='right: 15px;'><i class='fa fa-keyboard-o'></i></span>");
+
                 if($objInput.hasClass('mandatoryFormElement')) {
                     $objInput.parent().find('ul.tag-editor').addClass('mandatoryFormElement');
                 }
