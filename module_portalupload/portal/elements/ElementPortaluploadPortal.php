@@ -26,18 +26,20 @@ use Kajona\System\System\ResponseObject;
  *
  * @targetTable element_universal.content_id
  */
-class ElementPortaluploadPortal extends ElementPortal implements PortalElementInterface {
+class ElementPortaluploadPortal extends ElementPortal implements PortalElementInterface
+{
 
     /**
      * @return string
      */
-    public function loadData() {
+    public function loadData()
+    {
         $strReturn = "";
 
-        if($this->getParam("submitPortaluploadForm") == "1") {
+        if ($this->getParam("submitPortaluploadForm") == "1") {
             $strReturn .= $this->doUpload();
         }
-        elseif($this->getParam("submitAjaxUpload") == "1") {
+        elseif ($this->getParam("submitAjaxUpload") == "1") {
             $strReturn .= $this->doAjaxUpload();
         }
         else {
@@ -54,19 +56,17 @@ class ElementPortaluploadPortal extends ElementPortal implements PortalElementIn
      *
      * @return string
      */
-    private function uploadForm($formErrors = "") {
+    private function uploadForm($formErrors = "")
+    {
         $strReturn = "";
         //validate the rights
         $objFilemanagerRepo = new MediamanagerRepo($this->arrElementData["char2"]);
 
 
-        if($objFilemanagerRepo->rightRight1()) {
-
-
-            $strTemplateID = $this->objTemplate->readTemplate("/module_portalupload/" . $this->arrElementData["char1"], "portalupload_uploadform");
+        if ($objFilemanagerRepo->rightRight1()) {
 
             $strDlFolderId = "";
-            if($this->getParam("action") == "mediaFolder") {
+            if ($this->getParam("action") == "mediaFolder") {
                 $strDlFolderId = $this->getParam("systemid");
             }
 
@@ -74,7 +74,7 @@ class ElementPortaluploadPortal extends ElementPortal implements PortalElementIn
             $arrTemplate["portaluploadDlfolder"] = $strDlFolderId;
 
             // check if there was an successfull upload before
-            if($this->getParam("uploadSuccess") == "1") {
+            if ($this->getParam("uploadSuccess") == "1") {
                 $arrTemplate["portaluploadSuccess"] = $this->getLang("portaluploadSuccess");
             }
 
@@ -88,7 +88,7 @@ class ElementPortaluploadPortal extends ElementPortal implements PortalElementIn
             $arrTemplate["elementId"] = $this->arrElementData["content_id"];
             $arrTemplate["mediamanagerRepoId"] = $objFilemanagerRepo->getSystemid();
 
-            $strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
+            $strReturn .= $this->objTemplate->fillTemplateFile($arrTemplate, "/module_portalupload/".$this->arrElementData["char1"], "portalupload_uploadform");
 
         }
         else {
@@ -102,17 +102,21 @@ class ElementPortaluploadPortal extends ElementPortal implements PortalElementIn
      * Internal upload handler to handle xml uploads.
      * Used as a backend by the jquery upload plugin.
      * Terminates the request.
+     *
      * @return string
      */
-    private function doAjaxUpload() {
+    private function doAjaxUpload()
+    {
         ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
 
         $strUpload = $this->doUpload(true);
 
-        if($strUpload === true)
+        if ($strUpload === true) {
             $strUpload = $this->getLang("portaluploadSuccess");
-        else
+        }
+        else {
             ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_FORBIDDEN);
+        }
 
         $this->flushCompletePagesCache();
         ResponseObject::getInstance()->sendHeaders();
@@ -128,7 +132,8 @@ class ElementPortaluploadPortal extends ElementPortal implements PortalElementIn
      *
      * @return string
      */
-    private function doUpload($bitJsonResponse = false) {
+    private function doUpload($bitJsonResponse = false)
+    {
         $strReturn = "";
 
         //prepare the folder to be used as a target-folder for the upload
@@ -137,15 +142,15 @@ class ElementPortaluploadPortal extends ElementPortal implements PortalElementIn
 
         //add a special subfolder?
         $strPath = $objFilemanagerRepo->getStrPath();
-        if($this->getParam("portaluploadDlfolder") != "") {
+        if ($this->getParam("portaluploadDlfolder") != "") {
             /** @var $objDownloadfolder MediamanagerFile */
             $objDownloadfolder = Objectfactory::getInstance()->getObject($this->getParam("portaluploadDlfolder"));
 
             //check if the folder is within the current repo
             /** @var $objTemp MediamanagerFile */
             $objTemp = $objDownloadfolder;
-            while(validateSystemid($objTemp->getSystemid()) && ($objTemp instanceof MediamanagerFile || $objTemp instanceof MediamanagerRepo)) {
-                if($objTemp->getSystemid() == $this->arrElementData["char2"]) {
+            while (validateSystemid($objTemp->getSystemid()) && ($objTemp instanceof MediamanagerFile || $objTemp instanceof MediamanagerRepo)) {
+                if ($objTemp->getSystemid() == $this->arrElementData["char2"]) {
                     $strPath = $objDownloadfolder->getStrFilename();
                     break;
                 }
@@ -155,38 +160,43 @@ class ElementPortaluploadPortal extends ElementPortal implements PortalElementIn
         }
 
         //upload the file...
-        if($objFilemanagerRepo->rightRight1()) {
+        if ($objFilemanagerRepo->rightRight1()) {
 
             //Handle the fileupload
             $arrSource = $this->getParam("portaluploadFile");
 
-            $strTarget = $strPath . "/" . createFilename($arrSource["name"]);
+            $strTarget = $strPath."/".createFilename($arrSource["name"]);
 
             $objFilesystem = new Filesystem();
-            if($objFilesystem->isWritable($strPath)) {
+            if ($objFilesystem->isWritable($strPath)) {
 
                 //Check file for correct filters
                 $arrAllowed = explode(",", $objFilemanagerRepo->getStrUploadFilter());
                 $strSuffix = uniStrtolower(uniSubstr($arrSource["name"], uniStrrpos($arrSource["name"], ".")));
-                if($objFilemanagerRepo->getStrUploadFilter() == "" || in_array($strSuffix, $arrAllowed)) {
-                    if($objFilesystem->copyUpload($strTarget, $arrSource["tmp_name"])) {
+                if ($objFilemanagerRepo->getStrUploadFilter() == "" || in_array($strSuffix, $arrAllowed)) {
+                    if ($objFilesystem->copyUpload($strTarget, $arrSource["tmp_name"])) {
 
                         //upload was successfull. try to sync the downloads-archive.
-                        if($objDownloadfolder != null && $objDownloadfolder instanceof MediamanagerFile)
+                        if ($objDownloadfolder != null && $objDownloadfolder instanceof MediamanagerFile) {
                             MediamanagerFile::syncRecursive($objDownloadfolder->getSystemid(), $objDownloadfolder->getStrFilename());
-                        else
+                        }
+                        else {
                             $objFilemanagerRepo->syncRepo();
+                        }
 
                         $this->flushCompletePagesCache();
 
-                        if($bitJsonResponse)
+                        if ($bitJsonResponse) {
                             return true;
+                        }
 
                         //reload the site to display the new file
-                        if(validateSystemid($this->getParam("portaluploadDlfolder")))
+                        if (validateSystemid($this->getParam("portaluploadDlfolder"))) {
                             $this->portalReload(Link::getLinkPortalHref($this->getPagename(), "", "mediaFolder", "uploadSuccess=1", $this->getParam("portaluploadDlfolder")));
-                        else
+                        }
+                        else {
                             $this->portalReload(Link::getLinkPortalHref($this->getPagename(), "", "", $this->getAction(), "uploadSuccess=1", $this->getSystemid()));
+                        }
                     }
                     else {
                         $strReturn .= $this->uploadForm($this->getLang("portaluploadCopyUploadError"));

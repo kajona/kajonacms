@@ -21,7 +21,8 @@ use Kajona\System\System\Filesystem;
  *
  * @targetTable element_universal.content_id
  */
-class ElementDirectorybrowserPortal extends ElementPortal implements PortalElementInterface {
+class ElementDirectorybrowserPortal extends ElementPortal implements PortalElementInterface
+{
 
 
     /**
@@ -29,32 +30,29 @@ class ElementDirectorybrowserPortal extends ElementPortal implements PortalEleme
      *
      * @return string the prepared html-output
      */
-    public function loadData() {
+    public function loadData()
+    {
         $strReturn = "";
 
         //Load all files in the folder
         $objFilesystem = new Filesystem();
         $arrFiles = $objFilesystem->getFilelist($this->arrElementData["char2"]);
 
-
-        $strWrapperTemplateID = $this->objTemplate->readTemplate("/module_directorybrowser/" . $this->arrElementData["char1"], "directorybrowser_wrapper");
-        $strEntryTemplateID = $this->objTemplate->readTemplate("/module_directorybrowser/" . $this->arrElementData["char1"], "directorybrowser_entry");
-
         $strContent = "";
-        foreach($arrFiles as $strOneFile) {
-            $arrDetails = $objFilesystem->getFileDetails($this->arrElementData["char2"] . "/" . $strOneFile);
+        foreach ($arrFiles as $strOneFile) {
+            $arrDetails = $objFilesystem->getFileDetails($this->arrElementData["char2"]."/".$strOneFile);
 
             $arrTemplate = array();
             $arrTemplate["file_name"] = $arrDetails["filename"];
-            $arrTemplate["file_href"] = _webpath_ . $this->arrElementData["char2"] . "/" . $strOneFile;
+            $arrTemplate["file_href"] = _webpath_.$this->arrElementData["char2"]."/".$strOneFile;
             $arrTemplate["file_date"] = timeToString($arrDetails["filechange"]);
             $arrTemplate["file_size"] = bytesToString($arrDetails["filesize"]);
 
-            $strContent .= $this->fillTemplate($arrTemplate, $strEntryTemplateID);
+            $strContent .= $this->objTemplate->fillTemplateFile($arrTemplate, "/module_directorybrowser/".$this->arrElementData["char1"], "directorybrowser_entry");
         }
 
 
-        $strReturn .= $this->fillTemplate(array("files" => $strContent), $strWrapperTemplateID);
+        $strReturn .= $this->objTemplate->fillTemplateFile(array("files" => $strContent), "/module_directorybrowser/".$this->arrElementData["char1"], "directorybrowser_wrapper");
 
         return $strReturn;
     }

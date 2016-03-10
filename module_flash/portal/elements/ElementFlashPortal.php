@@ -17,7 +17,8 @@ use Kajona\Pages\Portal\PortalElementInterface;
  * @author jschroeter@kajona.de
  * @targetTable element_universal.content_id
  */
-class ElementFlashPortal extends ElementPortal implements PortalElementInterface {
+class ElementFlashPortal extends ElementPortal implements PortalElementInterface
+{
 
 
     /**
@@ -25,7 +26,8 @@ class ElementFlashPortal extends ElementPortal implements PortalElementInterface
      *
      * @return string the prepared html-output
      */
-    public function loadData() {
+    public function loadData()
+    {
 
         $arrTemplate = array();
         $arrTemplate["systemid"] = $this->getSystemid();
@@ -33,8 +35,7 @@ class ElementFlashPortal extends ElementPortal implements PortalElementInterface
         $arrTemplate["width"] = $this->arrElementData["int1"];
         $arrTemplate["height"] = $this->arrElementData["int2"];
 
-        $strTemplateID = $this->objTemplate->readTemplate("/module_flash/".$this->arrElementData["char2"], "flash");
-        $strReturn = $this->fillTemplate($arrTemplate, $strTemplateID);
+        $strReturn = $this->objTemplate->fillTemplateFile($arrTemplate, "/module_flash/".$this->arrElementData["char2"], "flash");
 
         return $strReturn;
     }

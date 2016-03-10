@@ -1243,7 +1243,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
 HTML;
 
 
-        $strReturn .= $this->objToolkit->dataTable(null, $arrRows);
+        $strReturn .= $this->objToolkit->dataTable(array(), $arrRows);
 
         $strReturn .= "<script type=\"text/javascript\">
                 KAJONA.admin.permissions.toggleEmtpyRows('".$this->getLang("permissions_toggle_visible", "system")."', '".$this->getLang("permissions_toggle_hidden", "system")."', 'table.kajona-data-table tr');

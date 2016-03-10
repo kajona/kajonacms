@@ -197,7 +197,7 @@ class WorkflowsAdmin extends AdminSimple implements AdminInterface
             $strCreator .= $objUser->getStrUsername();
         }
         $arrRows[] = array($this->getLang("workflow_owner"), $strCreator);
-        $strReturn .= $this->objToolkit->dataTable(null, $arrRows);
+        $strReturn .= $this->objToolkit->dataTable(array(), $arrRows);
 
 
         $strReturn .= $this->objToolkit->formHeadline($this->getLang("workflow_params"));
@@ -211,7 +211,7 @@ class WorkflowsAdmin extends AdminSimple implements AdminInterface
         $arrRows[] = array($this->getLang("workflow_text"), $objWorkflow->getStrText());
         $arrRows[] = array($this->getLang("workflow_text2"), $objWorkflow->getStrText2());
         $arrRows[] = array($this->getLang("workflow_text3"), $objWorkflow->getStrText3());
-        $strReturn .= $this->objToolkit->dataTable(null, $arrRows);
+        $strReturn .= $this->objToolkit->dataTable(array(), $arrRows);
 
         $strReturn .= $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "list"));
         $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_back"));

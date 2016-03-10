@@ -148,22 +148,19 @@ class ElementPortalloginPortal extends ElementPortal implements PortalElementInt
         }
         else {
 
-            $strTemplateID = $this->objTemplate->readTemplate("/module_portallogin/".$this->arrElementData["portallogin_template"], "portallogin_newpwdform");
             $arrTemplate = array();
-
             //check sysid & authcode
             $objUser = new UserUser($this->getParam("systemid"));
 
 
             if ($objUser->getStrAuthcode() != "" && $objUser->getStrAuthcode() == $this->getParam("authcode")) {
-
                 $arrTemplate["portallogin_action"] = "portalResetPwd";
                 $arrTemplate["portallogin_systemid"] = $this->getParam("systemid");
                 $arrTemplate["portallogin_authcode"] = $this->getParam("authcode");
                 $arrTemplate["portallogin_resetHint"] = "portalLoginReset";
                 $arrTemplate["portallogin_elsystemid"] = $this->arrElementData["content_id"];
                 $arrTemplate["action"] = Link::getLinkPortalHref($this->getPagename());
-                $strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
+                $strReturn .= $this->objTemplate->fillTemplateFile($arrTemplate, "/module_portallogin/".$this->arrElementData["portallogin_template"], "portallogin_newpwdform");
 
             }
             else {
@@ -217,14 +214,12 @@ class ElementPortalloginPortal extends ElementPortal implements PortalElementInt
 
         }
         else {
-
-            $strTemplateID = $this->objTemplate->readTemplate("/module_portallogin/".$this->arrElementData["portallogin_template"], "portallogin_resetform");
             $arrTemplate = array();
             $arrTemplate["portallogin_action"] = "portalLoginReset";
             $arrTemplate["portallogin_resetHint"] = "portalLoginReset";
             $arrTemplate["portallogin_elsystemid"] = $this->arrElementData["content_id"];
             $arrTemplate["action"] = Link::getLinkPortalHref($this->getPagename());
-            $strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
+            $strReturn .= $this->objTemplate->fillTemplateFile($arrTemplate, "/module_portallogin/".$this->arrElementData["portallogin_template"], "portallogin_resetform");
         }
 
         return $strReturn;
@@ -240,8 +235,6 @@ class ElementPortalloginPortal extends ElementPortal implements PortalElementInt
      */
     private function loginForm()
     {
-        $strTemplateID = $this->objTemplate->readTemplate("/module_portallogin/".$this->arrElementData["portallogin_template"], "portallogin_loginform");
-
         $arrTemplate = array();
         $arrTemplate["portallogin_action"] = "portalLogin";
         $arrTemplate["portallogin_elsystemid"] = $this->arrElementData["content_id"];
@@ -251,7 +244,7 @@ class ElementPortalloginPortal extends ElementPortal implements PortalElementInt
         $arrTemplate["portallogin_forgotpwdlinksimple"] = Link::getLinkPortal($strPwdPage, "", "", $this->getLang("pwdForgotLink"), "portalLoginReset");
 
         $arrTemplate["action"] = Link::getLinkPortalHref($this->getPagename());
-        return $this->fillTemplate($arrTemplate, $strTemplateID);
+        return $this->objTemplate->fillTemplateFile($arrTemplate, "/module_portallogin/".$this->arrElementData["portallogin_template"], "portallogin_loginform");
     }
 
     /**
@@ -261,7 +254,6 @@ class ElementPortalloginPortal extends ElementPortal implements PortalElementInt
      */
     private function statusArea()
     {
-        $strTemplateID = $this->objTemplate->readTemplate("/module_portallogin/".$this->arrElementData["portallogin_template"], "portallogin_status");
         $arrTemplate = array();
         $arrTemplate["loggedin_label"] = $this->getLang("loggedin_label");
         $arrTemplate["username"] = $this->objSession->getUsername();
@@ -275,7 +267,7 @@ class ElementPortalloginPortal extends ElementPortal implements PortalElementInt
 
         $arrTemplate["editprofilelink"] = Link::getLinkPortal($strProfileeditpage, "", "", $this->getLang("editprofilelink"), "portalEditProfile", "&pl_systemid=".$this->arrElementData["content_id"]);
         $arrTemplate["editprofilelinksimple"] = Link::getLinkPortal($strProfileeditpage, "", "", $this->getLang("editprofilelink"), "portalEditProfile");
-        return $this->fillTemplate($arrTemplate, $strTemplateID);
+        return $this->objTemplate->fillTemplateFile($arrTemplate, "/module_portallogin/".$this->arrElementData["portallogin_template"], "portallogin_status");
     }
 
 
@@ -308,12 +300,6 @@ class ElementPortalloginPortal extends ElementPortal implements PortalElementInt
         }
 
         if ($bitForm) {
-            if ($this->arrElementData["portallogin_editmode"] == 1) {
-                $strTemplateID = $this->objTemplate->readTemplate("/module_portallogin/".$this->arrElementData["portallogin_template"], "portallogin_userdataform_complete");
-            }
-            else {
-                $strTemplateID = $this->objTemplate->readTemplate("/module_portallogin/".$this->arrElementData["portallogin_template"], "portallogin_userdataform_minimal");
-            }
             $arrTemplate = array();
 
 
@@ -342,12 +328,11 @@ class ElementPortalloginPortal extends ElementPortal implements PortalElementInt
                 $arrTemplate["formErrors"] = "";
                 if (count($arrErrors) > 0) {
                     foreach ($arrErrors as $strOneError) {
-                        $strErrTemplate = $this->objTemplate->readTemplate("/module_portallogin/".$this->arrElementData["portallogin_template"], "errorRow");
-                        $arrTemplate["formErrors"] .= "".$this->fillTemplate(array("error" => $strOneError), $strErrTemplate);
+                        $arrTemplate["formErrors"] .= "".$this->objTemplate->fillTemplateFile(array("error" => $strOneError), "/module_portallogin/".$this->arrElementData["portallogin_template"], "errorRow");
                     }
                 }
 
-                return $this->fillTemplate($arrTemplate, $strTemplateID);
+                return $this->objTemplate->fillTemplateFile($arrTemplate, "/module_portallogin/".$this->arrElementData["portallogin_template"], $this->arrElementData["portallogin_editmode"] == 1 ? "portallogin_userdataform_complete" : "portallogin_userdataform_minimal");
             }
             else {
                 return "Login provider not supported.";

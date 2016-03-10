@@ -46,11 +46,7 @@ class RatingPortal extends PortalController implements PortalInterface
 
         $intNumberOfIcons = RatingRate::$intMaxRatingValue;
 
-        //read the templates
-        $strTemplateBarId = $this->objTemplate->readTemplate("/module_rating/".$strTemplate, "rating_bar");
-
         if ($bitRatingAllowed && $bitPermissions) {
-            $strTemplateIconId = $this->objTemplate->readTemplate("/module_rating/".$strTemplate, "rating_icon");
 
             for ($intI = 1; $intI <= $intNumberOfIcons; $intI++) {
                 $arrTemplate = array();
@@ -59,7 +55,7 @@ class RatingPortal extends PortalController implements PortalInterface
                 $arrTemplate["rating_icon_onclick"] = "KAJONA.portal.rating.rate('".$strSystemid."', '".$intI.".0', ".$intNumberOfIcons."); return false;";
                 $arrTemplate["rating_icon_title"] = $this->getLang("rating_rate1").$intI.$this->getLang("rating_rate2");
 
-                $strIcons .= $this->fillTemplate($arrTemplate, $strTemplateIconId);
+                $strIcons .= $this->objTemplate->fillTemplateFile($arrTemplate, "/module_rating/".$strTemplate, "rating_icon");
             }
         }
         else {
@@ -71,14 +67,15 @@ class RatingPortal extends PortalController implements PortalInterface
             }
         }
 
-        return $this->fillTemplate(
+        return $this->objTemplate->fillTemplateFile(
             array(
                 "rating_icons"         => $strIcons, "rating_bar_title" => $strRatingBarTitle,
                 "rating_rating"        => $floatRating, "rating_hits" => $intRatings,
                 "rating_ratingPercent" => ($floatRating / $intNumberOfIcons * 100),
                 "system_id"            => $strSystemid, 2
             ),
-            $strTemplateBarId
+            "/module_rating/".$strTemplate,
+            "rating_bar"
         );
     }
 

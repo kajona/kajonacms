@@ -135,7 +135,6 @@ class RightAdmin extends AdminController implements AdminInterface {
             }
 
             //Read the template
-            $strTemplateRowID = $this->objTemplate->readTemplate("/elements.tpl", "rights_form_row");
             $arrTemplateTotal["rows"] = "";
             //Inserting Rows
             foreach($arrGroups as $objSingleGroup) {
@@ -174,11 +173,10 @@ class RightAdmin extends AdminController implements AdminInterface {
 
 
                 //And Print it to template
-                $arrTemplateTotal["rows"] .= $this->objTemplate->fillTemplate($arrTemplateRow, $strTemplateRowID);
+                $arrTemplateTotal["rows"] .= $this->objTemplate->fillTemplateFile($arrTemplateRow, "/elements.tpl", "rights_form_row");
             }
 
             //Build the inherit-box
-            $strTemplateInheritID = $this->objTemplate->readTemplate("/elements.tpl", "rights_form_inherit");
             $arrTemplateInherit = array();
             $arrTemplateInherit["title"] = $this->getLang("titel_erben");
             $arrTemplateInherit["name"] = "inherit";
@@ -189,10 +187,9 @@ class RightAdmin extends AdminController implements AdminInterface {
                 $arrTemplateInherit["checked"] = "";
             }
 
-            $arrTemplateTotal["inherit"] = $this->objTemplate->fillTemplate($arrTemplateInherit, $strTemplateInheritID);
+            $arrTemplateTotal["inherit"] = $this->objTemplate->fillTemplateFile($arrTemplateInherit, "/elements.tpl", "rights_form_inherit");
 
             //Creating the output, starting with the header
-            $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "rights_form_header");
             $arrTemplate = array();
             $arrTemplate["record"] = $strTitle;
             //Backlink
@@ -203,11 +200,10 @@ class RightAdmin extends AdminController implements AdminInterface {
                 $arrTemplate["backlink"] = Link::getLinkAdminManual("href=\"" . $arrHistory[0] . "&" . $arrHistory[1]."\"", $this->getLang("commons_back"));
 
             $arrTemplate["desc"] = $this->getLang("desc");
-            $strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+            $strReturn .= $this->objTemplate->fillTemplateFile($arrTemplate, "/elements.tpl", "rights_form_header");
             //Followed by the form
             $strReturn .= $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "saverights"), "rightsForm", "", "KAJONA.admin.permissions.submitForm(); return false;");
-            $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "rights_form_form");
-            $strReturn .= $this->objTemplate->fillTemplate($arrTemplateTotal, $strTemplateID);
+            $strReturn .= $this->objTemplate->fillTemplateFile($arrTemplateTotal, "/elements.tpl", "rights_form_form");
             $strReturn .= $this->objToolkit->formInputHidden("systemid", $strSystemID);
 
             //place all inheritance-rights as hidden-fields to support the change-js script

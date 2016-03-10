@@ -63,7 +63,6 @@ class GuestbookPortal extends PortalController implements PortalInterface
         /** @var GuestbookPost $objOnePost */
         foreach ($objArraySectionIterator as $objOnePost) {
             if ($objOnePost->rightView()) {
-                $strTemplatePostID = $this->objTemplate->readTemplate("/module_guestbook/".$this->arrElementData["guestbook_template"], "post");
                 $arrTemplatePost = array();
                 $arrTemplatePost["post_name"] = "<a href=\"mailto:".$objOnePost->getStrGuestbookPostEmail()."\">".$objOnePost->getStrGuestbookPostName()."</a>";
                 $arrTemplatePost["post_name_plain"] = $objOnePost->getStrGuestbookPostName();
@@ -72,21 +71,19 @@ class GuestbookPortal extends PortalController implements PortalInterface
                 //replace encoded newlines
                 $arrTemplatePost["post_text"] = uniStrReplace("&lt;br /&gt;", "<br />", $objOnePost->getStrGuestbookPostText());
                 $arrTemplatePost["post_date"] = timeToString($objOnePost->getIntGuestbookPostDate());
-                $arrTemplate["liste_posts"] .= $this->objTemplate->fillTemplate($arrTemplatePost, $strTemplatePostID, false);
+                $arrTemplate["liste_posts"] .= $this->objTemplate->fillTemplateFile($arrTemplatePost, "/module_guestbook/".$this->arrElementData["guestbook_template"], "post", false);
             }
         }
 
         //link to the post-form & pageview links
         if ($objBook->rightRight1()) {
-            $strTemplateID = $this->objTemplate->readTemplate("/module_guestbook/".$this->arrElementData["guestbook_template"], "insert_link");
-            $arrTemplate["link_newentry"] = $this->fillTemplate(array("link_href" => Link::getLinkPortalHref(($this->getParam("page") ? $this->getParam("page") : ""), "", "insertGuestbook")), $strTemplateID);
+            $arrTemplate["link_newentry"] = $this->objTemplate->fillTemplateFile(array("link_href" => Link::getLinkPortalHref(($this->getParam("page") ? $this->getParam("page") : ""), "", "insertGuestbook")), "/module_guestbook/".$this->arrElementData["guestbook_template"], "insert_link");
         }
         $arrTemplate["link_forward"] = $arrObjPosts["strForward"];
         $arrTemplate["link_pages"] = $arrObjPosts["strPages"];
         $arrTemplate["link_back"] = $arrObjPosts["strBack"];
 
-        $strTemplateID = $this->objTemplate->readTemplate("/module_guestbook/".$this->arrElementData["guestbook_template"], "list");
-        $strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
+        $strReturn .= $this->objTemplate->fillTemplateFile($arrTemplate, "/module_guestbook/".$this->arrElementData["guestbook_template"], "list");
         return $strReturn."";
     }
 
@@ -99,19 +96,16 @@ class GuestbookPortal extends PortalController implements PortalInterface
     protected function actionInsertGuestbook()
     {
         $strReturn = "";
-        $strTemplateID = $this->objTemplate->readTemplate("/module_guestbook/".$this->arrElementData["guestbook_template"], "entry_form");
 
         $strErrors = "";
         $arrErrorFields = array();
         if (count($this->arrErrors) > 0) {
-            $strErrorTemplateID = $this->objTemplate->readTemplate("/module_guestbook/".$this->arrElementData["guestbook_template"], "error_row");
             foreach ($this->arrErrors as $strKey => $strOneError) {
-                $strErrors .= $this->fillTemplate(array("error" => $strOneError), $strErrorTemplateID);
+                $strErrors .= $this->objTemplate->fillTemplateFile(array("error" => $strOneError), "/module_guestbook/".$this->arrElementData["guestbook_template"], "error_row");
                 $arrErrorFields[] = "'{$strKey}'";
             }
 
-            $strErrorWrapperTemplateID = $this->objTemplate->readTemplate("/module_guestbook/".$this->arrElementData["guestbook_template"], "errors");
-            $strErrors = $this->fillTemplate(array("error_list" => $strErrors), $strErrorWrapperTemplateID);
+            $strErrors = $this->objTemplate->fillTemplateFile(array("error_list" => $strErrors), "/module_guestbook/".$this->arrElementData["guestbook_template"], "errors");
         }
 
         //update elements
@@ -130,7 +124,7 @@ class GuestbookPortal extends PortalController implements PortalInterface
         }
 
         $arrTemplate["action"] = getLinkPortalHref($this->getPagename(), "", "saveGuestbook");
-        $strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
+        $strReturn .= $this->objTemplate->fillTemplateFile($arrTemplate, "/module_guestbook/".$this->arrElementData["guestbook_template"], "entry_form");
         return $strReturn;
     }
 

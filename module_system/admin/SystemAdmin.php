@@ -323,7 +323,7 @@ class SystemAdmin extends AdminSimple implements AdminInterface
         $arrPlugins = $objPluginmanager->getPlugins();
 
         foreach ($arrPlugins as $objOnePlugin) {
-            $strContent = $this->objToolkit->dataTable(null, $objOnePlugin->getArrContent());
+            $strContent = $this->objToolkit->dataTable(array(), $objOnePlugin->getArrContent());
             $strReturn .= $this->objToolkit->getFieldset($objOnePlugin->getStrTitle(), $strContent);
         }
 

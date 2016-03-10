@@ -103,7 +103,7 @@ class PagesContentAdmin extends AdminSimple implements AdminInterface
             array($this->getLang("lastuserTitle"), $objPage->getLastEditUser()),
             array($this->getLang("lasteditTitle"), timeToString($objPage->getIntLmTime()))
         );
-        $strReturn .= $this->objToolkit->dataTable(null, $arrInfoRows);
+        $strReturn .= $this->objToolkit->dataTable(array(), $arrInfoRows);
         $strReturn .= $this->objToolkit->divider();
         return $strReturn;
     }

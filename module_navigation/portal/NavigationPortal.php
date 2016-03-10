@@ -209,8 +209,7 @@ class NavigationPortal extends PortalController implements PortalInterface
         }
 
         //wrap into the wrapper-section
-        $strLevelTemplateID = $this->objTemplate->readTemplate("/module_navigation/".$this->arrElementData["navigation_template"], "level_".$intLevel."_wrapper");
-        $strWrappedLevel = $this->fillTemplate(array("level".$intLevel => $strReturn), $strLevelTemplateID);
+        $strWrappedLevel = $this->objTemplate->fillTemplateFile(array("level".$intLevel => $strReturn), "/module_navigation/".$this->arrElementData["navigation_template"], "level_".$intLevel."_wrapper");
         if (uniStrlen($strWrappedLevel) > 0) {
             $strReturn = $strWrappedLevel;
         }
@@ -419,7 +418,7 @@ class NavigationPortal extends PortalController implements PortalInterface
         if ($objPageData != null) {
             //analyze the placeholders on the page, faster than iterating the the elements available in the db
             $strTemplateId = $this->objTemplate->readTemplate("/module_pages/".$objPageData->getStrTemplate());
-            $arrElementsTemplate = array_merge($this->objTemplate->getElements($strTemplateId, 0), $this->objTemplate->getElements($strTemplateId, 1));
+            $arrElementsTemplate = array_merge($this->objTemplate->getElements($strTemplateId, 0), $this->objTemplate->getElements($strTemplateId, 1)); //TODO: this will fail with blocks
 
             //loop elements to remove navigation-elements. to do so, get the current elements-name (maybe the user renamed the default "navigation")
             foreach ($arrElementsTemplate as $arrPlaceholder) {

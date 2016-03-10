@@ -68,23 +68,17 @@ class FormularContact extends PortalController implements PortalInterface
             $strError = "";
             $arrErrorFields = array();
             //Collect errors
-            $strTemplateErrorID = $this->objTemplate->readTemplate("/module_form/" . $this->arrElementData["formular_template"], "errorrow");
             foreach($this->arrError as $strKey => $strOneError) {
-                $strError .= $this->fillTemplate(array("error" => $strOneError), $strTemplateErrorID);
+                $strError .= $this->objTemplate->fillTemplateFile(array("error" => $strOneError), "/module_form/" . $this->arrElementData["formular_template"], "errorrow");
                 $arrErrorFields[] = "'{$strKey}'";
             }
             //and the complete form
-            $strTemplateErrorFormid = $this->objTemplate->readTemplate("/module_form/" . $this->arrElementData["formular_template"], "errors");
-            $arrParams["error_list"] = $this->fillTemplate(array("error_list" => $strError), $strTemplateErrorFormid);
-
+            $arrParams["error_list"] = $this->objTemplate->fillTemplateFile(array("error_list" => $strError), "/module_form/" . $this->arrElementData["formular_template"], "errors");
             $arrParams["error_fields"] = implode(",", $arrErrorFields);
 
         }
         //and the form itself
-        $strTemplateformId = $this->objTemplate->readTemplate("/module_form/".$this->arrElementData["formular_template"], "contactform");
-        //get actions
-
-        $strReturn .= $this->fillTemplate($arrParams, $strTemplateformId);
+        $strReturn .= $this->objTemplate->fillTemplateFile($arrParams, "/module_form/".$this->arrElementData["formular_template"], "contactform");
         return $strReturn;
     }
 
@@ -140,13 +134,9 @@ class FormularContact extends PortalController implements PortalInterface
         $objEmail = new Mail();
 
         //Template
-        $strMailTemplateID = $this->objTemplate->readTemplate("/module_form/".$this->arrElementData["formular_template"], "email");
-        $this->objTemplate->setTemplate($this->fillTemplate($this->getAllParams(), $strMailTemplateID));
-        $this->objTemplate->deletePlaceholder();
-
+        $strText = ($this->objTemplate->fillTemplateFile($this->getAllParams(), "/module_form/".$this->arrElementData["formular_template"], "email"));
         $objScriptlets = new ScriptletHelper();
-        $strText = $objScriptlets->processString($this->objTemplate->getTemplate(), ScriptletInterface::BIT_CONTEXT_PORTAL_PAGE);
-
+        $strText = $objScriptlets->processString($strText, ScriptletInterface::BIT_CONTEXT_PORTAL_PAGE);
 
         $objEmail->setText($strText);
         $objEmail->addTo($this->arrElementData["formular_email"]);
@@ -157,7 +147,7 @@ class FormularContact extends PortalController implements PortalInterface
                 $strReturn = $this->arrElementData["formular_success"];
             }
             else {
-                $strReturn = $this->objTemplate->fillTemplate(array(), $this->objTemplate->readTemplate("/module_form/".$this->arrElementData["formular_template"], "message_success"));
+                $strReturn = $this->objTemplate->fillTemplateFile(array(), "/module_form/".$this->arrElementData["formular_template"], "message_success");
             }
         }
         else {
@@ -165,7 +155,7 @@ class FormularContact extends PortalController implements PortalInterface
                 $strReturn = $this->arrElementData["formular_error"];
             }
             else {
-                $strReturn = $this->objTemplate->fillTemplate(array(), $this->objTemplate->readTemplate("/module_form/".$this->arrElementData["formular_template"], "message_error"));
+                $strReturn = $this->objTemplate->fillTemplateFile(array(), "/module_form/".$this->arrElementData["formular_template"], "message_error");
             }
         }
 

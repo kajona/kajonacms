@@ -15,7 +15,8 @@ use Kajona\Pages\Portal\PortalElementInterface;
  * @author jschroeter@kajona.de
  * @targetTable element_universal.content_id
  */
-class ElementFacebooklikeboxPortal extends ElementPortal implements PortalElementInterface {
+class ElementFacebooklikeboxPortal extends ElementPortal implements PortalElementInterface
+{
 
 
     /**
@@ -23,12 +24,12 @@ class ElementFacebooklikeboxPortal extends ElementPortal implements PortalElemen
      *
      * @return string the prepared html-output
      */
-    public function loadData() {
+    public function loadData()
+    {
         $strLanguage = $this->getStrPortalLanguage();
         //load the template
-        $strTemplateID = $this->objTemplate->readTemplate("/module_facebooklikebox/".$this->arrElementData["char1"], "facebooklikebox");
-        $strReturn = $this->fillTemplate(array("portallanguage" => $strLanguage), $strTemplateID);
-        return "adfsdfs".$strReturn;
+        $strReturn = $this->objTemplate->fillTemplateFile(array("portallanguage" => $strLanguage), "/module_facebooklikebox/".$this->arrElementData["char1"], "facebooklikebox");
+        return $strReturn;
     }
 
 }

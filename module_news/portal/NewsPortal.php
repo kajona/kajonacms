@@ -35,21 +35,23 @@ use Kajona\System\System\TemplateMapper;
  * @module news
  * @moduleId _news_module_id_
  */
-class NewsPortal extends PortalController implements PortalInterface {
+class NewsPortal extends PortalController implements PortalInterface
+{
 
     /**
      * Constructor
      *
      * @param mixed $arrElementData
      */
-    public function __construct($arrElementData = array(), $strSystemid = "") {
+    public function __construct($arrElementData = array(), $strSystemid = "")
+    {
         parent::__construct($arrElementData, $strSystemid);
 
         $strAction = $this->getParam("action");
-        if($strAction == "newsDetail" && $this->arrElementData["news_view"] == 1) {
+        if ($strAction == "newsDetail" && $this->arrElementData["news_view"] == 1) {
             $this->setAction("newsDetail");
         }
-        elseif(!isset($this->arrElementData["news_view"]) || $this->arrElementData["news_view"] == 0 || $strAction == "newsList") {
+        elseif (!isset($this->arrElementData["news_view"]) || $this->arrElementData["news_view"] == 0 || $strAction == "newsList") {
             $this->setAction("newsList");
         }
     }
@@ -59,7 +61,8 @@ class NewsPortal extends PortalController implements PortalInterface {
      *
      * @return void
      */
-    protected function actionList() {
+    protected function actionList()
+    {
 
     }
 
@@ -69,10 +72,11 @@ class NewsPortal extends PortalController implements PortalInterface {
      *
      * @return string
      */
-    protected function actionNewsList() {
+    protected function actionNewsList()
+    {
         $strReturn = "";
         //Load news using the correct filter
-        if($this->getParam("filterid") != "") {
+        if ($this->getParam("filterid") != "") {
             $strFilterId = $this->getParam("filterid");
         }
         else {
@@ -80,7 +84,7 @@ class NewsPortal extends PortalController implements PortalInterface {
         }
 
         $strPageview = 1;
-        if($this->getParam("pv") != 1 && $this->getSystemid() == $this->arrElementData["content_id"]) {
+        if ($this->getParam("pv") != 1 && $this->getSystemid() == $this->arrElementData["content_id"]) {
             $strPageview = $this->getParam("pv");
         }
 
@@ -107,12 +111,13 @@ class NewsPortal extends PortalController implements PortalInterface {
 
         //Check rights
 
-        if(!$objArraySectionIterator->valid())
+        if (!$objArraySectionIterator->valid()) {
             $strReturn .= $this->getLang("news_list_empty");
+        }
 
-        foreach($objArraySectionIterator as $objOneNews) {
+        foreach ($objArraySectionIterator as $objOneNews) {
             /** @var $objOneNews NewsNews */
-            if($objOneNews instanceof NewsNews && $objOneNews->rightView()) {
+            if ($objOneNews instanceof NewsNews && $objOneNews->rightView()) {
                 $objMapper = new TemplateMapper($objOneNews);
 
                 //generate a link to the details
@@ -127,19 +132,19 @@ class NewsPortal extends PortalController implements PortalInterface {
                 $objMapper->addPlaceholder("news_text", $objOneNews->getStrText());
 
                 //reset more link? -> no text, no image and no redirect page
-                if(uniStrlen(htmlStripTags($objOneNews->getStrText())) == 0 && uniStrlen($objOneNews->getStrImage()) == 0 && ($objOneNews->getIntRedirectEnabled() == "0" || $objOneNews->getStrRedirectPage() == "")) {
+                if (uniStrlen(htmlStripTags($objOneNews->getStrText())) == 0 && uniStrlen($objOneNews->getStrImage()) == 0 && ($objOneNews->getIntRedirectEnabled() == "0" || $objOneNews->getStrRedirectPage() == "")) {
                     $objMapper->addPlaceholder("news_more_link", "");
                 }
 
                 //postacomment
                 $arrPAC = $this->loadPostacomments($objOneNews->getSystemid(), ($objOneNews->getStrImage() != "" ? "news_list_image" : "news_list"));
-                if($arrPAC != null) {
+                if ($arrPAC != null) {
                     $objMapper->addPlaceholder("news_nrofcomments", $arrPAC["nrOfComments"]);
                     $objMapper->addPlaceholder("news_commentlist", $arrPAC["commentList"]);
                 }
 
                 //ratings
-                if($objOneNews->getFloatRating() !== null) {
+                if ($objOneNews->getFloatRating() !== null) {
                     /** @var $objRating RatingPortal */
                     $objRating = SystemModule::getModuleByName("rating")->getPortalInstanceOfConcreteModule();
                     $objMapper->addPlaceholder(
@@ -158,7 +163,7 @@ class NewsPortal extends PortalController implements PortalInterface {
                 $objMapper->addPlaceholder("news_categories", $this->renderCategoryTitles($objOneNews));
 
                 //load template section with or without image?
-                if($objOneNews->getStrImage() != "") {
+                if ($objOneNews->getStrImage() != "") {
                     $objMapper->addPlaceholder("news_image", urlencode($objOneNews->getStrImage()));
                     $strOneNews = $objMapper->writeToTemplate("/module_news/".$this->arrElementData["news_template"], "news_list_image");
                 }
@@ -185,7 +190,7 @@ class NewsPortal extends PortalController implements PortalInterface {
         $arrWrapperTemplate["link_forward"] = $arrNews["strForward"];
         $arrWrapperTemplate["link_pages"] = $arrNews["strPages"];
         $arrWrapperTemplate["link_back"] = $arrNews["strBack"];
-        $strReturn = $this->fillTemplate($arrWrapperTemplate, $this->objTemplate->readTemplate("/module_news/" . $this->arrElementData["news_template"], "news_list_wrapper"));
+        $strReturn = $this->objTemplate->fillTemplateFile($arrWrapperTemplate, "/module_news/".$this->arrElementData["news_template"], "news_list_wrapper");
 
         return $strReturn;
     }
@@ -195,14 +200,15 @@ class NewsPortal extends PortalController implements PortalInterface {
      *
      * @return string
      */
-    protected function actionNewsDetail() {
+    protected function actionNewsDetail()
+    {
         $strReturn = "";
         /** @var $objNews NewsNews */
         $objNews = Objectfactory::getInstance()->getObject($this->getSystemid());
-        if($objNews != null && $objNews instanceof NewsNews && $objNews->rightView() && $objNews->getIntRecordStatus() == "1") {
+        if ($objNews != null && $objNews instanceof NewsNews && $objNews->rightView() && $objNews->getIntRecordStatus() == "1") {
 
             //see if we should generate a redirect instead
-            if($objNews->getIntRedirectEnabled() == "1" && $objNews->getStrRedirectPage() != "") {
+            if ($objNews->getIntRedirectEnabled() == "1" && $objNews->getStrRedirectPage() != "") {
                 $this->portalReload(Link::getLinkPortalHref($objNews->getStrRedirectPage()));
                 return "<script type='text/javascript'>window.location.replace('".Link::getLinkPortalHref($objNews->getStrRedirectPage())."');</script>";
             }
@@ -210,7 +216,7 @@ class NewsPortal extends PortalController implements PortalInterface {
             //Load record
             $objMapper = new TemplateMapper($objNews);
 
-            $objMapper->addPlaceholder("news_back_link", "<a href=\"javascript:history.back();\">" . $this->getLang("news_zurueck") . "</a>");
+            $objMapper->addPlaceholder("news_back_link", "<a href=\"javascript:history.back();\">".$this->getLang("news_zurueck")."</a>");
             $objMapper->addPlaceholder("news_start_date", dateToString($objNews->getObjStartDate(), false));
             $objMapper->addPlaceholder("news_id", $objNews->getSystemid());
             $objMapper->addPlaceholder("news_title", $objNews->getStrTitle());
@@ -219,13 +225,13 @@ class NewsPortal extends PortalController implements PortalInterface {
 
             //postacomment
             $arrPAC = $this->loadPostacomments($objNews->getSystemid(), ($objNews->getStrImage() != "" ? "news_detail_image" : "news_detail"));
-            if($arrPAC != null) {
+            if ($arrPAC != null) {
                 $objMapper->addPlaceholder("news_nrofcomments", $arrPAC["nrOfComments"]);
                 $objMapper->addPlaceholder("news_commentlist", $arrPAC["commentList"]);
             }
 
             //ratings
-            if($objNews->getFloatRating() !== null) {
+            if ($objNews->getFloatRating() !== null) {
                 /** @var $objRating RatingPortal */
                 $objRating = SystemModule::getModuleByName("rating")->getPortalInstanceOfConcreteModule();
                 $objMapper->addPlaceholder(
@@ -244,7 +250,7 @@ class NewsPortal extends PortalController implements PortalInterface {
             $objMapper->addPlaceholder("news_categories", $this->renderCategoryTitles($objNews));
 
             //load template section with or without image?
-            if($objNews->getStrImage() != "") {
+            if ($objNews->getStrImage() != "") {
                 $objMapper->addPlaceholder("news_image", urlencode($objNews->getStrImage()));
                 $strReturn .= $objMapper->writeToTemplate("/module_news/".$this->arrElementData["news_template"], "news_detail_image");
             }
@@ -272,22 +278,24 @@ class NewsPortal extends PortalController implements PortalInterface {
 
     /**
      * Renders the news category titles
+     *
      * @param NewsNews $objNews
      *
      * @return string
      */
-    private function renderCategoryTitles(NewsNews $objNews) {
-        if(count(NewsCategory::getNewsMember($objNews->getSystemid())) == 0)
+    private function renderCategoryTitles(NewsNews $objNews)
+    {
+        if (count(NewsCategory::getNewsMember($objNews->getSystemid())) == 0) {
             return "";
+        }
 
         $strCategories = "";
-        foreach(NewsCategory::getNewsMember($objNews->getSystemid()) as $objCat) {
+        foreach (NewsCategory::getNewsMember($objNews->getSystemid()) as $objCat) {
             $objMapper = new TemplateMapper($objCat);
             $strCategories .= $objMapper->writeToTemplate("/module_news/".$this->arrElementData["news_template"], "categories_category");
         }
 
-        $strWrapper = $this->objTemplate->readTemplate("/module_news/".$this->arrElementData["news_template"], "categories_wrapper");
-        return $this->objTemplate->fillTemplate(array("categories" => $strCategories), $strWrapper);
+        return $this->objTemplate->fillTemplateFile(array("categories" => $strCategories), "/module_news/".$this->arrElementData["news_template"], "categories_wrapper");
     }
 
     /**
@@ -298,13 +306,14 @@ class NewsPortal extends PortalController implements PortalInterface {
      *
      * @return array
      */
-    private function loadPostacomments($strNewsSystemid, $strTemplateSection) {
-        if($this->isPostacommentOnTemplate($this->arrElementData["news_template"], $strTemplateSection)) {
+    private function loadPostacomments($strNewsSystemid, $strTemplateSection)
+    {
+        if ($this->isPostacommentOnTemplate($this->arrElementData["news_template"], $strTemplateSection)) {
 
             $objPacModule = SystemModule::getModuleByName("postacomment");
 
             $arrReturn = array();
-            if($objPacModule != null) {
+            if ($objPacModule != null) {
                 $arrComments = PostacommentPost::loadPostList(false, "", $strNewsSystemid, $this->getStrPortalLanguage());
 
                 //the rendered list
@@ -336,8 +345,9 @@ class NewsPortal extends PortalController implements PortalInterface {
      *
      * @return bool
      */
-    private function isPostacommentOnTemplate($strTemplate, $strSection) {
-        $strTemplateID = $this->objTemplate->readTemplate("/module_news/" . $strTemplate, $strSection);
+    private function isPostacommentOnTemplate($strTemplate, $strSection)
+    {
+        $strTemplateID = $this->objTemplate->readTemplate("/module_news/".$strTemplate, $strSection);
         return $this->objTemplate->containsPlaceholder($strTemplateID, "news_commentlist") || $this->objTemplate->containsPlaceholder($strTemplateID, "news_nrofcomments");
     }
 }

@@ -53,7 +53,6 @@ class PostacommentPortalXml extends PortalController implements XmlPortalInterfa
         //validate needed fields
         if (!$this->validateForm()) {
             //Create form to reenter values
-            $strTemplateID = $this->objTemplate->readTemplate("/module_postacomment/".$this->getParam("comment_template"), "postacomment_form");
             $arrForm = array();
             $arrForm["formaction"] = Link::getLinkPortalHref($this->getPagename(), "", "postComment", "", $this->getSystemid());
             $arrForm["comment_name"] = $this->getParam("comment_name");
@@ -80,7 +79,7 @@ class PostacommentPortalXml extends PortalController implements XmlPortalInterfa
             $arrForm["form_captcha_reload_label"] = $this->getLang("commons_captcha_reload");
             $arrForm["form_submit_label"] = $this->getLang("form_submit_label");
 
-            $strXMLContent .= $this->fillTemplate($arrForm, $strTemplateID);
+            $strXMLContent .= $this->objTemplate->fillTemplateFile($arrForm, "/module_postacomment/".$this->getParam("comment_template"), "postacomment_form");
         }
         else {
             //save the post to the db
@@ -131,8 +130,7 @@ class PostacommentPortalXml extends PortalController implements XmlPortalInterfa
             $arrOnePost["postacomment_post_date"] = timeToString($objPost->getIntDate(), true);
 
 
-            $strTemplateID = $this->objTemplate->readTemplate("/module_postacomment/".$this->getParam("comment_template"), "postacomment_post");
-            $strXMLContent .= $this->objTemplate->fillTemplate($arrOnePost, $strTemplateID);
+            $strXMLContent .= $this->objTemplate->fillTemplateFile($arrOnePost, "/module_postacomment/".$this->getParam("comment_template"), "postacomment_post");
         }
 
         ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
@@ -149,26 +147,23 @@ class PostacommentPortalXml extends PortalController implements XmlPortalInterfa
     {
         $bitReturn = true;
 
-        $strTemplateId = $this->objTemplate->readTemplate("/module_postacomment/".$this->getParam("comment_template"), "validation_error_row");
         if (uniStrlen($this->getParam("comment_name")) < 2) {
             $bitReturn = false;
-            $this->strErrors .= $this->objTemplate->fillTemplate(array("error" => $this->getLang("validation_name")), $strTemplateId);
+            $this->strErrors .= $this->objTemplate->fillTemplateFile(array("error" => $this->getLang("validation_name")), "/module_postacomment/".$this->getParam("comment_template"), "validation_error_row");
             $this->arrErrorFields[] = "'comment_name_{$this->getParam("comment_systemid")}'";
         }
         if (uniStrlen($this->getParam("comment_message")) < 2) {
             $bitReturn = false;
-            $this->strErrors .= $this->objTemplate->fillTemplate(array("error" => $this->getLang("validation_message")), $strTemplateId);
+            $this->strErrors .= $this->objTemplate->fillTemplateFile(array("error" => $this->getLang("validation_message")), "/module_postacomment/".$this->getParam("comment_template"), "validation_error_row");
             $this->arrErrorFields[] = "'comment_message_{$this->getParam("comment_systemid")}'";
         }
         if ($this->objSession->getCaptchaCode() != $this->getParam("form_captcha") || $this->getParam("form_captcha") == "") {
             $bitReturn = false;
-            $this->strErrors .= $this->objTemplate->fillTemplate(array("error" => $this->getLang("validation_code")), $strTemplateId);
+            $this->strErrors .= $this->objTemplate->fillTemplateFile(array("error" => $this->getLang("validation_code")), "/module_postacomment/".$this->getParam("comment_template"), "validation_error_row");
             $this->arrErrorFields[] = "'form_captcha_{$this->getParam("comment_systemid")}'";
         }
 
-        $strErrorWrapperTemplateID = $this->objTemplate->readTemplate("/module_postacomment/".$this->getParam("comment_template"), "errors");
-        $this->strErrors = $this->fillTemplate(array("error_list" => $this->strErrors), $strErrorWrapperTemplateID);
-
+        $this->strErrors = $this->objTemplate->fillTemplateFile(array("error_list" => $this->strErrors), "/module_postacomment/".$this->getParam("comment_template"), "errors");
         return $bitReturn;
     }
 }

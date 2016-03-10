@@ -574,7 +574,7 @@ HTML;
             $arrTable[] = array($this->getLang("image_dimensions"), $arrSize[0]." x ".$arrSize[1]);
             $arrTable[] = array($this->getLang("file_size"), bytesToString($arrDetails["filesize"]));
             $arrTable[] = array($this->getLang("file_editdate"), timeToString($arrDetails["filechange"]));
-            $strReturn .= $this->objToolkit->divider().$this->objToolkit->dataTable(null, $arrTable);
+            $strReturn .= $this->objToolkit->divider().$this->objToolkit->dataTable(array(), $arrTable);
 
         }
         return $strReturn;

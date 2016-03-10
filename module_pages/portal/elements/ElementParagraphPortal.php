@@ -38,19 +38,8 @@ class ElementParagraphPortal extends ElementPortal implements PortalElementInter
             $strTemplate = "paragraph.tpl";
         }
 
-        //choose template section
-        $strTemplateSection = "paragraph";
-        if ($this->arrElementData["paragraph_image"] != "" && $this->arrElementData["paragraph_link"] != "") {
-            $strTemplateSection = "paragraph_image_link";
-        }
-        elseif ($this->arrElementData["paragraph_image"] != "" && $this->arrElementData["paragraph_link"] == "") {
-            $strTemplateSection = "paragraph_image";
-        }
-        elseif ($this->arrElementData["paragraph_image"] == "" && $this->arrElementData["paragraph_link"] != "") {
-            $strTemplateSection = "paragraph_link";
-        }
 
-        $strTemplateID = $this->objTemplate->readTemplate("/element_paragraph/".$strTemplate, $strTemplateSection);
+
 
         if ($this->arrElementData["paragraph_image"] != "") {
             //remove the webpath (was added for paragraphs saved pre 3.3.0)
@@ -68,11 +57,23 @@ class ElementParagraphPortal extends ElementPortal implements PortalElementInter
         }
 
         if ($this->arrElementData["paragraph_title"] != "") {
-            $strTemplateTitleID = $this->objTemplate->readTemplate("/element_paragraph/".$strTemplate, "paragraph_title_tag");
-            $this->arrElementData["paragraph_title_tag"] = $this->fillTemplate($this->arrElementData, $strTemplateTitleID);
+            $this->arrElementData["paragraph_title_tag"] = $this->objTemplate->fillTemplateFile($this->arrElementData, "/element_paragraph/".$strTemplate, "paragraph_title_tag");
         }
 
-        $strReturn .= $this->fillTemplate($this->arrElementData, $strTemplateID);
+
+        //choose template section
+        $strTemplateSection = "paragraph";
+        if ($this->arrElementData["paragraph_image"] != "" && $this->arrElementData["paragraph_link"] != "") {
+            $strTemplateSection = "paragraph_image_link";
+        }
+        elseif ($this->arrElementData["paragraph_image"] != "" && $this->arrElementData["paragraph_link"] == "") {
+            $strTemplateSection = "paragraph_image";
+        }
+        elseif ($this->arrElementData["paragraph_image"] == "" && $this->arrElementData["paragraph_link"] != "") {
+            $strTemplateSection = "paragraph_link";
+        }
+
+        $strReturn .= $this->objTemplate->fillTemplateFile($this->arrElementData, "/element_paragraph/".$strTemplate, $strTemplateSection);
 
         return $strReturn;
     }
