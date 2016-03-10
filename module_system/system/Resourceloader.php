@@ -289,8 +289,18 @@ class Resourceloader
             return $this->applyCallbacks(BootstrapCache::getInstance()->getCacheRow(BootstrapCache::CACHE_FOLDERCONTENT, $strCachename), $objFilterFunction, $objWalkFunction);
         }
 
+        $arrModules = Classloader::getInstance()->getArrModules();
+
+        // add project folders
+        foreach ($arrModules as $strCorePath => $strSingleModule) {
+            $strPath = "project" . substr($strCorePath, strpos($strCorePath, "/"));
+            if (is_dir(_realpath_."/".$strPath.$strFolder)) {
+                $arrModules[$strPath] = $strSingleModule;
+            }
+        }
+
         //loop all given modules
-        foreach (Classloader::getInstance()->getArrModules() as $strCorePath => $strSingleModule) {
+        foreach ($arrModules as $strCorePath => $strSingleModule) {
             if (is_dir(_realpath_."/".$strCorePath.$strFolder)) {
                 $arrContent = scandir(_realpath_."/".$strCorePath.$strFolder);
                 foreach ($arrContent as $strSingleEntry) {
