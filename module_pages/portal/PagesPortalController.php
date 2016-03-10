@@ -23,6 +23,7 @@ use Kajona\System\System\Link;
 use Kajona\System\System\Logger;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\ResponseObject;
+use Kajona\System\System\ServiceProvider;
 use Kajona\System\System\SystemSetting;
 use Kajona\System\System\Template;
 
@@ -113,7 +114,7 @@ class PagesPortalController extends PortalController implements PortalInterface
             list($strPageCacheHashSum, $intPageCacheTime) = $this->getPageCacheValues($arrElementsOnPage);
 
             /** @var CacheManager $objCache */
-            $objCache = Carrier::getInstance()->getContainer()->offsetGet("cache_manager");
+            $objCache = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER);
             $strPageContent = $objCache->getValue($strPageCacheHashSum);
             if ($strPageContent !== false) {
                 return $strPageContent;
@@ -296,7 +297,7 @@ class PagesPortalController extends PortalController implements PortalInterface
         //TODO: remove this caching?
         if (!PagesPortaleditor::isActive() && $intPageCacheTime > 0) {
             /** @var CacheManager $objCache */
-            $objCache = Carrier::getInstance()->getContainer()->offsetGet("cache_manager");
+            $objCache = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER);
             $objCache->addValue($strPageCacheHashSum, $strPageContent, $intPageCacheTime);
         }
 

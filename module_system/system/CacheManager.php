@@ -270,7 +270,7 @@ class CacheManager
     }
 
     /**
-     * @deprecated if possible use the cache manager instance from the DI container "@inject cache_manager"
+     * @deprecated if possible use the cache manager instance from the DI container "@inject system_cache_manager"
      * @return CacheManager
      */
     public static function getInstance()

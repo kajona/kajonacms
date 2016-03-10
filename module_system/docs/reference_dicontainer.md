@@ -47,13 +47,20 @@ following `ServiceProvider` class:
      */
     class ServiceProvider implements ServiceProviderInterface
     {
+        const STR_LOGGER = "system_logger";
+    
         public function register(Container $objContainer)
         {
-            $objContainer['logger'] = function($c){
+            $objContainer[self::STR_LOGGER] = function($c){
                 return new Logger();
             };
         }
     }
+    
+Please regard to define for each existing service an own constant in your `ServiceProvider` class. The convention for this contants is as follows:
+    
+    const STR_<ServiceName> = "<modulename>_<serviename>";  e.g. const STR_LOGGER = "system_logger";
+
 
 ## Using services inside a controller or workflow
 
@@ -62,7 +69,7 @@ Inside a controller we can use the `@Inject` annotation to retrieve the logger i
     class PagesAdminController extends AdminSimple implements AdminInterface
     {
         /**
-         * @Inject logger
+         * @Inject system_logger
          */
         protected $logger;
         

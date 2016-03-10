@@ -13,6 +13,7 @@ use Kajona\Packagemanager\System\PackagemanagerManager;
 use Kajona\Packagemanager\System\PackagemanagerMetadata;
 use Kajona\Packagemanager\System\PackagemanagerPackagemanagerInterface;
 use Kajona\Packagemanager\System\PackagemanagerTemplate;
+use Kajona\Packagemanager\System\ServiceProvider;
 use Kajona\System\Admin\AdminFormgenerator;
 use Kajona\System\Admin\AdminInterface;
 use Kajona\System\Admin\AdminSimple;
@@ -778,7 +779,7 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
         $objHandler = $objManager->getPackage($this->getParam("package"));
         if ($objHandler !== null) {
             /** @var \Kajona\Packagemanager\System\PackagemanagerPharGeneratorInterface $objPharService */
-            $objPharService = Carrier::getInstance()->getContainer()->offsetGet("packagemanager_phargenerator");
+            $objPharService = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_PHARGENERATOR);
             try {
                 $objPharService->generateAndStreamPhar(_realpath_.$objHandler->getStrPath());
             }

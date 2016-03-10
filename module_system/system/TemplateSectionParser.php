@@ -30,7 +30,7 @@ class TemplateSectionParser
         }
         $this->bitCacheInit = true;
 
-        $this->arrCacheTemplateSection = Carrier::getInstance()->getContainer()->offsetGet("cache_manager")->getValue(__CLASS__);
+        $this->arrCacheTemplateSection = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER)->getValue(__CLASS__);
         if($this->arrCacheTemplateSection === false) {
             $this->arrCacheTemplateSection = array();
         }
@@ -42,7 +42,7 @@ class TemplateSectionParser
     public function __destruct()
     {
         if(Config::getInstance()->getConfig("templatecachetime") >=0) {
-            Carrier::getInstance()->getContainer()->offsetGet("cache_manager")->addValue(__CLASS__, $this->arrCacheTemplateSection, Config::getInstance()->getConfig("templatecachetime"));
+            Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER)->addValue(__CLASS__, $this->arrCacheTemplateSection, Config::getInstance()->getConfig("templatecachetime"));
         }
     }
 

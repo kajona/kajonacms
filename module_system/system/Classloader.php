@@ -411,7 +411,7 @@ class Classloader
             $objReflection = new ReflectionClass($strResolvedClassname);
             if ($objReflection->isInstantiable() && ($strBaseclass == null || $objReflection->isSubclassOf($strBaseclass)) && ($strImplementsInterface == null || $objReflection->implementsInterface($strImplementsInterface))) {
                 if ($bitInject) {
-                    $objFactory = Carrier::getInstance()->getContainer()->offsetGet("object_builder");
+                    $objFactory = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_OBJECT_BUILDER);
                     if (!empty($arrConstructorParams)) {
                         return $objFactory->factory($objReflection->getName(), $arrConstructorParams);
                     }

@@ -15,6 +15,7 @@ use Kajona\System\System\GenericeventListenerInterface;
 use Kajona\System\System\OrmComparatorEnum;
 use Kajona\System\System\OrmObjectlist;
 use Kajona\System\System\OrmObjectlistSystemstatusRestriction;
+use Kajona\System\System\ServiceProvider;
 use Kajona\System\System\SystemEventidentifier;
 use Kajona\System\System\SystemSetting;
 
@@ -65,7 +66,7 @@ class PackagemanagerRecordupdatedlistener implements GenericeventListenerInterfa
                 }
 
                 /** @var CacheManager $objCache */
-                $objCache = Carrier::getInstance()->getContainer()->offsetGet("cache_manager");
+                $objCache = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER);
                 $objCache->flushCache();
             }
         }

@@ -16,6 +16,7 @@ use Kajona\System\System\HttpStatuscodes;
 use Kajona\System\System\RequestDispatcher;
 use Kajona\System\System\RequestEntrypointEnum;
 use Kajona\System\System\ResponseObject;
+use Kajona\System\System\ServiceProvider;
 use Kajona\System\System\SystemEventidentifier;
 
 if (issetGet("admin") && getGet("admin") == 1) {
@@ -64,7 +65,7 @@ class Xml
         $this->objResponse->setStrResponseType(HttpResponsetypes::STR_TYPE_XML);
         $this->objResponse->setStrStatusCode(HttpStatuscodes::SC_OK);
 
-        $this->objBuilder = Carrier::getInstance()->getContainer()->offsetGet('object_builder');
+        $this->objBuilder = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_OBJECT_BUILDER);
 
         $objDispatcher = new RequestDispatcher($this->objResponse, $this->objBuilder);
         $objDispatcher->processRequest(_admin_, $strModule, $strAction, $strLanguageParam);

@@ -3,6 +3,7 @@
 namespace Kajona\System\Tests;
 
 use Kajona\System\System\Carrier;
+use Kajona\System\System\ServiceProvider;
 use Kajona\System\System\Template;
 use Kajona\System\System\Testbase;
 
@@ -24,7 +25,7 @@ class TemplateTest extends Testbase
 HTML;
 
         /** @var Template $objTemplate */
-        $objTemplate = Carrier::getInstance()->getContainer()->offsetGet("template");
+        $objTemplate = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_TEMPLATE);
         $strTemplateID = $objTemplate->setTemplate($strTemplate);
 
         $this->assertTrue($objTemplate->containsSection($strTemplateID, "list"));
@@ -62,7 +63,7 @@ HTML;
 
 
         /** @var Template $objTemplate */
-        $objTemplate = Carrier::getInstance()->getContainer()->offsetGet("template");
+        $objTemplate = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_TEMPLATE);
         $strTemplateID = $objTemplate->setTemplate($strTemplate);
 
         $this->assertTrue($objTemplate->containsSection($strTemplateID, "list1"));
@@ -90,7 +91,7 @@ HTML;
 HTML;
 
         /** @var Template $objTemplate */
-        $objTemplate = Carrier::getInstance()->getContainer()->offsetGet("template");
+        $objTemplate = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_TEMPLATE);
         $objTemplate->setTemplate($strTemplate);
         $strContent = trim($objTemplate->fillCurrentTemplate(array("ende" => "filled")));
         $this->assertEquals("test filled", $strContent);
@@ -108,7 +109,7 @@ HTML;
 
 
         /** @var Template $objTemplate */
-        $objTemplate = Carrier::getInstance()->getContainer()->offsetGet("template");
+        $objTemplate = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_TEMPLATE);
         $strTemplateID = $objTemplate->setTemplate($strTemplate);
 
         $this->assertTrue($objTemplate->containsSection($strTemplateID, "list"));
@@ -161,7 +162,7 @@ b
 c
 HTML;
 
-        $objTemplate = Carrier::getInstance()->getContainer()->offsetGet("template");
+        $objTemplate = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_TEMPLATE);
         $this->assertEquals(
             "a
 
@@ -196,7 +197,7 @@ HTML;
 
 
         /** @var Template $objTemplate */
-        $objTemplate = Carrier::getInstance()->getContainer()->offsetGet("template");
+        $objTemplate = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_TEMPLATE);
 
         $strSectionID = $objTemplate->setTemplate($objTemplate->getSectionFromTemplate($strTemplate, "list"));
 

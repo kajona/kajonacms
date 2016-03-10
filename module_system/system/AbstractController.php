@@ -27,7 +27,7 @@ abstract class AbstractController
     /**
      * Object containing config-data
      *
-     * @inject config
+     * @inject system_config
      * @var Config
      */
     protected $objConfig;
@@ -35,7 +35,7 @@ abstract class AbstractController
     /**
      * Object containing the session-management
      *
-     * @inject session
+     * @inject system_session
      * @var Session
      */
     protected $objSession;
@@ -43,7 +43,7 @@ abstract class AbstractController
     /**
      * Object to handle templates
      *
-     * @inject template
+     * @inject system_template
      * @var Template
      */
     protected $objTemplate;
@@ -51,7 +51,7 @@ abstract class AbstractController
     /**
      * Object managing the lang-files
      *
-     * @inject lang
+     * @inject system_lang
      * @var Lang
      */
     protected $objLang;
@@ -389,7 +389,7 @@ abstract class AbstractController
     public function flushCompletePagesCache()
     {
         /** @var CacheManager $objCache */
-        $objCache = Carrier::getInstance()->getContainer()->offsetGet("cache_manager");
+        $objCache = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER);
         $objCache->flushCache();
     }
 

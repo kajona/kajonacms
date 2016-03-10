@@ -13,6 +13,7 @@ use Kajona\System\System\Cookie;
 use Kajona\System\System\Logger;
 use Kajona\System\System\OrmObjectlist;
 use Kajona\System\System\OrmObjectlistRestriction;
+use Kajona\System\System\ServiceProvider;
 
 
 /**
@@ -115,7 +116,7 @@ class RatingRate extends \Kajona\System\System\Model implements \Kajona\System\S
         $objCookie->setCookie(RatingRate::RATING_COOKIE, getCookie(RatingRate::RATING_COOKIE).$this->getSystemid().",");
 
         //flush the page-cache to have all pages rendered using the correct values
-        Carrier::getInstance()->getContainer()->offsetGet("cache_manager")->flushCache();
+        Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER)->flushCache();
 
         return true;
     }

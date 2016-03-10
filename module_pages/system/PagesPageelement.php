@@ -23,6 +23,7 @@ use Kajona\System\System\OrmObjectlist;
 use Kajona\System\System\OrmRowcache;
 use Kajona\System\System\Reflection;
 use Kajona\System\System\Resourceloader;
+use Kajona\System\System\ServiceProvider;
 
 /**
  * Model for a element assigned to a page. NOT the raw-element!
@@ -603,7 +604,7 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
         parent::deleteObjectFromDatabase();
 
         /** @var CacheManager $objCache */
-        $objCache = Carrier::getInstance()->getContainer()->offsetGet("cache_manager");
+        $objCache = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER);
         $objCache->flushCache();
 
         return true;

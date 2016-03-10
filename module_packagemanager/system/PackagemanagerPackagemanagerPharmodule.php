@@ -19,6 +19,7 @@ use Kajona\System\System\InstallerInterface;
 use Kajona\System\System\InstallerRemovableInterface;
 use Kajona\System\System\Logger;
 use Kajona\System\System\PharModule;
+use Kajona\System\System\ServiceProvider;
 use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemSetting;
 use Phar;
@@ -144,7 +145,7 @@ class PackagemanagerPackagemanagerPharmodule extends PackagemanagerPackagemanage
         }
 
         /** @var CacheManager $objCache */
-        $objCache = Carrier::getInstance()->getContainer()->offsetGet("cache_manager");
+        $objCache = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER);
         $objCache->flushCache();
         $this->updateDefaultTemplate();
 

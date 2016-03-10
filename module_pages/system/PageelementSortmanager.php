@@ -10,6 +10,7 @@ use Kajona\System\System\CacheManager;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\CommonSortmanager;
 use Kajona\System\System\Logger;
+use Kajona\System\System\ServiceProvider;
 
 
 /**
@@ -130,7 +131,7 @@ class PageelementSortmanager extends CommonSortmanager
         }
 
         //flush the cachees
-        Carrier::getInstance()->getContainer()->offsetGet("cache_manager")->flushCache();
+        Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER)->flushCache();
         $this->objDB->flushQueryCache();
         $this->objSource->setIntSort($intNewPosition);
     }

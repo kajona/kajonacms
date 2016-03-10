@@ -17,6 +17,7 @@ use Kajona\System\System\Filesystem;
 use Kajona\System\System\InstallerInterface;
 use Kajona\System\System\InstallerRemovableInterface;
 use Kajona\System\System\Logger;
+use Kajona\System\System\ServiceProvider;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\SystemSetting;
 
@@ -142,7 +143,7 @@ class PackagemanagerPackagemanagerModule implements PackagemanagerPackagemanager
         }
 
         /** @var CacheManager $objCache */
-        $objCache = Carrier::getInstance()->getContainer()->offsetGet("cache_manager");
+        $objCache = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER);
         $objCache->flushCache();
 
         return $strReturn;

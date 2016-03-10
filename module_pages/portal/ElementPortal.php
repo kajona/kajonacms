@@ -17,7 +17,6 @@ use Kajona\Pages\System\PagesPortaleditorActionEnum;
 use Kajona\Pages\System\PagesPortaleditorPlaceholderAction;
 use Kajona\Pages\System\PagesPortaleditorSystemidAction;
 use Kajona\System\Portal\PortalController;
-use Kajona\System\System\Cache;
 use Kajona\System\System\CacheManager;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Exception;
@@ -28,6 +27,7 @@ use Kajona\System\System\OrmBase;
 use Kajona\System\System\Reflection;
 use Kajona\System\System\ScriptletHelper;
 use Kajona\System\System\ScriptletInterface;
+use Kajona\System\System\ServiceProvider;
 use Kajona\System\System\SystemSetting;
 
 /**
@@ -162,7 +162,7 @@ abstract class ElementPortal extends PortalController
     private function getElementOutputFromCache()
     {
         /** @var CacheManager $objCache */
-        $objCache = Carrier::getInstance()->getContainer()->offsetGet("cache_manager");
+        $objCache = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER);
         return $objCache->getValue($this->getCacheHashSum());
     }
 
@@ -200,7 +200,7 @@ abstract class ElementPortal extends PortalController
         $strElementOutput = preg_replace('/data-kajona-editable=\"([a-zA-Z0-9#_]*)\"/i', "", $strElementOutput);
 
         /** @var CacheManager $objCache */
-        $objCache = Carrier::getInstance()->getContainer()->offsetGet("cache_manager");
+        $objCache = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER);
         $objCache->addValue($this->getCacheHashSum(), $strElementOutput, $intCachetimeInSeconds);
 
     }

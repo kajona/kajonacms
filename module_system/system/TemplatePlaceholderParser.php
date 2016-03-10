@@ -28,7 +28,7 @@ class TemplatePlaceholderParser
             return;
         }
         $this->bitCacheInit = true;
-        $this->arrPlaceholderCache = Carrier::getInstance()->getContainer()->offsetGet("cache_manager")->getValue(__CLASS__);
+        $this->arrPlaceholderCache = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER)->getValue(__CLASS__);
         if($this->arrPlaceholderCache === false) {
             $this->arrPlaceholderCache = array();
         }
@@ -40,7 +40,7 @@ class TemplatePlaceholderParser
     public function __destruct()
     {
         if(Config::getInstance()->getConfig("templatecachetime") >=0) {
-            Carrier::getInstance()->getContainer()->offsetGet("cache_manager")->addValue(__CLASS__, $this->arrPlaceholderCache, Config::getInstance()->getConfig("templatecachetime"));
+            Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER)->addValue(__CLASS__, $this->arrPlaceholderCache, Config::getInstance()->getConfig("templatecachetime"));
         }
     }
 

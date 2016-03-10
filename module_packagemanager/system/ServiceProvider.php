@@ -14,9 +14,11 @@ use Pimple\ServiceProviderInterface;
  */
 class ServiceProvider implements ServiceProviderInterface
 {
+    const STR_PHARGENERATOR = "packagemanager_phargenerator";
+
     public function register(Container $objContainer)
     {
-        $objContainer['packagemanager_phargenerator'] = function ($c) {
+        $objContainer[self::STR_PHARGENERATOR] = function ($c) {
             return new PackagemanagerPharModuleGenerator();
         };
     }

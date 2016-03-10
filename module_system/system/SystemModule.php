@@ -359,7 +359,7 @@ class SystemModule extends Model implements ModelInterface, AdminListableInterfa
     {
 
         /** @var \Kajona\System\System\ObjectBuilder $objBuilder */
-        $objBuilder = Carrier::getInstance()->getContainer()->offsetGet("object_builder");
+        $objBuilder = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_OBJECT_BUILDER);
 
         $strClassname = $bitXml ? $this->getStrXmlNameAdmin() : $this->getStrNameAdmin();
         if (uniStrpos($strClassname, ".php") !== false) {
@@ -396,7 +396,7 @@ class SystemModule extends Model implements ModelInterface, AdminListableInterfa
     {
 
         /** @var \Kajona\System\System\ObjectBuilder $objBuilder */
-        $objBuilder = Carrier::getInstance()->getContainer()->offsetGet("object_builder");
+        $objBuilder = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_OBJECT_BUILDER);
 
         $strClassname = $bitXml ? $this->getStrXmlNamePortal() : $this->getStrNamePortal();
         if (uniStrpos($strClassname, ".php") !== false) {

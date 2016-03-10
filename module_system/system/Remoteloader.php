@@ -63,7 +63,7 @@ class Remoteloader
     private $intMaxCachetime = 3600;
 
     /**
-     * @inject cache_manager
+     * @inject system_cache_manager
      * @var CacheManager
      */
     private $objCachemanager = null;

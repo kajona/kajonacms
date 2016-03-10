@@ -15,27 +15,43 @@ use Pimple\ServiceProviderInterface;
  */
 class ServiceProvider implements ServiceProviderInterface
 {
+    const STR_DB = "system_db";
+    const STR_RIGHTS = "system_rights";
+    const STR_CONFIG = "system_config";
+    const STR_SESSION = "system_session";
+    const STR_ADMINTOOLKIT = "system_admintoolkit";
+    const STR_PORTALTOOLKIT = "system_portaltoolkit";
+    const STR_RESOURCE_LOADER = "system_resource_loader";
+    const STR_CLASS_LOADER = "system_class_loader";
+    const STR_TEMPLATE = "system_template";
+    const STR_LANG = "system_lang";
+    const STR_OBJECT_FACTORY = "system_object_factory";
+    const STR_OBJECT_BUILDER = "system_object_builder";
+    const STR_LOGGER = "system_logger";
+    const STR_CACHE_MANAGER = "system_cache_manager";
+
+
     public function register(Container $objContainer)
     {
-        $objContainer['db'] = function ($c) {
+        $objContainer[self::STR_DB] = function ($c) {
             return Database::getInstance();
         };
 
-        $objContainer['rights'] = function ($c) {
+        $objContainer[self::STR_RIGHTS] = function ($c) {
             return Rights::getInstance();
         };
 
-        $objContainer['config'] = function ($c) {
+        $objContainer[self::STR_CONFIG] = function ($c) {
             return Config::getInstance();
         };
 
-        $objContainer['session'] = function ($c) {
+        $objContainer[self::STR_SESSION] = function ($c) {
             return Session::getInstance();
         };
 
-        $objContainer['admintoolkit'] = function ($c) {
+        $objContainer[self::STR_ADMINTOOLKIT] = function ($c) {
             // decide which class to load
-            $strAdminToolkitClass = $c["config"]->getConfig("admintoolkit");
+            $strAdminToolkitClass = $c[self::STR_CONFIG]->getConfig("admintoolkit");
             if ($strAdminToolkitClass == "") {
                 $strAdminToolkitClass = "ToolkitAdmin";
             }
@@ -44,22 +60,22 @@ class ServiceProvider implements ServiceProviderInterface
             return Classloader::getInstance()->getInstanceFromFilename($strPath);
         };
 
-        $objContainer['portaltoolkit'] = function ($c) {
+        $objContainer[self::STR_PORTALTOOLKIT] = function ($c) {
             $strPath = Resourceloader::getInstance()->getPathForFile("/portal/ToolkitPortal.php");
             include_once $strPath;
 
             return new ToolkitPortal();
         };
 
-        $objContainer['resource_loader'] = function ($c) {
+        $objContainer[self::STR_RESOURCE_LOADER] = function ($c) {
             return Resourceloader::getInstance();
         };
 
-        $objContainer['class_loader'] = function ($c) {
+        $objContainer[self::STR_CLASS_LOADER] = function ($c) {
             return Classloader::getInstance();
         };
 
-        $objContainer['template'] = function ($c) {
+        $objContainer[self::STR_TEMPLATE] = function ($c) {
             return new Template(
                 new TemplateFileParser(),
                 new TemplateSectionParser(),
@@ -68,23 +84,23 @@ class ServiceProvider implements ServiceProviderInterface
             );
         };
 
-        $objContainer['lang'] = function ($c) {
+        $objContainer[self::STR_LANG] = function ($c) {
             return Lang::getInstance();
         };
 
-        $objContainer['object_factory'] = function ($c) {
+        $objContainer[self::STR_OBJECT_FACTORY] = function ($c) {
             return Objectfactory::getInstance();
         };
 
-        $objContainer['object_builder'] = function ($c) {
+        $objContainer[self::STR_OBJECT_BUILDER] = function ($c) {
             return new ObjectBuilder($c);
         };
 
-        $objContainer['logger'] = function ($c) {
+        $objContainer[self::STR_LOGGER] = function ($c) {
             return Logger::getInstance();
         };
 
-        $objContainer['cache_manager'] = function ($c) {
+        $objContainer[self::STR_CACHE_MANAGER] = function ($c) {
             return new CacheManager();
         };
     }

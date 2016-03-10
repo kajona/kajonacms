@@ -30,6 +30,7 @@ use Kajona\System\System\OrmBase;
 use Kajona\System\System\Reflection;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\ResponseObject;
+use Kajona\System\System\ServiceProvider;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\Template;
 use Kajona\System\System\TemplateBlockContainer;
@@ -495,7 +496,7 @@ HTML;
             /** @var PagesPage $objPage */
             $objPage = Objectfactory::getInstance()->getObject($this->getSystemid());
             /** @var TemplateBlockContainer $objTemplate */
-            $objTemplate = Carrier::getInstance()->getContainer()->offsetGet("template")->parsePageTemplate("/module_pages/".$objPage->getStrTemplate());
+            $objTemplate = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_TEMPLATE)->parsePageTemplate("/module_pages/".$objPage->getStrTemplate());
             foreach ($objTemplate->getArrBlocks() as $objOneBlocks) {
                 foreach ($objOneBlocks->getArrBlocks() as $objOneBlock) {
                     if ($objOneBlocks->getStrName() == $objBlocksElement->getStrName() && $objOneBlock->getStrName() == $objBlockElement->getStrName()) {

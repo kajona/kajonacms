@@ -1553,7 +1553,7 @@ abstract class Root
         }
 
         //flush the cache
-        Carrier::getInstance()->getContainer()->offsetGet("cache_manager")->flushCache();
+        Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER)->flushCache();
 
         return $bitResult;
     }

@@ -29,7 +29,7 @@ class TemplateFileParser
         }
         $this->bitCacheInit = true;
 
-        $this->arrCacheTemplates = Carrier::getInstance()->getContainer()->offsetGet("cache_manager")->getValue(__CLASS__);
+        $this->arrCacheTemplates = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER)->getValue(__CLASS__);
         if($this->arrCacheTemplates === false) {
             $this->arrCacheTemplates = array();
         }
@@ -41,7 +41,7 @@ class TemplateFileParser
     public function __destruct()
     {
         if(Config::getInstance()->getConfig("templatecachetime") >=0) {
-            Carrier::getInstance()->getContainer()->offsetGet("cache_manager")->addValue(__CLASS__, $this->arrCacheTemplates, Config::getInstance()->getConfig("templatecachetime"));
+            Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER)->addValue(__CLASS__, $this->arrCacheTemplates, Config::getInstance()->getConfig("templatecachetime"));
         }
     }
 

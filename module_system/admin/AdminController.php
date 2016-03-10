@@ -55,37 +55,37 @@ abstract class AdminController extends AbstractController
     private $arrOutput;
 
     /**
-     * @inject admintoolkit
+     * @inject system_admintoolkit
      * @var ToolkitAdmin
      */
     protected $objToolkit;
 
     /**
-     * @inject object_builder
+     * @inject system_object_builder
      * @var \Kajona\System\System\ObjectBuilder
      */
     protected $objBuilder;
 
     /**
-     * @inject rights
+     * @inject system_rights
      * @var Rights
      */
     protected $objRights;
 
     /**
-     * @inject resource_loader
+     * @inject system_resource_loader
      * @var Resourceloader
      */
     protected $objResourceLoader;
 
     /**
-     * @inject class_loader
+     * @inject system_class_loader
      * @var Classloader
      */
     protected $objClassLoader;
 
     /**
-     * @inject object_factory
+     * @inject system_object_factory
      * @var Objectfactory
      */
     protected $objFactory;

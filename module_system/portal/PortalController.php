@@ -43,7 +43,7 @@ abstract class PortalController extends AbstractController
     protected $arrElementData = array();
 
     /**
-     * @inject portaltoolkit
+     * @inject system_portaltoolkit
      * @var ToolkitPortal
      */
     protected $objToolkit;

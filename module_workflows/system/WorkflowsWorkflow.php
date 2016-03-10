@@ -18,6 +18,7 @@ use Kajona\System\System\OrmObjectlistOrderby;
 use Kajona\System\System\OrmObjectlistPropertyInRestriction;
 use Kajona\System\System\OrmObjectlistPropertyRestriction;
 use Kajona\System\System\OrmObjectlistRestriction;
+use Kajona\System\System\ServiceProvider;
 
 
 /**
@@ -423,7 +424,7 @@ class WorkflowsWorkflow extends \Kajona\System\System\Model implements \Kajona\S
             $objConfig = WorkflowsHandler::getHandlerByClass($strClassname);
 
             /** @var $objHandler WorkflowsHandlerInterface */
-            $objBuilder = Carrier::getInstance()->getContainer()->offsetGet("object_builder");
+            $objBuilder = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_OBJECT_BUILDER);
             $objHandler = $objBuilder->factory($strClassname);
             $objHandler->setObjWorkflow($this);
             if ($objConfig != null) {
