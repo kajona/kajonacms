@@ -97,14 +97,14 @@
 		    								init,
 					    					buildProject, installProjectSqlite,
 					    					lint,phploc,phpunitFast,jasmine,
-					    					buildFullZip, buildLightZip, buildAllInOneZip" />
+					    					buildAllInOneZip" />
 
 
     <target name="buildSqliteFull" depends="
 		    								init,
 					    					buildProject, installProjectSqlite,
 					    					lint,phpunit,jasmine,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,generateDoxygenDocs,phpcb,
-					    					buildFullZip, buildLightZip, buildAllInOneZip" />
+					    					buildAllInOneZip" />
 
     <target name="buildMysql" depends="
 		    								init,
@@ -121,9 +121,9 @@
 					    					buildProject, installProjectPostgres,
 					    					phpunitFast,jasmine" />
 
-    <target name="buildFullZipOnly" depends="
+    <target name="buildAllInOneZipOnly" depends="
                                             init,
-                                            buildProject, buildFullZip" />
+                                            buildProject, buildAllInOneZip" />
 
 
 
@@ -327,36 +327,6 @@
         </zip>
     </target>
 
-    <!-- creates the light-zip, only a limited set of modules included -->
-    <target name="buildLightZip" depends="init">
-        <antcall target="setupPackageFolders" />
-        <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true"  >
-            <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
-                <exclude name=".svn"/>
-                <exclude name=".git"/>
-                <include name="core*/module_navigation/**"/>
-                <include name="core*/module_pages/**"/>
-                <include name="core*/module_samplecontent/**"/>
-                <include name="core*/module_packagemanager/**"/>
-                <include name="core*/module_mediamanager/**"/>
-                <include name="core*/module_system/**"/>
-                <include name="core*/module_search/**"/>
-                <include name="core*/module_tags/**"/>
-                <include name="core*/module_dashboard/**"/>
-                <include name="core*/module_installer/**"/>
-                <include name="core*/module_v4skin/**"/>
-                <include name="core*/*.php"/>
-                <include name="core*/*.htaccess"/>
-            </fileset>
-        </copy>
-
-        <antcall target="buildPackageHelper" />
-        <antcall target="modulePharHelper" />
-
-        <zip destfile="${basedir}${packagesPath}/kajona_v4_light_${DSTAMP}-${TSTAMP}.zip">
-            <fileset dir="${basedir}${tempPath}/../" />
-        </zip>
-    </target>
 
     <target name="modulePharHelper" description="generates phar files out of the current module structure">
         <exec executable="php" dir="${basedir}${tempPath}/core"  failonerror="on" >
