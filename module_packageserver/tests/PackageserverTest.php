@@ -48,6 +48,7 @@ class PackageserverTest extends Testbase
 
         /** @var $objPortalServer PackageserverPortal */
         $objPortalServer = SystemModule::getModuleByName("packageserver")->getPortalInstanceOfConcreteModule();
+        $objPortalServer->setParam("protocolversion", 5);
 
         $strJson = $objPortalServer->action("list");
 
