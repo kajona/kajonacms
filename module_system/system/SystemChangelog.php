@@ -324,16 +324,16 @@ class SystemChangelog
     private function isVersioningAvailable(VersionableInterface $objSourceModel)
     {
 
-        if (self::$bitChangelogEnabled !== null) {
-            return self::$bitChangelogEnabled;
+        if (self::$bitChangelogEnabled === null) {
+            return SystemSetting::getConfigValue("_system_changehistory_enabled_") === "true";
         }
+
 
         if (!$objSourceModel instanceof VersionableInterface) {
             throw new Exception("object passed to create changelog not implementing VersionableInterface", Exception::$level_ERROR);
         }
 
-        self::$bitChangelogEnabled = true;
-        return true;
+        return self::$bitChangelogEnabled;
     }
 
     /**

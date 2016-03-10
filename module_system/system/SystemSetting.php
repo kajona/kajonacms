@@ -235,6 +235,7 @@ class SystemSetting extends Model implements ModelInterface, VersionableInterfac
     {
         if (self::$arrInstanceCache == null) {
 
+            SystemChangelog::$bitChangelogEnabled = false;
             if (count(Database::getInstance()->getTables()) == 0) {
                 return array();
             }
@@ -247,6 +248,8 @@ class SystemSetting extends Model implements ModelInterface, VersionableInterfac
                 self::$arrInstanceCache[$arrOneId["system_config_name"]] = new SystemSetting($arrOneId["system_config_id"]);
                 self::$arrValueMap[$arrOneId["system_config_name"]] = $arrOneId["system_config_value"];
             }
+
+            SystemChangelog::$bitChangelogEnabled = null;
         }
 
         if (self::$arrInstanceCache == null) {

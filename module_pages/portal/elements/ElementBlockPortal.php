@@ -7,6 +7,7 @@
 namespace Kajona\Pages\Portal\Elements;
 
 use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\Portal\PagesPortalController;
 use Kajona\Pages\Portal\PagesPortaleditor;
 use Kajona\Pages\Portal\PortalElementInterface;
 use Kajona\Pages\System\PagesPageelement;
@@ -29,6 +30,27 @@ class ElementBlockPortal extends ElementPortal implements PortalElementInterface
 {
 
 
+    private function getElementsOnBlock()
+    {
+        if(PagesPortalController::$arrElementsOnPage != null) {
+            $arrElementsOnBlock = array();
+
+            foreach(PagesPortalController::$arrElementsOnPage as $objOneElement) {
+                if($objOneElement->getPrevId() == $this->getSystemid()) {
+                    $arrElementsOnBlock[] = $objOneElement;
+                }
+            }
+
+        }
+        else {
+            //load elements below
+            $arrElementsOnBlock = PagesPageelement::getElementsOnPage($this->getSystemid(), !PagesPortaleditor::isActive(), $this->getStrPortalLanguage());
+        }
+
+        return $arrElementsOnBlock;
+    }
+
+
     /**
      * Does a little "make-up" to the contents
      *
@@ -39,9 +61,7 @@ class ElementBlockPortal extends ElementPortal implements PortalElementInterface
 
         $strReturn = "";
 
-        //load elements below
-        $arrElementsOnBlock = PagesPageelement::getElementsOnPage($this->getSystemid(), true, $this->getStrPortalLanguage());
-
+        $arrElementsOnBlock = $this->getElementsOnBlock();
         if (count($arrElementsOnBlock) == 0) {
             return "";
         }
@@ -91,7 +111,7 @@ class ElementBlockPortal extends ElementPortal implements PortalElementInterface
     public function getCacheHashSum()
     {
         $strSum = "";
-        $arrElementsOnBlock = PagesPageelement::getElementsOnPage($this->getSystemid(), true, $this->getStrPortalLanguage());
+        $arrElementsOnBlock = $this->getElementsOnBlock();
         $intCachetime = null;
         foreach($arrElementsOnBlock as $objOneElement) {
             $strSum .= $objOneElement->getConcretePortalInstance()->getCacheHashSum();
@@ -106,7 +126,7 @@ class ElementBlockPortal extends ElementPortal implements PortalElementInterface
      */
     public function getCachetimeInSeconds()
     {
-        $arrElementsOnBlock = PagesPageelement::getElementsOnPage($this->getSystemid(), true, $this->getStrPortalLanguage());
+        $arrElementsOnBlock = $this->getElementsOnBlock();
         $intCachetime = null;
         foreach($arrElementsOnBlock as $objOneElement) {
             $intElTime = $objOneElement->getConcretePortalInstance()->getCachetimeInSeconds();

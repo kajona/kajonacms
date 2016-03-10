@@ -7,6 +7,7 @@
 namespace Kajona\Pages\Portal\Elements;
 
 use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\Portal\PagesPortalController;
 use Kajona\Pages\Portal\PagesPortaleditor;
 use Kajona\Pages\Portal\PortalElementInterface;
 use Kajona\Pages\System\PagesPage;
@@ -25,6 +26,28 @@ class ElementBlocksPortal extends ElementPortal implements PortalElementInterfac
 
 
     private $arrBlocks = null;
+
+
+
+    private function getElementsOnBlocks()
+    {
+        if(PagesPortalController::$arrElementsOnPage != null) {
+            $arrElementsOnBlocks = array();
+
+            foreach(PagesPortalController::$arrElementsOnPage as $objOneElement) {
+                if($objOneElement->getPrevId() == $this->getSystemid()) {
+                    $arrElementsOnBlocks[] = $objOneElement;
+                }
+            }
+
+        }
+        else {
+            //load elements below
+            $arrElementsOnBlocks = PagesPageelement::getElementsOnPage($this->getSystemid(), !PagesPortaleditor::isActive(), $this->getStrPortalLanguage());
+        }
+
+        return $arrElementsOnBlocks;
+    }
 
 
     /**
@@ -48,7 +71,7 @@ class ElementBlocksPortal extends ElementPortal implements PortalElementInterfac
     public function getCacheHashSum()
     {
         $strSum = "";
-        $arrElementsOnBlock = PagesPageelement::getElementsOnPage($this->getSystemid(), true, $this->getStrPortalLanguage());
+        $arrElementsOnBlock = $this->getElementsOnBlocks();
         $intCachetime = null;
         foreach($arrElementsOnBlock as $objOneElement) {
             $strSum .= $objOneElement->getConcretePortalInstance()->getCacheHashSum();
@@ -90,7 +113,7 @@ class ElementBlocksPortal extends ElementPortal implements PortalElementInterfac
             $this->arrBlocks = array();
 
             //load elements below
-            $arrElementsOnBlocks = PagesPageelement::getElementsOnPage($this->getSystemid(), !PagesPortaleditor::isActive(), $this->getStrPortalLanguage());
+            $arrElementsOnBlocks = $this->getElementsOnBlocks();
 
             if (count($arrElementsOnBlocks) == 0) {
                 return array();

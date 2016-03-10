@@ -357,11 +357,11 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
      * @return PagesPageelement[]
      * @static
      */
-    public static function getElementsOnPage($strPageId, $bitJustActive = false, $strLanguage = "")
+    public static function getElementsOnPage($strPageId, $bitJustActive = false, $strLanguage = "", $bitWithMasterAndBlocks = false)
     {
 
         //since there's the time as an parameter, there's no need for querying the cache...
-        $arrIds = self::getPlainElementsOnPage($strPageId, $bitJustActive, $strLanguage);
+        $arrIds = self::getPlainElementsOnPage($strPageId, $bitJustActive, $strLanguage, $bitWithMasterAndBlocks);
 
         $arrReturn = array();
         foreach ($arrIds as $arrOneId) {
@@ -384,7 +384,7 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
      * @see PagesPageelement::getElementsOnPage()
      * @return array
      */
-    public static function getPlainElementsOnPage($strPageId, $bitJustActive = false, $strLanguage = "")
+    public static function getPlainElementsOnPage($strPageId, $bitJustActive = false, $strLanguage = "", $bitWithMasterAndBlocks = false)
     {
         //Calculate the current day as a time-stamp. This improves database-caches e.g. the kajona or mysql-query-cache.
         $objDate = new \Kajona\System\System\Date();
@@ -393,36 +393,81 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
         $objDate->setIntHour(0, true);
 
         $longToday = $objDate->getLongTimestamp();
-        $arrParams = array($strPageId, $strLanguage);
+        $arrParams = array();
         $objORM = new OrmObjectlist();
 
         $strAnd = "";
         if ($bitJustActive) {
-            $strAnd = "AND system_status = 1
-                       AND ( system_date_start IS null OR (system_date_start = 0 OR system_date_start <= ?))
-                       AND ( system_date_end IS null OR (system_date_end = 0 OR system_date_end >= ?)) ";
+            $strAnd = "AND el_system.system_status = 1
+                       AND ( el_date.system_date_start IS null OR (el_date.system_date_start = 0 OR el_date.system_date_start <= ?))
+                       AND ( el_date.system_date_end IS null OR (el_date.system_date_end = 0 OR el_date.system_date_end >= ?)) ";
 
             $arrParams[] = $longToday;
             $arrParams[] = $longToday;
         }
 
-        $strQuery = "SELECT *
+        if(!$bitWithMasterAndBlocks) {
+            $strQuery = "SELECT *
                        FROM "._dbprefix_."page_element,
                             "._dbprefix_."element,
-                            "._dbprefix_."system_right,
-                            "._dbprefix_."system as system
-                  LEFT JOIN "._dbprefix_."system_date
-                         ON (system_id = system_date_id)
-                      WHERE system_prev_id= ?
-                        AND page_element_ph_element = element_name
-                        AND system_id = page_element_id
-                        AND system_id = right_id
-                        AND page_element_ph_language = ?
+                            "._dbprefix_."system_right AS el_right,
+                            "._dbprefix_."system as el_system
+                  LEFT JOIN "._dbprefix_."system_date AS el_date
+                         ON (el_system.system_id = el_date.system_date_id)
+                      WHERE 1=1
                        ".$strAnd."
                        ".$objORM->getDeletedWhereRestriction()."
+                        AND el_system.system_prev_id= ?
+                        AND el_system.system_id = page_element_id
+                        AND el_system.system_id = el_right.right_id
+
+                        AND page_element_ph_element = element_name
+                        AND page_element_ph_language = ?
                   ORDER BY page_element_ph_placeholder ASC,
                            page_element_ph_language ASC,
                            system_sort ASC";
+
+            $arrParams[] = $strPageId;
+            $arrParams[] = $strLanguage;
+        }
+        else {
+            $strQuery = "SELECT *
+                       FROM "._dbprefix_."page_element,
+                            "._dbprefix_."element,
+                            "._dbprefix_."system_right AS el_right,
+                            "._dbprefix_."system as el_system
+                  LEFT JOIN "._dbprefix_."system_date AS el_date
+                         ON (el_system.system_id = el_date.system_date_id)
+                      WHERE 1=1
+                       ".$strAnd."
+                       ".$objORM->getDeletedWhereRestriction()."
+                      AND (
+                        /* check one: direct elements on the page and the master page */
+						(el_system.system_prev_id= ? OR el_system.system_prev_id = (SELECT page_id FROM kajona_page WHERE page_name = 'master'))
+
+                        /* check two: block on blocks on the page */
+                        OR
+                        (el_system.system_prev_id IN (select system_id from kajona_system where system_prev_id = ?))
+
+                        /* check three: elements on block on the page */
+                        OR
+                        (el_system.system_prev_id IN (select system_id FROM kajona_system WHERE system_prev_id IN (select system_id from kajona_system where system_prev_id = ?)))
+
+                      )
+
+                        AND el_system.system_id = page_element_id
+                        AND el_system.system_id = el_right.right_id
+
+                        AND page_element_ph_element = element_name
+                        AND page_element_ph_language = ?
+                        ORDER BY system_sort ASC
+                  ";
+
+            $arrParams[] = $strPageId;
+            $arrParams[] = $strPageId;
+            $arrParams[] = $strPageId;
+            $arrParams[] = $strLanguage;
+        }
 
         $arrReturn = Carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
 

@@ -24,6 +24,7 @@ use Kajona\System\System\Logger;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\ResponseObject;
 use Kajona\System\System\ServiceProvider;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemSetting;
 use Kajona\System\System\Template;
 
@@ -48,6 +49,10 @@ class PagesPortalController extends PortalController implements PortalInterface
      */
     private static $strAdditionalTitle = "";
 
+    /**
+     * @var PagesPageelement[]
+     */
+    public static $arrElementsOnPage = null;
 
     /**
      * @param array|mixed $arrElementData
@@ -84,35 +89,17 @@ class PagesPortalController extends PortalController implements PortalInterface
         //If we reached up till here, we can begin loading the elements to fill
         //TODO: merge with data from master-page, load blocks and blocks automatically within a single, complex join
         if (PagesPortaleditor::isActive()) {
-            $arrElementsOnPage = PagesPageelement::getElementsOnPage($objPageData->getSystemid(), false, $this->getStrPortalLanguage());
+            self::$arrElementsOnPage = PagesPageelement::getElementsOnPage($objPageData->getSystemid(), false, $this->getStrPortalLanguage(), true);
         }
         else {
-            $arrElementsOnPage = PagesPageelement::getElementsOnPage($objPageData->getSystemid(), true, $this->getStrPortalLanguage());
-        }
-
-
-
-        //If there's a master-page, load elements on that, too
-        $objMasterData = PagesPage::getPageByName("master");
-        if ($objMasterData != null) {
-            if (PagesPortaleditor::isActive()) {
-                $arrElementsOnMaster = PagesPageelement::getElementsOnPage($objMasterData->getSystemid(), false, $this->getStrPortalLanguage());
-            }
-            else {
-                $arrElementsOnMaster = PagesPageelement::getElementsOnPage($objMasterData->getSystemid(), true, $this->getStrPortalLanguage());
-            }
-
-            //and merge them
-            $arrElementsOnPage = array_merge($arrElementsOnPage, $arrElementsOnMaster);
+            self::$arrElementsOnPage = PagesPageelement::getElementsOnPage($objPageData->getSystemid(), true, $this->getStrPortalLanguage(), true);
         }
 
 
         $strPageCacheHashSum = null;
         $intPageCacheTime = 0;
         if (!PagesPortaleditor::isActive()) {
-
-            list($strPageCacheHashSum, $intPageCacheTime) = $this->getPageCacheValues($arrElementsOnPage);
-
+            list($strPageCacheHashSum, $intPageCacheTime) = $this->getPageCacheValues(self::$arrElementsOnPage);
             /** @var CacheManager $objCache */
             $objCache = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER);
             $strPageContent = $objCache->getValue($strPageCacheHashSum);
@@ -147,11 +134,16 @@ class PagesPortalController extends PortalController implements PortalInterface
         $arrBlocksIds = array();
 
         /** @var PagesPageelement $objOneElementOnPage */
-        foreach ($arrElementsOnPage as $objOneElementOnPage) {
+        foreach (self::$arrElementsOnPage as $objOneElementOnPage) {
 
             //element really available on the template?
             if ($objOneElementOnPage->getStrElement() != "block" && $objOneElementOnPage->getStrElement() != "blocks" && !in_array($objOneElementOnPage->getStrPlaceholder(), $arrPlaceholders)) {
                 //next one, plz
+                continue;
+            }
+
+            //current element located directly on the page?
+            if($objOneElementOnPage->getStrPrevId() != $objPageData->getSystemid() && !StringUtil::startsWith($objOneElementOnPage->getStrPlaceholder(), "master")) {
                 continue;
             }
 
@@ -294,7 +286,6 @@ class PagesPortalController extends PortalController implements PortalInterface
         }
 
         //and cache the whole page
-        //TODO: remove this caching?
         if (!PagesPortaleditor::isActive() && $intPageCacheTime > 0) {
             /** @var CacheManager $objCache */
             $objCache = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER);
