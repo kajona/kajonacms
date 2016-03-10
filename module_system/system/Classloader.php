@@ -287,10 +287,18 @@ class Classloader
      */
     private function getClassesInFolder($strFolder)
     {
-
         $arrFiles = array();
+        $arrModules = BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_MODULES);
 
-        foreach (array_merge(BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_MODULES), array("project")) as $strPath => $strSingleModule) {
+        // add project folders
+        foreach ($arrModules as $strPath => $strSingleModule) {
+            $strPath = "project" . substr($strPath, strpos($strPath, "/"));
+            if (is_dir(_realpath_."/".$strPath.$strFolder)) {
+                $arrModules[$strPath] = $strSingleModule;
+            }
+        }
+
+        foreach ($arrModules as $strPath => $strSingleModule) {
             if (is_dir(_realpath_."/".$strPath.$strFolder)) {
                 $arrTempFiles = scandir(_realpath_."/".$strPath.$strFolder);
                 foreach ($arrTempFiles as $strSingleFile) {
