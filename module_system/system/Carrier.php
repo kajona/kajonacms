@@ -83,7 +83,7 @@ class Carrier
      */
     public function getObjDB()
     {
-        return $this->objContainer['db'];
+        return $this->objContainer[ServiceProvider::STR_DB];
     }
 
 
@@ -95,7 +95,7 @@ class Carrier
      */
     public function getObjRights()
     {
-        return $this->objContainer['rights'];
+        return $this->objContainer[ServiceProvider::STR_RIGHTS];
     }
 
     /**
@@ -106,7 +106,7 @@ class Carrier
      */
     public function getObjConfig()
     {
-        return $this->objContainer['config'];
+        return $this->objContainer[ServiceProvider::STR_CONFIG];
     }
 
     /**
@@ -117,7 +117,7 @@ class Carrier
      */
     public function getObjSession()
     {
-        return $this->objContainer['session'];
+        return $this->objContainer[ServiceProvider::STR_SESSION];
     }
 
 
@@ -129,7 +129,7 @@ class Carrier
      */
     public function getObjTemplate()
     {
-        return $this->objContainer['template'];
+        return $this->objContainer[ServiceProvider::STR_TEMPLATE];
     }
 
     /**
@@ -140,7 +140,7 @@ class Carrier
      */
     public function getObjLang()
     {
-        return $this->objContainer['lang'];
+        return $this->objContainer[ServiceProvider::STR_LANG];
     }
 
 
@@ -155,10 +155,10 @@ class Carrier
     public function getObjToolkit($strArea)
     {
         if ($strArea == "admin") {
-            return $this->objContainer['admintoolkit'];
+            return $this->objContainer[ServiceProvider::STR_ADMINTOOLKIT];
         }
         elseif ($strArea == "portal") {
-            return $this->objContainer['portaltoolkit'];
+            return $this->objContainer[ServiceProvider::STR_PORTALTOOLKIT];
         }
         return null;
     }
