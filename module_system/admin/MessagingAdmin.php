@@ -527,7 +527,7 @@ JS;
                 array($this->getLang("message_reference"), $strReference)
             );
 
-            $strReturn .= $this->objToolkit->dataTable(null, $arrMetaData);
+            $strReturn .= $this->objToolkit->dataTable(array(), $arrMetaData);
 
             $strBody = nl2br($objMessage->getStrBody());
             $strBody = replaceTextLinks($strBody);

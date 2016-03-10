@@ -384,7 +384,7 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
 
             $arrRequiredRows[] = array($strOneModule, " >= ".$strVersion, $strStatus);
         }
-        $arrRows[] = array($this->getLang("package_modules"), $this->objToolkit->dataTable(null, $arrRequiredRows));
+        $arrRows[] = array($this->getLang("package_modules"), $this->objToolkit->dataTable(array(), $arrRequiredRows));
 
 
         if ($bitIncludeRequiredBy) {
@@ -393,7 +393,7 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
                 $strOneModule = array($strOneModule);
             });
 
-            $arrRows[] = array($this->getLang("package_required_by"), $this->objToolkit->dataTable(null, $arrRequiredBy));
+            $arrRows[] = array($this->getLang("package_required_by"), $this->objToolkit->dataTable(array(), $arrRequiredBy));
         }
 
         $strImages = "";
@@ -417,7 +417,7 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
         }
         $arrRows[] = array($this->getLang("package_screenshots"), $strImages);
 
-        $strReturn .= $this->objToolkit->dataTable(null, $arrRows);
+        $strReturn .= $this->objToolkit->dataTable(array(), $arrRows);
         return $strReturn;
     }
 
