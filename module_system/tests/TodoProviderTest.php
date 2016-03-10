@@ -16,6 +16,9 @@ class TodoProviderTest extends Testbase
 
         foreach ($arrPlugins as $objPlugin) {
             // get all categories
+
+            /** @var TodoProviderInterface[] $arrCategories */
+            /** @var TodoProviderInterface $objPlugin */
             $arrCategories = $objPlugin->getCategories();
             $arrNames[] = $objPlugin->getName();
 
@@ -35,8 +38,5 @@ class TodoProviderTest extends Testbase
                 }
             }
         }
-
-        // check whether we have duplicate names if so its an error condition
-        $this->assertEquals(count(array_unique($arrNames)), count($arrNames));
     }
 }
