@@ -10,7 +10,8 @@ describe('module_messaging', function() {
 
         expect(browser.driver.findElement(by.id('moduleTitle')).getText()).toEqual('Nachrichten');
 
-        browser.driver.findElement(by.css('.fa-plus-circle')).click();
+        element.all(by.css('.actions')).last().$('a').click();
+
         browser.driver.wait(protractor.until.elementLocated(By.id('folderviewDialog_iframe')), 5000);
         browser.driver.switchTo().frame(browser.driver.findElement(by.id('folderviewDialog_iframe')));
 
