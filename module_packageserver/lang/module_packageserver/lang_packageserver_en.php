@@ -10,8 +10,10 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["_packageserver_repo_id_"]         = "Package-Repository";
-$lang["_packageserver_repo_id_hint"]     = "By default, the package-server searches all repositories of the mediamanager (improved performance). If required, the search may be limited to a single repository. Specify the system-id of the repository here.";
+$lang["_packageserver_repo_v4_id_"]         = "V4 Package-Repository";
+$lang["_packageserver_repo_v4_id_hint"]     = "The id of the mediamanager repository holding the v4 packages (zip files)";
+$lang["_packageserver_repo_v5_id_"]         = "V5 Package-Repository";
+$lang["_packageserver_repo_v5_id_hint"]     = "The id of the mediamanager repository holding the v5 packages (phar files)";
 $lang["action_list"]                     = "Packages";
 $lang["action_logs"]                     = "Logfile";
 $lang["action_show_info"]                = "Detailed-View";

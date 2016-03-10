@@ -8,7 +8,6 @@
 
 namespace Kajona\Packagemanager\System;
 
-use Kajona\System\System\Cache;
 use Kajona\System\System\CacheManager;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Classloader;

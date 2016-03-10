@@ -126,6 +126,7 @@ class AdminskinImageresolver implements AdminskinImageresolverInterface {
         "icon_page"                        => "<i class='kj-icon fa fa-file-o'></i>",
         "icon_pageLocked"                  => "<span class='kj-icon fa-stack fa-lg'><i class='fa fa-file-o'></i><i class='fa fa-lock fa-stack-1x' style='color: red'></i></span>",
         "icon_page_alias"                  => "<span class='kj-icon fa-stack fa-lg'><i class='fa fa-file-o'></i><i class='fa fa-chevron-right fa-stack-1x'></i></span>",
+        "icon_phar"                        => "<i class='kj-icon fa fa-file-archive-o'></i>",
         "icon_progressbar"                 => "<i class='kj-icon fa fa-spinner icon-spin'></i>",
         "icon_question"                    => "<i class='kj-icon fa fa-question-circle'></i>",
         "icon_reply"                       => "<i class='kj-icon fa fa-reply'></i>",

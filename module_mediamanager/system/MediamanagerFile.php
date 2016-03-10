@@ -21,6 +21,8 @@ use Kajona\System\System\OrmObjectlistPropertyRestriction;
 use Kajona\System\System\OrmObjectlistRestriction;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\SearchPortalobjectInterface;
+use Kajona\System\System\StringUtil;
+use Kajona\System\System\Zip;
 
 
 /**
@@ -357,7 +359,7 @@ class MediamanagerFile extends \Kajona\System\System\Model implements \Kajona\Sy
     {
 
         //check if its a valid package
-        if (uniSubstr($this->getStrFilename(), -5) == ".phar") {
+        if (StringUtil::endsWith($this->getStrFilename(), ".phar") || StringUtil::endsWith($this->getStrFilename(), ".zip")) {
             $this->updatePackageInformation();
         }
 
@@ -369,10 +371,16 @@ class MediamanagerFile extends \Kajona\System\System\Model implements \Kajona\Sy
      */
     private function updatePackageInformation()
     {
-        if (is_file("phar://"._realpath_."/".$this->getStrFilename()."/metadata.xml")) {
+        //if it's either a phar or a zip based package, do some extracts
+        $objZip = new Zip();
+        if ((StringUtil::endsWith($this->getStrFilename(), ".phar") && is_file("phar://"._realpath_."/".$this->getStrFilename()."/metadata.xml")) ||
+            (StringUtil::endsWith($this->getStrFilename(), ".zip") && $objZip->getFileFromArchive($this->getStrFilename(), "/metadata.xml") !== false)
+        ) {
             $objMetadata = new PackagemanagerMetadata();
             $objMetadata->autoInit($this->getStrFilename());
             $this->setBitIspackage(1);
+            $this->setStrName($objMetadata->getStrTitle());
+            $this->setStrDescription($objMetadata->getStrDescription());
             $this->setStrCat($objMetadata->getStrType());
         }
         else {

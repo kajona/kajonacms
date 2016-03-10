@@ -36,6 +36,8 @@ use Kajona\System\System\UserUser;
 abstract class PackagemanagerContentproviderRemoteBase implements PackagemanagerContentproviderInterface
 {
 
+    const PROTOCOL_VERSION = 5;
+
     private static $STR_MODULE_NAME = "packagemanager";
 
     private $STR_BROWSE_HOST = "";
@@ -47,7 +49,7 @@ abstract class PackagemanagerContentproviderRemoteBase implements Packagemanager
     private $CLASS_NAME;
 
 
-    function __construct($strProviderName, $strBrowseHost, $strBrowseUrl, $strDownloadUrl, $strClassName, $strBrowseProtocol = "http://", $intBrowsePort = 80)
+    public function __construct($strProviderName, $strBrowseHost, $strBrowseUrl, $strDownloadUrl, $strClassName, $strBrowseProtocol = "http://", $intBrowsePort = 80)
     {
         $this->STR_PROVIDER_NAME = $strProviderName;
         $this->STR_BROWSE_HOST = $strBrowseHost;
@@ -125,7 +127,6 @@ abstract class PackagemanagerContentproviderRemoteBase implements Packagemanager
             $strReturn .= $objToolkit->getTextRow($objLang->getLang("commons_list_empty", null));
         }
         else {
-            $intI = 0;
             foreach ($arrPackages as $arrOnePackage) {
 
                 //check if already installed locally
@@ -186,7 +187,7 @@ abstract class PackagemanagerContentproviderRemoteBase implements Packagemanager
             }
         }
 
-        return $strQuery."&start=".$intStart."&end=".$intEnd."&domain=".urlencode(_webpath_);
+        return $strQuery."&protocolversion=".self::PROTOCOL_VERSION."&start=".$intStart."&end=".$intEnd."&domain=".urlencode(_webpath_);
     }
 
 
@@ -279,7 +280,7 @@ abstract class PackagemanagerContentproviderRemoteBase implements Packagemanager
     {
 
         $objRemoteloader = $this->getRemoteloader();
-        $objRemoteloader->setStrQueryParams($this->STR_BROWSE_URL."&title=".urlencode($strTitle)."&domain=".urlencode(_webpath_));
+        $objRemoteloader->setStrQueryParams($this->STR_BROWSE_URL."&protocolversion=".self::PROTOCOL_VERSION."&title=".urlencode($strTitle)."&domain=".urlencode(_webpath_));
 
         try {
             $strPackages = $objRemoteloader->getRemoteContent();

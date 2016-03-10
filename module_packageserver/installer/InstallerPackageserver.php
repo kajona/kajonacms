@@ -50,19 +50,30 @@ class InstallerPackageserver extends InstallerBase implements InstallerRemovable
 
         $strReturn .= "creating package-upload-repository...\n";
         $objFilesytem = new Filesystem();
-        $objFilesytem->folderCreate("/files/packages");
-        $objRepo = new MediamanagerRepo();
-        $objRepo->setStrPath("/files/packages");
-        $objRepo->setStrViewFilter(".phar");
-        $objRepo->setStrUploadFilter(".phar");
-        $objRepo->setStrTitle("Packageserver packages");
-        $objRepo->updateObjectToDb();
+        $objFilesytem->folderCreate("/files/packagesv4");
+        $objV4Repo = new MediamanagerRepo();
+        $objV4Repo->setStrPath("/files/packagesv4");
+        $objV4Repo->setStrViewFilter(".zip");
+        $objV4Repo->setStrUploadFilter(".zip");
+        $objV4Repo->setStrTitle("Packageserver v4 packages");
+        $objV4Repo->updateObjectToDb();
 
-        Carrier::getInstance()->getObjRights()->addGroupToRight(SystemSetting::getConfigValue("_guests_group_id_"), $objRepo->getSystemid(), Rights::$STR_RIGHT_RIGHT2);
+
+        $objFilesytem = new Filesystem();
+        $objFilesytem->folderCreate("/files/packagesv5");
+        $objV5Repo = new MediamanagerRepo();
+        $objV5Repo->setStrPath("/files/packagesv5");
+        $objV5Repo->setStrViewFilter(".phar");
+        $objV5Repo->setStrUploadFilter(".phar");
+        $objV5Repo->setStrTitle("Packageserver v5 packages");
+        $objV5Repo->updateObjectToDb();
+
+        Carrier::getInstance()->getObjRights()->addGroupToRight(SystemSetting::getConfigValue("_guests_group_id_"), $objV4Repo->getSystemid(), Rights::$STR_RIGHT_RIGHT2);
 
 
         $strReturn .= "Registering system-constants...\n";
-        $this->registerConstant("_packageserver_repo_id_", "", SystemSetting::$int_TYPE_STRING, _packageserver_module_id_);
+        $this->registerConstant("_packageserver_repo_v4_id_", $objV4Repo->getSystemid(), SystemSetting::$int_TYPE_STRING, _packageserver_module_id_);
+        $this->registerConstant("_packageserver_repo_v5_id_", $objV5Repo->getSystemid(), SystemSetting::$int_TYPE_STRING, _packageserver_module_id_);
 
 
         $strReturn .= "Setting aspect assignments...\n";
@@ -100,7 +111,8 @@ class InstallerPackageserver extends InstallerBase implements InstallerRemovable
     {
 
         $strReturn .= "Deleting config-entries..\n";
-        SystemSetting::getConfigByName("_packageserver_repo_id_")->deleteObjectFromDatabase();
+        SystemSetting::getConfigByName("_packageserver_repo_v4_id_")->deleteObjectFromDatabase();
+        SystemSetting::getConfigByName("_packageserver_repo_v5_id_")->deleteObjectFromDatabase();
 
         //delete the module-node
         $strReturn .= "Deleting the module-registration...\n";
@@ -132,13 +144,34 @@ class InstallerPackageserver extends InstallerBase implements InstallerRemovable
 
         $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
+
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if ($arrModule["module_version"] == "4.7") {
-            $strReturn .= "Updating 4.7 to 5.0...\n";
-            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.0");
+        if($arrModule["module_version"] == "4.7") {
+            $strReturn .= $this->update_47_50();
         }
 
+
         return $strReturn."\n\n";
+    }
+
+    private function update_47_50()
+    {
+        $strReturn = "Updating 4.7 to 5.0...\n";
+
+        $strReturn .= "Updating system-constants...\n";
+        //register v5 repo id
+        $this->registerConstant("_packageserver_repo_v5_id_", "", SystemSetting::$int_TYPE_STRING, _packageserver_module_id_);
+
+        //rename v4 repo id
+        $objSetting = SystemSetting::getConfigByName("_packageserver_repo_id_");
+        $objSetting->setStrName("_packageserver_repo_v4_id_");
+        $objSetting->updateObjectToDb();
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.0");
+        return $strReturn;
+
     }
 
 }

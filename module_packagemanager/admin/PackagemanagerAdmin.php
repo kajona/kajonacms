@@ -132,7 +132,7 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
 
             if (!$objOneMetadata->getBitIsPhar()) {
                 $strActions .= $this->objToolkit->listButton(
-                    Link::getLinkAdmin($this->getArrModule("modul"), "downloadAsPhar", "&package=".$objOneMetadata->getStrTitle(), $this->getLang("package_downloadasphar"), $this->getLang("package_downloadasphar"), "icon_downloads")
+                    Link::getLinkAdmin($this->getArrModule("modul"), "downloadAsPhar", "&package=".$objOneMetadata->getStrTitle(), $this->getLang("package_downloadasphar"), $this->getLang("package_downloadasphar"), "icon_phar")
                 );
             }
 

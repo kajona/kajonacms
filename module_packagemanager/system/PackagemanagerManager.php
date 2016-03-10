@@ -35,6 +35,8 @@ class PackagemanagerManager
 
     const STR_TYPE_MODULE = "MODULE";
     const STR_TYPE_TEMPLATE = "TEMPLATE";
+    /** @deprecated */
+    const STR_TYPE_ELEMENT = "ELEMENT";
 
 
     public static $arrLatestVersion = null;
@@ -146,7 +148,7 @@ class PackagemanagerManager
 
         $objManager = null;
 
-        if ($objMetadata->getStrType() == self::STR_TYPE_MODULE) {
+        if ($objMetadata->getStrType() == self::STR_TYPE_MODULE || $objMetadata->getStrType() == self::STR_TYPE_ELEMENT) {
             if ($objMetadata->getBitIsPhar()) {
                 $objManager = new PackagemanagerPackagemanagerPharmodule();
             }

@@ -21,8 +21,10 @@ use Kajona\System\System\AdminskinHelper;
 use Kajona\System\System\ArraySectionIterator;
 use Kajona\System\System\Link;
 use Kajona\System\System\Objectfactory;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\SystemSetting;
+use Kajona\System\System\Zip;
 
 
 /**
@@ -200,19 +202,9 @@ class PackageserverAdmin extends MediamanagerAdmin implements AdminInterface
     protected function actionUpdateDataFromMetadata()
     {
         $objPackage = new MediamanagerFile($this->getSystemid());
-
-        if (is_file("phar://"._realpath_."/".$objPackage->getStrFilename()."/metadata.xml")) {
-            $objMetadata = new PackagemanagerMetadata();
-            $objMetadata->autoInit($objPackage->getStrFilename());
-            $objPackage->setStrName($objMetadata->getStrTitle());
-            $objPackage->setStrDescription($objMetadata->getStrDescription());
-            //updateObjectToDb triggers the update of the isPackage and the category flags
-            $objPackage->updateObjectToDb();
-            return "<message><success /></message>";
-        }
-
-        return "<message><error /></message>";
-
+        //updateObjectToDb triggers the update of the isPackage and the category flags
+        $objPackage->updateObjectToDb();
+        return "<message><success /></message>";
     }
 
 

@@ -44,6 +44,13 @@ class PackageserverPortal extends PortalController implements PortalInterface
         $arrPackages = array();
         $intNrOfFiles = 0;
 
+
+        $strRepoId = SystemSetting::getConfigValue("_packageserver_repo_v4_id_");
+        if($this->getParam("protocolversion") >= 5) {
+            $strRepoId = SystemSetting::getConfigValue("_packageserver_repo_v5_id_");
+        }
+
+
         $intStart = $this->ensureNumericValue($this->getParam("start"), null);
         $intEnd = $this->ensureNumericValue($this->getParam("end"), null);
         $strTypeFilter = $this->isValidCategoryFilter($this->getParam("type")) ? $this->getParam("type") : false;
@@ -53,12 +60,12 @@ class PackageserverPortal extends PortalController implements PortalInterface
         if ($this->isValidPagingParameter($intStart) && $this->isValidPagingParameter($intEnd)) {
 
             if ($intEnd >= $intStart) {
-                $intNrOfFiles = $this->getAllPackagesCount(SystemSetting::getConfigValue("_packageserver_repo_id_"), $strTypeFilter, $strNameFilter);
-                $arrDBFiles = $this->getAllPackages(SystemSetting::getConfigValue("_packageserver_repo_id_"), $strTypeFilter, $intStart, $intEnd, $strNameFilter);
+                $intNrOfFiles = $this->getAllPackagesCount($strRepoId, $strTypeFilter, $strNameFilter);
+                $arrDBFiles = $this->getAllPackages($strRepoId, $strTypeFilter, $intStart, $intEnd, $strNameFilter);
 
                 //error-handling: a new filter and a offset is passed. but maybe the passed offset is no longer valid for the new filter criteria
                 if (count($arrDBFiles) == 0 && $intNrOfFiles > 0) {
-                    $arrDBFiles = $this->getAllPackages(SystemSetting::getConfigValue("_packageserver_repo_id_"), $strTypeFilter, 0, $intNrOfFiles, $strNameFilter);
+                    $arrDBFiles = $this->getAllPackages($strRepoId, $strTypeFilter, 0, $intNrOfFiles, $strNameFilter);
                 }
 
                 $objManager = new PackagemanagerManager();
@@ -139,57 +146,57 @@ class PackageserverPortal extends PortalController implements PortalInterface
      */
     private function getAllPackages($strParentId, $strCategoryFilter = false, $intStart = null, $intEnd = null, $strNameFilter = false)
     {
+
+        if (!validateSystemid($strParentId)) {
+            return array();
+        }
+
         $arrReturn = array();
+        $arrSubfiles = MediamanagerFile::loadFilesDB($strParentId, false, true, null, null, true);
 
-        if (validateSystemid($strParentId)) {
+        //TODO: category filtering
 
-            $arrSubfiles = MediamanagerFile::loadFilesDB($strParentId, false, true, null, null, true);
+        foreach ($arrSubfiles as $objOneFile) {
+            if ($objOneFile->getIntType() == MediamanagerFile::$INT_TYPE_FILE) {
 
-            foreach ($arrSubfiles as $objOneFile) {
-                if ($objOneFile->getIntType() == MediamanagerFile::$INT_TYPE_FILE) {
-
-                    //filename based check if the file should be included
-                    if ($strNameFilter !== false) {
-                        if (uniStrpos($strNameFilter, ",") !== false) {
-                            if (in_array($objOneFile->getStrName(), explode(",", $strNameFilter))) {
-                                $arrReturn[] = $objOneFile;
-                            }
-                        }
-                        elseif (uniSubstr($objOneFile->getStrName(), 0, uniStrlen($strNameFilter)) == $strNameFilter) {
+                //filename based check if the file should be included
+                if ($strNameFilter !== false) {
+                    if (uniStrpos($strNameFilter, ",") !== false) {
+                        if (in_array($objOneFile->getStrName(), explode(",", $strNameFilter))) {
                             $arrReturn[] = $objOneFile;
                         }
                     }
-                    else {
+                    elseif (uniSubstr($objOneFile->getStrName(), 0, uniStrlen($strNameFilter)) == $strNameFilter) {
                         $arrReturn[] = $objOneFile;
                     }
                 }
                 else {
-                    $arrReturn = array_merge($arrReturn, $this->getAllPackages($objOneFile->getSystemid()));
+                    $arrReturn[] = $objOneFile;
                 }
             }
+            else {
+                $arrReturn = array_merge($arrReturn, $this->getAllPackages($objOneFile->getSystemid()));
+            }
+        }
 
-            if ($intStart !== null && $intEnd !== null && $intStart > 0 && $intEnd > $intStart) {
-                if ($intEnd > count($arrReturn)) {
-                    $intEnd = count($arrReturn);
-                }
-
-                $arrTemp = array();
-                for ($intI = $intStart; $intI <= $intEnd; $intI++) {
-                    $arrTemp[] = $arrReturn[$intI];
-                }
-
-                $arrReturn = $arrTemp;
-
+        if ($intStart !== null && $intEnd !== null && $intStart > 0 && $intEnd > $intStart) {
+            if ($intEnd > count($arrReturn)) {
+                $intEnd = count($arrReturn);
             }
 
-            //sort them by filename
-            usort($arrReturn, function (MediamanagerFile $objA, MediamanagerFile $objB) {
-                return strcmp($objA->getStrName(), $objB->getStrName());
-            });
+            $arrTemp = array();
+            for ($intI = $intStart; $intI <= $intEnd; $intI++) {
+                $arrTemp[] = $arrReturn[$intI];
+            }
+
+            $arrReturn = $arrTemp;
+
         }
-        else {
-            $arrReturn = MediamanagerFile::getFlatPackageList($strCategoryFilter, true, $intStart, $intEnd, $strNameFilter);
-        }
+
+        //sort them by filename
+        usort($arrReturn, function (MediamanagerFile $objA, MediamanagerFile $objB) {
+            return strcmp($objA->getStrName(), $objB->getStrName());
+        });
 
         return $arrReturn;
     }
@@ -208,9 +215,8 @@ class PackageserverPortal extends PortalController implements PortalInterface
         if (validateSystemid($strParentId)) {
             return count($this->getAllPackages($strParentId, $strCategoryFilterFilter, null, null, $strNameFilter));
         }
-        else {
-            return MediamanagerFile::getFlatPackageListCount($strCategoryFilterFilter, true, $strNameFilter);
-        }
+
+        return 0;
     }
 
 
