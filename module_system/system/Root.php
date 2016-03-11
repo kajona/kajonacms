@@ -734,6 +734,9 @@ abstract class Root
             //unlock the record
             $this->getLockManager()->unlockRecord();
             Logger::getInstance()->addLogRow("updateObjectToDb() succeeded for systemid ".$this->getSystemid()." (".$this->getRecordComment().")", Logger::$levelInfo);
+
+            //call the recordUpdated-Listeners
+            CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_RECORDUPDATED, array($this, $bitRecordCreated));
         }
         else {
             $this->objDB->transactionRollback();
@@ -741,8 +744,6 @@ abstract class Root
         }
 
 
-        //call the recordUpdated-Listeners
-        CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_RECORDUPDATED, array($this, $bitRecordCreated));
 
         Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBQUERIES);
         return $bitCommit;
