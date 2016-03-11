@@ -443,15 +443,15 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
                        ".$objORM->getDeletedWhereRestriction()."
                       AND (
                         /* check one: direct elements on the page and the master page */
-						(el_system.system_prev_id= ? OR el_system.system_prev_id = (SELECT page_id FROM kajona_page WHERE page_name = 'master'))
+						(el_system.system_prev_id= ? OR el_system.system_prev_id = (SELECT page_id FROM "._dbprefix_."page WHERE page_name = 'master'))
 
                         /* check two: block on blocks on the page */
                         OR
-                        (el_system.system_prev_id IN (select system_id from kajona_system where system_prev_id = ?))
+                        (el_system.system_prev_id IN (SELECT system_id FROM "._dbprefix_."system WHERE system_prev_id = ?))
 
                         /* check three: elements on block on the page */
                         OR
-                        (el_system.system_prev_id IN (select system_id FROM kajona_system WHERE system_prev_id IN (select system_id from kajona_system where system_prev_id = ?)))
+                        (el_system.system_prev_id IN (SELECT system_id FROM "._dbprefix_."system WHERE system_prev_id IN (SELECT system_id FROM "._dbprefix_."system WHERE system_prev_id = ?)))
 
                       )
 
