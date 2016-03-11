@@ -49,15 +49,35 @@ class StringTest extends Testbase
 
     public function testStrToArray()
     {
+
+        //empty string
         $strString = "";
         $arrResult = StringUtil::toArray($strString);
-        $this->assertCount(0, $arrResult);
+        $this->assertNull($arrResult);
 
+        //null value
+        $strString = null;
+        $arrResult = StringUtil::toArray($strString);
+        $this->assertNull($arrResult);
+
+        //empty string
+        $strString = "null";
+        $arrResult = StringUtil::toArray($strString);
+        $this->assertCount(1, $arrResult);
+        $this->assertEquals("null", $arrResult[0]);
+
+        //standard cal with string
         $strString = "1,0,3";
         $arrResult = StringUtil::toArray($strString);
         $this->assertTrue(is_array($arrResult));
         $this->assertCount(3, $arrResult);
 
+        //Empty delimiter
+        $strString = "1,0,3";
+        $arrResult = StringUtil::toArray($strString, "");
+        $this->assertNull($arrResult);
+
+        //Delimiter "."
         $strString = "1.0.3";
         $arrResult = StringUtil::toArray($strString, ".");
         $this->assertTrue(is_array($arrResult));
@@ -67,6 +87,14 @@ class StringTest extends Testbase
         $arrResult = StringUtil::toArray($strString);
         $this->assertTrue(is_array($arrResult));
         $this->assertCount(0, $arrResult);
+
+        $strString = array(2,3,4);
+        $arrResult = StringUtil::toArray($strString);
+        $this->assertTrue(is_array($arrResult));
+        $this->assertCount(3, $arrResult);
+        $this->assertEquals(2, $arrResult[0]);
+        $this->assertEquals(3, $arrResult[1]);
+        $this->assertEquals(4, $arrResult[2]);
     }
 
     /**

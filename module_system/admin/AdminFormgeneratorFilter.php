@@ -117,7 +117,7 @@ class AdminFormgeneratorFilter extends AdminFormgenerator
 
         // clear params
         foreach($arrParamsSuffix as $strSuffix) {
-            $objCarrier->setParam($this->getFormElementName($strSuffix), "");
+            $objCarrier->setParam($this->getFormElementName($strSuffix), null);
         }
     }
 

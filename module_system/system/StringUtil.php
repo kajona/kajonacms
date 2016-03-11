@@ -220,32 +220,31 @@ class StringUtil
     /**
      * Converts a string to an array.
      *
-     * If $strString is "", then an empty array will be returned
+     * If $strString is null, array(null) will be returned.
+     * If delimiter is not set and $string is not an array, array($string) will be returned.
      *
      * @param $strString
      * @param string $strDelimiter
+     *
      * @return array
      */
     public static function toArray($strString, $strDelimiter = ",")
     {
-        if($strString === "") {
-            return array();
-        }
-        elseif(is_array($strString)) {
+        if(is_array($strString)) {
             return $strString;
         }
-        elseif(is_string($strString) && $strString !== "") {
+        elseif(is_string($strString) && $strString !== "" && !empty($strDelimiter)) {
             return explode($strDelimiter, $strString);
         }
 
-        return array();
+        return null;
     }
 
     /**
      * Converts a string to a Date
      *
      * @param $strString
-     * @return Date
+     * @return Date|null
      */
     public static function toDate($strString)
     {

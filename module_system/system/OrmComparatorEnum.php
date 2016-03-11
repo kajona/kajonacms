@@ -20,6 +20,8 @@ namespace Kajona\System\System;
  * @method static OrmComparatorEnum Like()
  * @method static OrmComparatorEnum In()
  * @method static OrmComparatorEnum NotIn()
+ * @method static OrmComparatorEnum InOrEmpty()
+ * @method static OrmComparatorEnum NotInOrEmpty()
  *
  *
  * @package module_system
@@ -28,6 +30,18 @@ namespace Kajona\System\System;
  */
 class OrmComparatorEnum extends EnumBase
 {
+    const GreaterThen = ">";
+    const GreaterThenEquals = ">=";
+    const LessThen = "<";
+    const LessThenEquals = "<=";
+    const Equal = "=";
+    const NotEqual = "!=";
+    const Like = "LIKE";
+    const In = "IN";
+    const NotIn = "NOT IN";
+    const InOrEmpty = "IN_OR_EMPTY";
+    const NotInOrEmpty = "NOTIN_OR_EMPTY";
+
     /**
      * Return the array of possible, so allowed values for the current enum
      *
@@ -35,46 +49,54 @@ class OrmComparatorEnum extends EnumBase
      */
     protected function getArrValues()
     {
-        return array("GreaterThen", "GreaterThenEquals", "LessThen", "LessThenEquals", "Equal", "NotEqual", "Like", "In", "NotIn");
+        return array("GreaterThen", "GreaterThenEquals", "LessThen", "LessThenEquals", "Equal", "NotEqual", "Like", "In", "NotIn", "InOrEmpty", "NotInOrEmpty");
     }
 
 
     public function getEnumAsSqlString()
     {
         if ($this->equals(OrmComparatorEnum::GreaterThen())) {
-            return ">";
+            return self::GreaterThen;
         }
 
         if ($this->equals(OrmComparatorEnum::GreaterThenEquals())) {
-            return ">=";
+            return self::GreaterThenEquals;
         }
 
         if ($this->equals(OrmComparatorEnum::LessThen())) {
-            return "<";
+            return self::LessThen;
         }
 
         if ($this->equals(OrmComparatorEnum::LessThenEquals())) {
-            return "<=";
+            return self::LessThenEquals;
         }
 
         if ($this->equals(OrmComparatorEnum::Equal())) {
-            return "=";
+            return self::Equal;
         }
 
         if ($this->equals(OrmComparatorEnum::NotEqual())) {
-            return "!=";
+            return self::NotEqual;
         }
 
         if ($this->equals(OrmComparatorEnum::Like())) {
-            return "LIKE";
+            return self::Like;
         }
 
         if ($this->equals(OrmComparatorEnum::In())) {
-            return "IN";
+            return self::In;
         }
 
         if ($this->equals(OrmComparatorEnum::NotIn())) {
-            return "NOT IN";
+            return self::NotIn;
+        }
+
+        if ($this->equals(OrmComparatorEnum::InOrEmpty())) {
+            return self::InOrEmpty;
+        }
+
+        if ($this->equals(OrmComparatorEnum::NotInOrEmpty())) {
+            return self::NotInOrEmpty;
         }
 
         throw new class_orm_exception("Unknown sql comparator", Exception::$level_ERROR);

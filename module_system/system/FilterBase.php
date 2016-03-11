@@ -31,6 +31,8 @@ abstract class FilterBase
     const STR_COMPAREOPERATOR_LIKE = "LIKE";
     const STR_COMPAREOPERATOR_IN = "IN";
     const STR_COMPAREOPERATOR_NOTIN = "NOTIN";
+    const STR_COMPAREOPERATOR_IN_OR_EMPTY = "IN_OR_EMPTY";
+    const STR_COMPAREOPERATOR_NOTIN_OR_EMPTY = "NOTIN_OR_EMPTY";
 
     /**
      * Returns the ID of the filter.
@@ -162,6 +164,16 @@ abstract class FilterBase
         }
         elseif(is_array($strValue)) {
             $strCompareOperator = $enumFilterCompareOperator === null ? OrmObjectlistInRestriction::STR_CONDITION_IN : $enumFilterCompareOperator->getEnumAsSqlString();
+
+            if($enumFilterCompareOperator !== null) {
+                if($enumFilterCompareOperator->equals(OrmComparatorEnum::InOrEmpty())) {
+                    return new OrmObjectlistInOrEmptyRestriction($strTableColumn, $strValue, $strCondition, OrmObjectlistInRestriction::STR_CONDITION_IN);
+                }
+                if($enumFilterCompareOperator->equals(OrmComparatorEnum::NotInOrEmpty())) {
+                    return new OrmObjectlistInOrEmptyRestriction($strTableColumn, $strValue, $strCondition, OrmObjectlistInRestriction::STR_CONDITION_NOTIN);
+                }
+            }
+
             return new OrmObjectlistInRestriction($strTableColumn, $strValue, $strCondition, $strCompareOperator);
         }
         elseif($strValue instanceof Date) {
@@ -229,6 +241,10 @@ abstract class FilterBase
                 return OrmComparatorEnum::In();
             case self::STR_COMPAREOPERATOR_NOTIN:
                 return OrmComparatorEnum::NotIn();
+            case self::STR_COMPAREOPERATOR_IN_OR_EMPTY:
+                return OrmComparatorEnum::InOrEmpty();
+            case self::STR_COMPAREOPERATOR_NOTIN_OR_EMPTY:
+                return OrmComparatorEnum::NotInOrEmpty();
             default:
                 return null;
         }

@@ -26,13 +26,13 @@ class OrmObjectlistInRestriction extends OrmObjectlistRestriction
     const STR_CONDITION_NOTIN = "NOT IN";
 
     private $strColumnName = "";
-    private $arrParams = array();
     private $strCondition = "";
     private $strInCondition = self::STR_CONDITION_IN;
 
+
     function __construct($strProperty, array $arrParams, $strCondition = "AND", $strInCondition = self::STR_CONDITION_IN)
     {
-        if ($strInCondition !== self::STR_CONDITION_IN && $strInCondition !== self::STR_CONDITION_NOTIN) {
+        if($strInCondition !== self::STR_CONDITION_IN && $strInCondition !== self::STR_CONDITION_NOTIN) {
             throw new Exception("Wrong condition set", Exception::$level_ERROR);
         }
 
@@ -52,13 +52,6 @@ class OrmObjectlistInRestriction extends OrmObjectlistRestriction
         throw new OrmException("Setting params for property IN restrictions is not supported", OrmException::$level_ERROR);
     }
 
-    /**
-     * @return array
-     */
-    public function getArrParams()
-    {
-        return $this->arrParams;
-    }
 
     /**
      * @param string $strWhere
@@ -83,25 +76,25 @@ class OrmObjectlistInRestriction extends OrmObjectlistRestriction
 
     protected function getInStatement($strColumnName)
     {
-
-        if (is_array($this->arrParams) && count($this->arrParams) > 0) {
-            if (count($this->arrParams) > self::MAX_IN_VALUES) {
+        if(is_array($this->arrParams) && count($this->arrParams) > 0) {
+            if(count($this->arrParams) > self::MAX_IN_VALUES) {
                 $intCount = ceil(count($this->arrParams) / self::MAX_IN_VALUES);
                 $arrParts = array();
 
-                for ($intI = 0; $intI < $intCount; $intI++) {
+                for($intI = 0; $intI < $intCount; $intI++) {
                     $arrParams = array_slice($this->arrParams, $intI * self::MAX_IN_VALUES, self::MAX_IN_VALUES);
                     $arrParamsPlaceholder = array_map(function ($objParameter) {
                         return "?";
                     }, $arrParams);
                     $strPlaceholder = implode(",", $arrParamsPlaceholder);
-                    if (!empty($strPlaceholder)) {
+                    if(!empty($strPlaceholder)) {
                         $arrParts[] = "{$strColumnName} {$this->strInCondition} ({$strPlaceholder})";
                     }
                 }
 
                 if (count($arrParts) > 0) {
-                    return $this->strCondition." (".implode(" OR ", $arrParts).")";
+                    $strParts = implode(" OR ", $arrParts);
+                    return $this->strCondition." (($strParts) {$this->addAdditionalConditions($strColumnName, "OR")})";
                 }
             }
             else {
@@ -111,11 +104,29 @@ class OrmObjectlistInRestriction extends OrmObjectlistRestriction
                 $strPlaceholder = implode(",", $arrParamsPlaceholder);
 
                 if (!empty($strPlaceholder)) {
-                    return "{$this->strCondition} {$strColumnName} {$this->strInCondition} ({$strPlaceholder})";
+                    return "{$this->strCondition} ({$strColumnName} {$this->strInCondition} ({$strPlaceholder}) {$this->addAdditionalConditions($strColumnName, "OR")})";
                 }
             }
         }
 
+        $strAdditionalCondition = $this->addAdditionalConditions($strColumnName, "");
+        if($strAdditionalCondition != "") {
+            return "{$this->strInCondition} ({$strAdditionalCondition})";
+        }
+
+        return "";
+    }
+
+    /**
+     * Hook method for additional conditions
+     *
+     * @param $strColumnName
+     * @param $strCondition
+     *
+     * @return string
+     */
+    protected function addAdditionalConditions($strColumnName, $strCondition)
+    {
         return "";
     }
 }

@@ -21,7 +21,7 @@ class OrmObjectlistRestriction
 {
 
     private $strWhere = "";
-    private $arrParams = array();
+    protected $arrParams = array();
 
     private $strTargetClass = "";
 

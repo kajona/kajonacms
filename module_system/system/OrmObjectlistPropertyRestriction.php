@@ -28,7 +28,6 @@ class OrmObjectlistPropertyRestriction extends OrmObjectlistRestriction
      * @var OrmComparatorEnum
      */
     private $objComparator = "";
-    private $arrParams = array();
 
     /**
      * @param string $strProperty
@@ -51,14 +50,6 @@ class OrmObjectlistPropertyRestriction extends OrmObjectlistRestriction
     public function setArrParams($arrParams)
     {
         throw new OrmException("Setting params for property restrictions is not supported", OrmException::$level_ERROR);
-    }
-
-    /**
-     * @return array
-     */
-    public function getArrParams()
-    {
-        return $this->arrParams;
     }
 
     /**
