@@ -4,6 +4,7 @@ namespace Kajona\System\Tests;
 
 use Kajona\System\System\Date;
 use Kajona\System\System\FilterBase;
+use Kajona\System\System\OrmObjectlistInOrEmptyRestriction;
 use Kajona\System\System\OrmObjectlistInRestriction;
 use Kajona\System\System\OrmObjectlistRestriction;
 use Kajona\System\System\Testbase;
@@ -36,9 +37,10 @@ class FilterBaseTest extends Testbase
         $objFilter->setObjFilter7(new Date(20150101000001));
         $objFilter->setObjFilter8(new Date(20150101000001));
         $objFilter->setStrFilter9($strSystemid);
+        $objFilter->setArrFilter10(array(OrmObjectlistInOrEmptyRestriction::NULL_OR_EMPTY, 1, 2, 3, 4));
 
         $arrRestrictions = $objFilter->getOrmRestrictions();
-        $this->assertCount(9, $arrRestrictions);
+        $this->assertCount(10, $arrRestrictions);
 
         //Without annotation @filterCompareOperator
         $this->assertTrue($arrRestrictions[0] instanceof OrmObjectlistRestriction);
@@ -57,7 +59,7 @@ class FilterBaseTest extends Testbase
         $this->assertEquals(1.0, $arrRestrictions[1]->getArrParams()[0]);
 
         $this->assertTrue($arrRestrictions[3] instanceof OrmObjectlistInRestriction);
-        $this->assertEquals(" AND filter.filter4 IN (?,?,?,?) ", $arrRestrictions[3]->getStrWhere());
+        $this->assertEquals(" AND (filter.filter4 IN (?,?,?,?) ) ", $arrRestrictions[3]->getStrWhere());
         $this->assertCount(4, $arrRestrictions[3]->getArrParams());
 
         $this->assertTrue($arrRestrictions[4] instanceof OrmObjectlistRestriction);
@@ -84,6 +86,10 @@ class FilterBaseTest extends Testbase
         $this->assertEquals(" AND filter.filter9 = ? ", $arrRestrictions[8]->getStrWhere());
         $this->assertCount(1, $arrRestrictions[8]->getArrParams());
         $this->assertEquals($strSystemid, $arrRestrictions[8]->getArrParams()[0]);
+
+        $this->assertTrue($arrRestrictions[9] instanceof OrmObjectlistInOrEmptyRestriction);
+        $this->assertEquals(" AND (filter.filter10 IN (?,?,?,?,?) OR (filter.filter10 IS NULL OR filter.filter10 = '')) ", $arrRestrictions[9]->getStrWhere());
+        $this->assertCount(5, $arrRestrictions[9]->getArrParams());
     }
 }
 
@@ -149,6 +155,14 @@ class FilterBaseA extends FilterBase
      * @fieldType text
      */
     protected $strFilter9;
+
+
+    /**
+     * @tableColumn filter.filter10
+     * @fieldType dropdown
+     * @filterCompareOperator IN_OR_EMPTY
+     */
+    protected $arrFilter10;
 
 
     public function getArrModule($strKey = "")
@@ -298,6 +312,22 @@ class FilterBaseA extends FilterBase
     public function setStrFilter9($strFilter9)
     {
         $this->strFilter9 = $strFilter9;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getArrFilter10()
+    {
+        return $this->arrFilter10;
+    }
+
+    /**
+     * @param mixed $objFilter10
+     */
+    public function setArrFilter10($objFilter10)
+    {
+        $this->arrFilter10 = $objFilter10;
     }
 }
 
