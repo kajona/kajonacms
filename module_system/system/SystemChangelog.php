@@ -56,6 +56,9 @@ class SystemChangelog
     public static $STR_ACTION_DELETE = "actionDelete";
 
 
+    private static $arrOldInstances = array();
+
+
     /**
      * Checks if an objects properties changed.
      * If the second params is passed, the set of changed properties is returned, too.
@@ -66,6 +69,7 @@ class SystemChangelog
      *
      * @throws Exception
      * @return array
+     * @deprecated
      */
     public function isObjectChanged(VersionableInterface $objObject, &$arrReducedSet = array(), $bitUseInitValues = false)
     {
@@ -88,21 +92,42 @@ class SystemChangelog
      *
      * @param VersionableInterface|Model $objCurrentObject
      *
-     * @return array|null
+     * @return void
      */
     public function readOldValues(VersionableInterface $objCurrentObject)
     {
-        if (!$this->isVersioningAvailable($objCurrentObject)) {
-            return null;
-        }
+        self::$arrOldInstances[$objCurrentObject->getSystemid()] = clone $objCurrentObject;
+        return null;
+    }
 
-        if (validateSystemid($objCurrentObject->getSystemid())) {
+
+    /**
+     * Reads all properties marked with the annotation @versionable.
+     * The state is cached in a static array mapped to the objects systemid.
+     * In consequence, this means that only objects with a valid systemid are scanned for properties under versioning.
+     *
+     *
+     * @param string $strSystemid
+     *
+     * @return array|null
+     */
+    private function readOldValuesInternal($strSystemid)
+    {
+
+        if (isset(self::$arrOldInstances[$strSystemid])) {
+            $objCurrentObject = self::$arrOldInstances[$strSystemid];
+
+            if (!$this->isVersioningAvailable($objCurrentObject) || !validateSystemid($objCurrentObject->getSystemid())) {
+                return null;
+            }
+
             $arrOldValues = $this->readVersionableProperties($objCurrentObject);
-            $this->setOldValuesForSystemid($objCurrentObject->getSystemid(), $arrOldValues);
+            $this->setOldValuesForSystemid($strSystemid, $arrOldValues);
             return $arrOldValues;
         }
         return null;
     }
+
 
     /**
      * Sets the passed entry for a concrete objects' property to the set of old values
@@ -113,6 +138,7 @@ class SystemChangelog
      */
     public function setOldValueForSystemidAndProperty($strSystemid, $strProperty, $strValue)
     {
+        $this->getOldValuesForSystemid($strSystemid);
         if (!isset(self::$arrOldValueCache[$strSystemid])) {
             self::$arrOldValueCache[$strSystemid] = array();
         }
@@ -179,6 +205,7 @@ class SystemChangelog
      */
     public function getOldValuesForSystemid($strSystemid)
     {
+        $this->readOldValuesInternal($strSystemid);
         if (isset(self::$arrOldValueCache[$strSystemid])) {
             return self::$arrOldValueCache[$strSystemid];
         }
@@ -228,6 +255,8 @@ class SystemChangelog
      */
     private function createChangeArray($objSourceModel, $bitUseInitValues = false)
     {
+
+
 
         $arrOldValues = $this->getOldValuesForSystemid($objSourceModel->getSystemid());
         if ($bitUseInitValues) {

@@ -73,7 +73,8 @@ class SystemchangelogTest extends Testbase
         $objChanges = new SystemChangelog();
 
         $strSystemid = generateSystemid();
-        $arrOldValues = $objChanges->readOldValues(new DummyObject($strSystemid));
+        $objChanges->readOldValues(new DummyObject($strSystemid));
+        $arrOldValues = $objChanges->getOldValuesForSystemid($strSystemid);
 
         $this->assertEquals($arrOldValues["strTest"], "old");
         $this->assertEquals($arrOldValues["strSecondTest"], "second old");
