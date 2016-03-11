@@ -208,39 +208,44 @@ class StringUtil
     public static function toInt($strString)
     {
         if(is_string($strString) && $strString !== "") {
-            return (int)$strString;
+            return intval($strString);
         }
         if(is_numeric($strString)) {
-            return (int)$strString;
+            return intval($strString);
         }
 
         return null;
     }
 
     /**
-     * Converts a string to an array
+     * Converts a string to an array.
+     *
+     * If $strString is "", then an empty array will be returned
      *
      * @param $strString
      * @param string $strDelimiter
-     * @return array|null
+     * @return array
      */
     public static function toArray($strString, $strDelimiter = ",")
     {
-        if(is_string($strString) && $strString !== "") {
-            return explode($strDelimiter, $strString);
+        if($strString === "") {
+            return array();
         }
         elseif(is_array($strString)) {
             return $strString;
         }
+        elseif(is_string($strString) && $strString !== "") {
+            return explode($strDelimiter, $strString);
+        }
 
-        return null;
+        return array();
     }
 
     /**
-     * Converts a string to a \Kajona\System\System\Date
+     * Converts a string to a Date
      *
      * @param $strString
-     * @return \Kajona\System\System\Date|null
+     * @return Date
      */
     public static function toDate($strString)
     {

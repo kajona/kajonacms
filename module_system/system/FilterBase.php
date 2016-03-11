@@ -127,7 +127,7 @@ abstract class FilterBase
      */
     protected function getSingleOrmRestriction($strAttributeName, $strValue, $strTableColumn, OrmComparatorEnum $enumFilterCompareOperator = null, $strCondition = "AND")
     {
-        return self::getORMRestriction($strValue, $strTableColumn, $enumFilterCompareOperator);
+        return self::getORMRestriction($strValue, $strTableColumn, $enumFilterCompareOperator, $strCondition);
     }
 
     /**

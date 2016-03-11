@@ -41,13 +41,17 @@ class StringTest extends Testbase
         $strString = "0";
         $intResult = StringUtil::toInt($strString);
         $this->assertEquals(0, $intResult);
+
+        $strString = "-42";
+        $intResult = StringUtil::toInt($strString);
+        $this->assertEquals(-42, $intResult);
     }
 
     public function testStrToArray()
     {
         $strString = "";
         $arrResult = StringUtil::toArray($strString);
-        $this->assertNull($arrResult);
+        $this->assertCount(0, $arrResult);
 
         $strString = "1,0,3";
         $arrResult = StringUtil::toArray($strString);
