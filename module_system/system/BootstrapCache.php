@@ -30,6 +30,8 @@ class BootstrapCache
     const CACHE_CLASSES = "classes";
     const CACHE_REFLECTION = "reflection";
     const CACHE_OBJECTS = "objects";
+    const CACHE_SERVICES = "services";
+    const CACHE_MODULEIDS = "moduleids";
 
 
     /**
@@ -53,7 +55,9 @@ class BootstrapCache
             self::CACHE_CLASSES,
             self::CACHE_PHARSUMS,
             self::CACHE_REFLECTION,
-            self::CACHE_OBJECTS
+            self::CACHE_OBJECTS,
+            self::CACHE_SERVICES,
+            self::CACHE_MODULEIDS,
         );
     }
 

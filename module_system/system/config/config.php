@@ -89,6 +89,10 @@
 
     $config['bootstrapcache_templates']      = true;                   //Caches the locations of templates fetched by the template-engine. Should be enabled on production systems but disabled on development systems.
 
+    $config['bootstrapcache_services']       = true;                   //Caches the class and file name of every service provider. Only these providers are called on startup
+
+    $config['bootstrapcache_moduleids']      = true;                   //Caches all module id constants
+
 
 //--debugging -------------------------------------------------------------------------------------------
 
