@@ -175,6 +175,7 @@ $lang["templateNotLoaded"]               = "ATTENTION: No template was selected 
 $lang["templateNotSelectedBefore"]       = "ATTENTION: No template was selected for this page!";
 $lang["warning_elementsremaining"]       = "ATTENTION<br />There are pageelements in the system which can't be assigned to any placeholder provided by the template. This can happen, if a placeholder was renamed or removed from the template. To rename a placeholder in the system, you can use the function \"Update placeholder\". A list of the elements follows after this warning.";
 $lang["folderview_quickselect"]          = "Quick select";
-
+$lang["pages_content_tab_blocks"]         = "Blocks";
+$lang["pages_content_tab_elements"]         = "Elements";
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Elements",  5 => "Folder", 6 => "Placeholders", 7 => "", 8 => "");

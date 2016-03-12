@@ -175,6 +175,8 @@ $lang["templateNotLoaded"]               = "ACHTUNG: Für diese Seite wurde noch
 $lang["templateNotSelectedBefore"]       = "ACHTUNG: Für diese Seite wurde noch kein Template gewählt!";
 $lang["warning_elementsremaining"]       = "ACHTUNG<br />Im System befinden sich Seitenelemente, die keinem Platzhalter zugeordnet werden können. Dies kann der Fall sein, wenn ein Platzhalter im Template umbenannt oder gelöscht wurde. Um Platzhalter auch im System umzubenennen, können Sie die Funktion \"Platzhalter anpassen\" verwenden. Eine Liste der betroffenen Elemente befindet sich unter dieser Warnung.";
 $lang["folderview_quickselect"]          = "Schnell-Auswahl";
+$lang["pages_content_tab_blocks"]         = "Blöcke";
+$lang["pages_content_tab_elements"]         = "Elemente";
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Elemente", 5 => "Ordner", 6 => "Platzhalter", 7 => "", 8 => "");

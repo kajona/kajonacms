@@ -64,10 +64,6 @@ class PagesContentAdmin extends AdminSimple implements AdminInterface
             $objLockmanager = new Lockmanager($this->getParam("unlockid"));
             $objLockmanager->unlockRecord();
         }
-        if ($this->getParam("adminunlockid") != "") {
-            $objLockmanager = new Lockmanager($this->getParam("adminunlockid"));
-            $objLockmanager->unlockRecord(true);
-        }
     }
 
 
@@ -203,10 +199,17 @@ class PagesContentAdmin extends AdminSimple implements AdminInterface
         }
 
 
-        $arrTabs["blocks"] = $strBlocks;
-        $arrTabs["elements"] = $this->renderElementPlaceholderList($objParsedBlocks->getArrPlaceholder(), $arrPageelementsOnPage);
+        $strElements = $this->renderElementPlaceholderList($objParsedBlocks->getArrPlaceholder(), $arrPageelementsOnPage);
 
-        $strReturn .= $this->objToolkit->getTabbedContent($arrTabs);
+        if($strBlocks != "" && $strElements != "") {
+            $arrTabs[$this->getLang("pages_content_tab_blocks")] = $strBlocks;
+            $arrTabs[$this->getLang("pages_content_tab_elements")] = $strElements;
+            $strReturn .= $this->objToolkit->getTabbedContent($arrTabs);
+        }
+        else {
+            $strReturn .= $strBlocks.$strElements;
+        }
+
         $strCore = Resourceloader::getInstance()->getCorePathForModule("module_pages");
 
         $strReturn .= <<<HTML
@@ -372,7 +375,9 @@ HTML;
             $strReturn .= $this->objToolkit->listFooter();
         }
 
-        $strReturn .= $this->objToolkit->getTableOfContents("h2");
+        if($strReturn != "") {
+            $strReturn .= $this->objToolkit->getTableOfContents("h2");
+        }
 
         return $strReturn;
     }
@@ -404,7 +409,7 @@ HTML;
             if (!$objLockmanager->isAccessibleForCurrentUser()) {
                 //So, return a button, if we have an admin in front of us
                 if ($objLockmanager->isUnlockableForCurrentUser()) {
-                    $strActions .= $this->objToolkit->listButton(Link::getLinkAdmin("pages_content", "list", "&systemid=".$this->getSystemid()."&adminunlockid=".$objOneIterable->getSystemid(), "", $this->getLang("ds_entsperren"), "icon_lockerOpen"));
+                    $strActions .= $this->objToolkit->listButton(Link::getLinkAdmin("pages_content", "list", "&systemid=".$this->getSystemid()."&unlockid=".$objOneIterable->getSystemid(), "", $this->getLang("ds_entsperren"), "icon_lockerOpen"));
                 }
                 //If the Element is locked, then its not allowed to edit or delete the record, so disable the icons
                 if ($objOneIterable->rightEdit() && !$objOneIterable->getConcreteAdminInstance() instanceof ElementBlockAdmin) {
