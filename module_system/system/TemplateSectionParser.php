@@ -50,7 +50,7 @@ class TemplateSectionParser
     public function readSection($strTemplate, $strSection, $bitKeepSectionTag = false)
     {
         $this->cacheInit();
-        $strHash = sha1($strTemplate.$strSection.$bitKeepSectionTag);
+        $strHash = ($strTemplate.$strSection.$bitKeepSectionTag);
 
         if (isset($this->arrCacheTemplateSection[$strHash])) {
             return $this->arrCacheTemplateSection[$strHash];

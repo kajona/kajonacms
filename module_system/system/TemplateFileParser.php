@@ -49,8 +49,8 @@ class TemplateFileParser
     public function readTemplate($strTemplateFilename)
     {
         $this->cacheInit();
+        $strHash = ($strTemplateFilename);
         $strFilename = $this->getPathForTemplate($strTemplateFilename);
-        $strHash = sha1($strFilename);
 
         if (isset($this->arrCacheTemplates[$strHash])) {
             return $this->arrCacheTemplates[$strHash];

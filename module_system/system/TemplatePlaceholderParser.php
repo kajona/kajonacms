@@ -92,7 +92,7 @@ class TemplatePlaceholderParser
     public function getElements($strTemplate, $intMode = 0)
     {
         $this->cacheInit();
-        $strHash = sha1($strTemplate.$intMode);
+        $strHash = ($strTemplate.$intMode);
         if (isset($this->arrPlaceholderCache[$strHash])) {
             return $this->arrPlaceholderCache[$strHash];
         }

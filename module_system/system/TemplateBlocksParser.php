@@ -54,7 +54,7 @@ class TemplateBlocksParser
     public function readBlocks($strTemplate, $strBlockDefinition = TemplateKajonaSections::BLOCKS)
     {
         $this->cacheInit();
-        $strHash = sha1($strTemplate.$strBlockDefinition);
+        $strHash = ($strTemplate.$strBlockDefinition);
         if(isset($this->arrBlocksCache[$strHash])) {
             return $this->arrBlocksCache[$strHash];
         }
