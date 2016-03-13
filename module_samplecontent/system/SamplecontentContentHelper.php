@@ -28,7 +28,7 @@ class SamplecontentContentHelper
         return $objPage;
     }
 
-    public function createBlocksElement($strBlocksName, PagesPage $objPage)
+    public function createBlocksElement($strBlocksName, PagesPage $objPage, $strLanguage = "")
     {
         if (PagesElement::getElement("blocks") == null || PagesElement::getElement("block") == null) {
             throw new Exception("block/blocks element not existing", Exception::$level_ERROR);
@@ -38,11 +38,14 @@ class SamplecontentContentHelper
         $objBlocks->setStrPlaceholder("blocks");
         $objBlocks->setStrName($strBlocksName);
         $objBlocks->setStrElement("blocks");
+        if($strLanguage != "") {
+            $objBlocks->setStrLanguage($strLanguage);
+        }
         $objBlocks->updateObjectToDb($objPage->getSystemid());
         return $objBlocks;
     }
 
-    public function createBlockElement($strBlockName, PagesPageelement $objBlocks)
+    public function createBlockElement($strBlockName, PagesPageelement $objBlocks, $strLanguage = "")
     {
         if ($objBlocks->getStrElement() != "blocks" || PagesElement::getElement("block") == null) {
             throw new Exception("block/blocks element not existing / wrong parent reference", Exception::$level_ERROR);
@@ -52,12 +55,15 @@ class SamplecontentContentHelper
         $objBlock->setStrPlaceholder("block");
         $objBlock->setStrName($strBlockName);
         $objBlock->setStrElement("block");
+        if($strLanguage != "") {
+            $objBlock->setStrLanguage($strLanguage);
+        }
         $objBlock->updateObjectToDb($objBlocks->getSystemid());
         return $objBlock;
     }
 
 
-    public function createPageElement($strPlaceholder, PagesPageelement $objBlock)
+    public function createPageElement($strPlaceholder, PagesPageelement $objBlock, $strLanguage = "")
     {
         $arrPlaceholder = explode("_", $strPlaceholder);
 
@@ -74,6 +80,9 @@ class SamplecontentContentHelper
         $objPageelement->setStrPlaceholder($strPlaceholder);
         $objPageelement->setStrName($arrPlaceholder[0]);
         $objPageelement->setStrElement($arrPlaceholder[1]);
+        if($strLanguage != "") {
+            $objPageelement->setStrLanguage($strLanguage);
+        }
         $objPageelement->updateObjectToDb($objBlock->getSystemid());
         return $objPageelement;
     }

@@ -3,10 +3,14 @@
 namespace Kajona\Navigation\Tests;
 
 use Kajona\Navigation\System\NavigationTree;
+use Kajona\Pages\Admin\Elements\ElementPlaintextAdmin;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
+use Kajona\Samplecontent\System\SamplecontentContentHelper;
 use Kajona\System\System\Carrier;
+use Kajona\System\System\LanguagesLanguage;
+use Kajona\System\System\Session;
 use Kajona\System\System\Testbase;
 
 class AutoNavigationTest extends Testbase
@@ -19,6 +23,11 @@ class AutoNavigationTest extends Testbase
 
     public function setUp()
     {
+
+        $objLang = new LanguagesLanguage();
+        $strLang = $objLang->getAdminLanguage();
+
+
         //creating a new page-node structure
         $objFolder = new PagesFolder();
         $objFolder->setStrName("naviautotest");
@@ -27,21 +36,26 @@ class AutoNavigationTest extends Testbase
 
         $objPage1 = new PagesPage();
         $objPage1->setStrName("testpage1");
+        $objPage1->setStrLanguage($strLang);
         $objPage1->setStrBrowsername("testpage1");
         $objPage1->setIntType(PagesPage::$INT_TYPE_PAGE);
         $objPage1->setStrTemplate("standard.tpl");
         $objPage1->updateObjectToDb($objFolder->getSystemid());
         self::$strPage1Systemid = $objPage1->getSystemid();
 
-        $objPagelement = new PagesPageelement();
-        $objPagelement->setStrPlaceholder("headline_row");
-        $objPagelement->setStrName("headline");
-        $objPagelement->setStrElement("row");
-        $objPagelement->setStrLanguage($objPage1->getStrAdminLanguageToWorkOn());
-        $objPagelement->updateObjectToDb($objPage1->getSystemid());
+        $objHelper = new SamplecontentContentHelper();
+        $objBlocks = $objHelper->createBlocksElement("Headline", $objPage1, $objPage1->getStrAdminLanguageToWorkOn());
+        $objBlock = $objHelper->createBlockElement("Headline", $objBlocks, $objPage1->getStrAdminLanguageToWorkOn());
+
+        $objHeadline = $objHelper->createPageElement("headline_plaintext", $objBlock, $objPage1->getStrAdminLanguageToWorkOn());
+        /** @var ElementPlaintextAdmin $objHeadlineAdminin */
+        $objHeadlineAdmin = $objHeadline->getConcreteAdminInstance();
+        $objHeadlineAdmin->setStrText("demo");
+        $objHeadlineAdmin->updateForeignElement();
 
 
         $objPage2 = new PagesPage();
+        $objPage2->setStrLanguage($strLang);
         $objPage2->setStrName("testpage2");
         $objPage2->setStrBrowsername("testpage2");
         $objPage2->setIntType(PagesPage::$INT_TYPE_ALIAS);
@@ -49,15 +63,13 @@ class AutoNavigationTest extends Testbase
         $objPage2->updateObjectToDb($objFolder->getSystemid());
         self::$strPage2Systemid = $objPage2->getSystemid();
 
-        $objPagelement = new PagesPageelement();
-        $objPagelement->setStrPlaceholder("headline_row");
-        $objPagelement->setStrName("headline");
-        $objPagelement->setStrElement("row");
-        $objPagelement->setStrLanguage($objPage2->getStrAdminLanguageToWorkOn());
-        $objPagelement->updateObjectToDb($objPage2->getSystemid());
+//        $objHelper = new SamplecontentContentHelper();
+//        $objBlocks = $objHelper->createBlocksElement("Headline", $objPage2, $objPage1->getStrAdminLanguageToWorkOn());
+//        $objBlock = $objHelper->createBlockElement("Headline", $objBlocks, $objPage1->getStrAdminLanguageToWorkOn());
 
 
         $objPage3 = new PagesPage();
+        $objPage3->setStrLanguage($strLang);
         $objPage3->setStrName("testpage2a");
         $objPage3->setStrBrowsername("testpage2a");
         $objPage3->setIntType(PagesPage::$INT_TYPE_PAGE);
@@ -65,12 +77,10 @@ class AutoNavigationTest extends Testbase
         $objPage3->updateObjectToDb($objPage2->getSystemid());
         self::$strPage2aSystemid = $objPage3->getSystemid();
 
-        $objPagelement = new PagesPageelement();
-        $objPagelement->setStrPlaceholder("headline_row");
-        $objPagelement->setStrName("headline");
-        $objPagelement->setStrElement("row");
-        $objPagelement->setStrLanguage($objPage3->getStrAdminLanguageToWorkOn());
-        $objPagelement->updateObjectToDb($objPage3->getSystemid());
+        $objHelper = new SamplecontentContentHelper();
+        $objBlocks = $objHelper->createBlocksElement("Headline", $objPage3, $objPage3->getStrAdminLanguageToWorkOn());
+        $objBlock = $objHelper->createBlockElement("Headline", $objBlocks, $objPage3->getStrAdminLanguageToWorkOn());
+
 
         Carrier::getInstance()->getObjDB()->flushQueryCache();
 

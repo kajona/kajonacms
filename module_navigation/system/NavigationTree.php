@@ -25,7 +25,8 @@ use Kajona\System\System\SystemModule;
  * @module navigation
  * @moduleId _navigation_modul_id_
  */
-class NavigationTree extends Model implements ModelInterface, AdminListableInterface {
+class NavigationTree extends Model implements ModelInterface, AdminListableInterface
+{
 
     /**
      * @var string
@@ -50,7 +51,8 @@ class NavigationTree extends Model implements ModelInterface, AdminListableInter
      *
      * @return string
      */
-    public function getStrDisplayName() {
+    public function getStrDisplayName()
+    {
         return $this->getStrName();
     }
 
@@ -61,7 +63,8 @@ class NavigationTree extends Model implements ModelInterface, AdminListableInter
      *
      * @return string the name of the icon, not yet wrapped by getImageAdmin()
      */
-    public function getStrIcon() {
+    public function getStrIcon()
+    {
         return "icon_treeRoot";
     }
 
@@ -70,7 +73,8 @@ class NavigationTree extends Model implements ModelInterface, AdminListableInter
      *
      * @return string
      */
-    public function getStrAdditionalInfo() {
+    public function getStrAdditionalInfo()
+    {
         return "";
     }
 
@@ -79,7 +83,8 @@ class NavigationTree extends Model implements ModelInterface, AdminListableInter
      *
      * @return string
      */
-    public function getStrLongDescription() {
+    public function getStrLongDescription()
+    {
         return "";
     }
 
@@ -93,11 +98,13 @@ class NavigationTree extends Model implements ModelInterface, AdminListableInter
      * @return NavigationTree[]
      * @static
      */
-    public static function getObjectList($strPrevid = "", $intStart = false, $intEnd = false) {
+    public static function getObjectList($strPrevid = "", $intStart = false, $intEnd = false)
+    {
         return parent::getObjectList(SystemModule::getModuleIdByNr(_navigation_modul_id_), $intStart, $intEnd);
     }
 
-    public static function getObjectCount($strPrevid = "") {
+    public static function getObjectCount($strPrevid = "")
+    {
         return parent::getObjectCount(SystemModule::getModuleIdByNr(_navigation_modul_id_));
     }
 
@@ -110,12 +117,14 @@ class NavigationTree extends Model implements ModelInterface, AdminListableInter
      * @return NavigationTree
      * @static
      */
-    public static function getNavigationByName($strName) {
+    public static function getNavigationByName($strName)
+    {
         $objOrm = new OrmObjectlist();
         $objOrm->addWhereRestriction(new OrmObjectlistPropertyRestriction("strName", OrmComparatorEnum::Equal(), $strName));
         $arrRows = $objOrm->getObjectList("Kajona\\Navigation\\System\\NavigationTree", SystemModule::getModuleIdByNr(_navigation_modul_id_));
-        if(count($arrRows) == 1)
+        if (count($arrRows) == 1) {
             return $arrRows[0];
+        }
 
         return null;
 
@@ -127,7 +136,8 @@ class NavigationTree extends Model implements ModelInterface, AdminListableInter
      *
      * @return array
      */
-    public function getCompleteNaviStructure() {
+    public function getCompleteNaviStructure()
+    {
         $arrReturn = array();
         $arrReturn["node"] = null;
         $arrReturn["subnodes"] = $this->loadSingleLevel($this->getSystemid());
@@ -141,12 +151,13 @@ class NavigationTree extends Model implements ModelInterface, AdminListableInter
      *
      * @return array
      */
-    private function loadSingleLevel($strParentNode) {
+    private function loadSingleLevel($strParentNode)
+    {
         $arrReturn = array();
 
         $arrCurLevel = NavigationPoint::getDynamicNaviLayer($strParentNode);
 
-        if(isset($arrCurLevel["node"]) && isset($arrCurLevel["subnodes"])) {
+        if (isset($arrCurLevel["node"]) && isset($arrCurLevel["subnodes"])) {
             //switch between added nodes and "real" nodes
             $arrTemp = array();
             $arrTemp["node"] = $arrCurLevel["node"];
@@ -157,11 +168,11 @@ class NavigationTree extends Model implements ModelInterface, AdminListableInter
         }
 
         /** @var NavigationPoint $objOneNode */
-        foreach($arrCurLevel as $strKey => $objOneNode) {
+        foreach ($arrCurLevel as $strKey => $objOneNode) {
 
-            if($strKey !== "node" && $strKey !== "subnodes") {
+            if ($strKey !== "node" && $strKey !== "subnodes") {
 
-                if($objOneNode->getIntRecordStatus() == 1 && $objOneNode->rightView()) {
+                if ($objOneNode->getIntRecordStatus() == 1 && $objOneNode->rightView()) {
                     $arrTemp = array();
                     $arrTemp["node"] = $objOneNode;
                     $arrTemp["subnodes"] = $this->loadSingleLevel($objOneNode->getSystemid());
@@ -178,30 +189,36 @@ class NavigationTree extends Model implements ModelInterface, AdminListableInter
     /**
      * @return string
      */
-    public function getStrName() {
+    public function getStrName()
+    {
         return $this->strName;
     }
 
     /**
      * @param string $strName
+     *
      * @return void
      */
-    public function setStrName($strName) {
+    public function setStrName($strName)
+    {
         $this->strName = $strName;
     }
 
     /**
      * @return string
      */
-    public function getStrFolderId() {
+    public function getStrFolderId()
+    {
         return $this->strFolderId;
     }
 
     /**
      * @param string $strFolderId
+     *
      * @return void
      */
-    public function setStrFolderId($strFolderId) {
+    public function setStrFolderId($strFolderId)
+    {
         $this->strFolderId = $strFolderId;
     }
 
