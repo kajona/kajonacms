@@ -9,6 +9,7 @@ namespace Kajona\Votings\Installer;
 
 use Kajona\Pages\Admin\Elements\ElementPlaintextAdmin;
 use Kajona\Pages\System\PagesFolder;
+use Kajona\Pages\System\PagesPage;
 use Kajona\Samplecontent\System\SamplecontentContentHelper;
 use Kajona\System\System\Database;
 use Kajona\System\System\SamplecontentInstallerInterface;
@@ -32,16 +33,6 @@ class InstallerSamplecontentVotings implements SamplecontentInstallerInterface
     public function install()
     {
         $strReturn = "";
-
-        //fetch navifolder-id
-        $strNaviFolderId = "";
-        $arrFolder = PagesFolder::getFolderList();
-        foreach ($arrFolder as $objOneFolder) {
-            if ($objOneFolder->getStrName() == "mainnavigation") {
-                $strNaviFolderId = $objOneFolder->getSystemid();
-            }
-        }
-
 
         $strReturn .= "Creating voting\n";
 
@@ -77,7 +68,7 @@ class InstallerSamplecontentVotings implements SamplecontentInstallerInterface
 
         $objHelper = new SamplecontentContentHelper();
 
-        $objPage = $objHelper->createPage("votings", "Votings", $strNaviFolderId);
+        $objPage = $objHelper->createPage("votings", "Votings", PagesPage::getPageByName("samplepages")->getSystemid());
         $strReturn .= "ID of new page: ".$objPage->getSystemid()."\n";
 
         $objBlocks = $objHelper->createBlocksElement("Headline", $objPage);

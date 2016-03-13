@@ -118,8 +118,8 @@ class InstallerPages extends InstallerBase implements InstallerInterface {
 
 
         $arrElements = array(
-            "row" => array("ElementRowAdmin.php", "ElementRowPortal.php"),
-            "paragraph" => array("ElementParagraphAdmin.php", "ElementParagraphPortal.php"),
+//            "row" => array("ElementRowAdmin.php", "ElementRowPortal.php"),
+//            "paragraph" => array("ElementParagraphAdmin.php", "ElementParagraphPortal.php"),
             "image" => array("ElementImageAdmin.php", "ElementImagePortal.php"),
             "downloads" => array("ElementDownloadsAdmin.php", "ElementDownloadsPortal.php"),
             "gallery" => array("ElementGalleryAdmin.php", "ElementGalleryPortal.php"),

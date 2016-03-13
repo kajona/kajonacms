@@ -10,6 +10,7 @@ namespace Kajona\Postacomment\Installer;
 use Kajona\Pages\Admin\Elements\ElementPlaintextAdmin;
 use Kajona\Pages\Admin\Elements\ElementRichtextAdmin;
 use Kajona\Pages\System\PagesFolder;
+use Kajona\Pages\System\PagesPage;
 use Kajona\Postacomment\Admin\Elements\ElementPostacommentAdmin;
 use Kajona\Samplecontent\System\SamplecontentContentHelper;
 use Kajona\System\System\Database;
@@ -36,20 +37,10 @@ class InstallerSamplecontentPostacomment implements SamplecontentInstallerInterf
     {
         $strReturn = "";
 
-        //fetch navifolder-id
-        $strNaviFolderId = "";
-        $arrFolder = PagesFolder::getFolderList();
-        foreach ($arrFolder as $objOneFolder) {
-            if ($objOneFolder->getStrName() == "mainnavigation") {
-                $strNaviFolderId = $objOneFolder->getSystemid();
-            }
-        }
-
-
         $strReturn .= "Creating new postacomment page...\n";
         $objHelper = new SamplecontentContentHelper();
 
-        $objPage = $objHelper->createPage("postacomment", "Postacomment", $strNaviFolderId);
+        $objPage = $objHelper->createPage("postacomment", "Postacomment", PagesPage::getPageByName("samplepages")->getSystemid());
         $strReturn .= "ID of new page: ".$objPage->getSystemid()."\n";
 
         $objBlocks = $objHelper->createBlocksElement("Headline", $objPage);

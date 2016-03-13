@@ -40,18 +40,11 @@ class InstallerSamplecontentFormular implements SamplecontentInstallerInterface 
     public function install() {
         $strReturn = "";
 
-        //fetch navifolder-id
-        $strNaviFolderId = "";
-        $arrFolder = PagesFolder::getFolderList();
-        foreach($arrFolder as $objOneFolder)
-            if($objOneFolder->getStrName() == "mainnavigation")
-                $strNaviFolderId = $objOneFolder->getSystemid();
-
         $strReturn .= "Creating new page contact...\n";
 
         $objHelper = new SamplecontentContentHelper();
 
-        $objPage = $objHelper->createPage("contact", "Contact", $strNaviFolderId);
+        $objPage = $objHelper->createPage("contact", "Contact", PagesPage::getPageByName("samplepages")->getSystemid());
         $strReturn .= "ID of new page: ".$objPage->getSystemid()."\n";
 
         $objBlocks = $objHelper->createBlocksElement("Headline", $objPage);

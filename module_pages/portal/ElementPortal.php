@@ -218,6 +218,7 @@ abstract class ElementPortal extends PortalController
             __CLASS__.
             $strGuestId.
             $this->getAction().
+            $this->getPagename().
             $this->strCacheAddon.
             $this->getParam("pv").
             $this->getSystemid().

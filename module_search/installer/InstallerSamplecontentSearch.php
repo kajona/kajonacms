@@ -46,14 +46,6 @@ class InstallerSamplecontentSearch implements SamplecontentInstallerInterface
         //pages installed?
         if(SystemModule::getModuleByName("pages", true) != null) {
 
-            $strSystemFolderId = "";
-            $arrFolder = PagesFolder::getFolderList();
-            foreach ($arrFolder as $objOneFolder) {
-                if ($objOneFolder->getStrName() == "_system") {
-                    $strSystemFolderId = $objOneFolder->getSystemid();
-                }
-            }
-
             //search the master page
             $objMaster = PagesPage::getPageByName("master");
             if ($objMaster != null) {
@@ -80,7 +72,7 @@ class InstallerSamplecontentSearch implements SamplecontentInstallerInterface
             $strReturn .= "Creating search page\n";
             $objHelper = new SamplecontentContentHelper();
 
-            $objPage = $objHelper->createPage("search", $this->strContentLanguage == "de" ? " Suche" : "Search", $strSystemFolderId);
+            $objPage = $objHelper->createPage("search", $this->strContentLanguage == "de" ? " Suche" : "Search", PagesPage::getPageByName("index")->getSystemid());
             $strReturn .= "ID of new page: ".$objPage->getSystemid()."\n";
 
             $objBlocks = $objHelper->createBlocksElement("Headline", $objPage);

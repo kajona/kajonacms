@@ -34,16 +34,6 @@ class InstallerSamplecontentFaqs implements SamplecontentInstallerInterface
     {
         $strReturn = "";
 
-        //fetch navifolder-id
-        $strNaviFolderId = "";
-        $arrFolder = PagesFolder::getFolderList();
-        foreach ($arrFolder as $objOneFolder) {
-            if ($objOneFolder->getStrName() == "mainnavigation") {
-                $strNaviFolderId = $objOneFolder->getSystemid();
-            }
-        }
-
-
         //search the index page
         $objIndex = PagesPage::getPageByName("index");
         if ($objIndex != null) {
@@ -77,7 +67,7 @@ class InstallerSamplecontentFaqs implements SamplecontentInstallerInterface
         $strReturn .= "Creating faqs-page\n";
         $objHelper = new SamplecontentContentHelper();
 
-        $objPage = $objHelper->createPage("faqs", "FAQs", $strNaviFolderId);
+        $objPage = $objHelper->createPage("faqs", "FAQs", PagesPage::getPageByName("samplepages")->getSystemid());
         $strReturn .= "ID of new page: ".$objPage->getSystemid()."\n";
 
         $objBlocks = $objHelper->createBlocksElement("Headline", $objPage);

@@ -11,6 +11,7 @@ use Kajona\Eventmanager\Admin\Elements\ElementEventmanagerAdmin;
 use Kajona\Eventmanager\System\EventmanagerEvent;
 use Kajona\Pages\Admin\Elements\ElementPlaintextAdmin;
 use Kajona\Pages\System\PagesFolder;
+use Kajona\Pages\System\PagesPage;
 use Kajona\Samplecontent\System\SamplecontentContentHelper;
 use Kajona\System\System\SamplecontentInstallerInterface;
 
@@ -31,16 +32,6 @@ class InstallerSamplecontentEventmanager implements SamplecontentInstallerInterf
     public function install()
     {
         $strReturn = "";
-
-        //fetch navifolder-id
-        $strNaviFolderId = "";
-        $arrFolder = PagesFolder::getFolderList();
-        foreach ($arrFolder as $objOneFolder) {
-            if ($objOneFolder->getStrName() == "mainnavigation") {
-                $strNaviFolderId = $objOneFolder->getSystemid();
-            }
-        }
-
 
         $strReturn .= "Creating event\n";
         $objEvent = new EventmanagerEvent();
@@ -66,7 +57,7 @@ class InstallerSamplecontentEventmanager implements SamplecontentInstallerInterf
         $strReturn .= "Creating events-page\n";
         $objHelper = new SamplecontentContentHelper();
 
-        $objPage = $objHelper->createPage("eventmanager", "Eventmanager", $strNaviFolderId);
+        $objPage = $objHelper->createPage("eventmanager", "Eventmanager", PagesPage::getPageByName("samplepages")->getSystemid());
         $strReturn .= "ID of new page: ".$objPage->getSystemid()."\n";
 
         $objBlocks = $objHelper->createBlocksElement("Headline", $objPage);

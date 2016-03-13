@@ -40,19 +40,10 @@ class InstallerSamplecontentRssfeed implements SamplecontentInstallerInterface
     {
         $strReturn = "";
 
-        //fetch navifolder-id
-        $strNaviFolderId = "";
-        $arrFolder = PagesFolder::getFolderList();
-        foreach ($arrFolder as $objOneFolder) {
-            if ($objOneFolder->getStrName() == "mainnavigation") {
-                $strNaviFolderId = $objOneFolder->getSystemid();
-            }
-        }
-
         $strReturn .= "Creating new page rssfeed...\n";
         $objHelper = new SamplecontentContentHelper();
 
-        $objPage = $objHelper->createPage("rssfeed", "Rssfeed", $strNaviFolderId);
+        $objPage = $objHelper->createPage("rssfeed", "Rssfeed", PagesPage::getPageByName("samplepages")->getSystemid());
         $strReturn .= "ID of new page: ".$objPage->getSystemid()."\n";
 
         $objBlocks = $objHelper->createBlocksElement("Headline", $objPage);

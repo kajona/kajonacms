@@ -141,7 +141,7 @@ class InstallerSamplecontent02Navigation implements SamplecontentInstallerInterf
 
         $objHelper = new SamplecontentContentHelper();
 
-        $objPage = $objHelper->createPage("sitemap", "Sitemap", $strTreePortalId);
+        $objPage = $objHelper->createPage("sitemap", "Sitemap", PagesPage::getPageByName("index")->getSystemid());
         $strReturn .= "ID of new page: ".$objPage->getSystemid()."\n";
 
         $objBlocks = $objHelper->createBlocksElement("Headline", $objPage);

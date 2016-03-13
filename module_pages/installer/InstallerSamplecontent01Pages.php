@@ -15,6 +15,7 @@ use Kajona\Pages\Admin\Elements\ElementImageAdmin;
 use Kajona\Pages\Admin\Elements\ElementPlaintextAdmin;
 use Kajona\Pages\Admin\Elements\ElementRichtextAdmin;
 use Kajona\Pages\System\PagesFolder;
+use Kajona\Pages\System\PagesPage;
 use Kajona\Samplecontent\System\SamplecontentContentHelper;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Database;
@@ -83,7 +84,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
 
         $objHelper = new SamplecontentContentHelper();
         $strReturn .= "Creating index-site...\n";
-        $objIndexPage = $objHelper->createPage("index", $this->strContentLanguage == "de" ? "Willkommen" : "Welcome", SystemModule::getModuleIdByNr(_pages_modul_id_), "home.tpl");
+        $objIndexPage = $objHelper->createPage("index", $this->strContentLanguage == "de" ? "Willkommen" : "Welcome", $strMainnavigationFolderID, "home.tpl");
 
         $objBlocks = $objHelper->createBlocksElement("Headline", $objIndexPage);
         $objBlock = $objHelper->createBlockElement("Headline", $objBlocks);
@@ -247,7 +248,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
 
 
         $strReturn .= "Creating imprint-site...\n";
-        $objImprintPage = $objHelper->createPage("imprint", $this->strContentLanguage == "de" ? "Impressum" : "Imprint", $strSystemFolderID, "standard.tpl");
+        $objImprintPage = $objHelper->createPage("imprint", $this->strContentLanguage == "de" ? "Impressum" : "Imprint", PagesPage::getPageByName("index")->getSystemid());
         $strReturn .= "ID of new page: ".$objImprintPage->getSystemid()."\n";
 
 
@@ -292,7 +293,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
 
         $strReturn .= "Creating sample page...\n";
 
-        $objPage1 = $objHelper->createPage("page_1", $this->strContentLanguage == "de" ? "Beispielseite" : "Sample page 1", $strMainnavigationFolderID);
+        $objPage1 = $objHelper->createPage("samplepages", $this->strContentLanguage == "de" ? "Beispielseiten" : "Sample pages", PagesPage::getPageByName("index")->getSystemid());
         $strReturn .= "ID of new page: ".$objPage1->getSystemid()."\n";
         $strReturn .= "ID of new page: ".$objPage1->getSystemid()."\n";
 
@@ -303,7 +304,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
         $objHeadline = $objHelper->createPageElement("headline_plaintext", $objBlock);
         /** @var ElementPlaintextAdmin $objHeadlineAdmin */
         $objHeadlineAdmin = $objHeadline->getConcreteAdminInstance();
-        $objHeadlineAdmin->setStrText($this->strContentLanguage == "de" ? "Beispielseite 1" : "Sample page 1");
+        $objHeadlineAdmin->setStrText($this->strContentLanguage == "de" ? "Beispielseiten" : "Sample pages");
         $objHeadlineAdmin->updateForeignElement();
 
 
@@ -338,7 +339,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
         $strReturn .= "Creating sample subpage...\n";
 
 
-        $objSubPage1 = $objHelper->createPage("subpage_1", $this->strContentLanguage == "de" ? "Beispiel-Unterseite 1" : "Sample subpage 1", $objPage1->getSystemid());
+        $objSubPage1 = $objHelper->createPage("subpage_1", $this->strContentLanguage == "de" ? "Beispiel-Unterseite 1" : "Sample subpage 1", PagesPage::getPageByName("samplepages")->getSystemid());
         $strReturn .= "ID of new page: ".$objSubPage1->getSystemid()."\n";
 
         $objBlocks = $objHelper->createBlocksElement("Headline", $objSubPage1);
@@ -393,15 +394,6 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
             return "Mediamanger not installed, skipping element\n";
         }
 
-        //fetch navifolder-id
-        $strNaviFolderId = "";
-        $arrFolder = PagesFolder::getFolderList();
-        foreach ($arrFolder as $objOneFolder) {
-            if ($objOneFolder->getStrName() == "mainnavigation") {
-                $strNaviFolderId = $objOneFolder->getSystemid();
-            }
-        }
-
 
         $strReturn .= "Creating new downloads...\n";
         $objDownloads = new MediamanagerRepo();
@@ -420,7 +412,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
 
         $objHelper = new SamplecontentContentHelper();
 
-        $objPage = $objHelper->createPage("downloads", "Downloads", $strNaviFolderId);
+        $objPage = $objHelper->createPage("downloads", "Downloads", PagesPage::getPageByName("samplepages")->getSystemid());
         $strReturn .= "ID of new page: ".$objPage->getSystemid()."\n";
 
         $objBlocks = $objHelper->createBlocksElement("Headline", $objPage);
@@ -459,16 +451,6 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
 
         $strReturn = "";
 
-        //fetch navifolder-id
-        $strNaviFolderId = "";
-        $arrFolder = PagesFolder::getFolderList();
-        foreach ($arrFolder as $objOneFolder) {
-            if ($objOneFolder->getStrName() == "mainnavigation") {
-                $strNaviFolderId = $objOneFolder->getSystemid();
-            }
-        }
-
-
         $strReturn .= "Creating new gallery...\n";
         $objGallery = new MediamanagerRepo();
         $objGallery->setStrTitle("Sample Gallery");
@@ -486,7 +468,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
 
         $objHelper = new SamplecontentContentHelper();
 
-        $objPage = $objHelper->createPage("gallery", "Gallery", $strNaviFolderId);
+        $objPage = $objHelper->createPage("gallery", "Gallery", PagesPage::getPageByName("samplepages")->getSystemid());
         $strReturn .= "ID of new page: ".$objPage->getSystemid()."\n";
 
         $objBlocks = $objHelper->createBlocksElement("Headline", $objPage);

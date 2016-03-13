@@ -50,13 +50,9 @@ class InstallerSamplecontentNews implements SamplecontentInstallerInterface
 
 
         //fetch navifolder-id
-        $strNaviFolderId = "";
         $strSystemFolderId = "";
         $arrFolder = PagesFolder::getFolderList();
         foreach ($arrFolder as $objOneFolder) {
-            if ($objOneFolder->getStrName() == "mainnavigation") {
-                $strNaviFolderId = $objOneFolder->getSystemid();
-            }
 
             if ($objOneFolder->getStrName() == "_system") {
                 $strSystemFolderId = $objOneFolder->getSystemid();
@@ -171,7 +167,7 @@ class InstallerSamplecontentNews implements SamplecontentInstallerInterface
 
 
         $strReturn .= "Creating news-list-pge\n";
-        $objPage = $objHelper->createPage("news", "News", $strNaviFolderId);
+        $objPage = $objHelper->createPage("news", "News", PagesPage::getPageByName("samplepages")->getSystemid());
         $strReturn .= "ID of new page: ".$objPage->getSystemid()."\n";
 
         $objBlocks = $objHelper->createBlocksElement("Headline", $objPage);

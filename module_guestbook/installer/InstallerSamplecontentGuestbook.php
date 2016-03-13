@@ -11,6 +11,7 @@ use Kajona\Guestbook\Admin\Elements\ElementGuestbookAdmin;
 use Kajona\Guestbook\System\GuestbookGuestbook;
 use Kajona\Pages\Admin\Elements\ElementPlaintextAdmin;
 use Kajona\Pages\System\PagesFolder;
+use Kajona\Pages\System\PagesPage;
 use Kajona\Samplecontent\System\SamplecontentContentHelper;
 use Kajona\System\System\Database;
 use Kajona\System\System\SamplecontentInstallerInterface;
@@ -38,15 +39,6 @@ class InstallerSamplecontentGuestbook implements SamplecontentInstallerInterface
     {
         $strReturn = "";
 
-        //fetch navifolder-id
-        $strNaviFolderId = "";
-        $arrFolder = PagesFolder::getFolderList();
-        foreach ($arrFolder as $objOneFolder) {
-            if ($objOneFolder->getStrName() == "mainnavigation") {
-                $strNaviFolderId = $objOneFolder->getSystemid();
-            }
-        }
-
         $strReturn .= "Creating new guestbook...\n";
         $objGuestbook = new GuestbookGuestbook();
         $objGuestbook->setStrGuestbookTitle("Guestbook");
@@ -59,7 +51,7 @@ class InstallerSamplecontentGuestbook implements SamplecontentInstallerInterface
         $strReturn .= "Creating new guestbook page...\n";
         $objHelper = new SamplecontentContentHelper();
 
-        $objPage = $objHelper->createPage("guestbook", "Guestbook", $strNaviFolderId);
+        $objPage = $objHelper->createPage("guestbook", "Guestbook", PagesPage::getPageByName("samplepages")->getSystemid());
         $strReturn .= "ID of new page: ".$objPage->getSystemid()."\n";
 
         $objBlocks = $objHelper->createBlocksElement("Headline", $objPage);
