@@ -199,6 +199,15 @@ class Resourceloader
                     }
                 }
             }
+            elseif (PharModule::isPhar(_realpath_."/".$strCorePath)) {
+
+                $objPhar = new PharModule($strCorePath);
+                foreach($objPhar->getContentMap() as $strFilename => $strPharPath) {
+                    if (strpos($strFilename, "/templates/default/tpl".$strFolder) !== false) {
+                        $arrReturn[] = basename($strPharPath);
+                    }
+                }
+            }
         }
 
 
