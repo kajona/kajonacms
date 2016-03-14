@@ -2,6 +2,7 @@
 namespace Kajona\Pages\Tests;
 
 use Kajona\Pages\Admin\Elements\ElementParagraphAdmin;
+use Kajona\Pages\Admin\Elements\ElementPlaintextAdmin;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
@@ -110,17 +111,17 @@ class PagesTest extends Testbase
         $strOldSystemid = $objPage->getSystemid();
 
         $objPagelement = new PagesPageelement();
-        $objPagelement->setStrPlaceholder("text_paragraph");
+        $objPagelement->setStrPlaceholder("text_plaintext");
         $objPagelement->setStrName("text");
-        $objPagelement->setStrElement("paragraph");
+        $objPagelement->setStrElement("plaintext");
         $objPagelement->updateObjectToDb($objPage->getSystemid());
         $objPagelement = new PagesPageelement($objPagelement->getSystemid());
 
         //and finally create the object
-        /** @var $objElement ElementParagraphAdmin */
+        /** @var $objElement ElementPlaintextAdmin */
         $objElement = $objPagelement->getConcreteAdminInstance();
 
-        $objElement->setStrTitle("autotest");
+        $objElement->setStrText("autotest");
 
         $objElement->doBeforeSaveToDb();
         $objElement->updateForeignElement();
@@ -158,20 +159,20 @@ class PagesTest extends Testbase
         $this->assertEquals($objOldElement->getStrLanguage(), $objNewElement->getStrLanguage());
         $this->assertEquals($objOldElement->getStrElement(), $objNewElement->getStrElement());
 
-        /** @var ElementParagraphAdmin $objOldElementInstance */
+        /** @var ElementPlaintextAdmin $objOldElementInstance */
         $objOldElementInstance = $objOldElement->getConcreteAdminInstance();
         $arrOldElementData = $objOldElementInstance->loadElementData();
 
-        /** @var ElementParagraphAdmin $objNewElementInstance */
+        /** @var ElementPlaintextAdmin $objNewElementInstance */
         $objNewElementInstance = $objNewElement->getConcreteAdminInstance();
         $arrNewElementData = $objNewElementInstance->loadElementData();
 
         $this->assertNotEquals($arrOldElementData["content_id"], $arrNewElementData["content_id"]);
-        $this->assertEquals($arrOldElementData["paragraph_title"], $arrNewElementData["paragraph_title"]);
+        $this->assertEquals($arrOldElementData["text"], $arrNewElementData["text"]);
 
-        $this->assertEquals($objOldElementInstance->getStrTitle(), $objNewElementInstance->getStrTitle());
-        $this->assertEquals($objOldElementInstance->getStrTitle(), "autotest");
-        $this->assertEquals($objNewElementInstance->getStrTitle(), "autotest");
+        $this->assertEquals($objOldElementInstance->getStrText(), $objNewElementInstance->getStrText());
+        $this->assertEquals($objOldElementInstance->getStrText(), "autotest");
+        $this->assertEquals($objNewElementInstance->getStrText(), "autotest");
 
 
         $objNewPage->deleteObjectFromDatabase();

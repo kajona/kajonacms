@@ -3,7 +3,7 @@ namespace Kajona\Pageimportexport\Admin\Tests;
 
 use Kajona\Pageimportexport\Admin\Systemtasks\SystemtaskPageexport;
 use Kajona\Pageimportexport\Admin\Systemtasks\SystemtaskPageimport;
-use Kajona\Pages\Admin\Elements\ElementParagraphAdmin;
+use Kajona\Pages\Admin\Elements\ElementrichtextAdmin;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
 use Kajona\System\System\Carrier;
@@ -44,15 +44,15 @@ class PageimportexportTest extends Testbase
 
 
         $objPagelement = new PagesPageelement();
-        $objPagelement->setStrPlaceholder("text_paragraph");
+        $objPagelement->setStrPlaceholder("text_richtext");
         $objPagelement->setStrName("text");
-        $objPagelement->setStrElement("paragraph");
+        $objPagelement->setStrElement("richtext");
         $objPagelement->updateObjectToDb($objPage->getSystemid());
 
-        $objElement = new ElementParagraphAdmin($objPagelement->getSystemid());
+        $objElement = new ElementRichtextAdmin($objPagelement->getSystemid());
         $objElement->setSystemid($objPagelement->getSystemid());
         $objElement->loadElementData();
-        $objElement->setStrTitle("para_title");
+        $objElement->setStrText("para_title");
         $objElement->updateForeignElement();
         $objPagelement = new PagesPageelement($objPagelement->getSystemid());
 
@@ -89,14 +89,15 @@ class PageimportexportTest extends Testbase
         $strPath = Resourceloader::getInstance()->getPathForFile("/admin/elements/".$objElements->getStrClassAdmin());
         $strClass = Classloader::getInstance()->getClassnameFromFilename($strPath);
 
-        $this->assertEquals($strClass, "Kajona\\Pages\\Admin\\Elements\\ElementParagraphAdmin");
+        $this->assertEquals($strClass, "Kajona\\Pages\\Admin\\Elements\\ElementRichtextAdmin");
 
 
+        /** @var ElementRichtextAdmin $objElement */
         $objElement = $objElements->getConcreteAdminInstance();
         $objElement->setSystemid($objElements->getSystemid());
         $objElement->loadElementData();
 
-        $this->assertEquals("para_title", $objElement->getStrTitle());
+        $this->assertEquals("para_title", $objElement->getStrText());
 
 
         $objPage->deleteObjectFromDatabase();
