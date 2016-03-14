@@ -4,13 +4,11 @@
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
-use Kajona\Ldap\System\Workflows\WorkflowLdapSync;
-
 
 /**
  * @deprecated
  */
-class class_workflow_ldap_sync extends WorkflowLdapSync  {
+class class_workflow_ldap_sync extends \Kajona\Ldap\System\Workflows\WorkflowLdapSync  {
 
 
 }
