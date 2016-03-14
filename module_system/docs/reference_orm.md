@@ -476,6 +476,26 @@ This restriction creates an IN statement e.g. <code>"AND \<columnnam\e> IN (\<pa
         //4. Get the objectlist
         $objOrm->getObjectList("Kajona\\Pages\\System\PagesPage");
 
+###OrmObjectlistInOrEmptyRestriction
+
+This restriction extends the normal IN-Restriction by searching also for empty cells (NULL or '').
+It creates an IN statement e.g. <code>"AND (\<columnnam\e> IN (\<parameters\>) OR (\<columnnam\e> IS NULL OR (\<columnnam\e> = '')</code>".
+
+    
+    Example: 
+        //1. Define objectlist
+        $objOrm = new OrmObjectlist();
+    
+        //2. Create restriction
+        $strColmnName = "system_status";
+        $arrParams = array(1,2,3,4,5);
+        $objRestriction = new OrmObjectlistInOrEmptyRestriction($strColmnName, $arrParams);//Generates "AND (system_status IN (1,2,3,4,5) OR system_status IS NULL OR system_status = '')"
+        
+        //3. Add restriction to the objectlist
+        $objOrm->addWhereRestriction($objRestriction);
+        
+        //4. Get the objectlist
+        $objOrm->getObjectList("Kajona\\Pages\\System\PagesPage");
 
 
     
