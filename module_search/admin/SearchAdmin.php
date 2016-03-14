@@ -8,6 +8,7 @@
 ********************************************************************************************************/
 
 namespace Kajona\Search\Admin;
+
 use Kajona\Search\System\SearchCommons;
 use Kajona\Search\System\SearchResult;
 use Kajona\Search\System\SearchSearch;
@@ -116,7 +117,7 @@ class SearchAdmin extends AdminSimple implements AdminInterface
             $objSearch = new SearchSearch();
         }
 
-        else if ($this->getParam("mode") == "edit") {
+        elseif ($this->getParam("mode") == "edit") {
             $objSearch = new SearchSearch($this->getSystemid());
         }
 
@@ -174,10 +175,10 @@ class SearchAdmin extends AdminSimple implements AdminInterface
         $objForm->updateSourceObject();
 
 
-        if($this->getParam("filtermodules") == "" && $this->getParam("search_filter_all") == "") {
+        if ($this->getParam("filtermodules") == "" && $this->getParam("search_filter_all") == "") {
             $arrNrs = array_keys($objSearch->getPossibleModulesForFilter());
             $intSearch = array_search(SystemModule::getModuleByName("messaging")->getIntNr(), $arrNrs);
-            if($intSearch !== false) {
+            if ($intSearch !== false) {
                 unset($arrNrs[$intSearch]);
             }
 
@@ -213,17 +214,16 @@ class SearchAdmin extends AdminSimple implements AdminInterface
 
         return $strReturn;
 
-
-
-
     }
 
     /**
      * Decoupled rendering of search results
+     *
      * @permissions view
      * @xml
      */
-    public function actionRenderSearch() {
+    public function actionRenderSearch()
+    {
 
         Carrier::getInstance()->getObjSession()->sessionClose();
 
@@ -256,18 +256,18 @@ class SearchAdmin extends AdminSimple implements AdminInterface
         $objSearchCommons = new SearchCommons();
         $arrResult = $objSearchCommons->doIndexedSearch($objSearch, 0, self::INT_MAX_NR_OF_RESULTS_FULLSEARCH);
 
-        $arrMappedObjects = array_map(function(SearchResult $objSearchResult) {
+        $arrMappedObjects = array_map(function (SearchResult $objSearchResult) {
             return $objSearchResult->getObjObject();
         }, $arrResult);
 
 
         $strReturn = "<content><![CDATA[";
 
-        if(count($arrMappedObjects) > 20) {
+        if (count($arrMappedObjects) > 20) {
             $strReturn .= $this->objToolkit->warningBox($this->getLang("search_reduce_hits_link"));
         }
 
-        if(count($arrMappedObjects) > 0) {
+        if (count($arrMappedObjects) > 0) {
             $strReturn .= $this->objToolkit->listHeader();
             foreach ($arrMappedObjects as $objOneObject) {
                 $strReturn .= $this->objToolkit->simpleAdminList($objOneObject, $this->getActionIcons($objOneObject, "searchResultList"));
@@ -347,8 +347,8 @@ class SearchAdmin extends AdminSimple implements AdminInterface
 
         $intSteps = 1;
         //try to load more entries if there's no hit
-        while(count($arrResult) == 0 && $intSteps < 10) {
-            $arrResult = $objSearchCommons->doAdminSearch($objSearch, self::INT_MAX_NR_OF_RESULTS_AUTOCOMPLETE*$intSteps, self::INT_MAX_NR_OF_RESULTS_AUTOCOMPLETE*++$intSteps);
+        while (count($arrResult) == 0 && $intSteps < 10) {
+            $arrResult = $objSearchCommons->doAdminSearch($objSearch, self::INT_MAX_NR_OF_RESULTS_AUTOCOMPLETE * $intSteps, self::INT_MAX_NR_OF_RESULTS_AUTOCOMPLETE * ++$intSteps);
         }
 
         $objSearchFunc = function (SearchResult $objA, SearchResult $objB) {

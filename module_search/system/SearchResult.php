@@ -6,6 +6,7 @@
 ********************************************************************************************************/
 
 namespace Kajona\Search\System;
+
 use Kajona\System\System\Model;
 use Kajona\System\System\ModelInterface;
 use Kajona\System\System\SearchPortalobjectInterface;
@@ -20,7 +21,8 @@ use Kajona\System\System\SearchResultobjectInterface;
  * @author sidler@mulchprod.de
  * @since 4.0
  */
-class SearchResult {
+class SearchResult
+{
 
     private $strResultId;
     private $intHits = 1;
@@ -38,128 +40,154 @@ class SearchResult {
     /**
      * @return string
      */
-    public function getStrSortHash() {
+    public function getStrSortHash()
+    {
         return sha1($this->strSystemid.$this->strPagename.$this->strPagelink);
     }
 
     /**
      * @param int $intScore
+     *
      * @return void
      */
-    public function setIntScore($intScore) {
+    public function setIntScore($intScore)
+    {
         $this->intScore = $intScore;
     }
 
     /**
      * @return int
      */
-    public  function getIntScore() {
+    public function getIntScore()
+    {
         return $this->intScore;
     }
 
     /**
      * @param int $intHits
+     *
      * @return void
      */
-    public function setIntHits($intHits) {
+    public function setIntHits($intHits)
+    {
         $this->intHits = $intHits;
     }
 
     /**
      * @return int
      */
-    public function getIntHits() {
+    public function getIntHits()
+    {
         return $this->intHits;
     }
 
     /**
      * @param string $strDescription
+     *
      * @return void
      */
-    public function setStrDescription($strDescription) {
+    public function setStrDescription($strDescription)
+    {
         $this->strDescription = $strDescription;
     }
 
     /**
      * @return mixed
      */
-    public function getStrDescription() {
+    public function getStrDescription()
+    {
         return $this->strDescription;
     }
 
     /**
      * @param string $strPagelink
+     *
      * @return void
      */
-    public function setStrPagelink($strPagelink) {
+    public function setStrPagelink($strPagelink)
+    {
         $this->strPagelink = $strPagelink;
     }
 
     /**
      * @return mixed
      */
-    public function getStrPagelink() {
+    public function getStrPagelink()
+    {
         return $this->strPagelink;
     }
 
     /**
      * @param string $strPagename
+     *
      * @return void
      */
-    public function setStrPagename($strPagename) {
+    public function setStrPagename($strPagename)
+    {
         $this->strPagename = $strPagename;
     }
 
     /**
      * @return mixed
      */
-    public function getStrPagename() {
+    public function getStrPagename()
+    {
         return $this->strPagename;
     }
 
     /**
      * @param string $strResultId
+     *
      * @return void
      */
-    public function setStrResultId($strResultId) {
+    public function setStrResultId($strResultId)
+    {
         $this->strResultId = $strResultId;
     }
 
     /**
      * @return mixed
      */
-    public function getStrResultId() {
+    public function getStrResultId()
+    {
         return $this->strResultId;
     }
 
     /**
      * @param string $strSystemid
+     *
      * @return void
      */
-    public function setStrSystemid($strSystemid) {
+    public function setStrSystemid($strSystemid)
+    {
         $this->strSystemid = $strSystemid;
     }
 
     /**
      * @return mixed
      */
-    public function getStrSystemid() {
+    public function getStrSystemid()
+    {
         return $this->strSystemid;
     }
 
     /**
      * @param \Kajona\System\System\Model $objObject
+     *
      * @return void
      */
-    public function setObjObject($objObject) {
+    public function setObjObject($objObject)
+    {
         $this->objObject = $objObject;
 
-        if($objObject instanceof \Kajona\System\System\Model) {
-            if($this->strSystemid == "")
+        if ($objObject instanceof \Kajona\System\System\Model) {
+            if ($this->strSystemid == "") {
                 $this->strSystemid = $objObject->getSystemid();
+            }
 
-            if($this->strResultId == "")
+            if ($this->strResultId == "") {
                 $this->strResultId = $objObject->getSystemid();
+            }
         }
 
     }
@@ -167,26 +195,28 @@ class SearchResult {
     /**
      * @return Model|ModelInterface|SearchResultobjectInterface|SearchPortalobjectInterface
      */
-    public function getObjObject() {
+    public function getObjObject()
+    {
         return $this->objObject;
     }
 
     /**
      * @param SearchSearch $objSearch
+     *
      * @return void
      */
-    public function setObjSearch($objSearch) {
+    public function setObjSearch($objSearch)
+    {
         $this->objSearch = $objSearch;
     }
 
     /**
      * @return SearchSearch
      */
-    public function getObjSearch() {
+    public function getObjSearch()
+    {
         return $this->objSearch;
     }
-
-
 
 
 }

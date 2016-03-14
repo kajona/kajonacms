@@ -27,7 +27,8 @@ use Kajona\System\Portal\XmlPortalInterface;
  * @module search
  * @moduleId _search_module_id_
  */
-class SearchPortalXml extends PortalController implements XmlPortalInterface {
+class SearchPortalXml extends PortalController implements XmlPortalInterface
+{
 
     private static $INT_MAX_NR_OF_RESULTS = 30;
 
@@ -37,19 +38,20 @@ class SearchPortalXml extends PortalController implements XmlPortalInterface {
      * @return string
      * @permissions view
      */
-    protected function actionDoSearch() {
+    protected function actionDoSearch()
+    {
         $strReturn = "";
 
         $objSearch = new SearchSearch();
         $objSearch->setStrPortalLangFilter($this->getStrPortalLanguage());
 
-        if($this->getParam("searchterm") != "") {
+        if ($this->getParam("searchterm") != "") {
             $objSearch->setStrQuery(htmlToString(urldecode($this->getParam("searchterm")), true));
         }
 
         $arrResult = array();
         $objSearchCommons = new SearchCommons();
-        if($objSearch->getStrQuery() != "") {
+        if ($objSearch->getStrQuery() != "") {
             $arrResult = $objSearchCommons->doPortalSearch($objSearch);
         }
 
@@ -65,39 +67,43 @@ class SearchPortalXml extends PortalController implements XmlPortalInterface {
      *
      * @return string
      */
-    private function createSearchXML($strSearchterm, $arrResults) {
+    private function createSearchXML($strSearchterm, $arrResults)
+    {
         $strReturn = "";
 
         $strReturn .=
             "<search>\n"
-                ."    <searchterm>".xmlSafeString($strSearchterm)."</searchterm>\n"
-                ."    <nrofresults>".count($arrResults)."</nrofresults>\n";
+            ."    <searchterm>".xmlSafeString($strSearchterm)."</searchterm>\n"
+            ."    <nrofresults>".count($arrResults)."</nrofresults>\n";
 
 
         //And now all results
         $intI = 0;
         $strReturn .= "    <resultset>\n";
-        foreach($arrResults as $objOneResult) {
+        foreach ($arrResults as $objOneResult) {
 
             $objPage = PagesPage::getPageByName($objOneResult->getStrPagename());
-            if($objPage === null || !$objPage->rightView() || $objPage->getIntRecordStatus() != 1)
+            if ($objPage === null || !$objPage->rightView() || $objPage->getIntRecordStatus() != 1) {
                 continue;
+            }
 
 
-            if(++$intI > self::$INT_MAX_NR_OF_RESULTS)
+            if (++$intI > self::$INT_MAX_NR_OF_RESULTS) {
                 break;
+            }
 
             //create a correct link
-            if($objOneResult->getStrPagelink() == "")
+            if ($objOneResult->getStrPagelink() == "") {
                 $objOneResult->setStrPagelink(getLinkPortal($objOneResult->getStrPagename(), "", "_self", $objOneResult->getStrPagename(), "", "&highlight=".$strSearchterm."#".$strSearchterm));
+            }
 
             $strReturn .=
                 "        <item>\n"
-                    ."            <pagename>".$objOneResult->getStrPagename()."</pagename>\n"
-                    ."            <pagelink>".$objOneResult->getStrPagelink()."</pagelink>\n"
-                    ."            <score>".$objOneResult->getIntHits()."</score>\n"
-                    ."            <description>".xmlSafeString(uniStrTrim($objOneResult->getStrDescription(), 200))."</description>\n"
-                    ."        </item>\n";
+                ."            <pagename>".$objOneResult->getStrPagename()."</pagename>\n"
+                ."            <pagelink>".$objOneResult->getStrPagelink()."</pagelink>\n"
+                ."            <score>".$objOneResult->getIntHits()."</score>\n"
+                ."            <description>".xmlSafeString(uniStrTrim($objOneResult->getStrDescription(), 200))."</description>\n"
+                ."        </item>\n";
         }
 
         $strReturn .= "    </resultset>\n";
