@@ -2,15 +2,15 @@
 
 <!-- available placeholders: languageswitch_entries -->
 <languageswitch_wrapper>
-    <div class="languageswitch"><ul>%%languageswitch_entries%%</ul></div>
+    <div class="btn-group pull-xs-right" role="group" >%%languageswitch_entries%%</div>
 </languageswitch_wrapper>
 
 <!-- available placeholders: href, langname_short, langname_long -->
 <languageswitch_entry>
-<li><a href="%%href%%" title="%%langname_long%%">%%langname_short%%</a></li>
+<a href="%%href%%" class="btn btn-secondary " title="%%langname_long%%">%%langname_short%%</a>
 </languageswitch_entry>
 
 <!-- available placeholders: href, langname_short, langname_long -->
 <languageswitch_entry_active>
-<li><a href="%%href%%" title="%%langname_long%%">%%langname_short%%</a></li>
+<a href="%%href%%" class="btn btn-primary" title="%%langname_long%%">%%langname_short%%</a>
 </languageswitch_entry_active>

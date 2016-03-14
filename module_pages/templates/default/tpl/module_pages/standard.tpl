@@ -29,15 +29,14 @@
 <body>
 
 <nav class="navbar navbar-full navbar-light bg-faded">
-    <a class="navbar-brand" href="#">Kajona CMS</a>
+    <a class="navbar-brand" href="_webpath_">Kajona CMS</a>
     %%masterportalnavi_navigation%%
     %%mastersearch_search%%
+    %%masterlanguageswitch_languageswitch%%
 </nav>
 
-<!--<ol class="breadcrumb">-->
-%%masterpathnavi_navigation%%
-<!--</ol>-->
 
+%%masterpathnavi_navigation%%
 <div class="container">
 
     <div class="row">
@@ -245,16 +244,6 @@
                     </div>
                 </kajona-block>
 
-                <kajona-block kajona-name="Dirbrowser">
-                    %%test_directorybrowser%%
-                </kajona-block>
-                <kajona-block kajona-name="fb">
-                    %%test_facebooklikebox%%
-                </kajona-block>
-
-                <kajona-block kajona-name="ls">
-                    %%test_languageswitch%%
-                </kajona-block>
 
             </kajona-blocks>
 

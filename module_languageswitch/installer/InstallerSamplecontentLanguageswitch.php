@@ -53,7 +53,7 @@ class InstallerSamplecontentLanguageswitch implements SamplecontentInstallerInte
             if (PagesElement::getElement("languageswitch") != null) {
                 $objPagelement = new PagesPageelement();
                 $objPagelement->setStrPlaceholder("masterlanguageswitch_languageswitch");
-                $objPagelement->setStrName("masterswitch");
+                $objPagelement->setStrName("masterlanguageswitch");
                 $objPagelement->setStrElement("languageswitch");
                 $objPagelement->updateObjectToDb($this->strMasterID);
                 /** @var ElementLanguageswitchAdmin $objLangSwitchAdmin */
