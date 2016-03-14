@@ -98,7 +98,7 @@ class PagesPortalController extends PortalController implements PortalInterface
 
         $strPageCacheHashSum = null;
         $intPageCacheTime = 0;
-        if (!PagesPortaleditor::isActive()) {
+        if (!PagesPortaleditor::isActive() && !PagesPortaleditor::isPossibleForEnabling()) {
             list($strPageCacheHashSum, $intPageCacheTime) = $this->getPageCacheValues(self::$arrElementsOnPage);
             /** @var CacheManager $objCache */
             $objCache = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER);

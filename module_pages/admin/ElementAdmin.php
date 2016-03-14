@@ -10,6 +10,7 @@
 namespace Kajona\Pages\Admin;
 
 use Kajona\Pages\Admin\Formentries\FormentryTemplate;
+use Kajona\Pages\System\PagesPage;
 use Kajona\Search\System\SearchResult;
 use Kajona\System\Admin\AdminController;
 use Kajona\System\Admin\AdminFormgenerator;
@@ -19,6 +20,7 @@ use Kajona\System\Admin\Formentries\FormentryText;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Link;
+use Kajona\System\System\Objectfactory;
 use Kajona\System\System\OrmBase;
 use Kajona\System\System\OrmObjectinit;
 use Kajona\System\System\OrmObjectlist;
@@ -27,6 +29,7 @@ use Kajona\System\System\OrmRowcache;
 use Kajona\System\System\Reflection;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\SearchPortalobjectInterface;
+use Kajona\System\System\SystemModule;
 use Kajona\System\System\ValidatorInterface;
 
 /**
@@ -732,25 +735,15 @@ abstract class ElementAdmin extends AdminController implements SearchPortalobjec
      */
     public function updateSearchResult(SearchResult $objResult)
     {
-        $objORM = new OrmObjectlist();
-        //load the matching site of the current page-element
-        $strQuery = "SELECT page_name, page_id, pageproperties_browsername
-						 FROM "._dbprefix_."page_element,
-						      "._dbprefix_."page_properties,
-						      "._dbprefix_."page,
-						      "._dbprefix_."system
-						 WHERE system_prev_id = page_id
-						   AND pageproperties_id = page_id
-						   AND system_id = page_element_id
-						   AND page_element_id = ?
-						   ".$objORM->getDeletedWhereRestriction()."
-						   AND system_status = 1";
 
-        $arrPage = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getSystemid()));
+        $objCur = Objectfactory::getInstance()->getObject($this->getSystemid());
+        while($objCur != null && !$objCur instanceof PagesPage && !$objCur instanceof SystemModule) {
+            $objCur = Objectfactory::getInstance()->getObject($objCur->getStrPrevId());
+        }
 
-        if (isset($arrPage["page_name"])) {
-            $objResult->setStrPagelink(Link::getLinkPortal($arrPage["page_name"], "", "_self", $arrPage["pageproperties_browsername"], "", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8"))));
-            $objResult->setStrPagename($arrPage["page_name"]);
+        if ($objCur instanceof PagesPage) {
+            $objResult->setStrPagelink(Link::getLinkPortal($objCur->getStrName(), "", "_self", $objCur->getStrBrowsername(), "", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8"))));
+            $objResult->setStrPagename($objCur->getStrName());
         }
 
     }

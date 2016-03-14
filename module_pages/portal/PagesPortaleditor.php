@@ -173,6 +173,17 @@ class PagesPortaleditor
         && Carrier::getInstance()->getObjSession()->isAdmin();
     }
 
+
+    /**
+     * Checks if the portaledtitor is enabled in general
+     * @return bool
+     */
+    public static function isPossibleForEnabling()
+    {
+        return SystemSetting::getConfigValue("_pages_portaleditor_") == "true"
+        && Carrier::getInstance()->getObjSession()->isAdmin();
+    }
+
     /**
      * Checks if the portaleditor is enabled in general and the current user has edit permissions on the current page
      * @param PagesPage $objPage
@@ -193,12 +204,11 @@ class PagesPortaleditor
      * @param string $strPageContent
      *
      * @return string
-     * @todo move this to an external class
      */
     public static function injectPortalEditorPageCode(PagesPage $objPageData, $strPageContent)
     {
 
-        if(!self::isActiveOnPage($objPageData)) {
+        if(!self::isActiveOnPage($objPageData) && !PagesPortaleditor::isPossibleForEnabling()) {
             return $strPageContent;
         }
 
