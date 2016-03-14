@@ -270,9 +270,11 @@ class SystemtaskPageexport extends SystemtaskBase implements AdminSystemtaskInte
                 $objWriter->text($arrOneCol["columnName"]);
                 $objWriter->endAttribute();
 
-                $objWriter->startCdata();
-                $objWriter->text($arrContentRow[$arrOneCol["columnName"]]);
-                $objWriter->endCdata();
+                if($arrContentRow[$arrOneCol["columnName"]] !== null) {
+                    $objWriter->startCdata();
+                    $objWriter->text($arrContentRow[$arrOneCol["columnName"]]);
+                    $objWriter->endCdata();
+                }
 
                 //column
                 $objWriter->endElement();

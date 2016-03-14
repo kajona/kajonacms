@@ -19,6 +19,7 @@ use Kajona\System\System\Logger;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\XmlParser;
+use SimpleXMLElement;
 
 
 /**
@@ -88,20 +89,11 @@ class SystemtaskPageimport extends SystemtaskBase implements AdminSystemtaskInte
         if ($strError != "suffix") {
             if ($strError != "upload") {
 
-                //parse using the kajona xml parser
-                $objXML = new XmlParser();
-                $objXML->loadFile($strTarget);
+                $objXml = new SimpleXMLElement(file_get_contents(_realpath_.$strTarget));
 
-                $arrXML = $objXML->xmlToArray();
 
-                foreach ($arrXML as $arrOneXml) {
-                    foreach ($arrOneXml as $arrNode) {
-                        foreach ($arrNode as $strName => $arrSubnode) {
-                            if ($strName == "page") {
-                                $strReturn .= $this->processSinglePage($arrSubnode[0], $bitReplaceExisting, $strTopFolderId);
-                            }
-                        }
-                    }
+                foreach ($objXml->page as $objOnePage) {
+                    $strReturn .= $this->processSinglePage($objOnePage, $bitReplaceExisting, $strTopFolderId);
                 }
                 $strReturn = $this->getLang("systemtask_pageimport_success").$strReturn;
 
@@ -160,32 +152,32 @@ class SystemtaskPageimport extends SystemtaskBase implements AdminSystemtaskInte
 
     //--- helpers ---------------------------------------------------------------------------------------
 
-    private function processSinglePage($arrPage, $bitReplaceExisting, $strTopFolderId)
+    private function processSinglePage(SimpleXMLElement $objXMlElement, $bitReplaceExisting, $strTopFolderId)
     {
 
         $strReturn = "";
 
-        $arrMetadata = $arrPage["metadata"][0];
-        $arrElements = $arrPage["elements"][0]["element"];
+        /** @var SimpleXMLElement $objMetadata */
+        $objMetadata = $objXMlElement->metadata;
 
         //create page itself
 
-        $strPagename = $arrMetadata["pagename"][0]["value"];
+        $strPagename = $objMetadata->pagename."";
 
         $strPrevId = "";
 
         //check if the exported prev-values may be used
-        $strImportPrevName = $arrMetadata["prevname"][0]["value"];
+        $strImportPrevName = $objMetadata->prevname."";
         if ($strImportPrevName != "") {
             $objPage = PagesPage::getPageByName($strImportPrevName);
             if ($objPage !== null) {
                 $strPrevId = $objPage->getSystemid();
             }
         }
-        elseif (validateSystemid($arrMetadata["previd"][0]["value"])) {
-            $objRoot = Objectfactory::getInstance()->getObject($arrMetadata["previd"][0]["value"]);
+        elseif (validateSystemid($objMetadata->previd."")) {
+            $objRoot = Objectfactory::getInstance()->getObject($objMetadata->previd."");
             if ($objRoot !== null) {
-                $strPrevId = $arrMetadata["previd"][0]["value"];
+                $strPrevId = $objMetadata->previd."";
             }
 
         }
@@ -217,26 +209,25 @@ class SystemtaskPageimport extends SystemtaskBase implements AdminSystemtaskInte
         $objLanguages = new LanguagesLanguage();
         $strCurrentLanguage = $objLanguages->getStrAdminLanguageToWorkOn();
 
-        $arrPropertysets = $arrMetadata["pageproperties"][0]["propertyset"];
 
-        foreach ($arrPropertysets as $arrOnePropSet) {
+        foreach ($objMetadata->pageproperties->propertyset as $objOnePropSet) {
 
             Carrier::getInstance()->getObjDB()->flushQueryCache();
 
-            $objLanguages->setStrAdminLanguageToWorkOn($arrOnePropSet["attributes"]["language"]);
+            $objLanguages->setStrAdminLanguageToWorkOn($objOnePropSet->language."");
 
             //reload page to save correct prop-sets
             $objPage = new PagesPage($strPageId);
-            $objPage->setStrLanguage($arrOnePropSet["language"][0]["value"]);
-            $objPage->setStrBrowsername($arrOnePropSet["browsername"][0]["value"]);
-            $objPage->setStrDesc($arrOnePropSet["description"][0]["value"]);
-            $objPage->setStrKeywords($arrOnePropSet["keywords"][0]["value"]);
-            $objPage->setStrTemplate($arrOnePropSet["template"][0]["value"]);
-            $objPage->setStrSeostring($arrOnePropSet["seostring"][0]["value"]);
-            $objPage->setStrLanguage($arrOnePropSet["language"][0]["value"]);
-            $objPage->setStrAlias($arrOnePropSet["alias"][0]["value"]);
-            $objPage->setStrTarget($arrOnePropSet["target"][0]["value"]);
-            $objPage->setStrPath($arrOnePropSet["path"][0]["value"]);
+            $objPage->setStrLanguage($objOnePropSet->language."");
+            $objPage->setStrBrowsername($objOnePropSet->browsername."");
+            $objPage->setStrDesc($objOnePropSet->description."");
+            $objPage->setStrKeywords($objOnePropSet->keywords."");
+            $objPage->setStrTemplate($objOnePropSet->template."");
+            $objPage->setStrSeostring($objOnePropSet->seostring."");
+            $objPage->setStrLanguage($objOnePropSet->language."");
+            $objPage->setStrAlias($objOnePropSet->alias."");
+            $objPage->setStrTarget($objOnePropSet->target."");
+            $objPage->setStrPath($objOnePropSet->path."");
 
             $objPage->updateObjectToDb();
 
@@ -248,28 +239,29 @@ class SystemtaskPageimport extends SystemtaskBase implements AdminSystemtaskInte
 
 
         //and import each element
-        foreach ($arrElements as $arrSingleElement) {
+        /** @var SimpleXMLElement $objSingleElement */
+        foreach ($objXMlElement->elements->element as $objSingleElement) {
 
             //validate if element exists
-            $strElementName = $arrSingleElement["metadata"][0]["element"][0]["value"];
+            $strElementName = $objSingleElement->metadata->element."";
             if (PagesElement::getElement($strElementName) !== null) {
 
                 $objElement = new PagesPageelement();
-                $objElement->setStrPlaceholder($arrSingleElement["metadata"][0]["placeholder"][0]["value"]);
-                $objElement->setStrName($arrSingleElement["metadata"][0]["name"][0]["value"]);
-                $objElement->setStrElement($arrSingleElement["metadata"][0]["element"][0]["value"]);
-                $objElement->setStrTitle($arrSingleElement["metadata"][0]["title"][0]["value"]);
-                $objElement->setStrLanguage($arrSingleElement["metadata"][0]["language"][0]["value"]);
+                $objElement->setStrPlaceholder($objSingleElement->metadata->placeholder."");
+                $objElement->setStrName($objSingleElement->metadata->name."");
+                $objElement->setStrElement($objSingleElement->metadata->element."");
+                $objElement->setStrTitle($objSingleElement->metadata->title."");
+                $objElement->setStrLanguage($objSingleElement->metadata->language."");
 
                 $objElement->updateObjectToDb($strPageId);
 
                 //and the foreign table
-                $strTable = $arrSingleElement["foreignTable"][0]["attributes"]["table"];
+                $strTable = $objSingleElement->foreignTable["table"]."";
 
 
                 $arrValues = array();
-                foreach ($arrSingleElement["foreignTable"][0]["column"] as $arrColumn) {
-                    $arrValues[$arrColumn["attributes"]["name"]] = isset($arrColumn["value"]) ? $arrColumn["value"] : "";
+                foreach ($objSingleElement->foreignTable->column as $objColumn) {
+                    $arrValues[$objColumn["name"].""] = $objColumn."" != "" ? $objColumn."" : null;
                 }
 
                 unset($arrValues["content_id"]);

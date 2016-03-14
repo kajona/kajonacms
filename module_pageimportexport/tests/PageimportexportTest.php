@@ -54,7 +54,6 @@ class PageimportexportTest extends Testbase
         $objElement->loadElementData();
         $objElement->setStrText("para_title");
         $objElement->updateForeignElement();
-        $objPagelement = new PagesPageelement($objPagelement->getSystemid());
 
 
         Carrier::getInstance()->setParam("pageExport", $strName);
