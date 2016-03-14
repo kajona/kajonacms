@@ -9,7 +9,9 @@
 namespace Kajona\Packagemanager\System;
 
 use Kajona\Packagemanager\System\Messageproviders\MessageproviderPackageupdate;
+use Kajona\System\System\CacheManager;
 use Kajona\System\System\Carrier;
+use Kajona\System\System\Classloader;
 use Kajona\System\System\Config;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Logger;
@@ -17,6 +19,7 @@ use Kajona\System\System\MessagingMessage;
 use Kajona\System\System\MessagingMessagehandler;
 use Kajona\System\System\OrmBase;
 use Kajona\System\System\OrmDeletedhandlingEnum;
+use Kajona\System\System\Reflection;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\SystemSetting;
 use Kajona\System\System\UserGroup;
@@ -441,7 +444,10 @@ class PackagemanagerManager
 
         OrmBase::setObjHandleLogicalDeletedGlobal(OrmDeletedhandlingEnum::EXCLUDED);
 
+        Classloader::getInstance()->flushCache();
+        Reflection::flushCache();
         Resourceloader::getInstance()->flushCache();
+        CacheManager::getInstance()->flushCache(null, CacheManager::NS_BOOTSTRAP);
 
         return $strLog;
     }

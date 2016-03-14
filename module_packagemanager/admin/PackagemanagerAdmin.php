@@ -23,6 +23,7 @@ use Kajona\System\Admin\Formentries\FormentryText;
 use Kajona\System\System\AdminskinHelper;
 use Kajona\System\System\ArrayIterator;
 use Kajona\System\System\ArraySectionIterator;
+use Kajona\System\System\CacheManager;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Classloader;
 use Kajona\System\System\Exception;
@@ -484,7 +485,7 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
                 Classloader::getInstance()->flushCache();
                 Reflection::flushCache();
                 Resourceloader::getInstance()->flushCache();
-
+                CacheManager::getInstance()->flushCache(null, CacheManager::NS_BOOTSTRAP);
                 //reload the module-ids
                 Classloader::getInstance()->bootstrapIncludeModuleIds();
 

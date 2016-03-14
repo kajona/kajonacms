@@ -118,15 +118,6 @@ class PackagemanagerPackagemanagerPharmodule extends PackagemanagerPackagemanage
         }
 
         //search for an existing installer
-        $objPhar = new Phar(_realpath_.$this->objMetadata->getStrPath());
-        $arrInstaller = array();
-        foreach (new RecursiveIteratorIterator($objPhar) as $objFile) {
-            if (strpos($objFile->getPathname(), "/installer/") !== false) {
-                $arrInstaller[] = $objFile->getPathname();
-            }
-        }
-
-
         $arrInstaller = $this->getInstaller($this->getObjMetadata());
 
         //start with modules
