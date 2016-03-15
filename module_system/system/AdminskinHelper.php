@@ -38,9 +38,7 @@ class AdminskinHelper
     public static function getListOfAdminskinsAvailable()
     {
 
-        $arrFiles = Resourceloader::getInstance()->getFolderContent("/admin/skins", array(), true, function ($strName) {
-            return $strName != ".";
-        });
+        $arrFiles = Resourceloader::getInstance()->getFolderContent("/admin/skins", array(), true);
 
         $arrReturn = array();
         foreach ($arrFiles as $strPath => $strName) {

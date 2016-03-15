@@ -336,6 +336,17 @@ class Resourceloader
                     if(strpos($strPath, $strFolder."/".basename($strPath)) === 0) {
                         $arrReturn[$strAbsolutePath] = basename($strPath);
                     }
+
+                    if($bitWithSubfolders && strpos(dirname($strPath), $strFolder) === 0) {
+                        //skip the own folder
+                        if(dirname($strPath) != $strFolder) {
+                            $strEntry = StringUtil::substring($strPath, StringUtil::length($strFolder)+1);
+                            if(StringUtil::indexOf($strEntry, "/") !== false) {
+                                $strEntry = StringUtil::substring($strEntry, 0, StringUtil::indexOf($strEntry, "/"));
+                            }
+                            $arrReturn[StringUtil::substring($strAbsolutePath, 0, StringUtil::indexOf($strAbsolutePath, $strEntry)+StringUtil::length($strEntry))] = $strEntry;
+                        }
+                    }
                 }
             }
         }

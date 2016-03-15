@@ -460,12 +460,6 @@ class UserAdmin extends AdminSimple implements AdminInterface
             $arrLang[$strLanguage] = $this->getLang("lang_".$strLanguage);
         }
 
-        //skins
-        $arrSkinsTemp = AdminskinHelper::getListOfAdminskinsAvailable();
-        $arrSkins = array();
-        foreach ($arrSkinsTemp as $strSkin) {
-            $arrSkins[$strSkin] = $strSkin;
-        }
 
         //access to usersources
         $objUsersources = new UserSourcefactory();
