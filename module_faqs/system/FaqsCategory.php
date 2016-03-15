@@ -9,11 +9,14 @@
 
 namespace Kajona\Faqs\System;
 
+use Kajona\Pages\System\PagesPage;
 use Kajona\Search\System\SearchResult;
 use Kajona\System\System\AdminListableInterface;
 use Kajona\System\System\Link;
+use Kajona\System\System\Objectfactory;
 use Kajona\System\System\OrmObjectlist;
 use Kajona\System\System\SearchPortalobjectInterface;
+use Kajona\System\System\SystemModule;
 
 
 /**
@@ -107,10 +110,9 @@ class FaqsCategory extends \Kajona\System\System\Model implements \Kajona\System
 
         $objORM = new OrmObjectlist();
 
-        $strQuery = "SELECT page_name,  page_id
+        $strQuery = "SELECT system_id
                        FROM " . _dbprefix_ . "element_faqs,
                             " . _dbprefix_ . "page_element,
-                            " . _dbprefix_ . "page,
                             " . _dbprefix_ . "system
                       WHERE content_id = page_element_id
                         AND content_id = system_id
@@ -119,25 +121,27 @@ class FaqsCategory extends \Kajona\System\System\Model implements \Kajona\System
                                 faqs_category = '0' OR faqs_category = ?
                             )
                         )
-                        AND system_prev_id = page_id
                         AND system_status = 1
                         " . $objORM->getDeletedWhereRestriction() . "
                         AND page_element_ph_language = ? ";
 
         $arrRows = $this->objDB->getPArray($strQuery, array($this->getSystemid(), $objResult->getObjSearch()->getStrPortalLangFilter()));
 
-        foreach ($arrRows as $arrOnePage) {
+        foreach ($arrRows as $arrOneElement) {
 
-            //check, if the post is available on a page using the current language
-            if (!isset($arrOnePage["page_name"]) || $arrOnePage["page_name"] == "") {
-                continue;
+            $objCur = Objectfactory::getInstance()->getObject($arrOneElement["system_id"]);
+            while($objCur != null && !$objCur instanceof PagesPage && !$objCur instanceof SystemModule) {
+                $objCur = Objectfactory::getInstance()->getObject($objCur->getStrPrevId());
             }
 
-            $objCurResult = clone($objResult);
-            $objCurResult->setStrPagelink(Link::getLinkPortal($arrOnePage["page_name"], "", "_self", $arrOnePage["page_name"], "", "&highlight=" . urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8"))));
-            $objCurResult->setStrPagename($arrOnePage["page_name"]);
-            $objCurResult->setStrDescription($this->getStrTitle());
-            $arrReturn[] = $objCurResult;
+            if ($objCur instanceof PagesPage && $objCur->getStrName() != 'master') {
+                $objCurResult = clone($objResult);
+                $objCurResult->setStrPagelink(Link::getLinkPortal($objCur->getStrName(), "", "_self", $objCur->getStrBrowsername(), "", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8"))));
+                $objCurResult->setStrPagename($objCur->getStrName());
+                $objCurResult->setStrDescription($this->getStrTitle());
+                $arrReturn[] = $objCurResult;
+
+            }
         }
 
         return $arrReturn;

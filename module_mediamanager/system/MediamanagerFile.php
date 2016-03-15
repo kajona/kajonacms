@@ -7,6 +7,7 @@
 namespace Kajona\Mediamanager\System;
 
 use Kajona\Packagemanager\System\PackagemanagerMetadata;
+use Kajona\Pages\System\PagesPage;
 use Kajona\Search\System\SearchResult;
 use Kajona\System\System\AdminGridableInterface;
 use Kajona\System\System\Carrier;
@@ -22,6 +23,7 @@ use Kajona\System\System\OrmObjectlistRestriction;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\SearchPortalobjectInterface;
 use Kajona\System\System\StringUtil;
+use Kajona\System\System\SystemModule;
 use Kajona\System\System\Zip;
 
 
@@ -171,49 +173,51 @@ class MediamanagerFile extends \Kajona\System\System\Model implements \Kajona\Sy
         $objLanguages = new LanguagesLanguage();
         $objORM = new OrmObjectlist();
 
-        $strQuery = "SELECT page_name, page_id
+        $strQuery = "SELECT system_id
                        FROM "._dbprefix_."element_downloads,
                             "._dbprefix_."page_element,
-                            "._dbprefix_."page,
                             "._dbprefix_."system
                       WHERE download_id = ?
                         AND content_id = page_element_id
                         AND content_id = system_id
-                        AND system_prev_id = page_id
                         AND system_status = 1
                         ".$objORM->getDeletedWhereRestriction()."
                         AND page_element_ph_language = ? ";
 
         $arrRows = $this->objDB->getPArray($strQuery, array($this->getRepositoryId(), $objResult->getObjSearch()->getStrPortalLangFilter()));
 
-        $strQuery = "SELECT page_name, page_id
+        $strQuery = "SELECT system_id
                        FROM "._dbprefix_."element_gallery,
                             "._dbprefix_."page_element,
-                            "._dbprefix_."page,
                             "._dbprefix_."system
                       WHERE gallery_id = ?
                         AND content_id = page_element_id
                         AND content_id = system_id
-                        AND system_prev_id = page_id
                         AND system_status = 1
                         ".$objORM->getDeletedWhereRestriction()."
                         AND page_element_ph_language = ? ";
 
-        $arrRows = array_merge($arrRows, $this->objDB->getPArray($strQuery, array($this->getRepositoryId(), $objLanguages->getStrPortalLanguage())));
+        $arrRows = array_merge($arrRows, $this->objDB->getPArray($strQuery, array($this->getRepositoryId(), $objResult->getObjSearch()->getStrPortalLangFilter())));
         $arrReturn = array();
 
-        foreach ($arrRows as $arrOnePage) {
+        foreach ($arrRows as $arrOneElement) {
 
-            if (!isset($arrOnePage["page_name"]) || $arrOnePage["page_name"] == "") {
-                continue;
+
+            $objCur = Objectfactory::getInstance()->getObject($arrOneElement["system_id"]);
+            while($objCur != null && !$objCur instanceof PagesPage && !$objCur instanceof SystemModule) {
+                $objCur = Objectfactory::getInstance()->getObject($objCur->getStrPrevId());
             }
 
-            $objOneResult = clone $objResult;
-            $objOneResult->setStrPagelink(Link::getLinkPortal($arrOnePage["page_name"], "", "_self", $this->getStrDisplayName(), "mediaFolder", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8")), $this->getPrevId(), "", "", $this->getStrDisplayName()));
-            $objOneResult->setStrPagename($arrOnePage["page_name"]);
-            $objOneResult->setStrDescription($this->getStrDescription());
+            if ($objCur instanceof PagesPage && $objCur->getStrName() != 'master') {
+                $objCurResult = clone($objResult);
+                $objCurResult->setStrPagelink(Link::getLinkPortal($objCur->getStrName(), "", "_self", $this->getStrDisplayName(), "mediaFolder", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8")), $this->getPrevId(), "", "", $this->getStrDisplayName()));
+                $objCurResult->setStrPagename($objCur->getStrName());
+                $objCurResult->setStrDescription($this->getStrDescription());
+                $arrReturn[] = $objCurResult;
 
-            $arrReturn[] = $objOneResult;
+            }
+
+
         }
 
         return $arrReturn;

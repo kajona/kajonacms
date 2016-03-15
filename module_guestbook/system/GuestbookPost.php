@@ -7,14 +7,17 @@
 
 namespace Kajona\Guestbook\System;
 
+use Kajona\Pages\System\PagesPage;
 use Kajona\Search\System\SearchResult;
 use Kajona\System\System\AdminListableInterface;
 use Kajona\System\System\Link;
+use Kajona\System\System\Objectfactory;
 use Kajona\System\System\OrmComparatorEnum;
 use Kajona\System\System\OrmObjectlist;
 use Kajona\System\System\OrmObjectlistOrderby;
 use Kajona\System\System\OrmObjectlistSystemstatusRestriction;
 use Kajona\System\System\SearchPortalobjectInterface;
+use Kajona\System\System\SystemModule;
 
 
 /**
@@ -199,47 +202,53 @@ class GuestbookPost extends \Kajona\System\System\Model implements \Kajona\Syste
     public function updateSearchResult(SearchResult $objResult)
     {
         $objORM = new OrmObjectlist();
-        $strQuery = "SELECT page_name, guestbook_amount, page_id
+        $strQuery = "SELECT system_id, guestbook_amount
                        FROM "._dbprefix_."element_guestbook,
                             "._dbprefix_."page_element,
-                            "._dbprefix_."page,
                             "._dbprefix_."system
                       WHERE guestbook_id = ?
                         AND content_id = page_element_id
                         AND content_id = system_id
-                        AND system_prev_id = page_id
                         AND system_status = 1
                         ".$objORM->getDeletedWhereRestriction()."
                         AND page_element_ph_language = ? ";
 
         $arrRows = $this->objDB->getPArray($strQuery, array($this->getPrevId(), $objResult->getObjSearch()->getStrPortalLangFilter()));
         $arrReturn = array();
-        foreach ($arrRows as $arrOnePage) {
+        foreach ($arrRows as $arrOneElement) {
 
-            //check, if the post is available on a page using the current language
-            if (!isset($arrOnePage["page_name"]) || $arrOnePage["page_name"] == "") {
-                continue;
+            $objCur = Objectfactory::getInstance()->getObject($arrOneElement["system_id"]);
+            while($objCur != null && !$objCur instanceof PagesPage && !$objCur instanceof SystemModule) {
+                $objCur = Objectfactory::getInstance()->getObject($objCur->getStrPrevId());
             }
 
-            //search pv position
-            $intAmount = $arrOnePage["guestbook_amount"];
-            $arrPostsInGB = GuestbookPost::getPosts($this->getPrevId(), true);
-            $intCounter = 0;
-            foreach ($arrPostsInGB as $objOnePostInGb) {
-                $intCounter++;
-                if ($objOnePostInGb->getSystemid() == $this->getSystemid()) {
-                    break;
+
+
+
+            if ($objCur instanceof PagesPage && $objCur->getStrName() != 'master') {
+
+
+                //search pv position
+                $intAmount = $arrOneElement["guestbook_amount"];
+                $arrPostsInGB = GuestbookPost::getPosts($this->getPrevId(), true);
+                $intCounter = 0;
+                foreach ($arrPostsInGB as $objOnePostInGb) {
+                    $intCounter++;
+                    if ($objOnePostInGb->getSystemid() == $this->getSystemid()) {
+                        break;
+                    }
                 }
+                //calculate pv
+                $intPvPos = ceil($intCounter / $intAmount);
+
+                $objCurResult = clone($objResult);
+                $objCurResult->setStrPagelink(Link::getLinkPortal($objCur->getStrName(), "", "_self", $objCur->getStrBrowsername(), "", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8"))."&pv=".$intPvPos));
+                $objCurResult->setStrPagename($objCur->getStrName());
+                $objCurResult->setStrDescription($this->getStrGuestbookPostText());
+                $arrReturn[] = $objCurResult;
+
             }
-            //calculate pv
-            $intPvPos = ceil($intCounter / $intAmount);
 
-            $objNewResult = clone $objResult;
-            $objNewResult->setStrPagelink(Link::getLinkPortal($arrOnePage["page_name"], "", "_self", $arrOnePage["page_name"], "", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8"))."&pv=".$intPvPos));
-            $objNewResult->setStrPagename($arrOnePage["page_name"]);
-            $objNewResult->setStrDescription($this->getStrGuestbookPostText());
-
-            $arrReturn[] = $objNewResult;
         }
 
         return $arrReturn;

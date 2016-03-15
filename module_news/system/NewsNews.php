@@ -22,6 +22,7 @@ use Kajona\System\System\Objectfactory;
 use Kajona\System\System\OrmObjectlist;
 use Kajona\System\System\OrmRowcache;
 use Kajona\System\System\SearchPortalobjectInterface;
+use Kajona\System\System\SystemModule;
 use Kajona\System\System\SystemSetting;
 use Kajona\System\System\VersionableInterface;
 
@@ -545,12 +546,11 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      */
     public function updateSearchResult(SearchResult $objResult) {
         $objORM = new OrmObjectlist();
-        $strQuery = "SELECT news_detailspage
+        $strQuery = "SELECT system_id
                        FROM "._dbprefix_."element_news,
                             "._dbprefix_."news_member,
                             "._dbprefix_."news,
                             "._dbprefix_."page_element,
-                            "._dbprefix_."page,
                             "._dbprefix_."system
                       WHERE news_id = ?
                         AND content_id = page_element_id
@@ -560,7 +560,6 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
                                 AND newsmem_news = news_id
                            )
                         )
-                        AND system_prev_id = page_id
                         AND system_status = 1
                         AND news_view = 0
                         ".$objORM->getDeletedWhereRestriction()."
@@ -569,24 +568,22 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
         $arrRows = $this->objDB->getPArray($strQuery, array($this->getSystemid(), $objResult->getObjSearch()->getStrPortalLangFilter()));
 
         $arrReturn = array();
-        foreach($arrRows as $arrOnePage) {
+        foreach($arrRows as $arrOneElement) {
 
-            //check, if the post is available on a page using the current language
-            if(!isset($arrOnePage["news_detailspage"]) || $arrOnePage["news_detailspage"] == "")
-                continue;
+            $objCur = Objectfactory::getInstance()->getObject($arrOneElement["system_id"]);
+            while($objCur != null && !$objCur instanceof PagesPage && !$objCur instanceof SystemModule) {
+                $objCur = Objectfactory::getInstance()->getObject($objCur->getStrPrevId());
+            }
 
-            $objDetails = PagesPage::getPageByName($arrOnePage["news_detailspage"]);
+            if ($objCur instanceof PagesPage && $objCur->getStrName() != 'master') {
+                $objCurResult = clone($objResult);
+                $objCurResult->setStrPagelink(Link::getLinkPortal($objCur->getStrName(), "", "_self", $this->getStrTitle(), "newsDetail", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8")), $this->getSystemid()));
+                $objCurResult->setStrPagename($objCur->getStrName());
+                $objCurResult->setStrDescription($this->getStrIntro());
+                $arrReturn[] = $objCurResult;
 
-            if($objDetails == null)
-                continue;
+            }
 
-            //TODO: PV position
-            $objOneResult = clone $objResult;
-            $objOneResult->setStrPagelink(Link::getLinkPortal($arrOnePage["news_detailspage"], "", "_self", $this->getStrTitle(), "newsDetail", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8")), $this->getSystemid()));
-            $objOneResult->setStrPagename($arrOnePage["news_detailspage"]);
-            $objOneResult->setStrDescription($this->getStrIntro());
-
-            $arrReturn[] = $objOneResult;
         }
         return $arrReturn;
     }

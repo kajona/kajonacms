@@ -9,6 +9,7 @@
 
 namespace Kajona\Faqs\System;
 
+use Kajona\Pages\System\PagesPage;
 use Kajona\Search\System\SearchResult;
 use Kajona\System\System\AdminListableInterface;
 use Kajona\System\System\Carrier;
@@ -18,6 +19,7 @@ use Kajona\System\System\OrmObjectlist;
 use Kajona\System\System\OrmRowcache;
 use Kajona\System\System\SearchPortalobjectInterface;
 use Kajona\System\System\SortableRatingInterface;
+use Kajona\System\System\SystemModule;
 use Kajona\System\System\VersionableInterface;
 
 
@@ -307,13 +309,12 @@ class FaqsFaq extends \Kajona\System\System\Model implements \Kajona\System\Syst
     {
         $objORM = new OrmObjectlist();
         //search for matching pages
-        $strQuery = "SELECT page_name,  page_id
+        $strQuery = "SELECT system_id
                        FROM " . _dbprefix_ . "element_faqs,
                             " . _dbprefix_ . "faqs
                   LEFT JOIN " . _dbprefix_ . "faqs_member
                          ON (faqsmem_faq = faqs_id),
                             " . _dbprefix_ . "page_element,
-                            " . _dbprefix_ . "page,
                             " . _dbprefix_ . "system
                       WHERE faqs_id = ?
                         AND content_id = page_element_id
@@ -323,7 +324,6 @@ class FaqsFaq extends \Kajona\System\System\Model implements \Kajona\System\Syst
                                 faqs_category = '0' OR faqs_category = faqsmem_category
                             )
                         )
-                        AND system_prev_id = page_id
                         AND system_status = 1
                         " . $objORM->getDeletedWhereRestriction() . "
                         AND page_element_ph_language = ? ";
@@ -332,18 +332,21 @@ class FaqsFaq extends \Kajona\System\System\Model implements \Kajona\System\Syst
 
         $arrReturn = array();
 
-        foreach ($arrRows as $arrOnePage) {
+        foreach ($arrRows as $arrOneElement) {
 
-            //check, if the post is available on a page using the current language
-            if (!isset($arrOnePage["page_name"]) || $arrOnePage["page_name"] == "") {
-                continue;
+            $objCur = Objectfactory::getInstance()->getObject($arrOneElement["system_id"]);
+            while($objCur != null && !$objCur instanceof PagesPage && !$objCur instanceof SystemModule) {
+                $objCur = Objectfactory::getInstance()->getObject($objCur->getStrPrevId());
             }
 
-            $objCurResult = clone($objResult);
-            $objCurResult->setStrPagelink(Link::getLinkPortal($arrOnePage["page_name"], "", "_self", $arrOnePage["page_name"], "", "&highlight=" . urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8"))));
-            $objCurResult->setStrPagename($arrOnePage["page_name"]);
-            $objCurResult->setStrDescription($this->getStrQuestion());
-            $arrReturn[] = $objCurResult;
+            if ($objCur instanceof PagesPage && $objCur->getStrName() != 'master') {
+                $objCurResult = clone($objResult);
+                $objCurResult->setStrPagelink(Link::getLinkPortal($objCur->getStrName(), "", "_self", $objCur->getStrBrowsername(), "", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8"))));
+                $objCurResult->setStrPagename($objCur->getStrName());
+                $objCurResult->setStrDescription($this->getStrQuestion());
+                $arrReturn[] = $objCurResult;
+
+            }
         }
 
         return $arrReturn;

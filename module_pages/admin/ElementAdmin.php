@@ -741,7 +741,7 @@ abstract class ElementAdmin extends AdminController implements SearchPortalobjec
             $objCur = Objectfactory::getInstance()->getObject($objCur->getStrPrevId());
         }
 
-        if ($objCur instanceof PagesPage) {
+        if ($objCur instanceof PagesPage && $objCur->getStrName() != 'master') {
             $objResult->setStrPagelink(Link::getLinkPortal($objCur->getStrName(), "", "_self", $objCur->getStrBrowsername(), "", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8"))));
             $objResult->setStrPagename($objCur->getStrName());
         }
