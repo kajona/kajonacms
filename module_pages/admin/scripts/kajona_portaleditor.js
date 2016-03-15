@@ -39,7 +39,12 @@ KAJONA.admin.portaleditor = {
 	objPlaceholderWithElements: {},
 
     initPortaleditor : function() {
+
         CKEDITOR_BASEPATH = KAJONA_WEBPATH+"/core/module_system/admin/scripts/ckeditor/";
+        if(KAJONA_PHARMAP && KAJONA.util.inArray("module_system", KAJONA_PHARMAP)) {
+            CKEDITOR_BASEPATH = KAJONA_WEBPATH+"/files/extract/module_system/admin/scripts/ckeditor/";
+        }
+
 
         KAJONA.admin.loader.loadFile([
             "/core/module_system/admin/scripts/ckeditor/ckeditor.js"

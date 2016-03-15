@@ -221,9 +221,10 @@ class PagesPortaleditor
 
         $strPeToolbar = "";
 
+        //check if a customized editor-config is available
         $strConfigFile = "'config_kajona_standard.js'";
-        if (is_file(_realpath_."/project/admin/scripts/ckeditor/config_kajona_standard.js")) {
-            $strConfigFile = "KAJONA_WEBPATH+'/project/admin/scripts/ckeditor/config_kajona_standard.js'";
+        if (is_file(_realpath_."/project/module_system/admin/scripts/ckeditor/config_kajona_standard.js")) {
+            $strConfigFile = "KAJONA_WEBPATH+'/project/module_system/admin/scripts/ckeditor/config_kajona_standard.js'";
         }
 
         //Add an iconbar

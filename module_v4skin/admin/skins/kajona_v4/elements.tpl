@@ -1406,10 +1406,6 @@ Used to print pre-formatted text, e.g. log-file contents
 ---------------------------------------------------------------------------------------------------------
 -- PORTALEDITOR -----------------------------------------------------------------------------------------
 
-<pe_basic_data>
-
-</pe_basic_data>
-
 The following section is the toolbar of the portaleditor, displayed at top of the page.
 The following placeholders are provided by the system:
 pe_status_page, pe_status_status, pe_status_autor, pe_status_time
