@@ -43,13 +43,15 @@ class TodoJstreeNodeLoader implements InterfaceJStreeNodeLoader
 
             $arrCategoryNodes = array();
             foreach ($arrCats as $strKey => $strCategoryName) {
+                $strJsonKey =  json_encode($strKey);
+
                 $arrCategoryNodes[] = array(
                     "id" => generateSystemid(),
                     "text" => $this->objToolkit->getTooltipText($strCategoryName, $strCategoryName),
                     "type" => "navigationpoint",
                     "a_attr"  => array(
                         "href"    => "#",
-                        "onclick" => "KAJONA.admin.dashboard.todo.loadCategory('" . $strKey . "','')"
+                        "onclick" => "KAJONA.admin.dashboard.todo.loadCategory($strJsonKey,'')"
                     ),
                     "state" => array(
                         "opened"  => true
@@ -58,13 +60,15 @@ class TodoJstreeNodeLoader implements InterfaceJStreeNodeLoader
                 );
             }
 
+            $strKeys = implode(",", array_keys($arrCats));
+            $strKeysJson = json_encode($strKeys);
             $arrProviderNodes[] = array(
                 "id" => generateSystemid(),
                 "text" => '<i class="fa fa-folder-o"></i>&nbsp;' . $this->objToolkit->getTooltipText($strProviderName, $strProviderName),
                 "type" => "navigationpoint",
                 "a_attr"  => array(
                     "href"    => "#",
-                    "onclick" => "KAJONA.admin.dashboard.todo.loadCategory('" . implode(",", array_keys($arrCats)) . "','')"
+                    "onclick" => "KAJONA.admin.dashboard.todo.loadCategory($strKeysJson,'')"
                 ),
                 "state" => array(
                     "opened"  => true
