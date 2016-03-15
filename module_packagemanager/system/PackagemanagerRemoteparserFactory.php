@@ -1,6 +1,6 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2016 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id: PackagemanagerRemoteparserFactory.php 5154 2012-10-26 08:17:12Z sidler          *
