@@ -283,6 +283,8 @@ class Reflection
             $bitReturn = false !== $this->searchFirstAnnotationInDoc($objReflectionMethod->getDocComment(), $strAnnotation);
         }
         catch (ReflectionException $objEx) {
+            $bitReturn = false;
+
             //not found in current class, maybe a base-class is existing?
             $objBaseClass = $this->objReflectionClass->getParentClass();
             if ($objBaseClass !== false) {
