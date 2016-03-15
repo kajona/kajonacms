@@ -32,9 +32,9 @@ E: Der Login-Provider füllt die noch fehlenden Daten auf Basis interner Daten a
 
 Jeder Login-Provider bzw. jedes Login-Subsystem ist im Ordner /system/usersources abgelegt. Ein Subsystem besteht dabei aus genau drei Dateien, wobei TBD als zu verwendender Name gilt:
 
-* class_usersources_group_TBD.php
-* class_usersources_user_TBD.php
-* class_usersources_source_TBD.php
+* UsersourcesGroupTBD.php
+* UsersourcesUserTBD.php
+* UsersourcesSourceTBD.php
 
 Die einzelnen Dateien werden durch die entsprechenden Interfaces definiert, die Schnittstellen und Strukturen sind also vorgegeben. Die Klassen group und user sollten selbsterklärend sein, sie repräsentieren jeweils eine Gruppe oder einen Benutzer. Jede source stellt eine allgemeine Zugriffsfassade dar, die für das Laden und Verwalten der einzelnen Benutzer und Gruppen verwendet wird. Darüber hinaus definiert die Klasse Eigenschaften des Login-Providers. Hierzu gehört die Information, ob einzelne Daten der Benutzer / Gruppen editierbar sind sowie ob das Anlegen neuer Datensätze seitens der Quelle überhaupt unterstützt wird.
 Ggf. kann ein  Login-Provider durch eigene Konfigurationsdateien weiter konfiguriert und parametrisiert werden.

@@ -1,6 +1,6 @@
 # Languages
 
-DSeit Version 3.0 beherrscht Kajona das Verwalten verschiedener Sprachen im Portal. Hierfür wird eine Seite in der Seitenverwaltung, wie sonst auch, angelegt. Der Unterschied ist aber nun, dass sowohl die Seiteneigenschaften, also auch die Seiteninhalte sprachabhängig gespeichert werden. Die Seite „Über uns“ kann in der Sprache Deutsch also das Template „standard_de.tpl“, im Englischen aber „standard_en.tpl“ als Template verwenden.
+Seit Version 3.0 beherrscht Kajona das Verwalten verschiedener Sprachen im Portal. Hierfür wird eine Seite in der Seitenverwaltung, wie sonst auch, angelegt. Der Unterschied ist aber nun, dass sowohl die Seiteneigenschaften, also auch die Seiteninhalte sprachabhängig gespeichert werden. Die Seite „Über uns“ kann in der Sprache Deutsch also das Template „standard_de.tpl“, im Englischen aber „standard_en.tpl“ als Template verwenden.
 Die Sprache, die als default gewählt wurde, wird als Start-Sprache gewählt, bis der Benutzer eine andere Sprache auswählt (Anmerkung: Im Portal werden die Sprachen ausgewertet, die der Browser als default-Sprachen sendet).
 Eine Spezialaktion ist „Content zuweisen“. Diese kommt nur dann in Aktion, wenn das Sprachen-Modul später in das System installiert wurde. In diesem Fall sollen ja die bisherigen Inhalte nach wie vor verwendet werden können, obwohl diese ja bisher keiner Sprache zugeordnet wurden. Mit dieser Aktion werden alle noch nicht zugeordneten Inhalte der Default-Sprache zugeordnet.
 
