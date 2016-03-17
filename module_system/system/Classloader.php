@@ -117,12 +117,10 @@ class Classloader
      */
     public function registerModuleServices(\Pimple\Container $objContainer)
     {
-        foreach (BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_CLASSES) as $strClass => $strOneFile) {
-            if (\Kajona\System\System\StringUtil::endsWith($strClass, "\\ServiceProvider")) {
-                $objServiceProvider = new $strClass();
-                if ($objServiceProvider instanceof \Pimple\ServiceProviderInterface) {
-                    $objServiceProvider->register($objContainer);
-                }
+        foreach (BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_SERVICES) as $strClass => $strOneFile) {
+            $objServiceProvider = new $strClass();
+            if ($objServiceProvider instanceof \Pimple\ServiceProviderInterface) {
+                $objServiceProvider->register($objContainer);
             }
         }
     }
@@ -274,7 +272,15 @@ class Classloader
             }
         }
 
+        $arrServiceProvider = array();
+        foreach ($arrMergedFiles as $strClassName => $strFile) {
+            if (strpos($strClassName, "\\ServiceProvider") !== false) {
+                $arrServiceProvider[$strClassName] = $strFile;
+            }
+        }
+
         BootstrapCache::getInstance()->updateCache(BootstrapCache::CACHE_CLASSES, $arrMergedFiles);
+        BootstrapCache::getInstance()->updateCache(BootstrapCache::CACHE_SERVICES, $arrServiceProvider);
     }
 
     /**
@@ -444,25 +450,38 @@ class Classloader
 
     public function bootstrapIncludeModuleIds()
     {
-        //fetch all phars and registered modules
-        foreach (BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_MODULES) as $strPath => $strOneModule) {
+        $arrModuleIds = BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_MODULEIDS);
 
-            if (!in_array($strOneModule, BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_PHARMODULES))) {
-                if (is_dir(_realpath_."/".$strPath."/system/") && is_dir(_realpath_."/".$strPath."/system/config/")) {
-                    foreach (scandir(_realpath_."/".$strPath."/system/config/") as $strModuleEntry) {
-                        if (preg_match("/module\_([a-z0-9\_])+\_id\.php/", $strModuleEntry)) {
-                            @include_once _realpath_."/".$strPath."/system/config/".$strModuleEntry;
+        if (!empty($arrModuleIds)) {
+            foreach ($arrModuleIds as $strConstant => $strValue) {
+                define($strConstant, $strValue);
+            }
+        } else {
+            $arrExistingConstants = get_defined_constants();
+
+            //fetch all phars and registered modules
+            foreach (BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_MODULES) as $strPath => $strOneModule) {
+
+                if (!in_array($strOneModule, BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_PHARMODULES))) {
+                    if (is_dir(_realpath_."/".$strPath."/system/") && is_dir(_realpath_."/".$strPath."/system/config/")) {
+                        foreach (scandir(_realpath_."/".$strPath."/system/config/") as $strModuleEntry) {
+                            if (preg_match("/module\_([a-z0-9\_])+\_id\.php/", $strModuleEntry)) {
+                                @include_once _realpath_."/".$strPath."/system/config/".$strModuleEntry;
+                            }
                         }
                     }
                 }
             }
-        }
 
-        foreach (BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_PHARMODULES) as $strPath => $strOneModule) {
-            $objPhar = new PharModule($strPath);
-            $objPhar->loadModuleIds();
-        }
+            foreach (BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_PHARMODULES) as $strPath => $strOneModule) {
+                $objPhar = new PharModule($strPath);
+                $objPhar->loadModuleIds();
+            }
 
+            $arrModuleIds = array_diff_key(get_defined_constants(), $arrExistingConstants);
+
+            BootstrapCache::getInstance()->updateCache(BootstrapCache::CACHE_MODULEIDS, $arrModuleIds);
+        }
     }
 
 
