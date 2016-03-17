@@ -14,6 +14,8 @@
     <script src="_webpath_/core/module_installer/less/less.min.js"></script>
     <!-- KAJONA_BUILD_LESS_END -->
 
+    <link rel="stylesheet" href="_webpath_/core/module_installer/fonts/fontawesome/css/font-awesome.min.css">
+
     <script src="_webpath_/[webpath,module_system]/admin/scripts/jquery/jquery.min.js"></script>
     <script src="_webpath_/[webpath,module_system]/admin/scripts/jqueryui/jquery-ui.custom.min.js"></script>
 
@@ -222,17 +224,141 @@ function switchDriver() {
 
 
 <modeselect_content>
-    <h2>[lang,installer_step_modeselect,installer]</h2>
+    <h2>[lang,installer_step_autoinstallation,installer]</h2>
     <div>
-        <a href="%%link_autoinstall%%">[lang,installer_mode_auto,installer]</a>
-        <p>[lang,installer_mode_auto_hint,installer]</p>
+        <p>Es kann losgehen, alle Daten sind bekannt</p>
+        <a href="#" onclick="startInstaller(this);return false;" class="btn btn-primary">Start installation</a>
     </div>
-    <p><br /></p>
-    <div>
-        <a href="%%link_manualinstall%%">[lang,installer_mode_manual,installer]</a>
-        <p>[lang,installer_mode_manual_hint,installer]</p>
-    </div>
+
+    <table class="table table-striped">
+        <tr>
+            <th>Package</th>
+            <th>Version</th>
+            <th>Status</th>
+            <th>Installation</th>
+            <th>Samplecontent</th>
+        </tr>
+        %%packagerows%%
+
+    </table>
+
+    <script type="text/javascript">
+
+        function startInstaller(objButton) {
+            $(objButton).on('click', function() {return false;} );
+            $(objButton).attr('disabled', 'disabled');
+            triggerNextInstaller();
+        }
+
+        function triggerNextInstaller() {
+            $.post(
+                '_webpath_/installer.php',
+                { step : 'getNextAutoInstall'},
+                function(data) {
+
+                    console.log('next step: '+data);
+
+                    if(data == '' || data == null) {
+                        console.log('installation finished');
+                        triggerNextSamplecontent;
+                    }
+
+                    $('tr[data-package="'+data+'"] td.spinner-module').html('<i class="fa fa-spinner fa-spin"></i>');
+
+                    triggerModuleInstaller(data);
+
+                }
+            );
+        }
+
+
+        function triggerModuleInstaller(strModule) {
+
+            console.log('installation trigger for '+strModule);
+            $.post(
+                '_webpath_/installer.php',
+                { step : 'triggerNextAutoInstall', module: strModule},
+                function(data) {
+
+                    if(data.status == 'success') {
+                        console.log('installation succeeded');
+
+                        $('tr[data-package="'+data.module+'"] td.spinner-module').html('<i class="fa fa-check"></i>');
+                    }
+                    else {
+                        console.log('installation failed ');
+                        $('tr[data-package="'+data.module+'"] td.spinner-module').html('<i class="fa fa-times"></i>');
+
+                    }
+
+
+                    triggerNextInstaller();
+                }
+            );
+        }
+
+
+        function triggerNextSamplecontent() {
+            $.post(
+                    '_webpath_/installer.php',
+                    { step : 'getNextAutoSamplecontent'},
+                    function(data) {
+
+                debugger;
+                        if(data == '' || data == null) {
+                            console.log('installation finished');
+                            return;
+                        }
+
+                        console.log('next step: '+data.module);
+
+                        $('tr[data-package="'+data.module+'"] td.spinner-spinner-samplecontent').html('<i class="fa fa-spinner fa-spin"></i>');
+
+                        triggerAutoSamplecontent(data.module);
+
+                    }
+            );
+        }
+
+
+        function triggerAutoSamplecontent(strModule) {
+
+            console.log('installation trigger for '+strModule);
+            $.post(
+                    '_webpath_/installer.php',
+                    { step : 'triggerNextAutoSamplecontent', module: strModule},
+                    function(data) {
+
+                        if(data.status == 'success') {
+                            console.log('installation succeeded');
+
+                            $('tr[data-package="'+data.module+'"] td.spinner-spinner-samplecontent').html('<i class="fa fa-check"></i>');
+                        }
+                        else {
+                            console.log('installation failed ');
+                            $('tr[data-package="'+data.module+'"] td.spinner-spinner-samplecontent').html('<i class="fa fa-times"></i>');
+
+                        }
+
+
+                        triggerNextSamplecontent();
+                    }
+            );
+        }
+
+    </script>
 </modeselect_content>
+
+<autoinstall_row>
+    <tr data-package="%%packagename%%">
+        <td>%%packageuiname%%</td>
+        <td>%%packageversion%%</td>
+        <td>%%packagestatus%%</td>
+        <td class="spinner-module">%%packageinstaller%%</td>
+        <td class="spinner-samplecontent">%%packagesamplecontent%%</td>
+    </tr>
+</autoinstall_row>
+
 
 
 <loginwizard_form>

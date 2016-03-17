@@ -29,6 +29,19 @@ class InstallerSamplecontentZZLanguages implements SamplecontentInstallerInterfa
 
 
     /**
+     * @inheritDoc
+     */
+    public function isInstalled()
+    {
+        $strCountQuery = "SELECT COUNT(*)
+                                FROM "._dbprefix_."page_properties
+                               WHERE pageproperties_language = ''";
+        $arrCount = $this->objDB->getPRow($strCountQuery, array(''));
+        return $arrCount["COUNT(*)"] == 0;
+    }
+
+
+    /**
      *
      * Does the hard work: installs the module and registers needed constants
      *

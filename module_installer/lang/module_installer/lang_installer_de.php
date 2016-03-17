@@ -28,7 +28,6 @@ $lang["installer_dbdriver_sqlite3"]      = "Der SQLite-Treiber legt die Datenban
 $lang["installer_elements_found"]        = "<b>Installation der Seitenelemente</b><br /><br />Bitte wählen Sie die Seitenelemente aus, die Sie installieren möchten:<br /><br />";
 $lang["installer_finish_closer"]         = "<br />Wir wünschen viel Spaß mit Kajona!";
 $lang["installer_finish_hints"]          = "Sie sollten nun die Schreibrechte auf die Datei /project/system/config/config.php auf Leserechte zurücksetzen.<br />Zusätzlich sollte aus Sicherheitsgründen die Datei /installer.php unbedingt komplett gelöscht werden.<br /><br /><br />Die Administrationsoberfläche erreichen Sie nun unter:<br />&nbsp;&nbsp;&nbsp;&nbsp;<a href=\""._webpath_."/admin\">"._webpath_."/admin</a><br /><br />Das Portal erreichen Sie unter:<br />&nbsp;&nbsp;&nbsp;&nbsp;<a href=\""._webpath_."/\">"._webpath_."</a><br /><br />";
-$lang["installer_finish_hints_update"]   = "<b>Achtung: Wenn Sie eine Update eines v3 Systems durchführen, dann sollten Sie nach dem Upgrade aller Module die Post-Update Scripte ausführen. </b><br /><a href=\"_webpath_/v3_v4_postupdate.php\">Post-Update ausführen</a><br />Weitere Informationen finden Sie in den <a href=\"http://www.kajona.de/update_342_to_40.html\" target=\"_blank\">Updatehinweisen zu 3.4.2 auf 4.0</a><br /><br />";
 $lang["installer_finish_intro"]          = "<b>Installation abgeschlossen</b><br /><br />";
 $lang["installer_given"]                 = "vorhanden";
 $lang["installer_install"]               = "Installieren";
@@ -60,7 +59,7 @@ $lang["installer_samplecontent"]         = "<b>Installation der Beispielinhalte<
 $lang["installer_step_adminsettings"]    = "Administrationszugang";
 $lang["installer_step_dbsettings"]       = "Datenbankeinstellungen";
 $lang["installer_step_finish"]           = "Abschluss";
-$lang["installer_step_modeselect"]       = "Installationsart wählen";
+$lang["installer_step_modeselect"]       = "Installation";
 $lang["installer_step_modules"]          = "Module";
 $lang["installer_step_phpsettings"]      = "PHP-Konfiguration";
 $lang["installer_step_samplecontent"]    = "Beispielinhalte";

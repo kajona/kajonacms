@@ -10,14 +10,17 @@ namespace Kajona\Installer;
 
 use Kajona\Packagemanager\System\PackagemanagerManager;
 use Kajona\Packagemanager\System\PackagemanagerMetadata;
+use Kajona\Samplecontent\System\SamplecontentInstallerHelper;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Classloader;
 use Kajona\System\System\Cookie;
 use Kajona\System\System\CoreEventdispatcher;
 use Kajona\System\System\Exception;
+use Kajona\System\System\HttpResponsetypes;
 use Kajona\System\System\Lang;
 use Kajona\System\System\RequestEntrypointEnum;
 use Kajona\System\System\ResponseObject;
+use Kajona\System\System\SamplecontentInstallerInterface;
 use Kajona\System\System\ScriptletHelper;
 use Kajona\System\System\Session;
 use Kajona\System\System\SystemEventidentifier;
@@ -44,7 +47,7 @@ class Installer {
     private $strForwardLink = "";
     private $strBackwardLink = "";
 
-    private $strVersion = "V 4.7";
+    private $strVersion = "V 5.0";
 
     /**
      * Instance of template-engine
@@ -99,6 +102,31 @@ class Installer {
 
      */
     public function action() {
+
+        //fetch posts
+        if(isset($_POST['step']) && $_POST["step"] == "getNextAutoInstall") {
+            header(HttpResponsetypes::STR_TYPE_JSON);
+            echo $this->getNextAutoInstall();
+            die;
+        }
+
+        if(isset($_POST['step']) && $_POST["step"] == "triggerNextAutoInstall") {
+            header(HttpResponsetypes::STR_TYPE_JSON);
+            echo $this->triggerNextAutoInstall();
+            die;
+        }
+
+        if(isset($_POST['step']) && $_POST["step"] == "getNextAutoSamplecontent") {
+            header(HttpResponsetypes::STR_TYPE_JSON);
+            echo $this->getNextAutoSameplecontent();
+            die;
+        }
+
+        if(isset($_POST['step']) && $_POST["step"] == "triggerNextAutoSamplecontent") {
+            header(HttpResponsetypes::STR_TYPE_JSON);
+            echo $this->triggerNextAutoSamplecontent();
+            die;
+        }
 
         //check if needed values are given
         if(!$this->checkDefaultValues())
@@ -365,8 +393,48 @@ class Installer {
             return;
         }
 
+        //fetch the relevant installers
+
+        $objManager = new PackagemanagerManager();
+        $arrPackageMetadata = $objManager->getAvailablePackages();
+
+        $strPackagetable = "";
+        foreach($arrPackageMetadata as $objOnePackage) {
+            $strSamplecontent = "";
+
+            $objScInstaller = SamplecontentInstallerHelper::getSamplecontentInstallerForPackage($objOnePackage);
+            if($objScInstaller !== null) {
+                $strSamplecontent = '<i class="fa fa-hourglass-o"></i>';
+
+                if(SystemModule::getModuleByName($objOnePackage->getStrTitle()) != null) {
+
+                    if ($objScInstaller->isInstalled()) {
+                        $strSamplecontent = '<i class="fa fa-cross"></i>';
+                    }
+                }
+            }
+
+            $strPackagetable .= $this->objTemplates->fillTemplateFile(
+
+
+                array(
+                    "packagename" => $objOnePackage->getStrTitle(),
+                    "packagestatus" => $objOnePackage->getStrTitle(),
+                    "packageuiname" => $objOnePackage->getStrTitle(),
+                    "packageversion" => $objOnePackage->getStrVersion(),
+                    "packagesamplecontent" => $strSamplecontent,
+                    "packageinstaller" => $objOnePackage->getBitProvidesInstaller() ? '<i class="fa fa-hourglass-o"></i>' : '<i class="fa fa-check"></i>'
+                ),
+                "/module_installer/installer.tpl", "autoinstall_row"
+            );
+        }
+
+
+
         $this->strOutput .= $this->objTemplates->fillTemplateFile(
             array(
+                "packagerows" => $strPackagetable,
+
                 "link_autoinstall" => _webpath_."/installer.php?step=finish&autoInstall=true",
                 "link_manualinstall" => _webpath_."/installer.php?step=install"
             ),
@@ -374,7 +442,6 @@ class Installer {
         );
 
         $this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php");
-
     }
 
     /**
@@ -603,11 +670,102 @@ class Installer {
 
         $strReturn .= $this->getLang("installer_finish_intro");
         $strReturn .= $this->getLang("installer_finish_hints");
-        $strReturn .= $this->getLang("installer_finish_hints_update");
         $strReturn .= $this->getLang("installer_finish_closer");
 
         $this->strOutput = $strReturn;
         $this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php?step=samplecontent");
+    }
+
+
+
+
+    public function getNextAutoSameplecontent() {
+
+        foreach(SamplecontentInstallerHelper::getSamplecontentInstallers() as $objOneInstaller) {
+            if(!$objOneInstaller->isInstalled()) {
+
+                $objManager = new PackagemanagerManager();
+                foreach($objManager->getAvailablePackages() as $objOnePackage) {
+
+                    if(get_class($objOneInstaller) == SamplecontentInstallerHelper::getSamplecontentInstallerForPackage($objOnePackage)) {
+                        return json_encode(array("module" => $objOnePackage->getStrTitle()));
+                    }
+                }
+
+            }
+        }
+
+        return json_encode("");
+
+    }
+
+    public function triggerNextAutoSamplecontent() {
+        $objManager = new PackagemanagerManager();
+        $arrPackageMetadata = $objManager->getAvailablePackages();
+        foreach($arrPackageMetadata as $objOneMetadata) {
+            if($objOneMetadata->getStrTitle() == $_POST["module"]) {
+
+                $objSamplecontent = SamplecontentInstallerHelper::getSamplecontentInstallerForPackage($objOneMetadata);
+
+
+                if ($objSamplecontent != null && !$objSamplecontent->isInstalled()) {
+
+                    $objSamplecontent->install();
+                    return json_encode(array("module" => $_POST["module"], "status" => "success"));
+                }
+
+                $objHandler = $objManager->getPackageManagerForPath($objOneMetadata->getStrPath());
+
+                if($objOneMetadata->getBitProvidesInstaller() && $objHandler->isInstallable()) {
+                    $objHandler->installOrUpdate();
+                }
+            }
+        }
+
+        return json_encode(array("module" => $_POST["module"], "status" => "error"));
+
+
+    }
+
+
+    public function getNextAutoInstall() {
+
+        $objManager = new PackagemanagerManager();
+        $arrPackagesToInstall = $objManager->getAvailablePackages();
+
+        foreach($arrPackagesToInstall as $intKey => $objOneMetadata) {
+
+            $objHandler = $objManager->getPackageManagerForPath($objOneMetadata->getStrPath());
+
+            if(!$objOneMetadata->getBitProvidesInstaller() || !$objHandler->isInstallable()) {
+                unset($arrPackagesToInstall[$intKey]);
+                continue;
+            }
+
+            return json_encode($objOneMetadata->getStrTitle());
+        }
+
+
+        return json_encode("");
+    }
+
+    public function triggerNextAutoInstall() {
+
+        $objManager = new PackagemanagerManager();
+        $arrPackageMetadata = $objManager->getAvailablePackages();
+
+        foreach($arrPackageMetadata as $objOneMetadata) {
+            if($objOneMetadata->getStrTitle() == $_POST["module"]) {
+                $objHandler = $objManager->getPackageManagerForPath($objOneMetadata->getStrPath());
+
+                if($objOneMetadata->getBitProvidesInstaller() && $objHandler->isInstallable()) {
+                    $objHandler->installOrUpdate();
+                    return json_encode(array("module" => $_POST["module"], "status" => "success"));
+                }
+            }
+        }
+
+        return json_encode(array("module" => $_POST["module"], "status" => "error"));
     }
 
 

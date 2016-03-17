@@ -37,6 +37,15 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
     private $objDB;
     private $strContentLanguage;
 
+
+    /**
+     * @inheritDoc
+     */
+    public function isInstalled()
+    {
+        return PagesPage::getPageByName("index") != null;
+    }
+
     public function install()
     {
         $strReturn = $this->installScPages();

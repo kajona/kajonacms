@@ -32,6 +32,24 @@ class InstallerSamplecontentLanguageswitch implements SamplecontentInstallerInte
     private $strMasterID = "";
 
     /**
+     * @inheritDoc
+     */
+    public function isInstalled()
+    {
+        $objMaster = PagesPage::getPageByName("master");
+        if ($objMaster != null) {
+            $arrElements = PagesPageelement::getElementsOnPage($objMaster->getSystemid(), false);
+            foreach ($arrElements as $objOneElement) {
+                if ($objOneElement->getStrElement() == "languageswitch") {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Does the hard work: installs the module and registers needed constants
      *
      * @return string

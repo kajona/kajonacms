@@ -45,5 +45,10 @@ interface SamplecontentInstallerInterface {
      */
     public function getCorrespondingModule();
 
+    /**
+     * Checks if the samplecontent is already installed or should be installed.
+     * @return bool
+     */
+    public function isInstalled();
 
 }

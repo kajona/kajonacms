@@ -34,6 +34,15 @@ class InstallerSamplecontent02Navigation implements SamplecontentInstallerInterf
 
     private $strMasterID = "";
 
+
+    /**
+     * @inheritDoc
+     */
+    public function isInstalled()
+    {
+        return NavigationTree::getObjectCount() > 0;
+    }
+
     /**
      * Does the hard work: installs the module and registers needed constants
      *

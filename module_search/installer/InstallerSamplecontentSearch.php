@@ -36,9 +36,17 @@ class InstallerSamplecontentSearch implements SamplecontentInstallerInterface
 
     private $strMasterID = "";
 
+
+    /**
+     * @inheritDoc
+     */
+    public function isInstalled()
+    {
+        return PagesPage::getPageByName("search") != null;
+    }
+
     /**
      * Does the hard work: installs the module and registers needed constants
-
      */
     public function install() {
         $strReturn = "";

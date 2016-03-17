@@ -31,6 +31,14 @@ class InstallerSamplecontentGuestbook implements SamplecontentInstallerInterface
     private $strContentLanguage;
 
     /**
+     * @inheritDoc
+     */
+    public function isInstalled()
+    {
+        return GuestbookGuestbook::getObjectCount() > 0;
+    }
+
+    /**
      * Does the hard work: installs the module and registers needed constants
      *
      * @return string

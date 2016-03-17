@@ -29,6 +29,15 @@ class InstallerSamplecontentPostacomment implements SamplecontentInstallerInterf
     private $objDB;
     private $strContentLanguage;
 
+
+    /**
+     * @inheritDoc
+     */
+    public function isInstalled()
+    {
+        return PagesPage::getPageByName("postacomment") != null;
+    }
+
     /**
      * Does the hard work: installs the module and registers needed constants
      *
