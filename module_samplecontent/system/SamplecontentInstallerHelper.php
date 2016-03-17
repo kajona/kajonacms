@@ -25,6 +25,7 @@ class SamplecontentInstallerHelper
     {
         //search for installers available
         $arrTempInstaller = Resourceloader::getInstance()->getFolderContent("/installer", array(".php"), false, null, function (&$strFilename, $strPath) {
+            /** @var SamplecontentInstallerInterface $objInstance */
             $objInstance = Classloader::getInstance()->getInstanceFromFilename($strPath, "Kajona\\System\\System\\SamplecontentInstallerInterface");
 
             //See if a legacy class was stored in the file
@@ -40,6 +41,7 @@ class SamplecontentInstallerHelper
                 }
             }
             else {
+                self::initInstaller($objInstance);
                 $strFilename = $objInstance;
             }
         });
@@ -63,14 +65,27 @@ class SamplecontentInstallerHelper
     }
 
 
+    public static function initInstaller(SamplecontentInstallerInterface $objInstaller)
+    {
+        $objInstaller->setObjDb(Carrier::getInstance()->getObjDB());
+        $objInstaller->setStrContentlanguage(Carrier::getInstance()->getObjSession()->getAdminLanguage());
+    }
+
+    /**
+     * @param PackagemanagerMetadata $objPackage
+     *
+     * @return SamplecontentInstallerInterface
+     */
     public static function getSamplecontentInstallerForPackage(PackagemanagerMetadata $objPackage)
     {
         $arrTempInstaller = Resourceloader::getInstance()->getFolderContent("/installer", array(".php"));
         foreach($arrTempInstaller as $strPath => $strFilename) {
             if(uniStrpos($strPath, $objPackage->getStrPath()) !== false) {
 
+                /** @var SamplecontentInstallerInterface $objInstance */
                 $objInstance = Classloader::getInstance()->getInstanceFromFilename($strPath, "Kajona\\System\\System\\SamplecontentInstallerInterface");
                 if($objInstance != null) {
+                    self::initInstaller($objInstance);
                     return $objInstance;
                 }
             }
@@ -97,8 +112,7 @@ class SamplecontentInstallerHelper
         }
         else {
             $strReturn .= "\t... installed.\n";
-            $objInstaller->setObjDb(Carrier::getInstance()->getObjDB());
-            $objInstaller->setStrContentlanguage(Carrier::getInstance()->getObjSession()->getAdminLanguage());
+//            self::initInstaller($objInstaller);
             $strReturn .= $objInstaller->install();
         }
 

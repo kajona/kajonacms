@@ -389,8 +389,8 @@ class Installer {
     public function modeSelect() {
 
         if($this->isInstalled()) {
-            ResponseObject::getInstance()->setStrRedirectUrl(_webpath_."/installer.php?step=install");
-            return;
+//            ResponseObject::getInstance()->setStrRedirectUrl(_webpath_."/installer.php?step=install");
+//            return;
         }
 
         //fetch the relevant installers
@@ -409,8 +409,17 @@ class Installer {
                 if(SystemModule::getModuleByName($objOnePackage->getStrTitle()) != null) {
 
                     if ($objScInstaller->isInstalled()) {
-                        $strSamplecontent = '<i class="fa fa-cross"></i>';
+                        $strSamplecontent = '<i class="fa fa-check"></i>';
                     }
+                }
+            }
+
+            $strModuleInstaller = '<i class="fa fa-check"></i>';
+            if($objOnePackage->getBitProvidesInstaller()) {
+                $strModuleInstaller = '<i class="fa fa-hourglass-o"></i>';
+                $objHandler = $objManager->getPackageManagerForPath($objOnePackage->getStrPath());
+                if(!$objHandler->isInstallable()) {
+                    $strModuleInstaller = '<i class="fa fa-check"></i>';
                 }
             }
 
@@ -423,7 +432,7 @@ class Installer {
                     "packageuiname" => $objOnePackage->getStrTitle(),
                     "packageversion" => $objOnePackage->getStrVersion(),
                     "packagesamplecontent" => $strSamplecontent,
-                    "packageinstaller" => $objOnePackage->getBitProvidesInstaller() ? '<i class="fa fa-hourglass-o"></i>' : '<i class="fa fa-check"></i>'
+                    "packageinstaller" => $strModuleInstaller
                 ),
                 "/module_installer/installer.tpl", "autoinstall_row"
             );
@@ -687,7 +696,7 @@ class Installer {
                 $objManager = new PackagemanagerManager();
                 foreach($objManager->getAvailablePackages() as $objOnePackage) {
 
-                    if(get_class($objOneInstaller) == SamplecontentInstallerHelper::getSamplecontentInstallerForPackage($objOnePackage)) {
+                    if(get_class($objOneInstaller) == get_class(SamplecontentInstallerHelper::getSamplecontentInstallerForPackage($objOnePackage))) {
                         return json_encode(array("module" => $objOnePackage->getStrTitle()));
                     }
                 }
@@ -707,17 +716,9 @@ class Installer {
 
                 $objSamplecontent = SamplecontentInstallerHelper::getSamplecontentInstallerForPackage($objOneMetadata);
 
-
                 if ($objSamplecontent != null && !$objSamplecontent->isInstalled()) {
-
-                    $objSamplecontent->install();
+                    SamplecontentInstallerHelper::install($objSamplecontent);
                     return json_encode(array("module" => $_POST["module"], "status" => "success"));
-                }
-
-                $objHandler = $objManager->getPackageManagerForPath($objOneMetadata->getStrPath());
-
-                if($objOneMetadata->getBitProvidesInstaller() && $objHandler->isInstallable()) {
-                    $objHandler->installOrUpdate();
                 }
             }
         }

@@ -24,7 +24,7 @@ class InstallerSamplecontentMediamanager implements SamplecontentInstallerInterf
      */
     public function isInstalled()
     {
-        return MediamanagerRepo::getObjectCount() > 0;
+        return validateSystemid(SystemSetting::getConfigValue("_mediamanager_default_filesrepoid_"));
     }
 
 

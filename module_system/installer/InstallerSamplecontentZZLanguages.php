@@ -8,6 +8,7 @@ namespace Kajona\System\Installer;
 
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
+use Kajona\System\System\Carrier;
 use Kajona\System\System\Classloader;
 use Kajona\System\System\Database;
 use Kajona\System\System\LanguagesLanguage;
@@ -34,9 +35,9 @@ class InstallerSamplecontentZZLanguages implements SamplecontentInstallerInterfa
     public function isInstalled()
     {
         $strCountQuery = "SELECT COUNT(*)
-                                FROM "._dbprefix_."page_properties
-                               WHERE pageproperties_language = ''";
-        $arrCount = $this->objDB->getPRow($strCountQuery, array(''));
+                                FROM "._dbprefix_."page_element
+                               WHERE page_element_ph_language = ''";
+        $arrCount = Carrier::getInstance()->getObjDB()->getPRow($strCountQuery, array());
         return $arrCount["COUNT(*)"] == 0;
     }
 

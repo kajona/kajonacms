@@ -234,7 +234,6 @@ function switchDriver() {
         <tr>
             <th>Package</th>
             <th>Version</th>
-            <th>Status</th>
             <th>Installation</th>
             <th>Samplecontent</th>
         </tr>
@@ -255,12 +254,13 @@ function switchDriver() {
                 '_webpath_/installer.php',
                 { step : 'getNextAutoInstall'},
                 function(data) {
-
-                    console.log('next step: '+data);
+//                    debugger;
+                    console.log('next module step: '+data);
 
                     if(data == '' || data == null) {
-                        console.log('installation finished');
-                        triggerNextSamplecontent;
+                        console.log('installation module finished');
+                        triggerNextSamplecontent();
+                        return;
                     }
 
                     $('tr[data-package="'+data+'"] td.spinner-module').html('<i class="fa fa-spinner fa-spin"></i>');
@@ -281,7 +281,7 @@ function switchDriver() {
                 function(data) {
 
                     if(data.status == 'success') {
-                        console.log('installation succeeded');
+                        console.log('installation module succeeded');
 
                         $('tr[data-package="'+data.module+'"] td.spinner-module').html('<i class="fa fa-check"></i>');
                     }
@@ -304,15 +304,15 @@ function switchDriver() {
                     { step : 'getNextAutoSamplecontent'},
                     function(data) {
 
-                debugger;
+//                        debugger;
                         if(data == '' || data == null) {
-                            console.log('installation finished');
+                            console.log('installation sc finished');
                             return;
                         }
 
-                        console.log('next step: '+data.module);
+                        console.log('next sc step: '+data.module);
 
-                        $('tr[data-package="'+data.module+'"] td.spinner-spinner-samplecontent').html('<i class="fa fa-spinner fa-spin"></i>');
+                        $('tr[data-package="'+data.module+'"] td.spinner-samplecontent').html('<i class="fa fa-spinner fa-spin"></i>');
 
                         triggerAutoSamplecontent(data.module);
 
@@ -330,13 +330,13 @@ function switchDriver() {
                     function(data) {
 
                         if(data.status == 'success') {
-                            console.log('installation succeeded');
+                            console.log('installation sc succeeded');
 
-                            $('tr[data-package="'+data.module+'"] td.spinner-spinner-samplecontent').html('<i class="fa fa-check"></i>');
+                            $('tr[data-package="'+data.module+'"] td.spinner-samplecontent').html('<i class="fa fa-check"></i>');
                         }
                         else {
                             console.log('installation failed ');
-                            $('tr[data-package="'+data.module+'"] td.spinner-spinner-samplecontent').html('<i class="fa fa-times"></i>');
+                            $('tr[data-package="'+data.module+'"] td.spinner-samplecontent').html('<i class="fa fa-times"></i>');
 
                         }
 
@@ -353,7 +353,6 @@ function switchDriver() {
     <tr data-package="%%packagename%%">
         <td>%%packageuiname%%</td>
         <td>%%packageversion%%</td>
-        <td>%%packagestatus%%</td>
         <td class="spinner-module">%%packageinstaller%%</td>
         <td class="spinner-samplecontent">%%packagesamplecontent%%</td>
     </tr>

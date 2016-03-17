@@ -38,7 +38,8 @@ class InstallerSamplecontentLanguageswitch implements SamplecontentInstallerInte
     {
         $objMaster = PagesPage::getPageByName("master");
         if ($objMaster != null) {
-            $arrElements = PagesPageelement::getElementsOnPage($objMaster->getSystemid(), false);
+            $arrElements = PagesPageelement::getElementsOnPage($objMaster->getSystemid(), false, $this->strContentLanguage);
+            $arrElements = array_merge($arrElements, PagesPageelement::getElementsOnPage($objMaster->getSystemid(), false, ''));
             foreach ($arrElements as $objOneElement) {
                 if ($objOneElement->getStrElement() == "languageswitch") {
                     return true;
