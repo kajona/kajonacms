@@ -200,12 +200,20 @@
         </exec>
     </target>
 
-    <target name="protractorExecute">
+    <target name="protractorExecute" depends="installNpmBuildDependencies">
+
+        <exec dir="${basedir}${jsPath}" executable="${path.node}" failonerror="on">
+            <arg line="./node_modules/protractor/bin/webdriver-manager update"/>
+        </exec>
+        <exec dir="${basedir}${jsPath}" executable="${path.node}" spawn="true">
+            <arg line="./node_modules/protractor/bin/webdriver-manager start"/>
+        </exec>
+
         <!-- start internal webserver -->
-        <antcall target="startWebServer" />
+        <!--<antcall target="startWebServer" />-->
 
         <!-- wait so that the selenium and webserver are ready -->
-        <sleep seconds="4" />
+        <!--<sleep seconds="4" />-->
 
         <!-- run selenium tests -->
         <exec dir="${basedir}${jsPath}" executable="${path.node}" failonerror="on">

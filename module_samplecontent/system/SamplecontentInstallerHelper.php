@@ -83,7 +83,7 @@ class SamplecontentInstallerHelper
             if(uniStrpos($strPath, $objPackage->getStrPath()) !== false) {
 
                 /** @var SamplecontentInstallerInterface $objInstance */
-                $objInstance = Classloader::getInstance()->getInstanceFromFilename($strPath, "Kajona\\System\\System\\SamplecontentInstallerInterface");
+                $objInstance = Classloader::getInstance()->getInstanceFromFilename($strPath, null, "Kajona\\System\\System\\SamplecontentInstallerInterface");
                 if($objInstance != null) {
                     self::initInstaller($objInstance);
                     return $objInstance;
