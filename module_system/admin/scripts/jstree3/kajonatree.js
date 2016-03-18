@@ -167,20 +167,22 @@ KAJONA.kajonatree.jstree = function () {
                         return treeContext.loadNodeDataUrl;
                     },
                     'data': function (node) {
+                        var data = {};
                         if (node.id === "#") {
-                            node.systemid = treeContext.rootNodeSystemid;
-                            node.jstree_initialtoggling = treeContext.treeviewExpanders;
+                            data.systemid = treeContext.rootNodeSystemid;
+                            data.jstree_initialtoggling = treeContext.treeviewExpanders;
                         }
                         else {
-                            node.systemid = node.id;
+                            data.systemid = node.id;
                         }
-                        return node;
+                        return data;
                     }
                 },
                 'themes': {
                     "url": false,
                     "icons": false
-                }
+                },
+                'animation' : false
             },
             'dnd': {
                 'check_while_dragging' : true

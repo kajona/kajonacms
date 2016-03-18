@@ -85,6 +85,11 @@ class SystemJSTreeBuilder {
             $arrNode["children"] = $arrNodes;
             $arrNodes = $arrNode;
         }
+        else {
+            if($arrNodes[0]["children"] == true) {
+                $arrNodes[0]["children"] = $this->getNodesByPath(array($arrNodes[0]["id"]));
+            }
+        }
 
         return json_encode($arrNodes);
     }
