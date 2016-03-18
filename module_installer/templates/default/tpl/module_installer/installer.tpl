@@ -329,7 +329,6 @@ function switchDriver() {
                 { step : 'triggerNextAutoSamplecontent', module: strModule},
                 function(data) {
                     if(data.status == 'success') {
-                        console.log('installation sc succeeded');
                         $('tr[data-package="'+data.module+'"]').removeClass('info');
                         $('tr[data-package="'+data.module+'"] td.spinner-samplecontent').html('<i class="fa fa-check"></i>');
                     }

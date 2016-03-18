@@ -75,4 +75,4 @@ $lang["installer_package_hint"] = "Hinweise";
 $lang["installer_package_hint_noinstaller"] = "Das Paket benötigt keine zusätzliche Installation";
 $lang["installer_start_installation"] = "Installation starten";
 $lang["installer_start_installation_hint"] = "Alle Daten sind vorhanden, die Installation kann beginnen";
-$lang["installer_start_statusinfo_intro"] = "Currently installing: ";
+$lang["installer_start_statusinfo_intro"] = "Aktuelle Installation: ";

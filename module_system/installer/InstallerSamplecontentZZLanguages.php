@@ -13,6 +13,7 @@ use Kajona\System\System\Classloader;
 use Kajona\System\System\Database;
 use Kajona\System\System\LanguagesLanguage;
 use Kajona\System\System\SamplecontentInstallerInterface;
+use Kajona\System\System\SystemModule;
 
 
 /**
@@ -34,6 +35,10 @@ class InstallerSamplecontentZZLanguages implements SamplecontentInstallerInterfa
      */
     public function isInstalled()
     {
+        if(SystemModule::getModuleByName("pages") == null) {
+            return true;
+        }
+
         $strCountQuery = "SELECT COUNT(*)
                                 FROM "._dbprefix_."page_element
                                WHERE page_element_ph_language = ''";

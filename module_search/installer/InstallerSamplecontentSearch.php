@@ -42,7 +42,7 @@ class InstallerSamplecontentSearch implements SamplecontentInstallerInterface
      */
     public function isInstalled()
     {
-        return PagesPage::getPageByName("search") != null;
+        return SystemModule::getModuleByName("pages") == null || PagesPage::getPageByName("search") != null;
     }
 
     /**
