@@ -7,7 +7,7 @@
 
 namespace Kajona\Samplecontent\Debug;
 
-use Kajona\Samplecontent\Installer\InstallerSamplecontent;
+use Kajona\Samplecontent\System\SamplecontentInstallerHelper;
 
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
@@ -27,7 +27,7 @@ for ($i = 0; $i < ob_get_level(); $i++) {
 ob_implicit_flush(1);
 
 //search for installers available
-$arrInstaller = InstallerSamplecontent::getSamplecontentInstallers();
+$arrInstaller = SamplecontentInstallerHelper::getSamplecontentInstallers();
 
 echo "found ".count($arrInstaller)." installers(s)\n\n";
 
@@ -48,22 +48,8 @@ if (issetPost("doinstall")) {
     foreach (getPost("installer") as $strClassname => $strChecked) {
         $objInstaller = new $strClassname;
 
-
-        $objLang = new \Kajona\System\System\LanguagesLanguage();
-
         if ($objInstaller instanceof \Kajona\System\System\SamplecontentInstallerInterface) {
-            $strModule = $objInstaller->getCorrespondingModule();
-            echo "Module ".$strModule."...\n";
-            $objModule = \Kajona\System\System\SystemModule::getModuleByName($strModule);
-            if ($objModule == null) {
-                echo "\t... not installed!\n";
-            }
-            else {
-                echo "\t... installed.\n";
-                $objInstaller->setObjDb(\Kajona\System\System\Carrier::getInstance()->getObjDB());
-                $objInstaller->setStrContentlanguage($objLang->getStrAdminLanguageToWorkOn());
-                echo $objInstaller->install();
-            }
+            echo SamplecontentInstallerHelper::install($objInstaller);
         }
     }
 

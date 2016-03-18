@@ -13,30 +13,44 @@ use Kajona\System\System\SystemSetting;
 /**
  * Installer of the mediamanager samplecontent
  */
-class InstallerSamplecontentMediamanager implements SamplecontentInstallerInterface  {
+class InstallerSamplecontentMediamanager implements SamplecontentInstallerInterface
+{
 
     private $objDB;
     private $strContentLanguage;
+
+    /**
+     * @inheritDoc
+     */
+    public function isInstalled()
+    {
+        return validateSystemid(SystemSetting::getConfigValue("_mediamanager_default_filesrepoid_"));
+    }
+
 
     /**
      * Does the hard work: installs the module and registers needed constants
      *
      * @return string
      */
-    public function install() {
+    public function install()
+    {
         $strReturn = "";
 
         $strReturn .= "Creating picture upload folder\n";
-        if(!is_dir(_realpath_._filespath_."/images/upload"))
+        if (!is_dir(_realpath_._filespath_."/images/upload")) {
             mkdir(_realpath_._filespath_."/images/upload", 0777, true);
+        }
 
         $strReturn .= "Creating new picture repository\n";
         $objRepo = new MediamanagerRepo();
 
-        if($this->strContentLanguage == "de")
+        if ($this->strContentLanguage == "de") {
             $objRepo->setStrTitle("Hochgeladene Bilder");
-        else
+        }
+        else {
             $objRepo->setStrTitle("Picture uploads");
+        }
 
         $objRepo->setStrPath(_filespath_."/images/upload");
         $objRepo->setStrUploadFilter(".jpg,.png,.gif,.jpeg");
@@ -52,16 +66,19 @@ class InstallerSamplecontentMediamanager implements SamplecontentInstallerInterf
         $objSetting->updateObjectToDb();
 
         $strReturn .= "Creating file upload folder\n";
-        if(!is_dir(_realpath_._filespath_."/public"))
+        if (!is_dir(_realpath_._filespath_."/public")) {
             mkdir(_realpath_._filespath_."/public", 0777, true);
+        }
 
         $strReturn .= "Creating new file repository\n";
         $objRepo = new MediamanagerRepo();
 
-        if($this->strContentLanguage == "de")
+        if ($this->strContentLanguage == "de") {
             $objRepo->setStrTitle("Hochgeladene Dateien");
-        else
+        }
+        else {
             $objRepo->setStrTitle("File uploads");
+        }
 
         $objRepo->setStrPath(_filespath_."/downloads");
         $objRepo->setStrUploadFilter(".zip,.pdf,.txt");
@@ -79,15 +96,18 @@ class InstallerSamplecontentMediamanager implements SamplecontentInstallerInterf
         return $strReturn;
     }
 
-    public function setObjDb($objDb) {
+    public function setObjDb($objDb)
+    {
         $this->objDB = $objDb;
     }
 
-    public function setStrContentlanguage($strContentlanguage) {
+    public function setStrContentlanguage($strContentlanguage)
+    {
         $this->strContentLanguage = $strContentlanguage;
     }
 
-    public function getCorrespondingModule() {
+    public function getCorrespondingModule()
+    {
         return "mediamanager";
     }
 

@@ -32,6 +32,15 @@ class InstallerSamplecontentRssfeed implements SamplecontentInstallerInterface
     private $objDB;
     private $strContentLanguage;
 
+
+    /**
+     * @inheritDoc
+     */
+    public function isInstalled()
+    {
+        return PagesPage::getPageByName("rssfeed") != null;
+    }
+
     /**
      * Does the hard work: installs the module and registers needed constants
      *

@@ -30,6 +30,16 @@ class InstallerSamplecontentFaqs implements SamplecontentInstallerInterface
 
     private $strIndexID = "";
 
+
+
+    /**
+     * @inheritDoc
+     */
+    public function isInstalled()
+    {
+        return FaqsFaq::getObjectCount() > 0;
+    }
+
     public function install()
     {
         $strReturn = "";

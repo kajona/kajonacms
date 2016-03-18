@@ -33,6 +33,15 @@ class InstallerSamplecontentFormular implements SamplecontentInstallerInterface 
     private $objDB;
     private $strContentLanguage;
 
+
+    /**
+     * @inheritDoc
+     */
+    public function isInstalled()
+    {
+        return PagesPage::getPageByName("contact") != null;
+    }
+
     /**
      * Does the hard work: installs the module and registers needed constants
      *

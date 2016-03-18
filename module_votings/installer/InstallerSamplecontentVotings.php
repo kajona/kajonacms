@@ -29,6 +29,13 @@ class InstallerSamplecontentVotings implements SamplecontentInstallerInterface
     private $objDB;
     private $strContentLanguage;
 
+    /**
+     * @inheritDoc
+     */
+    public function isInstalled()
+    {
+        return VotingsVoting::getObjectCount() > 0;
+    }
 
     public function install()
     {

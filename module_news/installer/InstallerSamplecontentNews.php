@@ -41,6 +41,14 @@ class InstallerSamplecontentNews implements SamplecontentInstallerInterface
     private $strMasterID = "";
 
     /**
+     * @inheritDoc
+     */
+    public function isInstalled()
+    {
+        return NewsNews::getObjectCount() > 0;
+    }
+
+    /**
      * Does the hard work: installs the module and registers needed constants
      *
      */

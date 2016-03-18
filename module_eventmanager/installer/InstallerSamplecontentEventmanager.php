@@ -29,6 +29,15 @@ class InstallerSamplecontentEventmanager implements SamplecontentInstallerInterf
     private $objDB;
     private $strContentLanguage;
 
+
+    /**
+     * @inheritDoc
+     */
+    public function isInstalled()
+    {
+        return EventmanagerEvent::getObjectCount() > 0;
+    }
+
     public function install()
     {
         $strReturn = "";

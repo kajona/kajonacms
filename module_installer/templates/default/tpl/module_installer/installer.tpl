@@ -14,6 +14,8 @@
     <script src="_webpath_/core/module_installer/less/less.min.js"></script>
     <!-- KAJONA_BUILD_LESS_END -->
 
+    <link rel="stylesheet" href="_webpath_/core/module_installer/fonts/fontawesome/css/font-awesome.min.css">
+
     <script src="_webpath_/[webpath,module_system]/admin/scripts/jquery/jquery.min.js"></script>
     <script src="_webpath_/[webpath,module_system]/admin/scripts/jqueryui/jquery-ui.custom.min.js"></script>
 
@@ -222,17 +224,139 @@ function switchDriver() {
 
 
 <modeselect_content>
-    <h2>[lang,installer_step_modeselect,installer]</h2>
+    <h2>[lang,installer_step_autoinstall,installer]</h2>
     <div>
-        <a href="%%link_autoinstall%%">[lang,installer_mode_auto,installer]</a>
-        <p>[lang,installer_mode_auto_hint,installer]</p>
+        <div class="alert alert-success">
+            <p id="statusintro">[lang,installer_start_installation_hint,installer]</p>
+            <p id="statusinfo" class="hidden"><i class="fa fa-spinner fa-spin"></i> [lang,installer_start_statusinfo_intro,installer] <span id="statuscurmodule"></span></p>
+            <div class="form-group">
+                <label class="col-sm-4"></label>
+                <div class="col-sm-6">
+                    <button type="submit" onclick="startInstaller(this);return false;" class="btn savechanges">[lang,installer_start_installation,installer]</button>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
     </div>
-    <p><br /></p>
-    <div>
-        <a href="%%link_manualinstall%%">[lang,installer_mode_manual,installer]</a>
-        <p>[lang,installer_mode_manual_hint,installer]</p>
-    </div>
+
+    <table class="table table-striped">
+        <tr>
+            <th>[lang,installer_package_title,installer]</th>
+            <th>[lang,installer_package_version,installer]</th>
+            <th>[lang,installer_package_installation,installer]</th>
+            <th>[lang,installer_package_samplecontent,installer]</th>
+            <th>[lang,installer_package_hint,installer]</th>
+        </tr>
+        %%packagerows%%
+
+    </table>
+
+    <script type="text/javascript">
+
+        function startInstaller(objButton) {
+            $(objButton).on('click', function() {return false;} );
+            $(objButton).attr('disabled', 'disabled');
+            $('#statusinfo').removeClass('hidden');
+            triggerNextInstaller();
+        }
+
+        function triggerNextInstaller() {
+            $.post(
+                '_webpath_/installer.php',
+                { step : 'getNextAutoInstall'},
+                function(data) {
+                    if(data == '' || data == null) {
+                        triggerNextSamplecontent();
+                        return;
+                    }
+
+                    $('tr[data-package="'+data+'"] td.spinner-module').html('<i class="fa fa-spinner fa-spin"></i>');
+                    triggerModuleInstaller(data);
+                }
+            );
+        }
+
+
+        function triggerModuleInstaller(strModule) {
+            $('#statuscurmodule').html("module "+strModule);
+            $('tr[data-package="'+strModule+'"]').addClass('info');
+
+            $.post(
+                '_webpath_/installer.php',
+                { step : 'triggerNextAutoInstall', module: strModule},
+                function(data) {
+
+                    if(data.status == 'success') {
+                        $('tr[data-package="'+data.module+'"]').removeClass('info');
+                        $('tr[data-package="'+data.module+'"] td.spinner-module').html('<i class="fa fa-check"></i>');
+                    }
+                    else {
+                        $('tr[data-package="'+data.module+'"]').removeClass('info').addClass('error');
+                        $('tr[data-package="'+data.module+'"] td.spinner-module').html('<i class="fa fa-times"></i>');
+                    }
+
+                    triggerNextInstaller();
+                }
+            );
+        }
+
+
+        function triggerNextSamplecontent() {
+            $.post(
+                '_webpath_/installer.php',
+                { step : 'getNextAutoSamplecontent'},
+                function(data) {
+                    if(data == '' || data == null) {
+                        $('#statusinfo').addClass('hidden');
+                        document.location = '_webpath_/installer.php?step=finish';
+                        return;
+                    }
+
+                    $('tr[data-package="'+data.module+'"] td.spinner-samplecontent').html('<i class="fa fa-spinner fa-spin"></i>');
+                    triggerAutoSamplecontent(data.module);
+
+                }
+            );
+        }
+
+
+        function triggerAutoSamplecontent(strModule) {
+            $('#statuscurmodule').html("samplecontent "+strModule);
+            $('tr[data-package="'+strModule+'"]').addClass('info');
+            $.post(
+                '_webpath_/installer.php',
+                { step : 'triggerNextAutoSamplecontent', module: strModule},
+                function(data) {
+                    if(data.status == 'success') {
+                        $('tr[data-package="'+data.module+'"]').removeClass('info');
+                        $('tr[data-package="'+data.module+'"] td.spinner-samplecontent').html('<i class="fa fa-check"></i>');
+                    }
+                    else {
+                        $('tr[data-package="'+data.module+'"]').removeClass('info').addClass('error');
+                        console.log('installation failed ');
+                        $('tr[data-package="'+data.module+'"] td.spinner-samplecontent').html('<i class="fa fa-times"></i>');
+
+                    }
+
+                    triggerNextSamplecontent();
+                }
+            );
+        }
+
+    </script>
 </modeselect_content>
+
+<autoinstall_row>
+    <tr data-package="%%packagename%%">
+        <td>%%packageuiname%%</td>
+        <td>%%packageversion%%</td>
+        <td class="spinner-module">%%packageinstaller%%</td>
+        <td class="spinner-samplecontent">%%packagesamplecontent%%</td>
+        <td class="text-muted">%%packagehint%%</td>
+    </tr>
+</autoinstall_row>
+
 
 
 <loginwizard_form>
