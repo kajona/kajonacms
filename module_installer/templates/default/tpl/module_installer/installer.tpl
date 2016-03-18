@@ -224,18 +224,29 @@ function switchDriver() {
 
 
 <modeselect_content>
-    <h2>[lang,installer_step_autoinstallation,installer]</h2>
+    <h2>[lang,installer_step_autoinstall,installer]</h2>
     <div>
-        <p>Es kann losgehen, alle Daten sind bekannt</p>
-        <a href="#" onclick="startInstaller(this);return false;" class="btn btn-primary">Start installation</a>
+        <div class="alert alert-success">
+            <p id="statusintro">[lang,installer_start_installation_hint,installer]</p>
+            <p id="statusinfo" class="hidden"><i class="fa fa-spinner fa-spin"></i> [lang,installer_start_statusinfo_intro,installer] <span id="statuscurmodule"></span></p>
+            <div class="form-group">
+                <label class="col-sm-4"></label>
+                <div class="col-sm-6">
+                    <button type="submit" onclick="startInstaller(this);return false;" class="btn savechanges">[lang,installer_start_installation,installer]</button>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
     </div>
 
     <table class="table table-striped">
         <tr>
-            <th>Package</th>
-            <th>Version</th>
-            <th>Installation</th>
-            <th>Samplecontent</th>
+            <th>[lang,installer_package_title,installer]</th>
+            <th>[lang,installer_package_version,installer]</th>
+            <th>[lang,installer_package_installation,installer]</th>
+            <th>[lang,installer_package_samplecontent,installer]</th>
+            <th>[lang,installer_package_hint,installer]</th>
         </tr>
         %%packagerows%%
 
@@ -246,6 +257,7 @@ function switchDriver() {
         function startInstaller(objButton) {
             $(objButton).on('click', function() {return false;} );
             $(objButton).attr('disabled', 'disabled');
+            $('#statusinfo').removeClass('hidden');
             triggerNextInstaller();
         }
 
@@ -254,43 +266,35 @@ function switchDriver() {
                 '_webpath_/installer.php',
                 { step : 'getNextAutoInstall'},
                 function(data) {
-//                    debugger;
-                    console.log('next module step: '+data);
-
                     if(data == '' || data == null) {
-                        console.log('installation module finished');
                         triggerNextSamplecontent();
                         return;
                     }
 
                     $('tr[data-package="'+data+'"] td.spinner-module').html('<i class="fa fa-spinner fa-spin"></i>');
-
                     triggerModuleInstaller(data);
-
                 }
             );
         }
 
 
         function triggerModuleInstaller(strModule) {
+            $('#statuscurmodule').html("module "+strModule);
+            $('tr[data-package="'+strModule+'"]').addClass('info');
 
-            console.log('installation trigger for '+strModule);
             $.post(
                 '_webpath_/installer.php',
                 { step : 'triggerNextAutoInstall', module: strModule},
                 function(data) {
 
                     if(data.status == 'success') {
-                        console.log('installation module succeeded');
-
+                        $('tr[data-package="'+data.module+'"]').removeClass('info');
                         $('tr[data-package="'+data.module+'"] td.spinner-module').html('<i class="fa fa-check"></i>');
                     }
                     else {
-                        console.log('installation failed ');
+                        $('tr[data-package="'+data.module+'"]').removeClass('info').addClass('error');
                         $('tr[data-package="'+data.module+'"] td.spinner-module').html('<i class="fa fa-times"></i>');
-
                     }
-
 
                     triggerNextInstaller();
                 }
@@ -300,49 +304,44 @@ function switchDriver() {
 
         function triggerNextSamplecontent() {
             $.post(
-                    '_webpath_/installer.php',
-                    { step : 'getNextAutoSamplecontent'},
-                    function(data) {
-
-//                        debugger;
-                        if(data == '' || data == null) {
-                            console.log('installation sc finished');
-                            return;
-                        }
-
-                        console.log('next sc step: '+data.module);
-
-                        $('tr[data-package="'+data.module+'"] td.spinner-samplecontent').html('<i class="fa fa-spinner fa-spin"></i>');
-
-                        triggerAutoSamplecontent(data.module);
-
+                '_webpath_/installer.php',
+                { step : 'getNextAutoSamplecontent'},
+                function(data) {
+                    if(data == '' || data == null) {
+                        $('#statusinfo').addClass('hidden');
+                        document.location = '_webpath_/installer.php?step=finish';
+                        return;
                     }
+
+                    $('tr[data-package="'+data.module+'"] td.spinner-samplecontent').html('<i class="fa fa-spinner fa-spin"></i>');
+                    triggerAutoSamplecontent(data.module);
+
+                }
             );
         }
 
 
         function triggerAutoSamplecontent(strModule) {
-
-            console.log('installation trigger for '+strModule);
+            $('#statuscurmodule').html("samplecontent "+strModule);
+            $('tr[data-package="'+strModule+'"]').addClass('info');
             $.post(
-                    '_webpath_/installer.php',
-                    { step : 'triggerNextAutoSamplecontent', module: strModule},
-                    function(data) {
-
-                        if(data.status == 'success') {
-                            console.log('installation sc succeeded');
-
-                            $('tr[data-package="'+data.module+'"] td.spinner-samplecontent').html('<i class="fa fa-check"></i>');
-                        }
-                        else {
-                            console.log('installation failed ');
-                            $('tr[data-package="'+data.module+'"] td.spinner-samplecontent').html('<i class="fa fa-times"></i>');
-
-                        }
-
-
-                        triggerNextSamplecontent();
+                '_webpath_/installer.php',
+                { step : 'triggerNextAutoSamplecontent', module: strModule},
+                function(data) {
+                    if(data.status == 'success') {
+                        console.log('installation sc succeeded');
+                        $('tr[data-package="'+data.module+'"]').removeClass('info');
+                        $('tr[data-package="'+data.module+'"] td.spinner-samplecontent').html('<i class="fa fa-check"></i>');
                     }
+                    else {
+                        $('tr[data-package="'+data.module+'"]').removeClass('info').addClass('error');
+                        console.log('installation failed ');
+                        $('tr[data-package="'+data.module+'"] td.spinner-samplecontent').html('<i class="fa fa-times"></i>');
+
+                    }
+
+                    triggerNextSamplecontent();
+                }
             );
         }
 
@@ -355,6 +354,7 @@ function switchDriver() {
         <td>%%packageversion%%</td>
         <td class="spinner-module">%%packageinstaller%%</td>
         <td class="spinner-samplecontent">%%packagesamplecontent%%</td>
+        <td class="text-muted">%%packagehint%%</td>
     </tr>
 </autoinstall_row>
 
