@@ -114,6 +114,8 @@ class Installer
         if (isset($_POST['step']) && $_POST["step"] == "triggerNextAutoInstall") {
             header(HttpResponsetypes::STR_TYPE_JSON);
             echo $this->triggerNextAutoInstall();
+            CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_REQUEST_ENDPROCESSING, array());
+            CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array(RequestEntrypointEnum::INSTALLER()));
             die;
         }
 
@@ -126,6 +128,8 @@ class Installer
         if (isset($_POST['step']) && $_POST["step"] == "triggerNextAutoSamplecontent") {
             header(HttpResponsetypes::STR_TYPE_JSON);
             echo $this->triggerNextAutoSamplecontent();
+            CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_REQUEST_ENDPROCESSING, array());
+            CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array(RequestEntrypointEnum::INSTALLER()));
             die;
         }
 
