@@ -138,14 +138,11 @@ class BuildHelper {
 
 
         echo "Installing samplecontent...\n\n";
-        try {
-            $objHandler = $objManager->getPackageManagerForPath(\Kajona\System\System\Resourceloader::getInstance()->getCorePathForModule("module_samplecontent")."/module_samplecontent");
+        foreach(\Kajona\Samplecontent\System\SamplecontentInstallerHelper::getSamplecontentInstallers() as $objOneInstaller) {
+            if(!$objOneInstaller->isInstalled()) {
+                echo $objOneInstaller->install();
+            }
         }
-        catch (\Kajona\System\System\Exception $objEx) {
-            $objHandler = null;
-        }
-        if($objHandler !== null)
-            echo $objHandler->installOrUpdate();
 
     }
 

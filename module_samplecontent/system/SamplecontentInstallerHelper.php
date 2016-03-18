@@ -65,7 +65,7 @@ class SamplecontentInstallerHelper
     }
 
 
-    public static function initInstaller(SamplecontentInstallerInterface $objInstaller)
+    private static function initInstaller(SamplecontentInstallerInterface $objInstaller)
     {
         $objInstaller->setObjDb(Carrier::getInstance()->getObjDB());
         $objInstaller->setStrContentlanguage(Carrier::getInstance()->getObjSession()->getAdminLanguage());
@@ -112,7 +112,6 @@ class SamplecontentInstallerHelper
         }
         else {
             $strReturn .= "\t... installed.\n";
-//            self::initInstaller($objInstaller);
             $strReturn .= $objInstaller->install();
         }
 
