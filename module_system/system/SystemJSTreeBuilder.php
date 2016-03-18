@@ -86,8 +86,10 @@ class SystemJSTreeBuilder {
             $arrNodes = $arrNode;
         }
         else {
-            if($arrNodes[0]["children"] == true) {
-                $arrNodes[0]["children"] = $this->getNodesByPath(array($arrNodes[0]["id"]));
+            foreach($arrNodes as &$arrSingleNode) {
+                if ($arrSingleNode["children"] == true) {
+                    $arrSingleNode["children"] = $this->getNodesByPath(array($arrSingleNode["id"]));
+                }
             }
         }
 
