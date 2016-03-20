@@ -17,34 +17,6 @@ namespace Kajona\System\System;
  */
 class TemplatePlaceholderParser
 {
-
-    private $arrPlaceholderCache = array();
-    private $bitCacheInit = false;
-
-
-    private function cacheInit()
-    {
-        if($this->bitCacheInit) {
-            return;
-        }
-        $this->bitCacheInit = true;
-        $this->arrPlaceholderCache = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER)->getValue(__CLASS__);
-        if($this->arrPlaceholderCache === false) {
-            $this->arrPlaceholderCache = array();
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function __destruct()
-    {
-        if(Config::getInstance()->getConfig("templatecachetime") >=0) {
-            Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER)->addValue(__CLASS__, $this->arrPlaceholderCache, Config::getInstance()->getConfig("templatecachetime"));
-        }
-    }
-
-
     /**
      * Deletes placeholder in the string
      *
@@ -91,12 +63,6 @@ class TemplatePlaceholderParser
      */
     public function getElements($strTemplate, $intMode = 0)
     {
-        $this->cacheInit();
-        $strHash = ($strTemplate.$intMode);
-        if (isset($this->arrPlaceholderCache[$strHash])) {
-            return $this->arrPlaceholderCache[$strHash];
-        }
-
         $arrReturn = array();
 
         //search placeholders
@@ -135,7 +101,6 @@ class TemplatePlaceholderParser
 
         }
 
-        $this->arrPlaceholderCache[$strHash] = $arrReturn;
         return $arrReturn;
     }
 

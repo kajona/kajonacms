@@ -47,6 +47,10 @@ class Template
 
     /** @var  TemplateBlocksParser */
     private $objBlocksParser;
+    
+    
+    
+    private $arrTemplateCache = array();
 
     /**
      * @param TemplateFileParser $objFileParser
@@ -60,6 +64,23 @@ class Template
         $this->objSectionParser = $objSectionParser;
         $this->objPlaceholderParser = $objPlaceholderParser;
         $this->objBlocksParser = $objBlocksParser;
+        
+        $this->arrTemplateCache = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER)->getValue(__CLASS__);
+        if($this->arrTemplateCache === false) {
+            $this->arrTemplateCache = array();
+        }
+    }
+
+
+
+    /**
+     * @inheritDoc
+     */
+    public function __destruct()
+    {
+        if(Config::getInstance()->getConfig("templatecachetime") >=0) {
+            Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER)->addValue(__CLASS__, $this->arrTemplateCache, Config::getInstance()->getConfig("templatecachetime"));
+        }
     }
 
 
@@ -94,7 +115,7 @@ class Template
      * @return string The identifier for further actions
      * @throws Exception
      *
-     * @deprecated use the direct  fill / parse methods instead
+     * @deprecated use the direct fill / parse methods instead
      */
     public function readTemplate($strName, $strSection = "", $bitForce = false, $bitThrowErrors = false)
     {
@@ -124,6 +145,10 @@ class Template
     public function parsePageTemplateString($strContent, $intMode = Template::INT_ELEMENT_MODE_REGULAR)
     {
 
+        if(isset($this->arrTemplateCache[__METHOD__][md5($strContent.$intMode)])) {
+            return $this->arrTemplateCache[__METHOD__][md5($strContent.$intMode)];
+        }
+
         //read top level placeholder
         $arrPlaceholder = $this->objPlaceholderParser->getElements($this->removeSection($strContent, TemplateKajonaSections::BLOCKS), $intMode);
         $objRoot = new TemplateBlockContainer(TemplateKajonaSections::ROOT, "", "", "", "");
@@ -146,6 +171,7 @@ class Template
             }
         }
 
+        $this->arrTemplateCache[__METHOD__][md5($strContent.$intMode)] = $objRoot;
         return $objRoot;
     }
 
@@ -159,8 +185,15 @@ class Template
      */
     public function parsePageTemplate($strName, $intMode = Template::INT_ELEMENT_MODE_REGULAR)
     {
+        if(isset($this->arrTemplateCache[__METHOD__][$strName.$intMode])) {
+            return $this->arrTemplateCache[__METHOD__][$strName.$intMode];
+        }
+
         $strTemplate = $this->objFileParser->readTemplate($strName);
-        return $this->parsePageTemplateString($strTemplate, $intMode);
+        $objReturn = $this->parsePageTemplateString($strTemplate, $intMode);
+
+        $this->arrTemplateCache[__METHOD__][$strName.$intMode] = $objReturn;
+        return $objReturn;
     }
 
     /**
@@ -174,13 +207,20 @@ class Template
      */
     public function getBlocksElementsFromTemplate($strTemplateFile, $strSection = "")
     {
+        
+        if(isset($this->arrTemplateCache[__METHOD__][$strTemplateFile.$strSection])) {
+            return $this->arrTemplateCache[__METHOD__][$strTemplateFile.$strSection];
+        }
+        
         $strTemplate = $this->objFileParser->readTemplate($strTemplateFile);
 
         if ($strSection != "") {
             $strTemplate = $this->objSectionParser->readSection($strTemplate, $strSection);
         }
 
-        return $this->objBlocksParser->readBlocks($strTemplate, TemplateKajonaSections::BLOCKS);
+        $arrReturn = $this->objBlocksParser->readBlocks($strTemplate, TemplateKajonaSections::BLOCKS);
+        $this->arrTemplateCache[__METHOD__][$strTemplateFile.$strSection] = $arrReturn;
+        return $arrReturn;
     }
 
     /**
@@ -191,7 +231,13 @@ class Template
      */
     public function getBlockElementsFromBlock($strBlock)
     {
-        return $this->objBlocksParser->readBlocks($strBlock, TemplateKajonaSections::BLOCK);
+        if(isset($this->arrTemplateCache[__METHOD__][$strBlock])) {
+            return $this->arrTemplateCache[__METHOD__][$strBlock];
+        }
+        $arrBlock = $this->objBlocksParser->readBlocks($strBlock, TemplateKajonaSections::BLOCK);
+
+        $this->arrTemplateCache[__METHOD__][$strBlock] = $arrBlock;
+        return $arrBlock;
     }
 
     /**
@@ -200,11 +246,19 @@ class Template
      * @param $strTemplateContent
      * @param $strSection
      *
-     * @return string|null
+     * @param bool $bitKeepSectionTag
+     *
+     * @return null|string
      */
     public function getSectionFromTemplate($strTemplateContent, $strSection, $bitKeepSectionTag = false)
     {
-        return $this->objSectionParser->readSection($strTemplateContent, $strSection, $bitKeepSectionTag);
+        $strHash = md5($strTemplateContent.$strSection.$bitKeepSectionTag);
+        if(isset($this->arrTemplateCache[__METHOD__][$strHash])) {
+            return $this->arrTemplateCache[__METHOD__][$strHash];
+        }
+        $strSection = $this->objSectionParser->readSection($strTemplateContent, $strSection, $bitKeepSectionTag);
+        $this->arrTemplateCache[__METHOD__][$strHash] = $strSection;
+        return $strSection;
     }
 
 
@@ -253,10 +307,18 @@ class Template
     public function fillTemplateFile($arrPlaceholderContent, $strTemplateFilename, $strSection = "", $bitRemovePlaceholder = true)
     {
 
-        $strTemplate = $this->objFileParser->readTemplate($strTemplateFilename);
+        if(!isset($this->arrTemplateCache[__METHOD__][$strTemplateFilename.$strSection])) {
 
-        if ($strSection != "") {
-            $strTemplate = $this->objSectionParser->readSection($strTemplate, $strSection);
+            $strTemplate = $this->objFileParser->readTemplate($strTemplateFilename);
+
+            if ($strSection != "") {
+                $strTemplate = $this->objSectionParser->readSection($strTemplate, $strSection);
+            }
+
+            $this->arrTemplateCache[__METHOD__][$strTemplateFilename.$strSection] = $strTemplate;
+        }
+        else {
+            $strTemplate = $this->arrTemplateCache[__METHOD__][$strTemplateFilename.$strSection];
         }
 
         foreach ($arrPlaceholderContent as $strPlaceholder => $strContent) {

@@ -18,33 +18,6 @@ namespace Kajona\System\System;
 class TemplateBlocksParser
 {
 
-    private $arrBlocksCache = array();
-    private $bitCacheInit = false;
-
-
-    private function cacheInit()
-    {
-        if($this->bitCacheInit) {
-            return;
-        }
-        $this->bitCacheInit = true;
-        $this->arrBlocksCache = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER)->getValue(__CLASS__);
-        if($this->arrBlocksCache === false) {
-            $this->arrBlocksCache = array();
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function __destruct()
-    {
-        if(Config::getInstance()->getConfig("templatecachetime") >=0) {
-            Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER)->addValue(__CLASS__, $this->arrBlocksCache, Config::getInstance()->getConfig("templatecachetime"));
-        }
-    }
-
-
     /**
      * @param $strTemplate
      * @param string $strBlockDefinition
@@ -53,15 +26,8 @@ class TemplateBlocksParser
      */
     public function readBlocks($strTemplate, $strBlockDefinition = TemplateKajonaSections::BLOCKS)
     {
-        $this->cacheInit();
-        $strHash = ($strTemplate.$strBlockDefinition);
-        if(isset($this->arrBlocksCache[$strHash])) {
-            return $this->arrBlocksCache[$strHash];
-        }
-
 
         $arrBlocks = array();
-
 
         //find opening tag
         $arrMatches = array();
@@ -94,8 +60,6 @@ class TemplateBlocksParser
                 break;
             }
         }
-
-        $this->arrBlocksCache[$strHash] = $arrBlocks;
 
         return $arrBlocks;
     }

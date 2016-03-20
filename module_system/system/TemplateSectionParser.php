@@ -19,44 +19,8 @@ namespace Kajona\System\System;
 class TemplateSectionParser
 {
 
-    private $arrCacheTemplateSection = array();
-    private $bitCacheInit = false;
-
-
-    private function cacheInit()
-    {
-        if($this->bitCacheInit) {
-            return;
-        }
-        $this->bitCacheInit = true;
-
-        $this->arrCacheTemplateSection = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER)->getValue(__CLASS__);
-        if($this->arrCacheTemplateSection === false) {
-            $this->arrCacheTemplateSection = array();
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function __destruct()
-    {
-        if(Config::getInstance()->getConfig("templatecachetime") >=0) {
-            Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER)->addValue(__CLASS__, $this->arrCacheTemplateSection, Config::getInstance()->getConfig("templatecachetime"));
-        }
-    }
-
-
     public function readSection($strTemplate, $strSection, $bitKeepSectionTag = false)
     {
-        $this->cacheInit();
-        $strHash = ($strTemplate.$strSection.$bitKeepSectionTag);
-
-        if (isset($this->arrCacheTemplateSection[$strHash])) {
-            return $this->arrCacheTemplateSection[$strHash];
-        }
-
-
         //find opening tag
         $arrMatches = array();
         $intStart = false;
@@ -91,7 +55,6 @@ class TemplateSectionParser
             $strTemplate = null;
         }
 
-        $this->arrCacheTemplateSection[$strHash] = $strTemplate;
         return $strTemplate;
     }
 
@@ -99,7 +62,7 @@ class TemplateSectionParser
     /**
      * Checks if the template referenced by the given identifier provides the section passed.
      *
-     * @param $strIdentifier
+     * @param $strTemplate
      * @param $strSection
      *
      * @return bool

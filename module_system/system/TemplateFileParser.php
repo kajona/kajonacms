@@ -18,44 +18,9 @@ namespace Kajona\System\System;
 class TemplateFileParser
 {
 
-    private $arrCacheTemplates = array();
-    private $bitCacheInit = false;
-
-
-    private function cacheInit()
-    {
-        if($this->bitCacheInit) {
-            return;
-        }
-        $this->bitCacheInit = true;
-
-        $this->arrCacheTemplates = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER)->getValue(__CLASS__);
-        if($this->arrCacheTemplates === false) {
-            $this->arrCacheTemplates = array();
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function __destruct()
-    {
-        if(Config::getInstance()->getConfig("templatecachetime") >=0) {
-            Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER)->addValue(__CLASS__, $this->arrCacheTemplates, Config::getInstance()->getConfig("templatecachetime"));
-        }
-    }
-
-
     public function readTemplate($strTemplateFilename)
     {
-        $this->cacheInit();
-        $strHash = ($strTemplateFilename);
         $strFilename = $this->getPathForTemplate($strTemplateFilename);
-
-        if (isset($this->arrCacheTemplates[$strHash])) {
-            return $this->arrCacheTemplates[$strHash];
-        }
-
 
         //We have to read the whole template from the filesystem
         if (uniSubstr($strFilename, -4) == ".tpl" && is_file($strFilename)) {
@@ -73,7 +38,6 @@ class TemplateFileParser
         }
 
         //Saving to the cache
-        $this->arrCacheTemplates[$strHash] = $strTemplateContent;
         return $strTemplateContent;
     }
 
