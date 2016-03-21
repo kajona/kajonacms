@@ -63,7 +63,7 @@ class AdminskinImageresolver implements AdminskinImageresolverInterface {
 
 
     
-    private static $arrFAImages = array(
+    public static $arrFAImages = array(
 
         "arrow_template"                   => "<i class='kj-icon fa fa-arrow-up'></i>",
         "icon_accept"                      => "<i class='kj-icon fa fa-check'></i>",
