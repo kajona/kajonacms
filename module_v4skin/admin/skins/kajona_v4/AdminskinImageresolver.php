@@ -65,7 +65,6 @@ class AdminskinImageresolver implements AdminskinImageresolverInterface {
     
     public static $arrFAImages = array(
 
-        "arrow_template"                   => "<i class='kj-icon fa fa-arrow-up'></i>",
         "icon_accept"                      => "<i class='kj-icon fa fa-check'></i>",
         "icon_acceptDisabled"              => "<span class='kj-icon fa-stack fa-lg'><i class='fa fa-check'></i><i class='fa fa-ban fa-stack-1x' style='color: red'></i></span>",
         "icon_arrowDown"                   => "<i class='kj-icon fa fa-arrow-circle-down'></i>",
@@ -135,7 +134,7 @@ class AdminskinImageresolver implements AdminskinImageresolverInterface {
         "icon_rss"                         => "<i class='kj-icon fa fa-rss'></i>",
         "icon_sitemap"                     => "<i class='kj-icon fa fa-sitemap'></i>",
         "icon_sound"                       => "<i class='kj-icon fa fa-music'></i>",
-        "icon_sync"                        => "<i class='kj-icon fa fa-retweet'></i>",
+        "icon_sync"                        => "<i class='kj-icon fa fa-refresh'></i>",
         "icon_systemtask"                  => "<i class='kj-icon fa fa-tasks'></i>",
         "icon_tag"                         => "<i class='kj-icon fa fa-tag'></i>",
         "icon_text"                        => "<i class='kj-icon fa fa-file-text-o'></i>",
