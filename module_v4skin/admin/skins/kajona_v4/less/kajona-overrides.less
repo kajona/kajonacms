@@ -523,7 +523,8 @@ footer {
         padding-right: 20px;
         filter: none;
         border: 0;
-        border-bottom: 1px solid @kajona-brand-color;
+
+        //border-bottom: 1px solid @kajona-brand-color;
 
         .navbar-dropdown-section {
             text-align: right;
@@ -543,6 +544,21 @@ footer {
                 font-size: @font-size-base+10;
             }
 
+        }
+
+        .status-indicator {
+            height: 2px;
+            background-color: @kajona-brand-color;
+            position: absolute;
+            top: 49px;
+            left: 0;
+            width: 100%;
+
+            &.active {
+                background-size: 10px 10px;
+                background-image: linear-gradient(45deg,rgba(255,255,255,.55) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.55) 50%,rgba(255,255,255,.55) 75%,transparent 75%,transparent);
+                animation: progress-bar-stripes 2s linear infinite;
+            }
         }
 
         .navbar-search {
