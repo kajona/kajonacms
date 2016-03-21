@@ -65,10 +65,12 @@ $(function () {
         },
         search: function(event, ui) {
             $(this).parent().find('.input-group-addon').html('<i class="fa fa-spinner fa-spin"></i></span>');
+            KAJONA.admin.WorkingIndicator.getInstance().start();
         },
         response: function(event, ui) {
             //$(this).css("background-image", "none");
             $(this).parent().find('.input-group-addon').html('<i class="fa fa-search"></i></span>');
+            KAJONA.admin.WorkingIndicator.getInstance().stop();
         }
     });
 

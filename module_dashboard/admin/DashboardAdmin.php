@@ -168,9 +168,9 @@ class DashboardAdmin extends AdminController implements AdminInterface {
                             },
                             loading: function(isLoading){
                                 if (isLoading) {
-                                    $('#moduleTitle').parent().next().html('<div style="float:right;width:30px;" class="calendar-loading"><div class="loadingContainer"></div></div>');
+                                    KAJONA.admin.WorkingIndicator.getInstance().start();
                                 } else {
-                                    $('#moduleTitle').parent().next().html('');
+                                    KAJONA.admin.WorkingIndicator.getInstance().stop();
                                 }
                             }
                         });

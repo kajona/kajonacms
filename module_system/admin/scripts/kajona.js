@@ -745,6 +745,7 @@ KAJONA.admin.ajax = {
             data = this.getDataObjectFromString(systemid, true);
         }
 
+        KAJONA.admin.WorkingIndicator.getInstance().start();
         $.ajax({
             type: 'POST',
             url: postTarget,
@@ -752,7 +753,11 @@ KAJONA.admin.ajax = {
             error: objCallback,
             success: objCallback,
             dataType: 'text'
-        });
+        }).done(
+            function(response) {
+                KAJONA.admin.WorkingIndicator.getInstance().stop();
+            }
+        );
 
 	},
 
@@ -1235,6 +1240,44 @@ KAJONA.admin.renderTocNavigation = function (selector) {
     $('#toc-navigation').css('width', $('#moduleNavigation').width()+15);
     $('#toc-navigation').css('max-height', $(window).height()-60);
 };
+
+
+
+
+KAJONA.admin.WorkingIndicator = function() {
+
+    if (KAJONA.admin.WorkingIndicator.prototype._singletonInstance) {
+        return KAJONA.admin.WorkingIndicator.prototype._singletonInstance;
+    }
+
+    KAJONA.admin.WorkingIndicator.prototype._singletonInstance = this;
+
+    var intWorkingCount = 0;
+
+    this.start = function () {
+
+        if(intWorkingCount == 0) {
+            $('#status-indicator').addClass("active");
+        }
+
+        intWorkingCount++;
+    };
+
+    this.stop = function() {
+        intWorkingCount--;
+
+        if(intWorkingCount == 0) {
+            $('#status-indicator').removeClass("active");
+        }
+    };
+
+
+
+};
+KAJONA.admin.WorkingIndicator.getInstance = function() {
+    return new KAJONA.admin.WorkingIndicator();
+};
+
 
 /**
  * Wrapper for desktop notifications.
