@@ -103,11 +103,11 @@ e.g. %%mastermainnavi\_navigation%%
 These placeholders behave the same as usual page element placeholders, but they have to be set on the master page. This is useful for page elements you want to show on every page, e.g. the navigations. Make sure you also define the placeholders in the master-template (master.tpl).
 
 In addition there is the placeholder `%%kajona_head%%` which contains some JavaScript code and the constant _ webpath _ which contains the URL path of the current system. Also the constant _ system_browser_cachebuster _ should be added to all references to JavaScript and CSS files, so the system can force the browser to reload all files from the server instead of loading them out of the browsers cache. 
-Have a look into the file /project/portal/global_includes.php to add new or edit existing static placeholders. If the file doesn't exist, copy it from  
+Have a look into the file /project/module_pages/portal/global_includes.php to add new or edit existing static placeholders. If the file doesn't exist, copy it from  
 
 `/core/module_pages/portal/global_includes.php` to 
 
-`/project/portal/global_includes.php`.
+`/project/module_pages/portal/global_includes.php`.
 
 Please have a look into the manual of module pages for a list of available regular placeholders and to learn more about the templates including the way the masterpage works in detail.
 
