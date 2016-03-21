@@ -452,6 +452,7 @@ footer {
             display: block;
             font-size: @font-size-base - 1;
             border-radius: 0;
+            color: @link-color;
 
             &:hover {
                 text-decoration: none;
@@ -841,10 +842,6 @@ footer {
 				.opacity(0);
 				.transition(opacity linear .2s);
                 padding-top: 3px;
-
-                .fa-lg {
-                    font-size: 1em;
-                }
 			}
 
 			&:hover {
@@ -1319,15 +1316,6 @@ footer {
             text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
             color: @gray;
         }
-
-        .fa-stack-base-full {
-            left: auto;
-            top: auto;
-        }
-    }
-
-    [class^='fa-']:before, [class*=' fa-']:before {
-        //font-size: @font-size-base+4;
     }
 
     [class*=' fa-stack']:before {
