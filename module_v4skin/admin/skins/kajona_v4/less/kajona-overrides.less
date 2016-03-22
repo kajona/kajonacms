@@ -1550,10 +1550,23 @@ table.form-control {
 
         td.actions {
             text-align: right;
+
+            @media (min-width: @screen-md-min) {
+                & {
+                    white-space: nowrap;
+                }
+            }
+
+        }
+
+        td.center {
+            color: lighten(@text-color, 20);
+
         }
 
         td.description {
             padding-top: 0;
+            color: lighten(@text-color, 20);
         }
 
         tr[data-systemid='batchActionSwitch'] {
