@@ -547,14 +547,16 @@ footer {
         }
 
         .status-indicator {
-            height: 2px;
+            height: 1px;
             background-color: @kajona-brand-color;
             position: absolute;
-            top: 48px;
+            top: 49px;
             left: 0;
             width: 100%;
 
             &.active {
+                top: 48px;
+                height: 2px;
                 background-size: 10px 10px;
                 background-image: linear-gradient(45deg,rgba(255,255,255,.55) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.55) 50%,rgba(255,255,255,.55) 75%,transparent 75%,transparent);
                 animation: progress-bar-stripes 2s linear infinite;
