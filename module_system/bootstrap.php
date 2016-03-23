@@ -9,10 +9,10 @@
 // -- The Path on the filesystem ---------------------------------------------------------------------------------------
 // Determine the current path on the filesystem. Use the dir-name of the current file minus core/module_system
 if (substr(__DIR__, 0, 7) == "phar://") {
-    define("_realpath_", str_replace(" ", "\040", substr(__DIR__, 7, -23)));
+    define("_realpath_", str_replace(array(" ", "\\"), array("\040", "/"), substr(__DIR__, 7, -23)));
 }
 else {
-    define("_realpath_", str_replace(" ", "\040", substr(__DIR__, 0, -18)));
+    define("_realpath_", str_replace(array(" ", "\\"), array("\040", "/"), substr(__DIR__, 0, -18)));
 }
 
 // -- Loader pre-configuration -----------------------------------------------------------------------------------------
