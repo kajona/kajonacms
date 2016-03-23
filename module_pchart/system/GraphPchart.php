@@ -14,8 +14,7 @@ use Kajona\System\System\GraphCommons;
 use Kajona\System\System\GraphInterface;
 use Kajona\System\System\Resourceloader;
 
-require_once(__DIR__."/pChart/pChart.class");
-require_once(__DIR__."/pChart/pData.class");
+
 
 
 /**
@@ -95,6 +94,9 @@ class GraphPchart implements GraphInterface {
 	 *
 	 */
 	public function __construct() {
+        require_once(__DIR__."/pChart/pChart.class");
+        require_once(__DIR__."/pChart/pData.class");
+
         $this->objDataset = new \pData();
         $this->objAdditionalDataset = new \pData();
         $this->arrDefaultColorPalette = GraphColorpalettes::$arrDefaultColorPalette;
