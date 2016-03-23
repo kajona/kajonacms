@@ -99,6 +99,7 @@ class ElementImageAdmin extends ElementAdmin implements AdminElementInterface
      */
     public function generateDummyContent()
     {
+        parent::generateDummyContent();
         $this->setStrImage("/files/images/samples/img_3000.jpg");
     }
 

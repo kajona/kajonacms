@@ -71,6 +71,7 @@ class ElementRichtextAdmin extends ElementAdmin implements AdminElementInterface
      */
     public function generateDummyContent()
     {
+        parent::generateDummyContent();
         $this->setStrText("Lorem <b>ipsum</b> dolor");
     }
 

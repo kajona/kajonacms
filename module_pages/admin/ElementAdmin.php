@@ -600,7 +600,18 @@ abstract class ElementAdmin extends AdminController implements SearchPortalobjec
      */
     public function generateDummyContent()
     {
-
+        //see if we can set a default template
+        $objReflection = new Reflection($this);
+        $arrProperties = $objReflection->getPropertiesWithAnnotation(FormentryTemplate::STR_TEMPLATEDIR_ANNOTATION);
+        foreach ($arrProperties as $strPropertyName => $strValue) {
+            $arrTemplates = Resourceloader::getInstance()->getTemplatesInFolder($strValue);
+            if (count($arrTemplates) > 0) {
+                $strSetter = $objReflection->getSetter($strPropertyName);
+                if($strSetter != null) {
+                    $this->{$strSetter}($arrTemplates[0]);
+                }
+            }
+        }
     }
 
     /**
