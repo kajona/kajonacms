@@ -734,6 +734,37 @@ footer {
 }
 
 
+//Fontawesome configuration start
+.fa-stack {
+    width: 1em;
+    height: 1em;
+    line-height: 1em;
+    vertical-align: 0;
+
+    .kj-stack {
+        left: 4px; top: 2px;
+        text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+        color: @gray;
+    }
+}
+
+[class*='kj-stack']:before {
+    font-size: 0.7em;
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+}
+
+.kj-icon  {
+    font-size: @font-size-base+3;
+
+    .kj-text-icon {
+        font-family: 'open sans', Monospace;
+        font-style: normal;
+        font-weight: bold;
+        border-bottom: 1px solid;
+    }
+}
+//Fontawesome configuration end
+
 
 // Special redefinition for the dropdowns in the top-bar, relevant for smaller display sizes
 .navbar-nav {
@@ -1319,32 +1350,6 @@ footer {
             height: auto;
         }
     }
-
-
-
-    //Fontawesome configuration start
-    .fa-stack {
-        width: 1em;
-        height: 1em;
-        line-height: 1em;
-        vertical-align: 0;
-
-        .kj-stack {
-            left: 4px; top: 2px;
-            text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
-            color: @gray;
-        }
-    }
-
-    [class*='kj-stack']:before {
-        font-size: 0.7em;
-        text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
-    }
-
-    .kj-icon  {
-        font-size: @font-size-base+3;
-    }
-    //Fontawesome configuration end
 
 
     .taglabel {
