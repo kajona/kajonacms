@@ -1116,4 +1116,30 @@ class Database
         return $this->objDbDriver->escape($strValue);
     }
 
+    /**
+     * Helper to replace all param-placeholder with the matching value, only to be used
+     * to render a debuggable-statement.
+     * 
+     * @param $strQuery
+     * @param $arrParams
+     *
+     * @return string
+     */
+    public function prettifyQuery($strQuery, $arrParams)
+    {
+        foreach($arrParams as $strOneParam) {
+
+            if (!is_numeric($strOneParam)) {
+                $strOneParam = "'{$strOneParam}'";
+            }
+
+            $intPos = uniStrpos($strQuery, '?');
+            if ($intPos !== false) {
+                $strQuery = substr_replace($strQuery, $strOneParam, $intPos, 1);
+            }
+        }
+
+        return $strQuery;
+    }
+
 }
