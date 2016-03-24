@@ -11,6 +11,7 @@ namespace Kajona\System\Admin;
 use Kajona\System\Admin\Formentries\FormentryHidden;
 use Kajona\System\System\ArraySectionIterator;
 use Kajona\System\System\Exception;
+use Kajona\System\System\FilterBase;
 use Kajona\System\System\Link;
 use Kajona\System\System\Model;
 use Kajona\System\System\ModelInterface;
@@ -33,10 +34,11 @@ use ReflectionMethod;
  */
 abstract class AdminEvensimpler extends AdminSimple
 {
-
     const   STR_OBJECT_LIST_ANNOTATION = "@objectList";
     const   STR_OBJECT_NEW_ANNOTATION = "@objectNew";
     const   STR_OBJECT_EDIT_ANNOTATION = "@objectEdit";
+
+    const   STR_OBJECT_LISTFILTER_ANNOTATION = "@objectFilter";
 
     private static $arrActionNameMapping = array(
         "list" => self::STR_OBJECT_LIST_ANNOTATION,
@@ -248,6 +250,25 @@ abstract class AdminEvensimpler extends AdminSimple
 
 
     /**
+     * Checks if for the current $strCurObjectTypeName a filter object was defined in Annotation STR_OBJECT_LISTFILTER_ANNOTATION.
+     *
+     * @param $strCurObjectTypeName
+     *
+     * @return null|string
+     */
+    private function getObjectFilterClass($strCurObjectTypeName) {
+
+        $objReflection = new Reflection($this);
+        $arrAnnotations = $objReflection->getAnnotationValuesFromClass(self::STR_OBJECT_LISTFILTER_ANNOTATION . $strCurObjectTypeName);
+
+        if (count($arrAnnotations) > 0) {
+            return reset($arrAnnotations);
+        }
+
+        return null;
+    }
+
+    /**
      * Renders the general list of records
      *
      * @throws Exception
@@ -260,19 +281,64 @@ abstract class AdminEvensimpler extends AdminSimple
         $strType = $this->getCurObjectClassName();
 
         if (!is_null($strType)) {
-            $objArraySectionIterator = new ArraySectionIterator($strType::getObjectCount($this->getSystemid()));
-            $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-            $objArraySectionIterator->setArraySection($strType::getObjectList($this->getSystemid(), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-            //pass the internal action in order to get a proper paging
+            /* pass the internal action in order to get a proper paging */
             $strOriginalAction = $this->getAction();
             $this->setAction($this->strOriginalAction);
+
+
+            /* Create filter for list */
+            $objFilter = null;
+            $strFilterForm = "";
+            $strObjectFilterClass = $this->getObjectFilterClass($this->getStrCurObjectTypeName());
+            if($strObjectFilterClass !== null) {
+                /** @var FilterBase $objFilter */
+                $objFilter = new $strObjectFilterClass();
+                $objFilter::getOrCreateFromSession();
+                $strFilterForm = $this->renderFilter($objFilter);
+                if($strFilterForm === FilterBase::STR_FILTER_REDIRECT) {
+                    return "";
+                }
+            }
+
+            /* Create list */
+            $objArraySectionIterator = new ArraySectionIterator($strType::getObjectListFilteredCount($objFilter, $this->getSystemid()));
+            $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+            $objArraySectionIterator->setArraySection($strType::getObjectListFiltered($objFilter, $this->getSystemid(), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+
+            /* Render list and filter */
             $strList = $this->renderList($objArraySectionIterator, false, "list" . $this->getStrCurObjectTypeName());
+            $strList = $strFilterForm.$strList;
+
             $this->setAction($strOriginalAction);
             return $strList;
         } else {
             throw new Exception("error loading list current object type not known ", Exception::$level_ERROR);
         }
+    }
+
+
+    /**
+     * Renders the filter form.
+     * If FilterBase::STR_FILTER_REDIRECT is being returned an adminRelaod with given filter url is being trigerred.
+     *
+     * @param FilterBase $objFilter
+     * @param string|null $strFilterUrl
+     *
+     * @return string
+     */
+    protected function renderFilter(FilterBase $objFilter, $strFilterUrl = null) {
+
+        if($strFilterUrl === null) {
+            $strFilterUrl = Link::getLinkAdminHref($objFilter->getArrModule(), $this->getAction());
+        }
+
+        if($objFilter->getBitRedirectAfterPost()) {
+            $this->adminReload($strFilterUrl);
+            return FilterBase::STR_FILTER_REDIRECT;
+        }
+        $strFilterForm = $objFilter->renderForm($strFilterUrl);
+        return $strFilterForm;
     }
 
     /**

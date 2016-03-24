@@ -8,6 +8,7 @@
 
 namespace Kajona\System\Admin;
 
+use Kajona\System\Admin\Formentries\FormentryButton;
 use Kajona\System\Admin\Formentries\FormentryHidden;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Exception;
@@ -23,6 +24,9 @@ use Kajona\System\System\Session;
  */
 class AdminFormgeneratorFilter extends AdminFormgenerator
 {
+    const STR_FORM_PARAM_RESET = "reset";
+    const STR_FORM_PARAM_FILTER = "setcontentfilter";
+
     /**
      * @param string $strFormname
      * @param FilterBase $objSourceobject
@@ -61,31 +65,28 @@ class AdminFormgeneratorFilter extends AdminFormgenerator
         $objLang = Carrier::getInstance()->getObjLang();
         $objFilter = $this->getObjSourceobject();
 
-        //1. Check if post request was send?
-        if ($objCarrier->getParam($this->getFormElementName("setcontentfilter")) == "true") {
+        /* Check if post request was send? */
+        if ($objCarrier->getParam($this->getFormElementName(self::STR_FORM_PARAM_FILTER)) == "true") {
             $objCarrier->setParam("pv", "1");
 
-            // 1.2 Check if filter was reset?
-            if ($objCarrier->getParam("reset") != "") {
+            /* Check if filter was reset? */
+            if ($objCarrier->getParam(self::STR_FORM_PARAM_RESET) != "") {
                 $this->resetParams();
             }
         }
 
-        // 2. Init the form
+        /* Init the form */
         $this->generateFieldsFromObject();
         $this->updateSourceObject();
-        $this->addField(new FormentryHidden($this->getStrFormname(), "setcontentfilter"))->setStrValue("true");
+        $this->addField(new FormentryHidden($this->getStrFormname(), self::STR_FORM_PARAM_FILTER))->setStrValue("true");
 
-        // 4. Update Filterform (specific filter form handling)
+        /* Update Filterform (specific filter form handling) */
         $objFilter->updateFilterForm($this);
 
-        // 5. Set form method to GET
-        $this->setStrMethod(self::STR_METHOD_GET);
-
-        // 6. Render filter form.
+        /* Render filter form. */
         $strReturn = parent::renderForm($strTargetURI, AdminFormgenerator::BIT_BUTTON_SUBMIT | AdminFormgenerator::BIT_BUTTON_RESET);
 
-        // 7. Display filter active/inactive
+        /* Display filter active/inactive */
         $bitFilterActive = false;
         foreach ($this->getArrFields() as $objOneField) {
             if (!$objOneField instanceof FormentryHidden) {
@@ -93,7 +94,7 @@ class AdminFormgeneratorFilter extends AdminFormgenerator
             }
         }
 
-        // 8. Render folder toggle
+        /* Render folder toggle*/
         $arrFolder = $objToolkit->getLayoutFolderPic($strReturn, $objLang->getLang("filter_show_hide", "system").($bitFilterActive ? $objLang->getLang("commons_filter_active", "system") : ""), "icon_folderOpen", "icon_folderClosed", false);
         $strReturn = $objToolkit->getFieldset($arrFolder[1], $arrFolder[0]);
 

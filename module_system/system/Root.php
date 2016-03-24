@@ -434,6 +434,59 @@ abstract class Root
 
 
     /**
+     * A generic approach to load a list of objects currently available.
+     * This list can be filtered via the given filterObject.
+     *
+     * This method is only a simple approach to determine the instances in the
+     * database, if you need more specific loaders, overwrite this method or add your own
+     * implementation to the derived class.
+     *
+     * @param FilterBase $objFilter
+     * @param string $strPrevid
+     * @param null $intStart
+     * @param null $intEnd
+     *
+     * @return Model[]|ModelInterface[]
+     */
+    public static function getObjectListFiltered(FilterBase $objFilter = null, $strPrevid = "", $intStart = null, $intEnd = null)
+    {
+        $objORM = new OrmObjectlist();
+
+        if ($objFilter !== null) {
+            $objFilter->addWhereRestrictions($objORM);
+        }
+
+        return $objORM->getObjectList(get_called_class(), $strPrevid, $intStart, $intEnd);
+    }
+
+
+    /**
+     * A generic approach to load a list of objects currently available.
+     * This result can be filtered via the given filterObject.
+     *
+     * This method is only a simple approach to determine the instances in the
+     * database, if you need more specific loaders, overwrite this method or add your own
+     * implementation to the derived class.
+     *
+     * @param FilterBase $objFilter
+     * @param string $strPrevid
+     * @param null $intStart
+     * @param null $intEnd
+     *
+     * @return int
+     */
+    public static function getObjectListFilteredCount(FilterBase $objFilter = null, $strPrevid = "")
+    {
+        $objORM = new OrmObjectlist();
+
+        if ($objFilter !== null) {
+            $objFilter->addWhereRestrictions($objORM);
+        }
+
+        return $objORM->getObjectCount(get_called_class(), $strPrevid);
+    }
+
+    /**
      * Validates if the current record may be restored
      *
      * @return bool
