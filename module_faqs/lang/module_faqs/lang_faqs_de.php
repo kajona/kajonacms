@@ -16,6 +16,7 @@ $lang["delete_faq_question"]             = "Möchten Sie die FAQ &quot;<b>%%elem
 $lang["faq_titel_faq"]                   = "FAQ";
 $lang["form_faqs_answer"]                 = "Antwort";
 $lang["form_faqs_question"]               = "Frage";
+$lang["form_faqs_cats"]                   = "Kategorie";
 $lang["kat_anzeigen"]                    = "Kategorie anzeigen";
 $lang["kat_ausblenden"]                  = "Kategorien ein-/ausblenden";
 $lang["modul_titel"]                     = "FAQs";

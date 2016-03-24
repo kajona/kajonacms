@@ -34,9 +34,8 @@ abstract class FilterBase
     const STR_COMPAREOPERATOR_IN_OR_EMPTY = "IN_OR_EMPTY";
     const STR_COMPAREOPERATOR_NOTIN_OR_EMPTY = "NOTIN_OR_EMPTY";
 
-    
     const STR_FILTER_REDIRECT = "redirect";
-    
+
     /**
      * bit to indicate if a redirect should be executed
      * Value is set to true if a filter is being submitted (filter or reset)
@@ -44,14 +43,6 @@ abstract class FilterBase
      * @var bool
      */
     private $bitRedirectAfterPost = false;
-
-    /**
-     * URL which is being set if $bitRedirectAfterPost is set to true.
-     * Is being used for redirects and for the form action
-     *
-     * @var null
-     */
-    private $strFilterUrl = null;
 
     /**
      * @var null
@@ -180,7 +171,8 @@ abstract class FilterBase
      *
      * @return Date|null
      */
-    protected function convertParamValue($strParamName, $arrParams) {
+    protected function convertParamValue($strParamName, $arrParams)
+    {
         $strValue = $arrParams[$strParamName] == "" ? null : $arrParams[$strParamName];
 
         //check if _id param exists, if yes take that one
@@ -255,7 +247,6 @@ abstract class FilterBase
     }
 
 
-
     /**
      * Adds all ORM restrictions to the given $objORM
      *
@@ -319,21 +310,6 @@ abstract class FilterBase
     }
 
     /**
-     * Generates a filter form based on the filter object.
-     *
-     * @param $strFilterUrl
-     *
-     * @return string
-     */
-    public final function renderForm($strFilterUrl)
-    {
-        $objFilterForm = new AdminFormgeneratorFilter($this->getFilterId(), $this);
-        $strFilter = $objFilterForm->renderForm($strFilterUrl);
-
-        return $strFilter;
-    }
-
-    /**
      * Write the filter to the session.
      * A clone of the filter is being written to the session.
      *
@@ -355,7 +331,8 @@ abstract class FilterBase
      *
      * @return string
      */
-    public function getFullParamName($strParam) {
+    public function getFullParamName($strParam)
+    {
         return $this->getFilterId()."_".$strParam;
     }
 
@@ -373,21 +350,5 @@ abstract class FilterBase
     public function setBitRedirectAfterPost($bitRedirectAfterPost)
     {
         $this->bitRedirectAfterPost = $bitRedirectAfterPost;
-    }
-
-    /**
-     * @return null
-     */
-    public function getStrFilterUrl()
-    {
-        return $this->strFilterUrl;
-    }
-
-    /**
-     * @param null $strFilterUrl
-     */
-    public function setStrFilterUrl($strFilterUrl)
-    {
-        $this->strFilterUrl = $strFilterUrl;
     }
 }

@@ -16,6 +16,7 @@ $lang["delete_faq_question"]             = "Do you really want to delete the FAQ
 $lang["faq_titel_faq"]                   = "FAQ";
 $lang["form_faqs_answer"]                 = "Answer";
 $lang["form_faqs_question"]               = "Question";
+$lang["form_faqs_cats"]                   = "Category";
 $lang["kat_anzeigen"]                    = "Show category";
 $lang["kat_ausblenden"]                  = "Show/hide categories";
 $lang["modul_titel"]                     = "FAQs";

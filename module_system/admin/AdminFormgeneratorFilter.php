@@ -24,8 +24,18 @@ use Kajona\System\System\Session;
  */
 class AdminFormgeneratorFilter extends AdminFormgenerator
 {
+    /**
+     * Constants for filter form
+     */
     const STR_FORM_PARAM_RESET = "reset";
     const STR_FORM_PARAM_FILTER = "setcontentfilter";
+
+    /**
+     * Set to true if filter shall be visible initially
+     *
+     * @var bool
+     */
+    private $bitInitiallyVisible = false;
 
     /**
      * @param string $strFormname
@@ -35,7 +45,7 @@ class AdminFormgeneratorFilter extends AdminFormgenerator
      */
     public function __construct($strFormname, $objSourceobject)
     {
-        if (!$objSourceobject instanceof FilterBase) {
+        if(!$objSourceobject instanceof FilterBase) {
             throw new Exception("Source object must be an instance of FilterBase object", Exception::$level_ERROR);
         }
 
@@ -55,6 +65,7 @@ class AdminFormgeneratorFilter extends AdminFormgenerator
      *
      * @param string $strTargetURI
      * @param int $intButtonConfig
+     *
      * @return string
      * @throws Exception
      */
@@ -66,11 +77,11 @@ class AdminFormgeneratorFilter extends AdminFormgenerator
         $objFilter = $this->getObjSourceobject();
 
         /* Check if post request was send? */
-        if ($objCarrier->getParam($this->getFormElementName(self::STR_FORM_PARAM_FILTER)) == "true") {
+        if($objCarrier->getParam($this->getFormElementName(self::STR_FORM_PARAM_FILTER)) == "true") {
             $objCarrier->setParam("pv", "1");
 
             /* Check if filter was reset? */
-            if ($objCarrier->getParam(self::STR_FORM_PARAM_RESET) != "") {
+            if($objCarrier->getParam(self::STR_FORM_PARAM_RESET) != "") {
                 $this->resetParams();
             }
         }
@@ -88,14 +99,18 @@ class AdminFormgeneratorFilter extends AdminFormgenerator
 
         /* Display filter active/inactive */
         $bitFilterActive = false;
-        foreach ($this->getArrFields() as $objOneField) {
-            if (!$objOneField instanceof FormentryHidden) {
+        foreach($this->getArrFields() as $objOneField) {
+            if(!$objOneField instanceof FormentryHidden) {
                 $bitFilterActive = $bitFilterActive || $objOneField->getStrValue() != "";
             }
         }
 
         /* Render folder toggle*/
-        $arrFolder = $objToolkit->getLayoutFolderPic($strReturn, $objLang->getLang("filter_show_hide", "system").($bitFilterActive ? $objLang->getLang("commons_filter_active", "system") : ""), "icon_folderOpen", "icon_folderClosed", false);
+        $arrFolder = $objToolkit->getLayoutFolderPic($strReturn,
+            $objLang->getLang("filter_show_hide", "system").($bitFilterActive ? $objLang->getLang("commons_filter_active", "system") : ""),
+            "icon_folderOpen",
+            "icon_folderClosed",
+            $this->getBitInitiallyVisible());
         $strReturn = $objToolkit->getFieldset($arrFolder[1], $arrFolder[0]);
 
         return $strReturn;
@@ -113,7 +128,6 @@ class AdminFormgeneratorFilter extends AdminFormgenerator
         $objFormgenerator = new self($objFilter->getFilterId(), $objFilter);
         $objFormgenerator->generateFieldsFromObject();
 
-        Session::getInstance()->sessionUnset($objFilter->getFilterId());
         $arrParamsSuffix = array_keys($objFormgenerator->getArrFields());
 
         // clear params
@@ -129,14 +143,30 @@ class AdminFormgeneratorFilter extends AdminFormgenerator
      *
      * @return string
      */
-    private function getFormElementName($strFieldName) {
+    private function getFormElementName($strFieldName)
+    {
         $strName = $strFieldName;
 
         if($this->getStrFormname() != "") {
-            $strName = $this->getStrFormname() . "_" . $strFieldName;
+            $strName = $this->getStrFormname()."_".$strFieldName;
         }
 
         return $strName;
     }
 
+    /**
+     * @return boolean
+     */
+    public function getBitInitiallyVisible()
+    {
+        return $this->bitInitiallyVisible;
+    }
+
+    /**
+     * @param boolean $bitInitiallyVisible
+     */
+    public function setBitInitiallyVisible($bitInitiallyVisible)
+    {
+        $this->bitInitiallyVisible = $bitInitiallyVisible;
+    }
 }
