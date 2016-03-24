@@ -80,5 +80,15 @@ $lang["required_feed_title"]             = "Feed title";
 $lang["required_feed_urltitle"]          = "URL feed title";
 $lang["required_news_title"]             = "News title";
 
+$lang["form_newscategoryfilter_title"]         = "Category title";
+
+$lang["form_newsnewsfilter_title"]             = "News title";
+$lang["form_newsnewsfilter_datestartfrom"]     = "Start date from";
+$lang["form_newsnewsfilter_datestartto"]       = "Start date to";
+$lang["form_newsnewsfilter_dateendfrom"]       = "End date from";
+$lang["form_newsnewsfilter_dateendto"]         = "End date to";
+$lang["form_newsnewsfilter_datespecialfrom"]   = "Archive date from";
+$lang["form_newsnewsfilter_datespecialto"]     = "Archive date to";
+
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "", 5 => "Feeds", 6 => "Rating", 7 => "", 8 => "");

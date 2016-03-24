@@ -10,10 +10,13 @@
 namespace Kajona\News\Admin;
 
 use Kajona\News\System\NewsCategory;
+use Kajona\News\System\NewsCategoryFilter;
+use Kajona\News\System\NewsNewsFilter;
 use Kajona\News\System\NewsNews;
 use Kajona\System\Admin\AdminEvensimpler;
 use Kajona\System\Admin\AdminInterface;
 use Kajona\System\System\ArraySectionIterator;
+use Kajona\System\System\FilterBase;
 use Kajona\System\System\LanguagesLanguage;
 use Kajona\System\System\LanguagesLanguageset;
 use Kajona\System\System\Link;
@@ -26,12 +29,16 @@ use Kajona\System\System\Objectfactory;
  * @author sidler@mulchprod.de
  *
  * @objectListNews Kajona\News\System\NewsNews
+ * @objectFilterNews Kajona\News\System\NewsNewsFilter
  * @objectNewNews Kajona\News\System\NewsNews
  * @objectEditNews Kajona\News\System\NewsNews
  * @objectEdit Kajona\News\System\NewsNews
+ *
  * @objectListCategory Kajona\News\System\NewsCategory
+ * @objectFilterCategory Kajona\News\System\NewsCategoryFilter
  * @objectNewCategory Kajona\News\System\NewsCategory
  * @objectEditCategory Kajona\News\System\NewsCategory
+ *
  * @objectListFeed Kajona\News\System\NewsFeed
  * @objectNewFeed Kajona\News\System\NewsFeed
  * @objectEditFeed Kajona\News\System\NewsFeed
@@ -146,16 +153,37 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
     protected function actionListNewsAndCategories()
     {
 
-        $objIterator = new ArraySectionIterator(NewsCategory::getObjectCount());
-        $objIterator->setIntElementsPerPage(NewsCategory::getObjectCount());
+        /* Category Filter and List */
+
+        /** @var  NewsCategoryFilter $objFilter */
+        $objFilter = NewsCategoryFilter::getOrCreateFromSession();
+        $strFilterForm = $this->renderFilter($objFilter);
+        if($strFilterForm === FilterBase::STR_FILTER_REDIRECT) {
+            return "";
+        }
+
+        $strReturn = $strFilterForm;
+        $objIterator = new ArraySectionIterator(NewsCategory::getObjectListFilteredCount($objFilter));
+        $objIterator->setIntElementsPerPage(NewsCategory::getObjectListFilteredCount($objFilter));
         $objIterator->setPageNumber(1);
-        $objIterator->setArraySection(NewsCategory::getObjectList("", $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
+        $objIterator->setArraySection(NewsCategory::getObjectListFiltered($objFilter, "", $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
-        $strReturn = $this->renderList($objIterator, false, NewsAdmin::STR_CAT_LIST);
+        $strReturn .= $this->renderList($objIterator, false, NewsAdmin::STR_CAT_LIST);
 
-        $objIterator = new ArraySectionIterator(NewsNews::getObjectCount($this->getParam("filterId")));
+
+        /* News Filter and List */
+
+        /** @var  NewsNewsFilter $objFilter */
+        $objFilter = NewsNewsFilter::getOrCreateFromSession();
+        $strFilterForm = $this->renderFilter($objFilter);
+        if($strFilterForm === FilterBase::STR_FILTER_REDIRECT) {
+            return "";
+        }
+        $strReturn .= $strFilterForm;
+
+        $objIterator = new ArraySectionIterator(NewsNews::getObjectListFilteredCount($objFilter, $this->getParam("filterId")));
         $objIterator->setPageNumber($this->getParam("pv"));
-        $objIterator->setArraySection(NewsNews::getObjectList($this->getParam("filterId"), $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
+        $objIterator->setArraySection(NewsNews::getObjectListFiltered($objFilter, $this->getParam("filterId"), $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
         $strReturn .= $this->renderList($objIterator, false, NewsAdmin::STR_NEWS_LIST, false, "&filterId=".$this->getParam("filterId"));
 

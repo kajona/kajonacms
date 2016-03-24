@@ -39,7 +39,7 @@ class FormentryButton extends FormentryBase implements FormentryInterface {
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
 
-        $strReturn .= $objToolkit->formInputSubmit($this->getStrLabel(), $this->getStrValue(), $this->getStrEventhandler(), $this->getBitReadonly());
+        $strReturn .= $objToolkit->formInputSubmit($this->getStrLabel(), $this->getStrValue(), $this->getStrEventhandler(), "", !$this->getBitReadonly());
 
         return $strReturn;
     }
