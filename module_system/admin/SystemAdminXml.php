@@ -47,16 +47,15 @@ class SystemAdminXml extends AdminController implements XmlAdminInterface
     protected function actionUnlockRecord()
     {
         $objRecord = Objectfactory::getInstance()->getObject($this->getSystemid());
-        $objLockmanager = $objRecord->getLockManager();
 
-        if($objRecord !== null && $objLockmanager->unlockRecord())
-        {
-            return "<ok></ok>";
+        if($objRecord !== null) {
+            $objLockmanager = $objRecord->getLockManager();
+            if ($objLockmanager->unlockRecord()) {
+                return "<ok></ok>";
+            }
         }
-        else {
-            ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_FORBIDDEN);
-            return "<error></error>";
-        }
+        ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_FORBIDDEN);
+        return "<error></error>";
     }
 
 
