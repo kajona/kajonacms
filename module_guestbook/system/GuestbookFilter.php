@@ -28,12 +28,6 @@ class GuestbookFilter extends FilterBase
      */
     private $strTitle;
 
-    
-    public function getArrModule($strKey = "")
-    {
-        return "guestbook";
-    }
-
     /**
      * @return mixed
      */

@@ -14,6 +14,12 @@ use Kajona\System\System\Date;
 use Kajona\System\System\FilterBase;
 use Kajona\System\System\StringUtil;
 
+/**
+ * Class NewsNewsFilter
+ *
+ * @author stefan.meyer1@yahoo.de
+ * @module news
+ */
 class NewsNewsFilter extends FilterBase
 {
     /**
@@ -72,12 +78,6 @@ class NewsNewsFilter extends FilterBase
      * @filterCompareOperator LE
      */
     private $objDateSpecialTo;
-
-    
-    public function getArrModule($strKey = "")
-    {
-        return "news";
-    }
 
     /**
      * @return mixed

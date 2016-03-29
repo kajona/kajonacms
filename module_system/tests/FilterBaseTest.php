@@ -2,11 +2,17 @@
 
 namespace Kajona\System\Tests;
 
+use Kajona\System\System\AbstractController;
+use Kajona\System\System\Classloader;
 use Kajona\System\System\Date;
 use Kajona\System\System\FilterBase;
 use Kajona\System\System\OrmObjectlistInOrEmptyRestriction;
 use Kajona\System\System\OrmObjectlistInRestriction;
 use Kajona\System\System\OrmObjectlistRestriction;
+use Kajona\System\System\Reflection;
+use Kajona\System\System\Resourceloader;
+use Kajona\System\System\SystemModule;
+use Kajona\System\System\SystemSetting;
 use Kajona\System\System\Testbase;
 
 /**
@@ -91,9 +97,68 @@ class FilterBaseTest extends Testbase
         $this->assertEquals(" AND (filter.filter10 IN (?,?,?,?,?) OR (filter.filter10 IS NULL OR filter.filter10 = '')) ", $arrRestrictions[9]->getStrWhere());
         $this->assertCount(5, $arrRestrictions[9]->getArrParams());
     }
+
+
+    public function testCheckRequiredAnnotations() {
+
+        //Get all classes which extend FilterBase
+        $arrFilterClasses = $this->getListOfFilters(true);
+        foreach($arrFilterClasses as $strFilterClass) {
+            $objReflection = new Reflection($strFilterClass);
+
+            //Check if class has @module annotaion
+            $this->assertTrue($objReflection->hasClassAnnotation(AbstractController::STR_MODULE_ANNOTATION), $strFilterClass." has no @module annotation");
+        }
+    }
+
+
+    /**
+     * Creates a list of objects implementing the FilterBase.
+     * The objects are initialized as empty objects
+     *
+     * @return FilterBase[]|string[]
+     */
+    public function getListOfFilters($bitAsStringArray = false)
+    {
+        $arrReturn = array();
+
+        //load classes
+        $arrFiles = Resourceloader::getInstance()->getFolderContent("/system", array(".php"), false, null, function (&$strFile, $strPath) {
+            $strFile = Classloader::getInstance()->getInstanceFromFilename($strPath, "Kajona\\System\\System\\FilterBase");
+        });
+
+        foreach($arrFiles as $objInstance) {
+
+            if($objInstance == null) {
+                continue;
+            }
+
+            $arrReturn[] = $objInstance;
+
+        }
+
+        if($bitAsStringArray) {
+            $arrReturn = array_map(
+                function ($strEntry) {
+                    return get_class($strEntry);
+                },
+                $arrReturn
+            );
+        }
+
+
+        return $arrReturn;
+    }
 }
 
 
+/**
+ * Class FilterBaseA
+ *
+ * @package Kajona\System\Tests
+ * @author stefan.meyer1@yahoo.de
+ * @module module
+ */
 class FilterBaseA extends FilterBase
 {
     /**
@@ -163,12 +228,6 @@ class FilterBaseA extends FilterBase
      * @filterCompareOperator IN_OR_EMPTY
      */
     protected $arrFilter10;
-
-
-    public function getArrModule($strKey = "")
-    {
-        return "module";
-    }
 
     /**
      * @return mixed

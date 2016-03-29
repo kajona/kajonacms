@@ -52,13 +52,6 @@ class GuestbookPostFilter extends FilterBase
      */
     private $strGuestbookPostText = "";
 
-
-
-    public function getArrModule($strKey = "")
-    {
-        return "guestbook";
-    }
-
     /**
      * @return string
      */

@@ -12,6 +12,13 @@ namespace Kajona\News\System;
 
 use Kajona\System\System\FilterBase;
 
+/**
+ * Class NewsCategoryFilter
+ *
+ * @package Kajona\News\System
+ * @author stefan.meyer1@yahoo.de
+ * @module news
+ */
 class NewsCategoryFilter extends FilterBase
 {
     /**
@@ -19,12 +26,6 @@ class NewsCategoryFilter extends FilterBase
      * @fieldType text
      */
     private $strTitle;
-
-
-    public function getArrModule($strKey = "")
-    {
-        return "news";
-    }
 
     /**
      * @return mixed

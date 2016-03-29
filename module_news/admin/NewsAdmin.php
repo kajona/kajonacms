@@ -14,6 +14,7 @@ use Kajona\News\System\NewsCategoryFilter;
 use Kajona\News\System\NewsNewsFilter;
 use Kajona\News\System\NewsNews;
 use Kajona\System\Admin\AdminEvensimpler;
+use Kajona\System\Admin\AdminFormgeneratorFilter;
 use Kajona\System\Admin\AdminInterface;
 use Kajona\System\System\ArraySectionIterator;
 use Kajona\System\System\FilterBase;
@@ -158,7 +159,7 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
         /** @var  NewsCategoryFilter $objFilter */
         $objFilter = NewsCategoryFilter::getOrCreateFromSession();
         $strFilterForm = $this->renderFilter($objFilter);
-        if($strFilterForm === FilterBase::STR_FILTER_REDIRECT) {
+        if($strFilterForm === AdminFormgeneratorFilter::STR_FILTER_REDIRECT) {
             return "";
         }
 
@@ -176,7 +177,7 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
         /** @var  NewsNewsFilter $objFilter */
         $objFilter = NewsNewsFilter::getOrCreateFromSession();
         $strFilterForm = $this->renderFilter($objFilter);
-        if($strFilterForm === FilterBase::STR_FILTER_REDIRECT) {
+        if($strFilterForm === AdminFormgeneratorFilter::STR_FILTER_REDIRECT) {
             return "";
         }
         $strReturn .= $strFilterForm;

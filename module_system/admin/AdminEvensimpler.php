@@ -303,7 +303,7 @@ abstract class AdminEvensimpler extends AdminSimple
                 $objFilter = new $strObjectFilterClass();
                 $objFilter::getOrCreateFromSession();
                 $strFilterForm = $this->renderFilter($objFilter);
-                if($strFilterForm === FilterBase::STR_FILTER_REDIRECT) {
+                if($strFilterForm === AdminFormgeneratorFilter::STR_FILTER_REDIRECT) {
                     return "";
                 }
             }
@@ -343,9 +343,9 @@ abstract class AdminEvensimpler extends AdminSimple
             $strFilterUrl = Link::getLinkAdminHref($this->getArrModule("module"), $this->getAction(), "&systemid=".$this->getSystemid());
         }
 
-        if($objFilter->getBitRedirectAfterPost()) {
+        if($objFilter->getBitFilterUpdated()) {
             $this->adminReload($strFilterUrl);
-            return FilterBase::STR_FILTER_REDIRECT;
+            return AdminFormgeneratorFilter::STR_FILTER_REDIRECT;
         }
 
         $objFilterForm = new AdminFormgeneratorFilter($objFilter->getFilterId(), $objFilter);

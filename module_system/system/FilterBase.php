@@ -34,15 +34,13 @@ abstract class FilterBase
     const STR_COMPAREOPERATOR_IN_OR_EMPTY = "IN_OR_EMPTY";
     const STR_COMPAREOPERATOR_NOTIN_OR_EMPTY = "NOTIN_OR_EMPTY";
 
-    const STR_FILTER_REDIRECT = "redirect";
-
     /**
      * bit to indicate if a redirect should be executed
      * Value is set to true if a filter is being submitted (filter or reset)
      *
      * @var bool
      */
-    private $bitRedirectAfterPost = false;
+    private $bitFilterUpdated = false;
 
     /**
      * @var null
@@ -68,12 +66,21 @@ abstract class FilterBase
 
     /**
      * Returns the module name.
+     * The module name is being retrieved via the class annotation @ module
      *
      * @param $strKey
      *
      * @return mixed
      */
-    abstract public function getArrModule($strKey = "");
+    public function getArrModule($strKey = "") {
+        $objReflection = new Reflection($this);
+        $arrAnnotationValues = $objReflection->getAnnotationValuesFromClass(AbstractController::STR_MODULE_ANNOTATION);
+        if (count($arrAnnotationValues) > 0) {
+            return trim($arrAnnotationValues[0]);
+        }
+
+        throw new Exception("Missing ".AbstractController::STR_MODULE_ANNOTATION." annotation for class ".__CLASS__);
+    }
 
 
     /**
@@ -94,7 +101,7 @@ abstract class FilterBase
          * If not try to get filter from session
          */
         if(Carrier::getInstance()->getParam($objFilter->getFullParamName(AdminFormgeneratorFilter::STR_FORM_PARAM_FILTER)) != "") {
-            $objFilter->setBitRedirectAfterPost(true);
+            $objFilter->setBitFilterUpdated(true);
 
             /*
              * In case filter was reset reset, remove from session
@@ -318,7 +325,7 @@ abstract class FilterBase
     public function writeFilterToSession()
     {
         $objFilter = clone $this;
-        $objFilter->setBitRedirectAfterPost(false);
+        $objFilter->setBitFilterUpdated(false);
 
         $strSessionId = $objFilter->getFilterId();
         Session::getInstance()->setSession($strSessionId, $objFilter);
@@ -339,16 +346,16 @@ abstract class FilterBase
     /**
      * @return boolean
      */
-    public function getBitRedirectAfterPost()
+    public function getBitFilterUpdated()
     {
-        return $this->bitRedirectAfterPost;
+        return $this->bitFilterUpdated;
     }
 
     /**
-     * @param boolean $bitRedirectAfterPost
+     * @param boolean $bitFilterUpdated
      */
-    public function setBitRedirectAfterPost($bitRedirectAfterPost)
+    public function setBitFilterUpdated($bitFilterUpdated)
     {
-        $this->bitRedirectAfterPost = $bitRedirectAfterPost;
+        $this->bitFilterUpdated = $bitFilterUpdated;
     }
 }
