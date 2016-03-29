@@ -29,6 +29,7 @@ Annotation         |Context    |Introduced in     |Description
 |@objectList[Name] class	|Class	|4.2|	Assigns an object type (class) to an action-name (actionList), see evensimpler-classes. Used to render a list.
 |@objectEdit[Name] class	|Class	|4.2	|Assigns an object type (class) to an action-name (actionEdit), see evensimpler-classes. Used to render an edit-form.
 |@objectNew[Name] class	|Class	|4.2	|Assigns an object type (class) to an action-name (actionNew), see evensimpler-classes. Used to render a new-instance form.
+|@objectFilter[Name] class	|Class	|4.7	|Assigns an filter object (class) to for an object, see evensimpler-classes. Used to render a filter for list actions (e.g. actionList)form.
 |@objectValidator class	|Class	|4.6	|Name of a class implementing ObjectValidatorInterface. Used by the form-generator to validate a classes instance during edit-operations.
 |@permissions permission	|Action-Method	|4.0|Comma-separated list of permission required to execute the action (one / many of view, edit, delete, right, right1, right2, right3, right4, right5)
 |@sortManager class	|Class	|5.0| Name of the sort-manager to be used by the current model-class, instance of SortmanagerInterface 
