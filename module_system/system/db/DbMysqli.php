@@ -512,6 +512,16 @@ class DbMysqli extends DbBase {
             return $this->arrStatementsCache[$strName];
         }
 
+
+        if(count($this->arrStatementsCache) > 300) {
+            /** @var mysqli_stmt $objOneEntry */
+            foreach($this->arrStatementsCache as $objOneEntry) {
+                $objOneEntry->close();
+            }
+
+            $this->arrStatementsCache = array();
+        }
+
         $objStatement = $this->linkDB->stmt_init();
         if(!$objStatement->prepare($strQuery)) {
             $this->strErrorMessage = $objStatement->error;
