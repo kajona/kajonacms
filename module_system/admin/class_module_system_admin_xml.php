@@ -28,16 +28,16 @@ class class_module_system_admin_xml extends class_admin_controller implements in
     protected function actionUnlockRecord()
     {
         $objRecord = class_objectfactory::getInstance()->getObject($this->getSystemid());
-        $objLockmanager = $objRecord->getLockManager();
+        
+        if($objRecord !== null) {
+            $objLockmanager = $objRecord->getLockManager();
+            if ($objLockmanager->unlockRecord()) {
+                return "<ok></ok>";
+            }
+        }
 
-        if($objRecord !== null && $objLockmanager->unlockRecord())
-        {
-            return "<ok></ok>";
-        }
-        else {
-            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_FORBIDDEN);
-            return "<error></error>";
-        }
+        class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_FORBIDDEN);
+        return "<error></error>";
     }
 
 
