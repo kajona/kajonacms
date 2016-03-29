@@ -259,7 +259,7 @@ abstract class FilterBase
      *
      * @param OrmObjectlist $objORM
      */
-    public function addWhereRestrictions(OrmObjectlist $objORM)
+    public function addWhereRestrictionsToORM(OrmObjectlist $objORM)
     {
         $objRestrictions = $this->getOrmRestrictions();
         foreach($objRestrictions as $objRestriction) {

@@ -301,7 +301,7 @@ abstract class AdminEvensimpler extends AdminSimple
             if($strObjectFilterClass !== null) {
                 /** @var FilterBase $objFilter */
                 $objFilter = new $strObjectFilterClass();
-                $objFilter::getOrCreateFromSession();
+                $objFilter = $objFilter::getOrCreateFromSession();
                 $strFilterForm = $this->renderFilter($objFilter);
                 if($strFilterForm === AdminFormgeneratorFilter::STR_FILTER_REDIRECT) {
                     return "";
