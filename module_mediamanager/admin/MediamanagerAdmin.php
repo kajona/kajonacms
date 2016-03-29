@@ -213,7 +213,7 @@ class MediamanagerAdmin extends AdminEvensimpler implements AdminInterface
                 else {
                     return $this->objToolkit->listButton(
                         Link::getLinkAdminDialog(
-                            $objListEntry->getArrModule("modul"), "editFile", "&systemid=".$objListEntry->getSystemid().$this->getStrPeAddon(), $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_edit"
+                            $objListEntry->getArrModule("modul"), "editFile", "&folderview=1&systemid=".$objListEntry->getSystemid().$this->getStrPeAddon(), $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_edit"
                         )
                     );
                 }
