@@ -228,7 +228,7 @@ class Database
         }
 
         if (!$bitReturn) {
-            $this->getError($strQuery."\r\n params: ".implode(", ", $arrParams));
+            $this->getError($strQuery, $arrParams);
         }
 
         return $bitReturn;
@@ -348,7 +348,7 @@ class Database
             }
 
             if ($arrReturn === false) {
-                $this->getError($strQuery."\n params: ".implode(", ", $arrParams));
+                $this->getError($strQuery, $arrParams);
                 return array();
             }
             if ($bitCache) {
@@ -408,7 +408,7 @@ class Database
      * @throws Exception
      * @return void
      */
-    private function getError($strQuery)
+    private function getError($strQuery, $arrParams)
     {
         if (!$this->bitConnected) {
             $this->dbconnect();
@@ -426,13 +426,16 @@ class Database
             $strQuery
         );
 
+        //$strQuery = $this->prettifyQuery($strQuery, $arrParams);
+
         $strErrorCode = "";
         $strErrorCode .= "Error in query\n\n";
         $strErrorCode .= "Error:\n";
         $strErrorCode .= $strError."\n\n";
         $strErrorCode .= "Query:\n";
         $strErrorCode .= $strQuery."\n";
-        $strErrorCode .= "\n";
+        $strErrorCode .= "\n\n";
+        $strErrorCode .= "Params: ".implode(", ", $arrParams)."\n";
         $strErrorCode .= "Callstack:\n";
         if (function_exists("debug_backtrace")) {
             $arrStack = debug_backtrace();
@@ -672,7 +675,7 @@ class Database
 
         $bitReturn = $this->objDbDriver->createTable(_dbprefix_.$strName, $arrFields, $arrKeys, $arrIndices, $bitTxSafe);
         if (!$bitReturn) {
-            $this->getError("");
+            $this->getError("", array());
         }
 
         return $bitReturn;
