@@ -21,9 +21,11 @@ use Kajona\System\Admin\AdminInterface;
  * @objectList Kajona\Guestbook\System\GuestbookGuestbook
  * @objectNew Kajona\Guestbook\System\GuestbookGuestbook
  * @objectEdit Kajona\Guestbook\System\GuestbookGuestbook
+ * @objectFilter Kajona\Guestbook\System\GuestbookFilter
  *
  * @objectListPost Kajona\Guestbook\System\GuestbookPost
  * @objectEditPost Kajona\Guestbook\System\GuestbookPost
+ * @objectFilterPost Kajona\Guestbook\System\GuestbookPostFilter
  *
  * @autoTestable list,new
  *

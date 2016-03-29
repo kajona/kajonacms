@@ -340,7 +340,7 @@ abstract class AdminEvensimpler extends AdminSimple
     {
 
         if($strFilterUrl === null) {
-            $strFilterUrl = Link::getLinkAdminHref($objFilter->getArrModule(), $this->getAction());
+            $strFilterUrl = Link::getLinkAdminHref($this->getArrModule("module"), $this->getAction(), "&systemid=".$this->getSystemid());
         }
 
         if($objFilter->getBitRedirectAfterPost()) {
