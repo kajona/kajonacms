@@ -46,7 +46,7 @@ class FaqsFaq extends \Kajona\System\System\Model implements \Kajona\System\Syst
      * @addSearchIndex
      * @listOrder
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldMandatory
      * @templateExport
      */

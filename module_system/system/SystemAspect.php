@@ -31,7 +31,7 @@ class SystemAspect extends Model implements ModelInterface, AdminListableInterfa
      * @var string
      * @tableColumn aspects.aspect_name
      * @tableColumnDatatype char254
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldMandatory
      *
      * @addSearchIndex

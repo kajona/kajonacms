@@ -39,7 +39,7 @@ class ElementFormularAdmin extends ElementAdmin implements AdminElementInterface
      * @var string
      * @tableColumn element_formular.formular_email
      * @tableColumnDatatype char254
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel formular_email
      * @fieldValidator Kajona\System\System\Validators\EmailValidator
      * @fieldMandatory
@@ -51,7 +51,7 @@ class ElementFormularAdmin extends ElementAdmin implements AdminElementInterface
      * @tableColumn element_formular.formular_success
      * @tableColumnDatatype text
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel formular_success
      */
     private $strSuccess;
@@ -61,7 +61,7 @@ class ElementFormularAdmin extends ElementAdmin implements AdminElementInterface
      * @tableColumn element_formular.formular_error
      * @tableColumnDatatype text
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel formular_error
      */
     private $strError;

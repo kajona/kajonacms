@@ -37,7 +37,7 @@ class ElementDirectorybrowserAdmin extends ElementAdmin implements AdminElementI
      * @var string
      * @tableColumn element_universal.char2
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel directory
      * @fieldMandatory
      *

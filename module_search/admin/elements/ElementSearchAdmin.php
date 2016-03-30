@@ -41,7 +41,7 @@ class ElementSearchAdmin extends ElementAdmin implements AdminElementInterface {
      * @tableColumn element_search.search_amount
      * @tableColumnDatatype int
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel search_amount
      */
     private $intAmount;

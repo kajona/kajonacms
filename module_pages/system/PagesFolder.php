@@ -39,7 +39,7 @@ class PagesFolder extends \Kajona\System\System\Model implements \Kajona\System\
      * @addSearchIndex
      *
      * @fieldMandatory
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel ordner_name
      * @tableColumn page_folder.folder_name
      * @tableColumnDatatype char254

@@ -31,7 +31,7 @@ class ElementMapsAdmin extends ElementAdmin implements AdminElementInterface
      * @var string
      * @tableColumn element_universal.char1
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel maps_address
      * @fieldMandatory
      *

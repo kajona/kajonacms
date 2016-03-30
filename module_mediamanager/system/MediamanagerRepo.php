@@ -32,7 +32,7 @@ class MediamanagerRepo extends \Kajona\System\System\Model implements \Kajona\Sy
      * @tableColumnDatatype char254
      * @listOrder
      * @fieldLabel commons_title
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldMandatory
      *
      * @addSearchIndex
@@ -45,7 +45,7 @@ class MediamanagerRepo extends \Kajona\System\System\Model implements \Kajona\Sy
      * @tableColumnDatatype char254
      * @fieldMandatory
      * @fieldValidator Kajona\System\System\Validators\FolderValidator
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel commons_path
      *
      * @addSearchIndex
@@ -56,7 +56,7 @@ class MediamanagerRepo extends \Kajona\System\System\Model implements \Kajona\Sy
      * @var string
      * @tableColumn mediamanager_repo.repo_upload_filter
      * @tableColumnDatatype char254
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel form_repo_uploadFilter
      */
     private $strUploadFilter = "";
@@ -65,7 +65,7 @@ class MediamanagerRepo extends \Kajona\System\System\Model implements \Kajona\Sy
      * @var string
      * @tableColumn mediamanager_repo.repo_view_filter
      * @tableColumnDatatype char254
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel form_repo_viewFilter
      */
     private $strViewFilter = "";

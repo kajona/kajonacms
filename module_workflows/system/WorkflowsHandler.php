@@ -49,7 +49,7 @@ class WorkflowsHandler extends \Kajona\System\System\Model implements \Kajona\Sy
      * @tableColumn workflows_handler.workflows_handler_val1
      * @tableColumnDatatype char254
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      */
     private $strConfigVal1 = "";
 
@@ -58,7 +58,7 @@ class WorkflowsHandler extends \Kajona\System\System\Model implements \Kajona\Sy
      * @tableColumn workflows_handler.workflows_handler_val2
      * @tableColumnDatatype char254
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      */
     private $strConfigVal2 = "";
 
@@ -67,7 +67,7 @@ class WorkflowsHandler extends \Kajona\System\System\Model implements \Kajona\Sy
      * @tableColumn workflows_handler.workflows_handler_val3
      * @tableColumnDatatype text
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      */
     private $strConfigVal3 = "";
 

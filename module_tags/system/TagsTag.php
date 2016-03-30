@@ -46,7 +46,7 @@ class TagsTag extends Model implements ModelInterface, AdminListableInterface, S
      *
      * @addSearchIndex
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldMandatory
      */
     private $strName;

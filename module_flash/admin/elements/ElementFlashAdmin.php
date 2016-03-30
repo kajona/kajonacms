@@ -45,7 +45,7 @@ class ElementFlashAdmin extends ElementAdmin implements AdminElementInterface {
      * @var string
      * @tableColumn element_universal.int1
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel flash_width
      */
     private $intInt1;
@@ -54,7 +54,7 @@ class ElementFlashAdmin extends ElementAdmin implements AdminElementInterface {
      * @var string
      * @tableColumn element_universal.int2
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel flash_height
      */
     private $intInt2;

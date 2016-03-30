@@ -48,7 +48,7 @@ class ElementGalleryRandomAdmin extends ElementAdmin implements AdminElementInte
     /**
      * @var int
      * @tableColumn element_gallery.gallery_maxh_d
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel gallery_maxh_d
      */
     private $intMaxHD;
@@ -56,7 +56,7 @@ class ElementGalleryRandomAdmin extends ElementAdmin implements AdminElementInte
     /**
      * @var int
      * @tableColumn element_gallery.gallery_maxw_d
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel gallery_maxw_d
      */
     private $intMaxWD;
@@ -64,7 +64,7 @@ class ElementGalleryRandomAdmin extends ElementAdmin implements AdminElementInte
     /**
      * @var int
      * @tableColumn element_gallery.gallery_text
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel gallery_text
      */
     private $strText;
@@ -72,7 +72,7 @@ class ElementGalleryRandomAdmin extends ElementAdmin implements AdminElementInte
     /**
      * @var int
      * @tableColumn element_gallery.gallery_text_x
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel gallery_text_x
      */
     private $intTextX;
@@ -80,7 +80,7 @@ class ElementGalleryRandomAdmin extends ElementAdmin implements AdminElementInte
     /**
      * @var int
      * @tableColumn element_gallery.gallery_text_y
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel gallery_text_y
      */
     private $intTextY;

@@ -42,7 +42,7 @@ class MessagingMessage extends Model implements ModelInterface, AdminListableInt
      * @var string
      * @tableColumn messages.message_title
      * @tableColumnDatatype char254
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel message_subject
      * @fieldMandatory
      *

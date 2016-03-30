@@ -48,7 +48,7 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
 
     /**
      * @var string
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldValidator Kajona\System\System\Validators\EmailValidator
      * @fieldMandatory
      */
@@ -56,43 +56,43 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
 
     /**
      * @var string
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      */
     private $strForename = "";
 
     /**
      * @var string
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      */
     private $strName = "";
 
     /**
      * @var string
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      */
     private $strStreet = "";
 
     /**
      * @var string
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      */
     private $strPostal = "";
 
     /**
      * @var string
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      */
     private $strCity = "";
 
     /**
      * @var string
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      */
     private $strTel = "";
 
     /**
      * @var string
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      */
     private $strMobile = "";
 

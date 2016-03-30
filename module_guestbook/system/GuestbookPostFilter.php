@@ -23,7 +23,7 @@ class GuestbookPostFilter extends FilterBase
     /**
      * @var string
      * @tableColumn guestbook_post.guestbook_post_name
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel form_guestbook_guestbookpostname
      */
     private $strGuestbookPostName = "";
@@ -31,7 +31,7 @@ class GuestbookPostFilter extends FilterBase
     /**
      * @var string
      * @tableColumn guestbook_post.guestbook_post_email
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel form_guestbook_guestbookpostemail
      */
     private $strGuestbookPostEmail = "";
@@ -39,7 +39,7 @@ class GuestbookPostFilter extends FilterBase
     /**
      * @var string
      * @tableColumn guestbook_post.guestbook_post_page
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel form_guestbook_guestbookpostpage
      */
     private $strGuestbookPostPage = "";
@@ -47,7 +47,7 @@ class GuestbookPostFilter extends FilterBase
     /**
      * @var string
      * @tableColumn guestbook_post.guestbook_post_text
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel form_guestbook_guestbookposttext
      */
     private $strGuestbookPostText = "";

@@ -29,7 +29,7 @@ class ElementParagraphAdmin extends ElementAdmin implements AdminElementInterfac
      * @tableColumn element_paragraph.paragraph_title
      * @tableColumnDatatype char254
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel commons_title
      *
      * @elementContentTitle

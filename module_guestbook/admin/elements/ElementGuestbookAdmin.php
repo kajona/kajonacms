@@ -50,7 +50,7 @@ class ElementGuestbookAdmin extends ElementAdmin implements AdminElementInterfac
      * @tableColumn element_guestbook.guestbook_amount
      * @tableColumnDatatype int
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel guestbook_amount
      */
     private $intAmount;

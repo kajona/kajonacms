@@ -28,7 +28,7 @@ class ElementPlaintextAdmin extends ElementAdmin implements AdminElementInterfac
      * @var string
      * @tableColumn element_universal.text
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldMandatory
      * @fieldLabel commons_title
      *

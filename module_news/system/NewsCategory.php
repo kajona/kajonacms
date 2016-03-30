@@ -33,7 +33,7 @@ class NewsCategory extends Model implements ModelInterface, AdminListableInterfa
      * @tableColumn news_category.news_cat_title
      * @tableColumnDatatype char254
      * @listOrder
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldMandatory
      * @fieldLabel commons_title
      *

@@ -38,7 +38,7 @@ class GuestbookPost extends \Kajona\System\System\Model implements \Kajona\Syste
      * @tableColumn guestbook_post.guestbook_post_name
      * @tableColumnDatatype char254
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      *
      * @addSearchIndex
      */
@@ -49,7 +49,7 @@ class GuestbookPost extends \Kajona\System\System\Model implements \Kajona\Syste
      * @tableColumn guestbook_post.guestbook_post_email
      * @tableColumnDatatype char254
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldValidator Kajona\System\System\Validators\EmailValidator
      *
      * @addSearchIndex
@@ -61,7 +61,7 @@ class GuestbookPost extends \Kajona\System\System\Model implements \Kajona\Syste
      * @tableColumn guestbook_post.guestbook_post_page
      * @tableColumnDatatype char254
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      *
      * @addSearchIndex
      */

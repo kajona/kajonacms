@@ -45,7 +45,7 @@ class PagesElement extends \Kajona\System\System\Model implements \Kajona\System
      * @listOrder
      *
      * @fieldMandatory
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel commons_name
      *
      * @addSearchIndex
@@ -86,7 +86,7 @@ class PagesElement extends \Kajona\System\System\Model implements \Kajona\System
      * @tableColumnDatatype int
      * @fieldMandatory
      * @fieldValidator Kajona\System\System\Validators\NumericValidator
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      */
     private $intCachetime = "-1";
 

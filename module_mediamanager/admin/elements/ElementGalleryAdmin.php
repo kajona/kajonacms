@@ -48,7 +48,7 @@ class ElementGalleryAdmin extends ElementAdmin implements AdminElementInterface
      * @var int
      * @tableColumn element_gallery.gallery_imagesperpage
      * @tableColumnDatatype int
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel gallery_imagesperpage
      */
     private $intImagesPerPage;
@@ -58,7 +58,7 @@ class ElementGalleryAdmin extends ElementAdmin implements AdminElementInterface
      * @var int
      * @tableColumn element_gallery.gallery_maxh_d
      * @tableColumnDatatype int
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel gallery_maxh_d
      */
     private $intMaxHD;
@@ -67,7 +67,7 @@ class ElementGalleryAdmin extends ElementAdmin implements AdminElementInterface
      * @var int
      * @tableColumn element_gallery.gallery_maxw_d
      * @tableColumnDatatype int
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel gallery_maxw_d
      */
     private $intMaxWD;
@@ -76,7 +76,7 @@ class ElementGalleryAdmin extends ElementAdmin implements AdminElementInterface
      * @var int
      * @tableColumn element_gallery.gallery_text
      * @tableColumnDatatype char254
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel gallery_text
      */
     private $strText;
@@ -85,7 +85,7 @@ class ElementGalleryAdmin extends ElementAdmin implements AdminElementInterface
      * @var int
      * @tableColumn element_gallery.gallery_text_x
      * @tableColumnDatatype int
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel gallery_text_x
      */
     private $intTextX;
@@ -94,7 +94,7 @@ class ElementGalleryAdmin extends ElementAdmin implements AdminElementInterface
      * @var int
      * @tableColumn element_gallery.gallery_text_y
      * @tableColumnDatatype int
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel gallery_text_y
      */
     private $intTextY;

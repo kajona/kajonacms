@@ -39,7 +39,7 @@ class EventmanagerEvent extends \Kajona\System\System\Model implements \Kajona\S
      * @versionable
      * @addSearchIndex
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldMandatory
      * @fieldLabel commons_title
      *
@@ -122,7 +122,7 @@ class EventmanagerEvent extends \Kajona\System\System\Model implements \Kajona\S
      * @tableColumnDatatype int
      * @versionable
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldValidator Kajona\System\System\Validators\PosintValidator
      * @fieldLabel event_maxparticipants
      * @templateExport

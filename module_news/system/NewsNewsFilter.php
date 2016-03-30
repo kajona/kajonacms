@@ -25,7 +25,7 @@ class NewsNewsFilter extends FilterBase
     /**
      * @var string
      * @tableColumn news.news_title
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      */
     private $strTitle;
 

@@ -52,13 +52,13 @@ class AdminFormA extends Model
 
     /**
      * @var
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      */
     private $strFieldA1;
 
     /**
      * @var
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      */
     private $strFieldA2;
 
@@ -102,13 +102,13 @@ class AdminFormB extends AdminFormA
 
     /**
      * @var
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      */
     private $strFieldB1;
 
     /**
      * @var
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      */
     private $strFieldB2;
 

@@ -163,19 +163,19 @@ class FilterBaseA extends FilterBase
 {
     /**
      * @tableColumn filter.filter1
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      */
     protected $strFilter1;
 
     /**
      * @tableColumn filter.filter2
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      */
     protected $intFilter2;
 
     /**
      * @tableColumn filter.filter3
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      */
     protected $floatFilter3;
 
@@ -217,7 +217,7 @@ class FilterBaseA extends FilterBase
 
     /**
      * @tableColumn filter.filter9
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      */
     protected $strFilter9;
 

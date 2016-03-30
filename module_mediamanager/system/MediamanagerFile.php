@@ -52,7 +52,7 @@ class MediamanagerFile extends \Kajona\System\System\Model implements \Kajona\Sy
      * @tableColumn mediamanager_file.file_name
      * @tableColumnDatatype char254
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      *
      * @addSearchIndex
      */
@@ -84,7 +84,7 @@ class MediamanagerFile extends \Kajona\System\System\Model implements \Kajona\Sy
      * @tableColumn mediamanager_file.file_subtitle
      * @tableColumnDatatype char254
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      *
      * @addSearchIndex
      */

@@ -27,7 +27,7 @@ class ElementRowAdmin extends ElementAdmin implements AdminElementInterface
      * @var string
      * @tableColumn element_paragraph.paragraph_title
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldMandatory
      * @fieldLabel commons_title
      *

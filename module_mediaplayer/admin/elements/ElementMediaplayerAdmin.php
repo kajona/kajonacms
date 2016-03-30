@@ -60,7 +60,7 @@ class ElementMediaplayerAdmin extends ElementAdmin implements AdminElementInterf
      * @var string
      * @tableColumn element_universal.int1
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel mediaplayer_width
      */
     private $intInt1;
@@ -69,7 +69,7 @@ class ElementMediaplayerAdmin extends ElementAdmin implements AdminElementInterf
      * @var string
      * @tableColumn element_universal.int2
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel mediaplayer_height
      */
     private $intInt2;

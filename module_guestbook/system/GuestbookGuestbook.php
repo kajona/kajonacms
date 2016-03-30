@@ -33,7 +33,7 @@ class GuestbookGuestbook extends \Kajona\System\System\Model implements \Kajona\
      * @listOrder
      *
      * @fieldMandatory
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel commons_title
      *
      * @addSearchIndex

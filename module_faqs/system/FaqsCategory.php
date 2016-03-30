@@ -38,7 +38,7 @@ class FaqsCategory extends \Kajona\System\System\Model implements \Kajona\System
      * @tableColumnDatatype char254
      * @listOrder asc
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldMandatory
      * @fieldLabel commons_title
      *

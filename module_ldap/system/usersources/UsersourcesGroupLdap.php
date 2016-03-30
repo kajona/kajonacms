@@ -36,7 +36,7 @@ class UsersourcesGroupLdap extends \Kajona\System\System\Model implements \Kajon
 
     /**
      * @var string
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldMandatory
      */
     private $strDn = "";

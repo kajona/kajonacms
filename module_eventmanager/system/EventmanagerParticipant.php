@@ -43,7 +43,7 @@ class EventmanagerParticipant extends \Kajona\System\System\Model implements \Ka
      * @versionable
      * @addSearchIndex
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldMandatory
      * @fieldLabel participant_forename
      *
@@ -58,7 +58,7 @@ class EventmanagerParticipant extends \Kajona\System\System\Model implements \Ka
      * @versionable
      * @addSearchIndex
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldMandatory
      * @fieldLabel participant_lastname
      *
@@ -73,7 +73,7 @@ class EventmanagerParticipant extends \Kajona\System\System\Model implements \Ka
      * @versionable
      * @listOrder
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldValidator Kajona\System\System\Validators\EmailValidator
      * @fieldMandatory
      * @fieldLabel participant_email
@@ -88,7 +88,7 @@ class EventmanagerParticipant extends \Kajona\System\System\Model implements \Ka
      * @tableColumnDatatype char254
      * @versionable
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel participant_phone
      *
      * @addSearchIndex

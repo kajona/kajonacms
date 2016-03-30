@@ -40,7 +40,7 @@ class NavigationPoint extends Model implements ModelInterface, AdminListableInte
      * @tableColumn navigation.navigation_name
      * @tableColumnDatatype char254
      * @fieldMandatory
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel commons_name
      *
      * @addSearchIndex

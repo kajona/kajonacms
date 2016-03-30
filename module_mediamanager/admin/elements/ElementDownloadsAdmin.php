@@ -47,7 +47,7 @@ class ElementDownloadsAdmin extends ElementAdmin implements AdminElementInterfac
      * @var int
      * @tableColumn element_downloads.download_amount
      * @tableColumnDatatype int
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel download_amount
      */
     private $intAmount;

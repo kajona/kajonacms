@@ -27,7 +27,7 @@ class ElementImageAdmin extends ElementAdmin implements AdminElementInterface
      * @tableColumn element_image.image_title
      * @tableColumnDatatype char254
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel commons_title
      *
      * @addSearchIndex
@@ -65,7 +65,7 @@ class ElementImageAdmin extends ElementAdmin implements AdminElementInterface
      * @tableColumn element_image.image_x
      * @tableColumnDatatype int
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel image_x
      * @fieldHidden
      */
@@ -76,7 +76,7 @@ class ElementImageAdmin extends ElementAdmin implements AdminElementInterface
      * @tableColumn element_image.image_y
      * @tableColumnDatatype int
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel image_y
      * @fieldHidden
      */

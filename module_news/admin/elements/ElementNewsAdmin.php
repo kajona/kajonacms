@@ -95,7 +95,7 @@ class ElementNewsAdmin extends ElementAdmin implements AdminElementInterface {
      * @tableColumn element_news.news_amount
      * @tableColumnDatatype int
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel news_amount
      * @fieldMandatory
      */

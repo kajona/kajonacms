@@ -23,7 +23,7 @@ class NewsCategoryFilter extends FilterBase
 {
     /**
      * @tableColumn news_category.news_cat_title
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      */
     private $strTitle;
 

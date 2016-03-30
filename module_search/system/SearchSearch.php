@@ -32,7 +32,7 @@ class SearchSearch extends Model implements ModelInterface, SortableRatingInterf
      * @tableColumnDatatype char254
      * @listOrder
      * @fieldMandatory
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      */
     private $strQuery;
 

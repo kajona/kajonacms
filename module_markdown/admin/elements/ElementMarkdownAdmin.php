@@ -39,7 +39,7 @@ class ElementMarkdownAdmin extends ElementAdmin implements AdminElementInterface
      * @var string
      * @tableColumn element_universal.char2
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      *
      */
     private $strSourceUrl = "";

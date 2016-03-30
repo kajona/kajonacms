@@ -38,7 +38,7 @@ class ElementPostacommentAdmin extends ElementAdmin implements AdminElementInter
      * @var string
      * @tableColumn element_universal.char2
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel postacomment_actionfilter
      */
     private $strChar2 = "";
@@ -47,7 +47,7 @@ class ElementPostacommentAdmin extends ElementAdmin implements AdminElementInter
      * @var int
      * @tableColumn element_universal.int1
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel postacomment_numberofposts
      */
     private $intInt1;

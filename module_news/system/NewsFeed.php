@@ -39,7 +39,7 @@ class NewsFeed extends Model implements ModelInterface, AdminListableInterface {
      * @tableColumnDatatype char254
      * @listOrder
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldMandatory
      * @fieldLabel form_feed_title
      */
@@ -50,7 +50,7 @@ class NewsFeed extends Model implements ModelInterface, AdminListableInterface {
      * @tableColumn news_feed.news_feed_urltitle
      * @tableColumnDatatype char254
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldMandatory
      * @fieldLabel form_feed_urltitle
      */
@@ -61,7 +61,7 @@ class NewsFeed extends Model implements ModelInterface, AdminListableInterface {
      * @tableColumn news_feed.news_feed_link
      * @tableColumnDatatype char254
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel form_feed_link
      */
     private $strLink = "";

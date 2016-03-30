@@ -46,7 +46,7 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      * @tableColumnDatatype char254
      * @addSearchIndex
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldMandatory
      * @fieldLabel commons_title
      *

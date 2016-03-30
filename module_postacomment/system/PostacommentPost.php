@@ -39,7 +39,7 @@ class PostacommentPost extends \Kajona\System\System\Model implements \Kajona\Sy
      * @tableColumn postacomment.postacomment_title
      * @tableColumnDatatype char254
      *
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel commons_title
      *
      * @addSearchIndex
@@ -65,7 +65,7 @@ class PostacommentPost extends \Kajona\System\System\Model implements \Kajona\Sy
      * @tableColumnDatatype char254
      *
      * @fieldMandatory
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldLabel postacomment_username
      */
     private $strUsername;

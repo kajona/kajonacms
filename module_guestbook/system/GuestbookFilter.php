@@ -24,7 +24,7 @@ class GuestbookFilter extends FilterBase
      * @var string
      * @tableColumn guestbook_book.guestbook_title
      * @fieldLabel commons_title
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      */
     private $strTitle;
 

@@ -50,7 +50,7 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
      * @addSearchIndex
      *
      * @fieldMandatory
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      */
     private $strName = "";
 
@@ -93,7 +93,7 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
      * @versionable
      *
      * @fieldMandatory
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      *
      * @addSearchIndex
      */
