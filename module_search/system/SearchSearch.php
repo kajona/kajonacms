@@ -63,7 +63,7 @@ class SearchSearch extends Model implements ModelInterface, SortableRatingInterf
      * For form-generation only
      *
      * @var string
-     * @fieldType user
+     * @fieldType Kajona\System\Admin\Formentries\FormentryUser
      * @fieldLabel search_users
      */
     private $strFormFilterUser = null;

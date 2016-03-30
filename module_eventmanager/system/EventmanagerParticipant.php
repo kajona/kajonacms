@@ -101,7 +101,7 @@ class EventmanagerParticipant extends \Kajona\System\System\Model implements \Ka
      * @tableColumnDatatype char20
      * @versionable
      *
-     * @fieldType user
+     * @fieldType Kajona\System\Admin\Formentries\FormentryUser
      * @fieldLabel participant_userid
      */
     private $strUserId = "";
