@@ -24,7 +24,7 @@ class ElementMediaplayerAdmin extends ElementAdmin implements AdminElementInterf
      * @var string
      * @tableColumn element_universal.char1
      *
-     * @fieldType file
+     * @fieldType Kajona\System\Admin\Formentries\FormentryFile
      * @fieldLabel mediaplayer_file
      * @fieldMandatory
      *
@@ -38,7 +38,7 @@ class ElementMediaplayerAdmin extends ElementAdmin implements AdminElementInterf
      * @var string
      * @tableColumn element_universal.char2
      *
-     * @fieldType file
+     * @fieldType Kajona\System\Admin\Formentries\FormentryFile
      * @fieldLabel mediaplayer_preview
      *
      * @addSearchIndex

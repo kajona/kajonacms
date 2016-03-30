@@ -24,7 +24,7 @@ class ElementFlashAdmin extends ElementAdmin implements AdminElementInterface {
      * @var string
      * @tableColumn element_universal.char1
      *
-     * @fieldType file
+     * @fieldType Kajona\System\Admin\Formentries\FormentryFile
      * @fieldLabel flash_file
      * @elementContentTitle
      */
