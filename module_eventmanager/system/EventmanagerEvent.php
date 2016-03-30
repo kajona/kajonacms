@@ -134,7 +134,7 @@ class EventmanagerEvent extends \Kajona\System\System\Model implements \Kajona\S
      *
      * @var \Kajona\System\System\Date
      * @versionable
-     * @fieldType datetime
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDatetime
      * @fieldLabel event_start
      * @fieldMandatory
      * @templateExport
@@ -147,7 +147,7 @@ class EventmanagerEvent extends \Kajona\System\System\Model implements \Kajona\S
      *
      * @var \Kajona\System\System\Date
      * @versionable
-     * @fieldType datetime
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDatetime
      * @fieldLabel event_end
      * @templateExport
      * @templateMapper datetime
