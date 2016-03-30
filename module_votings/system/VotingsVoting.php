@@ -47,14 +47,14 @@ class VotingsVoting extends Model implements ModelInterface, AdminListableInterf
 
     /**
      * @var int
-     * @fieldType date
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDate
      * @fieldLabel form_voting_datestart
      */
     private $objStartDate = null;
 
     /**
      * @var int
-     * @fieldType date
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDate
      * @fieldLabel form_voting_dateend
      */
     private $objEndDate = null;

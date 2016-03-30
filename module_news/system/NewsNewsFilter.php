@@ -32,7 +32,7 @@ class NewsNewsFilter extends FilterBase
     /**
      * @var Date
      * @tableColumn system_date.system_date_start
-     * @fieldType date
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDate
      * @filterCompareOperator GE
      */
     private $objDateStartFrom;
@@ -40,7 +40,7 @@ class NewsNewsFilter extends FilterBase
     /**
      * @var Date
      * @tableColumn system_date.system_date_start
-     * @fieldType date
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDate
      * @filterCompareOperator LE
      */
     private $objDateStartTo;
@@ -49,7 +49,7 @@ class NewsNewsFilter extends FilterBase
     /**
      * @var Date
      * @tableColumn system_date.system_date_end
-     * @fieldType date
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDate
      * @filterCompareOperator GE
      */
     private $objDateEndFrom;
@@ -57,7 +57,7 @@ class NewsNewsFilter extends FilterBase
     /**
      * @var Date
      * @tableColumn system_date.system_date_end
-     * @fieldType date
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDate
      * @filterCompareOperator LE
      */
     private $objDateEndTo;
@@ -66,7 +66,7 @@ class NewsNewsFilter extends FilterBase
     /**
      * @var Date
      * @tableColumn system_date.system_date_special
-     * @fieldType date
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDate
      * @filterCompareOperator GE
      */
     private $objDateSpecialFrom;
@@ -74,7 +74,7 @@ class NewsNewsFilter extends FilterBase
     /**
      * @var Date
      * @tableColumn system_date.system_date_special
-     * @fieldType date
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDate
      * @filterCompareOperator LE
      */
     private $objDateSpecialTo;

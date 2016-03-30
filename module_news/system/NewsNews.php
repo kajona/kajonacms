@@ -132,7 +132,7 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      * For form-rendering and versioning only
      *
      * @var int
-     * @fieldType date
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDate
      * @fieldLabel form_news_datestart
      * @fieldMandatory
      *
@@ -147,7 +147,7 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      * For form-rendering and versioning only
      *
      * @var int
-     * @fieldType date
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDate
      * @fieldLabel form_news_dateend
      *
      * @versionable
@@ -161,7 +161,7 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      * For form-rendering and versioning only
      *
      * @var int
-     * @fieldType date
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDate
      * @fieldLabel form_news_datespecial
      *
      * @versionable

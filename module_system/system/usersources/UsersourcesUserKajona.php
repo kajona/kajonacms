@@ -98,7 +98,7 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
 
     /**
      * @var int
-     * @fieldType date
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDate
      * @fieldLabel form_user_date
      */
     private $longDate = 0;

@@ -27,7 +27,7 @@ class ElementDateAdmin extends ElementAdmin implements AdminElementInterface
      * @var int
      * @todo add long column to universal table
      * @tableColumn element_universal.char2
-     * @fieldType date
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDate
      * @fieldLabel commons_date
      * @fieldMandatory
      *

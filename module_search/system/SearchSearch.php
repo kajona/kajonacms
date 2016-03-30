@@ -70,13 +70,13 @@ class SearchSearch extends Model implements ModelInterface, SortableRatingInterf
 
     /**
      * @var null
-     * @fieldType date
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDate
      */
     private $objChangeStartdate = null;
 
     /**
      * @var null
-     * @fieldType date
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDate
      */
     private $objChangeEnddate = null;
 

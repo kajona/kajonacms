@@ -187,14 +187,14 @@ class FilterBaseA extends FilterBase
 
     /**
      * @tableColumn filter.filter5
-     * @fieldType date
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDate
      */
     protected $objFilter5;
 
 
     /**
      * @tableColumn filter.filter6
-     * @fieldType date
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDate
      * @filterCompareOperator LE
      */
     protected $intFilter6;
@@ -202,14 +202,14 @@ class FilterBaseA extends FilterBase
 
     /**
      * @tableColumn filter.filter7
-     * @fieldType date
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDate
      * @filterCompareOperator GE
      */
     protected $objFilter7;
 
     /**
      * @tableColumn filter.filter8
-     * @fieldType date
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDate
      * @filterCompareOperator LE
      */
     protected $objFilter8;
