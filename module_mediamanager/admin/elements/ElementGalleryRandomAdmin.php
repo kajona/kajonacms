@@ -96,7 +96,7 @@ class ElementGalleryRandomAdmin extends ElementAdmin implements AdminElementInte
     /**
      * @var int
      * @tableColumn element_gallery.gallery_overlay
-     * @fieldType image
+     * @fieldType Kajona\System\Admin\Formentries\FormentryImage
      * @fieldLabel gallery_overlay
      */
     private $strGalleryOverlay;

@@ -68,7 +68,7 @@ class ElementParagraphAdmin extends ElementAdmin implements AdminElementInterfac
      * @tableColumn element_paragraph.paragraph_image
      * @tableColumnDatatype char254
      *
-     * @fieldType image
+     * @fieldType Kajona\System\Admin\Formentries\FormentryImage
      * @fieldLabel commons_image
      *
      * @addSearchIndex

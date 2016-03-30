@@ -60,7 +60,7 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      * @var string
      * @tableColumn news.news_image
      * @tableColumnDatatype char254
-     * @fieldType image
+     * @fieldType Kajona\System\Admin\Formentries\FormentryImage
      *
      * @addSearchIndex
      * @versionable

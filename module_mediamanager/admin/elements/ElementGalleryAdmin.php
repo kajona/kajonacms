@@ -112,7 +112,7 @@ class ElementGalleryAdmin extends ElementAdmin implements AdminElementInterface
      * @var int
      * @tableColumn element_gallery.gallery_overlay
      * @tableColumnDatatype char254
-     * @fieldType image
+     * @fieldType Kajona\System\Admin\Formentries\FormentryImage
      * @fieldLabel gallery_overlay
      */
     private $strGalleryOverlay;
