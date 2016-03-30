@@ -33,7 +33,7 @@ class UsersourcesGroupKajona extends Model implements ModelInterface, Usersource
 
     /**
      * @var string
-     * @fieldType textarea
+     * @fieldType Kajona\System\Admin\Formentries\FormentryTextarea
      */
     private $strDesc = "";
 

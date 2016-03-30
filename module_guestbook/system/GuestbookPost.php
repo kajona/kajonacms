@@ -72,7 +72,7 @@ class GuestbookPost extends \Kajona\System\System\Model implements \Kajona\Syste
      * @tableColumn guestbook_post.guestbook_post_text
      * @tableColumnDatatype text
      *
-     * @fieldType textarea
+     * @fieldType Kajona\System\Admin\Formentries\FormentryTextarea
      *
      * @addSearchIndex
      */

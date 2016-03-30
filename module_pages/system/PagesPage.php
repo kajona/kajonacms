@@ -74,7 +74,7 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
      * @var string
      * @versionable
      *
-     * @fieldType textarea
+     * @fieldType Kajona\System\Admin\Formentries\FormentryTextarea
      *
      * @addSearchIndex
      */

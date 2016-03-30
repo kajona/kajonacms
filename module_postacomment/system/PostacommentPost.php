@@ -52,7 +52,7 @@ class PostacommentPost extends \Kajona\System\System\Model implements \Kajona\Sy
      * @tableColumnDatatype text
      *
      * @fieldMandatory
-     * @fieldType textarea
+     * @fieldType Kajona\System\Admin\Formentries\FormentryTextarea
      * @fieldLabel postacomment_comment
      *
      * @addSearchIndex

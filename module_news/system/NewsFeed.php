@@ -71,7 +71,7 @@ class NewsFeed extends Model implements ModelInterface, AdminListableInterface {
      * @tableColumn news_feed.news_feed_desc
      * @tableColumnDatatype char254
      *
-     * @fieldType textarea
+     * @fieldType Kajona\System\Admin\Formentries\FormentryTextarea
      * @fieldLabel form_feed_desc
      */
     private $strDesc = "";

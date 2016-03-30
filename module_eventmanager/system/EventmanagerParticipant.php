@@ -126,7 +126,7 @@ class EventmanagerParticipant extends \Kajona\System\System\Model implements \Ka
      * @tableColumnDatatype text
      * @versionable
      *
-     * @fieldType textarea
+     * @fieldType Kajona\System\Admin\Formentries\FormentryTextarea
      * @fieldLabel participant_comment
      *
      * @addSearchIndex

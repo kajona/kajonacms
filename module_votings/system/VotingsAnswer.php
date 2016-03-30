@@ -30,7 +30,7 @@ class VotingsAnswer extends Model implements ModelInterface, AdminListableInterf
      * @tableColumnDatatype text
      * @addSearchIndex
      *
-     * @fieldType textarea
+     * @fieldType Kajona\System\Admin\Formentries\FormentryTextarea
      * @fieldMandatory
      * @fieldLabel form_answer_text
      */

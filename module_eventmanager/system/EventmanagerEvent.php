@@ -71,7 +71,7 @@ class EventmanagerEvent extends \Kajona\System\System\Model implements \Kajona\S
      * @versionable
      * @addSearchIndex
      *
-     * @fieldType textarea
+     * @fieldType Kajona\System\Admin\Formentries\FormentryTextarea
      * @fieldLabel event_location
      *
      * @addSearchIndex

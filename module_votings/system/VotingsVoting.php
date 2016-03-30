@@ -37,7 +37,7 @@ class VotingsVoting extends Model implements ModelInterface, AdminListableInterf
      * @tableColumnDatatype char254
      * @addSearchIndex
      *
-     * @fieldType textarea
+     * @fieldType Kajona\System\Admin\Formentries\FormentryTextarea
      * @fieldMandatory
      * @fieldLabel commons_title
      *
