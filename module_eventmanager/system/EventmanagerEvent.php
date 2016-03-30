@@ -97,7 +97,7 @@ class EventmanagerEvent extends \Kajona\System\System\Model implements \Kajona\S
      * @tableColumnDatatype int
      * @versionable
      *
-     * @fieldType yesno
+     * @fieldType Kajona\System\Admin\Formentries\FormentryYesno
      * @fieldMandatory
      * @fieldLabel event_registration
      * @templateExport
@@ -110,7 +110,7 @@ class EventmanagerEvent extends \Kajona\System\System\Model implements \Kajona\S
      * @tableColumnDatatype int
      * @versionable
      *
-     * @fieldType yesno
+     * @fieldType Kajona\System\Admin\Formentries\FormentryYesno
      * @fieldLabel event_limitparticipants
      * @templateExport
      */

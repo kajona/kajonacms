@@ -46,7 +46,7 @@ class GuestbookGuestbook extends \Kajona\System\System\Model implements \Kajona\
      * @tableColumnDatatype int
      *
      * @fieldMandatory
-     * @fieldType yesno
+     * @fieldType Kajona\System\Admin\Formentries\FormentryYesno
      */
     private $intGuestbookModerated = 0;
 

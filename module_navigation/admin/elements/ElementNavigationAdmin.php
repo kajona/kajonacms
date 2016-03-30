@@ -57,7 +57,7 @@ class ElementNavigationAdmin extends ElementAdmin implements AdminElementInterfa
      * @var int
      * @tableColumn element_navigation.navigation_foreign
      * @tableColumnDatatype int
-     * @fieldType yesno
+     * @fieldType Kajona\System\Admin\Formentries\FormentryYesno
      * @fieldLabel navigation_foreign
      */
     private $intForeign = 1;

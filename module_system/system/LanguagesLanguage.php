@@ -43,7 +43,7 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
      * @tableColumnDatatype int
      * @tableColumnIndex
      *
-     * @fieldType yesno
+     * @fieldType Kajona\System\Admin\Formentries\FormentryYesno
      * @fieldMandatory
      */
     private $bitDefault = false;

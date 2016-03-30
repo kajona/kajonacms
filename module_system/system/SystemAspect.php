@@ -42,7 +42,7 @@ class SystemAspect extends Model implements ModelInterface, AdminListableInterfa
      * @var bool
      * @tableColumn aspects.aspect_default
      * @tableColumnDatatype int
-     * @fieldType yesno
+     * @fieldType Kajona\System\Admin\Formentries\FormentryYesno
      * @fieldMandatory
      */
     private $bitDefault = 0;

@@ -76,7 +76,7 @@ class PagesElement extends \Kajona\System\System\Model implements \Kajona\System
      * @var int
      * @tableColumn element.element_repeat
      * @tableColumnDatatype int
-     * @fieldType yesno
+     * @fieldType Kajona\System\Admin\Formentries\FormentryYesno
      */
     private $intRepeat = "";
 
