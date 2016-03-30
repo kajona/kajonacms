@@ -54,7 +54,7 @@ class SearchSearch extends Model implements ModelInterface, SortableRatingInterf
      * For form-generation only
      *
      * @var array
-     * @fieldType toggle_buttonbar
+     * @fieldType Kajona\System\Admin\Formentries\FormentryToggleButtonbar
      * @fieldLabel search_modules
      */
     private $arrFormFilterModules = array();

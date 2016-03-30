@@ -99,7 +99,7 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      * @blockEscaping
      * @addSearchIndex
      *
-     * @fieldType wysiwygsmall
+     * @fieldType Kajona\System\Admin\Formentries\FormentryWysiwygsmall
      *
      * @versionable
      * @templateExport

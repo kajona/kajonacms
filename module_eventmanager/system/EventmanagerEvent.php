@@ -56,7 +56,7 @@ class EventmanagerEvent extends \Kajona\System\System\Model implements \Kajona\S
      * @blockEscaping
      * @addSearchIndex
      *
-     * @fieldType wysiwygsmall
+     * @fieldType Kajona\System\Admin\Formentries\FormentryWysiwygsmall
      * @fieldLabel commons_description
      *
      * @addSearchIndex
