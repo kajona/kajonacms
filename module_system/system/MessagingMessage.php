@@ -97,7 +97,7 @@ class MessagingMessage extends Model implements ModelInterface, AdminListableInt
      * @var string
      * @tableColumn messages.message_messageref
      * @tableColumnDatatype char20
-     * @fieldType hidden
+     * @fieldType Kajona\System\Admin\Formentries\FormentryHidden
      */
     private $strMessageRefId = "";
 

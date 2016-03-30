@@ -88,7 +88,7 @@ class ElementGalleryRandomAdmin extends ElementAdmin implements AdminElementInte
     /**
      * @var int
      * @tableColumn element_gallery.gallery_mode
-     * @fieldType hidden
+     * @fieldType Kajona\System\Admin\Formentries\FormentryHidden
      */
     private $intGalleryMode = 1;
 

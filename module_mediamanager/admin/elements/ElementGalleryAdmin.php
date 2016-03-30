@@ -103,7 +103,7 @@ class ElementGalleryAdmin extends ElementAdmin implements AdminElementInterface
      * @var int
      * @tableColumn element_gallery.gallery_mode
      * @tableColumnDatatype int
-     * @fieldType hidden
+     * @fieldType Kajona\System\Admin\Formentries\FormentryHidden
      */
     private $intGalleryMode = 0;
 

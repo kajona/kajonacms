@@ -45,7 +45,7 @@ class ElementMapsAdmin extends ElementAdmin implements AdminElementInterface
      * @var string
      * @tableColumn element_universal.char2
      *
-     * @fieldType hidden
+     * @fieldType Kajona\System\Admin\Formentries\FormentryHidden
      *
      * @addSearchIndex
      */
