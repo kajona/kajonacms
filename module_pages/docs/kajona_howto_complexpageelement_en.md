@@ -167,7 +167,7 @@ Since it's a common way to name a classes' properties first, we'll stick to that
  * @var string
  * @tableColumn element_universal.char1
  *
- * @fieldType template
+ * @fieldType Kajona\Pages\Admin\Formentries\FormentryTemplate
  * @fieldLabel template
  *
  * @fieldTemplateDir /element_rssfeed
@@ -178,7 +178,7 @@ private $strChar1;
 The first property we introduce is called „strChar1“. You are totally free when it comes to naming a property, there's no reason why the property was named „char1“. You may use „template“, „bazinga“ or anything else. The magic is created by the properties' annotations:
 @tableColumn maps the property to a column of the database-table introduced before. As soon as this mapping is set up, the framework is able to load the value of the property from this column and to store the value back to this field.
 
-@fieldType controls the rendering in the backend. Since we want to use the property to store the elements' template, we want a dropdown of templates available. This is achieved by using the formType „template“. Please note that this formentry requires the annotation @fieldTemplateDir in order to know what folders should be scanned for possible templates. The framework scans all template-folders under /core and all template-packs to search for elements saved in an element_rssfeed named folder.
+@fieldType controls the rendering in the backend. Since we want to use the property to store the elements' template, we want a dropdown of templates available. This is achieved by using the formType „Kajona\Pages\Admin\Formentries\FormentryTemplate“. Please note that this formentry requires the annotation @fieldTemplateDir in order to know what folders should be scanned for possible templates. The framework scans all template-folders under /core and all template-packs to search for elements saved in an element_rssfeed named folder.
 
 @fieldLabel is used to define a lang-key used to label the field. The label is rendered right before the input-element. The text is loaded from the lang-file located at element_rssfeed/lang/module_elements/lang_rssfeed_en.php.
 
@@ -187,7 +187,7 @@ The first property we introduce is called „strChar1“. You are totally free w
  * @var string
  * @tableColumn element_universal.char2
  *
- * @fieldType text
+ * @fieldType Kajona\System\Admin\Formentries\FormentryText
  * @fieldLabel rssfeed_url
  * @fieldMandatory
  *
@@ -203,7 +203,7 @@ Char2 will be used to store the url of the rssfeed to be loaded. Since this info
  * @var string
  * @tableColumn element_universal.int1
  *
- * @fieldType text
+ * @fieldType Kajona\System\Admin\Formentries\FormentryText
  * @fieldLabel rssfeed_numberofposts
  */
 private $intInt1;

@@ -96,7 +96,7 @@ Have a look at all the files the ModuleGenerator created for you, especially at 
 	     * @var string
 	     * @tableColumn userdirectory_person.person_name
 	     * @tableColumnDatatype char254
-	     * @fieldType text
+	     * @fieldType Kajona\System\Admin\Formentries\FormentryText
 	     * @fieldMandatory
 	     * @addSearchIndex
 	     * @templateExport
@@ -107,7 +107,7 @@ Have a look at all the files the ModuleGenerator created for you, especially at 
 	     * @var string
 	     * @tableColumn userdirectory_person.person_email
 	     * @tableColumnDatatype char254
-	     * @fieldType text
+	     * @fieldType Kajona\System\Admin\Formentries\FormentryText
 	     * @fieldMandatory
 	     * @addSearchIndex
 	     * @templateExport
@@ -147,7 +147,7 @@ At first we'll change the sorting by adding the ```@listOrder```annotation to th
      * @var string
      * @tableColumn userdirectory_person.person_name
      * @tableColumnDatatype char254
-     * @fieldType text
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldMandatory
      * @addSearchIndex
      * @templateExport
