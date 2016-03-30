@@ -27,7 +27,7 @@ class ElementPortalloginAdmin extends ElementAdmin implements AdminElementInterf
      * @tableColumn element_plogin.portallogin_template
      * @tableColumnDatatype char254
      *
-     * @fieldType template
+     * @fieldType Kajona\Pages\Admin\Formentries\FormentryTemplate
      * @fieldLabel template
      *
      * @fieldTemplateDir /module_portallogin

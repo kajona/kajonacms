@@ -71,7 +71,7 @@ class ElementFormularAdmin extends ElementAdmin implements AdminElementInterface
      * @tableColumn element_formular.formular_template
      * @tableColumnDatatype char254
      *
-     * @fieldType template
+     * @fieldType Kajona\Pages\Admin\Formentries\FormentryTemplate
      * @fieldLabel template
      *
      * @fieldTemplateDir /module_form

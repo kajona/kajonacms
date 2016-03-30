@@ -28,7 +28,7 @@ class ElementPortalregistrationAdmin extends ElementAdmin implements AdminElemen
      * @tableColumn element_preg.portalregistration_template
      * @tableColumnDatatype char254
      *
-     * @fieldType template
+     * @fieldType Kajona\Pages\Admin\Formentries\FormentryTemplate
      * @fieldLabel template
      *
      * @fieldTemplateDir /module_portalregistration

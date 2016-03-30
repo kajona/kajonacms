@@ -29,7 +29,7 @@ class ElementSearchAdmin extends ElementAdmin implements AdminElementInterface {
      * @tableColumn element_search.search_template
      * @tableColumnDatatype char254
      *
-     * @fieldType template
+     * @fieldType Kajona\Pages\Admin\Formentries\FormentryTemplate
      * @fieldLabel template
      *
      * @fieldTemplateDir /module_search

@@ -47,7 +47,7 @@ class ElementNavigationAdmin extends ElementAdmin implements AdminElementInterfa
      * @var string
      * @tableColumn element_navigation.navigation_template
      * @tableColumnDatatype char254
-     * @fieldType template
+     * @fieldType Kajona\Pages\Admin\Formentries\FormentryTemplate
      * @fieldLabel template
      * @fieldTemplateDir /module_navigation
      */

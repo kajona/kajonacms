@@ -38,7 +38,7 @@ class ElementFaqsAdmin extends ElementAdmin implements AdminElementInterface
      * @var string
      * @tableColumn element_faqs.faqs_template
      *
-     * @fieldType template
+     * @fieldType Kajona\Pages\Admin\Formentries\FormentryTemplate
      * @fieldLabel template
      *
      * @fieldTemplateDir /module_faqs

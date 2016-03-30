@@ -80,7 +80,7 @@ class ElementParagraphAdmin extends ElementAdmin implements AdminElementInterfac
      * @tableColumn element_paragraph.paragraph_template
      * @tableColumnDatatype char254
      *
-     * @fieldType template
+     * @fieldType Kajona\Pages\Admin\Formentries\FormentryTemplate
      * @fieldLabel template
      * @fieldTemplateDir /element_paragraph
      */

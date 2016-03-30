@@ -49,7 +49,7 @@ class ElementMediaplayerAdmin extends ElementAdmin implements AdminElementInterf
      * @var string
      * @tableColumn element_universal.char3
      *
-     * @fieldType template
+     * @fieldType Kajona\Pages\Admin\Formentries\FormentryTemplate
      * @fieldLabel template
      *
      * @fieldTemplateDir /module_mediaplayer

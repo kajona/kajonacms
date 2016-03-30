@@ -37,7 +37,7 @@ class ElementDownloadsAdmin extends ElementAdmin implements AdminElementInterfac
      * @var string
      * @tableColumn element_downloads.download_template
      * @tableColumnDatatype char254
-     * @fieldType template
+     * @fieldType Kajona\Pages\Admin\Formentries\FormentryTemplate
      * @fieldLabel template
      * @fieldTemplateDir /module_mediamanager
      */

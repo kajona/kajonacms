@@ -24,7 +24,7 @@ class ElementTellafriendAdmin extends ElementAdmin implements AdminElementInterf
      * @tableColumn element_tellafriend.tellafriend_template
      * @tableColumnDatatype char254
      *
-     * @fieldType template
+     * @fieldType Kajona\Pages\Admin\Formentries\FormentryTemplate
      * @fieldLabel template
      *
      * @fieldTemplateDir /module_tellafriend

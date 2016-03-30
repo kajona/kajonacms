@@ -38,7 +38,7 @@ class ElementGalleryRandomAdmin extends ElementAdmin implements AdminElementInte
     /**
      * @var string
      * @tableColumn element_gallery.gallery_template
-     * @fieldType template
+     * @fieldType Kajona\Pages\Admin\Formentries\FormentryTemplate
      * @fieldLabel template
      * @fieldTemplateDir /module_mediamanager
      */

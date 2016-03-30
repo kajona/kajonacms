@@ -24,7 +24,7 @@ class ElementLanguageswitchAdmin extends ElementAdmin implements AdminElementInt
      * @var string
      * @tableColumn element_universal.char1
      *
-     * @fieldType template
+     * @fieldType Kajona\Pages\Admin\Formentries\FormentryTemplate
      * @fieldLabel template
      *
      * @fieldTemplateDir /module_languageswitch

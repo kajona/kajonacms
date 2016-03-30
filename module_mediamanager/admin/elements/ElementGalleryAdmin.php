@@ -38,7 +38,7 @@ class ElementGalleryAdmin extends ElementAdmin implements AdminElementInterface
      * @var string
      * @tableColumn element_gallery.gallery_template
      * @tableColumnDatatype char254
-     * @fieldType template
+     * @fieldType Kajona\Pages\Admin\Formentries\FormentryTemplate
      * @fieldLabel template
      * @fieldTemplateDir /module_mediamanager
      */

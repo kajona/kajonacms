@@ -87,7 +87,7 @@ class ElementImageAdmin extends ElementAdmin implements AdminElementInterface
      * @tableColumn element_image.image_template
      * @tableColumnDatatype char254
      *
-     * @fieldType template
+     * @fieldType Kajona\Pages\Admin\Formentries\FormentryTemplate
      * @fieldLabel template
      *
      * @fieldTemplateDir /element_image

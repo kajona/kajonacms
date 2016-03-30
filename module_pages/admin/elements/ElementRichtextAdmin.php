@@ -42,7 +42,7 @@ class ElementRichtextAdmin extends ElementAdmin implements AdminElementInterface
      * @tableColumn element_universal.char1
      * @tableColumnDatatype char254
      *
-     * @fieldType template
+     * @fieldType Kajona\Pages\Admin\Formentries\FormentryTemplate
      * @fieldLabel template
      * @fieldTemplateDir /element_richtext
      */

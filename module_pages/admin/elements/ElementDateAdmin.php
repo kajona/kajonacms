@@ -40,7 +40,7 @@ class ElementDateAdmin extends ElementAdmin implements AdminElementInterface
      * @var string
      * @tableColumn element_universal.char1
      *
-     * @fieldType template
+     * @fieldType Kajona\Pages\Admin\Formentries\FormentryTemplate
      * @fieldTemplateDir /element_date
      * @fieldMandatory
      * @fieldLabel template

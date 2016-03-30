@@ -27,7 +27,7 @@ class ElementPostacommentAdmin extends ElementAdmin implements AdminElementInter
      * @var string
      * @tableColumn element_universal.char1
      *
-     * @fieldType template
+     * @fieldType Kajona\Pages\Admin\Formentries\FormentryTemplate
      * @fieldLabel template
      *
      * @fieldTemplateDir /module_postacomment

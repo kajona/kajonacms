@@ -55,7 +55,7 @@ class ElementMapsAdmin extends ElementAdmin implements AdminElementInterface
      * @var string
      * @tableColumn element_universal.char3
      *
-     * @fieldType template
+     * @fieldType Kajona\Pages\Admin\Formentries\FormentryTemplate
      * @fieldLabel template
      *
      * @addSearchIndex

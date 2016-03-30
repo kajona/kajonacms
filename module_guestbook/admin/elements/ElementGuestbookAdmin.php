@@ -38,7 +38,7 @@ class ElementGuestbookAdmin extends ElementAdmin implements AdminElementInterfac
      * @tableColumn element_guestbook.guestbook_template
      * @tableColumnDatatype char254
      *
-     * @fieldType template
+     * @fieldType Kajona\Pages\Admin\Formentries\FormentryTemplate
      * @fieldLabel template
      *
      * @fieldTemplateDir /module_guestbook

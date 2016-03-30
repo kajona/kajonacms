@@ -82,7 +82,7 @@ class ElementNewsAdmin extends ElementAdmin implements AdminElementInterface {
      * @tableColumn element_news.news_template
      * @tableColumnDatatype char254
      *
-     * @fieldType template
+     * @fieldType Kajona\Pages\Admin\Formentries\FormentryTemplate
      * @fieldLabel template
      *
      * @fieldTemplateDir /module_news
