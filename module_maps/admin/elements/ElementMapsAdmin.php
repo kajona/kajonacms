@@ -69,7 +69,7 @@ class ElementMapsAdmin extends ElementAdmin implements AdminElementInterface
      * @tableColumn element_universal.text
      * @blockEscaping
      *
-     * @fieldType wysiwyg
+     * @fieldType Kajona\System\Admin\Formentries\FormentryWysiwyg
      * @fieldLabel maps_infotext
      *
      * @addSearchIndex

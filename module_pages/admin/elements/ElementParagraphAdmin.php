@@ -44,7 +44,7 @@ class ElementParagraphAdmin extends ElementAdmin implements AdminElementInterfac
      * @tableColumnDatatype text
      * @blockEscaping
      *
-     * @fieldType wysiwyg
+     * @fieldType Kajona\System\Admin\Formentries\FormentryWysiwyg
      * @fieldLabel paragraph_content
      *
      * @addSearchIndex

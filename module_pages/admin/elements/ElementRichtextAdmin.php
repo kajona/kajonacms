@@ -29,7 +29,7 @@ class ElementRichtextAdmin extends ElementAdmin implements AdminElementInterface
      * @tableColumnDatatype text
      * @blockEscaping
      *
-     * @fieldType wysiwyg
+     * @fieldType Kajona\System\Admin\Formentries\FormentryWysiwyg
      * @fieldLabel commons_text
      *
      * @addSearchIndex
