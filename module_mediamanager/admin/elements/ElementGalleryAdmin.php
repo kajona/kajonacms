@@ -28,7 +28,7 @@ class ElementGalleryAdmin extends ElementAdmin implements AdminElementInterface
      * @var string
      * @tableColumn element_gallery.gallery_id
      * @tableColumnDatatype char20
-     * @fieldType dropdown
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      * @fieldLabel gallery_id
      */
     private $strRepo;

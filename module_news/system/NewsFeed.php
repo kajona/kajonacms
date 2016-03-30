@@ -91,7 +91,7 @@ class NewsFeed extends Model implements ModelInterface, AdminListableInterface {
      * @tableColumn news_feed.news_feed_cat
      * @tableColumnDatatype char20
      *
-     * @fieldType dropdown
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      * @fieldLabel form_feed_cat
      */
     private $strCat = "";

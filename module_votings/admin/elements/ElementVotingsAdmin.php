@@ -28,7 +28,7 @@ class ElementVotingsAdmin extends ElementAdmin implements AdminElementInterface
      * @var string
      * @tableColumn element_universal.char1
      *
-     * @fieldType dropdown
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      * @fieldLabel votings_voting
      *
      */
@@ -49,7 +49,7 @@ class ElementVotingsAdmin extends ElementAdmin implements AdminElementInterface
      * @var string
      * @tableColumn element_universal.int1
      *
-     * @fieldType dropdown
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      * @fieldLabel votings_mode
      * @fieldDDValues [0 => votings_mode_voting],[1 => votings_mode_result]
      */

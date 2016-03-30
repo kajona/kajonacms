@@ -36,7 +36,7 @@ class ElementPortaluploadAdmin extends ElementAdmin implements AdminElementInter
      * @var string
      * @tableColumn element_universal.char2
      *
-     * @fieldType dropdown
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      * @fieldLabel portalupload_download
      * @fieldMandatory
      */

@@ -28,7 +28,7 @@ class ElementGuestbookAdmin extends ElementAdmin implements AdminElementInterfac
      * @tableColumn element_guestbook.guestbook_id
      * @tableColumnDatatype char20
      *
-     * @fieldType dropdown
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      * @fieldLabel guestbook_id
      */
     private $strGuestbook;

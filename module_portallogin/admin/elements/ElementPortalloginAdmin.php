@@ -90,7 +90,7 @@ class ElementPortalloginAdmin extends ElementAdmin implements AdminElementInterf
      * @tableColumn element_plogin.portallogin_editmode
      * @tableColumnDatatype int
      *
-     * @fieldType dropdown
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      * @fieldLabel portallogin_editmode
      * @fieldDDValues [0=>portallogin_editmode_0],[1=>portallogin_editmode_1]
      */

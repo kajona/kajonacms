@@ -61,7 +61,7 @@ class ElementSearchAdmin extends ElementAdmin implements AdminElementInterface {
      * @tableColumn element_search.search_query_id
      * @tableColumnDatatype char20
      *
-     * @fieldType dropdown
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      * @fieldLabel search_search
      *
      */

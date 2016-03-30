@@ -28,7 +28,7 @@ class ElementDownloadsAdmin extends ElementAdmin implements AdminElementInterfac
      * @var string
      * @tableColumn element_downloads.download_id
      * @tableColumnDatatype char20
-     * @fieldType dropdown
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      * @fieldLabel download_id
      */
     private $strRepo;

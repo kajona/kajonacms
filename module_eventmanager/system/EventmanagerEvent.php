@@ -85,7 +85,7 @@ class EventmanagerEvent extends \Kajona\System\System\Model implements \Kajona\S
      * @tableColumnDatatype int
      * @versionable
      *
-     * @fieldType dropdown
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      * @fieldDDValues [1 => event_status_1],[2 => event_status_2],[3 => event_status_3],[4 => event_status_4]
      * @templateExport
      */

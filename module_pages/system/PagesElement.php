@@ -56,7 +56,7 @@ class PagesElement extends \Kajona\System\System\Model implements \Kajona\System
      * @var string
      * @tableColumn element.element_class_portal
      * @tableColumnDatatype char254
-     * @fieldType dropdown
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      *
      * @addSearchIndex
      */
@@ -66,7 +66,7 @@ class PagesElement extends \Kajona\System\System\Model implements \Kajona\System
      * @var string
      * @tableColumn element.element_class_admin
      * @tableColumnDatatype char254
-     * @fieldType dropdown
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      *
      * @addSearchIndex
      */

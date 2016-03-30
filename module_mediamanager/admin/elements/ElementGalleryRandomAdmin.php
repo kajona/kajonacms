@@ -29,7 +29,7 @@ class ElementGalleryRandomAdmin extends ElementAdmin implements AdminElementInte
     /**
      * @var string
      * @tableColumn element_gallery.gallery_id
-     * @fieldType dropdown
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      * @fieldLabel gallery_id
      */
     private $strRepo;

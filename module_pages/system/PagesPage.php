@@ -84,7 +84,7 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
      * @var string
      * @versionable
      *
-     * @fieldType dropdown
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      */
     private $strTemplate = "";
 
@@ -131,7 +131,7 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
      * @var string
      * @versionable
      *
-     * @fieldType dropdown
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      * @fieldDDValues [_self => page_targetself],[_blank => page_targetblank]
      */
     private $strTarget = "";

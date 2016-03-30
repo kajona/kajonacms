@@ -28,7 +28,7 @@ class ElementNewsAdmin extends ElementAdmin implements AdminElementInterface {
      * @tableColumn element_news.news_category
      * @tableColumnDatatype char20
      *
-     * @fieldType dropdown
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      * @fieldLabel commons_category
      */
     private $strCategory;
@@ -48,7 +48,7 @@ class ElementNewsAdmin extends ElementAdmin implements AdminElementInterface {
      * @tableColumn element_news.news_view
      * @tableColumnDatatype int
      *
-     * @fieldType dropdown
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      * @fieldLabel news_view
      * @fieldDDValues [0 => news_view_list],[1 => news_view_detail]
      */
@@ -59,7 +59,7 @@ class ElementNewsAdmin extends ElementAdmin implements AdminElementInterface {
      * @tableColumn element_news.news_mode
      * @tableColumnDatatype int
      *
-     * @fieldType dropdown
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      * @fieldLabel news_mode
      * @fieldDDValues [0 => news_mode_normal],[1 => news_mode_archive]
      * @fieldMandatory
@@ -71,7 +71,7 @@ class ElementNewsAdmin extends ElementAdmin implements AdminElementInterface {
      * @tableColumn element_news.news_order
      * @tableColumnDatatype int
      *
-     * @fieldType dropdown
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      * @fieldLabel news_order
      * @fieldDDValues [0 => news_order_desc],[1 => news_order_asc]
      */

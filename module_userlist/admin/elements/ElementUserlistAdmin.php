@@ -37,7 +37,7 @@ class ElementUserlistAdmin extends ElementAdmin implements AdminElementInterface
      * @var string
      * @tableColumn element_universal.char2
      *
-     * @fieldType dropdown
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      * @fieldLabel userlist_group
      */
     private $strChar2;
@@ -47,7 +47,7 @@ class ElementUserlistAdmin extends ElementAdmin implements AdminElementInterface
      * @var string
      * @tableColumn element_universal.int1
      *
-     * @fieldType dropdown
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      * @fieldLabel userlist_status
      * @fieldDDValues [0 =>  userlist_status_all],[1 => userlist_status_active],[2 => userlist_status_inactive]
      */

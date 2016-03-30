@@ -43,7 +43,7 @@ class UsersourcesGroupLdap extends \Kajona\System\System\Model implements \Kajon
 
     /**
      * @var int
-     * @fieldType dropdown
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      */
     private $intCfg = 0;
 

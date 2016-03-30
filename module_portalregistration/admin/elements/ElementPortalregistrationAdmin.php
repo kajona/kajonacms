@@ -40,7 +40,7 @@ class ElementPortalregistrationAdmin extends ElementAdmin implements AdminElemen
      * @tableColumn element_preg.portalregistration_group
      * @tableColumnDatatype char254
      *
-     * @fieldType dropdown
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      * @fieldLabel portalregistration_group
      */
     private $strGroup;

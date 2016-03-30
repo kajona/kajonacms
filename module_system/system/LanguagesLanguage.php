@@ -28,7 +28,7 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
      * @tableColumn languages.language_name
      * @tableColumnDatatype char254
      *
-     * @fieldType dropdown
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      * @fieldLabel commons_title
      * @fieldMandatory
      * @fieldValidator Kajona\System\System\Validators\TwocharsValidator

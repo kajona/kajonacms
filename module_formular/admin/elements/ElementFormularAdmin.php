@@ -27,7 +27,7 @@ class ElementFormularAdmin extends ElementAdmin implements AdminElementInterface
      * @var string
      * @tableColumn element_formular.formular_class
      * @tableColumnDatatype char254
-     * @fieldType dropdown
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      * @fieldLabel formular_class
      * @fieldMandatory
      *

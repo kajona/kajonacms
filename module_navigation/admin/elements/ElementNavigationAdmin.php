@@ -38,7 +38,7 @@ class ElementNavigationAdmin extends ElementAdmin implements AdminElementInterfa
      * @var string
      * @tableColumn element_navigation.navigation_id
      * @tableColumnDatatype char20
-     * @fieldType dropdown
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      * @fieldLabel commons_name
      */
     private $strRepo;

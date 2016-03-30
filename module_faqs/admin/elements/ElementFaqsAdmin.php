@@ -29,7 +29,7 @@ class ElementFaqsAdmin extends ElementAdmin implements AdminElementInterface
      * @var string
      * @tableColumn element_faqs.faqs_category
      *
-     * @fieldType dropdown
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      * @fieldLabel commons_category
      */
     private $strCategory;

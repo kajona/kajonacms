@@ -81,7 +81,7 @@ class NavigationPoint extends Model implements ModelInterface, AdminListableInte
      * @var string
      * @tableColumn navigation.navigation_target
      * @tableColumnDatatype char254
-     * @fieldType dropdown
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      * @fieldDDValues [_self => navigation_tagetself],[_blank => navigation_tagetblank]
      * @fieldLabel navigation_target
      */

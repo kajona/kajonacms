@@ -181,7 +181,7 @@ class FilterBaseA extends FilterBase
 
     /**
      * @tableColumn filter.filter4
-     * @fieldType dropdown
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      */
     protected $arrFilter4;
 
@@ -224,7 +224,7 @@ class FilterBaseA extends FilterBase
 
     /**
      * @tableColumn filter.filter10
-     * @fieldType dropdown
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      * @filterCompareOperator IN_OR_EMPTY
      */
     protected $arrFilter10;

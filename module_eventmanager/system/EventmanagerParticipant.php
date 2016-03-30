@@ -113,7 +113,7 @@ class EventmanagerParticipant extends \Kajona\System\System\Model implements \Ka
      * @tableColumnDatatype int
      * @versionable
      *
-     * @fieldType dropdown
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      * @fieldLabel participant_status
      * @fieldDDValues [1 => participant_status_1],[2 => participant_status_2],[3 => participant_status_3]
      */

@@ -39,7 +39,7 @@ class ElementEventmanagerAdmin extends ElementAdmin implements AdminElementInter
      * @var int
      * @tableColumn element_universal.int1
      *
-     * @fieldType dropdown
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      * @fieldLabel eventmanager_order
      * @fieldDDValues [0 => eventmanager_order_desc],[1 => eventmanager_order_asc]
      */
@@ -49,7 +49,7 @@ class ElementEventmanagerAdmin extends ElementAdmin implements AdminElementInter
      * @var int
      * @tableColumn element_universal.int2
      *
-     * @fieldType dropdown
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      * @fieldLabel eventmanager_mode
      * @fieldDDValues [0 => eventmanager_mode_calendar],[1 => eventmanager_mode_list]
      */
