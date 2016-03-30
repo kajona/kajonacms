@@ -69,7 +69,7 @@ class FaqsFaq extends \Kajona\System\System\Model implements \Kajona\System\Syst
     /**
      * @var FaqsCategory[]
      * @objectList faqs_member (source="faqsmem_faq", target="faqsmem_category")
-     * @fieldType checkboxarray
+     * @fieldType Kajona\System\Admin\Formentries\FormentryCheckboxarray
      * @versionable
      */
     private $arrCats = array();
