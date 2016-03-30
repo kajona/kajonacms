@@ -109,7 +109,7 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
 
     /**
      * @var int
-     * @fieldType toggleonoff
+     * @fieldType Kajona\System\Admin\Formentries\FormentryToggleonoff
      * @tableColumn news.news_redirect_enabled
      * @tableColumnDatatype int
      *
