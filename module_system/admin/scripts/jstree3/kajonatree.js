@@ -7,7 +7,8 @@ if (typeof KAJONA === "undefined") {
 }
 
 KAJONA.kajonatree = {
-
+    contextmenu: {},
+    conditionalselect: {}
 };
 
 /**
@@ -24,7 +25,9 @@ KAJONA.kajonatree.jstree = function () {
     this.treeviewExpanders  = null;
 
     /**
-     * Moves nodes below another node
+     * Moves nodes below another node.
+     * Triggers a relaod of the page after node was moved
+     *
      * @param node
      * @param node_parent
      * @param node_position
@@ -44,7 +47,7 @@ KAJONA.kajonatree.jstree = function () {
     }
 
     /**
-     * Checks if a node cann be dropped to a certain place in the tree
+     * Checks if a node can be dropped to a certain place in the tree
      *
      * @param node
      * @param node_parent
@@ -75,7 +78,7 @@ KAJONA.kajonatree.jstree = function () {
             return false;//TODO maybe not needed, already check by jstree it self
         }
 
-        //drage node same as target node?
+        //dragged node same as target node?
         if(strDragId == strTargetId) {
             return false;//TODO maybe not needed, already check by jstree it self
         }
@@ -189,38 +192,69 @@ KAJONA.kajonatree.jstree = function () {
             },
             'types': {
             },
-            'plugins': arrPlugins
+            'contextmenu': {
+            },
+            'conditionalselect': KAJONA.kajonatree.conditionalselect.handleCinditionalSelect,
+
+            'plugins': ['conditionalselect']
         };
 
-
         //2. Extend Js Tree Object due to jsTreeConfig
-        var arrPlugins = [];
-
         if(this.treeConfig.checkbox) {
-            arrPlugins.push('checkbox');
+            jsTreeObj.plugins.push('checkbox');
         }
         if(this.treeConfig.dnd) {
-            arrPlugins.push('dnd');
+            jsTreeObj.plugins.push('dnd');
         }
         if(this.treeConfig.types) {
-            arrPlugins.push('types');
+            jsTreeObj.plugins.push('types');
             jsTreeObj.types = this.treeConfig.types;
         }
-
-        jsTreeObj.plugins = arrPlugins;
-
+        if(this.treeConfig.contextmenu) {
+            jsTreeObj.plugins.push('contextmenu');
+            jsTreeObj.contextmenu = this.treeConfig.contextmenu;
+        }
 
         //3. Create the tree
-        $('#'+this.treeId).jstree(jsTreeObj)
-            .bind("select_node.jstree", function (event, data) {
-                if(data.node.a_attr) {
-                    if(data.node.a_attr.href) {
-                        document.location.href = data.node.a_attr.href;//Document reload
-                    }
-                }
-            });
+        $('#'+this.treeId).jstree(jsTreeObj);
 
         //4. init jstree draggable for lists
         $('td.treedrag.jstree-listdraggable').on('mousedown', this.listDnd);
     };
+};
+
+
+/**
+ *  Each time a node should be select, this method is being fired via the conditionalselect plugin.
+ *  Handles conitional select events.
+ *
+ * @param objNode - the node to be selected
+ * @param event - the event being fired
+ *
+ */
+KAJONA.kajonatree.conditionalselect.handleCinditionalSelect = function (objNode, event) {
+
+    //hanlde on click events
+    if(event.type == "click") {
+
+        //if node contains a_attr with href -> relaod page
+        if(objNode.a_attr) {
+            if(objNode.a_attr.href) {
+                document.location.href = objNode.a_attr.href;//Document reload
+            }
+        }
+    }
+
+    return true;
+};
+
+/**
+ * Function to open all nodes via the contextmenu
+ *
+ * @param data
+ */
+KAJONA.kajonatree.contextmenu.openAllNodes = function(data) {
+    var objTreeInstance = $.jstree.reference(data.reference),
+        objNode = objTreeInstance.get_node(data.reference);
+    objTreeInstance.open_all(objNode);
 };

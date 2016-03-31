@@ -20,7 +20,9 @@ namespace Kajona\System\System;
  * @moduleId _system_modul_id_
  *
  */
-class SystemJSTreeConfig {
+class SystemJSTreeConfig
+{
+    const STR_CONTEXTMENU_OPEN_ALL_NODES = "OPEN_ALL_NODES";
 
     /**
      * The rrot id of the tree
@@ -43,9 +45,40 @@ class SystemJSTreeConfig {
      */
     private $arrNodesToExpand = null;
 
+    /**
+     * @var bool - if true dnd is enabled on the tree (@see dnd plugin from jstree)
+     */
     private $bitDndEnabled = true;
+
+    /**
+     * @var bool - if true checkboxeds are rendered for each node
+     */
     private $bitCheckboxEnabled = false;
+
+    /**
+     * @var null|array - array which keeps the typ information (@see types plugin from jstree)
+     */
     private $arrTypes = null;
+
+    /**
+     * @var null (@see contextmenu plugin from jstree)
+     */
+    private $arrContextMenu = null;
+
+    /**
+     * SystemJSTreeConfig constructor.
+     */
+    public function __construct()
+    {
+        $this->initTreeConfig();
+    }
+
+
+    protected function initTreeConfig() {
+        //Add default context menu items
+        $this->addPredefinedContextMenuItems(SystemJSTreeConfig::STR_CONTEXTMENU_OPEN_ALL_NODES);
+    }
+
 
     /**
      * Checks if Dnd is enabled.
@@ -90,7 +123,8 @@ class SystemJSTreeConfig {
      * @param $strNodeType
      * @param array $arrValidChildren
      */
-    public function addType($strNodeType, array $arrValidChildren) {
+    public function addType($strNodeType, array $arrValidChildren)
+    {
         if($this->arrTypes == null) {
             $this->arrTypes = array();
         }
@@ -99,20 +133,40 @@ class SystemJSTreeConfig {
         );
     }
 
+    /**
+     * @param $arrItem
+     */
+    public function addContextMenuItem($strIndex, $arrItem)
+    {
+        if($this->arrContextMenu == null) {
+            $this->arrContextMenu = array();
+            $this->arrContextMenu["items"] = array();
+        }
+
+        $this->arrContextMenu["items"][$strIndex] = $arrItem;
+    }
+
 
     /**
      * Converst the set configs to Json
      *
      * @return string
      */
-    public function toJson() {
-        return json_encode(
-            array(
-                "dnd" => $this->bitDndEnabled,
-                "checkbox" => $this->bitCheckboxEnabled,
-                "types" => $this->arrTypes
-            )
+    public function toJson()
+    {
+        //build array
+        $arrJson = array(
+            "dnd"         => $this->bitDndEnabled,
+            "checkbox"    => $this->bitCheckboxEnabled,
+            "types"       => $this->arrTypes,
+            "contextmenu" => $this->arrContextMenu
         );
+
+        $strJson = json_encode($arrJson);
+
+        $strJson = preg_replace('/:"function(.*?)"/', ":function$1", $strJson);//remove '"' at end and beginning where a function(..) {...} as value is defined
+
+        return $strJson;
     }
 
     /**
@@ -161,5 +215,26 @@ class SystemJSTreeConfig {
     public function setArrNodesToExpand($arrNodesToExpand)
     {
         $this->arrNodesToExpand = $arrNodesToExpand;
+    }
+
+
+    /**
+     * Method fo adding predefined context menu items for a tree
+     *
+     * @param $strItemName
+     */
+    public function addPredefinedContextMenuItems($strItemName)
+    {
+        switch($strItemName) {
+            case self::STR_CONTEXTMENU_OPEN_ALL_NODES:
+                //contextmenu item for opening all nodes
+                $arrItem = array(
+                    "label"  => Lang::getInstance()->getLang("commons_tree_contextmenu_loadallsubnodes", "system"),
+                    "action" => "function(objNode, event){KAJONA.kajonatree.contextmenu.openAllNodes(objNode, event);}",
+                    "icon"   => "fa fa-sitemap"
+                );
+
+                $this->addContextMenuItem(self::STR_CONTEXTMENU_OPEN_ALL_NODES, $arrItem);
+        }
     }
 }
