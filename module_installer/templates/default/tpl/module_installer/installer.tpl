@@ -9,12 +9,12 @@
     <meta name="generator" content="Kajona, www.kajona.de" />
 
     <!-- KAJONA_BUILD_LESS_START -->
-    <link href="_webpath_/core/module_installer/less/bootstrap.less" rel="stylesheet/less">
+    <link href="_webpath_/[webpath,module_installer]/less/bootstrap.less" rel="stylesheet/less">
     <script> less = { env:'development' }; </script>
-    <script src="_webpath_/core/module_installer/less/less.min.js"></script>
+    <script src="_webpath_/[webpath,module_installer]/less/less.min.js"></script>
     <!-- KAJONA_BUILD_LESS_END -->
 
-    <link rel="stylesheet" href="_webpath_/core/module_installer/fonts/fontawesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="_webpath_/[webpath,module_installer]/fonts/fontawesome/css/font-awesome.min.css">
 
     <script src="_webpath_/[webpath,module_system]/admin/scripts/jquery/jquery.min.js"></script>
     <script src="_webpath_/[webpath,module_system]/admin/scripts/jqueryui/jquery-ui.custom.min.js"></script>

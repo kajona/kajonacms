@@ -11,6 +11,7 @@ use Kajona\Languageswitch\Admin\Elements\ElementLanguageswitchAdmin;
 use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
+use Kajona\System\System\Carrier;
 use Kajona\System\System\Database;
 use Kajona\System\System\SamplecontentInstallerInterface;
 
@@ -36,18 +37,8 @@ class InstallerSamplecontentLanguageswitch implements SamplecontentInstallerInte
      */
     public function isInstalled()
     {
-        $objMaster = PagesPage::getPageByName("master");
-        if ($objMaster != null) {
-            $arrElements = PagesPageelement::getElementsOnPage($objMaster->getSystemid(), false, $this->strContentLanguage);
-            $arrElements = array_merge($arrElements, PagesPageelement::getElementsOnPage($objMaster->getSystemid(), false, ''));
-            foreach ($arrElements as $objOneElement) {
-                if ($objOneElement->getStrElement() == "languageswitch") {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        $arrRow = Carrier::getInstance()->getObjDB()->getPRow("SELECT COUNT(*) FROM "._dbprefix_."page_element WHERE page_element_ph_element = ?", array("languageswitch"));
+        return $arrRow["COUNT(*)"] > 0;
     }
 
     /**
