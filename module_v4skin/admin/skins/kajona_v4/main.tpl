@@ -63,7 +63,7 @@
                 </div>
             </div>
         </div>
-        <div class="status-indicator"></div>
+        <div class="status-indicator" id="status-indicator"></div>
     </div>
     <div class="container-fluid pathNaviContainer">
         <div class="row row row-offcanvas row-offcanvas-left">
