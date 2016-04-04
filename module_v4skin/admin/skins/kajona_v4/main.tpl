@@ -65,14 +65,7 @@
         </div>
         <div class="status-indicator" id="status-indicator"></div>
     </div>
-    <div class="container-fluid pathNaviContainer">
-        <div class="row row row-offcanvas row-offcanvas-left">
-            <div class="col-md-2 hidden-xs hidden-sm" style="z-index: 0 !important;">&nbsp;</div>
-            <div class="col-md-10">
-                %%path%%
-            </div>
-        </div>
-    </div>
+
 </div>
 
 <div class="container-fluid main-container">
@@ -90,6 +83,14 @@
 
         <!-- CONTENT CONTAINER -->
         <div class="col-md-10" id="content">
+
+
+            <div class="row pathNaviContainer">
+                <div class="col-md-12">
+                    %%path%%
+                </div>
+            </div>
+
 
             <div class="row contentTopbar clearfix hidden-print">
                 <div class="col-md-6">
