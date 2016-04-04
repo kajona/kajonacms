@@ -1816,7 +1816,7 @@ It containes a list of aspects and provides the possibility to switch the differ
 </sitemap_combined_entry_body>
 
 <sitemap_combined_entry_body_active>
-    <div id="%%systemid%%" class="panel-collapse">
+    <div id="%%systemid%%" class="panel-collapse collapge in">
         <div class="panel-body">
             <ul>%%actions%%</ul>
         </div>
