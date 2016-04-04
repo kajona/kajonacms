@@ -1802,6 +1802,16 @@ HTML;
         }
 
 
+
+
+
+
+        $strMessagesId = "";
+        $strMessagesActions = "";
+        $strDashboardId = "";
+        $strDashboardActions = "";
+
+
         foreach ($arrNaviInstances as $objOneInstance) {
 
             $arrActions = AdminHelper::getModuleActionNaviHelper($objOneInstance);
@@ -1829,6 +1839,23 @@ HTML;
                 "moduleHref"  => Link::getLinkAdminHref($objOneInstance->getStrName(), "")
             );
 
+
+            if($objOneInstance->getStrName() == "dashboard") {
+                $strDashboardId = $objOneInstance->getSystemid();
+                $strDashboardActions = $strActions;
+
+                continue;
+            }
+
+
+            if($objOneInstance->getStrName() == "messaging") {
+                $strMessagesId = $objOneInstance->getSystemid();
+                $strMessagesActions = $strActions;
+
+                continue;
+            }
+
+
             if ($strCurrentModule == $objOneInstance->getStrName()) {
                 $strModules .= $this->objTemplate->fillTemplateFile($arrModuleLevel, "/elements.tpl", "sitemap_module_wrapper_active");
             }
@@ -1837,6 +1864,43 @@ HTML;
             }
 
         }
+
+
+
+        $strTestWrapper = '
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span class="linkcontainer">
+                        <a data-toggle="collapse" data-parent="#moduleNavigation" href="#'.$strDashboardId.'">
+                            <i class="fa fa-home"></i> 
+                        </a>
+                            
+                        <a data-toggle="collapse" data-parent="#moduleNavigation" href="#'.$strMessagesId.'">
+                            <i class="fa fa-envelope"></i> 
+                        </a>
+                            <i class="fa fa-search"></i> 
+                            <i class="fa fa-tags"></i>
+                    </span>
+                </div>
+                <div id="'.$strDashboardId.'" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <ul>'.$strDashboardActions.'</ul>
+                    </div>
+                </div>
+                <div id="'.$strMessagesId.'" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <ul>'.$strMessagesActions.'</ul>
+                    </div>
+                </div>
+                
+            </div>';
+
+
+
+
+
+        $strModules = $strTestWrapper.$strModules;
+
 
         return $this->objTemplate->fillTemplateFile(array("level" => $strModules), "/elements.tpl", "sitemap_wrapper");
     }
