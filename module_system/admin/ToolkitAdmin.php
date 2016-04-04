@@ -1802,14 +1802,15 @@ HTML;
         }
 
 
+        $strCombinedHeader = "";
+        $strCombinedBody = "";
 
-
-
-
-        $strMessagesId = "";
-        $strMessagesActions = "";
-        $strDashboardId = "";
-        $strDashboardActions = "";
+        $arrCombined = array(
+            "messaging" => "fa-envelope",
+            "dashboard" => "fa-home",
+            "tags" => "fa-tags",
+            "search" => "fa-search"
+        );
 
 
         foreach ($arrNaviInstances as $objOneInstance) {
@@ -1829,7 +1830,6 @@ HTML;
                 }
             }
 
-
             $arrModuleLevel = array(
                 "module"      => Link::getLinkAdmin($objOneInstance->getStrName(), "", "", Carrier::getInstance()->getObjLang()->getLang("modul_titel", $objOneInstance->getStrName())),
                 "actions"     => $strActions,
@@ -1840,66 +1840,42 @@ HTML;
             );
 
 
-            if($objOneInstance->getStrName() == "dashboard") {
-                $strDashboardId = $objOneInstance->getSystemid();
-                $strDashboardActions = $strActions;
+            if(array_key_exists($objOneInstance->getStrName(), $arrCombined)) {
+                $arrModuleLevel["faicon"] = $arrCombined[$objOneInstance->getStrName()];
 
-                continue;
-            }
+                $strBodySection = "sitemap_combined_entry_body";
+                if ($strCurrentModule == $objOneInstance->getStrName()) {
+                    $strBodySection = "sitemap_combined_entry_body_active";
+                }
 
-
-            if($objOneInstance->getStrName() == "messaging") {
-                $strMessagesId = $objOneInstance->getSystemid();
-                $strMessagesActions = $strActions;
-
-                continue;
-            }
-
-
-            if ($strCurrentModule == $objOneInstance->getStrName()) {
-                $strModules .= $this->objTemplate->fillTemplateFile($arrModuleLevel, "/elements.tpl", "sitemap_module_wrapper_active");
+                $strCombinedHeader .= $this->objTemplate->fillTemplateFile($arrModuleLevel, "/elements.tpl", "sitemap_combined_entry_header");
+                $strCombinedBody .= $this->objTemplate->fillTemplateFile($arrModuleLevel, "/elements.tpl", $strBodySection);
             }
             else {
-                $strModules .= $this->objTemplate->fillTemplateFile($arrModuleLevel, "/elements.tpl", "sitemap_module_wrapper");
-            }
 
+                if ($strCurrentModule == $objOneInstance->getStrName()) {
+                    $strModules .= $this->objTemplate->fillTemplateFile($arrModuleLevel, "/elements.tpl", "sitemap_module_wrapper_active");
+                }
+                else {
+                    $strModules .= $this->objTemplate->fillTemplateFile($arrModuleLevel, "/elements.tpl", "sitemap_module_wrapper");
+                }
+            }
         }
 
 
+        if($strCombinedHeader != "") {
+            $strSection = "sitemap_combined_entry_wrapper";
+            if(array_key_exists($strCurrentModule, $arrCombined)) {
+                $strSection = "sitemap_combined_entry_wrapper_active";
+            }
 
-        $strTestWrapper = '
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <span class="linkcontainer">
-                        <a data-toggle="collapse" data-parent="#moduleNavigation" href="#'.$strDashboardId.'">
-                            <i class="fa fa-home"></i> 
-                        </a>
-                            
-                        <a data-toggle="collapse" data-parent="#moduleNavigation" href="#'.$strMessagesId.'">
-                            <i class="fa fa-envelope"></i> 
-                        </a>
-                            <i class="fa fa-search"></i> 
-                            <i class="fa fa-tags"></i>
-                    </span>
-                </div>
-                <div id="'.$strDashboardId.'" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <ul>'.$strDashboardActions.'</ul>
-                    </div>
-                </div>
-                <div id="'.$strMessagesId.'" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <ul>'.$strMessagesActions.'</ul>
-                    </div>
-                </div>
-                
-            </div>';
+            $strModules = $this->objTemplate->fillTemplateFile(
+                array("combined_header" => $strCombinedHeader, "combined_body" => $strCombinedBody),
+                "/elements.tpl",
+                $strSection
+            ).$strModules;
+        }
 
-
-
-
-
-        $strModules = $strTestWrapper.$strModules;
 
 
         return $this->objTemplate->fillTemplateFile(array("level" => $strModules), "/elements.tpl", "sitemap_wrapper");
