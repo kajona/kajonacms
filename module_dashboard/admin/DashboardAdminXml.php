@@ -189,11 +189,11 @@ class DashboardAdminXml extends AdminController implements XmlAdminInterface {
         $strDate = $this->getParam("date");
 
         $arrHeaders = array(
-            "0 \" style=\"width:20px\"" => "",
+            "0 " => "",
             "1" => $this->getLang("todo_task_col_object"),
-            "2 \" style=\"width:300px\"" => $this->getLang("todo_task_col_category"),
-            "3 \" style=\"width:160px\"" => $this->getLang("todo_task_col_date"),
-            "4 \" style=\"width:80px\"" => "",
+            "2 " => $this->getLang("todo_task_col_category"),
+            "3 " => $this->getLang("todo_task_col_date"),
+            "4 " => "",
         );
         $arrValues = array();
 
