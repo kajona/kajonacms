@@ -34,7 +34,7 @@ class InstallerFormular extends InstallerBase implements InstallerRemovableInter
 
 
         //register the module
-        $this->registerModule($this->objMetadata->getStrTitle(), _facebooklikebox_module_id_, "", "", $this->objMetadata->getStrVersion(), false);
+        $this->registerModule($this->objMetadata->getStrTitle(), _formular_module_id_, "", "", $this->objMetadata->getStrVersion(), false);
 
 
         //Register the element
