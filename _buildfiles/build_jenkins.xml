@@ -210,10 +210,10 @@
         </exec>
 
         <!-- start internal webserver -->
-        <!--<antcall target="startWebServer" />-->
+        <antcall target="startWebServer" />
 
         <!-- wait so that the selenium and webserver are ready -->
-        <!--<sleep seconds="4" />-->
+        <sleep seconds="4" />
 
         <!-- run selenium tests -->
         <exec dir="${basedir}${jsPath}" executable="${path.node}" failonerror="on">
