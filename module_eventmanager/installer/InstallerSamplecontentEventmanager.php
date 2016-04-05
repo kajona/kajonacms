@@ -9,6 +9,7 @@ namespace Kajona\Eventmanager\Installer;
 
 use Kajona\Eventmanager\Admin\Elements\ElementEventmanagerAdmin;
 use Kajona\Eventmanager\System\EventmanagerEvent;
+use Kajona\Eventmanager\System\EventmanagerParticipant;
 use Kajona\Pages\Admin\Elements\ElementPlaintextAdmin;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
@@ -61,6 +62,16 @@ class InstallerSamplecontentEventmanager implements SamplecontentInstallerInterf
 
         $strReturn .= "Saving event...\n";
         $objEvent->updateObjectToDb();
+
+        $objParticipant = new EventmanagerParticipant();
+        $objParticipant->setStrForename("Dr. Kajona");
+        $objParticipant->setStrLastname("Team");
+        $objParticipant->setStrEmail("info@kajona.de");
+        $objParticipant->setIntParticipationStatus(1);
+        $objParticipant->updateObjectToDb($objEvent->getSystemid());
+
+        $objParticipant->setIntRecordStatus(0);
+        $objParticipant->updateObjectToDb();
 
 
         $strReturn .= "Creating events-page\n";
