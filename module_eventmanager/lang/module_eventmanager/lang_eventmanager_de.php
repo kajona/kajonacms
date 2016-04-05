@@ -98,6 +98,7 @@ $lang["rssfeed"]                         = "Rssfeed der Veranstaltungen anzeigen
 $lang["show_history"]                    = "Änderungshistorie anzeigen";
 $lang["updatelink"]                      = "Anmeldung aktualisieren";
 $lang["username"]                        = "Anmeldung als:";
+$lang["todo_provider_participant"]       = "Zu bestätigende Anmeldungen";
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Teilnehmen", 5 => "", 6 => "", 7 => "", 8 => "");

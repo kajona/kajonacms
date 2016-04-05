@@ -22,6 +22,9 @@ $lang["form_guestbook_guestbookpostemail"] = "E-Mail";
 $lang["form_guestbook_guestbookpostname"] = "Name";
 $lang["form_guestbook_guestbookpostpage"] = "Page";
 $lang["form_guestbook_guestbookposttext"] = "Message";
+$lang["form_guestbook_guestbookpoststatus"] = "Status";
+$lang["post_status_0"]                   = "Not visible";
+$lang["post_status_1"]                   = "Visible";
 $lang["gaestebuch_bearbeiten"]           = "Edit guestbook";
 $lang["gaestebuch_listeleer"]            = "No guestbooks available";
 $lang["insert_error_email"]              = "missing mail-address";
@@ -45,6 +48,7 @@ $lang["quickhelp_edit_guestbook"]        = "While creating or edtiting a guestbo
 $lang["quickhelp_list"]                  = "All guestbooks created can be found in this list.";
 $lang["quickhelp_new_guestbook"]         = "While creating or edtiting a guestbook, a title can be assigned. In addition, you can decide, whether new posts are published instantly. In the other case, new posts will remain inactive until an admin decides to activate them.<br /><br />Hint: If guests should be allowed to sign the guestbook, they need the right 'Sign'!";
 $lang["quickhelp_view_guestbook"]        = "In this list, all posts belonging to the current guestbook are listed. Posts can be deleted, activated or inactivated.";
+$lang["todo_provider_open"]              = "Posts to be moderated";
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Sign", 5 => "", 6 => "", 7 => "", 8 => "");

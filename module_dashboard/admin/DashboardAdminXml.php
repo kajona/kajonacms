@@ -36,7 +36,8 @@ use Kajona\System\System\SystemJSTreeBuilder;
  * @moduleId _dashboard_module_id_
  *
  */
-class DashboardAdminXml extends AdminController implements XmlAdminInterface {
+class DashboardAdminXml extends AdminController implements XmlAdminInterface
+{
 
     private $strStartMonthKey = "DASHBOARD_CALENDAR_START_MONTH";
     private $strStartYearKey = "DASHBOARD_CALENDAR_START_YEAR";
@@ -47,7 +48,8 @@ class DashboardAdminXml extends AdminController implements XmlAdminInterface {
      * @permissions delete
      * @return string
      */
-    protected function actionDeleteWidget() {
+    protected function actionDeleteWidget()
+    {
         $objWidget = new DashboardWidget($this->getSystemid());
         $strName = $objWidget->getStrDisplayName();
         $objWidget->deleteObject();
@@ -62,7 +64,8 @@ class DashboardAdminXml extends AdminController implements XmlAdminInterface {
      * @return string
      * @permissions edit
      */
-    protected function actionSetDashboardPosition() {
+    protected function actionSetDashboardPosition()
+    {
         $strReturn = "";
 
         $objWidget = new DashboardWidget($this->getSystemid());
@@ -72,8 +75,9 @@ class DashboardAdminXml extends AdminController implements XmlAdminInterface {
         Carrier::getInstance()->getObjDB()->flushQueryCache();
 
         $objWidget = new DashboardWidget($this->getSystemid());
-        if($intNewPos != "")
+        if ($intNewPos != "") {
             $objWidget->setAbsolutePosition($intNewPos);
+        }
 
 
         $strReturn .= "<message>".$objWidget->getStrDisplayName()." - ".$this->getLang("setDashboardPosition")."</message>";
@@ -87,17 +91,19 @@ class DashboardAdminXml extends AdminController implements XmlAdminInterface {
      * @return string
      * @permissions view
      */
-    protected function actionGetWidgetContent() {
+    protected function actionGetWidgetContent()
+    {
 
         //load the aspect and close the session afterwards
         SystemAspect::getCurrentAspect();
 
         $objWidgetModel = new DashboardWidget($this->getSystemid());
-        if($objWidgetModel->rightView()) {
+        if ($objWidgetModel->rightView()) {
             $objConcreteWidget = $objWidgetModel->getConcreteAdminwidget();
 
-            if(!$objConcreteWidget->getBitBlockSessionClose())
+            if (!$objConcreteWidget->getBitBlockSessionClose()) {
                 Carrier::getInstance()->getObjSession()->sessionClose();
+            }
 
             //disable the internal changelog
             SystemChangelog::$bitChangelogEnabled = false;
@@ -118,7 +124,8 @@ class DashboardAdminXml extends AdminController implements XmlAdminInterface {
      * @return string
      * @permissions view
      */
-    protected function actionGetCalendarEvents() {
+    protected function actionGetCalendarEvents()
+    {
 
         ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
 
@@ -140,20 +147,22 @@ class DashboardAdminXml extends AdminController implements XmlAdminInterface {
             /** @var EventEntry $objEvent */
             $strIcon = AdminskinHelper::getAdminImage($objEvent->getStrIcon());
             $arrRow = array(
-                "title" => strip_tags($objEvent->getStrDisplayName()),
-                "tooltip" => $objEvent->getStrDisplayName(),
-                "icon" => $strIcon,
-                "allDay" => true,
-                "url" => $objEvent->getStrHref(),
+                "title"     => strip_tags($objEvent->getStrDisplayName()),
+                "tooltip"   => $objEvent->getStrDisplayName(),
+                "icon"      => $strIcon,
+                "allDay"    => true,
+                "url"       => $objEvent->getStrHref(),
                 "className" => array($objEvent->getStrCategory(), "calendar-event"),
             );
 
             if ($objEvent->getObjStartDate() instanceof \Kajona\System\System\Date && $objEvent->getObjEndDate() instanceof \Kajona\System\System\Date) {
                 $arrRow["start"] = date("Y-m-d", $objEvent->getObjStartDate()->getTimeInOldStyle());
                 $arrRow["end"] = date("Y-m-d", $objEvent->getObjEndDate()->getTimeInOldStyle());
-            } elseif ($objEvent->getObjValidDate() instanceof \Kajona\System\System\Date) {
+            }
+            elseif ($objEvent->getObjValidDate() instanceof \Kajona\System\System\Date) {
                 $arrRow["start"] = date("Y-m-d", $objEvent->getObjValidDate()->getTimeInOldStyle());
-            } else {
+            }
+            else {
                 continue;
             }
 
@@ -167,13 +176,15 @@ class DashboardAdminXml extends AdminController implements XmlAdminInterface {
      * @return string
      * @permissions view
      */
-    protected function actionTodoCategory() {
+    protected function actionTodoCategory()
+    {
         ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_HTML);
 
         $strCategory = $this->getParam("category");
         if (empty($strCategory)) {
             $arrTodos = TodoRepository::getAllOpenTodos();
-        } else {
+        }
+        else {
             $arrCategories = explode(',', $strCategory);
             $arrTodos = array();
             foreach ($arrCategories as $strCategory) {
@@ -190,7 +201,7 @@ class DashboardAdminXml extends AdminController implements XmlAdminInterface {
 
         $arrHeaders = array(
             "0 " => "",
-            "1" => $this->getLang("todo_task_col_object"),
+            "1"  => $this->getLang("todo_task_col_object"),
             "2 " => $this->getLang("todo_task_col_category"),
             "3 " => $this->getLang("todo_task_col_date"),
             "4 " => "",
@@ -202,7 +213,7 @@ class DashboardAdminXml extends AdminController implements XmlAdminInterface {
             $arrModule = $objTodo->getArrModuleNavi();
             if (!empty($arrModule) && is_array($arrModule)) {
                 foreach ($arrModule as $strLink) {
-                    $strActions.= $this->objToolkit->listButton($strLink);
+                    $strActions .= $this->objToolkit->listButton($strLink);
                 }
             }
 
@@ -219,7 +230,7 @@ class DashboardAdminXml extends AdminController implements XmlAdminInterface {
                     $objTodo->getStrDisplayName(),
                     $strCategory,
                     $strValidDate,
-                    "4\" style=\"text-align:right" => $strActions
+                    "4 align-right" => $strActions
                 );
             }
         }

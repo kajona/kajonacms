@@ -100,6 +100,7 @@ $lang["rssfeed"]                         = "Show rssfeed of event";
 $lang["show_history"]                    = "Show change-history";
 $lang["updatelink"]                      = "Update registration";
 $lang["username"]                        = "Registering as:";
+$lang["todo_provider_participant"]       = "Outstanding registration confirmations";
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Participate", 5 => "", 6 => "", 7 => "", 8 => "");
