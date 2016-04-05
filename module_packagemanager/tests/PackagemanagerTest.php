@@ -104,7 +104,7 @@ class PackagemanagerTest extends Testbase
         $objManager = new PackagemanagerManager();
         $arrProviders = $objManager->getContentproviders();
         $this->assertEquals(2, count($arrProviders));
-        $this->assertEquals("Kajona\\Packagemanager\\System\\PackagemanagerContentproviderLocal", get_class($arrProviders[2]));
+        $this->assertEquals("Kajona\\Packagemanager\\System\\PackagemanagerContentproviderLocal", get_class($arrProviders[1]));
     }
 
 
