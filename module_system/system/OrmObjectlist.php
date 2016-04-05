@@ -279,7 +279,14 @@ class OrmObjectlist extends OrmBase
     {
         foreach ($this->arrWhereRestrictions as $objOneRestriction) {
             $objOneRestriction->setStrTargetClass($strTargetClass);
-            $strQuery .= " ".$objOneRestriction->getStrWhere()." ";
+
+            $strWhere = $objOneRestriction->getStrWhere();
+
+            if($objOneRestriction instanceof OrmCondition && $strWhere != "") {
+                $strWhere = OrmCondition::STR_CONDITION_AND." (".$strWhere.")";
+            }
+
+            $strQuery .= " ".$strWhere." ";
             foreach ($objOneRestriction->getArrParams() as $strOneParam) {
                 $arrParams[] = $strOneParam;
             }

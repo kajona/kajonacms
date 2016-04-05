@@ -10,20 +10,17 @@ namespace Kajona\System\System;
 
 
 /**
- * A objectlist restriction may be used to create where restrictions for the objectList and objectCount queries.
+ * A OrmPropertyCondition may be used to create where condition for the objectList and objectCount queries.
  * Therefore you may pass the name of a property, the comparator and, finally, the expecteed value of the property.
  * Example:
- *  $objQuery->addWhereRestriction(new OrmObjectlistPropertyRestriction("strTitle", OrmComparatorEnum::Equal(), "abc"));
+ *  $objQuery->addWhereRestriction(new OrmPropertyCondition("strTitle", OrmComparatorEnum::Equal(), "abc"));
  *
- * @package module_system
- * @author sidler@mulchprod.de
- * @since 4.7
- *
- * @deprecated
+ * @package Kajona\System\System
+ * @author stefan.meyer1@yahoo.de
+ * @since 5.0
  */
-class OrmObjectlistPropertyRestriction extends OrmObjectlistRestriction
+class OrmPropertyCondition extends OrmCondition
 {
-
     private $strProperty = "";
 
     /**
@@ -35,12 +32,9 @@ class OrmObjectlistPropertyRestriction extends OrmObjectlistRestriction
      * @param string $strProperty
      * @param OrmComparatorEnum $objComparator
      * @param $strValue
-     *
-     * @deprecated
      */
     public function __construct($strProperty, OrmComparatorEnum $objComparator, $strValue)
     {
-
         $this->arrParams = array($strValue);
         $this->objComparator = $objComparator;
         $this->strProperty = $strProperty;
@@ -82,8 +76,6 @@ class OrmObjectlistPropertyRestriction extends OrmObjectlistRestriction
             throw new OrmException("Failed to load annotation ".OrmBase::STR_ANNOTATION_TABLECOLUMN." for property ".$this->strProperty."@".$this->getStrTargetClass(), OrmException::$level_ERROR);
         }
 
-        return " AND ".$strPropertyValue." ".$this->objComparator->getEnumAsSqlString()." ? ";
+        return $strPropertyValue." ".$this->objComparator->getEnumAsSqlString()." ? ";
     }
-
-
 }

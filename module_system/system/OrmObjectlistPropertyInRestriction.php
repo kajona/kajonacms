@@ -16,12 +16,23 @@ namespace Kajona\System\System;
  * @package module_system
  * @author stefan.meyer1@yahoo.de
  * @since 4.8
+ * 
+ * @deprecated
  */
 class OrmObjectlistPropertyInRestriction extends OrmObjectlistInRestriction
 {
 
     private $strPropertyName;
 
+    /**
+     * OrmObjectlistPropertyInRestriction constructor.
+     *
+     * @param string $strProperty
+     * @param array $arrParams
+     * @param string $strCondition
+     *
+     * @deprecated
+     */
     public function __construct($strProperty, array $arrParams, $strCondition = "AND")
     {
         parent::__construct($strProperty, $arrParams, $strCondition);

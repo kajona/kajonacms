@@ -6,6 +6,9 @@ use Kajona\System\System\AbstractController;
 use Kajona\System\System\Classloader;
 use Kajona\System\System\Date;
 use Kajona\System\System\FilterBase;
+use Kajona\System\System\OrmCondition;
+use Kajona\System\System\OrmInCondition;
+use Kajona\System\System\OrmInOrEmptyCondition;
 use Kajona\System\System\OrmObjectlistInOrEmptyRestriction;
 use Kajona\System\System\OrmObjectlistInRestriction;
 use Kajona\System\System\OrmObjectlistRestriction;
@@ -25,7 +28,7 @@ class FilterBaseTest extends Testbase
     {
         $objFilter = new FilterBaseA();
 
-        $arrRestrictions = $objFilter->getOrmRestrictions();
+        $arrRestrictions = $objFilter->getOrmConditions();
         $this->assertCount(0, $arrRestrictions);
     }
 
@@ -45,56 +48,56 @@ class FilterBaseTest extends Testbase
         $objFilter->setStrFilter9($strSystemid);
         $objFilter->setArrFilter10(array(OrmObjectlistInOrEmptyRestriction::NULL_OR_EMPTY, 1, 2, 3, 4));
 
-        $arrRestrictions = $objFilter->getOrmRestrictions();
+        $arrRestrictions = $objFilter->getOrmConditions();
         $this->assertCount(10, $arrRestrictions);
 
         //Without annotation @filterCompareOperator
-        $this->assertTrue($arrRestrictions[0] instanceof OrmObjectlistRestriction);
-        $this->assertEquals(" AND filter.filter1 LIKE ? ", $arrRestrictions[0]->getStrWhere());
+        $this->assertTrue($arrRestrictions[0] instanceof OrmCondition);
+        $this->assertEquals(" filter.filter1 LIKE ? ", $arrRestrictions[0]->getStrWhere());
         $this->assertCount(1, $arrRestrictions[0]->getArrParams());
         $this->assertEquals("%1%", $arrRestrictions[0]->getArrParams()[0]);
 
-        $this->assertTrue($arrRestrictions[1] instanceof OrmObjectlistRestriction);
-        $this->assertEquals(" AND filter.filter2 = ? ", $arrRestrictions[1]->getStrWhere());
+        $this->assertTrue($arrRestrictions[1] instanceof OrmCondition);
+        $this->assertEquals(" filter.filter2 = ? ", $arrRestrictions[1]->getStrWhere());
         $this->assertCount(1, $arrRestrictions[1]->getArrParams());
         $this->assertEquals(1, $arrRestrictions[1]->getArrParams()[0]);
 
-        $this->assertTrue($arrRestrictions[2] instanceof OrmObjectlistRestriction);
-        $this->assertEquals(" AND filter.filter3 = ? ", $arrRestrictions[2]->getStrWhere());
+        $this->assertTrue($arrRestrictions[2] instanceof OrmCondition);
+        $this->assertEquals(" filter.filter3 = ? ", $arrRestrictions[2]->getStrWhere());
         $this->assertCount(1, $arrRestrictions[2]->getArrParams());
         $this->assertEquals(1.0, $arrRestrictions[1]->getArrParams()[0]);
 
-        $this->assertTrue($arrRestrictions[3] instanceof OrmObjectlistInRestriction);
-        $this->assertEquals(" AND (filter.filter4 IN (?,?,?,?) ) ", $arrRestrictions[3]->getStrWhere());
+        $this->assertTrue($arrRestrictions[3] instanceof OrmInCondition);
+        $this->assertEquals(" filter.filter4 IN (?,?,?,?) ", $arrRestrictions[3]->getStrWhere());
         $this->assertCount(4, $arrRestrictions[3]->getArrParams());
 
-        $this->assertTrue($arrRestrictions[4] instanceof OrmObjectlistRestriction);
-        $this->assertEquals(" AND filter.filter5 = ? ", $arrRestrictions[4]->getStrWhere());
+        $this->assertTrue($arrRestrictions[4] instanceof OrmCondition);
+        $this->assertEquals(" filter.filter5 = ? ", $arrRestrictions[4]->getStrWhere());
         $this->assertCount(1, $arrRestrictions[4]->getArrParams());
         $this->assertEquals(20150101000001, $arrRestrictions[4]->getArrParams()[0]);
 
-        $this->assertTrue($arrRestrictions[5] instanceof OrmObjectlistRestriction);
-        $this->assertEquals(" AND filter.filter6 <= ? ", $arrRestrictions[5]->getStrWhere());
+        $this->assertTrue($arrRestrictions[5] instanceof OrmCondition);
+        $this->assertEquals(" filter.filter6 <= ? ", $arrRestrictions[5]->getStrWhere());
         $this->assertEquals(12, $arrRestrictions[5]->getArrParams()[0]);
 
 
         //With annotation @filterCompareOperator
-        $this->assertTrue($arrRestrictions[6] instanceof OrmObjectlistRestriction);
-        $this->assertEquals(" AND filter.filter7 >= ? ", $arrRestrictions[6]->getStrWhere());
+        $this->assertTrue($arrRestrictions[6] instanceof OrmCondition);
+        $this->assertEquals(" filter.filter7 >= ? ", $arrRestrictions[6]->getStrWhere());
         $this->assertEquals(20150101000000, $arrRestrictions[6]->getArrParams()[0]);
 
-        $this->assertTrue($arrRestrictions[7] instanceof OrmObjectlistRestriction);
-        $this->assertEquals(" AND filter.filter8 <= ? ", $arrRestrictions[7]->getStrWhere());
+        $this->assertTrue($arrRestrictions[7] instanceof OrmCondition);
+        $this->assertEquals(" filter.filter8 <= ? ", $arrRestrictions[7]->getStrWhere());
         $this->assertEquals(20150101235959, $arrRestrictions[7]->getArrParams()[0]);
 
         //Filter by system id
-        $this->assertTrue($arrRestrictions[8] instanceof OrmObjectlistRestriction);
-        $this->assertEquals(" AND filter.filter9 = ? ", $arrRestrictions[8]->getStrWhere());
+        $this->assertTrue($arrRestrictions[8] instanceof OrmCondition);
+        $this->assertEquals(" filter.filter9 = ? ", $arrRestrictions[8]->getStrWhere());
         $this->assertCount(1, $arrRestrictions[8]->getArrParams());
         $this->assertEquals($strSystemid, $arrRestrictions[8]->getArrParams()[0]);
 
-        $this->assertTrue($arrRestrictions[9] instanceof OrmObjectlistInOrEmptyRestriction);
-        $this->assertEquals(" AND (filter.filter10 IN (?,?,?,?,?) OR (filter.filter10 IS NULL OR filter.filter10 = '')) ", $arrRestrictions[9]->getStrWhere());
+        $this->assertTrue($arrRestrictions[9] instanceof OrmInOrEmptyCondition);
+        $this->assertEquals("(( filter.filter10 IN (?,?,?,?,?) ) OR (filter.filter10 IS NULL) OR (filter.filter10 = ''))", $arrRestrictions[9]->getStrWhere());
         $this->assertCount(5, $arrRestrictions[9]->getArrParams());
     }
 

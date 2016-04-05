@@ -10,48 +10,31 @@ namespace Kajona\System\System;
 
 
 /**
- * A objectlist restriction may be used to create where restrictions for the objectList and objectCount queries.
- * This restrcition creates an IN statement e.g. "AND <columnname> IN (<parameters>)"
+ * A orm condition may be used to create where conditions for the objectList and objectCount queries.
+ * This condition creates an IN statement e.g. "AND <columnname> IN (<parameters>)"
  *
- * @deprecated
- * @package module_system
+ * @package Kajona\System\System
  * @author stefan.meyer1@yahoo.de
- * @since 4.8
- *
- * @deprecated 
+ * @since 5.0
  */
-class OrmObjectlistInRestriction extends OrmObjectlistRestriction
+class OrmInCondition extends OrmCondition
 {
-
     const MAX_IN_VALUES = 950;
 
     const STR_CONDITION_IN = "IN";
     const STR_CONDITION_NOTIN = "NOT IN";
 
-    private $strColumnName = "";
-    private $strCondition = "";
-    private $strInCondition = self::STR_CONDITION_IN;
+    protected $strColumnName = "";
+    protected $strInCondition = self::STR_CONDITION_IN;
 
-    /**
-     * OrmObjectlistInRestriction constructor.
-     *
-     * @param string $strProperty
-     * @param array $arrParams
-     * @param string $strCondition
-     * @param string $strInCondition
-     *
-     * @deprecated
-     */
-    function __construct($strProperty, array $arrParams, $strCondition = "AND", $strInCondition = self::STR_CONDITION_IN)
+
+
+    function __construct($strColumnName, array $arrParams, $strInCondition = self::STR_CONDITION_IN)
     {
-        if($strInCondition !== self::STR_CONDITION_IN && $strInCondition !== self::STR_CONDITION_NOTIN) {
-            throw new Exception("Wrong condition set", Exception::$level_ERROR);
-        }
+        $this->setStrInCondition($strInCondition);
 
         $this->arrParams = $arrParams;
-        $this->strCondition = $strCondition;
-        $this->strColumnName = $strProperty;
-        $this->strInCondition = $strInCondition;
+        $this->strColumnName = $strColumnName;
     }
 
     /**
@@ -88,25 +71,25 @@ class OrmObjectlistInRestriction extends OrmObjectlistRestriction
 
     protected function getInStatement($strColumnName)
     {
-        if(is_array($this->arrParams) && count($this->arrParams) > 0) {
-            if(count($this->arrParams) > self::MAX_IN_VALUES) {
+
+        if (is_array($this->arrParams) && count($this->arrParams) > 0) {
+            if (count($this->arrParams) > self::MAX_IN_VALUES) {
                 $intCount = ceil(count($this->arrParams) / self::MAX_IN_VALUES);
                 $arrParts = array();
 
-                for($intI = 0; $intI < $intCount; $intI++) {
+                for ($intI = 0; $intI < $intCount; $intI++) {
                     $arrParams = array_slice($this->arrParams, $intI * self::MAX_IN_VALUES, self::MAX_IN_VALUES);
                     $arrParamsPlaceholder = array_map(function ($objParameter) {
                         return "?";
                     }, $arrParams);
                     $strPlaceholder = implode(",", $arrParamsPlaceholder);
-                    if(!empty($strPlaceholder)) {
+                    if (!empty($strPlaceholder)) {
                         $arrParts[] = "{$strColumnName} {$this->strInCondition} ({$strPlaceholder})";
                     }
                 }
 
                 if (count($arrParts) > 0) {
-                    $strParts = implode(" OR ", $arrParts);
-                    return $this->strCondition." (($strParts) {$this->addAdditionalConditions($strColumnName, "OR")})";
+                    return " (".implode(" OR ", $arrParts).")";
                 }
             }
             else {
@@ -116,29 +99,31 @@ class OrmObjectlistInRestriction extends OrmObjectlistRestriction
                 $strPlaceholder = implode(",", $arrParamsPlaceholder);
 
                 if (!empty($strPlaceholder)) {
-                    return "{$this->strCondition} ({$strColumnName} {$this->strInCondition} ({$strPlaceholder}) {$this->addAdditionalConditions($strColumnName, "OR")})";
+                    return "{$strColumnName} {$this->strInCondition} ({$strPlaceholder})";
                 }
             }
-        }
-
-        $strAdditionalCondition = $this->addAdditionalConditions($strColumnName, "");
-        if($strAdditionalCondition != "") {
-            return "{$this->strInCondition} ({$strAdditionalCondition})";
         }
 
         return "";
     }
 
     /**
-     * Hook method for additional conditions
-     *
-     * @param $strColumnName
-     * @param $strCondition
-     *
      * @return string
      */
-    protected function addAdditionalConditions($strColumnName, $strCondition)
+    public function getStrInCondition()
     {
-        return "";
+        return $this->strInCondition;
+    }
+
+    /**
+     * @param string $strInCondition
+     */
+    public function setStrInCondition($strInCondition)
+    {
+        if($strInCondition !== self::STR_CONDITION_IN && $strInCondition !== self::STR_CONDITION_NOTIN) {
+            throw new OrmException(Exception::$level_FATALERROR, "strInCondition must have value IN or NOT IN. Current value is ".$strInCondition);
+        }
+
+        $this->strInCondition = $strInCondition;
     }
 }

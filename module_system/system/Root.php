@@ -453,7 +453,7 @@ abstract class Root
         $objORM = new OrmObjectlist();
 
         if ($objFilter !== null) {
-            $objFilter->addWhereRestrictionsToORM($objORM);
+            $objFilter->addWhereConditionToORM($objORM);
         }
 
         return $objORM->getObjectList(get_called_class(), $strPrevid, $intStart, $intEnd);
@@ -480,7 +480,7 @@ abstract class Root
         $objORM = new OrmObjectlist();
 
         if ($objFilter !== null) {
-            $objFilter->addWhereRestrictionsToORM($objORM);
+            $objFilter->addWhereConditionToORM($objORM);
         }
 
         return $objORM->getObjectCount(get_called_class(), $strPrevid);

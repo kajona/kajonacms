@@ -79,7 +79,7 @@ abstract class FilterBase
             return trim($arrAnnotationValues[0]);
         }
 
-        throw new Exception("Missing ".AbstractController::STR_MODULE_ANNOTATION." annotation for class ".__CLASS__);
+        throw new Exception(Exception::$level_ERROR, "Missing ".AbstractController::STR_MODULE_ANNOTATION." annotation for class ".__CLASS__);
     }
 
 
@@ -205,9 +205,9 @@ abstract class FilterBase
     /**
      * Generates ORM restrictions based on the properties of the filter.
      *
-     * @return OrmObjectlistRestriction[]
+     * @return OrmCondition[]
      */
-    public function getOrmRestrictions()
+    public function getOrmConditions()
     {
         $arrRestriction = array();
 
@@ -226,7 +226,7 @@ abstract class FilterBase
             if($strGetter !== null) {
                 $strValue = $this->$strGetter();
                 if($strValue !== null && $strValue !== "") {
-                    $objRestriction = $this->getSingleOrmRestriction($strAttributeName, $strValue, $strTableColumn, $enumFilterCompareOperator);
+                    $objRestriction = $this->getSingleOrmCondition($strAttributeName, $strValue, $strTableColumn, $enumFilterCompareOperator);
                     if($objRestriction !== null) {
                         $arrRestriction[] = $objRestriction;
                     }
@@ -246,11 +246,11 @@ abstract class FilterBase
      * @param OrmComparatorEnum|null $enumFilterCompareOperator
      * @param string $strCondition
      *
-     * @return OrmObjectlistInRestriction|OrmObjectlistRestriction|null
+     * @return OrmCondition|null
      */
-    protected function getSingleOrmRestriction($strAttributeName, $strValue, $strTableColumn, OrmComparatorEnum $enumFilterCompareOperator = null, $strCondition = "AND")
+    protected function getSingleOrmCondition($strAttributeName, $strValue, $strTableColumn, OrmComparatorEnum $enumFilterCompareOperator = null)
     {
-        return OrmObjectlistRestriction::getORMRestrictionForValue($strValue, $strTableColumn, $enumFilterCompareOperator, $strCondition);
+        return OrmCondition::getORMConditionForValue($strValue, $strTableColumn, $enumFilterCompareOperator);
     }
 
 
@@ -259,9 +259,9 @@ abstract class FilterBase
      *
      * @param OrmObjectlist $objORM
      */
-    public function addWhereRestrictionsToORM(OrmObjectlist $objORM)
+    public function addWhereConditionToORM(OrmObjectlist $objORM)
     {
-        $objRestrictions = $this->getOrmRestrictions();
+        $objRestrictions = $this->getOrmConditions();
         foreach($objRestrictions as $objRestriction) {
             $objORM->addWhereRestriction($objRestriction);
         }

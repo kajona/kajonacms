@@ -16,6 +16,8 @@ namespace Kajona\System\System;
  * @package module_system
  * @author sidler@mulchprod.de
  * @since 4.6
+ *
+ * @deprecated
  */
 class OrmObjectlistRestriction
 {
@@ -28,6 +30,8 @@ class OrmObjectlistRestriction
     /**
      * @param string $strWhere
      * @param string|string[] $arrParams either a single value or an array of params
+     *
+     * @deprecated use OrmCondition instead
      */
     function __construct($strWhere, $arrParams = array())
     {
@@ -38,79 +42,6 @@ class OrmObjectlistRestriction
 
         $this->arrParams = $arrParams;
         $this->strWhere = " ".$strWhere." ";
-    }
-
-    /**
-     * Generic method to create an ORM restriction.
-     *
-     * Depending on the type of the value ($strValue) a specific ORM-Restriction will be generated.
-     *  e.g. if $strValue is an array, then a OrmObjectlistInRestriction will be generated
-     *
-     *
-     * @param $strValue
-     * @param $strTableColumn
-     * @param OrmComparatorEnum|null $enumFilterCompareOperator
-     * @param string $strCondition
-     *
-     * @return OrmObjectlistInRestriction|OrmObjectlistRestriction|null
-     * @throws OrmException
-     */
-    public final static function getORMRestrictionForValue($strValue, $strTableColumn, OrmComparatorEnum $enumFilterCompareOperator = null, $strCondition = "AND")
-    {
-
-        if(is_string($strValue)) {
-            if(validateSystemid($strValue)) {
-                $strCompareOperator = $enumFilterCompareOperator === null ? "=" : $enumFilterCompareOperator->getEnumAsSqlString();
-                return new OrmObjectlistRestriction("$strCondition $strTableColumn $strCompareOperator ?", array($strValue));
-            }
-            else {
-                $strCompareOperator = $enumFilterCompareOperator === null ? "LIKE" : $enumFilterCompareOperator->getEnumAsSqlString();
-                return new OrmObjectlistRestriction("$strCondition $strTableColumn $strCompareOperator ?", array("%".$strValue."%"));
-            }
-        }
-        elseif(is_int($strValue) || is_float($strValue)) {
-            $strCompareOperator = $enumFilterCompareOperator === null ? "=" : $enumFilterCompareOperator->getEnumAsSqlString();
-            return new OrmObjectlistRestriction("$strCondition $strTableColumn $strCompareOperator ?", array($strValue));
-        }
-        elseif(is_bool($strValue)) {
-            $strCompareOperator = $enumFilterCompareOperator === null ? "=" : $enumFilterCompareOperator->getEnumAsSqlString();
-            return new OrmObjectlistRestriction("$strCondition $strTableColumn $strCompareOperator ?", $strValue ? array(1) : array(0));
-        }
-        elseif(is_array($strValue)) {
-            $strCompareOperator = $enumFilterCompareOperator === null ? OrmObjectlistInRestriction::STR_CONDITION_IN : $enumFilterCompareOperator->getEnumAsSqlString();
-
-            if($enumFilterCompareOperator !== null) {
-                if($enumFilterCompareOperator->equals(OrmComparatorEnum::InOrEmpty())) {
-                    return new OrmObjectlistInOrEmptyRestriction($strTableColumn, $strValue, $strCondition, OrmObjectlistInRestriction::STR_CONDITION_IN);
-                }
-                if($enumFilterCompareOperator->equals(OrmComparatorEnum::NotInOrEmpty())) {
-                    return new OrmObjectlistInOrEmptyRestriction($strTableColumn, $strValue, $strCondition, OrmObjectlistInRestriction::STR_CONDITION_NOTIN);
-                }
-            }
-
-            return new OrmObjectlistInRestriction($strTableColumn, $strValue, $strCondition, $strCompareOperator);
-        }
-        elseif($strValue instanceof Date) {
-            $strValue = clone $strValue;
-            $strCompareOperator = $enumFilterCompareOperator === null ? "=" : $enumFilterCompareOperator->getEnumAsSqlString();
-
-            if($enumFilterCompareOperator !== null) {
-                if($enumFilterCompareOperator->equals(OrmComparatorEnum::GreaterThen())
-                    || $enumFilterCompareOperator->equals(OrmComparatorEnum::GreaterThenEquals())
-                ) {
-                    $strValue->setBeginningOfDay();
-                }
-                if($enumFilterCompareOperator->equals(OrmComparatorEnum::LessThen())
-                    || $enumFilterCompareOperator->equals(OrmComparatorEnum::LessThenEquals())
-                ) {
-                    $strValue->setEndOfDay();
-                }
-            }
-
-            return new OrmObjectlistRestriction("$strCondition $strTableColumn $strCompareOperator ?", array($strValue->getLongTimestamp()));
-        }
-
-        return null;
     }
 
     /**
@@ -165,7 +96,17 @@ class OrmObjectlistRestriction
         $this->strTargetClass = $strTargetClass;
     }
 
+    public static function getOrderByRestrictionsAsString($arrOrderByRestrictions) {
+        $strOrderBy = "";
+        $arrOrderByStr = array();
+        foreach($arrOrderByRestrictions as $objOrderBy) {
+            $arrOrderByStr[] = $objOrderBy->getStrOrderBy();
+        }
+        if(count($arrOrderByStr) > 0) {
+            $strOrderBy .= " ORDER BY ".implode(", ", $arrOrderByStr);
+        }
 
+        return $strOrderBy;
 
-
+    }
 }

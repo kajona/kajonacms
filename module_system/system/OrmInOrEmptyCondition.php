@@ -10,50 +10,40 @@ namespace Kajona\System\System;
 
 
 /**
- * A objectlist restriction may be used to create where restrictions for the objectList and objectCount queries.
- * This restrcition creates an IN statement e.g. "AND <columnname> IN (<parameters>)"
+ * A orm condition may be used to create where restrictions for the objectList and objectCount queries.
+ * Pass them using a syntax like "x = ?", don't add "WHERE", "AND", "OR" at the beginning, this is done by the mapper.
  *
- * @package module_system
+ * @package Kajona\System\System
  * @author stefan.meyer1@yahoo.de
- * @since 4.8
- * 
- * @deprecated
+ * @since 5.0
  */
-class OrmObjectlistInOrEmptyRestriction extends OrmObjectlistInRestriction
+class OrmInOrEmptyCondition extends OrmInCondition
 {
     const NULL_OR_EMPTY = "NULL_OR_EMPTY";
-
     private $bitIncludeNullOrEmptyValues = false;
 
     /**
      * OrmObjectlistInOrEmptyRestriction constructor.
      *
      * @param bool $bitIncludeNullOrEmptyValues
-     *
-     * @deprecated
      */
-    function __construct($strProperty, array $arrParams, $strCondition = "AND", $strInCondition = self::STR_CONDITION_IN)
+    function __construct($strColumnName, array $arrParams, $strInCondition = self::STR_CONDITION_IN)
     {
-        parent::__construct($strProperty, $arrParams, $strCondition, $strInCondition);
+        parent::__construct($strColumnName, $arrParams, $strInCondition);
 
         if(in_array(self::NULL_OR_EMPTY, $this->arrParams)) {
             $this->bitIncludeNullOrEmptyValues = true;
         }
     }
 
-
-    /**
-     * @param $strColumnName
-     * @param $strCondition
-     *
-     * @return string
-     */
-    protected function addAdditionalConditions($strColumnName, $strCondition)
+    public function getStrWhere()
     {
+        $strWhere = parent::getStrWhere();
+
         if($this->bitIncludeNullOrEmptyValues) {
-            return "$strCondition ($strColumnName IS NULL OR $strColumnName = '')";
+            return "(($strWhere) OR ($this->strColumnName IS NULL) OR ($this->strColumnName = ''))";
         }
 
-        return "";
+        return $strWhere;
     }
 }
