@@ -10,6 +10,6 @@
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="pages" version="4.7" />
+        <module name="pages" version="5.0" />
     </requiredModules>
 </package>

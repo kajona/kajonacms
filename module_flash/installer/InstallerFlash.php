@@ -63,9 +63,9 @@ class InstallerFlash extends InstallerBase implements InstallerRemovableInterfac
         $strReturn = "";
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if ($arrModule["module_version"] == "5.0") {
-            $strReturn .= "Updating 5.0 to 5.1...\n";
-            $this->updateElementAndModule("5.1");
+        if ($arrModule["module_version"] == "4.7") {
+            $strReturn .= "Updating 4.7 to 5.0...\n";
+            $this->updateElementAndModule("5.0");
         }
 
         return $strReturn;

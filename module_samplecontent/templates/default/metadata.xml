@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <package
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="http://apidocs.kajona.de/xsd/package.xsd"
+        xsi:noNamespaceSchemaLocation="https://apidocs.kajona.de/xsd/package.xsd"
         >
     <title>default</title>
     <description>The default template-pack.</description>
-    <version>4.1</version>
+    <version>5.0</version>
     <author>Kajona Team</author>
     <type>TEMPLATE</type>
     <providesInstaller>FALSE</providesInstaller>

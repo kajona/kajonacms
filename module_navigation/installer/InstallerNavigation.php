@@ -145,50 +145,7 @@ class InstallerNavigation extends InstallerBase implements InstallerRemovableInt
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
 
         $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.0") {
-            $strReturn .= $this->update_40_41();
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.1") {
-            $strReturn = "Updating 4.1 to 4.2...\n";
-            $strReturn .= "Updating module-versions...\n";
-            $this->updateModuleVersion("navigation", "4.2");
-            $strReturn .= "Updating element-versions...\n";
-            $this->updateElementVersion("navigation", "4.2");
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.2") {
-            $strReturn = "Updating 4.2 to 4.3...\n";
-            $strReturn .= "Updating module-versions...\n";
-            $this->updateModuleVersion("navigation", "4.3");
-            $strReturn .= "Updating element-versions...\n";
-            $this->updateElementVersion("navigation", "4.3");
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.3") {
-            $strReturn = "Updating 4.3 to 4.4...\n";
-            $this->updateModuleVersion("navigation", "4.4");
-            $this->updateElementVersion("navigation", "4.4");
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.4") {
-            $strReturn = "Updating 4.4 to 4.5...\n";
-            $this->updateModuleVersion("navigation", "4.5");
-            $this->updateElementVersion("navigation", "4.5");
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.5") {
-            $strReturn = "Updating 4.5 to 4.6...\n";
-            $this->updateModuleVersion("navigation", "4.6");
-            $this->updateElementVersion("navigation", "4.6");
-        }
+        
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.6") {
@@ -197,16 +154,14 @@ class InstallerNavigation extends InstallerBase implements InstallerRemovableInt
             $this->updateElementVersion("navigation", "4.7");
         }
 
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.7") {
+            $strReturn = "Updating to 5.0...\n";
+            $this->updateModuleVersion("navigation", "5.0");
+            $this->updateElementVersion("navigation", "5.0");
+        }
+
         return $strReturn."\n\n";
 	}
-
-
-    private function update_40_41() {
-        $strReturn = "Updating 4.0 to 4.1...\n";
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("navigation", "4.1");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("navigation", "4.1");
-        return $strReturn;
-    }
+    
 }

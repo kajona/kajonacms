@@ -155,6 +155,13 @@ class InstallerGuestbook extends InstallerBase implements InstallerRemovableInte
             $this->updateElementVersion("guestbook", "4.7");
         }
 
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if ($arrModule["module_version"] == "4.7") {
+            $strReturn = "Updating to 5.0...\n";
+            $this->updateModuleVersion("guestbook", "5.0");
+            $this->updateElementVersion("guestbook", "5.0");
+        }
+
         return $strReturn."\n\n";
     }
 

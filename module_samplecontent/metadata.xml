@@ -5,11 +5,11 @@
         >
     <title>samplecontent</title>
     <description>The samplecontent provides a default installation of the portal.</description>
-    <version>4.7</version>
+    <version>5.0</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>FALSE</providesInstaller>
     <requiredModules>
-        <module name="system" version="4.7" />
+        <module name="system" version="5.0" />
     </requiredModules>
 </package>

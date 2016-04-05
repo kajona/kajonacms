@@ -18,6 +18,5 @@
 $config = array();
 
 //comma-separated list of registered content-providers
-$config["contentproviders"] = "Kajona\\Packagemanager\\System\\PackagemanagerContentproviderKajona,";
-$config["contentproviders"] .= "Kajona\\Packagemanager\\System\\PackagemanagerContentproviderKajonabase,";
+$config["contentproviders"]  = "Kajona\\Packagemanager\\System\\PackagemanagerContentproviderKajona,";
 $config["contentproviders"] .= "Kajona\\Packagemanager\\System\\PackagemanagerContentproviderLocal";

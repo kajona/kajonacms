@@ -5,12 +5,12 @@
     >
     <title>eventmanager</title>
     <description>A module to organize events and its participants. Participants may register to events, the number of participants per event is configurable.</description>
-    <version>4.7</version>
+    <version>5.0</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="system" version="4.7" />
-        <module name="pages" version="4.7" />
+        <module name="system" version="5.0" />
+        <module name="pages" version="5.0" />
     </requiredModules>
 </package>

@@ -161,6 +161,12 @@ class InstallerStats extends InstallerBase implements InstallerRemovableInterfac
             $strReturn .= $this->update_47_475();
         }
 
+        $arrModul = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if ($arrModul["module_version"] == "4.7.5") {
+            $strReturn .= "Updating to 5.0...\n";
+            $this->updateModuleVersion("stats", "5.0");
+        }
+
         $strReturn .= $this->extractBrowscap();
         return $strReturn."\n\n";
     }
@@ -199,7 +205,7 @@ class InstallerStats extends InstallerBase implements InstallerRemovableInterfac
         SystemSetting::getConfigByName("_stats_nrofrecords_")->deleteObjectFromDatabase();
 
         $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("stats", "4.6.1");
+        $this->updateModuleVersion("stats", "4.7.5");
         return $strReturn;
     }
 
