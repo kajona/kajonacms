@@ -293,7 +293,7 @@
         <antcall target="buildPackageHelper" />
         <antcall target="modulePharHelper" />
 
-        <zip destfile="${basedir}${packagesPath}/kajona_v4_full_${DSTAMP}-${TSTAMP}.zip">
+        <zip destfile="${basedir}${packagesPath}/kajona_v5_full_${DSTAMP}-${TSTAMP}.zip">
             <fileset dir="${basedir}${tempPath}/../" />
         </zip>
     </target>
@@ -307,21 +307,29 @@
         <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name=".git"/>
-                <exclude name="core*/module_flash/" />
-                <exclude name="core*/module_maps/" />
-                <exclude name="core*/module_userlist/" />
-                <exclude name="core*/module_mediaplayer/" />
-                <exclude name="core*/module_ldap/" />
-                <exclude name="core*/module_packageserver/" />
-                <exclude name="core*/module_pchart/" />
-                <exclude name="core*/module_flotchart/" />
-                <exclude name="core*/module_workflows/" />
-                <exclude name="core*/module_pdf/" />
-                <exclude name="core*/module_pageimportexport/" />
-                <exclude name="core*/module_demo/" />
 
-                <include name="core*/module_*/**"/>
-                <include name="core*/template_*/**"/>
+                <include name="core*/module_dashboard/**"/>
+                <include name="core*/module_eventmanager/**"/>
+                <include name="core*/module_faqs/**"/>
+                <include name="core*/module_formular/**"/>
+                <include name="core*/module_guestbook/**"/>
+                <include name="core*/module_installer/**"/>
+                <include name="core*/module_jqplot/**"/>
+                <include name="core*/module_languageswitch/**"/>
+                <include name="core*/module_mediamanager/**"/>
+                <include name="core*/module_navigation/**"/>
+                <include name="core*/module_news/**"/>
+                <include name="core*/module_packagemanager/**"/>
+                <include name="core*/module_pages/**"/>
+                <include name="core*/module_postacomment/**"/>
+                <include name="core*/module_rating/**"/>
+                <include name="core*/module_samplecontent/**"/>
+                <include name="core*/module_search/**"/>
+                <include name="core*/module_stats/**"/>
+                <include name="core*/module_system/**"/>
+                <include name="core*/module_tags/**"/>
+                <include name="core*/module_v4skin/**"/>
+                <include name="core*/module_votings/**"/>
                 <include name="core*/*.php"/>
                 <include name="core*/*.htaccess"/>
             </fileset>
@@ -330,7 +338,7 @@
         <antcall target="buildPackageHelper" />
         <antcall target="modulePharHelper" />
 
-        <zip destfile="${basedir}${packagesPath}/kajona_v4_allinone_${DSTAMP}-${TSTAMP}.zip">
+        <zip destfile="${basedir}${packagesPath}/kajona_v5_allinone_${DSTAMP}-${TSTAMP}.zip">
             <fileset dir="${basedir}${tempPath}/../" />
         </zip>
     </target>
