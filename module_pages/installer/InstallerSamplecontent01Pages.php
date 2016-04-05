@@ -118,20 +118,20 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
         $objRichtextAdmin = $objRichtext->getConcreteAdminInstance();
 
         if ($this->strContentLanguage == "de") {
-            $objRichtextAdmin->setStrText("Diese Installation von Kajona war erfolgreich. Wir wünschen viel Spaß mit Kajona V5.<br />
+            $objRichtextAdmin->setStrText("Diese Installation von Kajona war erfolgreich. .<br />
                                 Nehmen Sie sich die Zeit und betrachten Sie die einzelnen Seiten, die mit Beispielinhalten befüllt wurde. Sie gelangen jederzeit auf diese
                                 Seite durch den Link &quot;Home&quot; zurück.<br/>
                                 Um die Inhalte der Webseite zu verändern sollten Sie sich als erstes am Administrationsbereich <a href='_webpath_/admin'>anmelden</a>.
-                                Für weitere Informationen und Support besuchen Sie unsere Webseite: <a href=\"http://www.kajona.de\">www.kajona.de</a><br/>
+                                Für weitere Informationen und Support besuchen Sie unsere Webseite: <a href=\"https://www.kajona.de\">www.kajona.de</a><br/>
                                 Das gesamte Kajona-Team wünscht viel Spa&szlig; beim Verwalten der Webseite mit Kajona!");
 
         }
         else {
-            $objRichtextAdmin->setStrText("This installation of Kajona was successful. Have fun using Kajona V5!<br />
-                                Take some time and watch the pages already created and have a look at the sample-contents assigned to those page.
+            $objRichtextAdmin->setStrText("This installation of Kajona was successful. <br />
+                                Take some time and have a look at the pages already created and the sample-contents assigned to those page.
                                 You may return to this page any time by clicking the &quot;home&quot; link.<br/>
                                 To modify the contents of this webpage you have to <a href='_webpath_/admin'>log in</a> at the administration-backend.
-                                For further information, support or proposals, please visit our website: <a href=\"http://www.kajona.de\">www.kajona.de</a><br/>
+                                For further information, support or proposals, please visit our website: <a href=\"https://www.kajona.de\">www.kajona.de</a><br/>
                                 The Kajona-Team hopes you'll enjoy managing your website with Kajona!");
         }
         $objRichtextAdmin->updateForeignElement();
@@ -156,17 +156,15 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
         $objRichtextAdmin = $objRichtext->getConcreteAdminInstance();
 
         if ($this->strContentLanguage == "de") {
-            $objRichtextAdmin->setStrText("Dieser Text-Absatz befindet sich am Platzhalter contentleft_richtext, der im Standard-Template links ausgerichtet ist. Sobald Sie sich am
-                                System <a href='_webpath_/admin'>angemeldet</a> haben und das Portal erneut aufrufen, wird der Portal-Editor angezeigt. Nutzen Sie Drag n Drop
-                                um diesen Text-Absatz an einen anderen Platzhalter in diesem Template zu verschieben. Einzige Voraussetzung hierfür ist, dass der Platzhalter
-                                Elemente des Typs richtext zulässt.");
+            $objRichtextAdmin->setStrText("Inhalte werden in Kajona in Form von Blöcken organisiert. Dieser Block 'Two Columns Header and Text' beinahltet zwei spalten, dies ist die linke Inhaltsspalte.
+                                Sobald Sie sich am System <a href='_webpath_/admin'>angemeldet</a> haben und das Portal erneut aufrufen, wird der Portal-Editor angezeigt. <br />
+                                Nutzen Sie Drag n Drop um den gesamten Block zu verschieben.");
 
         }
         else {
-            $objRichtextAdmin->setStrText("This paragraph is located at the placeholder contentleft_richtext. The default-template aligns this placeholder to the left.
+            $objRichtextAdmin->setStrText("Content is organized in blocks. This block 'Two Columns Header and Text' is made of two columnns, this is the left column.
                                 As soon as you <a href='_webpath_/admin'>log in</a> at the administration-backend and reload the portal, the portal-editor is being shown.
-                                Use drag n drop to rearrange this placeholder and move it to another placeholder.
-                                The only limitation when dropping the element is, that the target-placeholder allows elements of the type richtext.");
+                                Use drag n drop to rearrange and organize blocks.");
         }
         $objRichtextAdmin->updateForeignElement();
 
@@ -182,13 +180,13 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
         $objRichtextAdmin = $objRichtext->getConcreteAdminInstance();
 
         if ($this->strContentLanguage == "de") {
-            $objRichtextAdmin->setStrText("Der Platzhalter dieses Elementes lautet contentright_richtext. Daher ist er für alle anderen Richtext-Absätze auf dieser Seite ein gültiger Ziel-Platzhalter,
-                                sobald ein Absatz per drag n drop verschoben wird. Verschieben Sie die Absätze auf dieser Seite, um ein erstes Gefühl hierfür zu bekommen.");
+            $objRichtextAdmin->setStrText("Das ist die rechte Spalte des Blocks 'Two Columns Header and Text'. Blöcke lassen sich immer nur als ganzes befüllen oder löschen. Somit wird sichergestellt, dass ein 
+                                einheitliches Layout aufgebaut werden kann. Über den Portal-Editor lassen sich alle Texte direkt in der Seite bearbeiten.");
 
         }
         else {
-            $objRichtextAdmin->setStrText("The placeholder of this paragraph is defined as contentright_richtext. Therefore it is a valid target-placeholder for other richtext paragraphs on the current
-                                page. Try to move paragraph on this site in order so see how the possible drop-areas are being highlighted.");
+            $objRichtextAdmin->setStrText("This is the right column of the block 'Two Columns Header and Text'. Blocks are creatable only as a whole, ensuring a consistent layout and look and feel of the page.
+                                The portaleditor allows to change the contents directly on the page.");
         }
         $objRichtextAdmin->updateForeignElement();
 
@@ -205,13 +203,13 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
         $objRichtextAdmin = $objRichtext->getConcreteAdminInstance();
 
         if ($this->strContentLanguage == "de") {
-            $objRichtextAdmin->setStrText("Der Platzhalter dieses Elementes lautet content_richtext. Daher ist er für alle anderen Richtext-Absätze auf dieser Seite ein gültiger Ziel-Platzhalter,
-                                sobald ein Absatz per drag n drop verschoben wird. Verschieben Sie die Absätze auf dieser Seite, um ein erstes Gefühl hierfür zu bekommen.");
+            $objRichtextAdmin->setStrText("Im Gegensatz zum voherigen, zweispaltigen Block basiert dieser Block 'Headline and Text' nur auf einer Überschrift und einem einspaltigen Text.
+                                Dieser darf dafür aber die gesamte Breite des Layouts nutzen. Verwenden Sie Drag n Drop um die Reihenfolge der Blöcke untereinander zu verändern.");
 
         }
         else {
-            $objRichtextAdmin->setStrText("The placeholder of this paragraph is defined as content_richtext. Therefore it is a valid target-placeholder for other richtext paragraphs on the current
-                                page. Try to move paragraph on this site in order so see how the possible drop-areas are being highlighted.");
+            $objRichtextAdmin->setStrText("In contrast to the previous block made of two columns, the block 'Headline and Text' is made of a headline and a single text-column only.
+                                Therefore the text may use the full width of the layout. Use drag n drop to change the order of the blocks.");
         }
         $objRichtextAdmin->updateForeignElement();
 
@@ -251,7 +249,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
 
         }
         else {
-            $objRichtextAdmin->setStrText("Maybe the requested page doesn\'t exist anymore.<br />Please try it again later.");
+            $objRichtextAdmin->setStrText("Maybe the requested page doesn't exist anymore.<br />Please try it again later.");
         }
         $objRichtextAdmin->updateForeignElement();
 
