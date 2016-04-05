@@ -32,7 +32,7 @@ describe('installation', function() {
         browser.driver.findElement(by.css('.savechanges')).click();
 
         // start the installation this takes some time
-        browser.driver.findElement(by.linkText('Automatische Installation')).click();
+        browser.driver.findElement(by.buttonText('Installation starten')).click();
 
         // this is required so that our installation sets all needed settings i.e. turn nice urls / ssl off etc.
         browser.get('http://127.0.0.1:8080/setupSeleniumConfig.php');

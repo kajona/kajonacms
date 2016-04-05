@@ -101,13 +101,13 @@
 body {
     -ms-overflow-style: scrollbar;
 
-    padding-top: 70px;
+    padding-top: 60px;
 
     &.dialogBody {
         padding: 0;
 
         #content {
-            padding-right: 0 15px 0 0;
+            padding: 0 15px 0 0;
         }
     }
 
@@ -141,8 +141,6 @@ footer {
 .sidebar-nav {
 
     text-align: right;
-    position: relative;
-    top: -11px;
 
     .nav-header {
         color: @white;
@@ -220,7 +218,7 @@ footer {
             padding: 0;
             border: 0;
 
-            a {
+            a, span.linkcontainer {
                 display: block;
                 padding: 6px 15px;
                 background-color: @kajona-gray;
@@ -234,6 +232,17 @@ footer {
                     color:@white;
                     text-shadow:none;
                     background:url(@kajona-navi-active-bg) -110px -35px no-repeat @kajona-brand-color;
+
+                    a {
+                        color: @white;
+                    }
+                }
+                
+                a {
+                    display: inline-block;
+                    border: none;
+                    padding: 0 5px;
+                    background-color: transparent;
                 }
             }
         }
@@ -661,61 +670,75 @@ footer {
 }
 
 
-.breadcrumb {
-    background:url(@kajona-breadcrumb-bg) right -45px no-repeat @gray-darker;
-    border:0;
-    .box-shadow(none);
-    margin:9px 0 0 0;
-    padding: 6px 14px 5px 14px;
-    white-space: nowrap;
+.pathNaviContainer {
 
-    li.pathentry {
-        color:@white;
-        font-weight: 600;
-        font-size:@font-size-base;
-        text-transform:uppercase;
-        vertical-align: top;
-        .text-overflow();
-        max-width: 250px;
+    position: fixed;
+    width: percentage((10 / @grid-columns));
+    z-index: 300;
 
-        .transition(max-width ease-out .5s);
+    @media (max-width: @screen-md-max) {
+        width: 100%;
+    }
 
-        &:hover {
-            max-width: 100% !important;
-        }
+    &.pathNaviContainerTop {
+        top: 50px;
+    }
 
-        a.moduleSwitchLink {
-            i {
-                font-size: @font-size-base+4;
+    .breadcrumb {
+        background: url(@kajona-breadcrumb-bg) right -45px no-repeat @gray-darker;
+        border: 0;
+        .box-shadow(none);
+        margin: 0;
+        padding: 6px 14px 5px 14px;
+        white-space: nowrap;
+
+        li.pathentry {
+            color: @white;
+            font-weight: 600;
+            font-size: @font-size-base;
+            text-transform: uppercase;
+            vertical-align: top;
+            .text-overflow();
+            max-width: 250px;
+
+            .transition(max-width ease-out .5s);
+
+            &:hover {
+                max-width: 100% !important;
+            }
+
+            a.moduleSwitchLink {
+                i {
+                    font-size: @font-size-base+4;
+                }
             }
         }
-    }
 
-    li.pathentry a,
-    li.pathentry:active a {
-        color:@white;
-    }
-
-    li.pathentry:before {
-        content: @fa-var-angle-right;
-        font-family: fontawesome;
-        color: @white;
-        padding: 0 2px;
-    }
-
-    li.pathentry:first-child {
-        overflow: visible;
-        &:before {
-            display: none;
+        li.pathentry a,
+        li.pathentry:active a {
+            color: @white;
         }
+
+        li.pathentry:before {
+            content: @fa-var-angle-right;
+            font-family: fontawesome;
+            color: @white;
+            padding: 0 2px;
+        }
+
+        li.pathentry:first-child {
+            overflow: visible;
+            &:before {
+                display: none;
+            }
+        }
+
+        &.breadcrumbTop {
+            margin: 0;
+            padding: 2px 14px 0 14px;
+        }
+
     }
-
-    &.breadcrumbTop {
-        margin: 0;
-        padding: 2px 14px 0 14px;
-    }
-
-
 }
 
 #quickhelp {

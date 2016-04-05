@@ -94,7 +94,7 @@ class AdminskinImageresolver implements AdminskinImageresolverInterface {
         "icon_enabled"                     => "<i class='kj-icon fa fa-eye'></i>",
         "icon_event"                       => "<i class='kj-icon fa fa-calendar-o'></i>",
         "icon_eventLocked"                 => "<span class='kj-icon fa-stack'><i class='fa fa-calendar-o'></i><i class='fa fa-lock fa-stack-1x kj-stack' style='color: red'></i></span>",
-        "icon_excel"                       => "<i class='kj-icon fa fa-ms-excel'></i>",
+        "icon_excel"                       => "<i class='kj-icon fa fa-file-excel-o'></i>",
         "icon_externalBrowser"             => "<i class='kj-icon fa fa-search'></i>",
         "icon_favorite"                    => "<i class='kj-icon fa fa-bookmark'></i>",
         "icon_favoriteDisabled"            => "<i class='kj-icon fa fa-bookmark-o'></i>",

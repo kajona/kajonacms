@@ -246,11 +246,21 @@ class CacheManager
         }
 
         if ($intType & self::TYPE_FILESYSTEM) {
-            $arrDriver[] = new FilesystemCache(_realpath_ . "/project/temp/cache", ".cache");
+            try {
+                $arrDriver[] = new FilesystemCache(_realpath_."/project/temp/cache", ".cache");
+            }
+            catch(\InvalidArgumentException $objEx) {
+                $arrDriver[] = new ArrayCache();
+            }
         }
 
         if ($intType & self::TYPE_PHPFILE) {
-            $arrDriver[] = new PhpFileCache(_realpath_ . "/project/temp/cache", ".cache.php");
+            try {
+                $arrDriver[] = new PhpFileCache(_realpath_."/project/temp/cache", ".cache.php");
+            }
+            catch(\InvalidArgumentException $objEx) {
+                $arrDriver[] = new ArrayCache();
+            }
         }
 
         $objCache = null;
@@ -259,7 +269,7 @@ class CacheManager
         } elseif (count($arrDriver) > 1) {
             $objCache = new ChainCache($arrDriver);
         } else {
-            throw new Exception("Invalid cache type", Exception::$level_ERROR);
+            throw new \Exception("Invalid cache type");
         }
 
         if ($objCache instanceof CacheProvider) {

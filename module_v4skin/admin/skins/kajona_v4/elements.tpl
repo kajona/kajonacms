@@ -1801,6 +1801,52 @@ It containes a list of aspects and provides the possibility to switch the differ
         %%level%%
 </sitemap_wrapper>
 
+<sitemap_combined_entry_header>
+    <a data-toggle="collapse" data-parent="#moduleNavigation" href="#%%systemid%%" rel="tooltip" title="%%moduleName%%">
+        <i class="fa %%faicon%%"></i>
+    </a>
+</sitemap_combined_entry_header>
+
+<sitemap_combined_entry_body>
+    <div id="%%systemid%%" class="panel-collapse collapse">
+        <div class="panel-body">
+            <ul>%%actions%%</ul>
+        </div>
+    </div>
+</sitemap_combined_entry_body>
+
+<sitemap_combined_entry_body_active>
+    <div id="%%systemid%%" class="panel-collapse collapge in">
+        <div class="panel-body">
+            <ul>%%actions%%</ul>
+        </div>
+    </div>
+</sitemap_combined_entry_body_active>
+
+<sitemap_combined_entry_wrapper>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <span class="linkcontainer ">
+                %%combined_header%%
+            </span>
+        </div>
+        %%combined_body%%
+    </div>
+</sitemap_combined_entry_wrapper>
+
+<sitemap_combined_entry_wrapper_active>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <span class="linkcontainer active">
+                %%combined_header%%
+            </span>
+        </div>
+        %%combined_body%%
+    </div>
+</sitemap_combined_entry_wrapper_active>
+
+
+
 <sitemap_module_wrapper>
     <div class="panel panel-default">
         <div class="panel-heading">

@@ -91,11 +91,13 @@ $(function () {
         if(scroll > 10 && KAJONA.admin.scroll != 'top') {
             $("ul.breadcrumb").addClass("breadcrumbTop");
             $("#quickhelp").addClass("quickhelpTop");
+            $(".pathNaviContainer").addClass("pathNaviContainerTop");
             KAJONA.admin.scroll = "top";
         }
         else if(scroll <= 10 && KAJONA.admin.scroll != 'margin') {
             $("ul.breadcrumb").removeClass("breadcrumbTop");
             $("#quickhelp").removeClass("quickhelpTop");
+            $(".pathNaviContainer").removeClass("pathNaviContainerTop");
             KAJONA.admin.scroll = "fixed";
         }
 
