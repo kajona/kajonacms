@@ -63,7 +63,7 @@ class SystemJSTreeConfig
     /**
      * @var null (@see contextmenu plugin from jstree)
      */
-    private $arrContextMenu = null;
+    private $strContextMenuItemFunction = "function(o, cb){ return KAJONA.kajonatree.contextmenu.createDefaultContextMenu(o, cb);}";
 
     /**
      * SystemJSTreeConfig constructor.
@@ -75,8 +75,6 @@ class SystemJSTreeConfig
 
 
     protected function initTreeConfig() {
-        //Add default context menu items
-        $this->addPredefinedContextMenuItems(SystemJSTreeConfig::STR_CONTEXTMENU_OPEN_ALL_NODES);
     }
 
 
@@ -134,20 +132,6 @@ class SystemJSTreeConfig
     }
 
     /**
-     * @param $arrItem
-     */
-    public function addContextMenuItem($strIndex, $arrItem)
-    {
-        if($this->arrContextMenu == null) {
-            $this->arrContextMenu = array();
-            $this->arrContextMenu["items"] = array();
-        }
-
-        $this->arrContextMenu["items"][$strIndex] = $arrItem;
-    }
-
-
-    /**
      * Converst the set configs to Json
      *
      * @return string
@@ -159,7 +143,9 @@ class SystemJSTreeConfig
             "dnd"         => $this->bitDndEnabled,
             "checkbox"    => $this->bitCheckboxEnabled,
             "types"       => $this->arrTypes,
-            "contextmenu" => $this->arrContextMenu
+            "contextmenu" => array(
+                "items" => $this->strContextMenuItemFunction
+            )
         );
 
         $strJson = json_encode($arrJson);
@@ -215,26 +201,5 @@ class SystemJSTreeConfig
     public function setArrNodesToExpand($arrNodesToExpand)
     {
         $this->arrNodesToExpand = $arrNodesToExpand;
-    }
-
-
-    /**
-     * Method fo adding predefined context menu items for a tree
-     *
-     * @param $strItemName
-     */
-    public function addPredefinedContextMenuItems($strItemName)
-    {
-        switch($strItemName) {
-            case self::STR_CONTEXTMENU_OPEN_ALL_NODES:
-                //contextmenu item for opening all nodes
-                $arrItem = array(
-                    "label"  => Lang::getInstance()->getLang("commons_tree_contextmenu_loadallsubnodes", "system"),
-                    "action" => "function(objNode, event){KAJONA.kajonatree.contextmenu.openAllNodes(objNode, event);}",
-                    "icon"   => "fa fa-sitemap"
-                );
-
-                $this->addContextMenuItem(self::STR_CONTEXTMENU_OPEN_ALL_NODES, $arrItem);
-        }
     }
 }

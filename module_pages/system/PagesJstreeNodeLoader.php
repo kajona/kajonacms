@@ -14,6 +14,7 @@ use Kajona\System\System\Carrier;
 use Kajona\System\System\InterfaceJStreeNodeLoader;
 use Kajona\System\System\Link;
 use Kajona\System\System\Objectfactory;
+use Kajona\System\System\SystemModule;
 
 
 /**
@@ -25,6 +26,7 @@ use Kajona\System\System\Objectfactory;
 class PagesJstreeNodeLoader implements InterfaceJStreeNodeLoader
 {
 
+    const NODE_TYPE_PAGE_MODULE = "page_module";
     const NODE_TYPE_PAGE = "page";
     const NODE_TYPE_FOLDER = "folder";
 
@@ -43,21 +45,40 @@ class PagesJstreeNodeLoader implements InterfaceJStreeNodeLoader
         $arrNodes = array();
 
         //1. Get Page
-        /** @var PagesPage $objSingleProcess */
-        $objSingleProcess = Objectfactory::getInstance()->getObject($strSystemId);
+        /** @var PagesPage $objSinglePage */
+        $objSinglePage = Objectfactory::getInstance()->getObject($strSystemId);
 
         //2. Handle Children
-        $arrChildrenProcesse = $this->getChildrenObjects($objSingleProcess);
+        $arrChildrenPages = $this->getChildrenObjects($objSinglePage);
 
-        //3. Prozesse Childs
-        foreach ($arrChildrenProcesse as $objSubProcess) {
-            $arrNodes[] = $this->getNode($objSubProcess->getStrSystemid());
+        //3. Node Childs
+        foreach ($arrChildrenPages as $objSubPage) {
+            $arrNodes[] = $this->getNode($objSubPage->getStrSystemid());
         }
 
 
         return $arrNodes;
     }
 
+
+    private function getNodeModule(SystemModule $objModule) {
+        $strLink = "";
+        if ($objModule->rightEdit()) {
+            $strLink = Link::getLinkAdminHref("pages", "list", "", false);
+        }
+
+        $arrNode = array(
+            "id"       => $objModule->getSystemid(),
+            "text"     => AdminskinHelper::getAdminImage($objModule->getStrIcon())."&nbsp;".$objModule->getStrDisplayName(),
+            "a_attr"   => array(
+                "href" => $strLink,
+            ),
+            "type"     => self::NODE_TYPE_PAGE_MODULE,
+            "children" => count($this->getChildrenObjects($objModule)) > 0
+        );
+
+        return $arrNode;
+    }
 
     private function getNodeFolder(PagesFolder $objSingleEntry)
     {
@@ -72,7 +93,7 @@ class PagesJstreeNodeLoader implements InterfaceJStreeNodeLoader
             "a_attr"   => array(
                 "href" => $strLink,
             ),
-            "type"     => "folder",
+            "type"     => self::NODE_TYPE_FOLDER,
             "children" => count($this->getChildrenObjects($objSingleEntry)) > 0
         );
 
@@ -101,7 +122,7 @@ class PagesJstreeNodeLoader implements InterfaceJStreeNodeLoader
             "a_attr"   => array(
                 "href" => $strLink,
             ),
-            "type"     => "page",
+            "type"     => self::NODE_TYPE_PAGE,
             "children" => count($this->getChildrenObjects($objSingleEntry)) > 0
         );
 
@@ -115,10 +136,13 @@ class PagesJstreeNodeLoader implements InterfaceJStreeNodeLoader
         /** @var PagesPage $objSinglePage */
         $objSingleEntry = Objectfactory::getInstance()->getObject($strSystemId);
 
-        if ($objSingleEntry instanceof PagesFolder) {
+        if ($objSingleEntry instanceof SystemModule) {
+            return $this->getNodeModule($objSingleEntry);
+        }
+        else if ($objSingleEntry instanceof PagesFolder) {
             return $this->getNodeFolder($objSingleEntry);
         }
-        if ($objSingleEntry instanceof PagesPage) {
+        else if ($objSingleEntry instanceof PagesPage) {
             return $this->getNodePage($objSingleEntry);
         }
 

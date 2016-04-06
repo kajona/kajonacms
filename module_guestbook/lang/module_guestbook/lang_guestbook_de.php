@@ -22,6 +22,9 @@ $lang["form_guestbook_guestbookpostemail"] = "E-Mail";
 $lang["form_guestbook_guestbookpostname"] = "Name";
 $lang["form_guestbook_guestbookpostpage"] = "Seite";
 $lang["form_guestbook_guestbookposttext"] = "Nachricht";
+$lang["form_guestbook_guestbookpoststatus"] = "Freigabestatus";
+$lang["post_status_0"]                   = "Nicht sichtbar";
+$lang["post_status_1"]                   = "Sichtbar";
 $lang["gaestebuch_bearbeiten"]           = "Gästebuch bearbeiten";
 $lang["gaestebuch_listeleer"]            = "Kein Gästebuch angelegt";
 $lang["insert_error_email"]              = "Fehlende E-Mailadresse";
@@ -45,6 +48,7 @@ $lang["quickhelp_edit_guestbook"]        = "Beim Anlegen oder Bearbeiten eines G
 $lang["quickhelp_list"]                  = "Alle angelegten Gästebücher finden Sie in dieser Liste.";
 $lang["quickhelp_new_guestbook"]         = "Beim Anlegen oder Bearbeiten eines Gästebuchs kann für dieses ein Titel vergeben werden. Ebenso kann der Freischaltmodus aktiviert oder deaktivert. Ist dieser aktiviert, werden neue Einträge per default deaktiviert abgespeischert. Damit diese im Portal erscheinen, müssen diese dann durch einen Admin oder Redakteur freigegeben werden.<br /><br />Hinweis: Sollen sich Gäste in das Gästebuch eintragen dürfen, so benötigen diese das Recht 'Eintragen'!";
 $lang["quickhelp_view_guestbook"]        = "In dieser Liste werden alle Einträge eines Gästebuchs angezeigt. Diese können dann gelöscht, aktiviert oder deaktiviert werden.";
+$lang["todo_provider_open"]              = "Freizugebende Posts";
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Eintragen", 5 => "", 6 => "", 7 => "", 8 => "");

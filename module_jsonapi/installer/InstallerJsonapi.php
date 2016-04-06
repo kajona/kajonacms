@@ -60,7 +60,18 @@ class InstallerJsonapi extends InstallerBase implements InstallerRemovableInterf
 
 
 	public function update() {
+        $strReturn = "";
+        //check installed version and to which version we can update
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if ($arrModule["module_version"] == "0.1") {
+            $strReturn .= "Updating to 5.0...\n";
+            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.0");
+        }
+
+        return $strReturn."\n\n";
 	}
 
 }

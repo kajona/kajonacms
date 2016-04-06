@@ -10,8 +10,8 @@
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="system" version="4.7" />
-        <module name="mediamanager" version="4.7" />
-        <module name="packagemanager" version="4.7" />
+        <module name="system" version="5.0" />
+        <module name="mediamanager" version="5.0" />
+        <module name="packagemanager" version="5.0" />
     </requiredModules>
 </package>

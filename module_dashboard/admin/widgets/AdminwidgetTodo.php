@@ -119,7 +119,7 @@ class AdminwidgetTodo extends Adminwidget implements AdminwidgetInterface
     public function onFistLogin($strUserid)
     {
         $objDashboard = new DashboardWidget();
-        $objDashboard->setStrColumn("column1");
+        $objDashboard->setStrColumn("column3");
         $objDashboard->setStrUser($strUserid);
         $objDashboard->setStrClass(__CLASS__);
         return $objDashboard->updateObjectToDb(DashboardWidget::getWidgetsRootNodeForUser($strUserid));

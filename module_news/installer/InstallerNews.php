@@ -177,53 +177,6 @@ class InstallerNews extends InstallerBase implements InstallerRemovableInterface
         $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.0") {
-            $strReturn .= $this->update_40_41();
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.1") {
-            $strReturn .= "Updating 4.1 to 4.2...\n";
-            $strReturn .= "Updating module-versions...\n";
-            $this->updateModuleVersion("news", "4.2");
-            $strReturn .= "Updating element-versions...\n";
-            $this->updateElementVersion("news", "4.2");
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.2") {
-            $strReturn .= "Updating 4.2 to 4.3...\n";
-            $strReturn .= "Updating module-versions...\n";
-            $this->updateModuleVersion("news", "4.3");
-            $strReturn .= "Updating element-versions...\n";
-            $this->updateElementVersion("news", "4.3");
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.3") {
-            $strReturn .= "Updating 4.3 to 4.4...\n";
-            $this->updateModuleVersion("news", "4.4");
-            $this->updateElementVersion("news", "4.4");
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.4") {
-            $strReturn .= $this->update_44_45();
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.5") {
-            $strReturn .= $this->update_45_451();
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.5.1") {
-            $strReturn .= "Updating 4.5.1 to 4.6...\n";
-            $this->updateModuleVersion("news", "4.6");
-            $this->updateElementVersion("news", "4.6");
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.6") {
             $strReturn .= "Updating to 4.7...\n";
             $this->updateModuleVersion("news", "4.7");
@@ -235,58 +188,16 @@ class InstallerNews extends InstallerBase implements InstallerRemovableInterface
             $strReturn .= $this->update_47_475();
         }
 
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.7.5") {
+            $strReturn .= "Updating to 5.0...\n";
+            $this->updateModuleVersion("news", "5.0");
+            $this->updateElementVersion("news", "5.0");
+        }
+        
         return $strReturn."\n\n";
 	}
-
-    private function update_40_41() {
-        $strReturn = "Updating 4.0 to 4.1...\n";
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("news", "4.1");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("news", "4.1");
-        return $strReturn;
-    }
-
-    private function update_44_45() {
-        $strReturn = "Updating 4.4 to 4.5...\n";
-
-        $strReturn .= "Updating news table...\n";
-
-        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."news")."
-                            ADD ".$this->objDB->encloseColumnName("news_redirect_page")." ".$this->objDB->getDatatype("char254")." NULL";
-
-        if(!$this->objDB->_pQuery($strQuery, array()))
-            $strReturn .= "An error occurred! ...\n";
-
-
-        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."news")."
-                            ADD ".$this->objDB->encloseColumnName("news_redirect_enabled")." ".$this->objDB->getDatatype("int")." NULL";
-
-        if(!$this->objDB->_pQuery($strQuery, array()))
-            $strReturn .= "An error occurred! ...\n";
-
-
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("news", "4.5");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("news", "4.5");
-        return $strReturn;
-    }
-
-    private function update_45_451() {
-        $strReturn = "Updating 4.5 to 4.5.1...\n";
-
-        $strReturn .= "Registering config settings...\n";
-        $this->registerConstant("_news_news_datetime_", "false", SystemSetting::$int_TYPE_BOOL, _news_module_id_);
-
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("news", "4.5.1");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("news", "4.5.1");
-        return $strReturn;
-    }
+    
 
     private function update_47_475() {
         $strReturn = "Updating 4.7 to 4.7.5...\n";

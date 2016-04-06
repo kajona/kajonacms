@@ -119,9 +119,9 @@ KAJONA.util.lang.fetchProperties = function(){
     if(objCache) {
         objCache = jQuery.parseJSON(objCache);
         var strResp = null;
-        for (strKey in objCache) {
-            if (arrData.text == strKey) {
-                strResp = objCache[strKey];
+        for (var strCacheKey in objCache) {
+            if (arrData.text == strCacheKey) {
+                strResp = objCache[strCacheKey];
             }
         }
     }

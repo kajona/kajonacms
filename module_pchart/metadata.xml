@@ -5,11 +5,11 @@
         >
     <title>pchart</title>
     <description>pChart is another charting-engine, rendering charts on the serverside. Please respect the licence of the pChart project before making use of it.</description>
-    <version>4.7</version>
+    <version>5.0</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>FALSE</providesInstaller>
     <requiredModules>
-        <module name="system" version="4.7" />
+        <module name="system" version="5.0" />
     </requiredModules>
 </package>

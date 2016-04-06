@@ -9,12 +9,20 @@ namespace Kajona\Guestbook\Installer;
 
 use Kajona\Guestbook\Admin\Elements\ElementGuestbookAdmin;
 use Kajona\Guestbook\System\GuestbookGuestbook;
+use Kajona\Guestbook\System\GuestbookPost;
+use Kajona\Guestbook\System\Messageproviders\MessageproviderGuestbook;
 use Kajona\Pages\Admin\Elements\ElementPlaintextAdmin;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Samplecontent\System\SamplecontentContentHelper;
+use Kajona\System\System\Carrier;
 use Kajona\System\System\Database;
+use Kajona\System\System\MessagingMessage;
+use Kajona\System\System\MessagingMessagehandler;
+use Kajona\System\System\Rights;
 use Kajona\System\System\SamplecontentInstallerInterface;
+use Kajona\System\System\SystemModule;
+use Kajona\System\System\UserGroup;
 
 
 /**
@@ -54,6 +62,30 @@ class InstallerSamplecontentGuestbook implements SamplecontentInstallerInterface
         $objGuestbook->updateObjectToDb();
         $strGuestbookID = $objGuestbook->getSystemid();
         $strReturn .= "ID of new guestbook: ".$strGuestbookID."\n";
+
+
+        $strReturn .= "Adding a sample post\n";
+        $objPost = new GuestbookPost();
+        $objPost->setStrGuestbookPostName("Kajona Team");
+        $objPost->setStrGuestbookPostEmail("info@kajona.de");
+        $objPost->setStrGuestbookPostPage("www.kajona.de");
+        $objPost->setStrGuestbookPostText("This is the first guestbook post!");
+        $objPost->updateObjectToDb($objGuestbook->getSystemid());
+
+
+        $objMessageHandler = new MessagingMessagehandler();
+        $arrGroups = array();
+        $allGroups = UserGroup::getObjectList();
+        foreach ($allGroups as $objOneGroup) {
+            if (Rights::getInstance()->checkPermissionForGroup($objOneGroup->getSystemid(), Rights::$STR_RIGHT_EDIT, SystemModule::getModuleByName("guestbook")->getSystemid())) {
+                $arrGroups[] = $objOneGroup;
+            }
+        }
+
+        $objMessage = new MessagingMessage();
+        $objMessage->setStrBody(Carrier::getInstance()->getObjLang()->getLang("new_post_mail", "guestbook").getLinkAdminHref("guestbook", "edit", "&systemid=".$objPost->getSystemid(), false));
+        $objMessage->setObjMessageProvider(new MessageproviderGuestbook());
+        $objMessageHandler->sendMessageObject($objMessage, $arrGroups);
 
 
         $strReturn .= "Creating new guestbook page...\n";

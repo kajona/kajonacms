@@ -5,11 +5,11 @@
         >
     <title>ldap</title>
     <description>Connects the installation to a ldap directory. Refer to the config-file for all options.</description>
-    <version>4.7.1</version>
+    <version>5.0</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="system" version="4.7" />
+        <module name="system" version="5.0" />
     </requiredModules>
 </package>

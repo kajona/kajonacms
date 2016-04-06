@@ -53,6 +53,15 @@ class GuestbookPostFilter extends FilterBase
     private $strGuestbookPostText = "";
 
     /**
+     * @var string
+     * @tableColumn system.system_status
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
+     * @fieldDDValues [0 => post_status_0],[1 => post_status_1]
+     * @fieldLabel form_guestbook_guestbookpoststatus
+     */
+    private $intStatus;
+
+    /**
      * @return string
      */
     public function getStrGuestbookPostEmail()
@@ -114,6 +123,22 @@ class GuestbookPostFilter extends FilterBase
     public function setStrGuestbookPostText($strGuestbookPostText)
     {
         $this->strGuestbookPostText = $strGuestbookPostText;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIntStatus()
+    {
+        return $this->intStatus;
+    }
+
+    /**
+     * @param string $intStatus
+     */
+    public function setIntStatus($intStatus)
+    {
+        $this->intStatus = $intStatus;
     }
 
     

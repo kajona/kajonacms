@@ -101,6 +101,7 @@ $lang["pages_ordner_delete"]             = "Ordner löschen";
 $lang["pages_ordner_edit"]               = "Ordner bearbeiten";
 $lang["pages_ordner_loeschen_frage"]     = "Möchten Sie den Ordner &quot;<b>%%element_name%%</b>&quot; wirklich löschen? Alle darin enthaltenen Seiten und Ordner werden dabei ebenfalls gelöscht!";
 $lang["pages_ordner_oeffnen"]            = "Ordner öffnen";
+$lang["pe_create"]                       = "Anlegen";
 $lang["pe_copy"]                         = "Kopieren";
 $lang["pe_delete"]                       = "Löschen";
 $lang["pe_delete_warning"]               = "Möchten Sie den Datensatz wirklich löschen?";

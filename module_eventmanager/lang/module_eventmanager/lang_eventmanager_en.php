@@ -65,7 +65,7 @@ $lang["new_participant_details"]         = "Details:";
 $lang["new_participant_event"]           = "Event:";
 $lang["new_participant_mail"]            = "A new participant registered for an event.";
 $lang["new_participant_participant"]     = "Participant:";
-$lang["noForename"]                      = "Missin forename";
+$lang["noForename"]                      = "Missing forename";
 $lang["noLastname"]                      = "Missing lastname";
 $lang["participantErrorConfirmation"]    = "Invalid data. Your registration could not be confirmed.";
 $lang["participantLimitReached"]         = "The maximum number of participants was reached.";
@@ -100,6 +100,7 @@ $lang["rssfeed"]                         = "Show rssfeed of event";
 $lang["show_history"]                    = "Show change-history";
 $lang["updatelink"]                      = "Update registration";
 $lang["username"]                        = "Registering as:";
+$lang["todo_provider_participant"]       = "Outstanding registration confirmations";
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Participate", 5 => "", 6 => "", 7 => "", 8 => "");

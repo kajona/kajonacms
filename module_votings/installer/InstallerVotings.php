@@ -147,27 +147,6 @@ class InstallerVotings extends InstallerBase implements InstallerRemovableInterf
 
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "1.2") {
-            $strReturn .= "Updating 1.2 to 1.3...\n";
-            $strReturn .= "Updating module-versions...\n";
-            $this->updateModuleVersion("votings", "1.3");
-            $strReturn .= "Updating element-versions...\n";
-            $this->updateElementVersion("votings", "1.3");
-            $this->objDB->flushQueryCache();
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "1.3") {
-            $strReturn .= "Updating 1.3 to 1.4...\n";
-            $strReturn .= "Updating module-versions...\n";
-            $this->updateModuleVersion("votings", "1.4");
-            $strReturn .= "Updating element-versions...\n";
-            $this->updateElementVersion("votings", "1.4");
-            $this->objDB->flushQueryCache();
-        }
-
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "1.4") {
             $strReturn .= "Updating 1.4 to 1.5...\n";
             $strReturn .= "Updating module-versions...\n";
@@ -194,6 +173,16 @@ class InstallerVotings extends InstallerBase implements InstallerRemovableInterf
             $this->updateModuleVersion("votings", "1.7");
             $strReturn .= "Updating element-versions...\n";
             $this->updateElementVersion("votings", "1.7");
+            $this->objDB->flushQueryCache();
+        }
+
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "1.7") {
+            $strReturn .= "Updating to 5.0...\n";
+            $strReturn .= "Updating module-versions...\n";
+            $this->updateModuleVersion("votings", "5.0");
+            $strReturn .= "Updating element-versions...\n";
+            $this->updateElementVersion("votings", "5.0");
             $this->objDB->flushQueryCache();
         }
 

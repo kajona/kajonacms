@@ -172,7 +172,6 @@ class InstallerFaqs extends InstallerBase implements InstallerRemovableInterface
         $strReturn .= "Version found:\n\t Module: " . $arrModule["module_name"] . ", Version: " . $arrModule["module_version"] . "\n\n";
 
 
-
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if ($arrModule["module_version"] == "4.6") {
             $strReturn .= "Updating to 4.7...\n";
@@ -184,6 +183,13 @@ class InstallerFaqs extends InstallerBase implements InstallerRemovableInterface
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if ($arrModule["module_version"] == "4.7") {
             $strReturn .= $this->update_47_475();
+        }
+
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if ($arrModule["module_version"] == "4.7.5") {
+            $strReturn .= "Updating to 5.0...\n";
+            $this->updateModuleVersion("faqs", "5.0");
+            $this->updateElementVersion("faqs", "5.0");
         }
 
         return $strReturn . "\n\n";

@@ -170,54 +170,7 @@ class InstallerTags extends InstallerBase implements InstallerRemovableInterface
         //check installed version and to which version we can update
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
-
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.0") {
-            $strReturn .= $this->update_40_41();
-            $this->objDB->flushQueryCache();
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.1") {
-            $strReturn .= $this->update_41_42();
-            $this->objDB->flushQueryCache();
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.2") {
-            $strReturn .= "Updating 4.2 to 4.3...\n";
-            $strReturn .= "Updating module-versions...\n";
-            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.3");
-            $strReturn .= "Updating element-versions...\n";
-            $this->updateElementVersion("tags", "4.3");
-            $this->objDB->flushQueryCache();
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.3") {
-            $strReturn .= "Updating 4.3 to 4.4...\n";
-            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.4");
-            $this->updateElementVersion($this->objMetadata->getStrTitle(), "4.4");
-            $this->objDB->flushQueryCache();
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.4") {
-            $strReturn .= "Updating 4.4 to 4.5...\n";
-            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.5");
-            $this->updateElementVersion($this->objMetadata->getStrTitle(), "4.5");
-            $this->objDB->flushQueryCache();
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.5") {
-            $strReturn .= "Updating 4.5 to 4.6...\n";
-            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.6");
-            $this->updateElementVersion($this->objMetadata->getStrTitle(), "4.6");
-            $this->objDB->flushQueryCache();
-        }
-
+        
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.6") {
             $strReturn .= "Updating to 4.7...\n";
@@ -226,30 +179,16 @@ class InstallerTags extends InstallerBase implements InstallerRemovableInterface
             $this->objDB->flushQueryCache();
         }
 
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.7") {
+            $strReturn .= "Updating to 5.0...\n";
+            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.0");
+            $this->updateElementVersion($this->objMetadata->getStrTitle(), "5.0");
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn."\n\n";
 	}
 
-
-    private function update_40_41() {
-        $strReturn = "Updating 4.0 to 4.1...\n";
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.1");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("tags", "4.1");
-        return $strReturn;
-    }
-
-    private function update_41_42() {
-        $strReturn = "Updating 4.1 to 4.2...\n";
-
-        $strReturn .= "Registering tags private mode setting\n";
-        $this->registerConstant("_tags_defaultprivate_", "false", SystemSetting::$int_TYPE_BOOL, _tags_modul_id_);
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.2");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("tags", "4.2");
-        return $strReturn;
-    }
 
 }

@@ -5,9 +5,10 @@ exports.config = {
     seleniumAddress: 'http://localhost:4444/wd/hub',
     baseUrl: 'http://127.0.0.1:8080/',
     specs: [
-
+        'install-spec.js',
         'login-spec.js',
-        '../../../module_system/tests/selenium/*-spec.js'
+        '../../temp/kajona/core*/module_*/tests/selenium/*-spec.js',
+        '../../temp/kajona/files/extract/module_*/tests/selenium/*-spec.js'
     ],
     jasmineNodeOpts: {
         defaultTimeoutInterval: 300000 // 5 minutes

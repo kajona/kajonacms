@@ -176,57 +176,6 @@ class InstallerSearch extends InstallerBase implements InstallerRemovableInterfa
 
         $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.0") {
-            $strReturn .= "Updating 4.0 to 4.1...\n";
-            $strReturn .= "Updating module-versions...\n";
-            $this->updateModuleVersion("search", "4.1");
-            $this->updateElementVersion("search", "4.1");
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.1") {
-            $strReturn .= "Updating 4.1 to 4.2...\n";
-            $strReturn .= "Updating module-versions...\n";
-            $this->updateModuleVersion("search", "4.2");
-            $this->updateElementVersion("search", "4.2");
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.2") {
-            $strReturn .= "Updating 4.2 to 4.3...\n";
-            $strReturn .= "Updating module-versions...\n";
-            $this->updateModuleVersion("search", "4.3");
-            $this->updateElementVersion("search", "4.3");
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.3") {
-            $strReturn .= $this->update_43_44();
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.4" || $arrModule["module_version"] == "4.4.1") {
-            $strReturn .= $this->update_441_45();
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.5") {
-            $strReturn .= $this->update_45_451();
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.5.1") {
-            $strReturn .= $this->update_451_452();
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.5.2") {
-            $strReturn .= "Updating 4.5.2 to 4.6...\n";
-            $strReturn .= "Updating module-versions...\n";
-            $this->updateModuleVersion("search", "4.6");
-            $this->updateElementVersion("search", "4.6");
-        }
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.6") {
@@ -240,6 +189,13 @@ class InstallerSearch extends InstallerBase implements InstallerRemovableInterfa
             $this->updateElementVersion("search", "4.7");
         }
 
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.7") {
+            $strReturn .= "Updating to 5.0...\n";
+            $this->updateModuleVersion("search", "5.0");
+            $this->updateElementVersion("search", "5.0");
+        }
+
         if($this->bitIndexRebuild) {
             $strReturn .= "Rebuilding search index...\n";
             $this->updateIndex();
@@ -249,95 +205,6 @@ class InstallerSearch extends InstallerBase implements InstallerRemovableInterfa
         return $strReturn."\n\n";
 	}
 
-
-    private function update_43_44() {
-        $strReturn = "Updating 4.3 to 4.4...\n";
-        // Install Index
-        $strReturn .= "Adding index tables...\n";
-        $this->installIndexTables();
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("search", "4.4");
-        $this->updateElementVersion("search", "4.4");
-
-        $this->bitIndexRebuild = true;
-
-
-        return $strReturn;
-    }
-
-    private function update_441_45() {
-        $strReturn = "Updating 4.4[.1] to 4.5...\n";
-        // Install Index
-        if(!$this->bitIndexTablesUpToDate) {
-            $strReturn .= "Updating index tables...\n";
-            $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."search_ix_document")."
-                                ADD ".$this->objDB->encloseColumnName("search_ix_content_lang")." ".$this->objDB->getDatatype("char20")." NULL";
-
-            if(!$this->objDB->_pQuery($strQuery, array()))
-                $strReturn .= "An error occurred! ...\n";
-
-            $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."search_ix_document")."
-                                ADD ".$this->objDB->encloseColumnName("search_ix_portal_object")." ".$this->objDB->getDatatype("int")." NULL";
-
-            if(!$this->objDB->_pQuery($strQuery, array()))
-                $strReturn .= "An error occurred! ...\n";
-
-            $this->objDB->_pQuery("CREATE INDEX ix_search_ix_content_lang ON ".$this->objDB->encloseTableName(_dbprefix_."search_ix_document")."  ( ".$this->objDB->encloseColumnName("search_ix_content_lang")." ) ", array());
-            $this->objDB->_pQuery("CREATE INDEX ix_search_ix_portal_object ON ".$this->objDB->encloseTableName(_dbprefix_."search_ix_document")."  ( ".$this->objDB->encloseColumnName("search_ix_portal_object")." ) ", array());
-        }
-
-        $strReturn .= "Removing old searchplugins...\n";
-        $objFilesystem = new Filesystem();
-        foreach(Resourceloader::getInstance()->getFolderContent("/admin/searchplugins/") as $strPath => $strFilename) {
-            $strReturn .= "Deleting ".$strPath."\n";
-            $objFilesystem->fileDelete($strPath);
-        }
-        foreach(Resourceloader::getInstance()->getFolderContent("/portal/searchplugins/") as $strPath => $strFilename) {
-            $strReturn .= "Deleting ".$strPath."\n";
-            $objFilesystem->fileDelete($strPath);
-        }
-
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("search", "4.5");
-        $this->updateElementVersion("search", "4.5");
-
-        $strReturn .= "Updating index...\n";
-
-        if(@ini_get("max_execution_time") < 3600 && @ini_get("max_execution_time") > 0)
-            @ini_set("max_execution_time", "3600");
-
-
-        $this->bitIndexRebuild = true;
-
-        $strReturn .= "Please make sure to update your searchindex manually as soon as all other packages have been updated.\n";
-        $strReturn .= "An index-rebuild can be started using module system, action systemtasks, task 'Rebuild search index'.";
-
-
-        return $strReturn;
-    }
-
-    private function update_45_451() {
-        $strReturn = "Updating 4.5 to 4.5.1...\n";
-
-        //Table for the index queue
-        $strReturn .= "Installing search-queue table...\n";
-
-        $arrFields = array();
-        $arrFields["search_queue_id"] 	    = array("char20", false);
-        $arrFields["search_queue_systemid"] 	= array("char20", true);
-        $arrFields["search_queue_action"] 	= array("char20", true);
-
-        if(!$this->objDB->createTable("search_queue", $arrFields, array("search_queue_id")))
-            $strReturn .= "An error occurred! ...\n";
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("search", "4.5.1");
-        $this->updateElementVersion("search", "4.5.1");
-
-        return $strReturn;
-    }
 
     private function updateIndex() {
         Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBQUERIES | Carrier::INT_CACHE_TYPE_MODULES);
@@ -376,28 +243,6 @@ class InstallerSearch extends InstallerBase implements InstallerRemovableInterfa
         return $strReturn;
     }
 
-    private function update_451_452() {
-        $strReturn = "";
-
-        $objPackageManager = new PackagemanagerManager();
-        if($objPackageManager->getPackage("pages") !== null) {
-            $strReturn .= "Updating search_element tables...\n";
-            $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."element_search")."
-                                ADD ".$this->objDB->encloseColumnName("search_query_id")." ".$this->objDB->getDatatype("char20")." NULL";
-
-            if(!$this->objDB->_pQuery($strQuery, array())) {
-                $strReturn .= "An error occurred! ...\n";
-            }
-
-        }
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("search", "4.5.2");
-        $this->updateElementVersion("search", "4.5.2");
-
-        return $strReturn;
-
-    }
 
     private function update_46_461() {
         $strReturn = "Adding index queue functionality...\n";

@@ -395,7 +395,7 @@ class ToolkitAdmin extends Toolkit
         $arrTemplate["value_id"] = htmlspecialchars($strUserId, ENT_QUOTES, "UTF-8", false);
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["class"] = $strClass;
-        $arrTemplate["opener"] = Link::getLinkAdminDialog(
+        $arrTemplate["opener"] = $this->listButton(Link::getLinkAdminDialog(
             "user",
             "userBrowser",
             "&form_element={$strName}&checkid={$strCheckIds}".($bitGroups ? "&allowGroup=1" : "").($bitBlockCurrentUser ? "&filter=current" : ""),
@@ -403,16 +403,16 @@ class ToolkitAdmin extends Toolkit
             Carrier::getInstance()->getObjLang()->getLang("user_browser", "user"),
             "icon_externalBrowser",
             Carrier::getInstance()->getObjLang()->getLang("user_browser", "user")
-        );
+        ));
 
-        $strResetIcon = Link::getLinkAdminManual(
+        $strResetIcon = $this->listButton(Link::getLinkAdminManual(
             "href=\"#\" onclick=\"document.getElementById('".$strName."').value='';document.getElementById('".$strName."_id').value='';return false;\"",
             "",
             Carrier::getInstance()->getObjLang()->getLang("user_browser_reset", "user"),
             "icon_delete"
-        );
+        ));
 
-        $arrTemplate["opener"] .= " ".$strResetIcon;
+        $arrTemplate["opener"] .= $strResetIcon;
 
         $strName = uniStrReplace(array("[", "]"), array("\\\[", "\\\]"), $strName);
         $arrTemplate["ajaxScript"] = "

@@ -49,47 +49,6 @@ class InstallerDashboard extends InstallerBase implements InstallerInterface {
 
         $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.0") {
-            $strReturn = "Updating 4.0 to 4.1...\n";
-            $strReturn .= "Updating module-versions...\n";
-            $this->updateModuleVersion("dashboard", "4.1");
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.1") {
-            $strReturn .= "Updating 4.1 to 4.2...\n";
-            $strReturn .= "Updating module-versions...\n";
-            $this->updateModuleVersion("dashboard", "4.2");
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.2") {
-            $strReturn .= "Updating 4.2 to 4.3...\n";
-            $strReturn .= "Updating module-versions...\n";
-            $this->updateModuleVersion("dashboard", "4.3");
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.3") {
-            $strReturn .= "Updating 4.3 to 4.4...\n";
-            $strReturn .= "Updating module-versions...\n";
-            $this->updateModuleVersion("dashboard", "4.4");
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.4") {
-            $strReturn .= "Updating 4.4 to 4.5...\n";
-            $strReturn .= "Updating module-versions...\n";
-            $this->updateModuleVersion("dashboard", "4.5");
-        }
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.5") {
-            $strReturn .= "Updating 4.5 to 4.6...\n";
-            $strReturn .= "Updating module-versions...\n";
-            $this->updateModuleVersion("dashboard", "4.6");
-        }
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.6") {
@@ -101,6 +60,13 @@ class InstallerDashboard extends InstallerBase implements InstallerInterface {
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.7") {
             $strReturn .= $this->update_47_475();
+        }
+
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.7.5") {
+            $strReturn .= "Updating to 5.0...\n";
+            $strReturn .= "Updating module-versions...\n";
+            $this->updateModuleVersion("dashboard", "5.0");
         }
 
         return $strReturn."\n\n";

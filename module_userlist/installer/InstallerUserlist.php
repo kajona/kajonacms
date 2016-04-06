@@ -48,7 +48,7 @@ class InstallerUserlist extends InstallerBase implements InstallerRemovableInter
 
             if ($objElement->getStrVersion() < 1) {
                 $strReturn .= "Updating element version!...\n";
-                $objElement->setStrVersion("1.0");
+                $objElement->setStrVersion("5.0");
                 $objElement->updateObjectToDb();
             }
         }
@@ -64,9 +64,9 @@ class InstallerUserlist extends InstallerBase implements InstallerRemovableInter
         $strReturn = "";
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if ($arrModule["module_version"] == "1.0") {
-            $strReturn .= "Updating 1.0 to 1.1...\n";
-            $this->updateElementAndModule("1.1");
+        if ($arrModule["module_version"] == "5.0") {
+            $strReturn .= "Updating to 5.1...\n";
+            $this->updateElementAndModule("5.1");
         }
 
         return $strReturn;

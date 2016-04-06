@@ -145,13 +145,6 @@ class InstallerLdap extends InstallerBase implements InstallerRemovableInterface
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
-
-        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if ($arrModule["module_version"] == "4.5") {
-            $strReturn .= "Updating 4.5 to 4.6...\n";
-            $this->updateModuleVersion("ldap", "4.6");
-        }
-
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if ($arrModule["module_version"] == "4.6") {
             $strReturn .= "Updating to 4.7...\n";
@@ -161,6 +154,12 @@ class InstallerLdap extends InstallerBase implements InstallerRemovableInterface
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if ($arrModule["module_version"] == "4.7") {
             $strReturn .= $this->update_47_471();
+        }
+
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if ($arrModule["module_version"] == "4.7.1") {
+            $strReturn .= "Updating to 5.0...\n";
+            $this->updateModuleVersion("ldap", "5.0");
         }
 
         return $strReturn."\n\n";
