@@ -4,9 +4,8 @@ This document describes the installation of a new Kajona-system in a few steps.
 More detailed information can be found at www.kajona.de.
 
 ##Download
-If not already done, the installation of Kajona starts with downloading the system from www.kajona.de. 
-You'll find two packages: a full and a light download. Compared to the full-package, the light one misses a few modules and elements.
-Nevertheless, you're able to extend your installation later on easily. New modules and elements may be added anytime.
+If not already done, the installation of Kajona starts by downloading the system from www.kajona.de. 
+
 
 ##Extract the files
 Right after downloading the zip-file you should extract the files – either on your webserver or, most commonly, on your local machine.
@@ -33,7 +32,7 @@ The system is now ready to be uploaded to the webserver. In most cases, this is 
 In order to complete the installation successfully, you have to set up a few file- and folder permissions. Rather the webserver needs write-permissions on the following files and folders:
 
 	/core
-	/project/system/config
+	/project/module_system/system/config
 	/project/dbdumps
 	/project/log
 	/project/temp
@@ -60,9 +59,10 @@ At first the installer checks the correct file-permissions as described in the s
 Now you have to provide the database name, user and password as noted before.
 After clicking on „write to config.php“, another form is being shown. Using this form, you can set up the username and password of the admin user-account of your system along with your e-mail adress.
 
-Afterwards, you may chose the installation mode. In nearly all cases, the “automatic installation” is the way to go – all modules and elements available will be installed.
+Afterwards, you may start the installation.
+
 If all modules and page elements are installed, your installation of Kajona is complete.
-Out of security-reasons you now should delete the /installer.php and the /v4_v4_postupdate.php-files (if given). Go on with „The portal is available“.
+Go on with „The portal is available“.
 
 ##The portal is available
 After the installation, make a first test: Load the portal by opening the root folder of the installation in your webbrowser, e.g.
@@ -70,8 +70,7 @@ After the installation, make a first test: Load the portal by opening the root f
 or 
 ``www.my-domain.xy/my_installation/``.
 
-If you installed the module „samplecontent“, a welcome-page should be loaded. Otherwise you should at least get an error, complaining about a missing index-site.
-Congratulations – Kajona was installed successfully. To change the contents of your portal, go on and „Log in at the administration“.
+A welcome-page should be loaded. Congratulations – Kajona was installed successfully. To change the contents of your portal, go on and „Log in at the administration“.
 
 ##Log in at the administration
 To log in at the administration, attach the folder „/admin“ to your portal-url:

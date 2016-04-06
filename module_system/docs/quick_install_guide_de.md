@@ -5,10 +5,8 @@ Dieses Dokument beschreibt die Installation eines neuen Kajona-Systems in wenige
 ##Download
 Wenn noch nicht bereits geschehen, so beginnt die Installation von Kajona mit dem Download des Systems von www.kajona.de.
 
-Als Basis des Downloads kann entweder das Light- oder das Full-Package gewählt werden. Im Gegensatz zum Full-Package besteht das Light-Packages aus einer reduzierten Anzahl an Modulen, ein späteres Erweitern des Systems um zusätzliche Module und Elemente ist aber jederzeit möglich.
 
-##Dateien enptacken
-
+##Dateien entpacken
 Nach dem Download sollte das ZIP-Paket entpackt werden. Dies kann bereits auf dem Ziel-Server, oder aber lokal erfolgen.
 Nach dem Entpacken sollte das Dateisystem wie folgt aussehen (schematisch, je nach Paket-Wahl kann die Liste variieren):
 
@@ -33,7 +31,7 @@ Das System kann nun auf den Webserver kopiert werden. Dies erfolgt in der Regel 
 Damit das System erfolgreich installiert und betrieben werden kann, müssen ein paar Datei- und Verzeichnisrechte vorgenommen werden. Konkret benötigt der Webserver Schreibrechte auf die folgenden Dateien/Verzeichnisse:
 
 	/core
-	/project/system/config
+	/project/module_system/system/config
 	/project/dbdumps
 	/project/log
 	/project/temp
@@ -59,13 +57,12 @@ Es sollte nun eine URL nach dem Schema ``www.meine-domain.xy/`` aufgerufen werde
 Als erster Schritt überprüft der Installer ob alle Rechte zuvor korrekt konfiguriert wurden. Zusätzlich werden ein paar benötigte PHP-Module auf Vorhandensein überprüft.
 Wurde dieser Schritt abgeschlossen, erfolgt das Erfassen der Datenbank-Zugangsdaten. Hier sollten nun die zuvor notierten Daten eingetragen werden.
 
-Nach dem Klick auf „in config.php Speichern“ erscheint ein weiteres Formular. In diesem können die gewünschten Zugangsdaten zur Administration erfasst werden. Konkret ist das der Benutzername und das Passwort samt E-Mail Adresse für den späteren Zugang zur Administration.
+Nach dem Klick auf „in config.php Speichern“ erscheint ein weiteres Formular. In diesem können die gewünschten Zugangsdaten zur Administration erfasst werden. Konkret sind das der Benutzername und das Passwort samt E-Mail Adresse für den späteren Zugang zur Administration.
 
-Ist auch dieser Schritt erledigt, geht es an die Installation des Systems an sich. Der einfachste Weg ist dabei die „Automatische Installation“ - alle Module und Inhalte werden Installiert.
+Ist auch dieser Schritt erledigt, geht es an die Installation des Systems an sich.
 
 Wurden alle Elemente und Module installiert ist die Installation abgeschlossen. 
-
-Aus Sicherheitsgründen sollte nun (per FTP) die Datei „/installer.php“ sowie, wenn vorhanden, die Datei „/v3_v4_postupdate.php“ gelöscht werden. Und dann kann es weiter gehen: „Das Portal lebt“.
+Und dann kann es weiter gehen: „Das Portal lebt“.
 
 ##Das Portal lebt
 Nach der Installation erfolgt der erste Test: Das Portal kann aufgerufen werden. Hierfür wird einfach der oberste Ordner des Systems aufgerufen, also, je nach dem,
@@ -73,7 +70,7 @@ Nach der Installation erfolgt der erste Test: Das Portal kann aufgerufen werden.
 oder 
 ``www.meine-domain.xy/meine_installation/``.
 
-Wurde das Modul „Samplecontent“ installiert, so erscheint nun eine vorgefertigte Beispielseite. Wenn das Modul nicht installiert wurde, sollte nun eine Fehlermeldung erscheinen, welche sich über eine fehlende Startseite beschwert. Herzlichen Glückwunsch – Kajona wurde installiert. Um nun Inhalte abzuändern, erfolgt das „Anmelden an der Administration“.
+Es erscheint nun eine vorgefertigte Beispielseite. Herzlichen Glückwunsch – Kajona wurde installiert. Um nun Inhalte abzuändern, erfolgt das „Anmelden an der Administration“.
 
 ##Anmelden an der Administration
 Um sich an der Administration anzumelden, wird der Pfad des Portals einfach um den Ordner admin/ ergänzt, also zu
