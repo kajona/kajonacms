@@ -34,6 +34,16 @@ describe('installation', function() {
         // start the installation this takes some time
         browser.driver.findElement(by.css('.savechanges')).click();
 
+        // wait for the installation
+        browser.driver.wait(function() {
+            return browser.driver.getCurrentUrl().then(function(url) {
+                return /finish/.test(url);
+            });
+        }, 60000 * 5);
+
+        // now we must have a success message
+        expect(browser.driver.findElement(by.css('.alert-success')).getText()).toMatch('Herzlichen Glückwunsch!');
+
         // this is required so that our installation sets all needed settings i.e. turn nice urls / ssl off etc.
         browser.get('http://127.0.0.1:8080/setupSeleniumConfig.php');
     });
