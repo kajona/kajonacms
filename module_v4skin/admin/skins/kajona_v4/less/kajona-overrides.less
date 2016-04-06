@@ -1,4 +1,3 @@
-
 /* KAJONA variable redefinitions */
 
 @kajona-brand-color:        #6cb121;
@@ -1506,9 +1505,7 @@ table.form-control {
 }
 
 
-.treeViewWrapper .jstree-default {
 
-}
 
 
 
@@ -1769,6 +1766,22 @@ table.form-control {
         background: lighten(@kajona-brand-color, 40%) !important;
     }
 }
+
+//if there is only one node -> hide triangle
+.treeDiv > ul.jstree-container-ul  > li.jstree-node:only-child {
+
+    //hides the triangle of the root node
+    > i.jstree-icon:first-child {
+        display: none;
+    }
+
+    //moves the subnodes of the root nodes to the left (needed as triangle is hidden)
+    > ul {
+        margin-left: -24px;
+    }
+}
+
+
 
 
 /* the login page */

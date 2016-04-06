@@ -833,8 +833,9 @@ class PagesAdminController extends AdminSimple implements AdminInterface
         $objTreeConfig->setStrRootNodeId($this->getObjModule()->getSystemid());
         $objTreeConfig->setStrNodeEndpoint(Link::getLinkAdminXml("pages", "getChildNodes"));
         $objTreeConfig->setArrNodesToExpand($arrNodesToExpand);
-        $objTreeConfig->addType("folder", array("page"));
-        $objTreeConfig->addType("page", array("page"));
+        $objTreeConfig->addType(PagesJstreeNodeLoader::NODE_TYPE_PAGE_MODULE, array(PagesJstreeNodeLoader::NODE_TYPE_PAGE, PagesJstreeNodeLoader::NODE_TYPE_FOLDER));
+        $objTreeConfig->addType(PagesJstreeNodeLoader::NODE_TYPE_FOLDER, array(PagesJstreeNodeLoader::NODE_TYPE_PAGE));
+        $objTreeConfig->addType(PagesJstreeNodeLoader::NODE_TYPE_PAGE, array(PagesJstreeNodeLoader::NODE_TYPE_PAGE));
 
         $strReturn .= $this->objToolkit->getTreeview($objTreeConfig, $strSideContent);
 
@@ -1319,7 +1320,7 @@ JS;
             $arrSystemIdPath = array($this->getSystemid());
         }
 
-        $arrReturn = $objJsTreeLoader->getJson($arrSystemIdPath, false);
+        $arrReturn = $objJsTreeLoader->getJson($arrSystemIdPath, $bitInitialLoading);
         ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
         return $arrReturn;
     }

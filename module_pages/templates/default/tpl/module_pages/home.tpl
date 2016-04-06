@@ -32,12 +32,11 @@
     <a class="navbar-brand" href="#">Kajona CMS</a>
     %%masterportalnavi_navigation%%
     %%mastersearch_search%%
+    %%masterlanguageswitch_languageswitch%%
 </nav>
 
-<!--<ol class="breadcrumb">-->
-    %%masterpathnavi_navigation%%
-<!--</ol>-->
 
+%%masterpathnavi_navigation%%
 <div class="container">
 
     <div class="row">
@@ -278,8 +277,6 @@
         </div>
 
     </div>
-
-
 
 
 
