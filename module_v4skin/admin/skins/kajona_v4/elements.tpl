@@ -1592,7 +1592,8 @@ The language switch surrounds the buttons
         KAJONA.admin.loader.loadFile([
             "/core/module_system/admin/scripts/jstree3/dist/jstree.min.js",
             "/core/module_system/admin/scripts/jstree3/dist/themes/default/style.min.css",
-            "/core/module_system/admin/scripts/jstree3/kajonatree.js"
+            "/core/module_system/admin/scripts/jstree3/kajonatree.js",
+            "/core/module_system/system/scripts/lang.js"
         ], function() {
 
             var jsTree = new KAJONA.kajonatree.jstree();

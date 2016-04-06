@@ -7,6 +7,7 @@ if (typeof KAJONA === "undefined") {
 }
 
 KAJONA.kajonatree = {
+    helper: {},
     contextmenu: {},
     conditionalselect: {}
 };
@@ -132,7 +133,7 @@ KAJONA.kajonatree.jstree = function () {
      */
     this.initTree = function () {
 
-        //1. Create config object
+        /* Create config object*/
         var jsTreeObj = {
             'core' : {
                 /**
@@ -194,12 +195,12 @@ KAJONA.kajonatree.jstree = function () {
             },
             'contextmenu': {
             },
-            'conditionalselect': KAJONA.kajonatree.conditionalselect.handleCinditionalSelect,
+            'conditionalselect': KAJONA.kajonatree.conditionalselect.handleConditionalSelect,
 
             'plugins': ['conditionalselect']
         };
 
-        //2. Extend Js Tree Object due to jsTreeConfig
+        /* Extend Js Tree Object due to jsTreeConfig*/
         if(this.treeConfig.checkbox) {
             jsTreeObj.plugins.push('checkbox');
         }
@@ -212,15 +213,53 @@ KAJONA.kajonatree.jstree = function () {
         }
         if(this.treeConfig.contextmenu) {
             jsTreeObj.plugins.push('contextmenu');
-            jsTreeObj.contextmenu = this.treeConfig.contextmenu;
+            jsTreeObj.contextmenu.items = this.treeConfig.contextmenu.items;
+            jsTreeObj.contextmenu.show_at_node = false;
         }
 
-        //3. Create the tree
-        $('#'+this.treeId).jstree(jsTreeObj);
+        /* Create the tree */
+        var $jsTree = $('#'+this.treeId).jstree(jsTreeObj);
+
+        /*Register events*/
+        $jsTree
+            .on("show_contextmenu.jstree", function(objNode, x, y) {
+                //initialze properties when context menu is shown
+                KAJONA.util.lang.initializeProperties($('.jstree-contextmenu'));
+            });
 
         //4. init jstree draggable for lists
         $('td.treedrag.jstree-listdraggable').on('mousedown', this.listDnd);
     };
+};
+
+
+/**
+ * Get the current tree instance
+ *
+ * @returns {*}
+ */
+KAJONA.kajonatree.helper.getTreeInstance = function() {
+    var treeId = $('.treeDiv').first()[0].id;
+    return $.jstree.reference('#' + treeId);
+
+};
+
+/**
+ *  Creates the contextmenu
+ *
+ * @param o - the node
+ * @param cb - callback function
+ */
+KAJONA.kajonatree.contextmenu.createDefaultContextMenu = function(o, cb) {
+    var objItems =  {
+        "expand_all": {
+            "label": "<span data-lang-property=\"system:commons_tree_contextmenu_loadallsubnodes\"></span>",
+            "action": KAJONA.kajonatree.contextmenu.openAllNodes,
+            "icon":"fa fa-sitemap"
+        }
+    };
+
+    return objItems;
 };
 
 
@@ -232,7 +271,7 @@ KAJONA.kajonatree.jstree = function () {
  * @param event - the event being fired
  *
  */
-KAJONA.kajonatree.conditionalselect.handleCinditionalSelect = function (objNode, event) {
+KAJONA.kajonatree.conditionalselect.handleConditionalSelect = function (objNode, event) {
 
     //hanlde on click events
     if(event.type == "click") {
