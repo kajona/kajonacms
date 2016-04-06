@@ -354,7 +354,7 @@ class Lang
         $lang = array();
         $this->bitSaveToCache = true;
 
-        include_once $strFilename;
+        include $strFilename;
 
         if (!isset($arrTargetArray[$strLanguage])) {
             $arrTargetArray[$strLanguage] = array();
