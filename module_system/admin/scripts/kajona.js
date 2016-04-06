@@ -753,7 +753,7 @@ KAJONA.admin.ajax = {
             error: objCallback,
             success: objCallback,
             dataType: 'text'
-        }).done(
+        }).always(
             function(response) {
                 KAJONA.admin.WorkingIndicator.getInstance().stop();
             }
