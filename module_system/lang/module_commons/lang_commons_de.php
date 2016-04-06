@@ -112,4 +112,4 @@ $lang["commons_object_validator_number_fieldcompare_greaterequals_than"] = "'{0}
 $lang["commons_object_validator_number_fieldcompare_less_than"] = "'{0}' muss < '{1}'";
 $lang["commons_object_validator_number_fieldcompare_lessequals_than"] = "'{0}' muss <= '{1}' sein";
 
-$lang["commons_tree_contextmenu_loadallsubnodes"] = "Alle Teilzweige aufklappen";
+$lang["commons_tree_contextmenu_loadallsubnodes"] = "Unterelemente aufklappen";
