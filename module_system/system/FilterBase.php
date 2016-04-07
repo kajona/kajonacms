@@ -6,7 +6,6 @@
 
 namespace Kajona\System\System;
 
-use DateTime;
 use Kajona\System\Admin\AdminFormgeneratorFilter;
 use ReflectionClass;
 
@@ -47,6 +46,14 @@ abstract class FilterBase
      */
     private $strFilterId = null;
 
+
+    /**
+     * Array to store additional conditions which are not provided by the filter itself
+     *
+     * @var array
+     */
+    private $arrAdditionalConditions = array();
+
     /**
      * Returns the ID of the filter.
      * This ID is also being used to store the filter in the session. Please make sure to use a unique ID.
@@ -72,10 +79,11 @@ abstract class FilterBase
      *
      * @return mixed
      */
-    public function getArrModule($strKey = "") {
+    public function getArrModule($strKey = "")
+    {
         $objReflection = new Reflection($this);
         $arrAnnotationValues = $objReflection->getAnnotationValuesFromClass(AbstractController::STR_MODULE_ANNOTATION);
-        if (count($arrAnnotationValues) > 0) {
+        if(count($arrAnnotationValues) > 0) {
             return trim($arrAnnotationValues[0]);
         }
 
@@ -209,8 +217,9 @@ abstract class FilterBase
      */
     public function getOrmConditions()
     {
-        $arrRestriction = array();
+        $arrConditions = array();
 
+        /*Handle configured conditions*/
         $objReflection = new Reflection(get_class($this));
         $arrProperties = $objReflection->getPropertiesWithAnnotation(OrmBase::STR_ANNOTATION_TABLECOLUMN);
         $arrPropertiesFilterComparator = $objReflection->getPropertiesWithAnnotation(self::STR_ANNOTATION_FILTER_COMPARE_OPERATOR);
@@ -228,13 +237,18 @@ abstract class FilterBase
                 if($strValue !== null && $strValue !== "") {
                     $objRestriction = $this->getSingleOrmCondition($strAttributeName, $strValue, $strTableColumn, $enumFilterCompareOperator);
                     if($objRestriction !== null) {
-                        $arrRestriction[] = $objRestriction;
+                        $arrConditions[] = $objRestriction;
                     }
                 }
             }
         }
 
-        return $arrRestriction;
+        /*Handle additional conditions*/
+        foreach($this->arrAdditionalConditions as $objCondition) {
+            $arrConditions[] = $objCondition;
+        }
+
+        return $arrConditions;
     }
 
     /**
@@ -261,9 +275,10 @@ abstract class FilterBase
      */
     public function addWhereConditionToORM(OrmObjectlist $objORM)
     {
-        $objRestrictions = $this->getOrmConditions();
-        foreach($objRestrictions as $objRestriction) {
-            $objORM->addWhereRestriction($objRestriction);
+        /*Add configured conditions*/
+        $arrConditions = $this->getOrmConditions();
+        foreach($arrConditions as $objCondition) {
+            $objORM->addWhereRestriction($objCondition);
         }
     }
 
@@ -357,5 +372,21 @@ abstract class FilterBase
     public function setBitFilterUpdated($bitFilterUpdated)
     {
         $this->bitFilterUpdated = $bitFilterUpdated;
+    }
+
+    /**
+     * @return array
+     */
+    public function getArrAdditionalConditions()
+    {
+        return $this->arrAdditionalConditions;
+    }
+
+    /**
+     * @param array $arrAdditionalConditions
+     */
+    public function setArrAdditionalConditions($arrAdditionalConditions)
+    {
+        $this->arrAdditionalConditions = $arrAdditionalConditions;
     }
 }
