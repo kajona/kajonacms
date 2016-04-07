@@ -60,11 +60,11 @@
 
 //--caching ---------------------------------------------------------------------------------------------
 
-    $config['textcachetime']        = 3600;                            //Number of seconds language-files are cached. Cached entries are shared between sessions. Reduce this amount during
+    $config['textcachetime']        = 1;                               //Number of seconds language-files are cached. Cached entries are shared between sessions. Reduce this amount during
                                                                        //development (probably changing the lang-files a lot) and set it to a high value as soon as the website is in
                                                                        //production. Attention: 0 = infinite!
 
-    $config['templatecachetime']    = 3600;                            //Number of seconds templates are cached. Cached entries are shared between sessions. Reduce this amount during
+    $config['templatecachetime']    = 1;                               //Number of seconds templates are cached. Cached entries are shared between sessions. Reduce this amount during
                                                                        //development (probably changing the templates a lot) and set it to a high value as soon as the website is in
                                                                        //production. Attention: 0 = infinite!
 
