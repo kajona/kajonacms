@@ -143,7 +143,7 @@ class V4toV5Migration
                     if($strSeparator == "|") {
                         $strNewValue .= "|".$this->getNewNameFromLegacyClass($strLegacyFile)."|";
                     }
-                    else if($strSeparator == ",") {
+                    elseif($strSeparator == ",") {
                         if(strlen($strNewValue) > 0) {
                             $strNewValue .= ",";
                         }
@@ -310,7 +310,13 @@ class V4toV5Migration
         $strContent = file_get_contents($strFilename);
         $arrMatches = array();
         preg_match("/extends ([a-zA-Z0-9_\\\\]+)/i", $strContent, $arrMatches);
-        return $arrMatches[1];
+        $strClassname = $arrMatches[1];
+
+        if($strClassname[0] == "\\") {
+            $strClassname = substr($strClassname, 1);
+        }
+
+        return $strClassname;
     }
 
     private function getNameNameFromOldFilename($strFilename)
