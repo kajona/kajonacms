@@ -16,7 +16,8 @@ namespace Kajona\System\System;
  * @author sidler@mulchprod.de
  * @since 4.3
  */
-class Link {
+class Link
+{
 
     private static $intNrOfPortalLanguages = null;
     private static $strPortalLanguage = null;
@@ -35,24 +36,28 @@ class Link {
      * @param string $strLinkId
      * @param bool $bitTooltip
      * @param string $strCss
+     *
      * @return string
      */
-    public static function getLinkAdminManual($strLinkContent, $strText , $strAlt="", $strImage="", $strImageId = "", $strLinkId = "", $bitTooltip = true, $strCss = "") {
+    public static function getLinkAdminManual($strLinkContent, $strText, $strAlt = "", $strImage = "", $strImageId = "", $strLinkId = "", $bitTooltip = true, $strCss = "")
+    {
         $strLink = "";
 
-        if($strImage != "") {
-            if(!$bitTooltip)
+        if ($strImage != "") {
+            if (!$bitTooltip) {
                 $strLink = "<a ".$strLinkContent."  title=\"".$strAlt."\" ".($strLinkId != "" ? "id=\"".$strLinkId."\"" : "")." >".AdminskinHelper::getAdminImage($strImage, $strAlt, true, $strImageId)."</a>";
-            else
+            }
+            else {
                 $strLink = "<a ".$strLinkContent."  title=\"".$strAlt."\" rel=\"tooltip\" ".($strLinkId != "" ? "id=\"".$strLinkId."\"" : "")." >".AdminskinHelper::getAdminImage($strImage, $strAlt, true, $strImageId)."</a>";
+            }
         }
-        else if($strText != "") {
-            if($bitTooltip && (trim($strAlt) == "" || $strAlt == $strText)) {
+        else if ($strText != "") {
+            if ($bitTooltip && (trim($strAlt) == "" || $strAlt == $strText)) {
                 $bitTooltip = false;
                 $strAlt = $strText;
             }
 
-            $strLink = "<a ".$strLinkContent." title=\"".$strAlt."\" ".($strCss!= "" ? " class=\"".$strCss."\"" : "")." ".($bitTooltip!= "" ? " rel=\"tooltip\"" : "")." ".($strLinkId != "" ? "id=\"".$strLinkId."\"" : "")." >".$strText."</a>";
+            $strLink = "<a ".$strLinkContent." title=\"".$strAlt."\" ".($strCss != "" ? " class=\"".$strCss."\"" : "")." ".($bitTooltip != "" ? " rel=\"tooltip\"" : "")." ".($strLinkId != "" ? "id=\"".$strLinkId."\"" : "")." >".$strText."</a>";
         }
 
         return $strLink;
@@ -69,15 +74,14 @@ class Link {
      * @param string $strImage
      * @param bool $bitTooltip
      * @param string $strCss
+     *
      * @return string
      */
-    public static function getLinkAdmin($strModule, $strAction, $strParams = "", $strText ="", $strAlt="", $strImage="", $bitTooltip = true, $strCss = "") {
+    public static function getLinkAdmin($strModule, $strAction, $strParams = "", $strText = "", $strAlt = "", $strImage = "", $bitTooltip = true, $strCss = "")
+    {
         $strHref = "href=\"".Link::getLinkAdminHref($strModule, $strAction, $strParams)."\"";
         return self::getLinkAdminManual($strHref, $strText, $strAlt, $strImage, "", "", $bitTooltip, $strCss);
     }
-
-
-
 
 
     /**
@@ -87,9 +91,11 @@ class Link {
      * @param string $strAction
      * @param string $strParams
      * @param bool $bitEncodedAmpersand
+     *
      * @return string
      */
-    public static function getLinkAdminHref($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = true) {
+    public static function getLinkAdminHref($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = true)
+    {
 
         //systemid in params?
         $strSystemid = "";
@@ -100,18 +106,22 @@ class Link {
         $strAction = urlencode($strAction);
 
         //rewriting enabled?
-        if(SystemSetting::getConfigValue("_system_mod_rewrite_") == "true") {
+        if (SystemSetting::getConfigValue("_system_mod_rewrite_") == "true") {
 
             //scheme: /admin/module.action.systemid
-            if($strModule != "" && $strAction == "" && $strSystemid == "")
+            if ($strModule != "" && $strAction == "" && $strSystemid == "") {
                 $strLink = _webpath_."/admin/".$strModule.".html";
-            elseif($strModule != "" && $strAction != "" && $strSystemid == "")
+            }
+            elseif ($strModule != "" && $strAction != "" && $strSystemid == "") {
                 $strLink = _webpath_."/admin/".$strModule."/".$strAction.".html";
-            else
+            }
+            else {
                 $strLink = _webpath_."/admin/".$strModule."/".$strAction."/".$strSystemid.".html";
+            }
 
-            if(count($arrParams) > 0)
+            if (count($arrParams) > 0) {
                 $strLink .= "?".implode("&amp;", $arrParams);
+            }
 
         }
         else {
@@ -119,12 +129,14 @@ class Link {
                 ($strAction != "" ? "&amp;action=".$strAction : "").
                 ($strSystemid != "" ? "&amp;systemid=".$strSystemid : "");
 
-            if(count($arrParams) > 0)
+            if (count($arrParams) > 0) {
                 $strLink .= "&amp;".(implode("&amp;", $arrParams));
+            }
         }
 
-        if(!$bitEncodedAmpersand)
+        if (!$bitEncodedAmpersand) {
             $strLink = uniStrReplace("&amp;", "&", $strLink);
+        }
 
         return $strLink;
     }
@@ -139,7 +151,8 @@ class Link {
      *
      * @return mixed|string
      */
-    public static function getLinkAdminXml($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = false) {
+    public static function getLinkAdminXml($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = false)
+    {
 
         //systemid in params?
         $strSystemid = "";
@@ -150,31 +163,37 @@ class Link {
         $strAction = urlencode($strAction);
 
         //rewriting enabled?
-        if(SystemSetting::getConfigValue("_system_mod_rewrite_") == "true") {
+        if (SystemSetting::getConfigValue("_system_mod_rewrite_") == "true") {
 
             //scheme: /admin/module.action.systemid
-            if($strModule != "" && $strAction == "" && $strSystemid == "")
+            if ($strModule != "" && $strAction == "" && $strSystemid == "") {
                 $strLink = _webpath_."/xml/admin/".$strModule;
-            else if($strModule != "" && $strAction != "" && $strSystemid == "")
+            }
+            else if ($strModule != "" && $strAction != "" && $strSystemid == "") {
                 $strLink = _webpath_."/xml/admin/".$strModule."/".$strAction;
-            else
+            }
+            else {
                 $strLink = _webpath_."/xml/admin/".$strModule."/".$strAction."/".$strSystemid;
+            }
 
-            if(count($arrParams) > 0)
+            if (count($arrParams) > 0) {
                 $strLink .= "?".implode("&amp;", $arrParams);
+            }
 
         }
         else {
             $strLink = ""._webpath_."/xml.php?admin=1&amp;module=".$strModule.
-                ($strAction != "" ? "&amp;action=".$strAction : "" ).
-                ($strSystemid != "" ?  "&amp;systemid=".$strSystemid : "");
+                ($strAction != "" ? "&amp;action=".$strAction : "").
+                ($strSystemid != "" ? "&amp;systemid=".$strSystemid : "");
 
-            if(count($arrParams) > 0)
+            if (count($arrParams) > 0) {
                 $strLink .= "&amp;".(implode("&amp;", $arrParams));
+            }
         }
 
-        if(!$bitEncodedAmpersand)
+        if (!$bitEncodedAmpersand) {
             $strLink = uniStrReplace("&amp;", "&", $strLink);
+        }
 
         return $strLink;
     }
@@ -196,35 +215,41 @@ class Link {
      *
      * @return string
      */
-    public static function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "", $strAlt = "", $strImage = "", $intWidth = "500", $intHeight = "500", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false) {
+    public static function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "", $strAlt = "", $strImage = "", $intWidth = "500", $intHeight = "500", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false)
+    {
         $strLink = "";
         //if($strParams != "")
         //    $strParams = str_replace("&", "&amp;", $strParams);
         $strTitle = addslashes(uniStrReplace(array("\n", "\r"), array(), strip_tags(nl2br($strTitle))));
 
-        if($bitPortalEditor && $intHeight == "500")
+        if ($bitPortalEditor && $intHeight == "500") {
             $intHeight = 690;
+        }
 
         //urlencoding
         $strModule = urlencode($strModule);
         $strAction = urlencode($strAction);
 
-        if($bitPortalEditor)
+        if ($bitPortalEditor) {
             $strParams .= "&pe=1";
-
-        if($strImage != "") {
-            if($strAlt == "")
-                $strAlt = $strAction;
-
-            if(!$bitTooltip)
-                $strLink = "<a href=\"#\" onclick=\"window.open('".Link::getLinkAdminHref($strModule, $strAction, $strParams)."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."'); return false;\" ".
-                    "title=\"".$strAlt."\">".AdminskinHelper::getAdminImage($strImage, $strAlt, true)."</a>";
-            else
-                $strLink = "<a href=\"#\" onclick=\"window.open('".Link::getLinkAdminHref($strModule, $strAction, $strParams)."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."'); return false;\" ".
-                    "title=\"".$strAlt."\" rel=\"tooltip\">".AdminskinHelper::getAdminImage($strImage, $strAlt, true)."</a>";
         }
 
-        if($strImage == "" && $strText != "") {
+        if ($strImage != "") {
+            if ($strAlt == "") {
+                $strAlt = $strAction;
+            }
+
+            if (!$bitTooltip) {
+                $strLink = "<a href=\"#\" onclick=\"window.open('".Link::getLinkAdminHref($strModule, $strAction, $strParams)."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."'); return false;\" ".
+                    "title=\"".$strAlt."\">".AdminskinHelper::getAdminImage($strImage, $strAlt, true)."</a>";
+            }
+            else {
+                $strLink = "<a href=\"#\" onclick=\"window.open('".Link::getLinkAdminHref($strModule, $strAction, $strParams)."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."'); return false;\" ".
+                    "title=\"".$strAlt."\" rel=\"tooltip\">".AdminskinHelper::getAdminImage($strImage, $strAlt, true)."</a>";
+            }
+        }
+
+        if ($strImage == "" && $strText != "") {
             $bitTooltip = $bitTooltip && $strAlt != "";
 
             $strLink = "<a href=\"#\" ".($bitPortalEditor ? "class=\"pe_link\"" : "")." ".($bitTooltip ? "title=\"".$strAlt."\" rel=\"tooltip\" " : "")." ".
@@ -248,49 +273,55 @@ class Link {
      * @param bool|string $strOnClick
      * @param null|int $intWidth
      * @param null|int $intHeight
+     *
      * @return string
      */
-    public static function getLinkAdminDialog($strModule, $strAction, $strParams = "", $strText = "", $strAlt="", $strImage="", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false, $strOnClick = "", $intWidth = null, $intHeight = null) {
+    public static function getLinkAdminDialog($strModule, $strAction, $strParams = "", $strText = "", $strAlt = "", $strImage = "", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false, $strOnClick = "", $intWidth = null, $intHeight = null)
+    {
         $strLink = "";
         $strTitle = addslashes(uniStrReplace(array("\n", "\r"), array(), strip_tags(nl2br($strTitle))));
 
-        if($bitPortalEditor)
+        if ($bitPortalEditor) {
             $strParams .= "&pe=1";
+        }
 
         //urlencoding
         $strModule = urlencode($strModule);
         $strAction = urlencode($strAction);
 
-        if($strOnClick == "") {
-            if($intWidth !== null && $intHeight !== null)
+        if ($strOnClick == "") {
+            if ($intWidth !== null && $intHeight !== null) {
                 $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".Link::getLinkAdminHref($strModule, $strAction, $strParams)."'); KAJONA.admin.folderview.dialog.setTitle('".$strTitle."'); ".
                     "KAJONA.admin.folderview.dialog.init('".$intWidth."', '".$intHeight."'); return false;";
-            else
+            }
+            else {
                 $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".Link::getLinkAdminHref($strModule, $strAction, $strParams)."'); KAJONA.admin.folderview.dialog.setTitle('".$strTitle."'); ".
                     "KAJONA.admin.folderview.dialog.init(); return false;";
+            }
         }
 
 
-
-        if($strImage != "") {
-            if($strAlt == "")
+        if ($strImage != "") {
+            if ($strAlt == "") {
                 $strAlt = $strAction;
+            }
 
-            if(!$bitTooltip)
+            if (!$bitTooltip) {
                 $strLink = "<a href=\"#\" onclick=\"".$strOnClick."\" title=\"".$strAlt."\">".AdminskinHelper::getAdminImage($strImage, $strAlt, true)."</a>";
-            else
+            }
+            else {
                 $strLink = "<a href=\"#\" onclick=\"".$strOnClick."\" title=\"".$strAlt."\" rel=\"tooltip\">".AdminskinHelper::getAdminImage($strImage, $strAlt, true)."</a>";
+            }
         }
 
-        if($strImage == "" && $strText != "") {
-            if($strAlt == "")
+        if ($strImage == "" && $strText != "") {
+            if ($strAlt == "") {
                 $strAlt = $strText;
-            $strLink = "<a href=\"#\" ".($bitPortalEditor ? "class=\"pe_link\"" : "")." ".($bitTooltip ? "title=\"".$strAlt."\" rel=\"tooltip\" " : "" )." onclick=\"".$strOnClick."\">".$strText."</a>";
+            }
+            $strLink = "<a href=\"#\" ".($bitPortalEditor ? "class=\"pe_link\"" : "")." ".($bitTooltip ? "title=\"".$strAlt."\" rel=\"tooltip\" " : "")." onclick=\"".$strOnClick."\">".$strText."</a>";
         }
         return $strLink;
     }
-
-
 
 
     /**
@@ -306,17 +337,20 @@ class Link {
      * @param string $strCssClass
      * @param string $strLanguage
      * @param string $strSeoAddon
+     *
      * @return string
      */
-    public static function getLinkPortal($strPageI, $strPageE, $strTarget = "_self", $strText = "", $strAction = "", $strParams = "", $strSystemid = "", $strCssClass = "", $strLanguage = "", $strSeoAddon = "") {
+    public static function getLinkPortal($strPageI, $strPageE, $strTarget = "_self", $strText = "", $strAction = "", $strParams = "", $strSystemid = "", $strCssClass = "", $strLanguage = "", $strSeoAddon = "")
+    {
         $strReturn = "";
 
         $strHref = Link::getLinkPortalHref($strPageI, $strPageE, $strAction, $strParams, $strSystemid, $strLanguage, $strSeoAddon);
 
-        if($strTarget == "")
+        if ($strTarget == "") {
             $strTarget = "_self";
+        }
 
-        $strReturn .="<a href=\"".$strHref."\" target=\"".$strTarget."\" ".($strCssClass != "" ? " class=\"".$strCssClass."\" ": "").">".$strText."</a>";
+        $strReturn .= "<a href=\"".$strHref."\" target=\"".$strTarget."\" ".($strCssClass != "" ? " class=\"".$strCssClass."\" " : "").">".$strText."</a>";
 
         return $strReturn;
     }
@@ -331,23 +365,27 @@ class Link {
      * @param string $strSystemid
      * @param string $strLanguage
      * @param string $strSeoAddon Only used if using mod_rewrite
+     *
      * @return string
      */
-    public static function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParams = "", $strSystemid = "", $strLanguage = "", $strSeoAddon = "") {
+    public static function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParams = "", $strSystemid = "", $strLanguage = "", $strSeoAddon = "")
+    {
         $strReturn = "";
         $bitInternal = true;
 
         //return "#" if neither an internal nor an external page is set
-        if($strPageI == "" && $strPageE == "")
+        if ($strPageI == "" && $strPageE == "") {
             return "#";
+        }
 
         //Internal links are more important than external links!
-        if($strPageI == "" && $strPageE != "")
+        if ($strPageI == "" && $strPageE != "") {
             $bitInternal = false;
+        }
 
 
         //create an array out of the params
-        if($strSystemid != "") {
+        if ($strSystemid != "") {
             $strParams .= "&systemid=".$strSystemid;
             $strSystemid = "";
         }
@@ -356,9 +394,9 @@ class Link {
 
         // any anchors set to the page?
         $strAnchor = "";
-        if(uniStrpos($strPageI, "#") !== false) {
+        if (uniStrpos($strPageI, "#") !== false) {
             //get anchor, remove anchor from link
-            $strAnchor = urlencode(uniSubstr($strPageI, uniStrpos($strPageI, "#")+1));
+            $strAnchor = urlencode(uniSubstr($strPageI, uniStrpos($strPageI, "#") + 1));
             $strPageI = uniSubstr($strPageI, 0, uniStrpos($strPageI, "#"));
         }
 
@@ -367,44 +405,48 @@ class Link {
         $strAction = urlencode($strAction);
 
         //more than one language installed?
-        if($strLanguage == "" && self::getIntNumberOfPortalLanguages() > 1)
+        if ($strLanguage == "" && self::getIntNumberOfPortalLanguages() > 1) {
             $strLanguage = self::getStrPortalLanguage();
-        else if($strLanguage != "" && self::getIntNumberOfPortalLanguages() <=1)
+        }
+        else if ($strLanguage != "" && self::getIntNumberOfPortalLanguages() <= 1) {
             $strLanguage = "";
+        }
 
         $strHref = "";
-        if($bitInternal) {
+        if ($bitInternal) {
             //check, if we could use mod_rewrite
             $bitRegularLink = true;
-            if(SystemSetting::getConfigValue("_system_mod_rewrite_") == "true") {
+            if (SystemSetting::getConfigValue("_system_mod_rewrite_") == "true") {
 
                 $strAddKeys = "";
 
                 //used later to add seo-relevant keywords
                 $objPage = \Kajona\Pages\System\PagesPage::getPageByName($strPageI);
-                if($objPage !== null) {
-                    if($strLanguage != "") {
+                if ($objPage !== null) {
+                    if ($strLanguage != "") {
                         $objPage->setStrLanguage($strLanguage);
                         $objPage->initObject();
                     }
 
                     $strAddKeys = $objPage->getStrSeostring().($strSeoAddon != "" && $objPage->getStrSeostring() != "" ? "-" : "").urlSafeString($strSeoAddon);
-                    if(uniStrlen($strAddKeys) > 0 && uniStrlen($strAddKeys) <=2 )
+                    if (uniStrlen($strAddKeys) > 0 && uniStrlen($strAddKeys) <= 2) {
                         $strAddKeys .= "__";
+                    }
 
                     //trim string
                     $strAddKeys = uniStrTrim($strAddKeys, 100, "");
 
-                    if($strLanguage != "")
+                    if ($strLanguage != "") {
                         $strHref .= $strLanguage."/";
+                    }
 
                     $strPath = $objPage->getStrPath();
-                    if($strPath == "") {
+                    if ($strPath == "") {
                         $objPage->updatePath();
                         $strPath = $objPage->getStrPath();
                         $objPage->updateObjectToDb();
                     }
-                    if($strPath != "") {
+                    if ($strPath != "") {
                         $strHref .= $strPath."/";
                     }
 
@@ -412,22 +454,28 @@ class Link {
 
                 //ok, here we go. schema for rewrite_links: pagename.addKeywords.action.systemid.language.html
                 //but: special case: just pagename & language
-                if($strAction == "" && $strSystemid == "" && $strAddKeys == "")
+                if ($strAction == "" && $strSystemid == "" && $strAddKeys == "") {
                     $strHref .= $strPageI.".html";
-                elseif($strAction == "" && $strSystemid == "")
+                }
+                elseif ($strAction == "" && $strSystemid == "") {
                     $strHref .= $strPageI.($strAddKeys == "" ? "" : ".".$strAddKeys).".html";
-                elseif($strAction != "" && $strSystemid == "")
-                    $strHref .= $strPageI.".".$strAddKeys.".".$strAction .".html";
-                else
-                    $strHref .= $strPageI.".".$strAddKeys.".".$strAction .".".$strSystemid.".html";
+                }
+                elseif ($strAction != "" && $strSystemid == "") {
+                    $strHref .= $strPageI.".".$strAddKeys.".".$strAction.".html";
+                }
+                else {
+                    $strHref .= $strPageI.".".$strAddKeys.".".$strAction.".".$strSystemid.".html";
+                }
 
                 //params?
-                if(count($arrParams) > 0)
+                if (count($arrParams) > 0) {
                     $strHref .= "?".implode("&amp;", $arrParams);
+                }
 
                 // add anchor if given
-                if($strAnchor != "")
+                if ($strAnchor != "") {
                     $strHref .= "#".$strAnchor;
+                }
 
                 //plus the domain as a prefix
                 $strHref = "_webpath_"."/".$strHref;
@@ -437,14 +485,15 @@ class Link {
 
             }
 
-            if($bitRegularLink)
+            if ($bitRegularLink) {
                 $strHref = "_indexpath_"."?".
-                    ($strPageI != "" ? "page=".$strPageI : "" )."".
-                    ($strSystemid != "" ? "&amp;systemid=".$strSystemid : "" ).
+                    ($strPageI != "" ? "page=".$strPageI : "")."".
+                    ($strSystemid != "" ? "&amp;systemid=".$strSystemid : "").
                     ($strAction != "" ? "&amp;action=".$strAction : "").
                     ($strLanguage != "" ? "&amp;language=".$strLanguage : "").
-                    (count($arrParams) > 0 ? "&amp;".implode("&amp;", $arrParams) : "" ).
+                    (count($arrParams) > 0 ? "&amp;".implode("&amp;", $arrParams) : "").
                     ($strAnchor != "" ? "#".$strAnchor : "")."";
+            }
         }
         else {
             $strHref = $strPageE;
@@ -469,12 +518,12 @@ class Link {
      *
      * @return string
      */
-    public static function getLinkPortalPopup($strPageI, $strPageE, $strAction = "", $strParams = "", $strSystemid = "", $strTitle = "", $intWidth = "500", $intHeight = "500") {
+    public static function getLinkPortalPopup($strPageI, $strPageE, $strAction = "", $strParams = "", $strSystemid = "", $strTitle = "", $intWidth = "500", $intHeight = "500")
+    {
         $strLink = Link::getLinkPortalHref($strPageI, $strPageE, $strAction, $strParams, $strSystemid);
         $strLink = "<a href=\"$strLink\" onclick=\"return !window.open('".$strLink."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."')\" title=\"".$strTitle."\">".$strTitle."</a>";
         return $strLink;
     }
-
 
 
     /**
@@ -484,32 +533,38 @@ class Link {
      *
      * @param string $strParams
      * @param string &$strSystemid
+     *
      * @return array
      */
-    private static function parseParamsString($strParams, &$strSystemid = "") {
+    private static function parseParamsString($strParams, &$strSystemid = "")
+    {
         $strParams = uniStrReplace("&amp;", "&", $strParams);
 
         //if given, remove first ampersand from params
-        if(substr($strParams, 0, 1) == "&")
+        if (substr($strParams, 0, 1) == "&") {
             $strParams = substr($strParams, 1);
+        }
 
         $arrParams = explode("&", $strParams);
-        foreach($arrParams as $strKey => &$strValue) {
+        foreach ($arrParams as $strKey => &$strValue) {
             $arrEntry = explode("=", $strValue);
 
-            if(count($arrEntry) == 2 && $arrEntry[0] == "systemid") {
+            if (count($arrEntry) == 2 && $arrEntry[0] == "systemid") {
                 //encoded and sanitized systemid param TODO: add cve number or other identifier
                 $strSystemid = $arrEntry[1];
-                if(!validateSystemid($strSystemid) && $strSystemid != "%systemid%")
+                if (!validateSystemid($strSystemid) && $strSystemid != "%systemid%") {
                     $strSystemid = "";
+                }
 
                 unset($arrParams[$strKey]);
             }
-            else if($strValue == "")
+            else if ($strValue == "") {
                 unset($arrParams[$strKey]);
+            }
 
-            if(count($arrEntry) == 2)
+            if (count($arrEntry) == 2) {
                 $arrEntry[1] = urlencode($arrEntry[1]);
+            }
 
             $strValue = implode("=", $arrEntry);
         }
@@ -519,11 +574,14 @@ class Link {
 
     /**
      * Helper to determin the number of portal languages only once.
+     *
      * @return int
      */
-    private static function getIntNumberOfPortalLanguages() {
-        if(self::$intNrOfPortalLanguages == null)
+    private static function getIntNumberOfPortalLanguages()
+    {
+        if (self::$intNrOfPortalLanguages == null) {
             self::$intNrOfPortalLanguages = LanguagesLanguage::getNumberOfLanguagesAvailable(true);
+        }
 
         return self::$intNrOfPortalLanguages;
     }
@@ -531,10 +589,12 @@ class Link {
 
     /**
      * Helper to fetch the portal language
+     *
      * @return null|string
      */
-    private static function getStrPortalLanguage() {
-        if(self::$strPortalLanguage == null) {
+    private static function getStrPortalLanguage()
+    {
+        if (self::$strPortalLanguage == null) {
             $objLang = new LanguagesLanguage();
             self::$strPortalLanguage = $objLang->getStrPortalLanguage();
         }
