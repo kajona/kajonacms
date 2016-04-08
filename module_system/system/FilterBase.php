@@ -55,6 +55,34 @@ abstract class FilterBase
     private $arrAdditionalConditions = array();
 
     /**
+     * FilterBase constructor.
+     *
+     * @param bool $bitFilterUpdated
+     */
+    public function __construct()
+    {
+        $this->initFilter();
+    }
+
+    /**
+     * Initializes the filter
+     */
+    protected function initFilter()
+    {
+
+    }
+
+
+    /**
+     * Method for setting default values.
+     * Must be called manually. Not being called on creation.
+     */
+    public function configureDefaultValues()
+    {
+
+    }
+
+    /**
      * Returns the ID of the filter.
      * This ID is also being used to store the filter in the session. Please make sure to use a unique ID.
      * By Default the class name (in lower case) is being returned
@@ -116,6 +144,9 @@ abstract class FilterBase
              */
             if(Carrier::getInstance()->getParam(AdminFormgeneratorFilter::STR_FORM_PARAM_RESET) != "") {
                 Session::getInstance()->sessionUnset($strFilterId);
+
+                //if filter was reset, set default values
+                $objFilter->configureDefaultValues();
             }
             else {
                 //If no reset was triggered -> Update filter with params which have been set

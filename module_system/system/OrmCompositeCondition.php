@@ -33,13 +33,14 @@ class OrmCompositeCondition extends OrmCondition
     private $strConditionConnect = self::STR_CONDITION_AND;
 
     /**
-     * OrmObjectlistCompoundRestriction constructor.
+     * OrmCompositeCondition constructor.
      *
      * @param OrmCondition[] $arrConditions
      * @param string $strConditionConnect
      */
     public function __construct(array $arrConditions = array(), $strConditionConnect = self::STR_CONDITION_AND)
     {
+        parent::__construct("");
         $this->arrConditions = $arrConditions;
         $this->setStrConditionConnect($strConditionConnect);
     }
@@ -85,10 +86,13 @@ class OrmCompositeCondition extends OrmCondition
             }
         }
 
-        $strWhere = implode(") ".$this->strConditionConnect." (", $arrWhere);
-        $strWhere = "( (".$strWhere.") )";
+        $strWhere = "";
+        if(count($arrWhere) > 0) {
+            $strWhere = implode(") ".$this->strConditionConnect." (", $arrWhere);
+            $strWhere = "( (".$strWhere.") )";
+        }
 
-        return " ".$strWhere." ";
+        return $strWhere;
     }
 
     public function getArrParams()

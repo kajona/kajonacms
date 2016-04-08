@@ -66,7 +66,7 @@ class OrmInCondition extends OrmCondition
      */
     public function getStrWhere()
     {
-        return " ".$this->getInStatement($this->strColumnName)." ";
+        return $this->getInStatement($this->strColumnName);
     }
 
     protected function getInStatement($strColumnName)
@@ -89,7 +89,7 @@ class OrmInCondition extends OrmCondition
                 }
 
                 if (count($arrParts) > 0) {
-                    return " (".implode(" OR ", $arrParts).")";
+                    return "(".implode(" OR ", $arrParts).")";
                 }
             }
             else {
