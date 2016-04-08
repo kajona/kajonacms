@@ -1760,27 +1760,56 @@ table.form-control {
 
 
 /* JS TREE */
-.jstree-default {
+.treeDiv {
+    &.jstree-default {
 
-    .jstree-hovered {
-        background: lighten(@kajona-brand-color, 40%) !important;
+        .jstree-hovered {
+            background: lighten(@kajona-brand-color, 40%) !important;
+        }
     }
+
+    //if there is only one node -> hide triangle
+    > ul.jstree-container-ul  > li.jstree-node:only-child {
+
+        //hides the triangle of the root node
+        > i.jstree-icon:first-child {
+            display: none;
+        }
+
+        //moves the subnodes of the root nodes to the left (needed as triangle is hidden)
+        > ul {
+            margin-left: -24px;
+        }
+    }
+
 }
 
-//if there is only one node -> hide triangle
-.treeDiv > ul.jstree-container-ul  > li.jstree-node:only-child {
+.jstree-contextmenu {
+    border: 1px solid @dropdown-border !important;
+    background:none @white !important;
+    padding: 2px 0 !important;
 
-    //hides the triangle of the root node
-    > i.jstree-icon:first-child {
-        display: none;
+    a, .vakata-context-hover > a {
+        color: @link-color !important;
+        text-transform: none;
+        //padding: 3px 15px;
+        display: block;
+        font-weight: normal;
+        box-shadow: none !important;
+        text-shadow: none !important;
+        background-color: @white !important;
+
+        .vakata-contextmenu-sep {
+            display: none !important;
+        }
     }
 
-    //moves the subnodes of the root nodes to the left (needed as triangle is hidden)
-    > ul {
-        margin-left: -24px;
+    a:hover, .dropdown-submenu:hover > a  {
+        color: @white !important;
+        background-color: @dropdown-link-active-bg !important;
+        text-decoration: none;
     }
 }
-
 
 
 
