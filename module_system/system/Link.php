@@ -108,15 +108,20 @@ class Link
         //rewriting enabled?
         if (SystemSetting::getConfigValue("_system_mod_rewrite_") == "true") {
 
+            $strPrefix = "/admin";
+            if(SystemSetting::getConfigValue("_system_mod_rewrite_admin_only_") == "true") {
+                $strPrefix = "";
+            }
+
             //scheme: /admin/module.action.systemid
             if ($strModule != "" && $strAction == "" && $strSystemid == "") {
-                $strLink = _webpath_."/admin/".$strModule.".html";
+                $strLink = _webpath_.$strPrefix."/".$strModule.".html";
             }
             elseif ($strModule != "" && $strAction != "" && $strSystemid == "") {
-                $strLink = _webpath_."/admin/".$strModule."/".$strAction.".html";
+                $strLink = _webpath_.$strPrefix."/".$strModule."/".$strAction.".html";
             }
             else {
-                $strLink = _webpath_."/admin/".$strModule."/".$strAction."/".$strSystemid.".html";
+                $strLink = _webpath_.$strPrefix."/".$strModule."/".$strAction."/".$strSystemid.".html";
             }
 
             if (count($arrParams) > 0) {
@@ -165,15 +170,20 @@ class Link
         //rewriting enabled?
         if (SystemSetting::getConfigValue("_system_mod_rewrite_") == "true") {
 
+            $strPrefix = "/admin";
+            if(SystemSetting::getConfigValue("_system_mod_rewrite_admin_only_") == "true") {
+                $strPrefix = "";
+            }
+
             //scheme: /admin/module.action.systemid
             if ($strModule != "" && $strAction == "" && $strSystemid == "") {
-                $strLink = _webpath_."/xml/admin/".$strModule;
+                $strLink = _webpath_."/xml".$strPrefix."/".$strModule;
             }
             else if ($strModule != "" && $strAction != "" && $strSystemid == "") {
-                $strLink = _webpath_."/xml/admin/".$strModule."/".$strAction;
+                $strLink = _webpath_."/xml".$strPrefix."/".$strModule."/".$strAction;
             }
             else {
-                $strLink = _webpath_."/xml/admin/".$strModule."/".$strAction."/".$strSystemid;
+                $strLink = _webpath_."/xml".$strPrefix."/".$strModule."/".$strAction."/".$strSystemid;
             }
 
             if (count($arrParams) > 0) {
