@@ -13,6 +13,8 @@ use Kajona\System\System\Filesystem;
 use Kajona\System\System\Logger;
 use Kajona\System\System\OrmBase;
 use Kajona\System\System\OrmDeletedhandlingEnum;
+use Kajona\System\System\PharModule;
+use Kajona\System\System\PharModuleExtractor;
 use Kajona\System\System\SystemSetting;
 
 
@@ -76,21 +78,37 @@ class PackagemanagerPackagemanagerTemplate implements PackagemanagerPackagemanag
     {
         $strSource = $this->objMetadata->getStrPath();
 
-        if (!is_dir(_realpath_.$strSource)) {
-            throw new Exception("current package ".$strSource." is not a folder.", Exception::$level_ERROR);
+        if (\Kajona\System\System\PharModule::isPhar(_realpath_.$strSource)) {
+            $objFilesystem = new Filesystem();
+            $objFilesystem->chmod($this->getStrTargetPath(), 0777);
+            Logger::getInstance(Logger::PACKAGEMANAGEMENT)->addLogRow("extracting ".$strSource." to ".$this->getStrTargetPath(), Logger::$levelInfo);
+
+            $objPharModules = new PharModule($strSource);
+            foreach($objPharModules->getContentMap() as $strFilename => $strPath) {
+                $objFilesystem->folderCreate(dirname($this->getStrTargetPath().$strFilename), true);
+                copy($strPath, _realpath_.$this->getStrTargetPath().$strFilename);
+            }
+
+            $objFilesystem->fileDelete($strSource);
+
+        }
+        elseif (is_dir(_realpath_.$strSource)) {
+
+            $objFilesystem = new Filesystem();
+            $objFilesystem->chmod($this->getStrTargetPath(), 0777);
+
+            Logger::getInstance(Logger::PACKAGEMANAGEMENT)->addLogRow("moving ".$strSource." to ".$this->getStrTargetPath(), Logger::$levelInfo);
+
+            $objFilesystem->folderCopyRecursive($strSource, $this->getStrTargetPath(), true);
+            $objFilesystem->folderDeleteRecursive($strSource);
+
+
+        } else {
+            throw new Exception("current package ".$strSource." is not a folder and not a phar", Exception::$level_ERROR);
         }
 
-        $objFilesystem = new Filesystem();
-        $objFilesystem->chmod($this->getStrTargetPath(), 0777);
-
-        Logger::getInstance(Logger::PACKAGEMANAGEMENT)->addLogRow("moving ".$strSource." to ".$this->getStrTargetPath(), Logger::$levelInfo);
-
-        $objFilesystem->folderCopyRecursive($strSource, $this->getStrTargetPath(), true);
         $this->objMetadata->setStrPath($this->getStrTargetPath());
-
         $objFilesystem->chmod($this->getStrTargetPath());
-
-        $objFilesystem->folderDeleteRecursive($strSource);
 
         //shift the cache buster
         $objSetting = SystemSetting::getConfigByName("_system_browser_cachebuster_");
