@@ -336,7 +336,7 @@ abstract class AdminEvensimpler extends AdminSimple
      *
      * @return string
      */
-    protected function renderFilter(FilterBase $objFilter, $strFilterUrl = null, $bitInitiallyVisible = false)
+    public function renderFilter(FilterBase $objFilter, $strFilterUrl = null, $bitInitiallyVisible = false)
     {
 
         if($strFilterUrl === null) {

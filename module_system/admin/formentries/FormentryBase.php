@@ -6,6 +6,7 @@
 
 namespace Kajona\System\Admin\Formentries;
 
+use Kajona\System\Admin\AdminFormgenerator;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Lang;
@@ -117,7 +118,14 @@ class FormentryBase
 
         //check, if label is set as a property
         if ($strKey != "") {
-            $this->strLabel = Carrier::getInstance()->getObjLang()->getLang($strKey, $this->objSourceObject->getArrModule("modul"));
+
+            //check if module param is set for @fieldLabel
+            $strModule = $this->getAnnotationParamValueForCurrentProperty("module", AdminFormgenerator::STR_LABEL_ANNOTATION);
+            if($strModule === null) {
+                $strModule = $this->objSourceObject->getArrModule("modul");
+            }
+
+            $this->strLabel = Carrier::getInstance()->getObjLang()->getLang($strKey, $strModule);
         }
         else {
             $this->strLabel = Carrier::getInstance()->getObjLang()->getLang("form_".$this->strFormName."_".$this->strSourceProperty, $this->objSourceObject->getArrModule("modul"));
@@ -351,14 +359,21 @@ class FormentryBase
         }
     }
 
-    protected function getAnnotationParamsForCurrentProperty()
-    {
-        //params
+
+    /**
+     * Gets the real property name for the current field, e.g. arrStatus, strTitle etc..
+     *
+     * @param string $strAnnotation
+     *
+     * @return int|null|string
+     */
+    protected function getCurrentProperty($strAnnotation = AdminFormgenerator::STR_TYPE_ANNOTATION) {
+        $strSourceProperty = null;
 
         if ($this->getObjSourceObject() != null) {
             $objReflection = new Reflection($this->getObjSourceObject());
 
-            $arrProperties = $objReflection->getPropertiesWithAnnotation("@fieldType");
+            $arrProperties = $objReflection->getPropertiesWithAnnotation($strAnnotation);
             $strSourceProperty = null;
             foreach ($arrProperties as $strPropertyName => $strValue) {
 
@@ -369,12 +384,47 @@ class FormentryBase
                     break;
                 }
             }
-            //get key vlaues
-            return $objReflection->getAnnotationValueForProperty($strSourceProperty, "@fieldType", ReflectionEnum::PARAMS);
+        }
+
+        return $strSourceProperty;
+    }
+
+    /**
+     * Gets the params for the current property and annotation
+     *
+     * @param string $strAnnotation
+     *
+     * @return array|null|string
+     */
+    protected function getAnnotationParamsForCurrentProperty($strAnnotation = AdminFormgenerator::STR_TYPE_ANNOTATION)
+    {
+        $strSourceProperty = $this->getCurrentProperty($strAnnotation);
+        if($strAnnotation !== null) {
+            $objReflection = new Reflection($this->getObjSourceObject());
+            return $objReflection->getAnnotationValueForProperty($strSourceProperty, $strAnnotation, ReflectionEnum::PARAMS);
         }
 
         return array();
     }
+
+    /**
+     * Gets the param value for the current property ,annotation and param name
+     *
+     * @param $strParamName
+     * @param string $strAnnotation
+     *
+     * @return mixed|null
+     */
+    protected function getAnnotationParamValueForCurrentProperty($strParamName,  $strAnnotation = AdminFormgenerator::STR_TYPE_ANNOTATION) {
+        $arrParams = $this->getAnnotationParamsForCurrentProperty($strAnnotation);
+
+        if(is_array($arrParams) && array_key_exists($strParamName, $arrParams)) {
+            return $arrParams[$strParamName];
+        }
+
+        return null;
+    }
+
 
 
 }

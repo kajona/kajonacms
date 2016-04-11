@@ -6,6 +6,7 @@
 
 namespace Kajona\System\System;
 
+use Kajona\System\Admin\AdminFormgenerator;
 use Kajona\System\Admin\AdminFormgeneratorFilter;
 use ReflectionClass;
 
@@ -92,7 +93,7 @@ abstract class FilterBase
     final public function getFilterId()
     {
         if($this->strFilterId === null) {
-            $objClass = new \ReflectionClass(get_called_class());
+            $objClass = new ReflectionClass(get_called_class());
             $this->strFilterId = StringUtil::toLowerCase($objClass->getShortName());
         }
 

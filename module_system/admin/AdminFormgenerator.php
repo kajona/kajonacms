@@ -19,6 +19,7 @@ use Kajona\System\System\Lang;
 use Kajona\System\System\Model;
 use Kajona\System\System\ModelInterface;
 use Kajona\System\System\Reflection;
+use Kajona\System\System\ReflectionEnum;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\UserUser;
 use Kajona\System\System\ValidatorInterface;

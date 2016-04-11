@@ -434,6 +434,26 @@ class Reflection
         return null;
     }
 
+
+    /**
+     * Gets the param value for the given property, annotation and param name
+     *
+     * @param $strProperty
+     * @param $strAnnotation
+     * @param $strParamName
+     *
+     * @return mixed|null
+     */
+    public function getParamValueForPropertyAndAnnotation($strProperty, $strAnnotation, $strParamName) {
+        $arrParams = $this->getAnnotationValueForProperty($strProperty, $strAnnotation, ReflectionEnum::PARAMS);
+        
+        if(is_array($arrParams) && array_key_exists($strParamName, $arrParams)) {
+            return $arrParams[$strParamName];
+        }
+
+        return null;
+    }
+
     /**
      * Searches an object for a given properties' setter method.
      * If not found, null is returned instead.

@@ -6,6 +6,7 @@
 
 namespace Kajona\System\Admin\Formentries;
 
+use Kajona\System\Admin\AdminFormgenerator;
 use Kajona\System\Admin\FormentryPrintableInterface;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Link;
@@ -82,21 +83,19 @@ class FormentryDropdown extends FormentryBase implements FormentryPrintableInter
             $objReflection = new Reflection($this->getObjSourceObject());
 
             //try to find the matching source property
-            $arrProperties = $objReflection->getPropertiesWithAnnotation(self::STR_DDVALUES_ANNOTATION);
-            $strSourceProperty = null;
-            foreach ($arrProperties as $strPropertyName => $strValue) {
-                if (uniSubstr(uniStrtolower($strPropertyName), (uniStrlen($this->getStrSourceProperty())) * -1) == $this->getStrSourceProperty()) {
-                    $strSourceProperty = $strPropertyName;
-                }
-            }
-
+            $strSourceProperty = $this->getCurrentProperty(self::STR_DDVALUES_ANNOTATION);
             if ($strSourceProperty == null) {
                 return;
             }
 
             //set dd values
             $strDDValues = $objReflection->getAnnotationValueForProperty($strSourceProperty, self::STR_DDVALUES_ANNOTATION);
-            $arrDDValues = self::convertDDValueStringToArray($strDDValues, $this->getObjSourceObject()->getArrModule("modul"));
+            $strModule = $this->getAnnotationParamValueForCurrentProperty("module", self::STR_DDVALUES_ANNOTATION);
+            if($strModule === null) {
+                $strModule = $this->getObjSourceObject()->getArrModule("modul");
+            }
+
+            $arrDDValues = self::convertDDValueStringToArray($strDDValues, $strModule);
             if ($arrDDValues !== null) {
                 $this->setArrKeyValues($arrDDValues);
             }
