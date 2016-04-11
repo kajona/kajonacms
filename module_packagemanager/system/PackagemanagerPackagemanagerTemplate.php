@@ -25,7 +25,8 @@ use Kajona\System\System\SystemSetting;
  * @author sidler@mulchprod.de
  * @since 4.0
  */
-class PackagemanagerPackagemanagerTemplate implements PackagemanagerPackagemanagerInterface {
+class PackagemanagerPackagemanagerTemplate implements PackagemanagerPackagemanagerInterface
+{
 
     /**
      * @var PackagemanagerMetadata
@@ -39,20 +40,21 @@ class PackagemanagerPackagemanagerTemplate implements PackagemanagerPackagemanag
      *
      * @return PackagemanagerMetadata[]
      */
-    public function getInstalledPackages() {
+    public function getInstalledPackages()
+    {
         $arrReturn = array();
 
         //loop all packages found
         $objFilesystem = new Filesystem();
         $arrFolders = $objFilesystem->getCompleteList("/templates");
 
-        foreach($arrFolders["folders"] as $strOneFolder) {
+        foreach ($arrFolders["folders"] as $strOneFolder) {
             try {
                 $objMetadata = new PackagemanagerMetadata();
                 $objMetadata->autoInit("/templates/".$strOneFolder);
                 $arrReturn[] = $objMetadata;
             }
-            catch(Exception $objEx) {
+            catch (Exception $objEx) {
 
             }
         }
@@ -70,11 +72,13 @@ class PackagemanagerPackagemanagerTemplate implements PackagemanagerPackagemanag
      * @throws Exception
      * @return void
      */
-    public function move2Filesystem() {
+    public function move2Filesystem()
+    {
         $strSource = $this->objMetadata->getStrPath();
 
-        if(!is_dir(_realpath_.$strSource))
+        if (!is_dir(_realpath_.$strSource)) {
             throw new Exception("current package ".$strSource." is not a folder.", Exception::$level_ERROR);
+        }
 
         $objFilesystem = new Filesystem();
         $objFilesystem->chmod($this->getStrTargetPath(), 0777);
@@ -90,8 +94,8 @@ class PackagemanagerPackagemanagerTemplate implements PackagemanagerPackagemanag
 
         //shift the cache buster
         $objSetting = SystemSetting::getConfigByName("_system_browser_cachebuster_");
-        if($objSetting != null) {
-            $objSetting->setStrValue((int)$objSetting->getStrValue()+1);
+        if ($objSetting != null) {
+            $objSetting->setStrValue((int)$objSetting->getStrValue() + 1);
             $objSetting->updateObjectToDb();
         }
     }
@@ -103,23 +107,27 @@ class PackagemanagerPackagemanagerTemplate implements PackagemanagerPackagemanag
      * @throws Exception
      * @return string
      */
-    public function installOrUpdate() {
+    public function installOrUpdate()
+    {
         return "";
     }
 
 
     /**
      * @param PackagemanagerMetadata $objMetadata
+     *
      * @return void
      */
-    public function setObjMetadata($objMetadata) {
+    public function setObjMetadata($objMetadata)
+    {
         $this->objMetadata = $objMetadata;
     }
 
     /**
      * @return PackagemanagerMetadata
      */
-    public function getObjMetadata() {
+    public function getObjMetadata()
+    {
         return $this->objMetadata;
     }
 
@@ -128,7 +136,8 @@ class PackagemanagerPackagemanagerTemplate implements PackagemanagerPackagemanag
      *
      * @return bool
      */
-    public function isInstallable() {
+    public function isInstallable()
+    {
         return false;
     }
 
@@ -138,11 +147,12 @@ class PackagemanagerPackagemanagerTemplate implements PackagemanagerPackagemanag
      *
      * @return string|null
      */
-    public function getVersionInstalled() {
+    public function getVersionInstalled()
+    {
 
         $strTarget = $this->getStrTargetPath();
 
-        if(is_dir(_realpath_.$strTarget)) {
+        if (is_dir(_realpath_.$strTarget)) {
             $objManager = new PackagemanagerMetadata();
             $objManager->autoInit($strTarget);
             return $objManager->getStrVersion();
@@ -158,10 +168,12 @@ class PackagemanagerPackagemanagerTemplate implements PackagemanagerPackagemanag
      *
      * @return mixed
      */
-    public function getStrTargetPath() {
+    public function getStrTargetPath()
+    {
         $strTarget = $this->objMetadata->getStrTarget();
-        if($strTarget == "")
+        if ($strTarget == "") {
             $strTarget = uniStrtolower(createFilename($this->objMetadata->getStrTitle(), true));
+        }
 
         return "/templates/".$strTarget;
     }
@@ -172,7 +184,8 @@ class PackagemanagerPackagemanagerTemplate implements PackagemanagerPackagemanag
      *
      * @return bool
      */
-    public function updateDefaultTemplate() {
+    public function updateDefaultTemplate()
+    {
         return true;
     }
 
@@ -181,7 +194,8 @@ class PackagemanagerPackagemanagerTemplate implements PackagemanagerPackagemanag
      *
      * @return bool
      */
-    public function isRemovable() {
+    public function isRemovable()
+    {
         return SystemSetting::getConfigValue("_packagemanager_defaulttemplate_") != $this->getObjMetadata()->getStrTitle();
     }
 
@@ -192,19 +206,20 @@ class PackagemanagerPackagemanagerTemplate implements PackagemanagerPackagemanag
      *
      * @return bool
      */
-    public function remove(&$strLog) {
+    public function remove(&$strLog)
+    {
 
         OrmBase::setObjHandleLogicalDeletedGlobal(OrmDeletedhandlingEnum::INCLUDED);
 
-        if(!$this->isRemovable()) {
+        if (!$this->isRemovable()) {
             return false;
         }
 
         /** @var PackagemanagerTemplate[] $arrTemplates */
         $arrTemplates = PackagemanagerTemplate::getObjectList();
 
-        foreach($arrTemplates as $objOneTemplate) {
-            if($objOneTemplate->getStrName() == $this->getObjMetadata()->getStrTitle()) {
+        foreach ($arrTemplates as $objOneTemplate) {
+            if ($objOneTemplate->getStrName() == $this->getObjMetadata()->getStrTitle()) {
                 return $objOneTemplate->deleteObjectFromDatabase();
             }
         }

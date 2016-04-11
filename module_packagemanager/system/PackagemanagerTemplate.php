@@ -112,6 +112,15 @@ class PackagemanagerTemplate extends Model implements ModelInterface, AdminLista
     }
 
     /**
+     * @inheritDoc
+     */
+    public function deleteObject()
+    {
+        return $this->deleteObjectFromDatabase();
+    }
+
+
+    /**
      * Deletes the tag with the given systemid from the system
      *
      * @return bool
