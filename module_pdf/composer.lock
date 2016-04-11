@@ -4,21 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "69ecbe1ca694ed49af3540b62b751122",
-    "content-hash": "3008d4ecf52e4ba30de1c5ac9f12b0f5",
+    "hash": "55670bd3ff86a7eb4056255163402602",
     "packages": [
         {
-            "name": "tecnick.com/tcpdf",
-            "version": "6.2.8",
+            "name": "tecnickcom/tcpdf",
+            "version": "6.2.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tecnickcom/TCPDF.git",
-                "reference": "3dee9e7f3a414875fd1d9f4f1dfc2433493a86d2"
+                "reference": "2f732eaa91b5665274689b1d40b285a7bacdc37f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tecnickcom/TCPDF/zipball/3dee9e7f3a414875fd1d9f4f1dfc2433493a86d2",
-                "reference": "3dee9e7f3a414875fd1d9f4f1dfc2433493a86d2",
+                "url": "https://api.github.com/repos/tecnickcom/TCPDF/zipball/2f732eaa91b5665274689b1d40b285a7bacdc37f",
+                "reference": "2f732eaa91b5665274689b1d40b285a7bacdc37f",
                 "shasum": ""
             },
             "require": {
@@ -68,8 +67,7 @@
                 "pdf417",
                 "qrcode"
             ],
-            "abandoned": "tecnickcom/tcpdf",
-            "time": "2015-04-29 16:13:58"
+            "time": "2015-09-12 10:08:34"
         }
     ],
     "packages-dev": [],

@@ -300,6 +300,9 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $this->registerConstant("_system_dbdump_amount_", 5, SystemSetting::$int_TYPE_INT, _system_modul_id_);
         //new in 3.0: mod-rewrite on / off
         $this->registerConstant("_system_mod_rewrite_", "false", SystemSetting::$int_TYPE_BOOL, _system_modul_id_);
+        $this->registerConstant("_system_mod_rewrite_admin_only_", "false", SystemSetting::$int_TYPE_BOOL, _system_modul_id_);
+        
+        
         //New Constant: Max time to lock records
         $this->registerConstant("_system_lock_maxtime_", 7200, SystemSetting::$int_TYPE_INT, _system_modul_id_);
         //Email to send error-reports
@@ -569,9 +572,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.7.6") {
-            $strReturn .= "Updating to 5.0...\n";
-            $this->updateModuleVersion("", "5.0");
-            $this->objDB->flushQueryCache();
+            $strReturn .= $this->update_476_50();
         }
 
         return $strReturn."\n\n";
@@ -672,4 +673,15 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         return $strReturn;
     }
 
+
+    private function update_476_50() {
+        $strReturn = "Updating 4.7.6 to 5.0...\n";
+        $strReturn .= "Registering new constant...\n";
+        $this->registerConstant("_system_mod_rewrite_admin_only_", "false", SystemSetting::$int_TYPE_BOOL, _system_modul_id_);
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.0");
+        return $strReturn;
+    }
+    
+    
 }

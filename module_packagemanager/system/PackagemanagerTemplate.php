@@ -112,6 +112,15 @@ class PackagemanagerTemplate extends Model implements ModelInterface, AdminLista
     }
 
     /**
+     * @inheritDoc
+     */
+    public function deleteObject()
+    {
+        return $this->deleteObjectFromDatabase();
+    }
+
+
+    /**
      * Deletes the tag with the given systemid from the system
      *
      * @return bool
@@ -171,7 +180,7 @@ class PackagemanagerTemplate extends Model implements ModelInterface, AdminLista
     /**
      * @return PackagemanagerMetadata|null
      */
-    private function getMetadata()
+    public function getMetadata()
     {
 
         $objMetadata = new PackagemanagerMetadata();

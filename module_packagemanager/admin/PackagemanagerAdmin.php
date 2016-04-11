@@ -315,10 +315,19 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
                     $strReturn .= $this->objToolkit->warningBox($strWarning);
                 }
 
-                $strReturn .= $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "installPackage"));
-                $strReturn .= $this->objToolkit->formInputHidden("package", $strFile);
-                $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("package_doinstall"));
-                $strReturn .= $this->objToolkit->formClose();
+
+                $strWarningText = $this->getLang("package_notinstallable");
+                if ($objHandler->getVersionInstalled() != null && version_compare($objHandler->getVersionInstalled(), $objHandler->getObjMetadata()->getStrVersion(), ">=")) {
+                    $strWarningText .= "<br />".$this->getLang("package_noinstall_installed");
+                    $strReturn .= $this->objToolkit->warningBox($strWarningText);
+                }
+                else {
+
+                    $strReturn .= $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "installPackage"));
+                    $strReturn .= $this->objToolkit->formInputHidden("package", $strFile);
+                    $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("package_doinstall"));
+                    $strReturn .= $this->objToolkit->formClose();
+                }
 
             }
             else {
@@ -712,6 +721,23 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
     protected function renderCopyAction(Model $objListEntry)
     {
         return "";
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function renderAdditionalActions(Model $objListEntry)
+    {
+        $arrReturn = array();
+        if($objListEntry instanceof PackagemanagerTemplate) {
+            if (!$objListEntry->getMetadata()->getBitIsPhar()) {
+                $arrReturn[] = $this->objToolkit->listButton(
+                    Link::getLinkAdmin($this->getArrModule("modul"), "downloadAsPhar", "&package=".$objListEntry->getMetadata()->getStrTitle(), $this->getLang("package_downloadasphar"), $this->getLang("package_downloadasphar"), "icon_phar")
+                );
+            }
+        }
+
+        return $arrReturn;
     }
 
 
