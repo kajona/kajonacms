@@ -714,6 +714,23 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
         return "";
     }
 
+    /**
+     * @inheritDoc
+     */
+    protected function renderAdditionalActions(Model $objListEntry)
+    {
+        $arrReturn = array();
+        if($objListEntry instanceof PackagemanagerTemplate) {
+            if (!$objListEntry->getMetadata()->getBitIsPhar()) {
+                $arrReturn[] = $this->objToolkit->listButton(
+                    Link::getLinkAdmin($this->getArrModule("modul"), "downloadAsPhar", "&package=".$objListEntry->getMetadata()->getStrTitle(), $this->getLang("package_downloadasphar"), $this->getLang("package_downloadasphar"), "icon_phar")
+                );
+            }
+        }
+
+        return $arrReturn;
+    }
+
 
     /**
      * @param \Kajona\System\System\Model

@@ -171,7 +171,7 @@ class PackagemanagerTemplate extends Model implements ModelInterface, AdminLista
     /**
      * @return PackagemanagerMetadata|null
      */
-    private function getMetadata()
+    public function getMetadata()
     {
 
         $objMetadata = new PackagemanagerMetadata();
