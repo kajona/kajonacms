@@ -740,7 +740,7 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
             if($objEl.data('element') == 'block') {
                 $objEl.children('.peActionToolbar')
                     .css('top', ($objEl.position().top) - 32)
-                    .css('right', 20)
+                    .css('left', $objEl.position().left + $objEl.width() - $objEl.children('.peActionToolbar').width())
                     .addClass('peShown').addClass('caretRight');
             }
             else {
