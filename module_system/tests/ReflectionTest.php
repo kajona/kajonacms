@@ -341,7 +341,7 @@ class ReflectionTest extends Testbase  {
 
 
         $arrParams = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyParamTest1", ReflectionEnum::PARAMS);
-        $this->assertCount(1, $arrParams);
+        $this->assertCount(3, $arrParams);
         $this->assertArrayHasKey("param1", $arrParams);
 
         $arrParams = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyParamTest2", ReflectionEnum::PARAMS);
@@ -354,6 +354,24 @@ class ReflectionTest extends Testbase  {
 
         $arrParams = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyParamTest4", ReflectionEnum::PARAMS);
         $this->assertCount(0, $arrParams);
+    }
+
+
+    public function testGetParamValue()
+    {
+        $objAnnotations = new Reflection(new C());
+
+        $strParamValue = $objAnnotations->getParamValueForPropertyAndAnnotation("propertyB1", "@propertyParamTest1", "param1");
+        $this->assertEquals(0, $strParamValue);
+
+        $strParamValue = $objAnnotations->getParamValueForPropertyAndAnnotation("propertyB1", "@propertyParamTest1", "param2");
+        $this->assertEquals(array("0", 123, 456), $strParamValue);
+
+        $strParamValue = $objAnnotations->getParamValueForPropertyAndAnnotation("propertyB1", "@propertyParamTest1", "param3");
+        $this->assertEquals("astring", $strParamValue);
+
+        $strParamValue = $objAnnotations->getParamValueForPropertyAndAnnotation("propertyB1", "@propertyParamTest1", "paramXYZ");
+        $this->assertNull($strParamValue);
     }
 }
 
@@ -452,7 +470,7 @@ class C extends B {
 
     /**
      * @propertyTest valB1
-     * @propertyParamTest1 valB1 (param1=0)
+     * @propertyParamTest1 valB1 (param1=0, param2={"0", 123, 456}, param3="astring")
      * @propertyParamTest2 valB1
      * @propertyParamTest3 (param1=0)
      * @propertyParamTest4
