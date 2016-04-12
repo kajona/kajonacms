@@ -555,7 +555,7 @@ Example:
     //2. Create restriction
     $strWhere = "system_status = ?"; //DO NOT add "AND" OR "OR" at the beginning of the string. 
     $arrParams = array(1);
-    $objCondition = new OrmCondition();
+    $objCondition = new OrmCondition($strWhere, $arrParams);
 
     //3. Add condition to the objectlist
     $objOrm->addWhereRestriction($objCondition);
@@ -574,7 +574,7 @@ This restriction creates an IN statement e.g. <code>"\<columnnam\e> IN (\<parame
         $objOrm = new OrmObjectlist();
     
         //2. Create restriction
-        $strColmnName = "system_status";
+        $strColumnName = "system_status";
         $arrParams = array(1,2,3,4,5);
         $objCondition = new OrmInCondition($strColmnName, $arrParams);//Generates "system_status IN (1,2,3,4,5)"
         
@@ -595,7 +595,7 @@ It creates an IN statement e.g. <code>"((\<columnnam\e> IN (\<parameters\>)( OR 
         $objOrm = new OrmObjectlist();
     
         //2. Create restriction
-        $strColmnName = "system_status";
+        $strColumnName = "system_status";
         $arrParams = array(1,2,3,4,5);
         $objCondition = new OrmInOrEmptyCondition($strColmnName, $arrParams);//Generates "((system_status IN (1,2,3,4,5)) OR (system_status IS NULL) OR (system_status = '')))"
         
