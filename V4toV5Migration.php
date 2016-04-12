@@ -57,7 +57,7 @@ class V4toV5Migration
             "penitentfee_kpi"   => "kpiamount_variant",
             "proz_unterdim"     => "proz_unterdim_typ",
             "repcfg_report"     => "repcfg_report_targetobject",
-
+            "report_access"     => "access_class"
 
 
 
