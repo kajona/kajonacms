@@ -168,7 +168,8 @@ class PharModule
      */
     private function getRelativeFilePath($objFile)
     {
-        $strArchivePath = DIRECTORY_SEPARATOR.substr($objFile->getPathName(), strlen("phar://"._realpath_.$this->strPharPath));
+        $strPharPath = "phar://".str_replace("//", "/", _realpath_."/".$this->strPharPath);
+        $strArchivePath = substr($objFile->getPathName(), strlen($strPharPath));
         $strArchivePath = str_replace("\\", "/", $strArchivePath);
         return $strArchivePath;
     }
