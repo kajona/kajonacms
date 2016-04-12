@@ -96,6 +96,13 @@ class OrmObjectlistRestriction
         $this->strTargetClass = $strTargetClass;
     }
 
+    /**
+     *  Generates an ORDER By Statement
+     *
+     * @param $arrOrderByRestrictions
+     *
+     * @return string
+     */
     public static function getOrderByRestrictionsAsString($arrOrderByRestrictions) {
         $strOrderBy = "";
         $arrOrderByStr = array();
