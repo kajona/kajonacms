@@ -399,7 +399,7 @@ class FormentryBase
     protected function getAnnotationParamsForCurrentProperty($strAnnotation = AdminFormgenerator::STR_TYPE_ANNOTATION)
     {
         $strSourceProperty = $this->getCurrentProperty($strAnnotation);
-        if($strAnnotation !== null) {
+        if($strSourceProperty !== null) {
             $objReflection = new Reflection($this->getObjSourceObject());
             return $objReflection->getAnnotationValueForProperty($strSourceProperty, $strAnnotation, ReflectionEnum::PARAMS);
         }
