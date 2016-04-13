@@ -13,7 +13,7 @@
      $Id$
 
      ====================================================================== -->
-<project name="Kajona Head Build" default="buildSqliteFast" basedir=".">
+<project name="Kajona Head Build" default="buildSqliteFull" basedir=".">
 
     <description>
         Buildfile to run common tasks.
@@ -81,6 +81,8 @@
     <property name="path.phploc"    value="${composerBinariesPath}/phploc${script-suffix}" />
     <!-- path to phpcb -->
     <property name="path.phpcb"     value="${composerBinariesPath}/phpcb${script-suffix}" />
+    <!-- path to phpdox -->
+    <property name="path.phpdox"     value="${composerBinariesPath}/phpdox${script-suffix}" />
 
 
     <!--
@@ -102,9 +104,9 @@
 
     <target name="buildSqliteFull" depends="
 		    								init,
-					    					buildProject, installProjectSqlite,
-					    					lint,phpunit,jasmine,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,generateDoxygenDocs,phpcb,
-					    					buildAllInOneZip" />
+					    					buildProject
+					    					,phpdox
+					    					" />
 
     <target name="buildMysql" depends="
 		    								init,
@@ -579,14 +581,14 @@
     </target>
 
 
-    <target name="generateDoxygenDocs">
+    <target name="phpdox">
         <echo>Generating PHP API Docs</echo>
-        <!--<chmod file="${basedir}/doxygenfilter.php" perm="700"/>-->
-        <exec executable="bash" dir="${basedir}${projectPath}">
-            <arg line="-c"/>
-            <arg line="' ( cat ${basedir}/doxygen.cfg ; echo \'INPUT=${basedir}${projectPath}\' ; echo \'OUTPUT_DIRECTORY=${basedir}/build/api\' ) | doxygen - '"/>
+        <exec executable="${path.phpdox}" dir="${basedir}" taskname="phpdox">
+            <arg line="-f ${basedir}/phpdox.xml" />
         </exec>
     </target>
+
+
 
     <target name="phpunit" description="Run unit tests with PHPUnit">
         <exec executable="${path.phpunit}" failonerror="true">
@@ -621,17 +623,5 @@
         </exec>
     </target>
 
-
-    <!-- deprecated -->
-    <target name="odt2pdf" description="converts odt files to pdfs" depends="cleanFilesystem, init, buildProject">
-        <apply executable="unoconv" parallel="false" dest="${basedir}${projectPath}" verbose="true">
-            <arg line="-f pdf"/>
-            <fileset dir="${basedir}${projectPath}" includes="**/*.odt"/>
-            <arg value="-o" />
-            <targetfile/>
-            <srcfile/>
-            <mapper type="glob" from="*.odt" to="*.pdf"/>
-        </apply>
-    </target>
 
 </project>

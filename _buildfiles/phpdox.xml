@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<phpdox xmlns="http://xml.phpdox.net/config">
+<project name="Kajona" source="buildproject" workdir="build/phpdox">
+    <collector backend="parser">
+        <include mask="*.php" />
+        <exclude mask="*vendor*" />
+        <exclude mask="*legacy*" />
+        <exclude mask="*tests*" />
+    </collector>
+
+    <generator output="build">
+        <build engine="html" output="api">
+            <file extension="html" />
+        </build>
+    </generator>
+</project>
+</phpdox>
