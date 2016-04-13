@@ -1,5 +1,7 @@
 Module System
 
+V4.7.2 --------------------------------------------------------------------------------------------------
+BUG: module_system | images,request dispatcher -> fixed possible xss vulnerabilities when passing urls to image.php and using the request-dispatcher reload param (fixes curesec vulnerability report)
 
 V4.7.1 --------------------------------------------------------------------------------------------------
 NEW: module_system | class_lockmanager -> changed some internal part to avoid race conditions for locks

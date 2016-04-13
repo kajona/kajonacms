@@ -196,7 +196,7 @@ class RequestDispatcher
                         if (Carrier::getInstance()->getParam("peClose") == "1") {
 
                             if(getGet("peRefreshPage") != "") {
-                                $strReloadUrl = urldecode(getGet("peRefreshPage"));
+                                $strReloadUrl = xssSafeString(getGet("peRefreshPage"));
                                 $strReturn = "<html><head></head><body><script type='text/javascript'>if(window.opener) { window.opener.location = '".$strReloadUrl."'; window.close(); } else { parent.location = '".$strReloadUrl."'; }</script></body></html>";
                             }
                             else {

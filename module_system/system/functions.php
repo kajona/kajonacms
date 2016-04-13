@@ -839,6 +839,23 @@ function urlSafeString($strText)
 }
 
 /**
+ * A helper to remove xss relevant chars from a string. To be used when embedding user-content into a js-call
+ * @param $strText
+ *
+ * @return mixed|string
+ */
+function xssSafeString($strText) {
+    if($strText == "")
+        return $strText;
+
+    $strText = urldecode($strText);
+    $strText = strip_tags($strText);
+    $strText = addslashes($strText);
+    $strText = filter_var($strText, FILTER_SANITIZE_STRING, FILTER_SANITIZE_URL);
+    //$strText = str_replace(array('\'', '"', '(', ')', ';'), '', $strText);
+    return $strText;
+}
+/**
  * Removes traversals like ../ from the passed string
  *
  * @param string $strFilename
@@ -848,7 +865,8 @@ function urlSafeString($strText)
 function removeDirectoryTraversals($strFilename)
 {
     $strFilename = urldecode($strFilename);
-    return uniStrReplace("..", "", $strFilename);
+    $strFilename = uniStrReplace("..", "", $strFilename);
+    return uniStrReplace("//", "/", $strFilename);
 }
 
 /**
