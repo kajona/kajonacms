@@ -186,8 +186,9 @@ class MediamanagerAdmin extends AdminEvensimpler implements AdminInterface
                 $strTargetId = "";
             }
 
+            $strTargetfield = xssSafeString($this->getParam("form_element"));
             return $this->objToolkit->listButton(
-                Link::getLinkAdmin($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$this->getParam("form_element")."&systemid=".$strTargetId, "", $this->getLang("commons_one_level_up"), "icon_folderActionLevelup")
+                Link::getLinkAdmin($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$strTargetId, "", $this->getLang("commons_one_level_up"), "icon_folderActionLevelup")
             );
         }
         return parent::renderLevelUpAction($strListIdentifier);
@@ -287,7 +288,7 @@ class MediamanagerAdmin extends AdminEvensimpler implements AdminInterface
     public function getActionIcons($objOneIterable, $strListIdentifier = "")
     {
         if ($strListIdentifier == self::INT_LISTTYPE_FOLDERVIEW) {
-            $strTargetfield = $this->getParam("form_element");
+            $strTargetfield = xssSafeString($this->getParam("form_element"));
 
             if ($objOneIterable instanceof MediamanagerFile && $objOneIterable->rightView()) {
 
@@ -627,7 +628,7 @@ HTML;
             $strReturn .= "<script type=\"text/javascript\">window.opener.KAJONA.admin.folderview.selectCallbackCKEditorFuncNum = ".(int)$this->getParam("CKEditorFuncNum").";</script>";
         }
 
-        $strTargetfield = $this->getParam("form_element");
+        $strTargetfield = xssSafeString($this->getParam("form_element"));
 
         $this->setArrModuleEntry("template", "/folderview.tpl");
 
@@ -676,7 +677,7 @@ HTML;
 
             $strReturn .= $this->actionUploadFileInternal();
             $strReturn .= $this->generateNewFolderDialogCode();
-            $strReturn .= $this->renderFloatingGrid($objIterator, MediamanagerAdmin::INT_LISTTYPE_FOLDERVIEW, "&form_element=".$this->getParam("form_element"), false);
+            $strReturn .= $this->renderFloatingGrid($objIterator, MediamanagerAdmin::INT_LISTTYPE_FOLDERVIEW, "&form_element=".$strTargetfield, false);
         }
 
         return $strReturn;
@@ -692,8 +693,10 @@ HTML;
     {
         if ($strListIdentifier == self::INT_LISTTYPE_FOLDERVIEW && $objOneIterable instanceof MediamanagerFile) {
 
-            if ($objOneIterable->getIntType() == MediamanagerFile::$INT_TYPE_FOLDER) {
-                return "onclick=\"document.location='".Link::getLinkAdminHref($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$this->getParam("form_element")."&systemid=".$objOneIterable->getSystemid())."'\"";
+            $strTargetfield = xssSafeString($this->getParam("form_element"));
+
+            if($objOneIterable->getIntType() == MediamanagerFile::$INT_TYPE_FOLDER) {
+                return "onclick=\"document.location='".Link::getLinkAdminHref($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$objOneIterable->getSystemid())."'\"";
             }
             elseif ($objOneIterable->getIntType() == MediamanagerFile::$INT_TYPE_FILE) {
 
@@ -704,7 +707,7 @@ HTML;
                     $bitImage = true;
                 }
 
-                if ($bitImage && $this->getParam("form_element") == "ckeditor") {
+                if ($bitImage && $strTargetfield == "ckeditor") {
                     $strValue = _webpath_."/image.php?image=".$strValue;
                 }
                 else {
@@ -712,7 +715,7 @@ HTML;
                 }
 
 
-                return "onclick=\"KAJONA.admin.folderview.selectCallback([['".$this->getParam("form_element")."', '".$strValue."']]);\"";
+                return "onclick=\"KAJONA.admin.folderview.selectCallback([['".$strTargetfield."', '".$strValue."']]);\"";
             }
 
             return "";
@@ -741,7 +744,7 @@ HTML;
         }
 
         $arrExcludeFolder = array(0 => ".", 1 => "..");
-        $strFormElement = $this->getParam("form_element");
+        $strFormElement = xssSafeString($this->getParam("form_element"));
 
 
         $objFilesystem = new Filesystem();

@@ -1,5 +1,8 @@
 Module Mediamanager
 
+V4.7.2 --------------------------------------------------------------------------------------------------
+BUG: module_mediamanger | mediamanager_admin -> fixed a possible xss vulnerability when browsing the image-dialog (fixes curesec vulnerability report)
+
 V4.7.1 --------------------------------------------------------------------------------------------------
 BUG: module_mediamanager | mediamanager_file -> fixed a case where editing the base-path of a copied mediamanager repo could lead to a loss of files in the filesystem (due to an erroneous sync request). credits go to avman. #87.
 
