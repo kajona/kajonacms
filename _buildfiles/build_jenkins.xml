@@ -13,7 +13,7 @@
      $Id$
 
      ====================================================================== -->
-<project name="Kajona Head Build" default="buildSqliteFull" basedir=".">
+<project name="Kajona Head Build" default="buildSqliteFast" basedir=".">
 
     <description>
         Buildfile to run common tasks.
@@ -104,9 +104,9 @@
 
     <target name="buildSqliteFull" depends="
 		    								init,
-					    					buildProject
-					    					,phpdox
-					    					" />
+					    					buildProject, installProjectSqlite,
+					    					lint,phpunit,jasmine,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,generateDoxygenDocs,phpcb,
+					    					buildAllInOneZip" />
 
     <target name="buildMysql" depends="
 		    								init,
