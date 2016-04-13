@@ -68,7 +68,7 @@ class FilterBaseTest extends Testbase
         $this->assertEquals(1.0, $arrRestrictions[1]->getArrParams()[0]);
 
         $this->assertTrue($arrRestrictions[3] instanceof OrmInCondition);
-        $this->assertEquals(" filter.filter4 IN (?,?,?,?) ", $arrRestrictions[3]->getStrWhere());
+        $this->assertEquals("filter.filter4 IN (?,?,?,?)", $arrRestrictions[3]->getStrWhere());
         $this->assertCount(4, $arrRestrictions[3]->getArrParams());
 
         $this->assertTrue($arrRestrictions[4] instanceof OrmCondition);
@@ -97,7 +97,7 @@ class FilterBaseTest extends Testbase
         $this->assertEquals($strSystemid, $arrRestrictions[8]->getArrParams()[0]);
 
         $this->assertTrue($arrRestrictions[9] instanceof OrmInOrEmptyCondition);
-        $this->assertEquals("(( filter.filter10 IN (?,?,?,?,?) ) OR (filter.filter10 IS NULL) OR (filter.filter10 = ''))", $arrRestrictions[9]->getStrWhere());
+        $this->assertEquals("((filter.filter10 IN (?,?,?,?,?)) OR (filter.filter10 IS NULL) OR (filter.filter10 = ''))", $arrRestrictions[9]->getStrWhere());
         $this->assertCount(5, $arrRestrictions[9]->getArrParams());
     }
 
