@@ -9,13 +9,8 @@ use Kajona\System\System\FilterBase;
 use Kajona\System\System\OrmCondition;
 use Kajona\System\System\OrmInCondition;
 use Kajona\System\System\OrmInOrEmptyCondition;
-use Kajona\System\System\OrmObjectlistInOrEmptyRestriction;
-use Kajona\System\System\OrmObjectlistInRestriction;
-use Kajona\System\System\OrmObjectlistRestriction;
 use Kajona\System\System\Reflection;
 use Kajona\System\System\Resourceloader;
-use Kajona\System\System\SystemModule;
-use Kajona\System\System\SystemSetting;
 use Kajona\System\System\Testbase;
 
 /**
@@ -46,7 +41,7 @@ class FilterBaseTest extends Testbase
         $objFilter->setObjFilter7(new Date(20150101000001));
         $objFilter->setObjFilter8(new Date(20150101000001));
         $objFilter->setStrFilter9($strSystemid);
-        $objFilter->setArrFilter10(array(OrmObjectlistInOrEmptyRestriction::NULL_OR_EMPTY, 1, 2, 3, 4));
+        $objFilter->setArrFilter10(array(OrmInOrEmptyCondition::NULL_OR_EMPTY, 1, 2, 3, 4));
 
         $arrRestrictions = $objFilter->getOrmConditions();
         $this->assertCount(10, $arrRestrictions);
