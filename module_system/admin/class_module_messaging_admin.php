@@ -189,7 +189,7 @@ JS;
                     $bitA = $this->getParam(get_class($objOneProvider)."_bymail") == "true";
                     $objConfig->setBitBymail($bitA);
                     $objConfig->updateObjectToDb();
-                    $strMessage = $objOneProvider->getStrName()." ".$this->getLang("provider_bymail")."=".$this->getParam(get_class($objOneProvider)."_bymail");
+                    $strMessage = $objOneProvider->getStrName()." ".$this->getLang("provider_bymail")."=".($bitA ? "enabled" : "disabled");
                     break;
 
                 }
@@ -197,7 +197,7 @@ JS;
                     $bitA = $this->getParam(get_class($objOneProvider)."_enabled") == "true";
                     $objConfig->setBitEnabled($bitA);
                     $objConfig->updateObjectToDb();
-                    $strMessage = $objOneProvider->getStrName()." ".$this->getLang("provider_enabled")."=".$this->getParam(get_class($objOneProvider)."_enabled");
+                    $strMessage = $objOneProvider->getStrName()." ".$this->getLang("provider_enabled")."=".($bitA ? "enabled" : "disabled");
                     break;
                 }
             }

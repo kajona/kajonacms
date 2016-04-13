@@ -181,7 +181,8 @@ class class_request_dispatcher {
                         if(class_carrier::getInstance()->getParam("peClose") == "1") {
 
                             if(getGet("peRefreshPage") != "") {
-                                $strReturn = "<html><head></head><body onload=\"parent.location = '" . urldecode(getGet("peRefreshPage")) . "';\"></body></html>";
+                                $strTargetUrl = xssSafeString(getGet("peRefreshPage"));
+                                $strReturn = "<html><head></head><body onload=\"parent.location = '" . $strTargetUrl . "';\"></body></html>";
                             }
                             else {
                                 $strReturn = "<html><head></head><body onload=\"parent.location.reload();\"></body></html>";

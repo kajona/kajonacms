@@ -1,5 +1,8 @@
 Module Messaging
 
+V4.7.2 --------------------------------------------------------------------------------------------------
+BUG: module_messaging | admi view -> fixed a possible xss vulnerability when rendering a configs-value on change (fixes curesec vulnerability report)
+
 V4.6 ----------------------------------------------------------------------------------------------------
 NEW: module_messaging | messages-> migrated column message_body from text to longtext
 BUG: module_messaging | messaging -> rendering of a message without a linked message-provider crashed the message-list view

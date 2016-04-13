@@ -473,10 +473,13 @@ abstract class class_admin_simple extends class_admin_controller {
     protected function renderTagAction(class_model $objListEntry) {
         if($objListEntry->rightView()) {
 
-            //the tag list is more complex and wrapped by a js-logic to load the tags by ajax afterwards
+            //sanitize critical chars
+            $strDialogTitle = $objListEntry->getStrDisplayName();
+            $strDialogTitle = addslashes(uniStrReplace(array("\n", "\r"), array(), strip_tags(nl2br($strDialogTitle))));
 
+            //the tag list is more complex and wrapped by a js-logic to load the tags by ajax afterwards
             // @codingStandardsIgnoreStart
-            $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".class_link::getLinkAdminHref("tags", "genericTagForm", "&systemid=".$objListEntry->getSystemid())."'); KAJONA.admin.folderview.dialog.setTitle('".uniStrReplace(array("\r", "\n"), "", strip_tags(nl2br($objListEntry->getStrDisplayName())))."'); KAJONA.admin.folderview.dialog.init(); return false;";
+            $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".class_link::getLinkAdminHref("tags", "genericTagForm", "&systemid=".$objListEntry->getSystemid())."'); KAJONA.admin.folderview.dialog.setTitle('".$strDialogTitle."'); KAJONA.admin.folderview.dialog.init(); return false;";
             $strLink = "<a href=\"#\" onclick=\"".$strOnClick."\" title=\"".$this->getLang("commons_edit_tags")."\" rel=\"tagtooltip\" data-systemid=\"".$objListEntry->getSystemid()."\">".class_adminskin_helper::getAdminImage("icon_tag", $this->getLang("commons_edit_tags"), true)."</a>";
             // @codingStandardsIgnoreEnd
             return $this->objToolkit->listButton($strLink);

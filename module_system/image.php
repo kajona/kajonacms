@@ -44,7 +44,7 @@ class class_flyimage {
         //find the params to use
         $this->strFilename = urldecode(getGet("image"));
         //avoid directory traversing
-        $this->strFilename = str_replace("../", "", $this->strFilename);
+        $this->strFilename = removeDirectoryTraversals($this->strFilename);
 
         $this->intMaxHeight = (int)getGet("maxHeight");
         if($this->intMaxHeight < 0)
