@@ -8,11 +8,14 @@
 
 namespace Kajona\Jqplot\System;
 
+use Kajona\System\Admin\ToolkitAdmin;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Exception;
 use Kajona\System\System\GraphCommons;
 use Kajona\System\System\GraphInterface;
+use Kajona\System\System\Lang;
 use Kajona\System\System\Resourceloader;
+use Kajona\V4Skin\Admin\Skins\Kajona_V4\AdminskinImageresolver;
 
 
 /**
@@ -509,8 +512,11 @@ class GraphJqplot implements GraphInterface
         $strReturn .= "<div style=\"width:5%; height:100%; float: left;\">";
 
         if ($this->isBitDownloadLink()) {
+            $objImage = new AdminskinImageresolver();
+            $strImage = $objImage->getImage("icon_downloads", Lang::getInstance()->getLang("commons_save_as_image", "system"));
+
             $strReturn .= "<a style=\"display:none; cursor: pointer; \" id=\"{$strImageExportId}\" onclick=\"KAJONA.admin.jqplotHelper.exportAsImage('{$strChartId}')\"'>
-                                   <i class='fa fa-download'></i>
+                                   {$strImage}
                                </a>";
         }
 

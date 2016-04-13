@@ -102,7 +102,7 @@ abstract class SystemtaskBase
      */
     public static function getAllSystemtasks()
     {
-        $arrFiles = Resourceloader::getInstance()->getFolderContent("/admin/systemtasks/", array(".php"), false, null, function (&$strOneFile, $strPath) {
+        $arrFiles = Resourceloader::getInstance()->getFolderContent("/admin/systemtasks", array(".php"), false, null, function (&$strOneFile, $strPath) {
 
             $objInstance = Classloader::getInstance()->getInstanceFromFilename($strPath, "Kajona\\System\\Admin\\Systemtasks\\SystemtaskBase");
 

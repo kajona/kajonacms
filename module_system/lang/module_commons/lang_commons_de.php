@@ -33,6 +33,7 @@ $lang["commons_continue"]                = "Weiter";
 $lang["commons_close"]                   = "Schließen";
 $lang["commons_date"]                    = "Datum";
 $lang["commons_create_date"]             = "Anlagedatum";
+$lang["commons_save_as_image"]          = "Als Bild speichern";
 $lang["commons_lastmodification_date"]   = "Letztes Änderungsdatum";
 $lang["commons_delete"]                  = "Löschen";
 $lang["commons_delete_category_question"] = "Möchten Sie die Kategorie &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
