@@ -155,8 +155,9 @@ class class_module_mediamanager_admin extends class_admin_evensimpler implements
             if($strTargetId == $this->getObjModule()->getSystemid())
                 $strTargetId = "";
 
+            $strTargetfield = xssSafeString($this->getParam("form_element"));
             return $this->objToolkit->listButton(
-                class_link::getLinkAdmin($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$this->getParam("form_element")."&systemid=".$strTargetId, "", $this->getLang("commons_one_level_up"), "icon_folderActionLevelup")
+                class_link::getLinkAdmin($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$strTargetId, "", $this->getLang("commons_one_level_up"), "icon_folderActionLevelup")
             );
         }
         return parent::renderLevelUpAction($strListIdentifier);
@@ -284,7 +285,7 @@ class class_module_mediamanager_admin extends class_admin_evensimpler implements
      */
     public function getActionIcons($objOneIterable, $strListIdentifier = "") {
         if($strListIdentifier == self::INT_LISTTYPE_FOLDERVIEW) {
-            $strTargetfield = $this->getParam("form_element");
+            $strTargetfield = xssSafeString($this->getParam("form_element"));
 
             if($objOneIterable instanceof class_module_mediamanager_file && $objOneIterable->rightView()) {
 
@@ -612,7 +613,7 @@ HTML;
             $strReturn .= "<script type=\"text/javascript\">window.opener.KAJONA.admin.folderview.selectCallbackCKEditorFuncNum = ".(int)$this->getParam("CKEditorFuncNum").";</script>";
         }
 
-        $strTargetfield = $this->getParam("form_element");
+        $strTargetfield = xssSafeString($this->getParam("form_element"));
 
         $this->setArrModuleEntry("template", "/folderview.tpl");
 
@@ -659,7 +660,7 @@ HTML;
 
             $strReturn .= $this->actionUploadFileInternal();
             $strReturn .= $this->generateNewFolderDialogCode();
-            $strReturn .= $this->renderFloatingGrid($objIterator, class_module_mediamanager_admin::INT_LISTTYPE_FOLDERVIEW, "&form_element=".$this->getParam("form_element"), false);
+            $strReturn .= $this->renderFloatingGrid($objIterator, class_module_mediamanager_admin::INT_LISTTYPE_FOLDERVIEW, "&form_element=".$strTargetfield, false);
         }
 
         return $strReturn;
@@ -674,8 +675,10 @@ HTML;
     protected function renderGridEntryClickAction($objOneIterable, $strListIdentifier) {
         if($strListIdentifier == self::INT_LISTTYPE_FOLDERVIEW && $objOneIterable instanceof class_module_mediamanager_file) {
 
+            $strTargetfield = xssSafeString($this->getParam("form_element"));
+
             if($objOneIterable->getIntType() == class_module_mediamanager_file::$INT_TYPE_FOLDER) {
-                return "onclick=\"document.location='".class_link::getLinkAdminHref($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$this->getParam("form_element")."&systemid=".$objOneIterable->getSystemid())."'\"";
+                return "onclick=\"document.location='".class_link::getLinkAdminHref($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$objOneIterable->getSystemid())."'\"";
             }
             else if($objOneIterable->getIntType() == class_module_mediamanager_file::$INT_TYPE_FILE) {
 
@@ -685,14 +688,14 @@ HTML;
                 if($arrMime[1] == "jpg" || $arrMime[1] == "png" || $arrMime[1] == "gif")
                     $bitImage = true;
 
-                if ($bitImage && $this->getParam("form_element") == "ckeditor") {
+                if ($bitImage && $strTargetfield == "ckeditor") {
                     $strValue = _webpath_."/image.php?image=".$strValue;
                 } else {
                     $strValue = _webpath_.$strValue;
                 }
 
 
-                return "onclick=\"KAJONA.admin.folderview.selectCallback([['".$this->getParam("form_element")."', '".$strValue."']]);\"";
+                return "onclick=\"KAJONA.admin.folderview.selectCallback([['".$strTargetfield."', '".$strValue."']]);\"";
             }
 
             return "";
@@ -719,7 +722,7 @@ HTML;
             $strFolder = $this->getParam("folder");
 
         $arrExcludeFolder = array(0 => ".", 1 => "..");
-        $strFormElement = $this->getParam("form_element");
+        $strFormElement = xssSafeString($this->getParam("form_element"));
 
 
         $objFilesystem = new class_filesystem();
