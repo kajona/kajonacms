@@ -287,13 +287,13 @@ TXT;
                         if (is_file($composerFile)) {
                             $arrOutput = array();
                             $intReturn = 0;
-                            exec('composer install --prefer-dist --working-dir --no-dev '.dirname($composerFile), $arrOutput, $intReturn);
+                            exec('composer install --prefer-dist --no-dev --working-dir  '.dirname($composerFile), $arrOutput, $intReturn);
                             if($intReturn == 127) {
-                                echo "<span style='color: red;'>composer was not found. please run 'composer install --prefer-dist --working-dir ".dirname($composerFile)."' manually</span>\n";
+                                echo "<span style='color: red;'>composer was not found. please run 'composer install --prefer-dist --no-dev --working-dir ".dirname($composerFile)."' manually</span>\n";
                                 continue;
                             }
                             if($intReturn == 1) {
-                                echo "<span style='color: red;'>composer error. please run 'composer install --prefer-dist --working-dir ".dirname($composerFile)."' manually</span>\n";
+                                echo "<span style='color: red;'>composer error. please run 'composer install --prefer-dist --no-dev --working-dir ".dirname($composerFile)."' manually</span>\n";
 
                                 if(!is_writable(dirname($composerFile))) {
                                     echo "<span style='color: red;'>    target folder ".dirname($composerFile)." is not writable</span>\n";
