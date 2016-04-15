@@ -9,7 +9,7 @@ namespace Kajona\Dashboard\System;
 
 use Kajona\System\System\Carrier;
 use Kajona\System\System\InterfaceJStreeNodeLoader;
-use Kajona\System\System\Link;
+use Kajona\System\System\SystemJSTreeNode;
 
 /**
  * @package module_prozessverwaltung
@@ -19,18 +19,24 @@ class TodoJstreeNodeLoader implements InterfaceJStreeNodeLoader
 {
     private $objToolkit = null;
 
+    /**
+     * TodoJstreeNodeLoader constructor.
+     */
     public function __construct()
     {
         $this->objToolkit = Carrier::getInstance()->getObjToolkit("admin");
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getChildNodes($strSystemId)
     {
         $arrProvider = array();
         $arrCategories = TodoRepository::getAllCategories();
-        foreach ($arrCategories as $strProviderName => $arrTaskCategories) {
-            foreach ($arrTaskCategories as $strKey => $strCategoryName) {
-                if (!isset($arrProvider[$strProviderName])) {
+        foreach($arrCategories as $strProviderName => $arrTaskCategories) {
+            foreach($arrTaskCategories as $strKey => $strCategoryName) {
+                if(!isset($arrProvider[$strProviderName])) {
                     $arrProvider[$strProviderName] = array();
                 }
 
@@ -39,57 +45,76 @@ class TodoJstreeNodeLoader implements InterfaceJStreeNodeLoader
         }
 
         $arrProviderNodes = array();
-        foreach ($arrProvider as $strProviderName => $arrCats) {
+        foreach($arrProvider as $strProviderName => $arrCats) {
 
             $arrCategoryNodes = array();
-            foreach ($arrCats as $strKey => $strCategoryName) {
-                $strJsonKey =  json_encode($strKey);
+            foreach($arrCats as $strKey => $strCategoryName) {
+                $strJsonKey = json_encode($strKey);
 
-                $arrCategoryNodes[] = array(
-                    "id" => generateSystemid(),
-                    "text" => $this->objToolkit->getTooltipText($strCategoryName, $strCategoryName),
-                    "type" => "navigationpoint",
-                    "a_attr"  => array(
-                        "href"    => "#",
-                        "onclick" => "KAJONA.admin.dashboard.todo.loadCategory($strJsonKey,'')"
-                    ),
-                    "state" => array(
-                        "opened"  => true
-                    ),
-                    "children" => false
+                $objNode = new SystemJSTreeNode();
+                $objNode->setStrId(generateSystemid());
+                $objNode->setStrText($this->objToolkit->getTooltipText($strCategoryName, $strCategoryName));
+                $objNode->setArrChildren(false);
+                $objNode->setStrType("navigationpoint");
+                $objNode->addAAttrAttr(
+                    SystemJSTreeNode::STR_NODE_AATTR_HREF,
+                    "#"
                 );
+                $objNode->addAAttrAttr(
+                    "onclick",
+                    "KAJONA.admin.dashboard.todo.loadCategory($strJsonKey,'')"
+                );
+                $objNode->addStateAttr(
+                    SystemJSTreeNode::STR_NODE_STATE_OPENED,
+                    true
+                );
+                $arrCategoryNodes[] = $objNode;
             }
 
             $strKeys = implode(",", array_keys($arrCats));
             $strKeysJson = json_encode($strKeys);
-            $arrProviderNodes[] = array(
-                "id" => generateSystemid(),
-                "text" => '<i class="fa fa-folder-o"></i>&nbsp;' . $this->objToolkit->getTooltipText($strProviderName, $strProviderName),
-                "type" => "navigationpoint",
-                "a_attr"  => array(
-                    "href"    => "#",
-                    "onclick" => "KAJONA.admin.dashboard.todo.loadCategory($strKeysJson,'')"
-                ),
-                "state" => array(
-                    "opened"  => true
-                ),
-                "children" => $arrCategoryNodes
+
+            $objNode = new SystemJSTreeNode();
+            $objNode->setStrId(generateSystemid());
+            $objNode->setStrText('<i class="fa fa-folder-o"></i>&nbsp;'.$this->objToolkit->getTooltipText($strProviderName, $strProviderName));
+            $objNode->setArrChildren($arrCategoryNodes);
+            $objNode->setStrType("navigationpoint");
+            $objNode->addAAttrAttr(
+                SystemJSTreeNode::STR_NODE_AATTR_HREF,
+                "#"
+            );
+            $objNode->addAAttrAttr(
+                "onclick",
+                "KAJONA.admin.dashboard.todo.loadCategory($strKeysJson,'')"
+            );
+            $objNode->addStateAttr(
+                SystemJSTreeNode::STR_NODE_STATE_OPENED,
+                true
             );
         }
 
         return $arrProviderNodes;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getNode($strSystemId)
     {
-        return array(
-            "id" => generateSystemid(),
-            "text" => $this->objToolkit->getTooltipText("Kategorien", "Kategorien"),
-            "type" => "navigationpoint",
-            "a_attr"  => array(
-                "href"    => "#",
-                "onclick" => "KAJONA.admin.dashboard.todo.loadCategory('','')"
-            )
+        $objNode = new SystemJSTreeNode();
+        $objNode->setStrId(generateSystemid());
+        $objNode->setStrText($this->objToolkit->getTooltipText("Kategorien", "Kategorien"));
+        $objNode->setStrType("navigationpoint");
+        $objNode->addAAttrAttr(
+            SystemJSTreeNode::STR_NODE_AATTR_HREF,
+            "#"
         );
+        $objNode->addAAttrAttr(
+            "onclick",
+            "KAJONA.admin.dashboard.todo.loadCategory('','')"
+        );
+
+        return $objNode;
+
     }
 }

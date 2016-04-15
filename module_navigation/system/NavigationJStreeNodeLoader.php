@@ -15,6 +15,7 @@ use Kajona\System\System\Carrier;
 use Kajona\System\System\InterfaceJStreeNodeLoader;
 use Kajona\System\System\Link;
 use Kajona\System\System\Objectfactory;
+use Kajona\System\System\SystemJSTreeNode;
 
 /**
  * @package module_navigation
@@ -26,8 +27,8 @@ use Kajona\System\System\Objectfactory;
 class NavigationJStreeNodeLoader implements InterfaceJStreeNodeLoader
 {
 
-    const NODE_TYPE_PAGE = "page";
-    const NODE_TYPE_FOLDER = "folder";
+    const NODE_TYPE_NAVIGATIONPOINT = "navigationpoint";
+    const NODE_TYPE_NAVIGATIONTREE = "navigationtree";
 
     private $objToolkit = null;
 
@@ -57,36 +58,57 @@ class NavigationJStreeNodeLoader implements InterfaceJStreeNodeLoader
         return $arrNodes;
     }
 
-
+    /**
+     * @param NavigationPoint $objSinglePoint
+     *
+     * @return SystemJSTreeNode
+     */
     private function getNodeNavigationPoint(NavigationPoint $objSinglePoint) {
 
-        $arrNode = array(
-            "id" => $objSinglePoint->getSystemid(),
-            "text" => AdminskinHelper::getAdminImage($objSinglePoint->getStrIcon())."&nbsp;".$objSinglePoint->getStrDisplayName(),
-            "a_attr"  => array(
-                "href"     => Link::getLinkAdminHref("navigation", "list", "&systemid=".$objSinglePoint->getSystemid(), false),
-            ),
-            "type" => "navigationpoint",
-            "children" => count($this->getChildrenObjects($objSinglePoint)) > 0
+        $objNode = new SystemJSTreeNode();
+        $objNode->setStrId($objSinglePoint->getSystemid());
+        $objNode->setStrText(AdminskinHelper::getAdminImage($objSinglePoint->getStrIcon())."&nbsp;".$objSinglePoint->getStrDisplayName());
+        $objNode->setStrType(self::NODE_TYPE_NAVIGATIONPOINT);
+        $objNode->setArrChildren(count($this->getChildrenObjects($objSinglePoint)) > 0);
+        $objNode->addAAttrAttr(
+            SystemJSTreeNode::STR_NODE_AATTR_HREF,
+            Link::getLinkAdminHref("navigation", "list", "&systemid=".$objSinglePoint->getSystemid(), false)
+        );
+        $objNode->addDataAttr(
+            SystemJSTreeNode::STR_NODE_DATA_RIGHTEDIT,
+            $objSinglePoint->rightEdit()
         );
 
-        return $arrNode;
+        return $objNode;
     }
 
+    /**
+     * @param NavigationTree $objSingleEntry
+     *
+     * @return SystemJSTreeNode
+     */
     private function getNodeNavigationTree(NavigationTree $objSingleEntry) {
-        $arrNode = array(
-            "id" => $objSingleEntry->getSystemid(),
-            "text" => AdminskinHelper::getAdminImage($objSingleEntry->getStrIcon())."&nbsp;".$objSingleEntry->getStrDisplayName(),
-            "a_attr"  => array(
-                "href"     => Link::getLinkAdminHref("navigation", "list", "&systemid=".$objSingleEntry->getSystemid(), false),
-            ),
-            "type" => "navigationtree",
-            "children" => count($this->getChildrenObjects($objSingleEntry)) > 0
+
+        $objNode = new SystemJSTreeNode();
+        $objNode->setStrId($objSingleEntry->getSystemid());
+        $objNode->setStrText(AdminskinHelper::getAdminImage($objSingleEntry->getStrIcon())."&nbsp;".$objSingleEntry->getStrDisplayName());
+        $objNode->setStrType(self::NODE_TYPE_NAVIGATIONTREE);
+        $objNode->setArrChildren(count($this->getChildrenObjects($objSingleEntry)) > 0);
+        $objNode->addAAttrAttr(
+            SystemJSTreeNode::STR_NODE_AATTR_HREF,
+            Link::getLinkAdminHref("navigation", "list", "&systemid=".$objSingleEntry->getSystemid(), false)
+        );
+        $objNode->addDataAttr(
+            SystemJSTreeNode::STR_NODE_DATA_RIGHTEDIT,
+            $objSingleEntry->rightEdit()
         );
 
-        return $arrNode;
+        return $objNode;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getNode($strSystemId) {
 
         //1. Get Process
@@ -102,6 +124,11 @@ class NavigationJStreeNodeLoader implements InterfaceJStreeNodeLoader
         return null;
     }
 
+    /**
+     * @param $objPage
+     *
+     * @return NavigationPoint[]
+     */
     private function getChildrenObjects($objPage) {
         //Handle Children
         $arrNavigations = NavigationPoint::getNaviLayer($objPage->getSystemid());

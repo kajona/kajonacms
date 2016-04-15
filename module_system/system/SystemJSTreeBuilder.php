@@ -21,12 +21,17 @@ namespace Kajona\System\System;
  * @moduleId _system_modul_id_
  *
  */
-class SystemJSTreeBuilder {
+class SystemJSTreeBuilder
+{
+    const STR_PARAM_INITIALTOGGLING = "jstree_initialtoggling";
+    const STR_PARAM_LOADALLCHILDNOES = "jstree_loadallchildnodes";
+
 
     private $objNodeLoader = null;
 
     /**
      * SystemJSTreeBuilder constructor.
+     *
      * @param InterfaceJStreeNodeLoader $objNodeGetter
      */
     public function __construct(InterfaceJStreeNodeLoader $objNodeGetter)
@@ -37,10 +42,12 @@ class SystemJSTreeBuilder {
     /**
      * Retrieves nodes for a tree by the given path.
      *
-     * @param array $arrSystemIdPath - array of system id's
-     * @return bool|mixed
+     * @param array $arrSystemIdPath - array of system id's, id's contained in this array will be loaded
+     *
+     * @return SystemJSTreeNode[]
      */
-    public function getNodesByPath(array $arrSystemIdPath) {
+    public function getNodesByPath(array $arrSystemIdPath)
+    {
 
         if(empty($arrSystemIdPath)) {
             return true;
@@ -50,16 +57,36 @@ class SystemJSTreeBuilder {
         $arrChildren = $this->objNodeLoader->getChildNodes($strSystemId);
 
         $strSubId = array_key_exists(0, $arrSystemIdPath) ? $arrSystemIdPath[0] : null;
-        foreach ($arrChildren as &$arrChildNode) {
+        foreach($arrChildren as $objChildNode) {
 
-            if ($strSubId !== null && $arrChildNode["id"] == $strSubId) {
-                $arrChildNode['state'] = array(
-                    "opened"  => true
-                );
+            if($strSubId !== null && $objChildNode->getStrId() == $strSubId) {
+                $objChildNode->addStateAttr(SystemJSTreeNode::STR_NODE_STATE_OPENED, true);
 
                 $arrSubchildNodes = $this->getNodesByPath($arrSystemIdPath);
-                $arrChildNode["children"] = $arrSubchildNodes;
+                $objChildNode->setArrChildren($arrSubchildNodes);
             }
+        }
+
+        return $arrChildren;
+    }
+
+
+    /**
+     * Method to get all child nodes for a given system id
+     *
+     * @param $strSystemId
+     *
+     * @return SystemJSTreeNode[]
+     */
+    public function getChildAllNodes($strSystemId)
+    {
+        $arrChildren = $this->objNodeLoader->getChildNodes($strSystemId);
+
+        foreach($arrChildren as $objChildNode) {
+            $objChildNode->addStateAttr(SystemJSTreeNode::STR_NODE_STATE_OPENED, true);
+
+            $arrSubchildNodes = $this->getChildAllNodes($objChildNode->getStrId());
+            $objChildNode->setArrChildren($arrSubchildNodes);
         }
 
         return $arrChildren;
@@ -69,32 +96,36 @@ class SystemJSTreeBuilder {
     /**
      * Returns the JSON reprensentation for the JSTree based on the retrieved nodes
      *
-     * @param $arrSystemIds
+     * @param $arrSystemIdPath - array of system id's, id's contained in this array will be loaded
      * @param bool $bitInitialLoading
+     *
      * @return string
      */
-    public function getJson($arrSystemIds, $bitInitialLoading = false) {
-        $arrNodes = $this->getNodesByPath($arrSystemIds);
+    public function getJson($arrSystemIdPath, $bitInitialLoading = false, $bitLoadAllSubnodes = false)
+    {
+        $arrNodes = $this->getNodesByPath($arrSystemIdPath);
 
         if($bitInitialLoading) {
             //root node is always first node in the array
-            $arrNode = $this->objNodeLoader->getNode($arrSystemIds[0]);
-            $arrNode['state'] = array(
-                "opened"  => true
-            );
-            $arrNode["children"] = $arrNodes;
-            $arrNodes = $arrNode;
+            $objNode = $this->objNodeLoader->getNode($arrSystemIdPath[0]);
+            $objNode->addStateAttr(SystemJSTreeNode::STR_NODE_STATE_OPENED, true);
+
+            $objNode->setArrChildren($arrNodes);
+            $arrNodes = $objNode;
         }
         else {
-            foreach($arrNodes as &$arrSingleNode) {
-                if ($arrSingleNode["children"] == true) {
-                    $arrSingleNode["children"] = $this->getNodesByPath(array($arrSingleNode["id"]));
+            foreach($arrNodes as $objSingleNode) {
+                if($objSingleNode->getArrChildren() === true) {
+                    if($bitLoadAllSubnodes) {
+                        $objSingleNode->setArrChildren($this->getChildAllNodes($objSingleNode->getStrId()));
+                    }
+                    else {
+                        $objSingleNode->setArrChildren($this->getNodesByPath(array($objSingleNode->getStrId())));
+                    }
                 }
             }
         }
 
         return json_encode($arrNodes);
     }
-
-
 }

@@ -14,6 +14,7 @@ use Kajona\System\System\Carrier;
 use Kajona\System\System\InterfaceJStreeNodeLoader;
 use Kajona\System\System\Link;
 use Kajona\System\System\Objectfactory;
+use Kajona\System\System\SystemJSTreeNode;
 use Kajona\System\System\SystemModule;
 
 
@@ -33,13 +34,16 @@ class PagesJstreeNodeLoader implements InterfaceJStreeNodeLoader
     private $objToolkit = null;
 
     /**
-     * class_module_prozessverwaltung_processnode constructor.
+     * PagesJstreeNodeLoader constructor.
      */
     public function __construct()
     {
         $this->objToolkit = Carrier::getInstance()->getObjToolkit("admin");
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getChildNodes($strSystemId)
     {
         $arrNodes = array();
@@ -52,7 +56,7 @@ class PagesJstreeNodeLoader implements InterfaceJStreeNodeLoader
         $arrChildrenPages = $this->getChildrenObjects($objSinglePage);
 
         //3. Node Childs
-        foreach ($arrChildrenPages as $objSubPage) {
+        foreach($arrChildrenPages as $objSubPage) {
             $arrNodes[] = $this->getNode($objSubPage->getStrSystemid());
         }
 
@@ -60,73 +64,88 @@ class PagesJstreeNodeLoader implements InterfaceJStreeNodeLoader
         return $arrNodes;
     }
 
-
-    private function getNodeModule(SystemModule $objModule) {
+    /**
+     * @inheritdoc
+     */
+    private function getNodeModule(SystemModule $objModule)
+    {
         $strLink = "";
-        if ($objModule->rightEdit()) {
+        if($objModule->rightEdit()) {
             $strLink = Link::getLinkAdminHref("pages", "list", "", false);
         }
 
-        $arrNode = array(
-            "id"       => $objModule->getSystemid(),
-            "text"     => AdminskinHelper::getAdminImage($objModule->getStrIcon())."&nbsp;".$objModule->getStrDisplayName(),
-            "a_attr"   => array(
-                "href" => $strLink,
-            ),
-            "type"     => self::NODE_TYPE_PAGE_MODULE,
-            "children" => count($this->getChildrenObjects($objModule)) > 0
+        $objNode = new SystemJSTreeNode();
+        $objNode->setStrId($objModule->getSystemid());
+        $objNode->setStrText(AdminskinHelper::getAdminImage($objModule->getStrIcon())."&nbsp;".$objModule->getStrDisplayName());
+        $objNode->setStrType(self::NODE_TYPE_PAGE_MODULE);
+        $objNode->setArrChildren(count($this->getChildrenObjects($objModule)) > 0);
+        $objNode->addAAttrAttr(
+            SystemJSTreeNode::STR_NODE_AATTR_HREF,
+            $strLink
+        );
+        $objNode->addDataAttr(
+            SystemJSTreeNode::STR_NODE_DATA_RIGHTEDIT,
+            $objModule->rightEdit()
         );
 
-        return $arrNode;
+        return $objNode;
     }
 
     private function getNodeFolder(PagesFolder $objSingleEntry)
     {
         $strLink = "";
-        if ($objSingleEntry->rightEdit()) {
+        if($objSingleEntry->rightEdit()) {
             $strLink = Link::getLinkAdminHref("pages", "list", "systemid=".$objSingleEntry->getSystemid(), false);
         }
 
-        $arrNode = array(
-            "id"       => $objSingleEntry->getSystemid(),
-            "text"     => AdminskinHelper::getAdminImage($objSingleEntry->getStrIcon())."&nbsp;".$objSingleEntry->getStrDisplayName(),
-            "a_attr"   => array(
-                "href" => $strLink,
-            ),
-            "type"     => self::NODE_TYPE_FOLDER,
-            "children" => count($this->getChildrenObjects($objSingleEntry)) > 0
+        $objNode = new SystemJSTreeNode();
+        $objNode->setStrId($objSingleEntry->getSystemid());
+        $objNode->setStrText(AdminskinHelper::getAdminImage($objSingleEntry->getStrIcon())."&nbsp;".$objSingleEntry->getStrDisplayName());
+        $objNode->setStrType(self::NODE_TYPE_FOLDER);
+        $objNode->setArrChildren(count($this->getChildrenObjects($objSingleEntry)) > 0);
+        $objNode->addAAttrAttr(
+            SystemJSTreeNode::STR_NODE_AATTR_HREF,
+            $strLink
+        );
+        $objNode->addDataAttr(
+            SystemJSTreeNode::STR_NODE_DATA_RIGHTEDIT,
+            $objSingleEntry->rightEdit()
         );
 
-        return $arrNode;
+        return $objNode;
     }
 
     private function getNodePage(PagesPage $objSingleEntry)
     {
 
         $strTargetId = $objSingleEntry->getSystemid();
-        if ($objSingleEntry->getIntType() == PagesPage::$INT_TYPE_ALIAS && PagesPage::getPageByName($objSingleEntry->getStrAlias()) != null) {
+        if($objSingleEntry->getIntType() == PagesPage::$INT_TYPE_ALIAS && PagesPage::getPageByName($objSingleEntry->getStrAlias()) != null) {
             $strTargetId = PagesPage::getPageByName($objSingleEntry->getStrAlias())->getSystemid();
         }
 
         $strLink = "";
-        if ($objSingleEntry->getIntType() == PagesPage::$INT_TYPE_ALIAS && Objectfactory::getInstance()->getObject($strTargetId)->rightEdit()) {
+        if($objSingleEntry->getIntType() == PagesPage::$INT_TYPE_ALIAS && Objectfactory::getInstance()->getObject($strTargetId)->rightEdit()) {
             $strLink = Link::getLinkAdminHref("pages_content", "list", "systemid=".$strTargetId, false);
         }
-        else if ($objSingleEntry->getIntType() == PagesPage::$INT_TYPE_PAGE && $objSingleEntry->rightEdit()) {
+        else if($objSingleEntry->getIntType() == PagesPage::$INT_TYPE_PAGE && $objSingleEntry->rightEdit()) {
             $strLink = Link::getLinkAdminHref("pages_content", "list", "systemid=".$objSingleEntry->getSystemid(), false);
         }
 
-        $arrNode = array(
-            "id"       => $objSingleEntry->getSystemid(),
-            "text"     => AdminskinHelper::getAdminImage($objSingleEntry->getStrIcon())."&nbsp;".$objSingleEntry->getStrDisplayName(),
-            "a_attr"   => array(
-                "href" => $strLink,
-            ),
-            "type"     => self::NODE_TYPE_PAGE,
-            "children" => count($this->getChildrenObjects($objSingleEntry)) > 0
+        $objNode = new SystemJSTreeNode();
+        $objNode->setStrId($objSingleEntry->getSystemid());
+        $objNode->setStrText(AdminskinHelper::getAdminImage($objSingleEntry->getStrIcon())."&nbsp;".$objSingleEntry->getStrDisplayName());
+        $objNode->setStrType(self::NODE_TYPE_PAGE);
+        $objNode->setArrChildren(count($this->getChildrenObjects($objSingleEntry)) > 0);
+        $objNode->addAAttrAttr(
+            SystemJSTreeNode::STR_NODE_AATTR_HREF,
+            $strLink
+        );
+        $objNode->addDataAttr(
+            SystemJSTreeNode::STR_NODE_DATA_RIGHTEDIT,
+            $objSingleEntry->rightEdit()
         );
 
-        return $arrNode;
+        return $objNode;
     }
 
     public function getNode($strSystemId)
@@ -136,19 +155,24 @@ class PagesJstreeNodeLoader implements InterfaceJStreeNodeLoader
         /** @var PagesPage $objSinglePage */
         $objSingleEntry = Objectfactory::getInstance()->getObject($strSystemId);
 
-        if ($objSingleEntry instanceof SystemModule) {
+        if($objSingleEntry instanceof SystemModule) {
             return $this->getNodeModule($objSingleEntry);
         }
-        else if ($objSingleEntry instanceof PagesFolder) {
+        else if($objSingleEntry instanceof PagesFolder) {
             return $this->getNodeFolder($objSingleEntry);
         }
-        else if ($objSingleEntry instanceof PagesPage) {
+        else if($objSingleEntry instanceof PagesPage) {
             return $this->getNodePage($objSingleEntry);
         }
 
         return null;
     }
 
+    /**
+     * @param $objPage
+     *
+     * @return PagesFolder[]|PagesPage[]
+     */
     private function getChildrenObjects($objPage)
     {
         //Handle Children

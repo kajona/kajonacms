@@ -1314,13 +1314,13 @@ JS;
             new PagesJstreeNodeLoader()
         );
 
-        $arrSystemIdPath = $this->getParam("jstree_initialtoggling");
+        $arrSystemIdPath = $this->getParam(SystemJSTreeBuilder::STR_PARAM_INITIALTOGGLING);
         $bitInitialLoading = is_array($arrSystemIdPath);
         if(!$bitInitialLoading) {
             $arrSystemIdPath = array($this->getSystemid());
         }
 
-        $arrReturn = $objJsTreeLoader->getJson($arrSystemIdPath, $bitInitialLoading);
+        $arrReturn = $objJsTreeLoader->getJson($arrSystemIdPath, $bitInitialLoading, $this->getParam(SystemJSTreeBuilder::STR_PARAM_LOADALLCHILDNOES) === "true");
         ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
         return $arrReturn;
     }

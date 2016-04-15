@@ -29,7 +29,7 @@ interface InterfaceJStreeNodeLoader
      *
      * @param $strSystemId
      *
-     * @return mixed
+     * @return SystemJSTreeNode[]
      */
     public function getChildNodes($strSystemId);
 
@@ -39,7 +39,7 @@ interface InterfaceJStreeNodeLoader
      *
      * @param $strSystemId
      *
-     * @return mixed
+     * @return SystemJSTreeNode
      */
     public function getNode($strSystemId);
 }
