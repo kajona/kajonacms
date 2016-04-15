@@ -730,7 +730,7 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
     {
         $arrReturn = array();
         if($objListEntry instanceof PackagemanagerTemplate) {
-            if (!$objListEntry->getMetadata()->getBitIsPhar()) {
+            if ($objListEntry->getMetadata() != null && !$objListEntry->getMetadata()->getBitIsPhar()) {
                 $arrReturn[] = $this->objToolkit->listButton(
                     Link::getLinkAdmin($this->getArrModule("modul"), "downloadAsPhar", "&package=".$objListEntry->getMetadata()->getStrTitle(), $this->getLang("package_downloadasphar"), $this->getLang("package_downloadasphar"), "icon_phar")
                 );
