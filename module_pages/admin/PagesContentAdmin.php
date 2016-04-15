@@ -34,6 +34,8 @@ use Kajona\System\System\ServiceProvider;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\Template;
 use Kajona\System\System\TemplateBlockContainer;
+use Kajona\System\System\TemplateBlocksParserException;
+use Kajona\System\System\TemplateKajonaSections;
 
 /**
  * This class is used to edit the content of a page. So, to create / delete / modify elements on a
@@ -128,7 +130,15 @@ class PagesContentAdmin extends AdminSimple implements AdminInterface
 
 
         //parse the whole template
-        $objParsedBlocks = $this->objTemplate->parsePageTemplate("/module_pages/".$objPage->getStrTemplate(), $objPage->getStrName() == "master" ? Template::INT_ELEMENT_MODE_MASTER : Template::INT_ELEMENT_MODE_REGULAR);
+        try {
+            $objParsedBlocks = $this->objTemplate->parsePageTemplate("/module_pages/".$objPage->getStrTemplate(), $objPage->getStrName() == "master" ? Template::INT_ELEMENT_MODE_MASTER : Template::INT_ELEMENT_MODE_REGULAR);
+        }
+        catch(TemplateBlocksParserException $objEx) {
+            $objParsedBlocks = new TemplateBlockContainer(TemplateKajonaSections::ROOT, "", "", "", "");
+
+            $strPath = $strName = Resourceloader::getInstance()->getTemplate("/module_pages/".$objPage->getStrTemplate(), false);
+            $strReturn .= $this->objToolkit->warningBox($this->getLang("exception_template_parse", array($strPath, nl2br(htmlentities($objEx->getStrSectionWithError())))), "alert-danger");
+        }
 
 
         $arrTabs = array();

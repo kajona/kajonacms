@@ -137,5 +137,47 @@ HTML;
     }
 
 
+    /**
+     * @throws \Kajona\System\System\TemplateBlocksParserException
+     * @expectedException \Kajona\System\System\TemplateBlocksParserException
+     */
+    public function testInvalidBlocks()
+    {
+        $strTemplate = <<<HTML
+
+
+                    <kajona-block kajona-name="Row light, 1" >
+                        <div class="row-dark">
+                            <h1>%%headline_plaintext%%</h1>
+                            %%content_richtext%%
+                        </div>
+                    </kajona-block>
+
+                    <kajona-block kajona-name="Row, light">
+                        <div class="row-light">
+                            <h1>%%headline_plaintext%%</h1>
+                            %%content_richtext%%
+                            %%date_date%%
+                        </div>
+                    </kajona-block>
+
+                    <kajona-block kajona-name="Row dark" >
+                        <div class="row-dark">
+                            <h1>%%headline_plaintext%%</h1>
+                            %%content_richtext%%
+                        </div>
+                    </kajona-block>
+
+
+HTML;
+
+
+        $objParser = new TemplateBlocksParser();
+
+        /** @var TemplateBlockContainer[] $arrBlocks */
+        $arrBlocks = $objParser->readBlocks($strTemplate, TemplateKajonaSections::BLOCK);
+
+    }
+
 }
 

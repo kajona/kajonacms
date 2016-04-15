@@ -27,6 +27,7 @@ use Kajona\System\System\ServiceProvider;
 use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemSetting;
 use Kajona\System\System\Template;
+use Kajona\System\System\TemplateBlocksParserException;
 
 /**
  * Handles the loading of the pages - loads the elements, passes control to them and returns the complete
@@ -110,7 +111,15 @@ class PagesPortalController extends PortalController implements PortalInterface
 
 
         //load the merged placeholder-list
-        $objPlaceholders = $this->objTemplate->parsePageTemplate("/module_pages/".$objPageData->getStrTemplate(), Template::INT_ELEMENT_MODE_MASTER);
+        try {
+            $objPlaceholders = $this->objTemplate->parsePageTemplate("/module_pages/".$objPageData->getStrTemplate(), Template::INT_ELEMENT_MODE_MASTER);
+        }
+        catch(TemplateBlocksParserException $objEx) {
+            Logger::getInstance(Logger::SYSTEMLOG)->addLogRow($objEx->getMessage(). " @ /module_pages/".$objPageData->getStrTemplate(), Logger::$levelError);
+            $objPageData = $this->getPageData(true);
+            $objPlaceholders = $this->objTemplate->parsePageTemplate("/module_pages/".$objPageData->getStrTemplate(), Template::INT_ELEMENT_MODE_MASTER);
+            self::$arrElementsOnPage = PagesPageelement::getElementsOnPage($objPageData->getSystemid(), true, $this->getStrPortalLanguage(), true);
+        }
 
 
         //Load the template from the filesystem to get the placeholders
@@ -302,7 +311,7 @@ class PagesPortalController extends PortalController implements PortalInterface
      * @throws Exception
      * @return PagesPage
      */
-    private function getPageData()
+    private function getPageData($bitErrorpage = false)
     {
         $strPagename = $this->getPagename();
 
@@ -310,8 +319,7 @@ class PagesPortalController extends PortalController implements PortalInterface
         $objPageData = PagesPage::getPageByName($strPagename);
 
         //check, if the page is enabled and if the rights are given, or if we want to load a preview of a page
-        $bitErrorpage = false;
-        if ($objPageData == null || ($objPageData->getIntRecordStatus() != 1 || !$objPageData->rightView())) {
+        if (!$bitErrorpage && ($objPageData == null || ($objPageData->getIntRecordStatus() != 1 || !$objPageData->rightView()))) {
             $bitErrorpage = true;
         }
 

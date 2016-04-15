@@ -23,6 +23,7 @@ class TemplateBlocksParser
      * @param string $strBlockDefinition
      *
      * @return TemplateBlockContainer[]
+     * @throws TemplateBlocksParserException
      */
     public function readBlocks($strTemplate, $strBlockDefinition = TemplateKajonaSections::BLOCKS)
     {
@@ -47,6 +48,14 @@ class TemplateBlocksParser
                     break;
                 }
                 else {
+
+
+                    if($intEnd < 0) {
+                        $objException = new TemplateBlocksParserException($strBlockDefinition." parsing failed, maybe there is an illegal character in the ".$strBlockDefinition." name attribute?", Exception::$level_ERROR);
+                        $objException->setStrSectionWithError($strTemplate);
+                        throw $objException;
+                    }
+
                     //delete substring before and after
                     $strTemplateSection = uniSubstr($strTemplate, $intStart, $intEnd);
 

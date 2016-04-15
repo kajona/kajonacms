@@ -139,7 +139,7 @@ class Template
      * The contained blocks and elements are nested within a root TemplateBlockContainer element
      * @param $strContent
      * @param int $intMode
-     *
+     * @throws Exception
      * @return TemplateBlockContainer
      */
     public function parsePageTemplateString($strContent, $intMode = Template::INT_ELEMENT_MODE_REGULAR)
