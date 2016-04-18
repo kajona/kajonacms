@@ -346,12 +346,26 @@ KAJONA.kajonatree.contextmenu.openAllNodes = function (data) {
     var objTreeInstance = $.jstree.reference(data.reference),
         objNode = objTreeInstance.get_node(data.reference);
 
-    if(!objNode.data) {
-        objNode.data = {};
+    /*Check if node was already loaded (also check if parent node was loaded)*/
+    var arrNodesToCheck = objNode.parents;
+    arrNodesToCheck.unshift(objNode.id);
+    var bitAlreadyLoaded = false;
+
+    for(var i = 0; i < arrNodesToCheck.length; i++) {
+        var objCurrNode = objTreeInstance.get_node(arrNodesToCheck[i]);
+
+        if(!objCurrNode.data) {
+            objCurrNode.data = {};
+        }
+
+        if(objCurrNode.data.jstree_loadallchildnodes) {
+            bitAlreadyLoaded = true;
+            break;
+        }
     }
 
-    //only load node if child nodes have not been loaded yet //TODO also check if parent nodes have flag set
-    if(!objNode.data.jstree_loadallchildnodes) {
+    //only load if have not been loaded yet, else just open all nodes
+    if(!bitAlreadyLoaded) {
         objNode.data.jstree_loadallchildnodes = true;
         objTreeInstance.load_node(objNode, function(node){
             objTreeInstance.open_all(node);
