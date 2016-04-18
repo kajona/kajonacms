@@ -202,4 +202,20 @@ class SystemJSTreeConfig
     {
         $this->arrNodesToExpand = $arrNodesToExpand;
     }
+
+    /**
+     * @return null
+     */
+    public function getStrContextMenuItemFunction()
+    {
+        return $this->strContextMenuItemFunction;
+    }
+
+    /**
+     * @param null $strContextMenuItemFunction
+     */
+    public function setStrContextMenuItemFunction($strContextMenuItemFunction)
+    {
+        $this->strContextMenuItemFunction = $strContextMenuItemFunction;
+    }
 }
