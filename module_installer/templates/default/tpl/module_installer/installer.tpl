@@ -290,13 +290,13 @@ function switchDriver() {
                     if(data.status == 'success') {
                         $('tr[data-package="'+data.module+'"]').removeClass('info');
                         $('tr[data-package="'+data.module+'"] td.spinner-module').html('<i class="fa fa-check"></i>');
+                        triggerNextInstaller();
                     }
                     else {
-                        $('tr[data-package="'+data.module+'"]').removeClass('info').addClass('error');
+                        $('tr[data-package="'+data.module+'"]').removeClass('info').addClass('danger');
                         $('tr[data-package="'+data.module+'"] td.spinner-module').html('<i class="fa fa-times"></i>');
                     }
 
-                    triggerNextInstaller();
                 }
             );
         }
@@ -331,15 +331,15 @@ function switchDriver() {
                     if(data.status == 'success') {
                         $('tr[data-package="'+data.module+'"]').removeClass('info');
                         $('tr[data-package="'+data.module+'"] td.spinner-samplecontent').html('<i class="fa fa-check"></i>');
+                        triggerNextSamplecontent();
                     }
                     else {
-                        $('tr[data-package="'+data.module+'"]').removeClass('info').addClass('error');
+                        $('tr[data-package="'+data.module+'"]').removeClass('info').addClass('danger');
                         console.log('installation failed ');
                         $('tr[data-package="'+data.module+'"] td.spinner-samplecontent').html('<i class="fa fa-times"></i>');
 
                     }
 
-                    triggerNextSamplecontent();
                 }
             );
         }
