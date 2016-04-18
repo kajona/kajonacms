@@ -866,7 +866,8 @@ function removeDirectoryTraversals($strFilename)
 {
     $strFilename = urldecode($strFilename);
     $strFilename = uniStrReplace("..", "", $strFilename);
-    return uniStrReplace("//", "/", $strFilename);
+    return $strFilename;
+//    return uniStrReplace("//", "/", $strFilename); //FIXME: should stay in place but breaks "phar:///". 
 }
 
 /**
