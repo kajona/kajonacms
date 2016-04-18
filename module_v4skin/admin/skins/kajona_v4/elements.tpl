@@ -1225,9 +1225,7 @@ Used to print plaintext in a form
 
 Used to print headline in a form
 <headline_form>
-    <headline_form>
-        <%%level%% class="%%class%%">%%text%%</%%level%%>
-</headline_form>
+    <%%level%% class="%%class%%">%%text%%</%%level%%>
 </headline_form>
 
 ---------------------------------------------------------------------------------------------------------
