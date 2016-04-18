@@ -155,9 +155,11 @@ class PagesContentAdmin extends AdminSimple implements AdminInterface
 
 
         //trigger blocks rendering
+        $arrGhostBlocks = array();
         $strBlocks = "";
         foreach ($objParsedBlocks->getArrBlocks() as $objOneBlocks) {
 
+            $arrGhostBlock = array();
 
             $strCurBlocks = "";
             $strNewBlocks = "";
@@ -169,18 +171,30 @@ class PagesContentAdmin extends AdminSimple implements AdminInterface
                 /** @var PagesPageelement $objOneBlocksOnPage */
                 foreach ($arrBlocksOnPage as $objOneBlocksOnPage) {
 
+                    if(!array_key_exists($objOneBlocksOnPage->getSystemid(), $arrGhostBlocks)) {
+                        $arrGhostBlocks[$objOneBlocksOnPage->getSystemid()] = $objOneBlocksOnPage;
+                    }
 
                     if ($objOneBlocksOnPage->getStrName() == $objOneBlocks->getStrName()) {
+
+                        $arrGhostBlocks[$objOneBlocksOnPage->getSystemid()] = false;
+
                         $strNewBlocksSystemid = $objOneBlocksOnPage->getSystemid();
                         $arrSubBlock = PagesPageelement::getElementsOnPage($objOneBlocksOnPage->getSystemid(), false, $this->getLanguageToWorkOn());
 
                         foreach ($arrSubBlock as $objOneBlockOnPage) {
+
+                            if(!array_key_exists($objOneBlockOnPage->getSystemid(), $arrGhostBlock)) {
+                                $arrGhostBlock[$objOneBlockOnPage->getSystemid()] = $objOneBlockOnPage;
+                            }
 
                             $strExistingBlock = "";
 
                             if ($objOneBlockOnPage->getStrName() == $objOneBlock->getStrName()) {
                                 $arrElementsInBlock = PagesPageelement::getElementsOnPage($objOneBlockOnPage->getSystemid(), false, $this->getLanguageToWorkOn());
                                 $strExistingBlock .= $this->renderElementPlaceholderList($objOneBlock->getArrPlaceholder(), $arrElementsInBlock, true, $objOneBlocksOnPage->getSystemid(), $objOneBlockOnPage->getSystemid());
+
+                                $arrGhostBlock[$objOneBlockOnPage->getSystemid()] = false;
                             }
 
                             if ($strExistingBlock != "") {
@@ -205,7 +219,24 @@ class PagesContentAdmin extends AdminSimple implements AdminInterface
 
             }
 
+            $arrGhostBlock = array_filter($arrGhostBlock, function ($objElement) {
+                return $objElement !== false;
+            });
+            if(count($arrGhostBlock) > 0) {
+                //render ghosts
+                $strCurBlocks .= $this->renderGhostElementList($arrGhostBlock);
+            }
+
             $strBlocks .= $this->objToolkit->getFieldset($objOneBlocks->getStrName(), $strCurBlocks.$strNewBlocks, "fieldset blocks");
+
+        }
+        
+        $arrGhostBlocks = array_filter($arrGhostBlocks, function ($objElement) {
+            return $objElement !== false;
+        });
+        if(count($arrGhostBlocks) > 0) {
+            //render ghosts
+            $strBlocks .= $this->renderGhostElementList($arrGhostBlocks);
         }
 
 
@@ -370,25 +401,41 @@ HTML;
 
         //if there are any page-elements remaining, print a warning and print the elements row
         if (count($arrElementsOnPage) > 0) {
-            $strReturn .= $this->objToolkit->divider();
-            $strReturn .= $this->objToolkit->warningBox($this->getLang("warning_elementsremaining"));
-            $strReturn .= $this->objToolkit->listHeader();
-
-            //minimized actions now, plz. this ain't being a real element anymore!
-            foreach ($arrElementsOnPage as $objOneElement) {
-                $strActions = "";
-                $strActions .= $this->objToolkit->listDeleteButton($objOneElement->getStrDisplayName(), $this->getLang("element_loeschen_frage"), Link::getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneElement->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
-
-                //Put all Output together
-                $strReturn .= $this->objToolkit->genericAdminList("", $objOneElement->getStrDisplayName().$this->getLang("placeholder").$objOneElement->getStrPlaceholder(), "", $strActions);
-            }
-            $strReturn .= $this->objToolkit->listFooter();
+            $strReturn .= $this->renderGhostElementList($arrElementsOnPage);
         }
 
         if($strReturn != "") {
             $strReturn .= $this->objToolkit->getTableOfContents("h2");
         }
 
+        return $strReturn;
+    }
+
+    /**
+     * @param PagesPageelement[] $arrEntries
+     */
+    private function renderGhostElementList(array $arrEntries)
+    {
+        $strReturn = $this->objToolkit->divider();
+        $strReturn .= $this->objToolkit->warningBox($this->getLang("warning_elementsremaining"));
+        $strReturn .= $this->objToolkit->listHeader();
+
+        //minimized actions now, plz. this ain't being a real element anymore!
+        foreach ($arrEntries as $objOneElement) {
+            $strActions = "";
+            $strActions .= $this->objToolkit->listDeleteButton($objOneElement->getStrDisplayName(), $this->getLang("element_loeschen_frage"), Link::getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneElement->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
+
+            //Put all Output together
+            $strPlaceholder = $objOneElement->getStrPlaceholder();
+
+//            if($strPlaceholder == "block") {
+//                $strPlaceholder = $objOneElement->getStrName();
+//            }
+
+            $strReturn .= $this->objToolkit->genericAdminList("", $objOneElement->getStrDisplayName()." ".$this->getLang("placeholder").$strPlaceholder, "", $strActions);
+        }
+        $strReturn .= $this->objToolkit->listFooter();
+        $strReturn .= $this->objToolkit->divider();
         return $strReturn;
     }
 
