@@ -245,8 +245,8 @@ class Lang
         $arrModuleFiles = Resourceloader::getInstance()->getLanguageFiles("module_".$strModule);
 
         // 1. commons fallback language
-        if(in_array("lang_".$this->strCommonsName."_".$this->strFallbackLanguage.".php", $arrCommons)) {
-            $this->loadAndMergeTextfile($strModule, array_search("lang_".$this->strCommonsName."_".$this->strFallbackLanguage.".php", $arrCommons), $this->strLanguage, $this->arrTexts);
+        foreach(array_keys($arrCommons, "lang_".$this->strCommonsName."_".$this->strFallbackLanguage.".php") as $strPath) {
+            $this->loadAndMergeTextfile($strModule, $strPath, $this->strLanguage, $this->arrTexts);
         }
 
         // 2. entries fallback language
@@ -260,8 +260,8 @@ class Lang
         }
 
         // 3. commons current language
-        if(in_array("lang_".$this->strCommonsName."_".$this->strLanguage.".php", $arrCommons)) {
-            $this->loadAndMergeTextfile($strModule, array_search("lang_".$this->strCommonsName."_".$this->strLanguage.".php", $arrCommons), $this->strLanguage, $this->arrTexts);
+        foreach(array_keys($arrCommons, "lang_".$this->strCommonsName."_".$this->strLanguage.".php") as $strPath) {
+            $this->loadAndMergeTextfile($strModule, $strPath, $this->strLanguage, $this->arrTexts);
         }
 
         // 4. entries current language
