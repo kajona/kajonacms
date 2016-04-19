@@ -9,6 +9,7 @@
 
 namespace Kajona\Workflows\System;
 
+use Kajona\System\System\Carrier;
 use Kajona\System\System\Logger;
 
 
@@ -104,6 +105,15 @@ class WorkflowsController
                 Logger::getInstance(self::STR_LOGFILE)->addLogRow("workflow ".$objOneWorkflow->getSystemid()." is locked, can't be executed", Logger::$levelWarning);
                 continue;
             }
+
+            //double-check if the workflow is still pending. it's possible that the workflow was fetched in the meantime by another thread.
+            //so skip if the wf-state is either no longer scheduled or the nr of executions differ
+            $arrRow = Carrier::getInstance()->getObjDB()->getPRow("SELECT * FROM "._dbprefix_."workflows WHERE workflows_id = ?", array($objOneWorkflow->getSystemid()), 0, false);
+            if($arrRow["workflows_state"] != WorkflowsWorkflow::$INT_STATE_SCHEDULED || $arrRow["workflows_runs"] != $objOneWorkflow->getIntRuns()) {
+                Logger::getInstance(self::STR_LOGFILE)->addLogRow("skipping workflow ".$objOneWorkflow->getSystemid().", seems it was executed in the meantime", Logger::$levelInfo);
+                continue;
+            }
+
 
             $objLockmanager->lockRecord();
 
