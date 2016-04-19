@@ -17,7 +17,7 @@ namespace Kajona\System\System;
  * @author stefan.meyer1@yahoo.de
  * @since 5.0
  */
-class OrmCondition extends OrmObjectlistRestriction
+class OrmCondition extends OrmObjectlistRestriction implements OrmConditionInterface
 {
     const STR_CONDITION_AND = "AND";
     const STR_CONDITION_OR = "OR";

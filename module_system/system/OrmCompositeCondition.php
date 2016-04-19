@@ -66,9 +66,15 @@ class OrmCompositeCondition extends OrmCondition
         return $this;
     }
 
-    public function addCondition(OrmCondition $objRestriction) {
+    public function addCondition(OrmCondition $objRestriction)
+    {
         $this->arrConditions[] = $objRestriction;
         return $this;
+    }
+
+    public function hasConditions()
+    {
+        return count($this->arrConditions) > 0;
     }
 
     public function getStrWhere()

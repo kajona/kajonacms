@@ -282,7 +282,7 @@ class OrmObjectlist extends OrmBase
 
             $strWhere = $objOneRestriction->getStrWhere();
 
-            if($objOneRestriction instanceof OrmCondition && $strWhere != "") {
+            if($objOneRestriction instanceof OrmConditionInterface && $strWhere != "") {
                 $strWhere = OrmCondition::STR_CONDITION_AND." (".$strWhere.")";
             }
 
