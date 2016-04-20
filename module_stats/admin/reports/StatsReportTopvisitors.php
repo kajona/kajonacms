@@ -7,7 +7,7 @@
 *	$Id$                           *
 ********************************************************************************************************/
 
-namespace Kajona\Stats\Admin\Statsreports;
+namespace Kajona\Stats\Admin\Reports;
 
 use Kajona\Stats\Admin\AdminStatsreportsInterface;
 use Kajona\System\Admin\ToolkitAdmin;
@@ -15,7 +15,6 @@ use Kajona\System\System\Database;
 use Kajona\System\System\Lang;
 use Kajona\System\System\Link;
 use Kajona\System\System\Session;
-use Kajona\System\System\SystemSetting;
 use Kajona\System\System\UserUser;
 
 /**
@@ -24,24 +23,26 @@ use Kajona\System\System\UserUser;
  * @package module_stats
  * @author sidler@mulchprod.de
  */
-class StatsReportTopreferers implements AdminStatsreportsInterface
+class StatsReportTopvisitors implements AdminStatsreportsInterface
 {
 
     //class vars
     private $intDateStart;
     private $intDateEnd;
 
-    private $objTexts;
+    /**
+     * @var Lang
+     */
+    private $objLang;
     private $objToolkit;
     private $objDB;
-
 
     /**
      * Constructor
      */
     public function __construct(Database $objDB, ToolkitAdmin $objToolkit, Lang $objTexts)
     {
-        $this->objTexts = $objTexts;
+        $this->objLang = $objTexts;
         $this->objToolkit = $objToolkit;
         $this->objDB = $objDB;
     }
@@ -55,6 +56,7 @@ class StatsReportTopreferers implements AdminStatsreportsInterface
     {
         return "core.stats.admin.statsreport";
     }
+
 
     /**
      * @param int $intEndDate
@@ -81,7 +83,7 @@ class StatsReportTopreferers implements AdminStatsreportsInterface
      */
     public function getTitle()
     {
-        return $this->objTexts->getLang("topreferer", "stats");
+        return $this->objLang->getLang("topvisitor", "stats");
     }
 
     /**
@@ -108,12 +110,11 @@ class StatsReportTopreferers implements AdminStatsreportsInterface
     public function getReport()
     {
         $strReturn = "";
-
         //Create Data-table
         $arrHeader = array();
         $arrValues = array();
         //Fetch data
-        $arrStats = $this->getTopReferer();
+        $arrStats = $this->getTopVisitors();
 
         //calc a few values
         $intSum = 0;
@@ -129,63 +130,58 @@ class StatsReportTopreferers implements AdminStatsreportsInterface
                 break;
             }
 
-            if ($arrOneStat["refurl"] == "") {
-                $arrOneStat["refurl"] = $this->objTexts->getLang("referer_direkt", "stats");
-            }
-            else {
-                $arrOneStat["refurl"] = Link::getLinkPortal("", $arrOneStat["refurl"], "_blank", uniStrTrim($arrOneStat["refurl"], 45));
-            }
-
             $arrValues[$intI] = array();
             $arrValues[$intI][] = $intI + 1;
-            $arrValues[$intI][] = $arrOneStat["refurl"];
+            if ($arrOneStat["stats_hostname"] != "" and $arrOneStat["stats_hostname"] != "na") {
+                $arrValues[$intI][] = $arrOneStat["stats_hostname"];
+            }
+            else {
+                $arrValues[$intI][] = $arrOneStat["stats_ip"];
+            }
             $arrValues[$intI][] = $arrOneStat["anzahl"];
             $arrValues[$intI][] = $this->objToolkit->percentBeam($arrOneStat["anzahl"] / $intSum * 100);
+
+            $strUtraceLinkMap = "href=\"http://www.utrace.de/ip-adresse/".$arrOneStat["stats_ip"]."\" target=\"_blank\"";
+            $strUtraceLinkText = "href=\"http://www.utrace.de/whois/".$arrOneStat["stats_ip"]."\" target=\"_blank\"";
+            if ($arrOneStat["stats_ip"] != "127.0.0.1" && $arrOneStat["stats_ip"] != "::1") {
+                $arrValues[$intI][] = Link::getLinkAdminManual($strUtraceLinkMap, "", $this->objLang->getLang("login_utrace_showmap", "user"), "icon_earth")
+                    ." ".Link::getLinkAdminManual($strUtraceLinkText, "", $this->objLang->getLang("login_utrace_showtext", "user"), "icon_text");
+            }
+            else {
+                $arrValues[$intI][] = getImageAdmin("icon_earthDisabled", $this->objLang->getLang("login_utrace_noinfo", "user"))." "
+                    .getImageAdmin("icon_textDisabled", $this->objLang->getLang("login_utrace_noinfo", "user"));
+            }
+
             $intI++;
         }
         //HeaderRow
         $arrHeader[] = "#";
-        $arrHeader[] = $this->objTexts->getLang("top_referer_titel", "stats");
-        $arrHeader[] = $this->objTexts->getLang("top_referer_gewicht", "stats");
-        $arrHeader[] = $this->objTexts->getLang("anteil", "stats");
+        $arrHeader[] = $this->objLang->getLang("top_visitor_titel", "stats");
+        $arrHeader[] = $this->objLang->getLang("commons_hits_header", "stats");
+        $arrHeader[] = $this->objLang->getLang("anteil", "stats");
+        $arrHeader[] = $this->objLang->getLang("login_utrace", "user");
 
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrValues);
 
+        $strReturn .= $this->objToolkit->getTextRow($this->objLang->getLang("stats_hint_task", "stats"));
 
         return $strReturn;
     }
 
     /**
-     * returns a list of top-referer
+     * Returns the list of top-visitors
      *
      * @return mixed
      */
-    public function getTopReferer()
+    public function getTopVisitors()
     {
-        //Build excluded domains
-        $arrBlocked = explode(",", SystemSetting::getConfigValue("_stats_exclusionlist_"));
-
-        $arrParams = array("%".str_replace("%", "\%", _webpath_)."%", $this->intDateStart, $this->intDateEnd);
-
-        $strExclude = "";
-        foreach ($arrBlocked as $strBlocked) {
-            if ($strBlocked != "") {
-                $strExclude .= " AND stats_referer NOT LIKE ? \n";
-                $arrParams[] = "%".str_replace("%", "\%", $strBlocked)."%";
-            }
-        }
-
-        $objUser = new UserUser(Session::getInstance()->getUserID());
-        $strQuery = "SELECT stats_referer as refurl, COUNT(*) as anzahl
-						FROM "._dbprefix_."stats_data
-						WHERE stats_referer NOT LIKE ?
-							AND stats_date > ?
-							AND stats_date <= ?
-							".$strExclude."
-						GROUP BY stats_referer
+        $strQuery = "  SELECT stats_ip , stats_browser, stats_hostname , COUNT(*) as anzahl
+					  	 FROM "._dbprefix_."stats_data
+						WHERE stats_date > ?
+						  AND stats_date <= ?
+						GROUP BY stats_ip, stats_browser, stats_hostname
 						ORDER BY anzahl desc";
-
-        return $this->objDB->getPArray($strQuery, $arrParams, 0, $objUser->getIntItemsPerPage() - 1);
+        return $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd));
     }
 
     /**
@@ -195,5 +191,4 @@ class StatsReportTopreferers implements AdminStatsreportsInterface
     {
         return "";
     }
-
 }

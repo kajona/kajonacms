@@ -7,7 +7,7 @@
 /**
  * @deprecated
  */
-class class_stats_report_topcountries extends Kajona\Stats\Admin\Statsreports\StatsReportTopcountries
+class class_stats_report_topcountries extends Kajona\Stats\Admin\Reports\StatsReportTopcountries
 {
 
 }

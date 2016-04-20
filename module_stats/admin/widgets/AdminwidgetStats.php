@@ -12,7 +12,7 @@ namespace Kajona\Stats\Admin\Widgets;
 use Kajona\Dashboard\Admin\Widgets\Adminwidget;
 use Kajona\Dashboard\Admin\Widgets\AdminwidgetInterface;
 use Kajona\Dashboard\System\DashboardWidget;
-use Kajona\Stats\Admin\Statsreports\StatsReportCommon;
+use Kajona\Stats\Admin\Reports\StatsReportCommon;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\GraphFactory;
 use Kajona\System\System\SystemAspect;

@@ -7,7 +7,7 @@
 /**
  * @deprecated
  */
-class class_stats_report_topqueries extends Kajona\Stats\Admin\Statsreports\StatsReportTopqueries
+class class_stats_report_topqueries extends Kajona\Stats\Admin\Reports\StatsReportTopqueries
 {
 
 }

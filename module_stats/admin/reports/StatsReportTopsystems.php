@@ -5,9 +5,10 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
-namespace Kajona\Stats\Admin\Statsreports;
+namespace Kajona\Stats\Admin\Reports;
 
 use Kajona\Stats\Admin\AdminStatsreportsInterface;
+use Kajona\Stats\System\Browscap;
 use Kajona\System\Admin\ToolkitAdmin;
 use Kajona\System\System\Database;
 use Kajona\System\System\GraphFactory;
@@ -16,12 +17,12 @@ use Kajona\System\System\Session;
 use Kajona\System\System\UserUser;
 
 /**
- * This plugin creates a list of countries the visitors come from
+ * This plugin creates a view common numbers, such as "user online" oder "total pagehits"
  *
  * @package module_stats
  * @author sidler@mulchprod.de
  */
-class StatsReportTopcountries implements AdminStatsreportsInterface
+class StatsReportTopsystems implements AdminStatsreportsInterface
 {
 
     //class vars
@@ -33,7 +34,6 @@ class StatsReportTopcountries implements AdminStatsreportsInterface
     private $objToolkit;
     private $objDB;
 
-    private $arrHits = null;
 
     /**
      * Constructor
@@ -54,6 +54,7 @@ class StatsReportTopcountries implements AdminStatsreportsInterface
     {
         return "core.stats.admin.statsreport";
     }
+
 
     /**
      * @param int $intEndDate
@@ -80,7 +81,7 @@ class StatsReportTopcountries implements AdminStatsreportsInterface
      */
     public function getTitle()
     {
-        return $this->objTexts->getLang("topcountries", "stats");
+        return $this->objTexts->getLang("topsystem", "stats");
     }
 
     /**
@@ -88,7 +89,7 @@ class StatsReportTopcountries implements AdminStatsreportsInterface
      */
     public function isIntervalable()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -112,7 +113,7 @@ class StatsReportTopcountries implements AdminStatsreportsInterface
         $arrHeader = array();
         $arrValues = array();
         //Fetch data
-        $arrStats = $this->getTopCountries();
+        $arrStats = $this->getTopSystem();
 
         //calc a few values
         $intSum = 0;
@@ -122,7 +123,7 @@ class StatsReportTopcountries implements AdminStatsreportsInterface
 
         $intI = 0;
         $objUser = new UserUser(Session::getInstance()->getUserID());
-        foreach ($arrStats as $strCountry => $arrOneStat) {
+        foreach ($arrStats as $strName => $arrOneStat) {
             //Escape?
             if ($intI >= $objUser->getIntItemsPerPage()) {
                 break;
@@ -130,20 +131,19 @@ class StatsReportTopcountries implements AdminStatsreportsInterface
 
             $arrValues[$intI] = array();
             $arrValues[$intI][] = $intI + 1;
-            $arrValues[$intI][] = $strCountry;
+            $arrValues[$intI][] = $strName;
             $arrValues[$intI][] = $arrOneStat;
             $arrValues[$intI][] = $this->objToolkit->percentBeam($arrOneStat / $intSum * 100);
             $intI++;
         }
         //HeaderRow
         $arrHeader[] = "#";
-        $arrHeader[] = $this->objTexts->getLang("top_country_titel", "stats");
-        $arrHeader[] = $this->objTexts->getLang("commons_hits_header", "stats");
+        $arrHeader[] = $this->objTexts->getLang("top_system_titel", "stats");
+        $arrHeader[] = $this->objTexts->getLang("top_system_gewicht", "stats");
         $arrHeader[] = $this->objTexts->getLang("anteil", "stats");
 
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrValues);
 
-        $strReturn .= $this->objToolkit->getTextRow($this->objTexts->getLang("stats_hint_task", "stats"));
 
         return $strReturn;
     }
@@ -154,51 +154,32 @@ class StatsReportTopcountries implements AdminStatsreportsInterface
      *
      * @return mixed
      */
-    public function getTopCountries()
+    public function getTopSystem()
     {
         $arrReturn = array();
-
-        if ($this->arrHits != null) {
-            return $this->arrHits;
-        }
-
-        $strQuery = "SELECT stats_ip, count(*) as anzahl
+        //load Data
+        $strQuery = "SELECT stats_browser, count(*) as anzahl
 						FROM "._dbprefix_."stats_data
 						WHERE stats_date > ?
-						  AND stats_date <= ?
-						GROUP BY stats_ip";
+							AND stats_date <= ?
+						GROUP BY stats_browser";
+        $arrBrowser = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd));
 
-        $arrTemp = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd));
+        $objBrowscap = new Browscap();
 
-        $intCounter = 0;
-        foreach ($arrTemp as $arrOneRecord) {
+        //Search the best matching pattern
+        foreach ($arrBrowser as $arrRow) {
+            $strSystem = $objBrowscap->getPlatformForUseragent($arrRow["stats_browser"]);
 
-            $strQuery = "SELECT ip2c_name as country_name
-						   FROM "._dbprefix_."stats_ip2country
-						  WHERE ip2c_ip = ?";
-
-            $arrRow = $this->objDB->getPRow($strQuery, array($arrOneRecord["stats_ip"]));
-
-            if (!isset($arrRow["country_name"])) {
-                $arrRow["country_name"] = "n.a.";
-            }
-
-            if (isset($arrReturn[$arrRow["country_name"]])) {
-                $arrReturn[$arrRow["country_name"]] += $arrOneRecord["anzahl"];
+            if (!isset($arrReturn[$strSystem])) {
+                $arrReturn[$strSystem] = $arrRow["anzahl"];
             }
             else {
-                $arrReturn[$arrRow["country_name"]] = $arrOneRecord["anzahl"];
+                $arrReturn[$strSystem] += $arrRow["anzahl"];
             }
-
-            //flush query cache every 2000 hits
-            if ($intCounter++ >= 2000) {
-                $this->objDB->flushQueryCache();
-            }
-
         }
 
         arsort($arrReturn);
-        $this->arrHits = $arrReturn;
         return $arrReturn;
     }
 
@@ -208,8 +189,7 @@ class StatsReportTopcountries implements AdminStatsreportsInterface
     public function getReportGraph()
     {
         $arrReturn = array();
-
-        $arrData = $this->getTopCountries();
+        $arrData = $this->getTopSystem();
 
         $intSum = 0;
         foreach ($arrData as $arrOneStat) {
@@ -227,8 +207,8 @@ class StatsReportTopcountries implements AdminStatsreportsInterface
                 $floatPercentage = $intOneSystem / $intSum * 100;
                 $floatPercentageSum += $floatPercentage;
                 $arrKeyValues[$strName] = $floatPercentage;
-                $arrValues[] = $floatPercentage;
                 $arrLabels[] = $strName;
+                $arrValues[] = $floatPercentage;
             }
             else {
                 break;
@@ -242,11 +222,59 @@ class StatsReportTopcountries implements AdminStatsreportsInterface
         }
         $objGraph = GraphFactory::getGraphInstance();
         $objGraph->createPieChart($arrValues, $arrLabels);
-
         $arrReturn[] = $objGraph->renderGraph();
 
+        //--- XY-Plot -----------------------------------------------------------------------------------
+        //calc number of plots
+        $arrPlots = array();
+        $arrTickLabels = array();
+        foreach ($arrKeyValues as $strSystem => $arrData) {
+            if ($strSystem != "others") {
+                $arrPlots[$strSystem] = array();
+            }
+        }
+
+        $intGlobalEnd = $this->intDateEnd;
+        $intGlobalStart = $this->intDateStart;
+
+        $this->intDateEnd = $this->intDateStart + 60 * 60 * 24 * $this->intInterval;
+
+        $intCount = 0;
+        while ($this->intDateStart <= $intGlobalEnd) {
+            $arrSystemData = $this->getTopSystem();
+            //init plot array for this period
+            $arrTickLabels[$intCount] = date("d.m.", $this->intDateStart);
+            foreach ($arrPlots as $strSystem => &$arrOnePlot) {
+                $arrOnePlot[$intCount] = 0;
+                if (array_key_exists($strSystem, $arrSystemData)) {
+                    $arrOnePlot[$intCount] = (int)$arrSystemData[$strSystem];
+                }
+
+            }
+            //increase start & end-date
+            $this->intDateStart = $this->intDateEnd;
+            $this->intDateEnd = $this->intDateStart + 60 * 60 * 24 * $this->intInterval;
+            $intCount++;
+        }
+        //create graph
+
+
+        //fehler fangen: mind. 2 datumswerte
+        if (count($arrTickLabels) > 1 && count($arrPlots) > 0) {
+            $objGraph = GraphFactory::getGraphInstance();
+            $objGraph->setArrXAxisTickLabels($arrTickLabels);
+
+            foreach ($arrPlots as $arrPlotName => $arrPlotData) {
+                $objGraph->addLinePlot($arrPlotData, $arrPlotName);
+            }
+            $objGraph->renderGraph();
+            $arrReturn[] = $objGraph->renderGraph();
+        }
+
+        //reset global dates
+        $this->intDateEnd = $intGlobalEnd;
+        $this->intDateStart = $intGlobalStart;
 
         return $arrReturn;
     }
 }
-

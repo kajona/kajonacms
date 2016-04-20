@@ -5,10 +5,9 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
-namespace Kajona\Stats\Admin\Statsreports;
+namespace Kajona\Stats\Admin\Reports;
 
 use Kajona\Stats\Admin\AdminStatsreportsInterface;
-use Kajona\Stats\System\Browscap;
 use Kajona\System\Admin\ToolkitAdmin;
 use Kajona\System\System\Database;
 use Kajona\System\System\GraphFactory;
@@ -17,22 +16,24 @@ use Kajona\System\System\Session;
 use Kajona\System\System\UserUser;
 
 /**
- * This plugin creates a view common numbers, such as "user online" oder "total pagehits"
+ * This plugin creates a list of countries the visitors come from
  *
  * @package module_stats
  * @author sidler@mulchprod.de
  */
-class StatsReportTopbrowser implements AdminStatsreportsInterface
+class StatsReportTopcountries implements AdminStatsreportsInterface
 {
 
     //class vars
     private $intDateStart;
     private $intDateEnd;
-    private $intInterval = 1;
+    private $intInterval;
 
     private $objTexts;
     private $objToolkit;
     private $objDB;
+
+    private $arrHits = null;
 
     /**
      * Constructor
@@ -79,7 +80,7 @@ class StatsReportTopbrowser implements AdminStatsreportsInterface
      */
     public function getTitle()
     {
-        return $this->objTexts->getLang("topbrowser", "stats");
+        return $this->objTexts->getLang("topcountries", "stats");
     }
 
     /**
@@ -87,7 +88,7 @@ class StatsReportTopbrowser implements AdminStatsreportsInterface
      */
     public function isIntervalable()
     {
-        return true;
+        return false;
     }
 
     /**
@@ -111,7 +112,7 @@ class StatsReportTopbrowser implements AdminStatsreportsInterface
         $arrHeader = array();
         $arrValues = array();
         //Fetch data
-        $arrStats = $this->getTopBrowser();
+        $arrStats = $this->getTopCountries();
 
         //calc a few values
         $intSum = 0;
@@ -121,7 +122,7 @@ class StatsReportTopbrowser implements AdminStatsreportsInterface
 
         $intI = 0;
         $objUser = new UserUser(Session::getInstance()->getUserID());
-        foreach ($arrStats as $strName => $arrOneStat) {
+        foreach ($arrStats as $strCountry => $arrOneStat) {
             //Escape?
             if ($intI >= $objUser->getIntItemsPerPage()) {
                 break;
@@ -129,57 +130,75 @@ class StatsReportTopbrowser implements AdminStatsreportsInterface
 
             $arrValues[$intI] = array();
             $arrValues[$intI][] = $intI + 1;
-            $arrValues[$intI][] = $strName;
+            $arrValues[$intI][] = $strCountry;
             $arrValues[$intI][] = $arrOneStat;
             $arrValues[$intI][] = $this->objToolkit->percentBeam($arrOneStat / $intSum * 100);
             $intI++;
         }
         //HeaderRow
         $arrHeader[] = "#";
-        $arrHeader[] = $this->objTexts->getLang("top_browser_titel", "stats");
-        $arrHeader[] = $this->objTexts->getLang("top_browser_gewicht", "stats");
+        $arrHeader[] = $this->objTexts->getLang("top_country_titel", "stats");
+        $arrHeader[] = $this->objTexts->getLang("commons_hits_header", "stats");
         $arrHeader[] = $this->objTexts->getLang("anteil", "stats");
-
 
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrValues);
 
+        $strReturn .= $this->objToolkit->getTextRow($this->objTexts->getLang("stats_hint_task", "stats"));
 
         return $strReturn;
     }
 
+
     /**
-     * Returns a array of top browsers
+     * Loads a list of systems accessed the page
      *
      * @return mixed
      */
-    private function getTopBrowser()
+    public function getTopCountries()
     {
         $arrReturn = array();
 
+        if ($this->arrHits != null) {
+            return $this->arrHits;
+        }
 
-        //load Data
-        $strQuery = "SELECT stats_browser, count(*) as anzahl
+        $strQuery = "SELECT stats_ip, count(*) as anzahl
 						FROM "._dbprefix_."stats_data
 						WHERE stats_date > ?
-							AND stats_date <= ?
-						GROUP BY stats_browser";
-        $arrBrowser = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd));
+						  AND stats_date <= ?
+						GROUP BY stats_ip";
 
-        $objBrowscap = new Browscap();
+        $arrTemp = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd));
 
-        //Search the best matching pattern
-        foreach ($arrBrowser as $arrRow) {
-            $strInfo = $objBrowscap->getBrowserForUseragent($arrRow["stats_browser"]);
+        $intCounter = 0;
+        foreach ($arrTemp as $arrOneRecord) {
 
-            if (!isset($arrReturn[$strInfo])) {
-                $arrReturn[$strInfo] = $arrRow["anzahl"];
+            $strQuery = "SELECT ip2c_name as country_name
+						   FROM "._dbprefix_."stats_ip2country
+						  WHERE ip2c_ip = ?";
+
+            $arrRow = $this->objDB->getPRow($strQuery, array($arrOneRecord["stats_ip"]));
+
+            if (!isset($arrRow["country_name"])) {
+                $arrRow["country_name"] = "n.a.";
+            }
+
+            if (isset($arrReturn[$arrRow["country_name"]])) {
+                $arrReturn[$arrRow["country_name"]] += $arrOneRecord["anzahl"];
             }
             else {
-                $arrReturn[$strInfo] += $arrRow["anzahl"];
+                $arrReturn[$arrRow["country_name"]] = $arrOneRecord["anzahl"];
             }
+
+            //flush query cache every 2000 hits
+            if ($intCounter++ >= 2000) {
+                $this->objDB->flushQueryCache();
+            }
+
         }
 
         arsort($arrReturn);
+        $this->arrHits = $arrReturn;
         return $arrReturn;
     }
 
@@ -190,8 +209,7 @@ class StatsReportTopbrowser implements AdminStatsreportsInterface
     {
         $arrReturn = array();
 
-        //--- PIE-GRAPH ---------------------------------------------------------------------------------
-        $arrData = $this->getTopBrowser();
+        $arrData = $this->getTopCountries();
 
         $intSum = 0;
         foreach ($arrData as $arrOneStat) {
@@ -204,9 +222,9 @@ class StatsReportTopbrowser implements AdminStatsreportsInterface
         $floatPercentageSum = 0;
         $arrValues = array();
         $arrLabels = array();
-        foreach ($arrData as $strName => $arrOneBrowser) {
+        foreach ($arrData as $strName => $intOneSystem) {
             if (++$intCount <= 6) {
-                $floatPercentage = $arrOneBrowser / $intSum * 100;
+                $floatPercentage = $intOneSystem / $intSum * 100;
                 $floatPercentageSum += $floatPercentage;
                 $arrKeyValues[$strName] = $floatPercentage;
                 $arrValues[] = $floatPercentage;
@@ -222,60 +240,13 @@ class StatsReportTopbrowser implements AdminStatsreportsInterface
             $arrLabels[] = "others";
             $arrValues[] = 100 - $floatPercentageSum;
         }
-        if (count($arrKeyValues) > 0) {
-            $objGraph = GraphFactory::getGraphInstance();
-            $objGraph->createPieChart($arrValues, $arrLabels);
-            $arrReturn[] = $objGraph->renderGraph();
-        }
+        $objGraph = GraphFactory::getGraphInstance();
+        $objGraph->createPieChart($arrValues, $arrLabels);
 
-        //--- XY-Plot -----------------------------------------------------------------------------------
-        //calc number of plots
-        $arrPlots = array();
-        $arrTickLabels = array();
-        foreach ($arrKeyValues as $strBrowser => $arrData) {
-            if ($strBrowser != "others") {
-                $arrPlots[$strBrowser] = array();
-            }
-        }
+        $arrReturn[] = $objGraph->renderGraph();
 
-        $intGlobalEnd = $this->intDateEnd;
-        $intGlobalStart = $this->intDateStart;
-
-        $this->intDateEnd = $this->intDateStart + 60 * 60 * 24 * $this->intInterval;
-
-        $intCount = 0;
-        while ($this->intDateStart <= $intGlobalEnd) {
-            $arrBrowserData = $this->getTopBrowser();
-            //init plot array for this period
-            $arrTickLabels[$intCount] = date("d.m.", $this->intDateStart);
-            foreach ($arrPlots as $strBrowser => &$arrOnePlot) {
-                $arrOnePlot[$intCount] = 0;
-                if (key_exists($strBrowser, $arrBrowserData)) {
-                    $arrOnePlot[$intCount] = (int)$arrBrowserData[$strBrowser];
-                }
-
-            }
-            //increase start & end-date
-            $this->intDateStart = $this->intDateEnd;
-            $this->intDateEnd = $this->intDateStart + 60 * 60 * 24 * $this->intInterval;
-            $intCount++;
-        }
-        //create graph
-        if (count($arrTickLabels) > 1 && count($arrPlots) > 0) {
-            $objGraph = GraphFactory::getGraphInstance();
-            $objGraph->setArrXAxisTickLabels($arrTickLabels);
-            foreach ($arrPlots as $arrPlotName => $arrPlotData) {
-                $objGraph->addLinePlot($arrPlotData, $arrPlotName);
-            }
-            $arrReturn[] = $objGraph->renderGraph();
-        }
-        //reset global dates
-        $this->intDateEnd = $intGlobalEnd;
-        $this->intDateStart = $intGlobalStart;
 
         return $arrReturn;
     }
-
-
 }
 

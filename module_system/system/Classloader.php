@@ -48,7 +48,6 @@ class Classloader
         "/admin/elements/",
         "/admin/formentries/",
         "/admin/reports/",
-        "/admin/statsreports/",
         "/admin/systemtasks/",
         "/admin/widgets/",
         "/admin/",

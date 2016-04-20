@@ -7,7 +7,7 @@
 /**
  * @deprecated
  */
-class class_stats_report_topsessions extends Kajona\Stats\Admin\Statsreports\StatsReportTopsessions
+class class_stats_report_topsessions extends Kajona\Stats\Admin\Reports\StatsReportTopsessions
 {
 
 }

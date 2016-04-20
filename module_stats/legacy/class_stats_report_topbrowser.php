@@ -7,7 +7,7 @@
 /**
  * @deprecated
  */
-class class_stats_report_topbrowser extends Kajona\Stats\Admin\Statsreports\StatsReportTopbrowser
+class class_stats_report_topbrowser extends Kajona\Stats\Admin\Reports\StatsReportTopbrowser
 {
 
 }

@@ -7,7 +7,7 @@
 /**
  * @deprecated
  */
-class class_stats_report_common extends Kajona\Stats\Admin\Statsreports\StatsReportCommon
+class class_stats_report_common extends Kajona\Stats\Admin\Reports\StatsReportCommon
 {
 
 }

@@ -7,7 +7,7 @@
 /**
  * @deprecated
  */
-class class_stats_report_topreferers extends Kajona\Stats\Admin\Statsreports\StatsReportTopreferers
+class class_stats_report_topreferers extends Kajona\Stats\Admin\Reports\StatsReportTopreferers
 {
 
 }

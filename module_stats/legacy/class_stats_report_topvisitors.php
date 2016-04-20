@@ -7,7 +7,7 @@
 /**
  * @deprecated
  */
-class class_stats_report_topvisitors extends Kajona\Stats\Admin\Statsreports\StatsReportTopvisitors
+class class_stats_report_topvisitors extends Kajona\Stats\Admin\Reports\StatsReportTopvisitors
 {
 
 }
