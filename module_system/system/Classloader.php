@@ -47,6 +47,7 @@ class Classloader
     private static $arrCodeFolders = array(
         "/admin/elements/",
         "/admin/formentries/",
+        "/admin/reports/",
         "/admin/statsreports/",
         "/admin/systemtasks/",
         "/admin/widgets/",
