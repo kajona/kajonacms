@@ -82,7 +82,7 @@ class NavigationAdmin extends AdminSimple implements AdminInterface {
             $objIterator = new ArraySectionIterator(NavigationPoint::getObjectCount($this->getSystemid()));
             $objIterator->setPageNumber($this->getParam("pv"));
             $objIterator->setArraySection(NavigationPoint::getNaviLayer($this->getSystemid(), false, $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
-            $strReturn .= $this->renderList($objIterator, true, "naviPoints", true);
+            $strReturn .= $this->renderList($objIterator, false, "naviPoints", false);
 
             if($this->strPeAddon == "")
                 $strReturn = $this->generateTreeView($strReturn);
