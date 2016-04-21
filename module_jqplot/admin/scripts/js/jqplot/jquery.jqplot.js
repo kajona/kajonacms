@@ -3347,8 +3347,16 @@
                                 theta -= 2*Math.PI;
                             }
                         }
-            
-                        sm = s.sliceMargin/180*Math.PI;
+
+                        // sm = s.sliceMargin/180*Math.PI;
+                        /*
+                         Fix check https://bitbucket.org/cleonello/jqplot/issue/560/pierenderer-with-slicemargin-and
+                         // There is a bug here; if the ratio of the sliceMargin to the slice size is too big
+                         // this function fails to return an object
+                         // Also, if sliceMargin is too big (say 100) the pieRenderer throws a runtime DOM exception on click
+                         // Just setting sm=0 fixes both issues (but allows clicking on the margins which isn't necessarily a bad thing)
+                         */
+                        sm = 0;
                         if (r < s._radius && r > s._innerRadius) {
                             for (j=0; j<s.gridData.length; j++) {
                                 minang = (j>0) ? s.gridData[j-1][1]+sm : sm;
@@ -9301,6 +9309,17 @@
                     var t = top + elem.position().top + parseInt(elem.css('padding-top'), 10);
                     newContext.font = elem.jqplotGetComputedFontStyle();
                     newContext.fillStyle = elem.css('color');
+
+
+                    //if text has line through -> set opacity for written text to 0.5
+                    if(elem.css('text-decoration') == 'line-through') {
+                        newContext.globalAlpha = 0.5;
+                    }
+                    else {
+                        newContext.globalAlpha = 1;
+                    }
+
+
                     writeWrappedText(elem, newContext, elem.text(), l, t, w);
                 });
 
@@ -9308,6 +9327,12 @@
             }
 
             else if (tagname == 'canvas') {
+                //custom code -> do not render elements which are hidden
+                if($(el).css("visibility") == "hidden") {
+                    return;
+                }
+                //custom code
+
                 newContext.drawImage(el, left, top);
             }
         }
