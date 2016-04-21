@@ -20,12 +20,12 @@ class ChartsJqPlot
 
 
         //JS-Imports for minimal system setup
-        echo "<script type=\"text/javascript\">KAJONA_WEBPATH = '" . _webpath_ . "'; KAJONA_BROWSER_CACHEBUSTER = '" . SystemSetting::getConfigValue("_system_browser_cachebuster_") . "';</script>\n";
-        echo "<script language=\"javascript\" type=\"text/javascript\" src=\"" . _webpath_ . Resourceloader::getInstance()->getCorePathForModule("module_system") . "/module_system/admin/scripts/jquery/jquery.min.js\"></script>";
-        echo "<script language=\"javascript\" type=\"text/javascript\" src=\"" . _webpath_ . Resourceloader::getInstance()->getCorePathForModule("module_system") . "/module_system/system/scripts/loader.js\"></script>";
-        echo "<script language=\"javascript\" type=\"text/javascript\" src=\"" . _webpath_ . Resourceloader::getInstance()->getCorePathForModule("module_system") . "/module_system/admin/scripts/kajona.js\"></script>";
+        echo "<script type=\"text/javascript\">KAJONA_WEBPATH = '"._webpath_."'; KAJONA_BROWSER_CACHEBUSTER = '".SystemSetting::getConfigValue("_system_browser_cachebuster_")."';</script>\n";
+        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.Resourceloader::getInstance()->getCorePathForModule("module_system")."/module_system/admin/scripts/jquery/jquery.min.js\"></script>";
+        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.Resourceloader::getInstance()->getCorePathForModule("module_system")."/module_system/system/scripts/loader.js\"></script>";
+        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.Resourceloader::getInstance()->getCorePathForModule("module_system")."/module_system/admin/scripts/kajona.js\"></script>";
         echo "<script type=\"text/javascript\">KAJONA_PHARMAP = ".json_encode(array_values(\Kajona\System\System\Classloader::getInstance()->getArrPharModules())).";</script>";
-        echo "<script language=\"javascript\" type=\"text/javascript\" src=\"" . _webpath_ . Resourceloader::getInstance()->getCorePathForModule("module_system") . "/module_system/admin/scripts/jqueryui/jquery-ui.custom.min.js\"></script>";
+        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.Resourceloader::getInstance()->getCorePathForModule("module_system")."/module_system/admin/scripts/jqueryui/jquery-ui.custom.min.js\"></script>";
 
         //jqPlot
 //        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.Resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.js\"></script>";
@@ -42,12 +42,12 @@ class ChartsJqPlot
 //        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.Resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.dateAxisRenderer.js\"></script>";
 //        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.Resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.pieRenderer.js\"></script>";
 //        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.Resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.canvasOverlay.js\"></script>";
-        echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . _webpath_ . Resourceloader::getInstance()->getCorePathForModule("module_jqplot") . "/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.css\"></link>";
-        echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . _webpath_ . Resourceloader::getInstance()->getCorePathForModule("module_system") . "/module_system/admin/scripts/jqueryui/css/smoothness/jquery-ui.custom.css\"></link>";
+        echo "<link rel=\"stylesheet\" type=\"text/css\" href=\""._webpath_.Resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.css\"></link>";
+        echo "<link rel=\"stylesheet\" type=\"text/css\" href=\""._webpath_.Resourceloader::getInstance()->getCorePathForModule("module_system")."/module_system/admin/scripts/jqueryui/css/smoothness/jquery-ui.custom.css\"></link>";
         //custom
 //        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.Resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom_helper.js\"></script>";
 //        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.Resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/custom/jqPlotTest.js\"></script>";
-        echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . _webpath_ . Resourceloader::getInstance()->getCorePathForModule("module_jqplot") . "/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom.css\"></link>";
+        echo "<link rel=\"stylesheet\" type=\"text/css\" href=\""._webpath_.Resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom.css\"></link>";
         //test-Divs
 
 

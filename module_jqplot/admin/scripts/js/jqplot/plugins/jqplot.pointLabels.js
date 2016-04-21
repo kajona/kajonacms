@@ -2,10 +2,10 @@
  * jqPlot
  * Pure JavaScript plotting plugin using jQuery
  *
- * Version: 1.0.8
- * Revision: 1250
+ * Version: 1.0.9
+ * Revision: d96a669
  *
- * Copyright (c) 2009-2013 Chris Leonello
+ * Copyright (c) 2009-2016 Chris Leonello
  * jqPlot is currently available for use in all personal or commercial projects 
  * under both the MIT (http://www.opensource.org/licenses/mit-license.php) and GPL 
  * version 2.0 (http://www.gnu.org/licenses/gpl-2.0.html) licenses. This means that you can 
@@ -273,7 +273,9 @@
         for (var i=0; i<p._elems.length; i++) {
             // Memory Leaks patch
             // p._elems[i].remove();
-            if(p._elems[i]) p._elems[i].emptyForce();
+            if(p._elems[i]) {
+                p._elems[i].emptyForce();
+            }
         }
         p._elems.splice(0, p._elems.length);
 
@@ -294,7 +296,7 @@
             for (var i=0, l=p._labels.length; i < l; i++) {
                 var label = p._labels[i];
                 
-                if (label == null || (p.hideZeros && parseFloat(label) == 0)) {//22.10.2015 -> changed parseInt(label, 10) to parseFloat(label)
+                if (label == null || (p.hideZeros && parseFloat(label) == 0)) {
                     continue;
                 }
                 
@@ -335,13 +337,6 @@
                         ell = (this._barPoints[i][2][0] + this._barPoints[i][0][0]) / 2 + plot._gridPadding.left - 0.5 * elem.outerWidth(true);
                     }
                 }
-
-                //custom -- add additional class for styling issue on labels within a stacked chart
-                if(this._stack) {
-                    elem.addClass('jqplotcustom-stacked-label');
-                }
-                //custom
-
 
                 if (this.renderer.constructor == $.jqplot.BarRenderer) {
                     if (this.barDirection == "vertical") {
