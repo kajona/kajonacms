@@ -768,6 +768,9 @@ class GraphJqplot implements GraphInterface
             $arrSeries2DataPoints[] = $arrDataPoints;
         }
 
+        //remove all values which are null
+        $arrSeries2DataPoints = $this->cleanUpArray($arrSeries2DataPoints);
+
         $strEncode = json_encode($arrSeries2DataPoints);
         return $strEncode;
     }
