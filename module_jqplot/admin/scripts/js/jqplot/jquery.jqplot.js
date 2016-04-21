@@ -5,12 +5,12 @@
  * 
  * About: Version
  * 
- * version: 1.0.8 
- * revision: 1250
+ * version: 1.0.9 
+ * revision: d96a669
  * 
  * About: Copyright & License
  * 
- * Copyright (c) 2009-2013 Chris Leonello
+ * Copyright (c) 2009-2016 Chris Leonello
  * jqPlot is currently available for use in all personal or commercial projects 
  * under both the MIT and GPL version 2.0 licenses. This means that you can 
  * choose the license that best suits your project and use it accordingly.
@@ -244,8 +244,8 @@
         }
     };
 
-    $.jqplot.version = "1.0.8";
-    $.jqplot.revision = "1250";
+    $.jqplot.version = "1.0.9";
+    $.jqplot.revision = "d96a669";
 
     $.jqplot.targetCounter = 1;
 
@@ -296,13 +296,11 @@
                 return window.G_vmlCanvasManager.initElement(canvas);
             }
 
-
-            //see http://stackoverflow.com/questions/20221461/hidpi-retina-plot-drawing
             var cctx = canvas.getContext('2d');
 
             var canvasBackingScale = 1;
-            if (window.devicePixelRatio > 1 && (cctx.webkitBackingStorePixelRatio === undefined ||
-                cctx.webkitBackingStorePixelRatio < 2)) {
+            if (window.devicePixelRatio > 1 && (cctx.webkitBackingStorePixelRatio === undefined || 
+                                                cctx.webkitBackingStorePixelRatio < 2)) {
                 canvasBackingScale = window.devicePixelRatio;
             }
             var oldWidth = canvas.width;
@@ -315,7 +313,6 @@
             cctx.save();
 
             cctx.scale(canvasBackingScale, canvasBackingScale);
-            //
 
             return canvas;
         };
@@ -1329,6 +1326,7 @@
         this._sumy = 0;
         this._sumx = 0;
         this._type = '';
+        this.step = false;
     }
     
     Series.prototype = new $.jqplot.ElemContainer();
@@ -2116,7 +2114,7 @@
             if (this.fontSize) {
                 this.target.css('font-size', this.fontSize);
             }
-
+            
             this.title.init();
             this.legend.init();
             this._sumy = 0;
@@ -2961,7 +2959,7 @@
                 // make room  for the legend between the grid and the edge.
                 // pass a dummy offsets object and a reference to the plot.
                 var legendElem = this.legend.draw({}, this);
-
+                
                 var gridPadding = {top:0, left:0, bottom:0, right:0};
                 
                 if (this.legend.placement == "outsideGrid") {
@@ -2990,7 +2988,7 @@
                     }
                     legendElem = legendElem.detach();
                 }
-
+                
                 var ax = this.axes;
                 var name;
                 // draw the yMidAxis first, so xaxis of pyramid chart can adjust itself if needed.
@@ -3135,8 +3133,33 @@
                 }
 
                 var fb = this.fillBetween;
-                if (fb.fill && fb.series1 !== fb.series2 && fb.series1 < seriesLength && fb.series2 < seriesLength && series[fb.series1]._type === 'line' && series[fb.series2]._type === 'line') {
+                if(typeof fb.series1 == 'number'){
+                    if(fb.fill&&fb.series1!==fb.series2&&fb.series1<seriesLength&&fb.series2<seriesLength&&series[fb.series1]._type==="line"&&series[fb.series2]._type==="line")
                     this.doFillBetweenLines();
+                }
+                else{
+                    if(fb.series1 != null && fb.series2 != null){
+                        var doFb = false;
+                        if(fb.series1.length === fb.series2.length){
+                            var tempSeries1 = 0;
+                            var tempSeries2 = 0;
+                            
+                            for(var cnt = 0; cnt < fb.series1.length; cnt++){
+                                tempSeries1 = fb.series1[cnt];
+                                tempSeries2 = fb.series2[cnt];
+                                if(tempSeries1!==tempSeries2&&tempSeries1<seriesLength&&tempSeries2<seriesLength&&series[tempSeries1]._type==="line"&&series[tempSeries2]._type==="line"){
+                                    doFb = true;
+                                }
+                                else{
+                                    doFb = false;
+                                    break;
+                                }
+                            }
+                        }
+                        if(fb.fill && doFb){
+                            this.doFillBetweenLines();
+                        }
+                    }
                 }
 
                 for (var i=0, l=$.jqplot.postDrawHooks.length; i<l; i++) {
@@ -3178,37 +3201,47 @@
 
         jqPlot.prototype.doFillBetweenLines = function () {
             var fb = this.fillBetween;
+            var series = this.series;
             var sid1 = fb.series1;
             var sid2 = fb.series2;
-            // first series should always be lowest index
-            var id1 = (sid1 < sid2) ? sid1 : sid2;
-            var id2 = (sid2 >  sid1) ? sid2 : sid1;
+            var id1 = 0, id2 = 0;
 
-            var series1 = this.series[id1];
-            var series2 = this.series[id2];
-
-            if (series2.renderer.smooth) {
-                var tempgd = series2.renderer._smoothedData.slice(0).reverse();
+            function fill(id1, id2){
+                var series1 = series[id1];
+                var series2 = series[id2];
+                if (series2.renderer.smooth)
+                    var tempgd = series2.renderer._smoothedData.slice(0).reverse();
+                else
+                    var tempgd = series2.gridData.slice(0).reverse();
+                if (series1.renderer.smooth)
+                    var gd = series1.renderer._smoothedData.concat(tempgd);
+                else
+                    var gd = series1.gridData.concat(tempgd);
+                var color = fb.color !== null ? fb.color : series[sid1].fillColor;
+                var baseSeries = fb.baseSeries !== null ? fb.baseSeries : id1;
+                var sr =
+                    series[baseSeries].renderer.shapeRenderer;
+                var opts =
+                {
+                    fillStyle : color,
+                    fill : true,
+                    closePath : true
+                };
+                sr.draw(series1.shadowCanvas._ctx, gd, opts)
             }
-            else {
-                var tempgd = series2.gridData.slice(0).reverse();
-            }
 
-            if (series1.renderer.smooth) {
-                var gd = series1.renderer._smoothedData.concat(tempgd);
+            if(typeof sid1 == 'number' && typeof sid2 == 'number'){
+                id1 = sid1 < sid2 ? sid1 : sid2;
+                id2 = sid2 > sid1 ? sid2 : sid1;
+                fill(id1, id2);
             }
-            else {
-                var gd = series1.gridData.concat(tempgd);
+            else{
+                for(var cnt = 0; cnt < sid1.length ; cnt++){
+                    id1 = sid1[cnt] < sid2[cnt] ? sid1[cnt] : sid2[cnt];
+                    id2 = sid2[cnt] > sid1[cnt] ? sid2[cnt] : sid1[cnt];
+                    fill(id1, id2);
+                }
             }
-
-            var color = (fb.color !== null) ? fb.color : this.series[sid1].fillColor;
-            var baseSeries = (fb.baseSeries !== null) ? fb.baseSeries : id1;
-
-            // now apply a fill to the shape on the lower series shadow canvas,
-            // so it is behind both series.
-            var sr = this.series[baseSeries].renderer.shapeRenderer;
-            var opts = {fillStyle: color, fill: true, closePath: true};
-            sr.draw(series1.shadowCanvas._ctx, gd, opts);
         };
         
         this.bindCustomEvents = function() {
@@ -3265,7 +3298,7 @@
                         for (j=0; j<s._barPoints.length; j++) {
                             points = s._barPoints[j];
                             p = s.gridData[j];
-                            if (x>points[0][0] && x<points[2][0] && y>points[2][1] && y<points[0][1]) {
+                            if (x>points[0][0] && x<points[2][0] && (y>points[2][1] && y<points[0][1] || y<points[2][1] && y>points[0][1])) {
                                 return {seriesIndex:s.index, pointIndex:j, gridData:p, data:s.data[j], points:s._barPoints[j]};
                             }
                         }
@@ -3314,8 +3347,16 @@
                                 theta -= 2*Math.PI;
                             }
                         }
-            
-                        sm = s.sliceMargin/180*Math.PI;
+
+                        // sm = s.sliceMargin/180*Math.PI;
+                        /*
+                         Fix check https://bitbucket.org/cleonello/jqplot/issue/560/pierenderer-with-slicemargin-and
+                         // There is a bug here; if the ratio of the sliceMargin to the slice size is too big
+                         // this function fails to return an object
+                         // Also, if sliceMargin is too big (say 100) the pieRenderer throws a runtime DOM exception on click
+                         // Just setting sm=0 fixes both issues (but allows clicking on the margins which isn't necessarily a bad thing)
+                         */
+                        sm = 0;
                         if (r < s._radius && r > s._innerRadius) {
                             for (j=0; j<s.gridData.length; j++) {
                                 minang = (j>0) ? s.gridData[j-1][1]+sm : sm;
@@ -3359,16 +3400,8 @@
                                 theta -= 2*Math.PI;
                             }
                         }
-
-                        //sm = s.sliceMargin/180*Math.PI;
-                        /*
-                        Fix check https://bitbucket.org/cleonello/jqplot/issue/560/pierenderer-with-slicemargin-and
-                         // There is a bug here; if the ratio of the sliceMargin to the slice size is too big
-                         // this function fails to return an object
-                         // Also, if sliceMargin is too big (say 100) the pieRenderer throws a runtime DOM exception on click
-                         // Just setting sm=0 fixes both issues (but allows clicking on the margins which isn't necessarily a bad thing)
-                        */
-                        sm = 0;
+            
+                        sm = s.sliceMargin/180*Math.PI;
                         if (r < s._radius) {
                             for (j=0; j<s.gridData.length; j++) {
                                 minang = (j>0) ? s.gridData[j-1][1]+sm : sm;
@@ -5654,6 +5687,9 @@
         for (var i=0; i<data.length; i++) {
             // if not a line series or if no nulls in data, push the converted point onto the array.
             if (data[i][0] != null && data[i][1] != null) {
+                if (this.step && i>0) {
+                    gd.push([xp.call(this._xaxis, data[i][0]), yp.call(this._yaxis, data[i-1][1])]);
+                }
                 gd.push([xp.call(this._xaxis, data[i][0]), yp.call(this._yaxis, data[i][1])]);
             }
             // else if there is a null, preserve it.
@@ -9091,7 +9127,7 @@
         if ($.jqplot.use_excanvas) {
             return null;
         }
-
+        
         var newCanvas = document.createElement("canvas");
         var h = $(this).outerHeight(true);
         var w = $(this).outerWidth(true);
@@ -9103,10 +9139,10 @@
         // have to check if any elements are hanging outside of plot area before rendering,
         // since changing width of canvas will erase canvas.
 
-        var clses = ['jqplot-table-legend', 'jqplot-xaxis-tick', 'jqplot-x2axis-tick', 'jqplot-yaxis-tick', 'jqplot-y2axis-tick', 'jqplot-y3axis-tick',
-            'jqplot-y4axis-tick', 'jqplot-y5axis-tick', 'jqplot-y6axis-tick', 'jqplot-y7axis-tick', 'jqplot-y8axis-tick', 'jqplot-y9axis-tick',
-            'jqplot-xaxis-label', 'jqplot-x2axis-label', 'jqplot-yaxis-label', 'jqplot-y2axis-label', 'jqplot-y3axis-label', 'jqplot-y4axis-label',
-            'jqplot-y5axis-label', 'jqplot-y6axis-label', 'jqplot-y7axis-label', 'jqplot-y8axis-label', 'jqplot-y9axis-label' ];
+        var clses = ['jqplot-table-legend', 'jqplot-xaxis-tick', 'jqplot-x2axis-tick', 'jqplot-yaxis-tick', 'jqplot-y2axis-tick', 'jqplot-y3axis-tick', 
+        'jqplot-y4axis-tick', 'jqplot-y5axis-tick', 'jqplot-y6axis-tick', 'jqplot-y7axis-tick', 'jqplot-y8axis-tick', 'jqplot-y9axis-tick',
+        'jqplot-xaxis-label', 'jqplot-x2axis-label', 'jqplot-yaxis-label', 'jqplot-y2axis-label', 'jqplot-y3axis-label', 'jqplot-y4axis-label', 
+        'jqplot-y5axis-label', 'jqplot-y6axis-label', 'jqplot-y7axis-label', 'jqplot-y8axis-label', 'jqplot-y9axis-label' ];
 
         var temptop, templeft, tempbottom, tempright;
 
@@ -9136,7 +9172,7 @@
         newCanvas.width = w + Number(x_offset);
         newCanvas.height = h + Number(y_offset);
 
-        var newContext = newCanvas.getContext("2d");
+        var newContext = newCanvas.getContext("2d"); 
 
         newContext.save();
         newContext.fillStyle = backgroundColor;
@@ -9173,7 +9209,7 @@
                     breaks.push(i);
                     w = '';
                     i--;
-                }
+                }   
             }
             if (breaks.length === 0) {
                 // center text if necessary
@@ -9219,6 +9255,7 @@
             // var left = x_offset + p.left + $(el).css('marginLeft') + $(el).css('borderLeftWidth') 
 
             // somehow in here, for divs within divs, the width of the inner div should be used instead of the canvas.
+
             if ((tagname == 'div' || tagname == 'span') && !$(el).hasClass('jqplot-highlighter-tooltip')) {
                 $(el).children().each(function() {
                     _jqpToImage(this, left, top);
@@ -9273,6 +9310,7 @@
                     newContext.font = elem.jqplotGetComputedFontStyle();
                     newContext.fillStyle = elem.css('color');
 
+
                     //if text has line through -> set opacity for written text to 0.5
                     if(elem.css('text-decoration') == 'line-through') {
                         newContext.globalAlpha = 0.5;
@@ -9280,6 +9318,7 @@
                     else {
                         newContext.globalAlpha = 1;
                     }
+
 
                     writeWrappedText(elem, newContext, elem.text(), l, t, w);
                 });
@@ -9371,7 +9410,7 @@
      * @author Chris Leonello
      * @date #date#
      * @version #VERSION#
-     * @copyright (c) 2010-2013 Chris Leonello
+     * @copyright (c) 2010-2015 Chris Leonello
      * jsDate is currently available for use in all personal or commercial projects 
      * under both the MIT and GPL version 2.0 licenses. This means that you can 
      * choose the license that best suits your project and use it accordingly.
@@ -10078,10 +10117,18 @@
 
         'sv': {
             monthNames: ['januari','februari','mars','april','maj','juni','juli','augusti','september','oktober','november','december'],
-          monthNamesShort: ['jan','feb','mar','apr','maj','jun','jul','aug','sep','okt','nov','dec'],
+            monthNamesShort: ['jan','feb','mar','apr','maj','jun','jul','aug','sep','okt','nov','dec'],
             dayNames: ['söndag','måndag','tisdag','onsdag','torsdag','fredag','lördag'],
             dayNamesShort: ['sön','mån','tis','ons','tor','fre','lör'],
             formatString: '%Y-%m-%d %H:%M:%S'
+        },
+
+        'it': {
+            monthNames: ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'],
+            monthNamesShort: ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'],
+            dayNames: ['Domenica','Lunedi','Martedi','Mercoledi','Giovedi','Venerdi','Sabato'],
+            dayNamesShort: ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'],
+            formatString: '%d-%m-%Y %H:%M:%S'
         }
     
     };

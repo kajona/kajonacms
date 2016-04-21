@@ -27,18 +27,18 @@ class GraphJqplotSeriesdata
 
     //contains specific options for this series
     private $arrSeriesOptions = array(
-        "renderer" => null,
+        "renderer"        => null,
         "rendererOptions" => array(
-            "showDataLabels" => null,
-            "fillToZero" => null,
+            "showDataLabels"     => null,
+            "fillToZero"         => null,
             "highlightMouseOver" => false
         ),
-        "markerOptions" => array(
+        "markerOptions"   => array(
             "style" => null
         ),
-        "label" => null,
-        "pointLabels" => array(
-            "show" => false,
+        "label"           => null,
+        "pointLabels"     => array(
+            "show"   => false,
             "labels" => null
         )
     );
@@ -49,23 +49,26 @@ class GraphJqplotSeriesdata
         $this->intSeriesDataOrder = $intSeriesDataOrder;
         $this->intChartType = $strChartType;
 
-        if ($strChartType == GraphJqplotCharttype::LINE) {
+        if($strChartType == GraphJqplotCharttype::LINE) {
             $this->arrSeriesOptions["renderer"] = "$.jqplot.LineRenderer";
             $this->arrSeriesOptions["lineWidth"] = 2;
             $this->arrSeriesOptions["shadow"] = false;
             $this->arrSeriesOptions["markerOptions"]["size"] = 6;
-        } elseif ($strChartType == GraphJqplotCharttype::LINE_Y2AXIS) {
+        }
+        elseif($strChartType == GraphJqplotCharttype::LINE_Y2AXIS) {
             $this->arrSeriesOptions["renderer"] = "$.jqplot.LineRenderer";
             $this->arrSeriesOptions["lineWidth"] = 2;
             $this->arrSeriesOptions["shadow"] = false;
             $this->arrSeriesOptions["markerOptions"]["size"] = 6;
             $this->arrSeriesOptions["yaxis"] = "y2axis";
-        } elseif ($strChartType == GraphJqplotCharttype::BAR) {
+        }
+        elseif($strChartType == GraphJqplotCharttype::BAR) {
             $this->arrSeriesOptions["renderer"] = "$.jqplot.BarRenderer";
             $this->arrSeriesOptions["rendererOptions"]["fillToZero"] = true;
             $this->arrSeriesOptions["rendererOptions"]["shadow"] = false;
             $this->arrSeriesOptions["pointLabels"]["hideZeros"] = false;
-        } elseif ($strChartType == GraphJqplotCharttype::BAR_HORIZONTAL) {
+        }
+        elseif($strChartType == GraphJqplotCharttype::BAR_HORIZONTAL) {
             $this->arrSeriesOptions["renderer"] = "$.jqplot.BarRenderer";
             $this->arrSeriesOptions["rendererOptions"]["barDirection"] = "horizontal";
             $this->arrSeriesOptions["rendererOptions"]["fillToZero"] = true;
@@ -75,14 +78,16 @@ class GraphJqplotSeriesdata
             //additionally set required global options
             $arrGlobalOptions["seriesDefaults"]["renderer"] = "$.jqplot.BarRenderer";
             $arrGlobalOptions["seriesDefaults"]["rendererOptions"]["barDirection"] = "horizontal";
-        } elseif ($strChartType == GraphJqplotCharttype::STACKEDBAR) {
+        }
+        elseif($strChartType == GraphJqplotCharttype::STACKEDBAR) {
             $this->arrSeriesOptions["renderer"] = "$.jqplot.BarRenderer";
             $this->arrSeriesOptions["rendererOptions"]["fillToZero"] = true;
             $this->arrSeriesOptions["rendererOptions"]["shadow"] = false;
             $this->arrSeriesOptions["pointLabels"]["hideZeros"] = true;
             $this->arrSeriesOptions["pointLabels"]["show"] = true;
 
-        } elseif ($strChartType == GraphJqplotCharttype::STACKEDBAR_HORIZONTAL) {
+        }
+        elseif($strChartType == GraphJqplotCharttype::STACKEDBAR_HORIZONTAL) {
             $this->arrSeriesOptions["renderer"] = "$.jqplot.BarRenderer";
             $this->arrSeriesOptions["rendererOptions"]["barDirection"] = "horizontal";
             $this->arrSeriesOptions["rendererOptions"]["fillToZero"] = true;
@@ -94,13 +99,15 @@ class GraphJqplotSeriesdata
             //additionally set required global options
             $arrGlobalOptions["seriesDefaults"]["renderer"] = "$.jqplot.BarRenderer";
             $arrGlobalOptions["seriesDefaults"]["rendererOptions"]["barDirection"] = "horizontal";
-        } elseif ($strChartType == GraphJqplotCharttype::PIE) {
+        }
+        elseif($strChartType == GraphJqplotCharttype::PIE) {
             $this->arrSeriesOptions["renderer"] = "$.jqplot.PieRenderer";
             $this->arrSeriesOptions["rendererOptions"]["showDataLabels"] = true;
             $this->arrSeriesOptions["rendererOptions"]["sliceMargin"] = 2;
             $this->arrSeriesOptions["rendererOptions"]["shadowOffset"] = 0;
             $this->arrSeriesOptions["rendererOptions"]["highlightMouseOver"] = true;
-        } else {
+        }
+        else {
             throw new Exception("Not a valid chart type", Exception::$level_ERROR);
         }
     }
@@ -140,13 +147,13 @@ class GraphJqplotSeriesdata
         $this->arrDataPoints = $arrDataArray;
 
         //now process array -> all values which are not numeric will be converted to a 0
-        foreach ($this->arrDataPoints as $objDataPoint) {
-            if (!is_numeric($objDataPoint->getFloatValue())) {
+        foreach($this->arrDataPoints as $objDataPoint) {
+            if(!is_numeric($objDataPoint->getFloatValue())) {
                 $objDataPoint->setFloatValue(0);
             }
         }
 
-        if (count($this->arrDataPoints) == 0) {
+        if(count($this->arrDataPoints) == 0) {
             $this->arrDataPoints = array(new GraphDatapoint(0));
         }
     }

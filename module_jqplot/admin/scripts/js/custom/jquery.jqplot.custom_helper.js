@@ -45,9 +45,11 @@ KAJONA.admin.jqplotHelper = {
         this.postPlot = function() {
             if (this.objPostPlotOptions.hasOwnProperty("intNrOfWrittenLabelsXAxis") && this.objPostPlotOptions["intNrOfWrittenLabelsXAxis"] != null) {
                 this.objJqplotChart.postDrawHooks.add(KAJONA.admin.jqplotHelper.setLabelsInvisible, [this.strChartId, this.objPostPlotOptions["intNrOfWrittenLabelsXAxis"], "xaxis"]);
+                KAJONA.admin.jqplotHelper.setLabelsInvisible(this.strChartId, this.objPostPlotOptions["intNrOfWrittenLabelsXAxis"], "xaxis");
             }
             if (this.objPostPlotOptions.hasOwnProperty("intNrOfWrittenLabelsYAxis") && this.objPostPlotOptions["intNrOfWrittenLabelsYAxis"] != null) {
                 this.objJqplotChart.postDrawHooks.add(KAJONA.admin.jqplotHelper.setLabelsInvisible, [this.strChartId, this.objPostPlotOptions["intNrOfWrittenLabelsYAxis"], "yaxis"]);
+                KAJONA.admin.jqplotHelper.setLabelsInvisible(this.strChartId, thisobjPostPlotOptions["intNrOfWrittenLabelsYAxis"], "yaxis");
             }
         };
 
@@ -56,8 +58,10 @@ KAJONA.admin.jqplotHelper = {
          */
         this.plot = function () {
             this.objJqplotChart = $.jqplot(this.strChartId, this.arrChartData, this.objChartOptions);
+
             KAJONA.admin.jqplotHelper.bindMouseEvents(this.strChartId, this.strTooltipId);
             KAJONA.admin.jqplotHelper.bindDataClickEvents(this.strChartId);
+
             if(this.bitEnableChartResizing) {
                 KAJONA.admin.jqplotHelper.enableChartResizing(this.strChartId, this.strResizeableId);
             }
@@ -69,7 +73,6 @@ KAJONA.admin.jqplotHelper = {
         this.render = function () {
             if (this.bitIsRendered) {
                 this.objJqplotChart.replot();
-                this.postPlot();
                 return;
             }
             this.plot();
