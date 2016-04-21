@@ -104,7 +104,7 @@ KAJONA.admin.jqplotHelper = {
                 if(objChart.arrSeriesToDataPoints[seriesIndex][pointIndex]) {
                     var objDataPoint = objChart.arrSeriesToDataPoints[seriesIndex][pointIndex];
 
-                    if(objDataPoint.actionhandler != null) {
+                    if(objDataPoint.actionhandler && objDataPoint.actionhandler != null) {
                         var objFunction = eval("("+objDataPoint.actionhandler+")");
                         if ($.isFunction(objFunction)) {
                             objFunction.call(this, ev, seriesIndex, pointIndex, data, objDataPoint);
@@ -240,7 +240,7 @@ KAJONA.admin.jqplotHelper = {
 
         if(objChart.arrSeriesToDataPoints && objChart.arrSeriesToDataPoints[seriesIndex]) {
             var objDataPoint = objChart.arrSeriesToDataPoints[seriesIndex][pointIndex];
-            if(objDataPoint && objDataPoint.actionhandlervalue != null) {
+            if(objDataPoint &&  objDataPoint.actionhandlervalue && objDataPoint.actionhandlervalue != null) {
                 return true;
             }
         }
@@ -328,7 +328,7 @@ KAJONA.admin.jqplotHelper = {
     },
 
     dataPointOnClickURLHandler: function(ev, seriesIndex, pointIndex, data, objDataPoint) {
-        if(objDataPoint.actionhandlervalue != null && objDataPoint.actionhandlervalue != "") {
+        if(objDataPoint.actionhandlervalue && objDataPoint.actionhandlervalue != null && objDataPoint.actionhandlervalue != "") {
             KAJONA.admin.folderview.dialog.setContentIFrame(objDataPoint.actionhandlervalue);
             KAJONA.admin.folderview.dialog.setTitle('');
             KAJONA.admin.folderview.dialog.init();
@@ -336,7 +336,7 @@ KAJONA.admin.jqplotHelper = {
     },
 
     dataRedirect: function(ev, seriesIndex, pointIndex, data, objDataPoint) {
-        if(objDataPoint.actionhandlervalue != null && objDataPoint.actionhandlervalue != "") {
+        if(objDataPoint.actionhandlervalue && objDataPoint.actionhandlervalue != null && objDataPoint.actionhandlervalue != "") {
             window.location = objDataPoint.actionhandlervalue;
         }
     },
