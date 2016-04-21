@@ -49,7 +49,7 @@ KAJONA.admin.jqplotHelper = {
             }
             if (this.objPostPlotOptions.hasOwnProperty("intNrOfWrittenLabelsYAxis") && this.objPostPlotOptions["intNrOfWrittenLabelsYAxis"] != null) {
                 this.objJqplotChart.postDrawHooks.add(KAJONA.admin.jqplotHelper.setLabelsInvisible, [this.strChartId, this.objPostPlotOptions["intNrOfWrittenLabelsYAxis"], "yaxis"]);
-                KAJONA.admin.jqplotHelper.setLabelsInvisible(this.strChartId, thisobjPostPlotOptions["intNrOfWrittenLabelsYAxis"], "yaxis");
+                KAJONA.admin.jqplotHelper.setLabelsInvisible(this.strChartId, this.objPostPlotOptions["intNrOfWrittenLabelsYAxis"], "yaxis");
             }
         };
 
