@@ -47,10 +47,6 @@ div.jqplot-chart-tooltip-content {
     clear:both;
 }
 
-canvas.jqplot-series-canvas {
-    opacity: 0.8;
-}
-
 div.jqplot-point-label {
     z-index: 0;
 }
