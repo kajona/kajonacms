@@ -115,7 +115,7 @@ class StatsAdminXml extends AdminController implements XmlAdminInterface
         $objClass = new ReflectionClass($objReport);
         $strClassname = StringUtil::toLowerCase($objClass->getShortName());
 
-        return StringUtil::substring($strClassname, StringUtil::indexOf("StatsReport", $strClassname)+11);
+        return $strClassname;
     }
 
 }

@@ -136,7 +136,7 @@ class StatsAdmin extends AdminController implements AdminInterface
 
         $strAction = $this->getParam("action");
         if ($strAction == "") {
-            $strAction = "common";
+            $strAction = "statsreportcommon";
             $this->setParam("action", $strAction);
         }
 
@@ -343,6 +343,6 @@ class StatsAdmin extends AdminController implements AdminInterface
         $objClass = new ReflectionClass($objReport);
         $strClassname = StringUtil::toLowerCase($objClass->getShortName());
 
-        return StringUtil::substring($strClassname, StringUtil::indexOf("StatsReport", $strClassname)+11);
+        return $strClassname;
     }
 }
