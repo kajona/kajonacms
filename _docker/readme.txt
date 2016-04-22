@@ -1,4 +1,4 @@
-==== Fig/ Docker for Kajona ====
+==== Docker Engine / Docker Compose for Kajona ====
 
     - the default settings only work on linux!
 
@@ -6,8 +6,8 @@
 *** Setup your local environment, get all the software
 ************************************************************************************
 
-    - install docker.com (build ship and run every app everywhere)
-    - install fig.sh (fast isolated development environments using docker)
+    - install Docker Engine (build ship and run every app everywhere)
+    - install Docker Compose (a tool for defining and running multi-container Docker applications)
 
 
 ************************************************************************************
@@ -16,8 +16,8 @@
 
     - edit Dockerfiles if you need a proxy for your network environment
 
-    - call fig and bring the containers up
-    # fig -p kajona up -d
+    - call docker-compose and bring the containers up
+    # docker-compose up -d
 
     - the webserver of the container is available on the host on
       http://localhost  
@@ -35,5 +35,5 @@
     $config['dbprefix']             = 'kajona_';              //Table-prefix 
     $config['dbport']               = '';                     //Database port 
 
-    - call fig to stop your servers
-    # fig -p kajona stop
+    - call docker-compose to stop your servers
+    # docker-compose down
