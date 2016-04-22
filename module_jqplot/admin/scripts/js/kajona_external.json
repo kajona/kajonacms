@@ -1,13 +1,13 @@
 [{
     "name" : "jqplot",
-    "version" : "1.0.8",
+    "version" : "1.0.9",
     "source" : "http://www.jqplot.com",
     "license" : "MIT License and GPL v2",
     "licenseurl" : "http://www.jqplot.com/docs/files/MIT-LICENSE-txt.html"
 },
 {
     "name" : "FileSaver.js",
-    "version" : "1.1.20151003",
+    "version" : "1.1.20160328",
     "source" : "https://github.com/eligrey/FileSaver.js/",
     "license" : "MIT",
     "licenseurl" : "https://github.com/eligrey/FileSaver.js/blob/master/LICENSE.md"
