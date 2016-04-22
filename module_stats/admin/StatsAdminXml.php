@@ -11,6 +11,8 @@ use Kajona\System\Admin\AdminController;
 use Kajona\System\Admin\XmlAdminInterface;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Pluginmanager;
+use Kajona\System\System\StringUtil;
+use ReflectionClass;
 
 
 /**
@@ -68,7 +70,7 @@ class StatsAdminXml extends AdminController implements XmlAdminInterface
         $strPlugin = $this->getParam("plugin");
         $strReturn = "";
 
-        $objPluginManager = new Pluginmanager(StatsAdmin::$STR_PLUGIN_EXTENSION_POINT, "/admin/statsreports");
+        $objPluginManager = new Pluginmanager(StatsAdmin::$STR_PLUGIN_EXTENSION_POINT, "/admin/reports");
 
 
         $objPlugin = null;
@@ -110,7 +112,10 @@ class StatsAdminXml extends AdminController implements XmlAdminInterface
 
     private function getActionForReport(AdminStatsreportsInterface $objReport)
     {
-        return uniStrtolower(uniSubstr(get_class($objReport), uniStrpos("StatsReport", get_class($objReport))+11));
+        $objClass = new ReflectionClass($objReport);
+        $strClassname = StringUtil::toLowerCase($objClass->getShortName());
+
+        return StringUtil::substring($strClassname, StringUtil::indexOf("StatsReport", $strClassname)+11);
     }
 
 }

@@ -13,6 +13,8 @@ use Kajona\System\Admin\AdminController;
 use Kajona\System\Admin\AdminInterface;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Pluginmanager;
+use Kajona\System\System\StringUtil;
+use ReflectionClass;
 
 
 /**
@@ -98,7 +100,7 @@ class StatsAdmin extends AdminController implements AdminInterface
             @ini_set("memory_limit", "60M");
         }
 
-        $this->objPluginManager = new Pluginmanager(self::$STR_PLUGIN_EXTENSION_POINT, "/admin/statsreports");
+        $this->objPluginManager = new Pluginmanager(self::$STR_PLUGIN_EXTENSION_POINT, "/admin/reports");
 
         $this->setAction("list");
     }
@@ -338,6 +340,9 @@ class StatsAdmin extends AdminController implements AdminInterface
 
     private function getActionForReport(AdminStatsreportsInterface $objReport)
     {
-        return uniStrtolower(uniSubstr(get_class($objReport), uniStrpos("StatsReport", get_class($objReport))+11));
+        $objClass = new ReflectionClass($objReport);
+        $strClassname = StringUtil::toLowerCase($objClass->getShortName());
+
+        return StringUtil::substring($strClassname, StringUtil::indexOf("StatsReport", $strClassname)+11);
     }
 }
