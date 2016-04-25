@@ -187,7 +187,7 @@ interface DbDriverInterface
      * @return bool
      * @since 4.6
      */
-    public function addColumn($strTable, $strColumn, $strDatatype);
+    public function addColumn($strTable, $strColumn, $strDatatype, $bitNull = null, $strDefault = null);
 
     /**
      * Removes a column from a table

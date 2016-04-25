@@ -61,9 +61,19 @@ abstract class DbBase implements DbDriverInterface
      * @return bool
      * @since 4.6
      */
-    public function addColumn($strTable, $strColumn, $strDatatype)
+    public function addColumn($strTable, $strColumn, $strDatatype, $bitNull = null, $strDefault = null)
     {
-        return $this->_pQuery("ALTER TABLE ".($this->encloseTableName($strTable))." ADD ".($this->encloseColumnName($strColumn)." ".$this->getDatatype($strDatatype)), array());
+        $strQuery = "ALTER TABLE ".($this->encloseTableName($strTable))." ADD ".($this->encloseColumnName($strColumn)." ".$this->getDatatype($strDatatype));
+
+        if ($bitNull !== null) {
+            $strQuery .= $bitNull ? " NULL" : " NOT NULL";
+        }
+
+        if ($strDefault !== null) {
+            $strQuery .= " DEFAULT " . $strDefault;
+        }
+
+        return $this->_pQuery($strQuery, array());
     }
 
     /**

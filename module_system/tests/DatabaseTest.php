@@ -93,16 +93,26 @@ class DatabaseTest extends Testbase
             return $arrValue["columnName"];
         }, $objDb->getColumnsOfTable(_dbprefix_ . "temp_autotest"));
 
-        $this->assertTrue(!in_array("temp_new_col", $arrColumnNames));
+        $this->assertTrue(!in_array("temp_new_col1", $arrColumnNames));
+        $this->assertTrue(!in_array("temp_new_col2", $arrColumnNames));
+        $this->assertTrue(!in_array("temp_new_col3", $arrColumnNames));
+        $this->assertTrue(!in_array("temp_new_col4", $arrColumnNames));
 
-        $this->assertTrue($objDb->addColumn("temp_autotest", "temp_new_col", DbDatatypes::STR_TYPE_INT));
+        $this->assertTrue($objDb->addColumn("temp_autotest", "temp_new_col1", DbDatatypes::STR_TYPE_INT));
+        $this->assertTrue($objDb->addColumn("temp_autotest", "temp_new_col2", DbDatatypes::STR_TYPE_INT, true, "NULL"));
+        $this->assertTrue($objDb->addColumn("temp_autotest", "temp_new_col3", DbDatatypes::STR_TYPE_INT, false, "0"));
+        $this->assertTrue($objDb->addColumn("temp_autotest", "temp_new_col4", DbDatatypes::STR_TYPE_INT, true));
+
         $this->flushDBCache();
 
         $arrColumnNames = array_map(function ($arrValue) {
             return $arrValue["columnName"];
         }, $objDb->getColumnsOfTable(_dbprefix_ . "temp_autotest"));
 
-        $this->assertTrue(in_array("temp_new_col", $arrColumnNames));
+        $this->assertTrue(in_array("temp_new_col1", $arrColumnNames));
+        $this->assertTrue(in_array("temp_new_col2", $arrColumnNames));
+        $this->assertTrue(in_array("temp_new_col3", $arrColumnNames));
+        $this->assertTrue(in_array("temp_new_col4", $arrColumnNames));
     }
 
 
