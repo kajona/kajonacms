@@ -718,9 +718,9 @@ class Database
      *
      * @return bool
      */
-    public function addColumn($strTable, $strColumn, $strDatatype)
+    public function addColumn($strTable, $strColumn, $strDatatype, $bitNull = null, $strDefault = null)
     {
-        return $this->objDbDriver->addColumn(_dbprefix_.$strTable, $strColumn, $strDatatype);
+        return $this->objDbDriver->addColumn(_dbprefix_.$strTable, $strColumn, $strDatatype, $bitNull, $strDefault);
     }
 
     /**
