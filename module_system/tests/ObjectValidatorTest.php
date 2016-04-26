@@ -5,7 +5,6 @@ namespace Kajona\System\Tests;
 use Kajona\News\System\NewsNews;
 use Kajona\System\Admin\AdminFormgenerator;
 use Kajona\System\System\SystemModule;
-use Kajona\System\System\Testbase;
 
 class ObjectValidatorTest extends Testbase
 {

@@ -2,7 +2,7 @@
 namespace Kajona\Pages\Tests;
 
 use Kajona\Pages\System\PagesFolder;
-use Kajona\System\System\Testbase;
+use Kajona\System\Tests\Testbase;
 
 class SortTest extends Testbase
 {

@@ -11,7 +11,7 @@ use Kajona\Search\System\SearchQueryParser;
 use Kajona\Search\System\SearchTerm;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Objectfactory;
-use Kajona\System\System\Testbase;
+use Kajona\System\Tests\Testbase;
 
 class SearchBooleanQueryTest extends Testbase
 {

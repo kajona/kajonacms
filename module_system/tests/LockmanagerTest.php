@@ -6,7 +6,6 @@ use Kajona\System\System\Carrier;
 use Kajona\System\System\Exception;
 use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemSetting;
-use Kajona\System\System\Testbase;
 use Kajona\System\System\UserGroup;
 use Kajona\System\System\UserUser;
 

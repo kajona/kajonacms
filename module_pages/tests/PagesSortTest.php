@@ -5,7 +5,7 @@ use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
 use Kajona\System\System\LanguagesLanguage;
-use Kajona\System\System\Testbase;
+use Kajona\System\Tests\Testbase;
 
 class PagesSortTest extends Testbase
 {

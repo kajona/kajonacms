@@ -4,7 +4,6 @@ namespace Kajona\System\Tests;
 
 use Kajona\System\System\Date;
 use Kajona\System\System\StringUtil;
-use Kajona\System\System\Testbase;
 
 class StringTest extends Testbase
 {

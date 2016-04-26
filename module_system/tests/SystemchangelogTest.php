@@ -5,7 +5,6 @@ namespace Kajona\System\Tests;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Date;
 use Kajona\System\System\SystemChangelog;
-use Kajona\System\System\Testbase;
 use Kajona\System\System\VersionableInterface;
 
 /**

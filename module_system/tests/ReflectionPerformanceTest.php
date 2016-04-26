@@ -2,6 +2,7 @@
 
 namespace Kajona\System\System;
 
+use Kajona\System\Tests\Testbase;
 use ReflectionMethod;
 
 class ReflectionPerformanceTest extends Testbase  {

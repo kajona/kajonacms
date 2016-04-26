@@ -6,8 +6,8 @@ use Kajona\News\Portal\NewsPortalXml;
 use Kajona\News\System\NewsCategory;
 use Kajona\News\System\NewsFeed;
 use Kajona\News\System\NewsNews;
-use Kajona\System\System\Testbase;
 use Kajona\System\System\XmlParser;
+use Kajona\System\Tests\Testbase;
 
 class NewsTest extends Testbase
 {

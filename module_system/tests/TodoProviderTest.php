@@ -4,7 +4,6 @@ namespace Kajona\System\Tests;
 
 use Kajona\Dashboard\System\TodoProviderInterface;
 use Kajona\System\System\Pluginmanager;
-use Kajona\System\System\Testbase;
 
 class TodoProviderTest extends Testbase
 {

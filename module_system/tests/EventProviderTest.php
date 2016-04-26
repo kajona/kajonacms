@@ -5,7 +5,6 @@ namespace Kajona\System\Tests;
 use Kajona\Dashboard\System\EventProviderInterface;
 use Kajona\System\System\Date;
 use Kajona\System\System\Pluginmanager;
-use Kajona\System\System\Testbase;
 
 class EventProviderTest extends Testbase
 {

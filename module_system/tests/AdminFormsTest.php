@@ -4,7 +4,6 @@ namespace Kajona\System\Tests;
 
 use Kajona\System\Admin\AdminFormgenerator;
 use Kajona\System\System\Model;
-use Kajona\System\System\Testbase;
 
 class AdminFormsTest extends Testbase
 {

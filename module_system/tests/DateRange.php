@@ -5,7 +5,6 @@ namespace Kajona\System\Tests;
 use Kajona\System\System\Date;
 use Kajona\System\System\DatePeriodEnum;
 use Kajona\System\System\DateRange;
-use Kajona\System\System\Testbase;
 
 class DateRangeTest extends Testbase
 {

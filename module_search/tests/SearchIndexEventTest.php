@@ -8,7 +8,7 @@ use Kajona\Search\System\SearchCommons;
 use Kajona\Search\System\SearchSearch;
 use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemModule;
-use Kajona\System\System\Testbase;
+use Kajona\System\Tests\Testbase;
 use Kajona\Tags\System\TagsTag;
 
 class SearchIndexEventTest extends Testbase

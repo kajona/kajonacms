@@ -2,6 +2,8 @@
 
 namespace Kajona\System\System;
 
+use Kajona\System\Tests\Testbase;
+
 class ReflectionTest extends Testbase  {
 
     /**

@@ -3,7 +3,6 @@
 namespace Kajona\System\Tests;
 
 use Kajona\System\System\Mail;
-use Kajona\System\System\Testbase;
 
 class MailTest extends Testbase
 {

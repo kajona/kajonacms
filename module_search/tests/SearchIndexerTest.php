@@ -13,7 +13,7 @@ use Kajona\System\System\MessagingMessage;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\SystemChangelog;
 use Kajona\System\System\SystemModule;
-use Kajona\System\System\Testbase;
+use Kajona\System\Tests\Testbase;
 
 class SearchIndexerTest extends Testbase
 {

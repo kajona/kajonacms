@@ -4,7 +4,6 @@ namespace Kajona\System\Tests;
 
 use Kajona\System\System\Filesystem;
 use Kajona\System\System\Resourceloader;
-use Kajona\System\System\Testbase;
 use Kajona\System\System\Zip;
 
 class ZipTest extends Testbase

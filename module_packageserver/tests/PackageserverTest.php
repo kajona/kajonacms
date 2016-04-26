@@ -8,7 +8,7 @@ use Kajona\Packageserver\Portal\PackageserverPortal;
 use Kajona\System\System\Filesystem;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\SystemSetting;
-use Kajona\System\System\Testbase;
+use Kajona\System\Tests\Testbase;
 use Phar;
 
 class PackageserverTest extends Testbase

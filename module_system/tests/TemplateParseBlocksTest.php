@@ -5,7 +5,6 @@ namespace Kajona\System\Tests;
 use Kajona\System\System\TemplateBlockContainer;
 use Kajona\System\System\TemplateBlocksParser;
 use Kajona\System\System\TemplateKajonaSections;
-use Kajona\System\System\Testbase;
 
 /**
  * Class class_test_templateTest

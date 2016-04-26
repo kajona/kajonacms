@@ -5,7 +5,6 @@ namespace Kajona\System\Tests;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\ServiceProvider;
 use Kajona\System\System\Template;
-use Kajona\System\System\Testbase;
 
 /**
  * Class class_test_templateTest

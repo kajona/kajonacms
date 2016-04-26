@@ -10,7 +10,7 @@ use Kajona\Search\System\SearchTerm;
 use Kajona\Search\System\SearchTermQuery;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Objectfactory;
-use Kajona\System\System\Testbase;
+use Kajona\System\Tests\Testbase;
 
 class SearchMetadataFilterTest extends Testbase
 {

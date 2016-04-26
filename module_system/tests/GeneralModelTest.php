@@ -8,7 +8,6 @@ use Kajona\System\System\Model;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Reflection;
 use Kajona\System\System\Resourceloader;
-use Kajona\System\System\Testbase;
 use ReflectionClass;
 
 class GeneralModelTest extends Testbase

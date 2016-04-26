@@ -4,7 +4,6 @@ namespace Kajona\System\Tests;
 
 use Kajona\System\System\EnumBase;
 use Kajona\System\System\Exception;
-use Kajona\System\System\Testbase;
 
 class EnumTest extends Testbase
 {

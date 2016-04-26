@@ -3,7 +3,7 @@
 namespace Kajona\Qrcode\Tests;
 
 use Kajona\Qrcode\System\Qrcode;
-use Kajona\System\System\Testbase;
+use Kajona\System\Tests\Testbase;
 
 class QrcodeTest extends Testbase
 {

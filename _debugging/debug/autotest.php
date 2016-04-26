@@ -8,7 +8,7 @@ namespace Kajona\Debugging\Debug;
 
 use Kajona\System\System\Filesystem;
 use Kajona\System\System\Resourceloader;
-use Kajona\System\System\Testbase;
+use Kajona\System\Tests\Testbase;
 use ReflectionClass;
 
 echo "+-------------------------------------------------------------------------------+\n";

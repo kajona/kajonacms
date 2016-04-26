@@ -4,7 +4,6 @@ namespace Kajona\System\Tests;
 
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Date;
-use Kajona\System\System\Testbase;
 
 /**
  * Class class_test_functions

@@ -7,7 +7,7 @@ use Kajona\System\System\Carrier;
 use Kajona\System\System\Classloader;
 use Kajona\System\System\Date;
 use Kajona\System\System\Resourceloader;
-use Kajona\System\System\Testbase;
+use Kajona\System\Tests\Testbase;
 
 class StatsReportTest extends Testbase
 {

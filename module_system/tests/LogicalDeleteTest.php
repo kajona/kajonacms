@@ -5,7 +5,6 @@ namespace Kajona\System\Tests;
 use Kajona\System\System\OrmBase;
 use Kajona\System\System\OrmDeletedhandlingEnum;
 use Kajona\System\System\SystemAspect;
-use Kajona\System\System\Testbase;
 
 class LogicalDeleteTest extends Testbase
 {

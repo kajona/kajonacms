@@ -12,7 +12,7 @@ use Kajona\System\System\SystemChangelog;
 use Kajona\System\System\SystemEventidentifier;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\SystemSetting;
-use Kajona\System\System\Testbase;
+use Kajona\System\Tests\Testbase;
 
 class SearchDeferredIndexerTest extends Testbase
 {

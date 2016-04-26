@@ -5,7 +5,6 @@ namespace Kajona\System\Tests;
 use Kajona\System\System\Classloader;
 use Kajona\System\System\Pluginmanager;
 use Kajona\System\System\Resourceloader;
-use Kajona\System\System\Testbase;
 
 class PluginmanagerTest extends Testbase
 {

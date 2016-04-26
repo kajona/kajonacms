@@ -2,7 +2,7 @@
 namespace Kajona\Pages\Tests;
 
 use Kajona\System\System\SystemModule;
-use Kajona\System\System\Testbase;
+use Kajona\System\Tests\Testbase;
 
 class PortalTest extends Testbase
 {

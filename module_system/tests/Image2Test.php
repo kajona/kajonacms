@@ -3,7 +3,6 @@
 namespace Kajona\System\Tests;
 
 use Kajona\System\System\Image2;
-use Kajona\System\System\Testbase;
 
 class Image2Test extends Testbase
 {

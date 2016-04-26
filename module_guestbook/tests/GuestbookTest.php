@@ -5,7 +5,7 @@ namespace Kajona\Guestbook\Tests;
 use Kajona\Guestbook\System\GuestbookGuestbook;
 use Kajona\Guestbook\System\GuestbookPost;
 use Kajona\System\System\Carrier;
-use Kajona\System\System\Testbase;
+use Kajona\System\Tests\Testbase;
 
 class GuestbookTest extends Testbase
 {

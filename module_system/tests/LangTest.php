@@ -3,7 +3,6 @@
 namespace Kajona\System\Tests;
 
 use Kajona\System\System\Lang;
-use Kajona\System\System\Testbase;
 
 class LangTest extends Testbase
 {

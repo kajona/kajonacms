@@ -8,8 +8,5 @@
   "require": {
     "pimple/pimple": "^3.0",
     "doctrine/cache": "^1.6"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "^4.8"
   }
 }

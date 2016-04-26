@@ -3,7 +3,7 @@
 namespace Kajona\Pdf\Tests;
 
 use Kajona\Pdf\System\Pdf;
-use Kajona\System\System\Testbase;
+use Kajona\System\Tests\Testbase;
 
 class PdfTest extends Testbase
 {

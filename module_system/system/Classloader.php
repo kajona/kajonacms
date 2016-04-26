@@ -65,7 +65,8 @@ class Classloader
         "/system/",
         "/installer/",
         "/event/",
-        "/legacy/"
+        "/legacy/",
+        "/tests/"
     );
 
     /**

@@ -6,7 +6,6 @@ use Kajona\System\System\CoreEventdispatcher;
 use Kajona\System\System\GenericeventListenerInterface;
 use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemEventidentifier;
-use Kajona\System\System\Testbase;
 
 class StatuschangedeventTest extends Testbase
 {

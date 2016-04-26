@@ -6,7 +6,7 @@
 
 namespace Kajona\Workflows\Test;
 
-use Kajona\System\System\Testbase;
+use Kajona\System\Tests\Testbase;
 use Kajona\Workflows\System\WorkflowsWorkflow;
 
 class WorkflowTest extends Testbase

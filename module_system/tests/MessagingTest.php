@@ -6,7 +6,6 @@ use Kajona\System\System\Messageproviders\MessageproviderExceptions;
 use Kajona\System\System\MessagingMessage;
 use Kajona\System\System\MessagingMessagehandler;
 use Kajona\System\System\SystemSetting;
-use Kajona\System\System\Testbase;
 use Kajona\System\System\UserGroup;
 
 class MessagingTest extends Testbase

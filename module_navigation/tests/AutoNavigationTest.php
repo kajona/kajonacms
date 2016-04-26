@@ -6,12 +6,10 @@ use Kajona\Navigation\System\NavigationTree;
 use Kajona\Pages\Admin\Elements\ElementPlaintextAdmin;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
-use Kajona\Pages\System\PagesPageelement;
 use Kajona\Samplecontent\System\SamplecontentContentHelper;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\LanguagesLanguage;
-use Kajona\System\System\Session;
-use Kajona\System\System\Testbase;
+use Kajona\System\Tests\Testbase;
 
 class AutoNavigationTest extends Testbase
 {

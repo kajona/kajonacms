@@ -5,7 +5,6 @@ namespace Kajona\System\Tests;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\OrmInCondition;
 use Kajona\System\System\OrmInOrEmptyCondition;
-use Kajona\System\System\Testbase;
 
 class OrmInConditionTest extends Testbase
 {

@@ -6,7 +6,6 @@ use Kajona\System\System\Classloader;
 use Kajona\System\System\CoreEventdispatcher;
 use Kajona\System\System\GenericeventListenerInterface;
 use Kajona\System\System\Resourceloader;
-use Kajona\System\System\Testbase;
 
 class GenericeventdispatcherTest extends Testbase  {
 

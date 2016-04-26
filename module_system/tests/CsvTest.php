@@ -3,7 +3,6 @@
 namespace Kajona\System\Tests;
 
 use Kajona\System\System\Csv;
-use Kajona\System\System\Testbase;
 
 class CsvTest extends Testbase
 {

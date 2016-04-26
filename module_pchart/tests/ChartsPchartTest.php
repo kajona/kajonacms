@@ -3,7 +3,7 @@ namespace Kajona\Pchart\Tests;
 
 use Kajona\Pchart\System\GraphPchart;
 use Kajona\System\System\GraphColorpalettes;
-use Kajona\System\System\Testbase;
+use Kajona\System\Tests\Testbase;
 
 class ChartsPchartTest extends Testbase
 {

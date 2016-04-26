@@ -4,7 +4,7 @@ namespace Kajona\Maps\Test;
 // includes
 use Kajona\Maps\System\Geocoder;
 
-class GeocoderTest extends \Kajona\System\System\Testbase {
+class GeocoderTest extends \Kajona\System\Tests\Testbase {
 
     public function test() {
 

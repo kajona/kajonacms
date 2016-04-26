@@ -6,7 +6,7 @@ use Kajona\Mediamanager\System\MediamanagerFile;
 use Kajona\Mediamanager\System\MediamanagerRepo;
 use Kajona\System\System\Filesystem;
 use Kajona\System\System\SystemModule;
-use Kajona\System\System\Testbase;
+use Kajona\System\Tests\Testbase;
 
 class MediamanagerTest extends Testbase
 {

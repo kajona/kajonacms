@@ -3,7 +3,6 @@
 namespace Kajona\System\Tests;
 
 use Kajona\System\System\Date;
-use Kajona\System\System\Testbase;
 
 class DateTest extends Testbase
 {

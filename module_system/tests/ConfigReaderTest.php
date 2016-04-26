@@ -6,7 +6,6 @@ use Kajona\System\System\Classloader;
 use Kajona\System\System\Config;
 use Kajona\System\System\Filesystem;
 use Kajona\System\System\Resourceloader;
-use Kajona\System\System\Testbase;
 
 class ConfigReaderTest extends Testbase
 {

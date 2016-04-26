@@ -6,7 +6,6 @@ use Kajona\System\System\Carrier;
 use Kajona\System\System\Database;
 use Kajona\System\System\Exception;
 use Kajona\System\System\SystemAspect;
-use Kajona\System\System\Testbase;
 
 class SystemTest extends Testbase
 {

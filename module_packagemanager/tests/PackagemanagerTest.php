@@ -6,8 +6,8 @@ use Kajona\Packagemanager\System\PackagemanagerManager;
 use Kajona\Packagemanager\System\PackagemanagerMetadata;
 use Kajona\System\System\Filesystem;
 use Kajona\System\System\Resourceloader;
-use Kajona\System\System\Testbase;
 use Kajona\System\System\Zip;
+use Kajona\System\Tests\Testbase;
 
 class PackagemanagerTest extends Testbase
 {

@@ -2,7 +2,7 @@
 
 namespace Kajona\Ezchart\Tests;
 
-use Kajona\System\System\Testbase;
+use Kajona\System\Tests\Testbase;
 
 class ChartsEzcTest extends Testbase  {
 

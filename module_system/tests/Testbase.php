@@ -4,9 +4,17 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
-namespace Kajona\System\System;
+namespace Kajona\System\Tests;
 
 
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Classloader;
+use Kajona\System\System\Config;
+use Kajona\System\System\Database;
+use Kajona\System\System\Date;
+use Kajona\System\System\Model;
+use Kajona\System\System\OrmBase;
+use Kajona\System\System\Reflection;
 use PHPUnit_Framework_TestCase;
 
 

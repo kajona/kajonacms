@@ -5,7 +5,6 @@ namespace Kajona\System\Tests;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Rights;
 use Kajona\System\System\SystemAspect;
-use Kajona\System\System\Testbase;
 
 class CopyTest extends Testbase
 {

@@ -3,7 +3,6 @@
 namespace Kajona\System\Tests;
 
 use Kajona\System\System\Carrier;
-use Kajona\System\System\Testbase;
 
 class DatabaseTxTest extends Testbase
 {

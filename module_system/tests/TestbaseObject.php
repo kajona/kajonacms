@@ -1,9 +1,12 @@
 <?php
 
-namespace Kajona\System\System;
+namespace Kajona\System\Tests;
 
 use DOMDocument;
 use DOMElement;
+use Kajona\System\System\Database;
+use Kajona\System\System\Model;
+use Kajona\System\System\UserUser;
 use RuntimeException;
 
 

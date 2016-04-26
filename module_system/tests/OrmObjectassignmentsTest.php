@@ -13,7 +13,6 @@ use Kajona\System\System\OrmDeletedhandlingEnum;
 use Kajona\System\System\OrmSchemamanager;
 use Kajona\System\System\SystemEventidentifier;
 use Kajona\System\System\SystemModule;
-use Kajona\System\System\TestbaseObject;
 
 /**
  * Class class_test_orm_schemamanagerTest

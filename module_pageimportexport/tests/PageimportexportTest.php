@@ -11,7 +11,7 @@ use Kajona\System\System\Classloader;
 use Kajona\System\System\Database;
 use Kajona\System\System\OrmRowcache;
 use Kajona\System\System\Resourceloader;
-use Kajona\System\System\Testbase;
+use Kajona\System\Tests\Testbase;
 
 class PageimportexportTest extends Testbase
 {

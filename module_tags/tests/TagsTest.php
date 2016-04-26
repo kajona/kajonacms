@@ -6,7 +6,7 @@ use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
 use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemModule;
-use Kajona\System\System\Testbase;
+use Kajona\System\Tests\Testbase;
 use Kajona\Tags\System\TagsTag;
 
 class TagsTest extends Testbase

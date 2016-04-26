@@ -7,7 +7,7 @@
 /**
  * @deprecated
  */
-class class_testbase extends Kajona\System\System\Testbase
+class class_testbase extends \Kajona\System\Tests\Testbase
 {
 
 }

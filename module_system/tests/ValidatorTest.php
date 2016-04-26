@@ -2,7 +2,6 @@
 
 namespace Kajona\System\Tests;
 
-use Kajona\System\System\Testbase;
 use Kajona\System\System\Validators\IntValidator;
 use Kajona\System\System\Validators\PosintValidator;
 

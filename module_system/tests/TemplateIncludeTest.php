@@ -4,7 +4,6 @@ namespace Kajona\System\Tests;
 
 use Kajona\System\System\Filesystem;
 use Kajona\System\System\TemplateFileParser;
-use Kajona\System\System\Testbase;
 
 class TemplateIncludeTest extends Testbase
 {

@@ -5,7 +5,6 @@ namespace Kajona\System\Tests;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Filesystem;
 use Kajona\System\System\Logger;
-use Kajona\System\System\Testbase;
 
 class LoggerTest extends Testbase
 {

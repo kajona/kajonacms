@@ -5,7 +5,7 @@ namespace Kajona\Search\Tests;
 use Kajona\Search\System\SearchBooleanQuery;
 use Kajona\Search\System\SearchQueryParser;
 use Kajona\Search\System\SearchTermQuery;
-use Kajona\System\System\Testbase;
+use Kajona\System\Tests\Testbase;
 
 class SearchQueryParserTest extends Testbase
 {

@@ -5,7 +5,6 @@ namespace Kajona\System\Tests;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\OrmObjectlistInOrEmptyRestriction;
 use Kajona\System\System\OrmObjectlistInRestriction;
-use Kajona\System\System\Testbase;
 
 class OrmObjectlistInRestrictionTest extends Testbase
 {

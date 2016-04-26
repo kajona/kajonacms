@@ -3,7 +3,6 @@
 namespace Kajona\System\Tests;
 
 use Kajona\System\System\Resourceloader;
-use Kajona\System\System\Testbase;
 
 class JsFilesTest extends Testbase
 {

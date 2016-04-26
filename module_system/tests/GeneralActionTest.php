@@ -9,7 +9,6 @@ use Kajona\System\System\Carrier;
 use Kajona\System\System\Classloader;
 use Kajona\System\System\Reflection;
 use Kajona\System\System\Resourceloader;
-use Kajona\System\System\Testbase;
 use ReflectionClass;
 use ReflectionMethod;
 
