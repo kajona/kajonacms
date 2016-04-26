@@ -373,6 +373,31 @@ class DbOci8 extends DbBase
     }
 
     /**
+     * Adds a column to a table
+     *
+     * @param $strTable
+     * @param $strColumn
+     * @param $strDatatype
+     *
+     * @return bool
+     * @since 4.6
+     */
+    public function addColumn($strTable, $strColumn, $strDatatype, $bitNull = null, $strDefault = null)
+    {
+        $strQuery = "ALTER TABLE ".($this->encloseTableName($strTable))." ADD ".($this->encloseColumnName($strColumn)." ".$this->getDatatype($strDatatype));
+
+        if ($strDefault !== null) {
+            $strQuery .= " DEFAULT " . $strDefault;
+        }
+
+        if ($bitNull !== null) {
+            $strQuery .= $bitNull ? " NULL" : " NOT NULL";
+        }
+
+        return $this->_pQuery($strQuery, array());
+    }
+
+    /**
      * Used to send a create table statement to the database
      * By passing the query through this method, the driver can
      * add db-specific commands.
