@@ -10,12 +10,14 @@
 namespace Kajona\Votings\System;
 
 use Kajona\System\System\AdminListableInterface;
+use Kajona\System\System\FilterBase;
 use Kajona\System\System\Link;
 use Kajona\System\System\Model;
 use Kajona\System\System\ModelInterface;
 use Kajona\System\System\OrmComparatorEnum;
 use Kajona\System\System\OrmObjectlist;
 use Kajona\System\System\OrmObjectlistSystemstatusRestriction;
+use Kajona\System\System\OrmSystemstatusCondition;
 use Kajona\System\System\SearchResultobjectInterface;
 
 /**
@@ -121,14 +123,34 @@ class VotingsVoting extends Model implements ModelInterface, AdminListableInterf
      *
      * @return VotingsVoting[]
      * @static
+     *
+     * @deprecated
      */
     public static function getObjectList($bitOnlyActive = false, $intStart = false, $intEnd = false) {
+        return self::getObjectListFiltered(null, "", $intStart, $intEnd,$bitOnlyActive);
+    }
+
+    /**
+     * Loads all available categories from the db,
+     * so a kind of factory method for voting-object
+     *
+     * @param FilterBase|null $objFilter
+     * @param string $strPrevid
+     * @param null $intStart
+     * @param null $intEnd
+     * @param bool $bitOnlyActive
+     *
+     * @return VotingsVoting[]
+     */
+    public static function getObjectListFiltered(FilterBase $objFilter = null, $strPrevid = "", $intStart = null, $intEnd = null, $bitOnlyActive = false)
+    {
         $objOrm = new OrmObjectlist();
         if($bitOnlyActive) {
-            $objOrm->addWhereRestriction(new OrmObjectlistSystemstatusRestriction(OrmComparatorEnum::NotEqual(), 0));
+            $objOrm->addWhereRestriction(new OrmSystemstatusCondition(OrmComparatorEnum::NotEqual(), 0));
         }
         return $objOrm->getObjectList(__CLASS__, "", $intStart, $intEnd);
     }
+
 
     /**
      * Counts the answers related to the current question

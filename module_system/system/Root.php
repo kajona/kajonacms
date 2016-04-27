@@ -408,12 +408,11 @@ abstract class Root
      *
      * @return int
      *
-     * @deprecated use getObjectCountFiltered
+     * @deprecated use getObjectCountFiltered instead
      */
     public static function getObjectCount($strPrevid = "")
     {
-        $objORM = new OrmObjectlist();
-        return $objORM->getObjectCount(get_called_class(), $strPrevid);
+        return self::getObjectCountFiltered(null, $strPrevid);
     }
 
     /**
@@ -428,12 +427,11 @@ abstract class Root
      *
      * @return self[]
      *
-     * @deprecated use getObjectListFiltered
+     * @deprecated use getObjectListFiltered instead
      */
     public static function getObjectList($strPrevid = "", $intStart = null, $intEnd = null)
     {
-        $objORM = new OrmObjectlist();
-        return $objORM->getObjectList(get_called_class(), $strPrevid, $intStart, $intEnd);
+        return self::getObjectListFiltered(null, $strPrevid, $intStart, $intEnd);
     }
 
 
