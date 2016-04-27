@@ -63,7 +63,7 @@ class TopMenu extends BasePage {
 
         return this.showUserMenu().then(function(){
             context.element_lnkUserMenuLogOut.click().then(function(){
-                return new LoginPage(this.webDriver);
+                return new LoginPage(context.webDriver);
             });
         });
     };
