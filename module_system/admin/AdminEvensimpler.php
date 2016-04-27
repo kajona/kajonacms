@@ -309,7 +309,7 @@ abstract class AdminEvensimpler extends AdminSimple
             }
 
             /* Create list */
-            $objArraySectionIterator = new ArraySectionIterator($strType::getObjectListFilteredCount($objFilter, $this->getSystemid()));
+            $objArraySectionIterator = new ArraySectionIterator($strType::getObjectCountFiltered($objFilter, $this->getSystemid()));
             $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
             $objArraySectionIterator->setArraySection($strType::getObjectListFiltered($objFilter, $this->getSystemid(), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 

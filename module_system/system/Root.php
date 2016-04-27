@@ -407,6 +407,8 @@ abstract class Root
      * @param string $strPrevid
      *
      * @return int
+     *
+     * @deprecated use getObjectCountFiltered
      */
     public static function getObjectCount($strPrevid = "")
     {
@@ -425,6 +427,8 @@ abstract class Root
      * @param null|int $intEnd
      *
      * @return self[]
+     *
+     * @deprecated use getObjectListFiltered
      */
     public static function getObjectList($strPrevid = "", $intStart = null, $intEnd = null)
     {
@@ -475,7 +479,7 @@ abstract class Root
      *
      * @return int
      */
-    public static function getObjectListFilteredCount(FilterBase $objFilter = null, $strPrevid = "")
+    public static function getObjectCountFiltered(FilterBase $objFilter = null, $strPrevid = "")
     {
         $objORM = new OrmObjectlist();
 

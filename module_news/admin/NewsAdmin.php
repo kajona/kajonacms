@@ -164,8 +164,8 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
         }
 
         $strReturn = $strFilterForm;
-        $objIterator = new ArraySectionIterator(NewsCategory::getObjectListFilteredCount($objFilter));
-        $objIterator->setIntElementsPerPage(NewsCategory::getObjectListFilteredCount($objFilter));
+        $objIterator = new ArraySectionIterator(NewsCategory::getObjectCountFiltered($objFilter));
+        $objIterator->setIntElementsPerPage(NewsCategory::getObjectCountFiltered($objFilter));
         $objIterator->setPageNumber(1);
         $objIterator->setArraySection(NewsCategory::getObjectListFiltered($objFilter, "", $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
@@ -182,7 +182,7 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
         }
         $strReturn .= $strFilterForm;
 
-        $objIterator = new ArraySectionIterator(NewsNews::getObjectListFilteredCount($objFilter, $this->getParam("filterId")));
+        $objIterator = new ArraySectionIterator(NewsNews::getObjectCountFiltered($objFilter, $this->getParam("filterId")));
         $objIterator->setPageNumber($this->getParam("pv"));
         $objIterator->setArraySection(NewsNews::getObjectListFiltered($objFilter, $this->getParam("filterId"), $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
