@@ -75,7 +75,7 @@ class DashboardAdminXml extends AdminController implements XmlAdminInterface
         Carrier::getInstance()->getObjDB()->flushQueryCache();
 
         $objWidget = new DashboardWidget($this->getSystemid());
-        if ($intNewPos != "") {
+        if($intNewPos != "") {
             $objWidget->setAbsolutePosition($intNewPos);
         }
 
@@ -98,10 +98,10 @@ class DashboardAdminXml extends AdminController implements XmlAdminInterface
         SystemAspect::getCurrentAspect();
 
         $objWidgetModel = new DashboardWidget($this->getSystemid());
-        if ($objWidgetModel->rightView()) {
+        if($objWidgetModel->rightView()) {
             $objConcreteWidget = $objWidgetModel->getConcreteAdminwidget();
 
-            if (!$objConcreteWidget->getBitBlockSessionClose()) {
+            if(!$objConcreteWidget->getBitBlockSessionClose()) {
                 Carrier::getInstance()->getObjSession()->sessionClose();
             }
 
@@ -134,16 +134,16 @@ class DashboardAdminXml extends AdminController implements XmlAdminInterface
         $objStartDate = new \Kajona\System\System\Date(strtotime($this->getParam("start")));
         $objEndDate = new \Kajona\System\System\Date(strtotime($this->getParam("end")));
 
-        foreach ($arrCategories as $arrCategory) {
-            foreach ($arrCategory as $strKey => $strValue) {
-                if ($this->objSession->getSession($strKey) != "disabled") {
+        foreach($arrCategories as $arrCategory) {
+            foreach($arrCategory as $strKey => $strValue) {
+                if($this->objSession->getSession($strKey) != "disabled") {
                     $arrEvents = array_merge($arrEvents, EventRepository::getEventsByCategoryAndDate($strKey, $objStartDate, $objEndDate));
                 }
             }
         }
 
         $arrData = array();
-        foreach ($arrEvents as $objEvent) {
+        foreach($arrEvents as $objEvent) {
             /** @var EventEntry $objEvent */
             $strIcon = AdminskinHelper::getAdminImage($objEvent->getStrIcon());
             $arrRow = array(
@@ -155,11 +155,11 @@ class DashboardAdminXml extends AdminController implements XmlAdminInterface
                 "className" => array($objEvent->getStrCategory(), "calendar-event"),
             );
 
-            if ($objEvent->getObjStartDate() instanceof \Kajona\System\System\Date && $objEvent->getObjEndDate() instanceof \Kajona\System\System\Date) {
+            if($objEvent->getObjStartDate() instanceof \Kajona\System\System\Date && $objEvent->getObjEndDate() instanceof \Kajona\System\System\Date) {
                 $arrRow["start"] = date("Y-m-d", $objEvent->getObjStartDate()->getTimeInOldStyle());
                 $arrRow["end"] = date("Y-m-d", $objEvent->getObjEndDate()->getTimeInOldStyle());
             }
-            elseif ($objEvent->getObjValidDate() instanceof \Kajona\System\System\Date) {
+            elseif($objEvent->getObjValidDate() instanceof \Kajona\System\System\Date) {
                 $arrRow["start"] = date("Y-m-d", $objEvent->getObjValidDate()->getTimeInOldStyle());
             }
             else {
@@ -181,18 +181,18 @@ class DashboardAdminXml extends AdminController implements XmlAdminInterface
         ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_HTML);
 
         $strCategory = $this->getParam("category");
-        if (empty($strCategory)) {
+        if(empty($strCategory)) {
             $arrTodos = TodoRepository::getAllOpenTodos();
         }
         else {
             $arrCategories = explode(',', $strCategory);
             $arrTodos = array();
-            foreach ($arrCategories as $strCategory) {
+            foreach($arrCategories as $strCategory) {
                 $arrTodos = array_merge($arrTodos, TodoRepository::getOpenTodos($strCategory, false));
             }
         }
 
-        if (empty($arrTodos)) {
+        if(empty($arrTodos)) {
             return $this->objToolkit->warningBox($this->getLang("todo_no_open_tasks"), "alert-info");
         }
 
@@ -208,11 +208,11 @@ class DashboardAdminXml extends AdminController implements XmlAdminInterface
         );
         $arrValues = array();
 
-        foreach ($arrTodos as $objTodo) {
+        foreach($arrTodos as $objTodo) {
             $strActions = "";
             $arrModule = $objTodo->getArrModuleNavi();
-            if (!empty($arrModule) && is_array($arrModule)) {
-                foreach ($arrModule as $strLink) {
+            if(!empty($arrModule) && is_array($arrModule)) {
+                foreach($arrModule as $strLink) {
                     $strActions .= $this->objToolkit->listButton($strLink);
                 }
             }
@@ -224,7 +224,7 @@ class DashboardAdminXml extends AdminController implements XmlAdminInterface
             $bitSearchMatch = empty($strSearch) || stripos($objTodo->getStrDisplayName(), $strSearch) !== false;
             $bitDateMatch = empty($strDate) || $strValidDate == $strDate;
 
-            if ($bitSearchMatch && $bitDateMatch) {
+            if($bitSearchMatch && $bitDateMatch) {
                 $arrValues[] = array(
                     $strIcon,
                     $objTodo->getStrDisplayName(),
@@ -248,7 +248,14 @@ class DashboardAdminXml extends AdminController implements XmlAdminInterface
             new TodoJstreeNodeLoader()
         );
 
-        $arrReturn = $objJsTreeLoader->getJson(array(""), true);
+
+        $arrSystemIdPath = $this->getParam(SystemJSTreeBuilder::STR_PARAM_INITIALTOGGLING);
+        $bitInitialLoading = is_array($arrSystemIdPath);
+        if(!$bitInitialLoading) {
+            $arrSystemIdPath = array("");
+        }
+
+        $arrReturn = $objJsTreeLoader->getJson($arrSystemIdPath, $bitInitialLoading, $this->getParam(SystemJSTreeBuilder::STR_PARAM_LOADALLCHILDNOES) === "true");
         ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
         return $arrReturn;
     }

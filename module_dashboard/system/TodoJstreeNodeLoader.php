@@ -55,7 +55,7 @@ class TodoJstreeNodeLoader implements InterfaceJStreeNodeLoader
                 $objNode->setStrId(generateSystemid());
                 $objNode->setStrText($this->objToolkit->getTooltipText($strCategoryName, $strCategoryName));
                 $objNode->setArrChildren(false);
-                $objNode->setStrType("navigationpoint");
+                $objNode->setStrType("provider");
                 $objNode->addAAttrAttr(
                     SystemJSTreeNode::STR_NODE_AATTR_HREF,
                     "#"
@@ -78,7 +78,7 @@ class TodoJstreeNodeLoader implements InterfaceJStreeNodeLoader
             $objNode->setStrId(generateSystemid());
             $objNode->setStrText('<i class="fa fa-folder-o"></i>&nbsp;'.$this->objToolkit->getTooltipText($strProviderName, $strProviderName));
             $objNode->setArrChildren($arrCategoryNodes);
-            $objNode->setStrType("navigationpoint");
+            $objNode->setStrType("category");
             $objNode->addAAttrAttr(
                 SystemJSTreeNode::STR_NODE_AATTR_HREF,
                 "#"
@@ -91,6 +91,9 @@ class TodoJstreeNodeLoader implements InterfaceJStreeNodeLoader
                 SystemJSTreeNode::STR_NODE_STATE_OPENED,
                 true
             );
+
+
+            $arrProviderNodes[] = $objNode;
         }
 
         return $arrProviderNodes;
