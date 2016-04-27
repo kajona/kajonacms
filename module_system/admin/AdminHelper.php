@@ -45,7 +45,7 @@ class AdminHelper
         foreach ($arrModules as $arrOneModule) {
             $objModule = SystemModule::getModuleByName($arrOneModule["module_name"]);
 
-            if (!$objModule->rightView()) {
+            if ($objModule == null || !$objModule->rightView()) {
                 continue;
             }
 

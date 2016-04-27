@@ -162,6 +162,9 @@ class PagesPortalController extends PortalController implements PortalInterface
             //Build the class-name for the object
             /** @var  ElementPortal $objElement */
             $objElement = $objOneElementOnPage->getConcretePortalInstance();
+            if($objElement == null) {
+                continue;
+            }
             //let the element do the work and earn the output
             if (!isset($arrTemplate[$objOneElementOnPage->getStrPlaceholder()])) {
                 $arrTemplate[$objOneElementOnPage->getStrPlaceholder()] = "";
@@ -435,6 +438,10 @@ class PagesPortalController extends PortalController implements PortalInterface
         foreach ($arrElementsOnPage as $objOneElement) {
             /** @var  ElementPortal $objElement */
             $objElementInstance = $objOneElement->getConcretePortalInstance();
+            
+            if($objElementInstance == null) {
+                continue;
+            }
 
             $strElementHash .= $objElementInstance->getCacheHashSum();
 

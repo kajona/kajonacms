@@ -74,7 +74,9 @@ class ElementBlocksPortal extends ElementPortal implements PortalElementInterfac
         $arrElementsOnBlock = $this->getElementsOnBlocks();
         $intCachetime = null;
         foreach($arrElementsOnBlock as $objOneElement) {
-            $strSum .= $objOneElement->getConcretePortalInstance()->getCacheHashSum();
+            if($objOneElement->getConcretePortalInstance() !== null) {
+                $strSum .= $objOneElement->getConcretePortalInstance()->getCacheHashSum();
+            }
         }
 
         return sha1($strSum);
@@ -129,7 +131,10 @@ class ElementBlocksPortal extends ElementPortal implements PortalElementInterfac
                     foreach ($arrElementsOnBlocks as $objOneElement) {
                         /** @var  ElementBlockPortal $objElement */
                         $objElement = $objOneElement->getConcretePortalInstance();
-                        $this->arrBlocks[] = $objElement;
+                        
+                        if($objElement !== null) {
+                            $this->arrBlocks[] = $objElement;
+                        }
                     }
 
                 }

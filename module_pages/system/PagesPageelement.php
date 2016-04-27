@@ -257,7 +257,7 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
      * Creates an instance of the concrete admin-element instance, e.g. the concrete row-element
      * Please note, that due to performance issues the foreign content is not loaded in the step!
      *
-     * @return ElementPortal
+     * @return ElementPortal|null
      */
     public function getConcretePortalInstance()
     {
@@ -281,10 +281,11 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
         $objInstance = Classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Portal\\ElementPortal", null, array($this), true);
 
         //and finally create the object
-        /** @var $objInstance ElementPortal */
-        $objInstance->setSystemid($this->getSystemid());
-        $this->objConcretePortalInstance = $objInstance;
-
+        if($objInstance !== null) {
+            /** @var $objInstance ElementPortal */
+            $objInstance->setSystemid($this->getSystemid());
+            $this->objConcretePortalInstance = $objInstance;
+        }
         return $objInstance;
     }
 
