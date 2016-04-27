@@ -1,16 +1,17 @@
+"use strict";
 
-describe('login', function() {
+var LoginPage = require('../page_object/LoginPage.js');
 
-    beforeEach(function() {
+describe('login', function () {
+    beforeEach(function () {
         browser.ignoreSynchronization = true;
     });
 
-    it('test login', function() {
+    it('test login', function () {
         browser.get('index.php?admin=1');
 
-        browser.driver.findElement(by.id('name')).sendKeys('test');
-        browser.driver.findElement(by.id('passwort')).sendKeys('test123');
-        browser.driver.findElement(by.css('.savechanges')).click();
+        var loginPage = new LoginPage(browser.driver);
+        loginPage.login("artemeonadmin", "admin0815");
 
         // check whether login was successful
         expect(browser.driver.findElement(by.id('moduleTitle')).getText()).toEqual("Übersicht");
