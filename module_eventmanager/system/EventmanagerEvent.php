@@ -181,7 +181,7 @@ class EventmanagerEvent extends \Kajona\System\System\Model implements \Kajona\S
         }
 
         if ($this->getIntRegistrationRequired()) {
-            $strCenter .= ", ".EventmanagerParticipant::getObjectCount($this->getSystemid())." ".$this->getLang("event_participant");
+            $strCenter .= ", ".EventmanagerParticipant::getObjectCountFiltered(null, $this->getSystemid())." ".$this->getLang("event_participant");
         }
 
         $strCenter .= ")";

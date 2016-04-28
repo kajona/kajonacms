@@ -79,7 +79,7 @@ class NavigationAdmin extends AdminSimple implements AdminInterface {
         }
         else {
 
-            $objIterator = new ArraySectionIterator(NavigationPoint::getObjectCount($this->getSystemid()));
+            $objIterator = new ArraySectionIterator(NavigationPoint::getObjectCountFiltered(null, $this->getSystemid()));
             $objIterator->setPageNumber($this->getParam("pv"));
             $objIterator->setArraySection(NavigationPoint::getNaviLayer($this->getSystemid(), false, $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
             $strReturn .= $this->renderList($objIterator, false, "naviPoints", false);
