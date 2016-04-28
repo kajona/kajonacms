@@ -866,7 +866,7 @@ JS;
 
         $objArraySectionIterator = new ArraySectionIterator(PagesElement::getObjectCountFiltered());
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-        $objArraySectionIterator->setArraySection(PagesElement::getObjectList("", $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+        $objArraySectionIterator->setArraySection(PagesElement::getObjectListFiltered(null, "", $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
         $strReturn .= $this->renderList($objArraySectionIterator, false, PagesAdminController::STR_LIST_ELEMENTS);
 
         return $strReturn;

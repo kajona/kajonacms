@@ -1116,7 +1116,7 @@ JS;
     {
         $objIterator = new ArraySectionIterator(SystemAspect::getObjectCountFiltered());
         $objIterator->setPageNumber($this->getParam("pv"));
-        $objIterator->setArraySection(SystemAspect::getObjectList("", $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
+        $objIterator->setArraySection(SystemAspect::getObjectListFiltered(null, "", $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
         return $this->renderList($objIterator, false, "aspectList");
     }
 

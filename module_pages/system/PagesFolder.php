@@ -131,7 +131,7 @@ class PagesFolder extends \Kajona\System\System\Model implements \Kajona\System\
             $strSystemid = SystemModule::getModuleByName("pages")->getSystemid();
         }
 
-        return self::getObjectList($strSystemid);
+        return self::getObjectListFiltered(null, $strSystemid);
     }
 
     /**
@@ -148,7 +148,7 @@ class PagesFolder extends \Kajona\System\System\Model implements \Kajona\System\
             $strFolderid = SystemModule::getModuleByName("pages")->getSystemid();
         }
 
-        return PagesPage::getObjectList($strFolderid);
+        return PagesPage::getObjectListFiltered(null, $strFolderid);
 
     }
 

@@ -267,7 +267,7 @@ class NavigationPoint extends Model implements ModelInterface, AdminListableInte
     private static function loadPageLevelToNavigationNodes($strSourceId)
     {
 
-        $arrPages = PagesPage::getObjectList($strSourceId);
+        $arrPages = PagesPage::getObjectListFiltered(null, $strSourceId);
         $arrReturn = array();
 
         //transform the sublevel

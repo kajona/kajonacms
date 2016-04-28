@@ -679,7 +679,7 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
         $objArraySectionIterator = new ArraySectionIterator(PackagemanagerTemplate::getObjectCountFiltered());
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(
-            PackagemanagerTemplate::getObjectList("", $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos())
+            PackagemanagerTemplate::getObjectListFiltered(null, "", $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos())
         );
 
         return $this->renderList($objArraySectionIterator);

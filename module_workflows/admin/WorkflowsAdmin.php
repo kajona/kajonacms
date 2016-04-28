@@ -510,7 +510,7 @@ class WorkflowsAdmin extends AdminSimple implements AdminInterface
 
         $objIterator = new ArraySectionIterator(WorkflowsHandler::getObjectCountFiltered());
         $objIterator->setPageNumber($this->getParam("pv"));
-        $objIterator->setArraySection(WorkflowsHandler::getObjectList("", $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
+        $objIterator->setArraySection(WorkflowsHandler::getObjectListFiltered(null, "", $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
         $strReturn .= $this->renderList($objIterator, false, self::STR_LIST_HANDLER);
         return $strReturn;
