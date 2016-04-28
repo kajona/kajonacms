@@ -117,23 +117,6 @@ class VotingsVoting extends Model implements ModelInterface, AdminListableInterf
      * Loads all available categories from the db,
      * so a kind of factory method for voting-object
      *
-     * @param bool $bitOnlyActive
-     * @param bool $intStart
-     * @param bool $intEnd
-     *
-     * @return VotingsVoting[]
-     * @static
-     *
-     * @deprecated
-     */
-    public static function getObjectList($bitOnlyActive = false, $intStart = false, $intEnd = false) {
-        return self::getObjectListFiltered(null, "", $intStart, $intEnd,$bitOnlyActive);
-    }
-
-    /**
-     * Loads all available categories from the db,
-     * so a kind of factory method for voting-object
-     *
      * @param FilterBase|null $objFilter
      * @param string $strPrevid
      * @param null $intStart

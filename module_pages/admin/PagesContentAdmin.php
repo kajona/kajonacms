@@ -1079,7 +1079,7 @@ JS;
 
 
             //step one: language selection
-            $arrLanguages = LanguagesLanguage::getObjectList(true);
+            $arrLanguages = LanguagesLanguage::getObjectListFiltered(null, true);
             $arrLanguageDD = array();
             foreach ($arrLanguages as $objSingleLanguage) {
                 $arrLanguageDD[$objSingleLanguage->getSystemid()] = $this->getLang("lang_".$objSingleLanguage->getStrName(), "languages");

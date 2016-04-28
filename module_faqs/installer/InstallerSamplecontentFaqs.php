@@ -37,7 +37,7 @@ class InstallerSamplecontentFaqs implements SamplecontentInstallerInterface
      */
     public function isInstalled()
     {
-        return FaqsFaq::getObjectCount() > 0;
+        return FaqsFaq::getObjectCountFiltered(null) > 0;
     }
 
     public function install()

@@ -84,18 +84,18 @@ class FaqsAdmin extends AdminEvensimpler implements AdminInterface
 
         $this->setStrCurObjectTypeName("Cat");
         $this->setCurObjectClassName("Kajona\\Faqs\\System\\FaqsCategory");
-        $objIterator = new ArraySectionIterator(FaqsCategory::getObjectCount());
-        $objIterator->setIntElementsPerPage(FaqsCategory::getObjectCount());
+        $objIterator = new ArraySectionIterator(FaqsCategory::getObjectCountFiltered());
+        $objIterator->setIntElementsPerPage(FaqsCategory::getObjectCountFiltered());
         $objIterator->setPageNumber(1);
-        $objIterator->setArraySection(FaqsCategory::getObjectList("", $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
+        $objIterator->setArraySection(FaqsCategory::getObjectListFiltered(null, "", $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
         $strReturn = $this->renderList($objIterator, false, FaqsAdmin::STR_CAT_LIST);
 
         $this->setStrCurObjectTypeName("Faq");
         $this->setCurObjectClassName("Kajona\\Faqs\\System\\FaqsFaq");
-        $objIterator = new ArraySectionIterator(FaqsFaq::getObjectCount($this->getParam("filterId")));
+        $objIterator = new ArraySectionIterator(FaqsFaq::getObjectCountFiltered(null, $this->getParam("filterId")));
         $objIterator->setPageNumber($this->getParam("pv"));
-        $objIterator->setArraySection(FaqsFaq::getObjectList($this->getParam("filterId"), $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
+        $objIterator->setArraySection(FaqsFaq::getObjectListFiltered(null, $this->getParam("filterId"), $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
         $strReturn .= $this->renderList($objIterator, false, FaqsAdmin::STR_FAQ_LIST);
 

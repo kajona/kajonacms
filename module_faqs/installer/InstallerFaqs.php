@@ -132,7 +132,7 @@ class InstallerFaqs extends InstallerBase implements InstallerRemovableInterface
         }
 
         /** @var FaqsFaq $objOneFaq */
-        foreach (FaqsFaq::getObjectList() as $objOneFaq) {
+        foreach (FaqsFaq::getObjectListFiltered(null) as $objOneFaq) {
             $strReturn .= "Deleting faq '" . $objOneFaq->getStrDisplayName() . "' ...\n";
             if (!$objOneFaq->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting faq, aborting.\n";

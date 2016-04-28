@@ -39,7 +39,7 @@ class ElementLanguageswitchPortal extends ElementPortal implements PortalElement
             $this->arrElementData["char1"] = "languageswitch.tpl";
         }
 
-        $arrObjLanguages = LanguagesLanguage::getObjectList(true);
+        $arrObjLanguages = LanguagesLanguage::getObjectListFiltered(null, true);
 
         //load the languageset in order to generate more specific switches
         $objLanguageset = LanguagesLanguageset::getLanguagesetForSystemid($this->getParam("systemid"));

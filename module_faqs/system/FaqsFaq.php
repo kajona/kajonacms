@@ -13,6 +13,7 @@ use Kajona\Pages\System\PagesPage;
 use Kajona\Search\System\SearchResult;
 use Kajona\System\System\AdminListableInterface;
 use Kajona\System\System\Carrier;
+use Kajona\System\System\FilterBase;
 use Kajona\System\System\Link;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\OrmObjectlist;
@@ -170,6 +171,7 @@ class FaqsFaq extends \Kajona\System\System\Model implements \Kajona\System\Syst
      * Loads all faqs from the database
      * if passed, the filter is used to load the faqs of the given category
      *
+     * @param FilterBase $objFilter
      * @param string $strFilter
      * @param null $intStart
      * @param null $intEnd
@@ -177,7 +179,7 @@ class FaqsFaq extends \Kajona\System\System\Model implements \Kajona\System\Syst
      * @return mixed
      * @static
      */
-    public static function getObjectList($strFilter = "", $intStart = null, $intEnd = null)
+    public static function getObjectListFiltered(FilterBase $objFilter = null, $strFilter = "", $intStart = null, $intEnd = null)
     {
         if ($strFilter != "") {
 
@@ -207,7 +209,7 @@ class FaqsFaq extends \Kajona\System\System\Model implements \Kajona\System\Syst
 
             return $arrReturn;
         } else {
-            return parent::getObjectList("", $intStart, $intEnd);
+            return parent::getObjectListFiltered($objFilter, "", $intStart, $intEnd);
         }
 
     }
@@ -216,12 +218,13 @@ class FaqsFaq extends \Kajona\System\System\Model implements \Kajona\System\Syst
      * Loads all faqs from the database
      * if passed, the filter is used to load the faqs of the given category
      *
+     * @param FilterBase $objFilter
      * @param string $strFilter
      *
      * @return mixed
      * @static
      */
-    public static function getObjectCount($strFilter = "")
+    public static function getObjectCountFiltered(FilterBase $objFilter = null, $strFilter = "")
     {
         if ($strFilter != "") {
             $objORM = new OrmObjectlist();
@@ -237,7 +240,7 @@ class FaqsFaq extends \Kajona\System\System\Model implements \Kajona\System\Syst
             $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strFilter));
             return $arrRow["COUNT(*)"];
         } else {
-            return parent::getObjectCount();
+            return parent::getObjectCountFiltered($objFilter);
         }
 
     }

@@ -209,7 +209,7 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
                 $strReturn .= $this->objToolkit->formHeadline($this->getLang("languageset_addtolanguage"));
 
                 $strReturn .= $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "assignToLanguageset"));
-                $arrLanguages = LanguagesLanguage::getObjectList();
+                $arrLanguages = LanguagesLanguage::getObjectListFiltered(null);
                 $arrDropdown = array();
                 foreach ($arrLanguages as $objOneLanguage) {
                     $arrDropdown[$objOneLanguage->getSystemid()] = $this->getLang("lang_".$objOneLanguage->getStrName(), "languages");
@@ -229,7 +229,7 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
 
                 $strReturn .= $this->objToolkit->formHeadline($this->getLang("languageset_maintainlanguages"));
 
-                $arrLanguages = LanguagesLanguage::getObjectList();
+                $arrLanguages = LanguagesLanguage::getObjectListFiltered(null);
 
                 $strReturn .= $this->objToolkit->listHeader();
                 $intNrOfUnassigned = 0;
@@ -263,7 +263,7 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
                     $strReturn .= $this->objToolkit->formHeadline($this->getLang("languageset_addnewstolanguage"));
 
                     $strReturn .= $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "addNewsToLanguageset"));
-                    $arrLanguages = LanguagesLanguage::getObjectList();
+                    $arrLanguages = LanguagesLanguage::getObjectListFiltered(null);
                     $arrDropdown = array();
                     foreach ($arrLanguages as $objOneLanguage) {
                         if (!in_array($objOneLanguage->getSystemid(), $arrMaintainedLanguages)) {
