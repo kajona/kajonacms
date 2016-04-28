@@ -96,7 +96,7 @@ class InstallerRating extends InstallerBase implements InstallerRemovableInterfa
     {
 
         /** @var RatingRate $objOneObject */
-        foreach (RatingRate::getObjectList() as $objOneObject) {
+        foreach (RatingRate::getObjectListFiltered() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
             if (!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";

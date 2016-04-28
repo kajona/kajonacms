@@ -126,7 +126,7 @@ class InstallerTags extends InstallerBase implements InstallerRemovableInterface
         }
 
         /** @var TagsFavorite $objOneObject */
-        foreach(TagsFavorite::getObjectList() as $objOneObject) {
+        foreach(TagsFavorite::getObjectListFiltered() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
             if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";
@@ -135,7 +135,7 @@ class InstallerTags extends InstallerBase implements InstallerRemovableInterface
         }
 
         /** @var TagsTag $objOneObject */
-        foreach(TagsTag::getObjectList() as $objOneObject) {
+        foreach(TagsTag::getObjectListFiltered() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
             if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";

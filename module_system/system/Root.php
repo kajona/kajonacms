@@ -448,7 +448,7 @@ abstract class Root
      * @param null $intStart
      * @param null $intEnd
      *
-     * @return Model[]|ModelInterface[]
+     * @return self[]
      */
     public static function getObjectListFiltered(FilterBase $objFilter = null, $strPrevid = "", $intStart = null, $intEnd = null)
     {

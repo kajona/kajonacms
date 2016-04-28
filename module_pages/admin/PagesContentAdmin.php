@@ -334,7 +334,7 @@ HTML;
 
                     //Loading all Elements installed on the system ("RAW"-Elements)
                     /** @var PagesElement $objOnePossibleElementInSystem */
-                    foreach (PagesElement::getObjectList() as $objOnePossibleElementInSystem) {
+                    foreach (PagesElement::getObjectListFiltered() as $objOnePossibleElementInSystem) {
                         if ($objOnePossibleElementInSystem->getStrName() == $arrSingleElementOnTemplateplaceholder["element"]) {
 
                             $strNewElementLink = Link::getLinkAdmin(

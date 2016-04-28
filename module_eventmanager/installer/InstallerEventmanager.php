@@ -112,7 +112,7 @@ class InstallerEventmanager extends InstallerBase implements InstallerRemovableI
         }
 
         /** @var \Kajona\Eventmanager\System\EventmanagerEvent $objOneObject */
-        foreach(EventmanagerEvent::getObjectList() as $objOneObject) {
+        foreach(EventmanagerEvent::getObjectListFiltered() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
             if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";

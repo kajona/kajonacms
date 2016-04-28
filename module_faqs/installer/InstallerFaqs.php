@@ -123,7 +123,7 @@ class InstallerFaqs extends InstallerBase implements InstallerRemovableInterface
 
         //delete all faqs and categories
         /** @var FaqsCategory $objOneCategory */
-        foreach (FaqsCategory::getObjectList() as $objOneCategory) {
+        foreach (FaqsCategory::getObjectListFiltered() as $objOneCategory) {
             $strReturn .= "Deleting category '" . $objOneCategory->getStrDisplayName() . "' ...\n";
             if (!$objOneCategory->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting category, aborting.\n";

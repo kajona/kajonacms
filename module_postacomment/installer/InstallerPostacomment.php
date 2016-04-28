@@ -112,7 +112,7 @@ class InstallerPostacomment extends InstallerBase implements InstallerRemovableI
         }
 
         /** @var PostacommentPost $objOneObject */
-        foreach(PostacommentPost::getObjectList() as $objOneObject) {
+        foreach(PostacommentPost::getObjectListFiltered() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
             if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";
