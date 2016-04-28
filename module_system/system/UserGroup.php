@@ -169,6 +169,23 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface
 
 
     /**
+     * @deprecated
+     */
+    public static function getObjectList($strFilter = "", $intStart = null, $intEnd = null)
+    {
+        return self::getObjectListFiltered(null, $strFilter, $intStart, $intEnd);
+    }
+
+    /**
+     * @deprecated
+     */
+    public static function getObjectCount($strFilter = "")
+    {
+        return self::getObjectCountFiltered(null, $strFilter);
+    }
+
+
+    /**
      * Returns all groups from database
      *
      * @param string $strFilter
@@ -178,7 +195,7 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface
      * @return UserGroup[]
      * @static
      */
-    public static function getObjectList($strFilter = "", $intStart = null, $intEnd = null)
+    public static function getObjectListFiltered(FilterBase $objFilter = null, $strFilter = "", $intStart = null, $intEnd = null)
     {
         $strQuery = "SELECT group_id
                        FROM "._dbprefix_."user_group
@@ -199,6 +216,7 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface
         return $arrReturn;
     }
 
+
     /**
      * Fetches the number of groups available
      *
@@ -206,7 +224,7 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface
      *
      * @return int
      */
-    public static function getObjectCount($strFilter = "")
+    public static function getObjectCountFiltered(FilterBase $objFilter = null, $strFilter = "", $intStart = null, $intEnd = null)
     {
         $strQuery = "SELECT COUNT(*)
                        FROM "._dbprefix_."user_group
@@ -220,6 +238,7 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrFilter);
         return $arrRow["COUNT(*)"];
     }
+
 
     /**
      * Returns the number of members of the current group.

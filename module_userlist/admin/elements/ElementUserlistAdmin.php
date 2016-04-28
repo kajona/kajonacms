@@ -57,7 +57,7 @@ class ElementUserlistAdmin extends ElementAdmin implements AdminElementInterface
     public function getAdminForm()
     {
 
-        $arrGroups = UserGroup::getObjectList();
+        $arrGroups = UserGroup::getObjectListFiltered();
         $arrGroupsDD = array();
         $arrGroupsDD[0] = $this->getLang("userlist_all");
         if (count($arrGroups) > 0) {

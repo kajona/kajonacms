@@ -858,9 +858,9 @@ class UserAdmin extends AdminSimple implements AdminInterface
         $strReturn .= $this->objToolkit->formInputHidden("doFilter", "1");
         $strReturn .= $this->objToolkit->formClose();
 
-        $objArraySectionIterator = new ArraySectionIterator(UserGroup::getObjectCount($this->objSession->getSession($this->STR_GROUPFILTER_SESSION_KEY)));
+        $objArraySectionIterator = new ArraySectionIterator(UserGroup::getObjectCountFiltered(null, $this->objSession->getSession($this->STR_GROUPFILTER_SESSION_KEY)));
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-        $objArraySectionIterator->setArraySection(UserGroup::getObjectList($this->objSession->getSession($this->STR_GROUPFILTER_SESSION_KEY), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+        $objArraySectionIterator->setArraySection(UserGroup::getObjectListFiltered(null, $this->objSession->getSession($this->STR_GROUPFILTER_SESSION_KEY), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
         $strReturn .= $this->renderList($objArraySectionIterator, false, "groupList");
         return $strReturn;
@@ -1420,7 +1420,7 @@ HTML;
         $strFormElement = $this->getParam("form_element");
         if ($this->getSystemid() == "") {
             //show groups
-            $arrUsers = UserGroup::getObjectList();
+            $arrUsers = UserGroup::getObjectListFiltered();
             $strReturn .= $this->objToolkit->listHeader();
             foreach ($arrUsers as $objSingleGroup) {
                 $strAction = "";

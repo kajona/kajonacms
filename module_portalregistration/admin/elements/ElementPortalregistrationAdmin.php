@@ -58,7 +58,7 @@ class ElementPortalregistrationAdmin extends ElementAdmin implements AdminElemen
     public function getAdminForm() {
         $objForm = parent::getAdminForm();
 
-        $arrGroups = UserGroup::getObjectList();
+        $arrGroups = UserGroup::getObjectListFiltered();
         $arrGroupsDD = array();
         foreach($arrGroups as $objOneGroup) {
             if($objOneGroup->getStrSubsystem() == "kajona") {

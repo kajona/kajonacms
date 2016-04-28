@@ -167,7 +167,7 @@ class GuestbookPortal extends PortalController implements PortalInterface
             $objMessageHandler = new MessagingMessagehandler();
 
             $arrGroups = array();
-            $allGroups = UserGroup::getObjectList();
+            $allGroups = UserGroup::getObjectListFiltered();
             foreach ($allGroups as $objOneGroup) {
                 if (Rights::getInstance()->checkPermissionForGroup($objOneGroup->getSystemid(), Rights::$STR_RIGHT_EDIT, $this->getObjModule()->getSystemid())) {
                     $arrGroups[] = $objOneGroup;

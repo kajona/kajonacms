@@ -122,7 +122,7 @@ class SystemtaskPermissions extends SystemtaskBase implements AdminSystemtaskInt
         $objForm = new AdminFormgenerator($strFormName, new SystemCommon());
 
         $arrGroups = array();
-        foreach (UserGroup::getObjectList() as $objOneGroup) {
+        foreach (UserGroup::getObjectListFiltered() as $objOneGroup) {
             $arrGroups[$objOneGroup->getSystemid()] = $objOneGroup->getStrDisplayName();
         }
 

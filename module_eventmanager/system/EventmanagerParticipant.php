@@ -273,7 +273,7 @@ class EventmanagerParticipant extends \Kajona\System\System\Model implements \Ka
         $objMessageHandler = new MessagingMessagehandler();
 
         $arrGroups = array();
-        $allGroups = UserGroup::getObjectList();
+        $allGroups = UserGroup::getObjectListFiltered();
         foreach($allGroups as $objOneGroup) {
             if(Rights::getInstance()->checkPermissionForGroup($objOneGroup->getSystemid(), Rights::$STR_RIGHT_EDIT, $this->getSystemid()))
                 $arrGroups[] = $objOneGroup;
