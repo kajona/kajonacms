@@ -70,7 +70,7 @@ class ElementNavigationAdmin extends ElementAdmin implements AdminElementInterfa
         $objForm = parent::getAdminForm();
 
         $arrNavigationsDropdown = array();
-        foreach(NavigationTree::getObjectList() as $objOneNavigation)
+        foreach(NavigationTree::getObjectListFiltered() as $objOneNavigation)
             $arrNavigationsDropdown[$objOneNavigation->getSystemid()] = $objOneNavigation->getStrDisplayName();
         $objForm->getField("repo")->setArrKeyValues($arrNavigationsDropdown);
 

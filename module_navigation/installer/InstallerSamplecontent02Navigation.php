@@ -40,7 +40,7 @@ class InstallerSamplecontent02Navigation implements SamplecontentInstallerInterf
      */
     public function isInstalled()
     {
-        return NavigationTree::getObjectCount() > 0;
+        return NavigationTree::getObjectCountFiltered() > 0;
     }
 
     /**

@@ -109,7 +109,7 @@ class InstallerNavigation extends InstallerBase implements InstallerRemovableInt
         }
 
         /** @var NavigationTree $objOneObject */
-        foreach(NavigationTree::getObjectList() as $objOneObject) {
+        foreach(NavigationTree::getObjectListFiltered() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
             if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";

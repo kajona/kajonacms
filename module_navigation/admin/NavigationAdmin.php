@@ -71,9 +71,9 @@ class NavigationAdmin extends AdminSimple implements AdminInterface {
         //Decide, whether to return the list of navigation or the layer of a navigation
         if($this->getSystemid() == "" || $this->getSystemid() == $this->getObjModule()->getSystemid()) {
 
-            $objIterator = new ArraySectionIterator(NavigationTree::getObjectCount(SystemModule::getModuleIdByNr(_navigation_modul_id_)));
+            $objIterator = new ArraySectionIterator(NavigationTree::getObjectCountFiltered(null, SystemModule::getModuleIdByNr(_navigation_modul_id_)));
             $objIterator->setPageNumber($this->getParam("pv"));
-            $objIterator->setArraySection(NavigationTree::getObjectList("", $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
+            $objIterator->setArraySection(NavigationTree::getObjectListFiltered(null, "", $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
             return $this->renderList($objIterator);
 
         }
