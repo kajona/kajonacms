@@ -140,7 +140,7 @@ class InstallerNews extends InstallerBase implements InstallerRemovableInterface
         }
 
         /** @var NewsNews $objOneObject */
-        foreach(NewsNews::getObjectList() as $objOneObject) {
+        foreach(NewsNews::getObjectListFiltered() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
             if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";

@@ -45,7 +45,7 @@ class InstallerSamplecontentNews implements SamplecontentInstallerInterface
      */
     public function isInstalled()
     {
-        return NewsNews::getObjectCount() > 0;
+        return NewsNews::getObjectCountFiltered() > 0;
     }
 
     /**

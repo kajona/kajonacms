@@ -274,7 +274,7 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
                     $strReturn .= $this->objToolkit->formInputDropdown("languageset_language", $arrDropdown, $this->getLang("commons_language_field"));
 
 
-                    $arrNews = NewsNews::getObjectList();
+                    $arrNews = NewsNews::getObjectListFiltered();
                     $arrDropdown = array();
                     foreach ($arrNews as $objOneNews) {
                         if (LanguagesLanguageset::getLanguagesetForSystemid($objOneNews->getSystemid()) == null) {
@@ -406,7 +406,7 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
     {
         $strReturn = "";
         if ($this->getObjModule()->rightView()) {
-            $arrNews = NewsNews::getObjectList();
+            $arrNews = NewsNews::getObjectListFiltered();
             $strReturn .= "<newslist>\n";
             foreach ($arrNews as $objOneNews) {
                 if ($objOneNews->rightView()) {
