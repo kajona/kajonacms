@@ -140,10 +140,11 @@ class UserAdmin extends AdminSimple implements AdminInterface
         $strReturn .= $this->objToolkit->formInputHidden("doFilter", "1");
         $strReturn .= $this->objToolkit->formClose();
 
-        $objIterator = new ArraySectionIterator(UserUser::getObjectCount($this->objSession->getSession($this->STR_USERFILTER_SESSION_KEY)));
+        $objIterator = new ArraySectionIterator(UserUser::getObjectCountFiltered(null, $this->objSession->getSession($this->STR_USERFILTER_SESSION_KEY)));
         $objIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objIterator->setArraySection(
-            UserUser::getObjectList(
+            UserUser::getObjectListFiltered(
+                null,
                 $this->objSession->getSession($this->STR_USERFILTER_SESSION_KEY),
                 $objIterator->calculateStartPos(),
                 $objIterator->calculateEndPos()

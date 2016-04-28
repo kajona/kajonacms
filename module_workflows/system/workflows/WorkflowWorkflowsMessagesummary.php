@@ -92,7 +92,7 @@ class WorkflowWorkflowsMessagesummary implements WorkflowsHandlerInterface
     {
 
         //loop all messages by user
-        foreach (UserUser::getObjectList() as $objOneUser) {
+        foreach (UserUser::getObjectListFiltered() as $objOneUser) {
 
             //skip inactive users
             if ($objOneUser->getIntActive() == 0) {

@@ -134,7 +134,7 @@ class ElementUserlistPortal extends ElementPortal implements PortalElementInterf
             }
         }
         else {
-            $arrUser = UserUser::getObjectList();
+            $arrUser = UserUser::getObjectListFiltered();
         }
 
         //filter against inactive?

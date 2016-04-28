@@ -305,6 +305,31 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
      */
     public static function getObjectList($strUsernameFilter = "", $intStart = null, $intEnd = null)
     {
+        return self::getObjectListFiltered(null, $strUsernameFilter, $intStart, $intEnd);
+    }
+
+    /**
+     * Counts the number of users created
+     *
+     * @param string $strUsernameFilter
+     *
+     * @return int
+     */
+    public static function getObjectCount($strUsernameFilter = "")
+    {
+        return self::getObjectCountFiltered(null, $strUsernameFilter);
+    }
+
+    /**
+     * @param FilterBase|null $objFilter
+     * @param string $strUsernameFilter
+     * @param null $intStart
+     * @param null $intEnd
+     *
+     * @return UserUser[]
+     */
+    public static function getObjectListFiltered(FilterBase $objFilter = null, $strUsernameFilter = "", $intStart = null, $intEnd = null)
+    {
         $strDbPrefix = _dbprefix_;
         $arrParams = array();
 
@@ -339,13 +364,12 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
     }
 
     /**
-     * Counts the number of users created
-     *
+     * @param FilterBase|null $objFilter
      * @param string $strUsernameFilter
      *
      * @return int
      */
-    public static function getObjectCount($strUsernameFilter = "")
+    public static function getObjectCountFiltered(FilterBase $objFilter = null, $strUsernameFilter = "")
     {
         $strDbPrefix = _dbprefix_;
         $arrParams = array();
@@ -371,6 +395,7 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
         return $arrRow["COUNT(*)"];
     }
+
 
     /**
      * Fetches all available active users with the given username an returns them in an array
