@@ -368,7 +368,7 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
         $strReturn = "";
         if ($this->getObjModule()->rightView()) {
             /** @var NewsCategory[] $arrCategories */
-            $arrCategories = NewsCategory::getObjectList();
+            $arrCategories = NewsCategory::getObjectListFiltered();
             $strReturn .= "<categories>\n";
             foreach ($arrCategories as $objOneCategory) {
                 if ($objOneCategory->rightView()) {

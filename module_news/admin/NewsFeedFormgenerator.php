@@ -30,7 +30,7 @@ class NewsFeedFormgenerator extends AdminFormgenerator  {
         parent::generateFieldsFromObject();
 
         /** @var NewsCategory[] $arrNewsCats */
-        $arrNewsCats = NewsCategory::getObjectList();
+        $arrNewsCats = NewsCategory::getObjectListFiltered();
         $arrCatsDD = array();
         foreach($arrNewsCats as $objOneCat) {
             $arrCatsDD[$objOneCat->getSystemid()] = $objOneCat->getStrTitle();

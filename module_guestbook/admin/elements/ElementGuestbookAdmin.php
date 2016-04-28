@@ -62,7 +62,7 @@ class ElementGuestbookAdmin extends ElementAdmin implements AdminElementInterfac
     {
         $objForm = parent::getAdminForm();
 
-        $objGuestbooks = GuestbookGuestbook::getObjectList();
+        $objGuestbooks = GuestbookGuestbook::getObjectListFiltered();
         $arrGuestbooks = array();
         foreach ($objGuestbooks as $objOneGuestbook) {
             $arrGuestbooks[$objOneGuestbook->getSystemid()] = $objOneGuestbook->getStrDisplayName();

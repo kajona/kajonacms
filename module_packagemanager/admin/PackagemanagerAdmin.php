@@ -676,7 +676,7 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
 
         PackagemanagerTemplate::syncTemplatepacks();
 
-        $objArraySectionIterator = new ArraySectionIterator(PackagemanagerTemplate::getObjectCount());
+        $objArraySectionIterator = new ArraySectionIterator(PackagemanagerTemplate::getObjectCountFiltered());
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(
             PackagemanagerTemplate::getObjectList("", $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos())

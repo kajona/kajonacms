@@ -122,7 +122,7 @@ class WorkflowsAdmin extends AdminSimple implements AdminInterface
     protected function actionList()
     {
 
-        $objIterator = new ArraySectionIterator(WorkflowsWorkflow::getObjectCount());
+        $objIterator = new ArraySectionIterator(WorkflowsWorkflow::getObjectCountFiltered());
         $objIterator->setPageNumber($this->getParam("pv"));
         $objIterator->setArraySection(WorkflowsWorkflow::getAllworkflows($objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
@@ -508,7 +508,7 @@ class WorkflowsAdmin extends AdminSimple implements AdminInterface
 
         $strReturn = $this->objToolkit->formHeadline($this->getLang("action_list_handlers"));
 
-        $objIterator = new ArraySectionIterator(WorkflowsHandler::getObjectCount());
+        $objIterator = new ArraySectionIterator(WorkflowsHandler::getObjectCountFiltered());
         $objIterator->setPageNumber($this->getParam("pv"));
         $objIterator->setArraySection(WorkflowsHandler::getObjectList("", $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 

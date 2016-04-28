@@ -49,7 +49,7 @@ class ElementFaqsAdmin extends ElementAdmin implements AdminElementInterface
     {
         $objForm = parent::getAdminForm();
 
-        $arrRawCats = FaqsCategory::getObjectList();
+        $arrRawCats = FaqsCategory::getObjectListFiltered();
         $arrCats = array();
         //addd an "i want all" cat ;)
         $arrCats["0"] = $this->getLang("commons_all_categories");

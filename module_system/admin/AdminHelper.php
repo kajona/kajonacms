@@ -158,7 +158,7 @@ class AdminHelper
     public static function flushActionNavigationCache()
     {
 
-        $arrAspects = SystemAspect::getObjectList();
+        $arrAspects = SystemAspect::getObjectListFiltered();
 
         foreach (SystemModule::getModulesInNaviAsArray() as $arrOneModule) {
             $objOneModule = SystemModule::getModuleByName($arrOneModule["module_name"]);

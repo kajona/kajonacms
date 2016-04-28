@@ -128,7 +128,7 @@ class ElementSearchAdmin extends ElementAdmin implements AdminElementInterface {
     public function getAdminForm() {
         $objForm = parent::getAdminForm();
 
-        $arrRawQueries = SearchSearch::getObjectList();
+        $arrRawQueries = SearchSearch::getObjectListFiltered();
 
         $arrQueries = array();
         foreach ($arrRawQueries as $objOneQuery) {

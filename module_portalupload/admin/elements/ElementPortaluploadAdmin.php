@@ -44,7 +44,7 @@ class ElementPortaluploadAdmin extends ElementAdmin implements AdminElementInter
 
     public function getAdminForm() {
 
-        $arrDlArchives = MediamanagerRepo::getObjectList();
+        $arrDlArchives = MediamanagerRepo::getObjectListFiltered();
         $arrDlDD = array();
         if(count($arrDlArchives) > 0) {
             foreach($arrDlArchives as $objOneArchive) {

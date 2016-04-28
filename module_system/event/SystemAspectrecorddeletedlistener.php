@@ -36,9 +36,9 @@ class SystemAspectrecorddeletedlistener implements GenericeventListenerInterface
         if($strSourceClass == 'Kajona\System\System\SystemAspect') {
 
             //if we have just one aspect remaining, set this one as default
-            if(SystemAspect::getObjectCount() == 1) {
+            if(SystemAspect::getObjectCountFiltered() == 1) {
                 /** @var SystemAspect[] $arrObjAspects */
-                $arrObjAspects = SystemAspect::getObjectList();
+                $arrObjAspects = SystemAspect::getObjectListFiltered();
                 $objOneAspect = $arrObjAspects[0];
                 $objOneAspect->setBitDefault(1);
                 return $objOneAspect->updateObjectToDb();

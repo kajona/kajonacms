@@ -146,7 +146,7 @@ class SystemAdmin extends AdminSimple implements AdminInterface
     protected function actionList()
     {
 
-        $objIterator = new ArraySectionIterator(SystemModule::getObjectCount());
+        $objIterator = new ArraySectionIterator(SystemModule::getObjectCountFiltered());
         $objIterator->setPageNumber($this->getParam("pv"));
         $objIterator->setArraySection(SystemModule::getAllModules($objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
@@ -275,7 +275,7 @@ class SystemAdmin extends AdminSimple implements AdminInterface
         $strReturn .= $this->objToolkit->formHeadline($objModule->getStrName());
         $arrAspectsSet = explode(",", $objModule->getStrAspect());
         $strReturn .= $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "saveModuleAspect"));
-        $arrAspects = SystemAspect::getObjectList();
+        $arrAspects = SystemAspect::getObjectListFiltered();
         foreach ($arrAspects as $objOneAspect) {
             $strReturn .= $this->objToolkit->formInputCheckbox("aspect_" . $objOneAspect->getSystemid(), $objOneAspect->getStrName(), in_array($objOneAspect->getSystemid(), $arrAspectsSet));
         }
@@ -1114,7 +1114,7 @@ JS;
      */
     protected function actionAspects()
     {
-        $objIterator = new ArraySectionIterator(SystemAspect::getObjectCount());
+        $objIterator = new ArraySectionIterator(SystemAspect::getObjectCountFiltered());
         $objIterator->setPageNumber($this->getParam("pv"));
         $objIterator->setArraySection(SystemAspect::getObjectList("", $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
         return $this->renderList($objIterator, false, "aspectList");

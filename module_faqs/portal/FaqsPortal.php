@@ -47,7 +47,7 @@ class FaqsPortal extends PortalController implements PortalInterface
         //load categories
         $arrCategories = array();
         if ($this->arrElementData["faqs_category"] == "0") {
-            $arrCategories = FaqsCategory::getObjectList();
+            $arrCategories = FaqsCategory::getObjectListFiltered();
         } else {
             $arrCategories[] = new FaqsCategory($this->arrElementData["faqs_category"]);
         }

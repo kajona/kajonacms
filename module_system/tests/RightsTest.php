@@ -320,7 +320,7 @@ class RightsTest extends Testbase
         $strGroupId = generateSystemid();
 
         //fill caches
-        SystemAspect::getObjectList();
+        SystemAspect::getObjectListFiltered();
 
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow("SELECT * FROM " . _dbprefix_ . "system_right WHERE right_id = ?", array($objAspect->getSystemid()), 0, false);
         $this->assertTrue(!in_array($strGroupId, explode(",", $arrRow["right_view"])));
@@ -332,7 +332,7 @@ class RightsTest extends Testbase
         $this->assertTrue(in_array($strGroupId, explode(",", $arrRow["right_view"])));
         $this->assertTrue(Carrier::getInstance()->getObjRights()->checkPermissionForGroup($strGroupId, Rights::$STR_RIGHT_VIEW, $objAspect->getSystemid()));
 
-        SystemAspect::getObjectList();
+        SystemAspect::getObjectListFiltered();
 
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow("SELECT * FROM " . _dbprefix_ . "system_right WHERE right_id = ?", array($objAspect->getSystemid()), 0, false);
         $this->assertTrue(in_array($strGroupId, explode(",", $arrRow["right_view"])));

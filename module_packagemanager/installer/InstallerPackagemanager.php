@@ -48,7 +48,7 @@ class InstallerPackagemanager extends InstallerBase implements InstallerInterfac
         $strReturn .= "Initial templatepack sync...\n";
         PackagemanagerTemplate::syncTemplatepacks();
 
-        $arrPacks = PackagemanagerTemplate::getObjectList();
+        $arrPacks = PackagemanagerTemplate::getObjectListFiltered();
         if(count($arrPacks) > 0) {
             //search the default package
             foreach($arrPacks as $objOnePack) {

@@ -56,7 +56,7 @@ class ElementDownloadsAdmin extends ElementAdmin implements AdminElementInterfac
     public function getAdminForm()
     {
         //Load all archives
-        $arrObjArchs = MediamanagerRepo::getObjectList();
+        $arrObjArchs = MediamanagerRepo::getObjectListFiltered();
         $arrArchives = array();
         foreach ($arrObjArchs as $objOneArchive) {
             $arrArchives[$objOneArchive->getSystemid()] = $objOneArchive->getStrDisplayName();

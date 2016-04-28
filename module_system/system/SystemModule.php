@@ -207,7 +207,7 @@ class SystemModule extends Model implements ModelInterface, AdminListableInterfa
             if (count(Database::getInstance()->getTables()) == 0) {
                 return array();
             }
-            self::$arrModules = parent::getObjectList();
+            self::$arrModules = parent::getObjectListFiltered();
         }
 
         if ($intStart === null || $intEnd === null) {

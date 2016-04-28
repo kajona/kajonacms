@@ -34,7 +34,7 @@ class InstallerSamplecontentVotings implements SamplecontentInstallerInterface
      */
     public function isInstalled()
     {
-        return VotingsVoting::getObjectCount() > 0;
+        return VotingsVoting::getObjectCountFiltered() > 0;
     }
 
     public function install()

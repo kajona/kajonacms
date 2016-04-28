@@ -43,7 +43,7 @@ class InstallerSamplecontentGuestbook implements SamplecontentInstallerInterface
      */
     public function isInstalled()
     {
-        return GuestbookGuestbook::getObjectCount() > 0;
+        return GuestbookGuestbook::getObjectCountFiltered() > 0;
     }
 
     /**
