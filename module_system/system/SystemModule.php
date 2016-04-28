@@ -246,11 +246,26 @@ class SystemModule extends Model implements ModelInterface, AdminListableInterfa
      *
      * @return int
      * @static
+     * @deprecated 
      */
     public static function getObjectCount($strPrevid = "")
     {
+        return self::getObjectCountFiltered(null, $strPrevid);
+    }
+
+    /**
+     * Counts the number of modules available
+     *
+     * @param string $strPrevid
+     *
+     * @return int
+     * @static
+     */
+    public static function getObjectCountFiltered(FilterBase $objFilter = null, $strPrevid = "")
+    {
         return count(self::loadModuleData());
     }
+
 
     /**
      * Tries to look up a module using the given name. If the module

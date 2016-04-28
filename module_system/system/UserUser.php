@@ -314,6 +314,7 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
      * @param string $strUsernameFilter
      *
      * @return int
+     * @deprecated 
      */
     public static function getObjectCount($strUsernameFilter = "")
     {
