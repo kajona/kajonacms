@@ -382,30 +382,11 @@ class Filesystem
 
         $strFolder = $this->prependRealpath($strFolder);
 
-        if ($bitRecursive) {
-            $arrRecursiveFolders = explode("/", $strFolder);
+        if (!is_dir($strFolder)) {
+            $bitReturn = mkdir($strFolder, 0777, $bitRecursive);
 
-            $strFolders = "";
-            foreach ($arrRecursiveFolders as $strOneFolder) {
-                if ($bitReturn === true) {
-
-                    $strTestfolder = $strFolders;
-
-                    $strFolders .= "/".$strOneFolder;
-                    if (!is_dir($strFolders)) {
-
-                        if ($bitThrowExceptionOnError && !is_writable($strTestfolder)) {
-                            throw new Exception("Folder ".$strTestfolder." is not writable", Exception::$level_FATALERROR);
-                        }
-
-                        $bitReturn = $this->folderCreate($strFolders, false);
-                    }
-                }
-            }
-        }
-        else {
-            if (!is_dir($strFolder)) {
-                $bitReturn = mkdir($strFolder, 0777);
+            if(!$bitReturn && $bitThrowExceptionOnError) {
+                throw new Exception("Error creating folder ".$strFolder.", maybe the target is not writable?", Exception::$level_FATALERROR);
             }
         }
 

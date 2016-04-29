@@ -12,7 +12,7 @@ class TemplateIncludeTest extends Testbase
     {
 
         $objFilesystem = new Filesystem();
-        $objFilesystem->folderCreate("/templates/default/tpl/test", true);
+        $objFilesystem->folderCreate("/templates/default/tpl/test", true, true);
 
         file_put_contents(_realpath_ . "/templates/default/tpl/test/test1.tpl", "
             page template
