@@ -11,7 +11,7 @@ describe('login', function () {
         browser.get('index.php?admin=1');
 
         var loginPage = new LoginPage(browser.driver);
-        loginPage.login("artemeonadmin", "admin0815");
+        loginPage.login("test", "test123");
 
         // check whether login was successful
         expect(browser.driver.findElement(by.id('moduleTitle')).getText()).toEqual("Übersicht");
