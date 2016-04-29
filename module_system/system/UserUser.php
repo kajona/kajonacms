@@ -295,33 +295,6 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
 
 
     /**
-     * Fetches all available users an returns them in an array
-     *
-     * @param string $strUsernameFilter
-     * @param bool|int $intStart
-     * @param bool|int $intEnd
-     *
-     * @return UserUser[]
-     */
-    public static function getObjectList($strUsernameFilter = "", $intStart = null, $intEnd = null)
-    {
-        return self::getObjectListFiltered(null, $strUsernameFilter, $intStart, $intEnd);
-    }
-
-    /**
-     * Counts the number of users created
-     *
-     * @param string $strUsernameFilter
-     *
-     * @return int
-     * @deprecated 
-     */
-    public static function getObjectCount($strUsernameFilter = "")
-    {
-        return self::getObjectCountFiltered(null, $strUsernameFilter);
-    }
-
-    /**
      * @param FilterBase|null $objFilter
      * @param string $strUsernameFilter
      * @param null $intStart

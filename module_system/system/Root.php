@@ -397,44 +397,6 @@ abstract class Root
         }
     }
 
-
-    /**
-     * A generic approach to count the number of object currently available.
-     * This method is only a simple approach to determine the number of instances in the
-     * database, if you need more specific counts, overwrite this method or add your own
-     * implementation to the derived class.
-     *
-     * @param string $strPrevid
-     *
-     * @return int
-     *
-     * @deprecated use getObjectCountFiltered instead
-     */
-    public static function getObjectCount($strPrevid = "")
-    {
-        return self::getObjectCountFiltered(null, $strPrevid);
-    }
-
-    /**
-     * A generic approach to load a list of objects currently available.
-     * This method is only a simple approach to determine the instances in the
-     * database, if you need more specific loaders, overwrite this method or add your own
-     * implementation to the derived class.
-     *
-     * @param string $strPrevid
-     * @param null|int $intStart
-     * @param null|int $intEnd
-     *
-     * @return self[]
-     *
-     * @deprecated use getObjectListFiltered instead
-     */
-    public static function getObjectList($strPrevid = "", $intStart = null, $intEnd = null)
-    {
-        return self::getObjectListFiltered(null, $strPrevid, $intStart, $intEnd);
-    }
-
-
     /**
      * A generic approach to load a list of objects currently available.
      * This list can be filtered via the given filterObject.

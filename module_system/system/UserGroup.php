@@ -169,23 +169,6 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface
 
 
     /**
-     * @deprecated
-     */
-    public static function getObjectList($strFilter = "", $intStart = null, $intEnd = null)
-    {
-        return self::getObjectListFiltered(null, $strFilter, $intStart, $intEnd);
-    }
-
-    /**
-     * @deprecated
-     */
-    public static function getObjectCount($strFilter = "")
-    {
-        return self::getObjectCountFiltered(null, $strFilter);
-    }
-
-
-    /**
      * Returns all groups from database
      *
      * @param string $strFilter

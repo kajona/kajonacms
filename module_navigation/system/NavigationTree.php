@@ -90,22 +90,6 @@ class NavigationTree extends Model implements ModelInterface, AdminListableInter
     }
 
     /**
-     * @deprecated
-     */
-    public static function getObjectList($strPrevid = "", $intStart = false, $intEnd = false)
-    {
-        return self::getObjectListFiltered(null, $strPrevid, $intStart, $intEnd);
-    }
-
-    /**
-     * @deprecated
-     */
-    public static function getObjectCount($strPrevid = "")
-    {
-        return self::getObjectCountFiltered(null, $strPrevid);
-    }
-
-    /**
      * Returns an array of all navigation-trees available
      *
      * @param string $strPrevid

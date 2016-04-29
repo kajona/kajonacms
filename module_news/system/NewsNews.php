@@ -247,21 +247,6 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
         return $this->getStrTitle();
     }
 
-    /**
-     * @deprecated 
-     */
-    public static function getObjectList($strFilter = "", $intStart = null, $intEnd = null, \Kajona\System\System\Date $objStartDate = null, \Kajona\System\System\Date $objEndDate = null) {
-        return self::getObjectListFiltered(null, $strFilter, $intStart, $intEnd, $objStartDate, $objEndDate);
-    }
-
-
-    /**
-     * @deprecated
-     */
-    public static function getObjectCount($strFilter = "", \Kajona\System\System\Date $objStartDate = null, \Kajona\System\System\Date $objEndDate = null) {
-        return self::getObjectCountFiltered(null, $strFilter, $objStartDate, $objEndDate);
-    }
-
 
     /**
      * Loads all news from the database
