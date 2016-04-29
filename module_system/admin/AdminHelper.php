@@ -116,6 +116,10 @@ class AdminHelper
             }
 
             $objAdminInstance = $objModule->getAdminInstanceOfConcreteModule();
+            if($objAdminInstance == null) {
+                return array();
+            }
+            
             $arrItems = $objAdminInstance->getOutputModuleNavi();
             $arrItems = array_merge($arrItems, $objAdminInstance->getModuleRightNaviEntry());
             $arrFinalItems = array();

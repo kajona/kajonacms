@@ -611,7 +611,9 @@ class UserAdmin extends AdminSimple implements AdminInterface
                 continue;
             }
 
-            $arrModules[$objOneModule->getStrName()] = $objOneModule->getAdminInstanceOfConcreteModule()->getLang("modul_titel");
+            if($objOneModule->getAdminInstanceOfConcreteModule() !== null) {
+                $arrModules[$objOneModule->getStrName()] = $objOneModule->getAdminInstanceOfConcreteModule()->getLang("modul_titel");
+            }
         }
 
 
