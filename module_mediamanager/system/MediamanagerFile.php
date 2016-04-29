@@ -322,6 +322,15 @@ class MediamanagerFile extends \Kajona\System\System\Model implements \Kajona\Sy
         return $this->getStrName();
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function deleteObject()
+    {
+        return $this->deleteObjectFromDatabase();
+    }
+
+
     public function deleteObjectFromDatabase()
     {
 
