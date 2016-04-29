@@ -19,6 +19,7 @@ use Kajona\System\Admin\AdminInterface;
 use Kajona\System\Admin\AdminSimple;
 use Kajona\System\Admin\Formentries\FormentryCheckbox;
 use Kajona\System\Admin\Formentries\FormentryHeadline;
+use Kajona\System\Admin\Formentries\FormentryPlaintext;
 use Kajona\System\Admin\Formentries\FormentryText;
 use Kajona\System\System\AdminskinHelper;
 use Kajona\System\System\ArrayIterator;
@@ -38,7 +39,6 @@ use Kajona\System\System\Resourceloader;
 use Kajona\System\System\ResponseObject;
 use Kajona\System\System\Root;
 use Kajona\System\System\StringUtil;
-use Kajona\System\System\SystemCommon;
 use Kajona\System\System\SystemSetting;
 
 /**
@@ -487,13 +487,11 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
 
         if ($objManager->validatePackage($strFile)) {
 
-            if (\Kajona\System\System\StringUtil::indexOf($strFile, "/project") !== false) {
+            if (StringUtil::indexOf($strFile, "/project") !== false) {
                 $objHandler = $objManager->getPackageManagerForPath($strFile);
                 $objHandler->move2Filesystem();
 
-                Classloader::getInstance()->flushCache();
-                Reflection::flushCache();
-                Resourceloader::getInstance()->flushCache();
+                Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_CLASSLOADER);
                 CacheManager::getInstance()->flushCache(null, CacheManager::NS_BOOTSTRAP);
                 //reload the module-ids
                 Classloader::getInstance()->bootstrapIncludeModuleIds();
@@ -729,10 +727,16 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
     protected function renderAdditionalActions(Model $objListEntry)
     {
         $arrReturn = array();
-        if($objListEntry instanceof PackagemanagerTemplate) {
+        if ($objListEntry instanceof PackagemanagerTemplate) {
             if ($objListEntry->getMetadata() != null && !$objListEntry->getMetadata()->getBitIsPhar()) {
                 $arrReturn[] = $this->objToolkit->listButton(
                     Link::getLinkAdmin($this->getArrModule("modul"), "downloadAsPhar", "&package=".$objListEntry->getMetadata()->getStrTitle(), $this->getLang("package_downloadasphar"), $this->getLang("package_downloadasphar"), "icon_phar")
+                );
+            }
+
+            if ($objListEntry->getStrName() !== "default") {
+                $arrReturn[] = $this->objToolkit->listButton(
+                    Link::getLinkAdmin($this->getArrModule("modul"), "addTemplates", "&systemid=".$objListEntry->getSystemid(), $this->getLang("action_add_templates"), $this->getLang("action_add_templates"), "icon_new")
                 );
             }
         }
@@ -771,7 +775,7 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
     protected function renderDeleteAction(ModelInterface $objListEntry)
     {
         if ($objListEntry->rightDelete() && $this->getObjModule()->rightDelete()) {
-            if (SystemSetting::getConfigValue("_packagemanager_defaulttemplate_") == $objListEntry->getStrName()) {
+            if (SystemSetting::getConfigValue("_packagemanager_defaulttemplate_") == $objListEntry->getStrName() || $objListEntry->getStrName() === "default") {
                 return $this->objToolkit->listButton(AdminskinHelper::getAdminImage("icon_deleteDisabled", $this->getLang("pack_active_no_delete")));
             }
             else {
@@ -828,6 +832,46 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
     }
 
     /**
+     * @return string
+     * @throws Exception
+     * @permissions edit
+     */
+    protected function actionAddTemplates()
+    {
+        $objPack = new PackagemanagerTemplate($this->getSystemid());
+        $objForm = $this->getPackAdminForm($objPack);
+
+
+        $objForm->addField(new FormentryPlaintext("hint"))->setStrValue($this->objToolkit->warningBox($this->getLang("add_templates_hint", array($objPack->getStrName(), _templatepath_."/".$objPack->getStrName()))));
+        $objForm->setFieldToPosition("hint", 1);
+        $objForm->removeField("pack_name");
+
+        if ($objForm->getField("pack_modules[module_pages]") !== null) {
+            $objForm->getField("pack_modules[module_pages]")->setStrValue(false);
+        }
+
+        $strReturn = $objForm->renderForm(Link::getLinkAdminHref($this->getArrModule("modul"), "addTemplateToPack"));
+        return $strReturn;
+    }
+
+    protected function actionAddTemplateToPack()
+    {
+        $objPack = new PackagemanagerTemplate($this->getSystemid());
+        $objFilesystem = new Filesystem();
+
+        $arrModules = $this->getParam("pack_modules");
+        foreach ($arrModules as $strName => $strValue) {
+            if ($strValue != "") {
+                $objFilesystem->folderCopyRecursive(Resourceloader::getInstance()->getAbsolutePathForModule($strName)."/templates/default", _templatepath_."/".$objPack->getStrName(), false);
+            }
+        }
+
+        Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_CLASSLOADER);
+        $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "listTemplates"));
+        return "";
+    }
+
+    /**
      * @param AdminFormgenerator|null $objForm
      *
      * @return string
@@ -846,9 +890,9 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
     /**
      * @return AdminFormgenerator
      */
-    private function getPackAdminForm()
+    private function getPackAdminForm($objTargetObject = null)
     {
-        $objFormgenerator = new AdminFormgenerator("pack", new SystemCommon());
+        $objFormgenerator = new AdminFormgenerator("pack", $objTargetObject);
         $objFormgenerator->addField(new FormentryText("pack", "name"))->setStrLabel($this->getLang("pack_name"))->setBitMandatory(true)->setStrValue($this->getParam("pack_name"));
         $objFormgenerator->addField(new FormentryHeadline())->setStrValue($this->getLang("pack_copy_include"));
         $arrModules = Classloader::getInstance()->getArrModules();
@@ -895,9 +939,7 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
             }
         }
 
-        Resourceloader::getInstance()->flushCache();
-        Classloader::getInstance()->flushCache();
-        Reflection::flushCache();
+        Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_CLASSLOADER);
 
         $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "listTemplates"));
         return "";
