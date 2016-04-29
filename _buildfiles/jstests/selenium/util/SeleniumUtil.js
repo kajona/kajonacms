@@ -17,6 +17,15 @@ class SeleniumUtil {
     static moveToElement(webDriver, element) {
         return webDriver.actions().mouseMove(element).perform();
     };
+
+    /**
+     * Gets the Base url
+     *
+     * @returns {string}
+     */
+    static getBaseUrl() {
+        return browser.baseUrl;
+    }
 }
 
 module.exports = SeleniumUtil;

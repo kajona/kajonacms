@@ -3,7 +3,7 @@
 /**
  * require statements
  */
-var BasePage = require('../page_object/BasePage.js');
+var BasePage = require('../pageobject/BasePage.js');
 
 /**
  *
@@ -58,4 +58,4 @@ class LoginPage extends BasePage {
 module.exports = LoginPage;
 
 //Require here ncause of require cycles
-var AdminLandingPage = require('../page_object/AdminLandingPage.js');
+var AdminLandingPage = require('../pageobject/AdminLandingPage.js');

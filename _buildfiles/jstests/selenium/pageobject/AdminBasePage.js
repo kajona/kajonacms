@@ -3,10 +3,10 @@
 /**
  * require statements
  */
-var BasePage = require('../page_object/BasePage.js');
-var LeftNavigation = require('../page_object/LeftNavigation.js');
-var TopMenu = require('../page_object/TopMenu.js');
-var MainContent = require('../page_object/MainContent.js');
+var BasePage = require('../pageobject/BasePage.js');
+var LeftNavigation = require('../pageobject/LeftNavigation.js');
+var TopMenu = require('../pageobject/TopMenu.js');
+var MainContent = require('../pageobject/MainContent.js');
 
 /**
  * 

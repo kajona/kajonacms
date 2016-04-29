@@ -3,7 +3,7 @@
 /**
  * require statements
  */
-var BasePage = require('../page_object/BasePage.js');
+var BasePage = require('../pageobject/BasePage.js');
 
 /**
  *

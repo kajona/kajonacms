@@ -3,9 +3,9 @@
 /**
  * require statements
  */
-var BasePage = require('../page_object/BasePage.js');
+var BasePage = require('../pageobject/BasePage.js');
+var LoginPage = require('../pageobject/LoginPage.js');
 var SeleniumUtil = require('../util/SeleniumUtil.js');
-var LoginPage = require('../page_object/LoginPage.js');
 
 /**
  *
@@ -62,7 +62,7 @@ class TopMenu extends BasePage {
         var context = this;
 
         return this.showUserMenu().then(function(){
-            context.element_lnkUserMenuLogOut.click().then(function(){
+            return context.element_lnkUserMenuLogOut.click().then(function(){
                 return new LoginPage(context.webDriver);
             });
         });
