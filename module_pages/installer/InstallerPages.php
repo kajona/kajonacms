@@ -121,6 +121,7 @@ class InstallerPages extends InstallerBase implements InstallerInterface {
 //            "row" => array("ElementRowAdmin.php", "ElementRowPortal.php"),
 //            "paragraph" => array("ElementParagraphAdmin.php", "ElementParagraphPortal.php"),
             "image" => array("ElementImageAdmin.php", "ElementImagePortal.php"),
+            "imagesrc" => array("ElementImagesrcAdmin.php", "ElementImagesrcPortal.php"),
             "downloads" => array("ElementDownloadsAdmin.php", "ElementDownloadsPortal.php"),
             "gallery" => array("ElementGalleryAdmin.php", "ElementGalleryPortal.php"),
             "galleryRandom" => array("ElementGalleryRandomAdmin.php", "ElementGalleryPortal.php"),

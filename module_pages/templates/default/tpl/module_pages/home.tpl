@@ -88,7 +88,7 @@
                         </div>
 
                         <div class="col-sm-3">
-                            %%imageright_image%%
+                            <img src="[img,%%imageright_imagesrc%%,400,600]" />
                         </div>
                     </div>
 
@@ -109,7 +109,7 @@
                         </div>
 
                         <div class="col-sm-4">
-                            %%imageright_image%%
+                            <img src="[img,%%imageright_imagesrc%%,300,600]" />
                         </div>
                     </div>
 
