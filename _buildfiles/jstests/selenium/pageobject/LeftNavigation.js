@@ -11,12 +11,8 @@ var SeleniumWaitHelper = require('../util/SeleniumWaitHelper.js');
  */
 class LeftNavigation extends BasePage {
 
-    /**
-     *
-     * @param {webdriver.WebDriver} webDriver
-     */
-    constructor(webDriver) {
-        super(webDriver);
+    constructor() {
+        super();
 
         this._NAVIGATION = ".//*[@id='moduleNavigation']";
         this._NAVIGATION_HAMBURGER = ".//*[@data-toggle='offcanvas']";//visible when page width < 932px

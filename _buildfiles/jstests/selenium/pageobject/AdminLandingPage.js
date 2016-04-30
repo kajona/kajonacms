@@ -6,17 +6,12 @@
 var AdminBasePage = require('../pageobject/AdminBasePage.js');
 
 /**
- *
- * @param {webdriver.WebDriver} webDriver
- * @constructor
+ * 
  */
 class AdminLandingPage extends AdminBasePage {
-    /**
-     *
-     * @param {webdriver.WebDriver} webDriver
-     */
-    constructor(webDriver) {
-        super(webDriver);
+
+    constructor() {
+        super();
     }
 }
 

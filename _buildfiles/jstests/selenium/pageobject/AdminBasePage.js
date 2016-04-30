@@ -5,7 +5,6 @@
  */
 var BasePage = require('../pageobject/BasePage.js');
 var LeftNavigation = require('../pageobject/LeftNavigation.js');
-var TopMenu = require('../pageobject/TopMenu.js');
 var MainContent = require('../pageobject/MainContent.js');
 
 /**
@@ -14,21 +13,18 @@ var MainContent = require('../pageobject/MainContent.js');
  * @constructor
  */
 class AdminBasePage extends BasePage {
-    /**
-     *
-     * @param {webdriver.WebDriver} webDriver
-     */
-    constructor(webDriver) {
-        super(webDriver);
+
+    constructor() {
+        super();
 
         /** @type {LeftNavigation} */
-        this._leftNavigation = new LeftNavigation(webDriver);
+        this._leftNavigation = new LeftNavigation();
 
         /** @type {TopMenu} */
-        this._topMenu = new TopMenu(webDriver);
+        this._topMenu = new TopMenu();
 
         /** @type {MainContent} */
-        this._mainContent = new MainContent(webDriver);
+        this._mainContent = new MainContent();
     }
 
     /**
@@ -59,3 +55,5 @@ class AdminBasePage extends BasePage {
 
 /** @type {AdminBasePage} */
 module.exports = AdminBasePage;
+
+var TopMenu = require('../pageobject/TopMenu.js');//put here due to cycle!!

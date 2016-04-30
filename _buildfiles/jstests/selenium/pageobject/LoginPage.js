@@ -4,18 +4,15 @@
  * require statements
  */
 var BasePage = require('../pageobject/BasePage.js');
+var SeleniumUtil = require('../util/SeleniumUtil');
 
 /**
  *
  */
 class LoginPage extends BasePage {
 
-    /**
-     *
-     * @param {webdriver.WebDriver} webDriver
-     */
-    constructor(webDriver) {
-        super(webDriver);
+    constructor() {
+        super();
 
         this._LOGIN_CONTAINER = "//*[@id='loginContainer_content']";
         this._LOGIN_INPUT_USERNAME = this._LOGIN_CONTAINER + "//*[@id='name']";
@@ -34,6 +31,16 @@ class LoginPage extends BasePage {
         // this.element_loginErrorBox = this.webDriver.findElement(by.xpath(LoginPage.LOGIN_ERROR_BOX));
     }
 
+    /**
+     *
+     * @returns {Promise<LoginPage>}
+     */
+    static getPage() {
+        return SeleniumUtil.gotToUrl("index.php?admin=1").then(function(){
+            return new LoginPage();
+        });
+    }
+
 
     /**
      * Logins the user.
@@ -44,12 +51,11 @@ class LoginPage extends BasePage {
      * @returns {Promise<LoginPage>}
      */
     login(strUserName, strPassword) {
-        var context = this;
 
         this._element_userName.sendKeys(strUserName);
         this._element_password.sendKeys(strPassword);
         return this._element_loginBtn.click().then(function(){
-            return new AdminLandingPage(context.webDriver);
+            return new AdminLandingPage();
         });
     };
 }
