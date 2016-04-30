@@ -771,7 +771,7 @@ abstract class ElementAdmin extends AdminController implements SearchPortalobjec
     public function getContentLang()
     {
         $this->loadElementData();
-        return $this->arrElementData["page_element_ph_language"];
+        return isset($this->arrElementData["page_element_ph_language"]) ? $this->arrElementData["page_element_ph_language"] : "";
     }
 
     /**
