@@ -69,6 +69,15 @@ abstract class OrmBase
     }
 
     /**
+     * Used to reset the internal flag detecting if logical deletions are present, or not
+     * @internal
+     */
+    public static function resetBitLogicalDeleteAvailable()
+    {
+        self::$bitLogcialDeleteAvailable = null;
+    }
+
+    /**
      * @return Root|VersionableInterface
      */
     protected function getObjObject()
