@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://apidocs.kajona.de/xsd/package.xsd"
+        >
+    <title>languageredirect</title>
+    <description>Redirects the visitor to the current page in another language. This is useful if you want to have the current site being listed in the navigation even there's now real content given for the current language. By clicking the page in the navigation, the browser is redirected to the same page using a different portal-language.
+            V0.3: Fixed a bug in the update sequence
+    </description>
+    <version>0.3</version>
+    <author>Lorddoc</author>
+    <type>ELEMENT</type>
+    <providesInstaller>TRUE</providesInstaller>
+    <requiredModules>
+        <module name="system" version="4.3" />
+        <module name="pages" version="4.3" />
+    </requiredModules>
+</package>
