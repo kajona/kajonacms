@@ -27,7 +27,7 @@ abstract class OrmBase
     protected static $objHandleLogicalDeletedGlobal = null;
 
     /**
-     * Flag to change the handling of deleted obejcts locally, so only for the current instance of the ORM
+     * Flag to change the handling of deleted objects locally, so only for the current instance of the ORM
      * mapper.
      *
      * @var OrmDeletedhandlingEnum
