@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <package
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="http://apidocs.kajona.de/xsd/package.xsd"
+        xsi:noNamespaceSchemaLocation="https://apidocs.kajona.de/xsd/package.xsd"
         >
     <title>sourcecode</title>
     <description>
@@ -9,13 +9,13 @@
         Therefore the element makes use of https://highlightjs.org.
         The sources of the element are available at https://github.com/sidler/element_sourcecode
     </description>
-    <version>0.1</version>
-    <author>lorddoc</author>
-    <type>ELEMENT</type>
+    <version>5.0</version>
+    <author>Kajona Team</author>
+    <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="system" version="4.5" />
-        <module name="pages" version="4.5" />
+        <module name="system" version="5.0" />
+        <module name="pages" version="5.0" />
     </requiredModules>
     <screenshots>
         <screenshot path="screenshots/screen1.png" />

@@ -7,6 +7,11 @@
 *	$Id$                                   *
 ********************************************************************************************************/
 
+namespace Kajona\Sourcecode\Admin\Elements;
+
+use Kajona\Pages\Admin\AdminElementInterface;
+use Kajona\Pages\Admin\ElementAdmin;
+
 
 /**
  * Class to handle the admin-stuff of the sourcecode-element
@@ -16,7 +21,8 @@
  *
  * @targetTable element_universal.content_id
  */
-class class_element_sourcecode_admin extends class_element_admin implements interface_admin_element {
+class ElementSourcecodeAdmin extends ElementAdmin implements AdminElementInterface
+{
 
     /**
      * @var string
@@ -25,7 +31,7 @@ class class_element_sourcecode_admin extends class_element_admin implements inte
      * @fieldType template
      * @fieldLabel template
      *
-     * @fieldTemplateDir /element_sourcecode
+     * @fieldTemplateDir /module_sourcecode
      */
     private $strChar1;
 
@@ -42,36 +48,37 @@ class class_element_sourcecode_admin extends class_element_admin implements inte
     private $strText;
 
 
-
     /**
      * @param string $strChar1
      */
-    public function setStrChar1($strChar1) {
+    public function setStrChar1($strChar1)
+    {
         $this->strChar1 = $strChar1;
     }
 
     /**
      * @return string
      */
-    public function getStrChar1() {
+    public function getStrChar1()
+    {
         return $this->strChar1;
     }
 
     /**
      * @return string
      */
-    public function getStrText() {
+    public function getStrText()
+    {
         return $this->strText;
     }
 
     /**
      * @param string $intText
      */
-    public function setStrText($intText) {
+    public function setStrText($intText)
+    {
         $this->strText = uniStrReplace("<br />", "\n", $intText);
     }
-
-
 
 
 }
