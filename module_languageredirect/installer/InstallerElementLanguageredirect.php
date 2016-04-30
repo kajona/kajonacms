@@ -39,8 +39,8 @@ class InstallerElementLanguageredirect extends InstallerBase implements Installe
         if($objElement == null) {
             $objElement = new PagesElement();
             $objElement->setStrName("languageredirect");
-            $objElement->setStrClassAdmin('ElementLanguageredirectAdmin');
-            $objElement->setStrClassPortal('ElementLanguageredirectPortal');
+            $objElement->setStrClassAdmin('ElementLanguageredirectAdmin.php');
+            $objElement->setStrClassPortal('ElementLanguageredirectPortal.php   ');
             $objElement->setIntCachetime(60);
             $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->objMetadata->getStrVersion());

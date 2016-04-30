@@ -38,8 +38,8 @@ class InstallerElementSourcecode extends InstallerBase implements InstallerInter
 		if($objElement == null) {
 			$objElement = new PagesElement();
 			$objElement->setStrName("sourcecode");
-			$objElement->setStrClassAdmin('ElementSourcecodeAdmin');
-			$objElement->setStrClassPortal('ElementSourcecodePortal');
+			$objElement->setStrClassAdmin('ElementSourcecodeAdmin.php');
+			$objElement->setStrClassPortal('ElementSourcecodePortal.php');
 			$objElement->setIntCachetime(60);
 			$objElement->setIntRepeat(0);
 			$objElement->setStrVersion($this->objMetadata->getStrVersion());

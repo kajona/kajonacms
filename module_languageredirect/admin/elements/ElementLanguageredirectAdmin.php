@@ -7,7 +7,7 @@
 *   $Id: class_element_downloads_toplist_admin.php 3577 2011-01-17 20:07:32Z sidler $                         *
 ********************************************************************************************************/
 
-namespace Kajona\Languageredirect\Admin;
+namespace Kajona\Languageredirect\Admin\Elements;
 
 use Kajona\Pages\Admin\AdminElementInterface;
 use Kajona\Pages\Admin\ElementAdmin;

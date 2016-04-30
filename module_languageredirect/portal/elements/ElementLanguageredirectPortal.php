@@ -7,7 +7,7 @@
 *   $Id: class_element_downloads_toplist_admin.php 3530 2011-01-06 12:30:26Z sidler $                         *
 ********************************************************************************************************/
 
-namespace Kajona\Languageredirect\Portal;
+namespace Kajona\Languageredirect\Portal\Elements;
 
 use Kajona\Pages\Portal\ElementPortal;
 use Kajona\Pages\Portal\PortalElementInterface;
