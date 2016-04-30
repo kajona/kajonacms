@@ -7,27 +7,40 @@
 *   $Id: installer_element_downloads_toplist.php 4161 2011-10-29 12:03:12Z sidler $                     *
 ********************************************************************************************************/
 
+namespace Kajona\Languageredirect\Installer;
+
+use Kajona\Pages\System\PagesElement;
+use Kajona\System\System\InstallerBase;
+use Kajona\System\System\InstallerInterface;
+use Kajona\System\System\SystemModule;
+
+
 /**
  *
- * @package element_languageredirect
  * @author sidler@mulchprod.de
  *
  * @moduleId _pages_content_modul_id_
  */
-class class_installer_element_languageredirect extends class_installer_base implements interface_installer {
+class InstallerElementLanguageredirect extends InstallerBase implements InstallerInterface
+{
 
 
     public function install() {
+        //register the module
+        $this->registerModule($this->objMetadata->getStrTitle(), _languageredirect_module_id_, "", "", $this->objMetadata->getStrVersion(), false);
+        
+        
         $strReturn = "";
         //Register the element
         $strReturn .= "Registering languageredirect-element...\n";
         //check, if not already existing
         $objElement = null;
-        if(class_module_pages_element::getElement("languageredirect") == null) {
-            $objElement = new class_module_pages_element();
+        $objElement = PagesElement::getElement("languageredirect");
+        if($objElement == null) {
+            $objElement = new PagesElement();
             $objElement->setStrName("languageredirect");
-            $objElement->setStrClassAdmin("class_element_languageredirect_admin.php");
-            $objElement->setStrClassPortal("class_element_languageredirect_portal.php");
+            $objElement->setStrClassAdmin('ElementLanguageredirectAdmin');
+            $objElement->setStrClassPortal('ElementLanguageredirectPortal');
             $objElement->setIntCachetime(60);
             $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->objMetadata->getStrVersion());
@@ -36,7 +49,14 @@ class class_installer_element_languageredirect extends class_installer_base impl
         }
         else {
             $strReturn .= "Element already installed!...\n";
+
+            if ($objElement->getStrVersion() < 5) {
+                $strReturn .= "Updating element version!...\n";
+                $objElement->setStrVersion("5.0");
+                $objElement->updateObjectToDb();
+            }
         }
+
         return $strReturn;
     }
 
@@ -44,17 +64,11 @@ class class_installer_element_languageredirect extends class_installer_base impl
     public function update() {
         $strReturn = "";
 
-        if(class_module_pages_element::getElement($this->objMetadata->getStrTitle())->getStrVersion() == "0.1") {
-            $strReturn = "Updating element languageredirect to 0.2...\n";
-            $this->updateElementVersion("languageredirect", "0.2");
-            $this->objDB->flushQueryCache();
-        }
-
-
-        if(class_module_pages_element::getElement($this->objMetadata->getStrTitle())->getStrVersion() == "0.2") {
-            $strReturn = "Updating element languageredirect to 0.3...\n";
-            $this->updateElementVersion("languageredirect", "0.3");
-            $this->objDB->flushQueryCache();
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if ($arrModule["module_version"] == "5.0") {
+            $strReturn .= "Updating 5.0 to 5.1...\n";
+            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1");
+            $this->updateElementVersion("form", "5.1");
         }
 
         return $strReturn;
