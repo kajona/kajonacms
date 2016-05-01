@@ -50,7 +50,7 @@ class ElementLinkAdmin extends ElementAdmin implements AdminElementInterface
      *
      * @addSearchIndex
      * @templateExport
-     * @templatemapper pagelink
+     * @templateMapper pagelink
      */
     private $strPage = "";
 
