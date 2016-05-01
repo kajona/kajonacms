@@ -14,14 +14,13 @@ use Kajona\Pages\Portal\PortalElementInterface;
 use Kajona\Pages\System\PagesPageelement;
 use Kajona\System\System\TemplateMapper;
 
-
 /**
- * Portal-Part of the plaintext element
+ * Portal-Part of the link element
  *
- * @author jschroeter@kajona.de
+ * @author sidler@mulchprod.de
  * @targetTable element_universal.content_id
  */
-class ElementPlaintextPortal extends ElementPortal implements PortalElementInterface
+class ElementLinkPortal extends ElementPortal implements PortalElementInterface
 {
 
     /**
@@ -35,7 +34,7 @@ class ElementPlaintextPortal extends ElementPortal implements PortalElementInter
         $strTemplate = $this->arrElementData["char1"];
         //fallback
         if ($strTemplate == "") {
-            $strTemplate = "plaintext.tpl";
+            $strTemplate = "link.tpl";
         }
 
         $objPageElement = new PagesPageelement($this->getSystemid());
@@ -43,16 +42,7 @@ class ElementPlaintextPortal extends ElementPortal implements PortalElementInter
         $objAdmin->loadElementData();
 
         $objMapper = new TemplateMapper($objAdmin);
-        return $objMapper->writeToTemplate("/element_plaintext/".$strTemplate, "plaintext");
+        return $objMapper->writeToTemplate("/element_link/".$strTemplate, "link");
     }
-
-    /**
-     * @inheritDoc
-     */
-    protected function getAnchorTag()
-    {
-        return "";
-    }
-
 
 }

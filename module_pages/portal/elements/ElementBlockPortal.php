@@ -192,4 +192,13 @@ class ElementBlockPortal extends ElementPortal implements PortalElementInterface
         return $strElementOutput;
     }
 
+    /**
+     * @inheritDoc
+     */
+    protected function getAnchorTag()
+    {
+        return "";
+    }
+
+
 }

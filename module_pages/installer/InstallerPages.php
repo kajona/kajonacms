@@ -130,6 +130,7 @@ class InstallerPages extends InstallerBase implements InstallerInterface {
             "date" => array("ElementDateAdmin.php", "ElementDatePortal.php"),
             "plaintext" => array("ElementPlaintextAdmin.php", "ElementPlaintextPortal.php"),
             "richtext" => array("ElementRichtextAdmin.php", "ElementRichtextPortal.php"),
+            "link" => array("ElementLinkAdmin.php", "ElementLinkPortal.php"),
         );
 
         foreach($arrElements as $strOneElement => $arrConfig) {
