@@ -4,21 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "61cadd8f9b70bf84ef14e157819afe0f",
-    "content-hash": "070fa270b9236566f56cfb64f196d723",
+    "hash": "6ba5ea43617874374418211c12df1a42",
     "packages": [
         {
             "name": "erusev/parsedown",
-            "version": "1.5.3",
+            "version": "1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/erusev/parsedown.git",
-                "reference": "b9e5228e92e5f5c17d7774cfb2de8e5e8362de1a"
+                "reference": "3ebbd730b5c2cf5ce78bc1bf64071407fc6674b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/erusev/parsedown/zipball/b9e5228e92e5f5c17d7774cfb2de8e5e8362de1a",
-                "reference": "b9e5228e92e5f5c17d7774cfb2de8e5e8362de1a",
+                "url": "https://api.github.com/repos/erusev/parsedown/zipball/3ebbd730b5c2cf5ce78bc1bf64071407fc6674b7",
+                "reference": "3ebbd730b5c2cf5ce78bc1bf64071407fc6674b7",
                 "shasum": ""
             },
             "type": "library",
@@ -44,7 +43,7 @@
                 "markdown",
                 "parser"
             ],
-            "time": "2015-04-29 20:22:24"
+            "time": "2015-10-04 16:44:32"
         }
     ],
     "packages-dev": [],
