@@ -8,8 +8,8 @@ describe('login', function () {
     });
 
     it('test login', function () {
-        var loginPage = LoginPage.getPage();
-        loginPage.then(function (loginPage) {
+        LoginPage.getPage()
+            .then(function (loginPage) {
                 return loginPage.login("test", "test123");
             })
             .then(function (landingPage) {
