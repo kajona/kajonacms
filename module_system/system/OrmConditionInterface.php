@@ -19,13 +19,15 @@ namespace Kajona\System\System;
 interface OrmConditionInterface
 {
     /**
-     * The where SQL statment MUST NOT contain a leading AND
+     * The where SQL statment MUST NOT contain a leading AND, OR or WHERE!!
      *
      * @return string
      */
     public function getStrWhere();
 
     /**
+     * Returns an array of the params for the given condition.
+     *
      * @return array
      */
     public function getArrParams();

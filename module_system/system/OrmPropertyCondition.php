@@ -76,6 +76,6 @@ class OrmPropertyCondition extends OrmCondition
             throw new OrmException("Failed to load annotation ".OrmBase::STR_ANNOTATION_TABLECOLUMN." for property ".$this->strProperty."@".$this->getStrTargetClass(), OrmException::$level_ERROR);
         }
 
-        return $strPropertyValue." ".$this->objComparator->getEnumAsSqlString()." ? ";
+        return $strPropertyValue." ".$this->objComparator->getEnumAsSqlString()." ?";
     }
 }

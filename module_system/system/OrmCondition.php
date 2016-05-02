@@ -30,6 +30,16 @@ class OrmCondition extends OrmObjectlistRestriction implements OrmConditionInter
         parent::__construct($strWhere, $arrParams);
     }
 
+    /**
+     * @param string $strWhere
+     *
+     * @return void
+     */
+    public function setStrWhere($strWhere)
+    {
+        $strWhere = StringUtil::trim($strWhere);
+        $this->strWhere = $strWhere;
+    }
 
     /**
      * Generic method to create an ORM restriction.
