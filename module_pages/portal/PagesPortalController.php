@@ -75,7 +75,7 @@ class PagesPortalController extends PortalController implements PortalInterface
     {
 
         //Determine the pagename
-        $objPageData = $this->getPageData();
+        $objPageData = clone $this->getPageData();
 
         //react on portaleditor commands
         //pe to display, or pe to disable?
@@ -116,7 +116,7 @@ class PagesPortalController extends PortalController implements PortalInterface
         }
         catch(TemplateBlocksParserException $objEx) {
             Logger::getInstance(Logger::SYSTEMLOG)->addLogRow($objEx->getMessage(). " @ /module_pages/".$objPageData->getStrTemplate(), Logger::$levelError);
-            $objPageData = $this->getPageData(true);
+            $objPageData = clone $this->getPageData(true);
             $objPlaceholders = $this->objTemplate->parsePageTemplate("/module_pages/".$objPageData->getStrTemplate(), Template::INT_ELEMENT_MODE_MASTER);
             self::$arrElementsOnPage = PagesPageelement::getElementsOnPage($objPageData->getSystemid(), true, $this->getStrPortalLanguage(), true);
         }

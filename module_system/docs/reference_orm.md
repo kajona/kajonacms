@@ -309,6 +309,7 @@ Optionally:
 On property level:
 
 Mandatory:
+
 ``@tableColumn name.columnName`` -> The name of the targetTable and the name of the column the property is mapped to
 
 ``@tableColumnDatatype`` text -> The data-type of the column, see https://github.com/kajona/kajonacms/blob/master/module_system/system/DbDatatypes.php for a full list. 
@@ -382,7 +383,9 @@ On MySQL, this results in a table based on the following DDL:
 	PRIMARY KEY (`object_id`,`anotherproperty`),
 	KEY `custnr` (`custnr`)
 	) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-	If @targetTableTxSafe would be missing, the default (InnoDB) would be set as the table engine:
+	
+If @targetTableTxSafe would be missing, the default (InnoDB) would be set as the table engine:
+
 	CREATE TABLE IF NOT EXISTS `kajona_object` (
 	`object_id` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
 	`property1` text COLLATE utf8_unicode_ci,
@@ -432,116 +435,8 @@ Since the query loads faq entries, the following statements would be fulfilled w
 
 	$objFaq = Objectfactory::getInstance()->getObject($arrRows[0]["system_id"]);
 	
-	
 
-##ORM Restrictions (deprecated, use OrmCondition instead)
-
-Kajona provides a list of ORM-Restrictions to create where restrictions for the objectList and objectCount queries.
-You can use either the basic ORM-Restriction `OrmObjectlistRestriction` where you can define your own SQL and set additional parameters for prepared statements
-
-Example: 
-
-    //1. Define objectlist
-    $objOrm = new OrmObjectlist();
-    
-    //2. Create restriction
-    $strWhere = " AND system_status = ?";
-    $arrParams = array(1);
-    $objRestriction = new OrmObjectlistRestriction();
-
-    //3. Add restriction to the objectlist
-    $objOrm->addWhereRestriction($objRestriction);
-
-    //4. Get the objectlist
-    $objOrm->getObjectList("Kajona\\Pages\\System\PagesPage");
-    
-
-There are also specific objectlist restrictions available which 
- 
-###OrmObjectlistInRestriction (deprecated, use OrmInCondition instead)
-This restriction creates an IN statement e.g. <code>"AND \<columnnam\e> IN (\<parameters\>)</code>"
-    
-    Example: 
-        //1. Define objectlist
-        $objOrm = new OrmObjectlist();
-    
-        //2. Create restriction
-        $strColmnName = "system_status";
-        $arrParams = array(1,2,3,4,5);
-        $objRestriction = new OrmObjectlistInRestriction($strColmnName, $arrParams);//Generates "AND system_status IN (1,2,3,4,5)"
-        
-        //3. Add restriction to the objectlist
-        $objOrm->addWhereRestriction($objRestriction);
-        
-        //4. Get the objectlist
-        $objOrm->getObjectList("Kajona\\Pages\\System\PagesPage");
-
-###OrmObjectlistInOrEmptyRestriction (deprecated, use OrmInOrEmptyCondition instead)
-
-This restriction extends the normal IN-Restriction by searching also for empty cells (NULL or '').
-It creates an IN statement e.g. <code>"AND (\<columnnam\e> IN (\<parameters\>) OR (\<columnnam\e> IS NULL OR (\<columnnam\e> = '')</code>".
-
-    
-    Example: 
-        //1. Define objectlist
-        $objOrm = new OrmObjectlist();
-    
-        //2. Create restriction
-        $strColmnName = "system_status";
-        $arrParams = array(1,2,3,4,5);
-        $objRestriction = new OrmObjectlistInOrEmptyRestriction($strColmnName, $arrParams);//Generates "AND (system_status IN (1,2,3,4,5) OR system_status IS NULL OR system_status = '')"
-        
-        //3. Add restriction to the objectlist
-        $objOrm->addWhereRestriction($objRestriction);
-        
-        //4. Get the objectlist
-        $objOrm->getObjectList("Kajona\\Pages\\System\PagesPage");
-
-
-    
-###OrmObjectlistPropertyInRestriction (deprecated, use OrmPropertyInCondition instead)
-This restriction is a specialzed version of `OrmObjectlistInRestriction`. 
-Instead of passing the columname you pass the name of the property of the defined target class of the object list (see example below `Kajona\\Pages\\System\PagesPage`).
-The column name of the given property is determined via the `@tableClolumn` annotation of the property
-
-    Example: 
-        //1. Define objectlist
-        $objOrm = new OrmObjectlist();
-
-        //2. Create restriction
-        $strPropertyName = "intNumber";//@tableClolumn page_number
-        $arrParams = array(1,2,3,4,5);
-        $objRestriction = new OrmObjectlistPropertyInRestriction($strPropertyName, $arrParams);//Generates "AND page_number IN (1,2,3,4,5)"
-        
-        //3. Add restriction to the objectlist
-        $objOrm->addWhereRestriction($objRestriction);
-        
-        //4. Get the objectlist
-        $objOrm->getObjectList("Kajona\\Pages\\System\PagesPage");
-
-
-
-###OrmObjectlistPropertyRestriction (deprecated, use OrmPropertyCondition instead)
-This restriction creates an  <code>"AND \<columnname\> \<comparator\> \<value\>"</code>.
-Therefore you may pass the name of a property of the defined target class of the object list, the comparator and, finally, the expected value of the property.
-    
-    Example: 
-        //1. Define objectlist
-        $objOrm = new OrmObjectlist();
-    
-        //2. Create restriction
-         $strPropertyName = "strTitle";//@tableClolumn page_title
-         $strPropertyValue = "My Title";
-         $objRestriction = new OrmObjectlistPropertyInRestriction($strPropertyName, OrmComparatorEnum::Equal(), $strPropertyValue);//Generates "AND page_title = 'My Title'"
-         
-         //3. Add restriction to the objectlist
-         $objOrm->addWhereRestriction($objRestriction);
-         
-         //4. Get the objectlist
-         $objOrm->getObjectList("Kajona\\Pages\\System\PagesPage");
-
-
-##ORM Conditions (replaces the ORMRestrictions)
+##ORM Conditions 
 
 Kajona provides a list of ORM-Conditions to create where restrictions for the objectList and objectCount queries.
 You can use either the basic ORM-Conditions `OrmCondition` where you can define your own SQL and set additional parameters for prepared statements.
@@ -561,7 +456,7 @@ Example:
     $objOrm->addWhereRestriction($objCondition);
 
     //4. Get the objectlist
-    $objOrm->getObjectList("Kajona\\Pages\\System\PagesPage");
+    $objOrm->getObjectList("Kajona\\Pages\\System\\PagesPage");
     
 
 There are also specific objectlist restrictions available which 
@@ -576,13 +471,13 @@ This restriction creates an IN statement e.g. <code>"\<columnnam\e> IN (\<parame
         //2. Create restriction
         $strColumnName = "system_status";
         $arrParams = array(1,2,3,4,5);
-        $objCondition = new OrmInCondition($strColmnName, $arrParams);//Generates "system_status IN (1,2,3,4,5)"
+        $objCondition = new OrmInCondition($strColumnName, $arrParams);//Generates "system_status IN (1,2,3,4,5)"
         
         //3. Add condition to the objectlist
         $objOrm->addWhereRestriction($objCondition);
         
         //4. Get the objectlist
-        $objOrm->getObjectList("Kajona\\Pages\\System\PagesPage");
+        $objOrm->getObjectList("Kajona\\Pages\\System\\PagesPage");
 
 ###OrmInOrEmptyCondition
 
@@ -597,13 +492,13 @@ It creates an IN statement e.g. <code>"((\<columnnam\e> IN (\<parameters\>)( OR 
         //2. Create restriction
         $strColumnName = "system_status";
         $arrParams = array(1,2,3,4,5);
-        $objCondition = new OrmInOrEmptyCondition($strColmnName, $arrParams);//Generates "((system_status IN (1,2,3,4,5)) OR (system_status IS NULL) OR (system_status = '')))"
+        $objCondition = new OrmInOrEmptyCondition($strColumnName, $arrParams);//Generates "((system_status IN (1,2,3,4,5)) OR (system_status IS NULL) OR (system_status = '')))"
         
         //3. Add condition to the objectlist
         $objOrm->addWhereRestriction($objCondition);
         
         //4. Get the objectlist
-        $objOrm->getObjectList("Kajona\\Pages\\System\PagesPage");
+        $objOrm->getObjectList("Kajona\\Pages\\System\\PagesPage");
 
 
     
@@ -625,7 +520,7 @@ The column name of the given property is determined via the `@tableClolumn` anno
         $objOrm->addWhereRestriction($objCondition);
         
         //4. Get the objectlist
-        $objOrm->getObjectList("Kajona\\Pages\\System\PagesPage");
+        $objOrm->getObjectList("Kajona\\Pages\\System\\PagesPage");
 
 
 
@@ -638,7 +533,7 @@ Therefore you may pass the name of a property of the defined target class of the
         $objOrm = new OrmObjectlist();
     
         //2. Create restriction
-         $strPropertyName = "strTitle";//@tableClolumn page_title
+         $strPropertyName = "strTitle";//@tableColumn page_title
          $strPropertyValue = "My Title";
          $objCondition = new OrmPropertyCondition($strPropertyName, OrmComparatorEnum::Equal(), $strPropertyValue);//Generates "page_title = 'My Title'"
          
@@ -646,7 +541,7 @@ Therefore you may pass the name of a property of the defined target class of the
          $objOrm->addWhereRestriction($objCondition);
          
          //4. Get the objectlist
-         $objOrm->getObjectList("Kajona\\Pages\\System\PagesPage");
+         $objOrm->getObjectList("Kajona\\Pages\\System\\PagesPage");
          
          
 ###OrmCompositeCondition
@@ -674,7 +569,7 @@ e.g.
          $objOrm->addWhereRestriction($objCompositeCondition);
          
          //4. Get the objectlist
-         $objOrm->getObjectList("Kajona\\Pages\\System\PagesPage");
+         $objOrm->getObjectList("Kajona\\Pages\\System\\PagesPage");
          
          
 ## Orm escaping

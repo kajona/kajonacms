@@ -44,6 +44,11 @@ class ElementLanguageswitchPortal extends ElementPortal implements PortalElement
         //load the languageset in order to generate more specific switches
         $objLanguageset = LanguagesLanguageset::getLanguagesetForSystemid($this->getParam("systemid"));
 
+
+        $objLanguage = new LanguagesLanguage();
+        $strCurLang = $objLanguage->getPortalLanguage();
+        
+
         //Iterate over all languages
         $strRows = "";
         foreach ($arrObjLanguages as $objOneLanguage) {
@@ -91,6 +96,10 @@ class ElementLanguageswitchPortal extends ElementPortal implements PortalElement
             }
 
         }
+
+        $objPage = PagesPage::getPageByName($this->getPagename());
+        $objPage->setStrLanguage($strCurLang);
+        $objPage = PagesPage::getPageByName($this->getPagename());
 
         return $this->objTemplate->fillTemplateFile(array("languageswitch_entries" => $strRows), "/module_languageswitch/".$this->arrElementData["char1"], "languageswitch_wrapper");
     }

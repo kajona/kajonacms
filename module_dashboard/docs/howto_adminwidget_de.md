@@ -148,6 +148,6 @@ Im Falle des Widgets beinhaltet dieses keinen Installer, somit wird als Wert „
 	    <providesInstaller>FALSE</providesInstaller>
 	    <requiredModules>
 	        <module name="system" version="3.4.9.3" />
-	        <module name="dasjhboard" version="3.4.9" />
+	        <module name="dashboard" version="3.4.9" />
 	    </requiredModules>
 	</package>
