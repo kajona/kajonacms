@@ -47,17 +47,17 @@ class FilterBaseTest extends Testbase
 
         //Without annotation @filterCompareOperator
         $this->assertTrue($arrRestrictions[0] instanceof OrmCondition);
-        $this->assertEquals(" filter.filter1 LIKE ? ", $arrRestrictions[0]->getStrWhere());
+        $this->assertEquals("filter.filter1 LIKE ?", $arrRestrictions[0]->getStrWhere());
         $this->assertCount(1, $arrRestrictions[0]->getArrParams());
         $this->assertEquals("%1%", $arrRestrictions[0]->getArrParams()[0]);
 
         $this->assertTrue($arrRestrictions[1] instanceof OrmCondition);
-        $this->assertEquals(" filter.filter2 = ? ", $arrRestrictions[1]->getStrWhere());
+        $this->assertEquals("filter.filter2 = ?", $arrRestrictions[1]->getStrWhere());
         $this->assertCount(1, $arrRestrictions[1]->getArrParams());
         $this->assertEquals(1, $arrRestrictions[1]->getArrParams()[0]);
 
         $this->assertTrue($arrRestrictions[2] instanceof OrmCondition);
-        $this->assertEquals(" filter.filter3 = ? ", $arrRestrictions[2]->getStrWhere());
+        $this->assertEquals("filter.filter3 = ?", $arrRestrictions[2]->getStrWhere());
         $this->assertCount(1, $arrRestrictions[2]->getArrParams());
         $this->assertEquals(1.0, $arrRestrictions[1]->getArrParams()[0]);
 
@@ -66,27 +66,27 @@ class FilterBaseTest extends Testbase
         $this->assertCount(4, $arrRestrictions[3]->getArrParams());
 
         $this->assertTrue($arrRestrictions[4] instanceof OrmCondition);
-        $this->assertEquals(" filter.filter5 = ? ", $arrRestrictions[4]->getStrWhere());
+        $this->assertEquals("filter.filter5 = ?", $arrRestrictions[4]->getStrWhere());
         $this->assertCount(1, $arrRestrictions[4]->getArrParams());
         $this->assertEquals(20150101000001, $arrRestrictions[4]->getArrParams()[0]);
 
         $this->assertTrue($arrRestrictions[5] instanceof OrmCondition);
-        $this->assertEquals(" filter.filter6 <= ? ", $arrRestrictions[5]->getStrWhere());
+        $this->assertEquals("filter.filter6 <= ?", $arrRestrictions[5]->getStrWhere());
         $this->assertEquals(12, $arrRestrictions[5]->getArrParams()[0]);
 
 
         //With annotation @filterCompareOperator
         $this->assertTrue($arrRestrictions[6] instanceof OrmCondition);
-        $this->assertEquals(" filter.filter7 >= ? ", $arrRestrictions[6]->getStrWhere());
+        $this->assertEquals("filter.filter7 >= ?", $arrRestrictions[6]->getStrWhere());
         $this->assertEquals(20150101000000, $arrRestrictions[6]->getArrParams()[0]);
 
         $this->assertTrue($arrRestrictions[7] instanceof OrmCondition);
-        $this->assertEquals(" filter.filter8 <= ? ", $arrRestrictions[7]->getStrWhere());
+        $this->assertEquals("filter.filter8 <= ?", $arrRestrictions[7]->getStrWhere());
         $this->assertEquals(20150101235959, $arrRestrictions[7]->getArrParams()[0]);
 
         //Filter by system id
         $this->assertTrue($arrRestrictions[8] instanceof OrmCondition);
-        $this->assertEquals(" filter.filter9 = ? ", $arrRestrictions[8]->getStrWhere());
+        $this->assertEquals("filter.filter9 = ?", $arrRestrictions[8]->getStrWhere());
         $this->assertCount(1, $arrRestrictions[8]->getArrParams());
         $this->assertEquals($strSystemid, $arrRestrictions[8]->getArrParams()[0]);
 
