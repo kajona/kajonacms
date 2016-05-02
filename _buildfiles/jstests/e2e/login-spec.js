@@ -9,13 +9,14 @@ describe('login', function () {
 
     it('test login', function () {
         var loginPage = LoginPage.getPage();
-        loginPage.login("test", "test123").then(function(landingPage){
-            
-            landingPage.mainContent.getMainContentTitle().then(function(strTitle) {
-                // check whether login was successful
+        loginPage.then(function (loginPage) {
+                return loginPage.login("test", "test123");
+            })
+            .then(function (landingPage) {
+                return landingPage.mainContent.getMainContentTitle();
+            })
+            .then(function (strTitle) {
                 expect(strTitle).toEqual("Übersicht");
             });
-        });
     });
-
 });
