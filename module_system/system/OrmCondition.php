@@ -38,7 +38,7 @@ class OrmCondition extends OrmObjectlistRestriction implements OrmConditionInter
     public function setStrWhere($strWhere)
     {
         $strWhere = StringUtil::trim($strWhere);
-        $this->strWhere = $strWhere;
+        parent::setStrWhere($strWhere);
     }
 
     /**
