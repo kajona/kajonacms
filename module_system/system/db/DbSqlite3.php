@@ -475,8 +475,14 @@ class DbSqlite3 extends DbBase
         $bitCreate = $this->_pQuery($strQuery, array());
 
         if ($bitCreate && count($arrIndices) > 0) {
-            $strQuery = "CREATE INDEX ix_".generateSystemid()." ON ".$strName." ( ".implode(", ", $arrIndices).") ";
-            $bitCreate = $bitCreate && $this->_pQuery($strQuery, array());
+            foreach ($arrIndices as $strOneIndex) {
+                if (is_array($strOneIndex)) {
+                    $strQuery = "CREATE INDEX ix_".generateSystemid()." ON ".$strName." ( ".implode(", ", $strOneIndex).") ";
+                } else {
+                    $strQuery = "CREATE INDEX ix_".generateSystemid()." ON ".$strName." ( ".$strOneIndex.") ";
+                }
+                $bitCreate = $bitCreate && $this->_pQuery($strQuery, array());
+            }
         }
 
         return $bitCreate;
