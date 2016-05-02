@@ -21,18 +21,20 @@ use Kajona\System\System\TemplateMapper;
  * @author jschroeter@kajona.de
  * @targetTable element_universal.content_id
  */
-class ElementPlaintextPortal extends ElementPortal implements PortalElementInterface {
+class ElementPlaintextPortal extends ElementPortal implements PortalElementInterface
+{
 
     /**
      * Does a little "make-up" to the contents
      *
      * @return string
      */
-    public function loadData() {
+    public function loadData()
+    {
 
         $strTemplate = $this->arrElementData["char1"];
         //fallback
-        if($strTemplate == "") {
+        if ($strTemplate == "") {
             $strTemplate = "plaintext.tpl";
         }
 
@@ -43,5 +45,14 @@ class ElementPlaintextPortal extends ElementPortal implements PortalElementInter
         $objMapper = new TemplateMapper($objAdmin);
         return $objMapper->writeToTemplate("/element_plaintext/".$strTemplate, "plaintext");
     }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getAnchorTag()
+    {
+        return "";
+    }
+
 
 }

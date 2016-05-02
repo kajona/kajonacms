@@ -11,6 +11,8 @@ namespace Kajona\Markdown\Admin\Elements;
 
 use Kajona\Pages\Admin\AdminElementInterface;
 use Kajona\Pages\Admin\ElementAdmin;
+use Kajona\System\System\Exception;
+use Kajona\System\System\Remoteloader;
 
 
 /**
@@ -43,6 +45,14 @@ class ElementMarkdownAdmin extends ElementAdmin implements AdminElementInterface
      *
      */
     private $strSourceUrl = "";
+
+    /**
+     * Dummy property to have the remote file indexed, too
+     *
+     * @var string
+     * @addSearchIndex
+     */
+    private $strContent = "";
 
 
     /**
@@ -77,5 +87,43 @@ class ElementMarkdownAdmin extends ElementAdmin implements AdminElementInterface
         $this->strTemplate = $strTemplate;
     }
 
+    /**
+     * @return string
+     */
+    public function getStrContent()
+    {
+        if(trim($this->getStrSourceUrl()) == "") {
+            return "";
+        }
+
+        $arrUrl = parse_url($this->getStrSourceUrl());
+
+        $objLoader = new Remoteloader();
+        $objLoader->setStrProtocolHeader($arrUrl["scheme"]."://");
+        $objLoader->setStrHost($arrUrl["host"]);
+        $objLoader->setStrQueryParams($arrUrl["path"]);
+        $objLoader->setIntPort(null);
+
+        try {
+            $strReturn = $objLoader->getRemoteContent();
+            if($strReturn) {
+                return $strReturn;
+            }
+        } catch(\Exception $objEx) {
+        }
+        
+        return "";
+    }
+
+    /**
+     * @param string $strContent
+     */
+    public function setStrContent($strContent)
+    {
+        $this->strContent = $strContent;
+    }
+
+    
+    
 
 }

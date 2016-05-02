@@ -22,17 +22,9 @@ use Kajona\System\Admin\AdminFormgenerator;
  *
  * @targetTable element_navigation.content_id
  */
-class ElementNavigationAdmin extends ElementAdmin implements AdminElementInterface {
-
-    /**
-     * Legacy support
-     *
-     * @var string
-     * @tableColumn element_navigation.navigation_mode
-     * @tableColumnDatatype char254
-     * @deprecated
-     */
-    private $intMode;
+class ElementNavigationAdmin extends ElementAdmin implements AdminElementInterface
+{
+    
 
     /**
      * @var string
@@ -66,12 +58,14 @@ class ElementNavigationAdmin extends ElementAdmin implements AdminElementInterfa
     /**
      * @return AdminFormgenerator|null
      */
-    public function getAdminForm() {
+    public function getAdminForm()
+    {
         $objForm = parent::getAdminForm();
 
         $arrNavigationsDropdown = array();
-        foreach(NavigationTree::getObjectListFiltered() as $objOneNavigation)
+        foreach (NavigationTree::getObjectListFiltered() as $objOneNavigation) {
             $arrNavigationsDropdown[$objOneNavigation->getSystemid()] = $objOneNavigation->getStrDisplayName();
+        }
         $objForm->getField("repo")->setArrKeyValues($arrNavigationsDropdown);
 
         return $objForm;
@@ -79,67 +73,61 @@ class ElementNavigationAdmin extends ElementAdmin implements AdminElementInterfa
 
     /**
      * @param string $strTemplate
+     *
      * @return void
      */
-    public function setStrTemplate($strTemplate) {
+    public function setStrTemplate($strTemplate)
+    {
         $this->strTemplate = $strTemplate;
     }
 
     /**
      * @return string
      */
-    public function getStrTemplate() {
+    public function getStrTemplate()
+    {
         return $this->strTemplate;
     }
 
     /**
      * @param string $strRepo
+     *
      * @return void
      */
-    public function setStrRepo($strRepo) {
+    public function setStrRepo($strRepo)
+    {
         $this->strRepo = $strRepo;
     }
 
     /**
      * @return string
      */
-    public function getStrRepo() {
+    public function getStrRepo()
+    {
         return $this->strRepo;
     }
 
     /**
      * @param int $intForeign
+     *
      * @return void
      */
-    public function setIntForeign($intForeign) {
+    public function setIntForeign($intForeign)
+    {
         $this->intForeign = $intForeign;
     }
 
     /**
      * @return int
      */
-    public function getIntForeign() {
-        if($this->intForeign === null)
+    public function getIntForeign()
+    {
+        if ($this->intForeign === null) {
             $this->intForeign = 1;
+        }
         return $this->intForeign;
     }
-
-    /**
-     * @param string $intMode
-     */
-    public function setIntMode($intMode) {
-        $this->intMode = $intMode;
-    }
-
-    /**
-     * @return string
-     */
-    public function getIntMode() {
-        return $this->intMode;
-    }
-
-
-
+    
 
 
 }

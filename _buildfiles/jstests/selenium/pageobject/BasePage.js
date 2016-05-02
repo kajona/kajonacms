@@ -1,16 +1,14 @@
 "use strict";
 
+var SeleniumUtil = require('../util/SeleniumUtil.js');
+
 /**
  *
  */
 class BasePage {
 
-    /**
-     *
-     * @param {webdriver.WebDriver} webDriver
-     */
-    constructor(webDriver) {
-        this.webDriver = webDriver;
+    constructor() {
+        this.webDriver = SeleniumUtil.getWebDriver();
     }
 }
 

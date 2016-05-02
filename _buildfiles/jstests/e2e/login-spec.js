@@ -8,13 +8,14 @@ describe('login', function () {
     });
 
     it('test login', function () {
-        browser.get('index.php?admin=1');
-
-        var loginPage = new LoginPage(browser.driver);
-        loginPage.login("test", "test123");
-
-        // check whether login was successful
-        expect(browser.driver.findElement(by.id('moduleTitle')).getText()).toEqual("Übersicht");
+        var loginPage = LoginPage.getPage();
+        loginPage.login("test", "test123").then(function(landingPage){
+            
+            landingPage.mainContent.getMainContentTitle().then(function(strTitle) {
+                // check whether login was successful
+                expect(strTitle).toEqual("Übersicht");
+            });
+        });
     });
 
 });

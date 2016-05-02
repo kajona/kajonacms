@@ -4,7 +4,6 @@
  * require statements
  */
 var BasePage = require('../pageobject/BasePage.js');
-var LoginPage = require('../pageobject/LoginPage.js');
 var SeleniumUtil = require('../util/SeleniumUtil.js');
 
 /**
@@ -12,12 +11,8 @@ var SeleniumUtil = require('../util/SeleniumUtil.js');
  */
 class TopMenu extends BasePage {
 
-    /**
-     *
-     * @param {webdriver.WebDriver} webDriver
-     */
-    constructor(webDriver) {
-        super(webDriver);
+    constructor() {
+        super();
 
         //constants
         this._TOPMENU_SEARCHBOX_INPUT = "//*[@id='globalSearchInput']";
@@ -63,7 +58,7 @@ class TopMenu extends BasePage {
 
         return this.showUserMenu().then(function(){
             return context.element_lnkUserMenuLogOut.click().then(function(){
-                return new LoginPage(context.webDriver);
+                return new LoginPage();
             });
         });
     };
@@ -81,3 +76,5 @@ class TopMenu extends BasePage {
 
 /** @type {TopMenu} */
 module.exports = TopMenu;
+
+var LoginPage = require('../pageobject/LoginPage.js');

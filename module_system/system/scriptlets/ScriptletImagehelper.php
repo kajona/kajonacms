@@ -72,7 +72,7 @@ class ScriptletImagehelper implements ScriptletInterface
      */
     public function getProcessingContext()
     {
-        return ScriptletInterface::BIT_CONTEXT_PORTAL_ELEMENT;
+        return ScriptletInterface::BIT_CONTEXT_PORTAL_ELEMENT | ScriptletInterface::BIT_CONTEXT_PORTAL_PAGE;
     }
 
 }

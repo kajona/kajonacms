@@ -64,4 +64,13 @@ class ElementImagePortal extends ElementPortal implements PortalElementInterface
         return $strReturn;
     }
 
+    /**
+     * @inheritDoc
+     */
+    protected function getAnchorTag()
+    {
+        return "";
+    }
+
+
 }

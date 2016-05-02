@@ -26,6 +26,24 @@ class SeleniumUtil {
     static getBaseUrl() {
         return browser.baseUrl;
     }
+
+    /**
+     *
+     * @param strUrl
+     * @returns {webdriver.promise.Promise<void>}
+     */
+    static gotToUrl(strUrl) {
+        return SeleniumUtil.getWebDriver().get(SeleniumUtil.getBaseUrl()+"/"+strUrl);
+    }
+
+    /**
+     * Gets the current webdriver instance
+     *
+     * @returns {webdriver.WebDriver}
+     */
+    static getWebDriver() {
+        return browser.driver;
+    }
 }
 
 module.exports = SeleniumUtil;

@@ -568,6 +568,11 @@ HTML;
                                 //Create dummy elements
                                 $strPlaceholder = $arrOnePlaceholder["placeholder"];
 
+                                //validate if the passed element really exists
+                                if(PagesElement::getElement($arrElementList["element"]) == null) {
+                                    throw new Exception("Element of type ".$arrElementList["element"]." is not installed", Exception::$level_ERROR);
+                                }
+
 
                                 $objPageElement = new PagesPageelement();
                                 $objPageElement->setStrName($arrElementList["name"]);

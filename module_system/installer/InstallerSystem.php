@@ -16,6 +16,7 @@ use Kajona\System\System\Filesystem;
 use Kajona\System\System\InstallerBase;
 use Kajona\System\System\InstallerInterface;
 use Kajona\System\System\LanguagesLanguage;
+use Kajona\System\System\OrmBase;
 use Kajona\System\System\OrmSchemamanager;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\SystemAspect;
@@ -469,6 +470,10 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $strReturn .= "Setting messaging to pos 1 in navigation.../n";
         $objModule = SystemModule::getModuleByName("messaging");
         $objModule->setAbsolutePosition(1);
+
+        //to avoid problems on subsequent installers
+        OrmBase::resetBitLogicalDeleteAvailable();
+
 
         return $strReturn;
     }
