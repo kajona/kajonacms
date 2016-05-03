@@ -8,6 +8,7 @@ namespace Kajona\Pages\Portal\Templatemapper;
 
 use Kajona\System\Portal\TemplatemapperInterface;
 use Kajona\System\System\Link;
+use Kajona\System\System\StringUtil;
 
 
 /**
@@ -29,6 +30,10 @@ class PagelinkTemplatemapper implements TemplatemapperInterface
      */
     public function format($strValue)
     {
+        if(StringUtil::startsWith($strValue, "http")) {
+            return Link::getLinkPortalHref("", $strValue);
+        }
+        
         return Link::getLinkPortalHref($strValue);
     }
 
