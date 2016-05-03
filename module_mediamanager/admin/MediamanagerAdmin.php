@@ -456,7 +456,7 @@ HTML;
     {
 
         $this->setStrCurObjectTypeName("file");
-        $this->setCurObjectClassName("MediamanagerFile");
+        $this->setCurObjectClassName('Kajona\Mediamanager\System\MediamanagerFile');
         parent::actionSave();
 
         $objFile = Objectfactory::getInstance()->getObject($this->getSystemid());
