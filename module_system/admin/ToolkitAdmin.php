@@ -620,7 +620,7 @@ class ToolkitAdmin extends Toolkit
     }
 
     /**
-     * Returns a button to submit a form
+     * Returns a button to submit a form, by default with a wrapper
      *
      * @param string $strValue
      * @param string $strName
@@ -628,9 +628,11 @@ class ToolkitAdmin extends Toolkit
      * @param string $strClass use cancelbutton for cancel-buttons
      * @param bool $bitEnabled
      *
+     * @param bool $bitWithWrapper
+     *
      * @return string
      */
-    public function formInputSubmit($strValue = null, $strName = "Submit", $strEventhandler = "", $strClass = "", $bitEnabled = true)
+    public function formInputSubmit($strValue = null, $strName = "Submit", $strEventhandler = "", $strClass = "", $bitEnabled = true, $bitWithWrapper = true)
     {
         if ($strValue === null) {
             $strValue = Carrier::getInstance()->getObjLang()->getLang("commons_save", "system");
@@ -642,7 +644,24 @@ class ToolkitAdmin extends Toolkit
         $arrTemplate["eventhandler"] = $strEventhandler;
         $arrTemplate["class"] = $strClass;
         $arrTemplate["disabled"] = $bitEnabled ? "" : "disabled=\"disabled\"";
-        return $this->objTemplate->fillTemplateFile($arrTemplate, "/elements.tpl", "input_submit");
+
+        $strButton = $this->objTemplate->fillTemplateFile($arrTemplate, "/elements.tpl", "input_submit");
+
+        if($bitWithWrapper) {
+            $strButton = $this->objTemplate->fillTemplateFile(array("button" => $strButton), "/elements.tpl", "input_submit_wrapper");
+        }
+        return $strButton;
+    }
+
+    /**
+     * Renders a wrapper around a single or multiple buttons
+     * @param $strButtons
+     *
+     * @return string
+     */
+    public function formInputButtonWrapper($strButtons)
+    {
+        return $this->objTemplate->fillTemplateFile(array("button" => $strButtons), "/elements.tpl", "input_submit_wrapper");
     }
 
     /**
