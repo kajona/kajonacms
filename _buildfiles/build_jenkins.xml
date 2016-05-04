@@ -499,6 +499,7 @@
                 <exclude name="**/*min.js" />
                 <exclude name="**/jquery*.js" />
                 <exclude name="**/ckeditor/**/*.js" />
+                <exclude name="core*/module_*/tests/**/*.js" />
             </fileset>
             <globmapper from="*.js" to="*-full.js"/>
         </copy>
