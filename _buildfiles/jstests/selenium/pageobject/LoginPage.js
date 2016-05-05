@@ -3,8 +3,10 @@
 /**
  * require statements
  */
-var BasePage = require('../pageobject/BasePage.js');
-var SeleniumUtil = require('../util/SeleniumUtil');
+var SeleniumWaitHelper = require('../util/SeleniumWaitHelper.js');
+var SeleniumUtil = require('../util/SeleniumUtil.js');
+var BasePage = require('../pageobject/base/BasePage.js');
+var AdminLandingPage = require('../pageobject/AdminLandingPage.js');
 
 /**
  *
@@ -36,32 +38,31 @@ class LoginPage extends BasePage {
      * @returns {Promise<LoginPage>}
      */
     static getPage() {
-        return SeleniumUtil.gotToUrl("index.php?admin=1").then(function(){
+        return SeleniumUtil.gotToUrl("index.php?admin=1").then(function () {
             return new LoginPage();
         });
     }
 
-
     /**
      * Logins the user.
      * 
-     * 
      * @param {string} strUserName
      * @param {string} strPassword
-     * @returns {Promise<LoginPage>}
+     * @returns {Promise<AdminLandingPage>}
      */
     login(strUserName, strPassword) {
 
         this._element_userName.sendKeys(strUserName);
         this._element_password.sendKeys(strPassword);
-        return this._element_loginBtn.click().then(function(){
-            return new AdminLandingPage();
-        });
+        return this._element_loginBtn
+            .then(function (el) {
+                return el.click();
+            })
+            .then(function () {
+                return new AdminLandingPage();
+            });
     };
 }
 
 /** @type {LoginPage} */
 module.exports = LoginPage;
-
-//Require here ncause of require cycles
-var AdminLandingPage = require('../pageobject/AdminLandingPage.js');

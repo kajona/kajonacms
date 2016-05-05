@@ -3,8 +3,9 @@
 /**
  * require statements
  */
-var BasePage = require('../pageobject/BasePage.js');
 var SeleniumUtil = require('../util/SeleniumUtil.js');
+var BasePage = require('../pageobject/base/BasePage.js');
+var SeleniumWaitHelper = require('../util/SeleniumWaitHelper.js');
 
 /**
  *
@@ -51,18 +52,19 @@ class TopMenu extends BasePage {
     /**
      * Logs out.
      *
-     * @returns {Promise<R>}
+     * @returns {Promise<void>}
      */
     logout() {
         var context = this;
 
-        return this.showUserMenu().then(function(){
-            return context.element_lnkUserMenuLogOut.click().then(function(){
-                return new LoginPage();
+        return this.showUserMenu()
+            .then(function () {
+                return context.element_lnkUserMenuLogOut
+            })
+            .then(function (el) {
+                return el.click();
             });
-        });
-    };
-
+    }
 
     /**
      * Displays the user menu.
@@ -70,11 +72,11 @@ class TopMenu extends BasePage {
      * @returns {webdriver.promise.Promise.<void>}
      */
     showUserMenu() {
-        return SeleniumUtil.moveToElement(this.webDriver, this.element_lnkUserMenu);
+        return this.element_lnkUserMenu.then(function (element) {
+            return SeleniumUtil.moveToElement(element);
+        });
     }
 }
 
 /** @type {TopMenu} */
 module.exports = TopMenu;
-
-var LoginPage = require('../pageobject/LoginPage.js');

@@ -3,7 +3,7 @@
 /**
  * require statements
  */
-var BasePage = require('../pageobject/BasePage.js');
+var BasePage = require('../pageobject/base/BasePage.js');
 var SeleniumWaitHelper = require('../util/SeleniumWaitHelper.js');
 
 /**

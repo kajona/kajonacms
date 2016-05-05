@@ -3,7 +3,8 @@
 /**
  * require statements
  */
-var BasePage = require('../pageobject/BasePage.js');
+var BasePage = require('../pageobject/base/BasePage.js');
+var SeleniumWaitHelper = require('../util/SeleniumWaitHelper.js');
 
 /**
  *
@@ -21,16 +22,16 @@ class MainContent extends BasePage {
         this._CONTENTTOPBAR = this._MAINCONTENT + "//div[contains(concat(' ', @class, ' '), ' contentTopbar ')]";
 
 
-        /** @type {!webdriver.WebElement} */
+        /** @type {WebElementPromise} */
         this._element_mainContent = this.webDriver.findElement(By.xpath(this._MAINCONTENT));
 
-        /** @type {!webdriver.WebElement} */
+        /** @type {WebElementPromise} */
         this._element_pathContainer = this.webDriver.findElement(By.xpath(this._PATHCONTAINER));
 
-        /** @type {!webdriver.WebElement} */
+        /** @type {WebElementPromise} */
         this._element_breadCrumb = this.webDriver.findElement(By.xpath(this._BREADCRUMP));
 
-        /** @type {!webdriver.WebElement} */
+        /** @type {WebElementPromise} */
         this._element_contentTopBar = this.webDriver.findElement(By.xpath(this._CONTENTTOPBAR));
 
 
@@ -43,6 +44,14 @@ class MainContent extends BasePage {
      */
     getMainContentTitle() {
         return this._element_mainContent.findElement(By.id('moduleTitle')).getText();
+    }
+
+    /**
+     * 
+     * @returns {WebElementPromise}
+     */
+    get element_mainContent() {
+        return this._element_mainContent;
     }
 }
 

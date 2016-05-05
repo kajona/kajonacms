@@ -1,6 +1,7 @@
 "use strict";
 
-var SeleniumUtil = require('../util/SeleniumUtil.js');
+
+var SeleniumUtil = require('../../util/SeleniumUtil.js');
 
 /**
  *
@@ -14,3 +15,4 @@ class BasePage {
 
 /** @type {BasePage} */
 module.exports = BasePage;
+

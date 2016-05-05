@@ -3,18 +3,23 @@
 /**
  * require statements
  */
-var BasePage = require('../pageobject/BasePage.js');
-var LeftNavigation = require('../pageobject/LeftNavigation.js');
-var MainContent = require('../pageobject/MainContent.js');
+var BasePage = require('../base/BasePage.js');
+var LeftNavigation = require('../../pageobject/LeftNavigation.js');
+var MainContent = require('../../pageobject/MainContent.js');
+var TopMenu = require('../../pageobject/TopMenu.js');
 
 /**
  * 
- * @param {webdriver.WebDriver} webDriver
+ *
  * @constructor
  */
 class AdminBasePage extends BasePage {
 
-    constructor() {
+    /**
+     *
+     * @param {MainContent} mainContentPage
+     */
+    constructor(mainContentPage) {
         super();
 
         /** @type {LeftNavigation} */
@@ -23,8 +28,12 @@ class AdminBasePage extends BasePage {
         /** @type {TopMenu} */
         this._topMenu = new TopMenu();
 
+
+        if(!mainContentPage) {
+            mainContentPage = new MainContent()
+        }
         /** @type {MainContent} */
-        this._mainContent = new MainContent();
+        this._mainContent = mainContentPage
     }
 
     /**
@@ -50,10 +59,7 @@ class AdminBasePage extends BasePage {
     get mainContent() {
         return this._mainContent;
     };
-
 }
 
 /** @type {AdminBasePage} */
 module.exports = AdminBasePage;
-
-var TopMenu = require('../pageobject/TopMenu.js');//put here due to cycle!!
