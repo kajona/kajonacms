@@ -47,10 +47,12 @@ class class_formentry_yesno extends class_formentry_base implements interface_fo
      * @return string
      */
     public function getValueAsText() {
-        if($this->getStrValue())
+        if($this->getStrValue() === 1 || $this->getStrValue() === "1")
             return class_carrier::getInstance()->getObjLang()->getLang("commons_yes", "system");
-        else
+        elseif($this->getStrValue() === 0 || $this->getStrValue() === "0")
             return class_carrier::getInstance()->getObjLang()->getLang("commons_no", "system");
+
+        return "-";
     }
 
     public function validateValue() {
