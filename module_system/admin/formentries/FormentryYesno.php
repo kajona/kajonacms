@@ -62,10 +62,12 @@ class FormentryYesno extends FormentryBase implements FormentryPrintableInterfac
      * @return string
      */
     public function getValueAsText() {
-        if($this->getStrValue())
+        if($this->getStrValue() === 1 || $this->getStrValue() === "1" )
             return Carrier::getInstance()->getObjLang()->getLang("commons_yes", "system");
-        else
+        elseif($this->getStrValue() === 0 || $this->getStrValue() === "0" )
             return Carrier::getInstance()->getObjLang()->getLang("commons_no", "system");
+
+        return "-";
     }
 
     public function validateValue() {
