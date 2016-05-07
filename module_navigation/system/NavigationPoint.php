@@ -8,6 +8,7 @@
 namespace Kajona\Navigation\System;
 
 use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
@@ -20,6 +21,7 @@ use Kajona\System\System\Objectfactory;
 use Kajona\System\System\OrmObjectlist;
 use Kajona\System\System\OrmObjectlistRestriction;
 use Kajona\System\System\Resourceloader;
+use Kajona\System\System\StringUtil;
 
 /**
  * Model for a navigation point itself
@@ -282,8 +284,13 @@ class NavigationPoint extends Model implements ModelInterface, AdminListableInte
             if ($objOneEntry instanceof PagesPage) {
 
                 //validate if the page to be linked has a template assigned and at least a single element created
+                //TODO: hier müssen blocks raus!!!!
+                $arrElementsOnPage = PagesPageelement::getPlainElementsOnPage($objOneEntry->getSystemid(), true, $objLanguage->getStrPortalLanguage(), true);
+                $arrElementsOnPage = array_filter($arrElementsOnPage, function($arrRow) {
+                    return $arrRow["page_element_ph_placeholder"] != "blocks" && !StringUtil::startsWith($arrRow["page_element_ph_placeholder"], "master");
+                });
                 if ($objOneEntry->getIntType() == PagesPage::$INT_TYPE_ALIAS
-                    || ($objOneEntry->getStrTemplate() != "" && count(PagesPageelement::getPlainElementsOnPage($objOneEntry->getSystemid(), true, $objLanguage->getStrPortalLanguage())) > 0)
+                    || ($objOneEntry->getStrTemplate() != "" && count($arrElementsOnPage) > 0)
                 ) {
 
                     $objPoint = new NavigationPoint();
