@@ -18,10 +18,6 @@ class ListBatchActionRow {
         this._elementBatchActionRow = elementBatchActionRow;
     }
 
-    canCreateObjects() {
-
-    }
-
     createObject() {
         return this._elementBatchActionRow.then(function (elementRow) {
             elementRow.findElement(By.css("td.actions a")).click();

@@ -4,7 +4,10 @@
  * require statements
  */
 var BasePage = require('../pageobject/base/BasePage.js');
+var SeleniumUtil = require('../util/SeleniumUtil.js');
 var SeleniumWaitHelper = require('../util/SeleniumWaitHelper.js');
+var ContentTopBar = require('../pageobject/ContentTopBar.js');
+var PathNavi = require('../pageobject/PathNavi.js');
 
 /**
  *
@@ -14,28 +17,39 @@ class MainContent extends BasePage {
     constructor() {
         super();
 
-        this._MAINCONTENT = ".//*[@id='content']";
+        this._MAINCONTENT = "div#content";
 
-        this._PATHCONTAINER = this._MAINCONTENT + "//div[contains(concat(' ', @class, ' '), ' pathNaviContainer ')]";
-        this._BREADCRUMP = this._PATHCONTAINER + "//ul[contains(concat(' ', @class, ' '), ' breadcrumb ')]";
-
-        this._CONTENTTOPBAR = this._MAINCONTENT + "//div[contains(concat(' ', @class, ' '), ' contentTopbar ')]";
-
-
-        /** @type {WebElementPromise} */
-        this._element_mainContent = this.webDriver.findElement(By.xpath(this._MAINCONTENT));
-
-        /** @type {WebElementPromise} */
-        this._element_pathContainer = this.webDriver.findElement(By.xpath(this._PATHCONTAINER));
-
-        /** @type {WebElementPromise} */
-        this._element_breadCrumb = this.webDriver.findElement(By.xpath(this._BREADCRUMP));
-
-        /** @type {WebElementPromise} */
-        this._element_contentTopBar = this.webDriver.findElement(By.xpath(this._CONTENTTOPBAR));
-
-
+        this._initElements();
+        this._initObjects();
     }
+
+    _initElements() {
+        /** @type {WebElementPromise} */
+        this._element_mainContent = this.webDriver.findElement(By.css(this._MAINCONTENT));
+    }
+
+    _initObjects() {
+        this._pathNavi = new PathNavi(this._element_mainContent);
+        this._contentTopBar = new ContentTopBar(this._element_mainContent);
+    }
+
+
+    /**
+     *
+     * @returns {PathNavi}
+     */
+    get pathNavi() {
+        return this._pathNavi;
+    }
+
+    /**
+     *
+     * @returns {ContentTopBar}
+     */
+    get contentTopBar() {
+        return this._contentTopBar;
+    }
+
 
     /**
      * Gets the title of the main content
@@ -43,11 +57,12 @@ class MainContent extends BasePage {
      * @returns {webdriver.promise.Promise<string>}
      */
     getMainContentTitle() {
-        return this._element_mainContent.findElement(By.id('moduleTitle')).getText();
+        return this.contentTopBar.getTitle();
+
     }
 
     /**
-     * 
+     *
      * @returns {WebElementPromise}
      */
     get element_mainContent() {

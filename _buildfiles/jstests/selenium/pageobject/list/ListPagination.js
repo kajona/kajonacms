@@ -25,10 +25,10 @@ class ListPagination {
         this._elementPagination = elementPagination;
 
         /** @type {!webdriver.promise.Promise.<!Array.<!webdriver.WebElement>>}*/
-        this._elementPageinationLinks = SeleniumUtil.findElementsByPromise(this._elementPagination, By.css(this._CSS_LIST_PAGINATION_PAGELINKS));
+        this._elementPageinationLinks = this._elementPagination.findElements(By.css(this._CSS_LIST_PAGINATION_PAGELINKS));
 
         /** @type {WebElementPromise}*/
-        this._elementPageinationTotal = SeleniumUtil.findElementByPromise(this._elementPagination, By.css(this._CSS_LIST_PAGINATION_TOTALCOUNT));
+        this._elementPageinationTotal = this._elementPagination.findElement(By.css(this._CSS_LIST_PAGINATION_TOTALCOUNT));
     }
 
 

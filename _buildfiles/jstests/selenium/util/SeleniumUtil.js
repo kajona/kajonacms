@@ -43,32 +43,6 @@ class SeleniumUtil {
     static getWebDriver() {
         return browser.driver;
     }
-
-    /**
-     *
-     * @param {WebElementPromise} webElementPromise
-     * @param locator
-     * @returns {WebElementPromise}
-     */
-    static findElementByPromise(webElementPromise, locator) {
-        return webElementPromise.then(function(element){
-            return element.findElement(locator);
-        });
-    }
-
-    /**
-     *
-     * @param {WebElementPromise} webElementPromise
-     * @param locator
-     * @returns {!webdriver.promise.Promise.<!Array.<!webdriver.WebElement>>}
-     */
-    static findElementsByPromise(webElementPromise, locator) {
-        return webElementPromise.then(function(element){
-            return element.findElements(locator);
-        });
-    }
-
-
 }
 
 module.exports = SeleniumUtil;

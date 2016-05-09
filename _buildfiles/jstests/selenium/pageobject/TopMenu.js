@@ -12,7 +12,7 @@ var SeleniumWaitHelper = require('../util/SeleniumWaitHelper.js');
  */
 class TopMenu extends BasePage {
 
-    constructor() {
+    constructor(elementTopMenu) {
         super();
 
         //constants

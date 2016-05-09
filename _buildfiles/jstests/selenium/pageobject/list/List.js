@@ -3,7 +3,6 @@
 /**
  * require statements
  */
-var SeleniumUtil = require('../../util/SeleniumUtil.js');
 var MainContent = require('../../pageobject/MainContent.js');
 var ListRow = require('../../pageobject/list/ListRow');
 var ListBatchActionRow = require('../../pageobject/list/ListBatchActionRow');
@@ -17,32 +16,36 @@ class List extends MainContent {
     constructor() {
         super();
 
+
+
         this._initElements();
         this._initObjects();
     }
 
     _initElements() {
+        super._initElements();
 
         this._CSS_LIST_ROOT = ".table.admintable";
         this._CSS_LIST_ROWS = "tbody > tr:not([data-systemid='batchActionSwitch'])";
         this._CSS_LIST_BATCHACTIONROW ="tbody > tr[data-systemid='batchActionSwitch']";
         this._CSS_LIST_PAGINATION = ".pager";
 
-
         /** @type {WebElementPromise}*/
         this._elementList = this.element_mainContent.findElement(By.css(this._CSS_LIST_ROOT));
 
         /** @type {!webdriver.promise.Promise.<!Array.<!webdriver.WebElement>>}*/
-        this._elementsListRows = SeleniumUtil.findElementsByPromise(this._elementList, By.css(this._CSS_LIST_ROWS));
+        this._elementsListRows = this._elementList.findElements(By.css(this._CSS_LIST_ROWS));
 
         /** @type {WebElementPromise}*/
-        this._elementListBatchActionRow = SeleniumUtil.findElementByPromise(this._elementList, By.css(this._CSS_LIST_BATCHACTIONROW));
+        this._elementListBatchActionRow = this._elementList.findElement(By.css(this._CSS_LIST_BATCHACTIONROW));
 
         /** @type {WebElementPromise}*/
         this._elementPageination = this.element_mainContent.findElement(By.css(this._CSS_LIST_PAGINATION));
     }
 
     _initObjects() {
+        super._initObjects();
+
         /** @type Promise<ListRow[]>*/
         this._arrListRows = this._createListRows();
 
@@ -69,7 +72,7 @@ class List extends MainContent {
 
     /**
      *
-     * @returns {Promise<ListBatchActionRow>}
+     * @returns {ListBatchActionRow}
      */
     _createBatchActionRow() {
         return new ListBatchActionRow(this._elementListBatchActionRow);
@@ -78,7 +81,7 @@ class List extends MainContent {
 
     /**
      *
-     * @returns {Promise<ListPagination>}
+     * @returns {ListPagination}
      */
     _createPagination() {
         return new ListPagination(this._elementPageination);
