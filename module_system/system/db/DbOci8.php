@@ -36,6 +36,8 @@ class DbOci8 extends DbBase
 
     private $bitTxOpen = false;
 
+    private $objErrorStmt = null;
+
     /**
      * This method makes sure to connect to the database properly
      *
@@ -196,6 +198,7 @@ class DbOci8 extends DbBase
         $resultSet = oci_execute($objStatement, $bitAddon);
 
         if (!$resultSet) {
+            $this->objErrorStmt = $objStatement;
             return false;
         }
 
@@ -248,8 +251,9 @@ class DbOci8 extends DbBase
      */
     public function getError()
     {
-        $strError = oci_error($this->linkDB);
-        return $strError;
+        $strError = oci_error($this->objErrorStmt != null ? $this->objErrorStmt : $this->linkDB);
+        $this->objErrorStmt = null;
+        return print_r($strError, true);
     }
 
     /**
