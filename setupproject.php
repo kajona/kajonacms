@@ -95,7 +95,7 @@ class class_project_setup {
             $arrContent = scandir(self::$strRealPath."/".$strSingleModule);
             foreach($arrContent as $strSingleEntry) {
                 if(substr($strSingleEntry, -5) == ".root" && !is_file(self::$strRealPath."/".substr($strSingleEntry, 0, -5))) {
-                    echo "copy ".$strSingleEntry." to ".self::$strRealPath."/".substr($strSingleEntry, 0, -5)."\n";
+                    //echo "copy ".$strSingleEntry." to ".self::$strRealPath."/".substr($strSingleEntry, 0, -5)."\n";
                     copy(self::$strRealPath."/".$strSingleModule."/".$strSingleEntry, self::$strRealPath."/".substr($strSingleEntry, 0, -5));
                 }
             }
