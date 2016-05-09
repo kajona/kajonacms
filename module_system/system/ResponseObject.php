@@ -19,6 +19,11 @@ class ResponseObject
     private $arrAdditionalHeaders = array();
 
     /**
+     * @var RequestEntrypointEnum
+     */
+    private $objEntryPoint;
+
+    /**
      * @var ResponseObject
      */
     private static $objInstance = null;
@@ -179,4 +184,19 @@ class ResponseObject
         return $this->strRedirectUrl;
     }
 
+    /**
+     * @param RequestEntrypointEnum $objEntryPoint
+     */
+    public function setObjEntrypoint(RequestEntrypointEnum $objEntryPoint)
+    {
+        $this->objEntryPoint = $objEntryPoint;
+    }
+
+    /**
+     * @return RequestEntrypointEnum
+     */
+    public function getObjEntrypoint()
+    {
+        return $this->objEntryPoint;
+    }
 }

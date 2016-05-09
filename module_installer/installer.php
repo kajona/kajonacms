@@ -103,6 +103,7 @@ class Installer
      */
     public function action()
     {
+        ResponseObject::getInstance()->setObjEntrypoint(RequestEntrypointEnum::INSTALLER());
 
         //fetch posts
         if (isset($_POST['step']) && $_POST["step"] == "getNextAutoInstall") {
