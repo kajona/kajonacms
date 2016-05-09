@@ -3,8 +3,9 @@
 /**
  * require statements
  */
-var BasePage = require('../pageobject/base/BasePage.js');
+var BasePage = require('./base/BasePage.js');
 var SeleniumWaitHelper = require('../util/SeleniumWaitHelper.js');
+var Constants = require('./Constants.js');
 
 /**
  *
@@ -13,17 +14,24 @@ class LeftNavigation extends BasePage {
 
     constructor() {
         super();
-
-        this._NAVIGATION = ".//*[@id='moduleNavigation']";
-        this._NAVIGATION_HAMBURGER = ".//*[@data-toggle='offcanvas']";//visible when page width < 932px
-
-        /** @type {!webdriver.WebElement} */
-        this.element_navigation = this.webDriver.findElement(By.xpath(this._NAVIGATION));
-
-        /** @type {!webdriver.WebElement} */
-        this.element_navigationHamburger = this.webDriver.findElement(By.xpath(this._NAVIGATION_HAMBURGER));
     }
 
+
+    /**
+     *
+     * @returns {WebElementPromise|!webdriver.WebElement}
+     */
+    get element_navigation() {
+        return this.webDriver.findElement(By.xpath(Constants.LEFTNAVIGATION_XPATH_NAVIGATION));
+    }
+
+    /**
+     *
+     * @returns {WebElementPromise|!webdriver.WebElement}
+     */
+    get element_navigationHamburger() {
+        return this.webDriver.findElement(By.xpath(Constants.LEFTNAVIGATION_XPATH_NAVIGATION_HAMBURGER));
+    }
 
     /**
      * Opens the navigation
@@ -34,6 +42,8 @@ class LeftNavigation extends BasePage {
         var context = this;
 
         return this.isNavigationDisplayed().then(function(isMenuDisplayed) {
+
+            //if menu is not displayed, check if there is a hamburger element and click it
             if(!isMenuDisplayed) {
                 context.isNavigationHamburgerDisplayed().then(function(isHamburgerMenuVisible) {
                     if(isHamburgerMenuVisible) {
@@ -47,12 +57,10 @@ class LeftNavigation extends BasePage {
     /**
      * Checks if the hamburger element to open/close the navigation is present
      *
-     * @returns {Promise<R>}
+     * @returns {webdriver.promise.Promise<boolean>}
      */
     isNavigationHamburgerDisplayed() {
-        return this.element_navigationHamburger.isDisplayed().then(function (isHamburgerVisible) {
-            return isHamburgerVisible;
-        });
+        return this.element_navigationHamburger.isDisplayed();
     }
 
     /**
@@ -61,7 +69,7 @@ class LeftNavigation extends BasePage {
      * @returns {Promise<boolean>}
      */
     isNavigationDisplayed() {
-        var strPath = this._NAVIGATION + "/../../..";
+        var strPath = Constants.LEFTNAVIGATION_XPATH_NAVIGATION + "/../../..";
 
         //if element has class active -> menu is displayed
         return this.webDriver.findElement(By.xpath(strPath)).getAttribute("class").then(function (strValue) {
@@ -77,17 +85,15 @@ class LeftNavigation extends BasePage {
      * @returns {WebElementPromise|!webdriver.WebElement}
      */
     getNavigationModule(strMenuName) {
-        var strPathMenu = this._NAVIGATION + "//*[contains(concat(' ', @class, ' '), ' panel-heading ')]/a[contains(text(), '" + strMenuName + "')]";
-        return SeleniumWaitHelper.getElementWhenDisplayed(this.webDriver, By.xpath(strPathMenu)).then(function (menuElement) {
-          return menuElement;
-        });
+        var strPathMenu = Constants.LEFTNAVIGATION_XPATH_NAVIGATION + "//*[contains(concat(' ', @class, ' '), ' panel-heading ')]/a[contains(text(), '" + strMenuName + "')]";
+        return SeleniumWaitHelper.getElementWhenDisplayed(this.webDriver, By.xpath(strPathMenu));
     }
 
     /**
      * Checks if the module in the navigation is already opened
      *
      * @param {string} strMenuName
-     * @returns {*}
+     * @returns {Promise<boolean>}
      */
     isNavigationModuleOpened(strMenuName) {
         return this.getNavigationModule(strMenuName).then(function (menuElement) {
@@ -141,7 +147,7 @@ class LeftNavigation extends BasePage {
 
         return this.openNavigationModule(strMenuName)
             .then(function () {
-                var strPathToLinks = context._NAVIGATION + "//*[contains(concat(' ', @class, ' '), ' panel-heading ')]/a[contains(text(), '" + strMenuName + "')]/../..//li[a[contains(concat(' ', @class, ' '), ' adminnavi ')]]";
+                var strPathToLinks = Constants.LEFTNAVIGATION_XPATH_NAVIGATION + "//*[contains(concat(' ', @class, ' '), ' panel-heading ')]/a[contains(text(), '" + strMenuName + "')]/../..//li[a[contains(concat(' ', @class, ' '), ' adminnavi ')]]";
                 return SeleniumWaitHelper.getElementsWhenPresent(context.webDriver, By.xpath(strPathToLinks));
             });
     };
@@ -157,7 +163,7 @@ class LeftNavigation extends BasePage {
         var context = this;
 
         return this.openNavigationModule(strMenuName).then(function () {
-            var strPathToLinks = context._NAVIGATION + "//*[contains(concat(' ', @class, ' '), ' panel-heading ')]/a[contains(text(), '" + strMenuName + "')]/../..//li[a[contains(concat(' ', @class, ' '), ' adminnavi ')]][" + intLinkPosition + "]";
+            var strPathToLinks = Constants.LEFTNAVIGATION_XPATH_NAVIGATION + "//*[contains(concat(' ', @class, ' '), ' panel-heading ')]/a[contains(text(), '" + strMenuName + "')]/../..//li[a[contains(concat(' ', @class, ' '), ' adminnavi ')]][" + intLinkPosition + "]";
             return SeleniumWaitHelper.getElementWhenDisplayed(context.webDriver, By.xpath(strPathToLinks));
         });
     }

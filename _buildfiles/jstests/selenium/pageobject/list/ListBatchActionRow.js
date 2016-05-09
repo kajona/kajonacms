@@ -3,25 +3,30 @@
 /**
  * require statements
  */
-
+var BasePage = require('../base/BasePage.js');
+var Constants = require('../Constants.js');
 
 /**
  *
  */
-class ListBatchActionRow {
+class ListBatchActionRow extends BasePage {
 
     /**
      * 
-     * @param {WebElementPromise} elementBatchActionRow
+     * @param {WebElementPromise} elementList
      */
-    constructor(elementBatchActionRow) {
-        this._elementBatchActionRow = elementBatchActionRow;
+    constructor(elementList) {
+        super();
+
+        this._elementList = elementList;
+    }
+
+    get elementBatchActionRow() {
+        return this._elementList.findElement(By.css(Constants.LIST_CSS_BATCHACTIONROW));
     }
 
     createObject() {
-        return this._elementBatchActionRow.then(function (elementRow) {
-            elementRow.findElement(By.css("td.actions a")).click();
-        });
+        return this.elementBatchActionRow.findElement(By.css("td.actions a")).click();
     }
 }
 

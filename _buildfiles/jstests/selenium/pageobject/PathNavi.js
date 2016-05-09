@@ -3,37 +3,36 @@
 /**
  * require statements
  */
-var SeleniumUtil = require('../util/SeleniumUtil.js');
+var BasePage = require('./base/BasePage.js');
+var Constants = require('./Constants.js');
 
 /**
  *
  */
-class PathNavi {
+class PathNavi extends BasePage {
 
     /**
      *
-     * @param {WebElementPromise} elemMainContent
      */
-    constructor(elemMainContent) {
-
-        this._PATHCONTAINER = "div.pathNaviContainer";
-        this._BREADCRUMP = "ul.breadcrumb";
-
-        /** @type {WebElementPromise} */
-        this._elemPathNavi = elemMainContent.findElement(By.css(this._PATHCONTAINER));
-
-        /** @type {WebElementPromise} */
-        this._element_breadCrumb = this._elemPathNavi.findElement(By.css(this._BREADCRUMP));
-
-        this._initElements();
-        this._initObjects();
+    constructor() {
+        super();
     }
 
-    _initElements() {
+    /**
+     *
+     * @returns {WebElementPromise|!webdriver.WebElement}
+     */
+    get elemPathNavi() {
+        return this.webDriver.findElement(By.css(Constants.PATHNAVI_CSS_PATHCONTAINER));
     }
 
-    _initObjects() {
+    /**
+     *
+     */
+    get element_breadCrumb() {
+        this.elemPathNavi.findElement(By.css(Constants.PATHNAVI_CSS_BREADCRUMP));
     }
+
 }
 
 /** @type {PathNavi} */
