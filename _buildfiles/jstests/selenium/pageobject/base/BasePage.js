@@ -1,6 +1,5 @@
 "use strict";
 
-
 var SeleniumUtil = require('../../util/SeleniumUtil.js');
 
 /**

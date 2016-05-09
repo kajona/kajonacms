@@ -3,13 +3,14 @@
 /**
  * require statements
  */
-var BasePage = require('../base/BasePage.js');
-var LeftNavigation = require('../../pageobject/LeftNavigation.js');
-var MainContent = require('../../pageobject/MainContent.js');
-var TopMenu = require('../../pageobject/TopMenu.js');
+var BasePage = require('./BasePage.js');
+var LeftNavigation = require('../LeftNavigation.js');
+var MainContent = require('../MainContent.js');
+var TopMenu = require('../TopMenu.js');
+var ContentTopBar = require('../ContentTopBar.js');
+var PathNavi = require('../PathNavi.js');
 
 /**
- * 
  *
  * @constructor
  */
@@ -27,6 +28,12 @@ class AdminBasePage extends BasePage {
 
         /** @type {TopMenu} */
         this._topMenu = new TopMenu();
+
+        /** @type {PathNavi} */
+        this._pathNavi = new PathNavi();
+
+        /** @type {ContentTopBar} */
+        this._contentTopBar = new ContentTopBar();
 
 
         if(!mainContentPage) {
@@ -59,6 +66,24 @@ class AdminBasePage extends BasePage {
     get mainContent() {
         return this._mainContent;
     };
+
+    /**
+     *
+     * @returns {PathNavi}
+     */
+    get pathNavi() {
+        return this._pathNavi;
+    };
+
+    /**
+     *
+     * @returns {ContentTopBar}
+     */
+    get contentTopBar() {
+        return this._contentTopBar;
+    };
+    
+    
 }
 
 /** @type {AdminBasePage} */

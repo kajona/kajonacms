@@ -3,25 +3,27 @@
 /**
  * require statements
  */
-var SeleniumUtil = require('../util/SeleniumUtil.js');
-var MainContent = require('../pageobject/MainContent.js');
+var BasePage = require('./base/BasePage.js');
+var Constants = require('./Constants.js');
 
 /**
  *
  */
-class ContentTopBar {
+class ContentTopBar extends BasePage {
 
     /**
      *
-     * @param {WebElementPromise} elemMainContent
      */
-    constructor(elemMainContent) {
+    constructor() {
+        super();
+    }
 
-        this._CSS_CONTENTTOPBAR = "div.contentTopbar";
-        this._ID_TITLE = "moduleTitle";
-
-        /** @type {WebElementPromise} */
-        this._elemContentTopBar = elemMainContent.findElement(By.css(this._CSS_CONTENTTOPBAR));
+    /**
+     *
+     * @returns {WebElementPromise|!webdriver.WebElement}
+     */
+    get elemContentTopBar() {
+        return this.webDriver.findElement(By.css(Constants.CONTENTTOPBAR_CSS_CONTENTTOPBAR));
     }
 
     /**
@@ -29,8 +31,10 @@ class ContentTopBar {
      * @returns {webdriver.promise.Promise<string>|*}
      */
     getTitle() {
-        return this._elemContentTopBar.findElement(By.id(this._ID_TITLE)).getText();
+        return this.elemContentTopBar.findElement(By.id(Constants.CONTENTTOPBAR_ID_TITLE)).getText();
     }
+
+
 }
 
 /** @type {ContentTopBar} */
