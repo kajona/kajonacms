@@ -93,6 +93,8 @@ class Flyimage
 
         $this->strSystemid = getGet("systemid");
         $this->strElementId = getGet("elementid");
+        
+        ResponseObject::getInstance()->setObjEntrypoint(RequestEntrypointEnum::IMAGE());
 
     }
 

@@ -24,7 +24,7 @@ echo "+-------------------------------------------------------------------------
 
 function walkFolderRecursive($strStartFolder) {
     $objFilesystem = new Filesystem();
-    $arrFilesAndFolders = $objFilesystem->getCompleteList($strStartFolder, array(".php"), array(), array(".", "..", ".svn"));
+    $arrFilesAndFolders = $objFilesystem->getCompleteList($strStartFolder, array(".php"), array(), array(".", "..", ".svn", "vendor"));
 
     foreach($arrFilesAndFolders["files"] as $arrOneFile) {
         $strFilename = $arrOneFile["filename"];
@@ -33,13 +33,13 @@ function walkFolderRecursive($strStartFolder) {
         $strContent = file_get_contents($strStartFolder."/".$strFilename);
         if(uniSubstr($strContent, 0, 5) != "<?php")
             echo "Whitespace at the beginning of file >> ".$strStartFolder."/".$strFilename." is:>".uniSubstr($strContent, 0, 1)."< << \n";
-
-        if(uniSubstr($strContent, -2) != "?>")
-            echo "Whitespace at the end of file >> ".$strStartFolder."/".$strFilename." << \n";
     }
 
     foreach($arrFilesAndFolders["folders"] as $strOneFolder)
         walkFolderRecursive($strStartFolder."/".$strOneFolder);
+
+    ob_flush();
+    flush();
 }
 
 echo "Invoking check at "._realpath_.", listing files below...\n\n";
