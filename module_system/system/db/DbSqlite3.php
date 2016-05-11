@@ -92,6 +92,13 @@ class DbSqlite3 extends DbBase
     {
         $bitReturn = true;
 
+        /* Get existing table info */
+        $arrPragmaTableInfo = $this->getPArray("PRAGMA table_info('{$strTargetTableName}')", array());
+        $arrColumnsPragma = array();
+        foreach($arrPragmaTableInfo as $arrRow) {
+            $arrColumnsPragma[$arrRow['name']] = $arrRow;
+        }
+
         $arrSourceColumns = array();
         array_walk($arrSourceTableInfo, function ($arrValue) use (&$arrSourceColumns) {
             $arrSourceColumns[] = $arrValue["columnName"];
@@ -105,22 +112,53 @@ class DbSqlite3 extends DbBase
 
         //build the a temp table
         $strQuery = "CREATE TABLE ".$strTargetTableName."_temp ( \n";
+
         //loop the fields
-        foreach ($arrTargetTableInfo as $intI => $arrOneColumn) {
-            $strQuery .= " ".$arrOneColumn["columnName"]." ".$arrOneColumn["columnType"];
-            //nullable?
-            if ($intI == 0) {
-                $strQuery .= " NOT NULL, \n";
+        $arrColumns = array();
+        $arrPks = array();
+        foreach ($arrTargetTableInfo as $arrOneColumn) {
+            $arrRow = null;
+
+            if(array_key_exists($arrOneColumn["columnName"], $arrColumnsPragma)) {
+                $arrRow = $arrColumnsPragma[$arrOneColumn["columnName"]];
             }
             else {
-                $strQuery .= ", \n";
+                $arrRow["name"] = $arrOneColumn["columnName"];
+                $arrRow["type"] = $arrOneColumn["columnType"];
             }
 
+            //column settings
+            $strColumn = " ".$arrRow["name"]." ".$arrRow["type"];
+
+            if($arrRow["notnull"] === 1) {
+                $strColumn .= " NOT NULL ";
+            }
+            elseif($arrRow["notnull"] === 0) {
+                $strColumn .= " NULL ";
+            }
+
+            if($arrRow["dflt_value"] !== null) {
+                $strColumn .= " DEFAULT {$arrRow["dflt_value"]} ";
+            }
+            $arrColumns[] = $strColumn;
+
+            //primary key?
+            if($arrRow["pk"] === 1) {
+                $arrPks[] = $arrRow["name"];
+            }
         }
 
+        //columns
+        $strQuery .= implode(",\n", $arrColumns);
+
         //primary keys
-        $strQuery .= " PRIMARY KEY (".$arrTargetTableInfo[0]["columnName"].") \n";
-        $strQuery .= ") ";
+        if(count($arrPks) > 0) {
+            $strQuery .= ",PRIMARY KEY (";
+            $strQuery .= implode(",", $arrPks);
+            $strQuery .= ")\n";
+        }
+        
+        $strQuery .= ")\n";
 
         $bitReturn = $bitReturn && $this->_pQuery($strQuery, array());
 
@@ -378,31 +416,16 @@ class DbSqlite3 extends DbBase
      */
     public function getColumnsOfTable($strTableName)
     {
+        $arrTableInfo = $this->getPArray("PRAGMA table_info('{$strTableName}')", array());
+
         $arrColumns = array();
-        $arrTableInfo = $this->getPArray("SELECT sql FROM sqlite_master WHERE type='table' and name=?", array($strTableName));
-        if (!empty($arrTableInfo)) {
-            $strTableDef = $arrTableInfo[0]["sql"];
-            $strTableDef = uniStrReplace("\"", "", $strTableDef);
-
-            // Extract the column definitions from the create statement
-            $arrMatch = array();
-            preg_match("/CREATE TABLE\s+[a-z_0-9]+\s+\((.+)\)/ism", trim($strTableDef), $arrMatch);
-
-            // Get all column names and types
-            $strColumnDef = $arrMatch[1];
-            $intPrimaryKeyPos = strripos($strColumnDef, "PRIMARY KEY");
-            if ($intPrimaryKeyPos !== false) {
-                $strColumnDef = substr($strColumnDef, 0, $intPrimaryKeyPos);
-            }
-            preg_match_all("/\s*([a-z_0-9]+)\s+([a-z]+)[^,]+/ism", trim($strColumnDef), $arrMatch, PREG_SET_ORDER);
-
-            foreach ($arrMatch as $arrColumnInfo) {
-                $arrColumns[] = array(
-                    "columnName" => $arrColumnInfo[1],
-                    "columnType" => $arrColumnInfo[2]
-                );
-            }
+        foreach($arrTableInfo as $arrRow) {
+            $arrColumns[] = array(
+                "columnName" => $arrRow['name'],
+                "columnType" => $arrRow['type']
+            );
         }
+
         return $arrColumns;
     }
 
