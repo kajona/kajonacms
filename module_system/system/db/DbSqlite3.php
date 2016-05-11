@@ -130,20 +130,20 @@ class DbSqlite3 extends DbBase
             //column settings
             $strColumn = " ".$arrRow["name"]." ".$arrRow["type"];
 
-            if($arrRow["notnull"] === 1) {
+            if(array_key_exists("notnull", $arrRow) && $arrRow["notnull"] === 1) {
                 $strColumn .= " NOT NULL ";
             }
-            elseif($arrRow["notnull"] === 0) {
+            elseif(array_key_exists("notnull", $arrRow) && $arrRow["notnull"] === 0) {
                 $strColumn .= " NULL ";
             }
 
-            if($arrRow["dflt_value"] !== null) {
+            if(array_key_exists("dflt_value", $arrRow) && $arrRow["dflt_value"] !== null) {
                 $strColumn .= " DEFAULT {$arrRow["dflt_value"]} ";
             }
             $arrColumns[] = $strColumn;
 
             //primary key?
-            if($arrRow["pk"] === 1) {
+            if(array_key_exists("pk", $arrRow) && $arrRow["pk"] === 1) {
                 $arrPks[] = $arrRow["name"];
             }
         }
@@ -157,7 +157,7 @@ class DbSqlite3 extends DbBase
             $strQuery .= implode(",", $arrPks);
             $strQuery .= ")\n";
         }
-        
+
         $strQuery .= ")\n";
 
         $bitReturn = $bitReturn && $this->_pQuery($strQuery, array());
