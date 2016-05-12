@@ -120,7 +120,7 @@ class BuildHelper {
                 }
 
 
-                echo "Installing ".$objOneMetadata->getStrTitle()."...\n\n";
+                echo dateToString(new \Kajona\System\System\Date())." Installing ".$objOneMetadata->getStrTitle()."...\n\n";
                 $objHandler = $objManager->getPackageManagerForPath($objOneMetadata->getStrPath());
 
                 if(!$objHandler->isInstallable()) {
@@ -128,7 +128,8 @@ class BuildHelper {
                     continue;
                 }
 
-                echo $objHandler->installOrUpdate();
+                $objHandler->installOrUpdate();
+//                echo $objHandler->installOrUpdate();
 
                 unset($arrPackagesToInstall[$intKey]);
 
@@ -140,7 +141,9 @@ class BuildHelper {
         echo "Installing samplecontent...\n\n";
         foreach(\Kajona\Samplecontent\System\SamplecontentInstallerHelper::getSamplecontentInstallers() as $objOneInstaller) {
             if(!$objOneInstaller->isInstalled()) {
-                echo $objOneInstaller->install();
+                echo dateToString(new \Kajona\System\System\Date())." Installing ".get_class($objOneInstaller)."...\n\n";
+                $objOneInstaller->install();
+//                echo $objOneInstaller->install();
             }
         }
 
