@@ -13,10 +13,7 @@ describe('login', function () {
                 return loginPage.login("test", "test123");
             })
             .then(function (landingPage) {
-                return landingPage.mainContent.getMainContentTitle();
-            })
-            .then(function (strTitle) {
-                expect(strTitle).toEqual("Übersicht");
+                expect(landingPage.contentTopBar.getTitle()).toEqual("Übersicht");
             });
     });
 });
