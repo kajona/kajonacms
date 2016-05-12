@@ -1,3 +1,6 @@
+"use strict";
+
+var SeleniumUtil = require('../../../../core/_buildfiles/jstests/selenium/util/SeleniumUtil.js');
 
 describe('module_dashboard', function() {
 
@@ -6,7 +9,7 @@ describe('module_dashboard', function() {
     });
 
     it('test list', function() {
-        browser.get('index.php?admin=1&module=dashboard&action=list');
+        SeleniumUtil.gotToUrl('index.php?admin=1&module=dashboard&action=list');
 
         expect(browser.driver.findElement(by.id('moduleTitle')).getText()).toEqual('Übersicht');
     });

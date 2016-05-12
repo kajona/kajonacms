@@ -1,3 +1,6 @@
+"use strict";
+
+var SeleniumUtil = require('../../../../core/_buildfiles/jstests/selenium/util/SeleniumUtil.js');
 
 describe('module_guestbook', function() {
 
@@ -6,7 +9,7 @@ describe('module_guestbook', function() {
     });
 
     it('test list', function() {
-        browser.get('index.php?admin=1&module=guestbook&action=list');
+        SeleniumUtil.gotToUrl('index.php?admin=1&module=guestbook&action=list');
 
         expect(browser.driver.findElement(by.id('moduleTitle')).getText()).toEqual('Gästebücher');
     });
