@@ -88,7 +88,7 @@ class DbPostgres extends DbBase {
         if($strName === false)
             return false;
 
-        return @pg_execute($this->linkDB, $strName, $arrParams) !== false;
+        return pg_execute($this->linkDB, $strName, $arrParams) !== false;
     }
 
     /**
@@ -110,9 +110,13 @@ class DbPostgres extends DbBase {
         if($strName === false)
             return false;
 
-        $resultSet = @pg_execute($this->linkDB, $strName, $arrParams);
+        $resultSet = pg_execute($this->linkDB, $strName, $arrParams);
 
-        while($arrRow = @pg_fetch_array($resultSet)) {
+        if($resultSet === false) {
+            return false;
+        }
+
+        while($arrRow = pg_fetch_array($resultSet)) {
             //conversions to remain compatible:
             //   count --> COUNT(*)
             if(isset($arrRow["count"]))
@@ -121,7 +125,7 @@ class DbPostgres extends DbBase {
             $arrReturn[$intCounter++] = $arrRow;
         }
 
-        @pg_free_result($resultSet);
+        pg_free_result($resultSet);
 
         return $arrReturn;
     }
@@ -156,7 +160,7 @@ class DbPostgres extends DbBase {
      * @return string
      */
     public function getError() {
-        $strError = @pg_last_error($this->linkDB);
+        $strError = pg_last_error($this->linkDB);
         return $strError;
     }
 
