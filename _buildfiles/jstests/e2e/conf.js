@@ -3,7 +3,7 @@ var ScreenShotReporter = require('protractor-screenshot-reporter');
 
 exports.config = {
     seleniumAddress: 'http://localhost:4444/wd/hub',
-    baseUrl: 'http://127.0.0.1:8080/',
+    baseUrl: 'http://127.0.0.1:8080',
     specs: [
         'install-spec.js',
         'login-spec.js',
