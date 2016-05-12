@@ -61,7 +61,8 @@ class FaqsFaq extends \Kajona\System\System\Model implements \Kajona\System\Syst
      * @versionable
      * @addSearchIndex
      *
-     * @fieldType Kajona\System\Admin\Formentries\FormentryWysiwygsmall
+     * @fieldType Kajona\System\Admin\Formentries\FormentryWysiwyg
+     * @wysiwygConfig minimalimage
      * @fieldMandatory
      * @templateExport
      */

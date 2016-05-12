@@ -73,7 +73,8 @@ class MediamanagerFile extends \Kajona\System\System\Model implements \Kajona\Sy
      * @tableColumnDatatype text
      * @blockEscaping
      *
-     * @fieldType Kajona\System\Admin\Formentries\FormentryWysiwygsmall
+     * @fieldType Kajona\System\Admin\Formentries\FormentryWysiwyg
+     * @wysiwygConfig minimalimage
      *
      * @addSearchIndex
      */
