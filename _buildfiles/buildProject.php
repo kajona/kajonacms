@@ -107,6 +107,8 @@ class BuildHelper {
 
         $intMaxLoops = 0;
         echo "starting installations...\n";
+        \Kajona\System\System\ResponseObject::getInstance()->setObjEntrypoint(\Kajona\System\System\RequestEntrypointEnum::INSTALLER());
+
         while(count($arrPackagesToInstall) > 0 && ++$intMaxLoops < 100) {
             /** @var \Kajona\Packagemanager\System\PackagemanagerMetadata $objOneMetadata */
             foreach($arrPackagesToInstall as $intKey => $objOneMetadata) {
