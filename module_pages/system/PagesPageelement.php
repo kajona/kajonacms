@@ -461,7 +461,9 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
 
                         AND page_element_ph_element = element_name
                         AND page_element_ph_language = ?
-                        ORDER BY system_sort ASC
+                        ORDER BY page_element_ph_placeholder ASC,
+                           page_element_ph_language ASC, 
+                           system_sort ASC
                   ";
 
             $arrParams[] = $strPageId;
