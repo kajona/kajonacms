@@ -1,8 +1,8 @@
 "use strict";
 
-var LoginPage = require('../page_object/LoginPage.js');
-var AdminLandingPage = require('../page_object/AdminLandingPage.js');
-var SeleniumWaitHelper = require('../util/SeleniumWaitHelper.js');
+var LoginPage = require('../selenium/pageobject/LoginPage.js');
+var AdminLandingPage = require('../selenium/pageobject/AdminLandingPage.js');
+var SeleniumWaitHelper = require('../selenium/util/SeleniumWaitHelper.js');
 
 describe('clickallmodulelinks', function () {
     beforeEach(function () {
@@ -10,28 +10,29 @@ describe('clickallmodulelinks', function () {
     });
 
     it('test clickallmodulelinks', function () {
-        browser.get('index.php?admin=1');
-
-        var loginPage = new LoginPage(browser.driver);
-        var ladingPage = loginPage.login("artemeonadmin", "admin0815");
+        var loginPage = LoginPage.getPage();
         var strMenuName = "CIM";
 
-        ladingPage.then(function(adminLandingPage) {
-            adminLandingPage.leftNavigation.getNavigationModuleLinks(strMenuName).then(function(arrElements) {
-                for(let i = 1; i<= arrElements.length; i++) {
-                    let adminPage = new AdminLandingPage(browser.driver);
-                    adminPage.leftNavigation.getModuleMenuLink(strMenuName, i).then(function(element) {
-                        element.click();
-                    });
-                }
-            }).then(function() {
-                let adminPage = new AdminLandingPage(browser.driver);
+        loginPage
+            .then(function (p) {
+                return p.login("artemeonadmin", "admin0815");
+            })
+            .then(function (adminLandingPage) {
+                adminLandingPage.leftNavigation.getNavigationModuleLinks(strMenuName).then(function (arrElements) {
+                    for (let i = 1; i <= arrElements.length; i++) {
+                        let adminPage = new AdminLandingPage();
+                        adminPage.leftNavigation.getModuleMenuLink(strMenuName, i).then(function (element) {
+                            element.click();
+                        });
+                    }
+                });
+            })
+            .then(function () {
+                let adminPage = new AdminLandingPage();
                 adminPage.topMenu.logout();
             });
-        });
 
         // adminLandingPage.leftNavigation.openNavigationModule(strMenuName);
-
 
 
         // check whether login was successful

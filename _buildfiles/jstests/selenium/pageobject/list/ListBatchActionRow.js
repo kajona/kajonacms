@@ -3,8 +3,8 @@
 /**
  * require statements
  */
-var BasePage = require('../base/BasePage.js');
-var Constants = require('../Constants.js');
+var BasePage = requireHelper('/pageobject/base/BasePage.js');
+var Constants = requireHelper('/pageobject/Constants.js');
 
 /**
  *

@@ -3,11 +3,11 @@
 /**
  * require statements
  */
-var MainContent = require('../MainContent.js');
-var ListRow = require('./ListRow.js');
-var ListBatchActionRow = require('./ListBatchActionRow.js');
-var ListPagination = require('./ListPagination.js');
-var Constants = require('../Constants.js');
+var MainContent = requireHelper('/pageobject/MainContent.js');
+var ListRow = requireHelper('/pageobject/list/ListRow.js');
+var ListBatchActionRow = requireHelper('/pageobject/list/ListBatchActionRow.js');
+var ListPagination = requireHelper('/pageobject/list/ListPagination.js');
+var Constants = requireHelper('/pageobject/Constants.js');
 
 /**
  *

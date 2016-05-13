@@ -1,6 +1,6 @@
 "use strict";
 
-var SeleniumUtil = require('../../../../core/_buildfiles/jstests/selenium/util/SeleniumUtil.js');
+var SeleniumUtil = requireHelper('/util/SeleniumUtil.js');
 
 describe('module_guestbook', function() {
 

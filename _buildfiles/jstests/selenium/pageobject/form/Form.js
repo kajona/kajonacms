@@ -3,8 +3,8 @@
 /**
  * require statements
  */
-var MainContent = require('../MainContent.js');
-var Constants = require('../Constants.js');
+var MainContent = requireHelper('/pageobject/MainContent.js');
+var Constants = requireHelper('/pageobject/Constants.js');
 
 /**
  *

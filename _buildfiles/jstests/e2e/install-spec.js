@@ -1,6 +1,6 @@
 "use strict";
 
-var SeleniumUtil = require('../selenium/util/SeleniumUtil.js');
+var SeleniumUtil = requireHelper('/util/SeleniumUtil.js');
 
 describe('installation', function() {
 

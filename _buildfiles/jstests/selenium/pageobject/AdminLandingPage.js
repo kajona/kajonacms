@@ -3,7 +3,7 @@
 /**
  * require statements
  */
-var AdminBasePage = require('./base/AdminBasePage.js');
+var AdminBasePage = requireHelper('/pageobject/base/AdminBasePage.js');
 
 /**
  * 

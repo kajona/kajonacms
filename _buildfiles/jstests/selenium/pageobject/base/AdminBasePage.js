@@ -1,14 +1,16 @@
 "use strict";
 
+let defaultPageObjectPath = browser.params.defaultPageObjectPath;
+
 /**
  * require statements
  */
-var BasePage = require('./BasePage.js');
-var LeftNavigation = require('../LeftNavigation.js');
-var MainContent = require('../MainContent.js');
-var TopMenu = require('../TopMenu.js');
-var ContentTopBar = require('../ContentTopBar.js');
-var PathNavi = require('../PathNavi.js');
+var BasePage = requireHelper('/pageobject/base/BasePage.js');
+var LeftNavigation = requireHelper('/pageobject/LeftNavigation.js');
+var MainContent = requireHelper('/pageobject/MainContent.js');
+var TopMenu = requireHelper('/pageobject/TopMenu.js');
+var ContentTopBar = requireHelper('/pageobject/ContentTopBar.js');
+var PathNavi = requireHelper('/pageobject/PathNavi.js');
 
 /**
  *

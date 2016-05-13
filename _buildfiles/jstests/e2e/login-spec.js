@@ -1,6 +1,6 @@
 "use strict";
 
-var LoginPage = require('../selenium/pageobject/LoginPage.js');
+var LoginPage = requireHelper('/pageobject/LoginPage.js');
 
 describe('login', function () {
     beforeEach(function () {

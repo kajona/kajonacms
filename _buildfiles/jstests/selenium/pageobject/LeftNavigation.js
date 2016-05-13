@@ -3,9 +3,9 @@
 /**
  * require statements
  */
-var BasePage = require('./base/BasePage.js');
-var SeleniumWaitHelper = require('../util/SeleniumWaitHelper.js');
-var Constants = require('./Constants.js');
+var BasePage = requireHelper('/pageobject/base/BasePage.js');
+var SeleniumWaitHelper = requireHelper('/util/SeleniumWaitHelper.js');
+var Constants = requireHelper('/pageobject/Constants.js');
 
 /**
  *

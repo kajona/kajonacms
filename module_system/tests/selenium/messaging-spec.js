@@ -1,7 +1,7 @@
 "use strict";
 
-var SeleniumUtil = require('../../../../core/_buildfiles/jstests/selenium/util/SeleniumUtil.js');
-var SeleniumWaitHelper = require('../../../../core/_buildfiles/jstests/selenium/util/SeleniumWaitHelper.js');
+var SeleniumUtil = requireHelper('/util/SeleniumUtil.js');
+var SeleniumWaitHelper = requireHelper('/util/SeleniumWaitHelper.js');
 
 
 describe('module_messaging', function() {

@@ -3,11 +3,11 @@
 /**
  * require statements
  */
-var SeleniumWaitHelper = require('../util/SeleniumWaitHelper.js');
-var SeleniumUtil = require('../util/SeleniumUtil.js');
-var BasePage = require('./base/BasePage.js');
-var AdminLandingPage = require('./AdminLandingPage.js');
-var Constants = require('./Constants');
+var SeleniumWaitHelper = requireHelper('/util/SeleniumWaitHelper.js');
+var SeleniumUtil = requireHelper('/util/SeleniumUtil.js');
+var BasePage = requireHelper('/pageobject/base/BasePage.js');
+var AdminLandingPage = requireHelper('/pageobject/AdminLandingPage.js');
+var Constants = requireHelper('/pageobject/Constants');
 
 /**
  *
