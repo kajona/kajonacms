@@ -92,11 +92,11 @@ class FormentryTemplate extends FormentryBase implements FormentryInterface
             $strTemplateDir = $objReflection->getAnnotationValueForProperty($strSourceProperty, self::STR_TEMPLATEDIR_ANNOTATION);
 
             //load templates
-            $arrTemplates = Resourceloader::getInstance()->getTemplatesInFolder($strTemplateDir);
+            $arrTemplates = Resourceloader::getInstance()->getTemplatesInFolder($strTemplateDir, true);
             $arrTemplatesDD = array();
             if (count($arrTemplates) > 0) {
-                foreach ($arrTemplates as $strTemplate) {
-                    $arrTemplatesDD[$strTemplate] = $strTemplate;
+                foreach ($arrTemplates as $strPath => $strTemplate) {
+                    $arrTemplatesDD[$strTemplate] = $strTemplate . " (" .$strPath.")";
                 }
             }
             $this->setArrKeyValues($arrTemplatesDD);
