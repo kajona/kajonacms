@@ -31,6 +31,8 @@ use Kajona\System\System\Exception;
 use Kajona\System\System\Filesystem;
 use Kajona\System\System\History;
 use Kajona\System\System\HttpResponsetypes;
+use Kajona\System\System\Image2;
+use Kajona\System\System\Imageplugins\ImageScale;
 use Kajona\System\System\Link;
 use Kajona\System\System\Model;
 use Kajona\System\System\ModelInterface;
@@ -410,20 +412,18 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
         $strImages = "";
         foreach ($objHandler->getObjMetadata()->getArrScreenshots() as $strOneScreenshot) {
 
-            $strImage = "";
-            if (uniSubstr($objHandler->getObjMetadata()->getStrPath(), 0, -5) == ".phar") {
-                $strPharImage = "phar://"._realpath_."/".$objHandler->getObjMetadata()->getStrPath()."/".$strOneScreenshot;
-                if (is_file($strPharImage)) {
-                    $strImage = _images_cachepath_."/".generateSystemid().uniSubstr($strOneScreenshot, -4);
-                    copy($strPharImage, _realpath_.$strImage);
-                }
+            if ($objHandler->getObjMetadata()->getBitIsPhar()) {
+                $strImage = "phar://"._realpath_."/".$objHandler->getObjMetadata()->getStrPath()."/".$strOneScreenshot;
             }
             else {
-                $strImage = $objHandler->getObjMetadata()->getStrPath()."/".$strOneScreenshot;
+                $strImage = _realpath_.$objHandler->getObjMetadata()->getStrPath()."/".$strOneScreenshot;
             }
 
-            if ($strImage != "") {
-                $strImages .= "<img src='"._webpath_."/image.php?image=".urlencode(StringUtil::replace(_realpath_, "", $strImage))."&maxWidth=300&maxHeight=200' alt='".$strOneScreenshot."' />&nbsp;";
+            if ($strImage != "" && is_file($strImage)) {
+                $objImage = new Image2();
+                $objImage->load($strImage);
+                $objImage->addOperation(new ImageScale(300, 300));
+                $strImages .= "<img src='".$objImage->getAsBase64Src()."' alt='".$strOneScreenshot."' />&nbsp;";
             }
         }
         $arrRows[] = array($this->getLang("package_screenshots"), $strImages);
@@ -564,9 +564,6 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
         $objManager = new PackagemanagerManager();
         $arrContentProvider = $objManager->getContentproviders();
         if ($this->getParam("provider") == "") {
-
-            //todo: temporary switched back to a simple list until the problems with tabs height and the dropdowns width' are resolved completely.
-            // in addition this reduces the workload on both, client, server and remote repositories
 
             $strReturn .= $this->objToolkit->listHeader();
             foreach ($arrContentProvider as $objOneProvider) {
