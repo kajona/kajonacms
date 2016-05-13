@@ -26,6 +26,14 @@ use Kajona\System\System\XmlParser;
  */
 class ElementRssfeedPortal extends ElementPortal implements PortalElementInterface
 {
+    /**
+     * @inheritDoc
+     */
+    protected function getAnchorTag()
+    {
+        return "";
+    }
+
 
     /**
      * Loads the feed and displays it
@@ -114,7 +122,7 @@ class ElementRssfeedPortal extends ElementPortal implements PortalElementInterfa
 
                     $arrTemplate["feed_title"] = $arrFeed["feed"][0]["title"][0]["value"];
                     $arrTemplate["feed_link"] = $arrFeed["feed"][0]["link"][0]["attributes"]["href"];
-                    $arrTemplate["feed_description"] = $arrFeed["feed"][0]["subtitle"][0]["value"];
+                    $arrTemplate["feed_description"] = isset($arrFeed["feed"][0]["subtitle"]) ? $arrFeed["feed"][0]["subtitle"][0]["value"] : "";
                     $intCounter = 0;
 
                     if (isset($arrFeed["feed"][0]["entry"]) && is_array($arrFeed["feed"][0]["entry"])) {
@@ -137,6 +145,15 @@ class ElementRssfeedPortal extends ElementPortal implements PortalElementInterfa
                             $arrMessage["post_title"] = (isset($arrOneItem["title"][0]["value"]) ? $arrOneItem["title"][0]["value"] : "");
                             $arrMessage["post_description"] = (isset($arrOneItem["summary"][0]["value"]) ? $arrOneItem["summary"][0]["value"] : "");
                             $arrMessage["post_link"] = (isset($arrOneItem["link"][0]["attributes"]["href"]) ? $arrOneItem["link"][0]["attributes"]["href"] : "");
+                            
+                            //fetch special entries
+                            if(isset($arrOneItem["media:thumbnail"]) && isset($arrOneItem["media:thumbnail"][0]["attributes"]["url"])) {
+                                $arrMessage["post_image_url"] = $arrOneItem["media:thumbnail"][0]["attributes"]["url"];
+                            }
+
+                            if(isset($arrOneItem["author"]) && isset($arrOneItem["author"][0]["name"])) {
+                                $arrMessage["post_author"] = $arrOneItem["author"][0]["name"][0]["value"];
+                            }
 
                             $strContent .= $this->objTemplate->fillTemplateFile($arrMessage, "/module_rssfeed/".$this->arrElementData["char1"], "rssfeed_post");
 

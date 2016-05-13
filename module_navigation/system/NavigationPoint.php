@@ -284,7 +284,6 @@ class NavigationPoint extends Model implements ModelInterface, AdminListableInte
             if ($objOneEntry instanceof PagesPage) {
 
                 //validate if the page to be linked has a template assigned and at least a single element created
-                //TODO: hier müssen blocks raus!!!!
                 $arrElementsOnPage = PagesPageelement::getPlainElementsOnPage($objOneEntry->getSystemid(), true, $objLanguage->getStrPortalLanguage(), true);
                 $arrElementsOnPage = array_filter($arrElementsOnPage, function($arrRow) {
                     return $arrRow["page_element_ph_placeholder"] != "blocks" && !StringUtil::startsWith($arrRow["page_element_ph_placeholder"], "master");
@@ -328,8 +327,6 @@ class NavigationPoint extends Model implements ModelInterface, AdminListableInte
             if ($objInstance->getIntType() != PagesPage::$INT_TYPE_ALIAS) {
                 $arrReturn = array_merge($arrReturn, self::getAdditionalEntriesForPage($objInstance));
             }
-            //else
-            //    $arrReturn = array_merge($arrReturn, self::getAdditionalEntriesForPage(PagesPage::getPageByName($objInstance->getStrAlias())));
 
         }
 
