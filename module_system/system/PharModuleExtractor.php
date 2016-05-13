@@ -48,7 +48,12 @@ class PharModuleExtractor
                 if (preg_match($this->strExtractPattern, $strKey)) {
                     //extract the file and export it
                     $strTargetPath = _realpath_."/files/extract/".$strModule."/".$strKey;
-                    $objFilesystem->folderCreate(dirname($strTargetPath), true, true);
+
+                    try {
+                        $objFilesystem->folderCreate(dirname($strTargetPath), true, true);
+                    } catch (Exception $objEx) {
+                        throw new Exception("Failed to copy to "._realpath_."files/extract/, please make sure the directory is writable and reload the page.", Exception::$level_FATALERROR, $objEx);
+                    }
                     //copy
                     copy($strFullPath, $strTargetPath);
                 }

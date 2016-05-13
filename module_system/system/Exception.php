@@ -45,9 +45,9 @@ class Exception extends \Exception
      * @param string $strError
      * @param int $intErrorlevel
      */
-    public function __construct($strError, $intErrorlevel)
+    public function __construct($strError, $intErrorlevel, Exception $objPrevious = null)
     {
-        parent::__construct($strError);
+        parent::__construct($strError, 0, $objPrevious);
         $this->intErrorlevel = $intErrorlevel;
 
         //decide, what to print --> get config-value
@@ -127,6 +127,12 @@ class Exception extends \Exception
                 }
             }
             $strMailtext .= "\n\n";
+
+            $strMailtext .= "Callstack:\n";
+            $strMailtext .= $this->getTraceAsString();
+            $strMailtext .= "\n\n";
+
+
             $strMailtext .= "If you don't know what to do, feel free to open a ticket.\n\n";
             $strMailtext .= "For more help visit http://www.kajona.de.\n\n";
 
@@ -145,59 +151,45 @@ class Exception extends \Exception
             $objMessageHandler->sendMessageObject($objMessage, new UserGroup(SystemSetting::getConfigValue("_admins_group_id_")));
         }
 
-        if ($this->intErrorlevel == Exception::$level_FATALERROR) {
-            //Handle fatal errors.
-            $strLogMessage = basename($this->getFile()).":".$this->getLine()." -- ".$this->getMessage();
-            Logger::getInstance()->addLogRow($strLogMessage, Logger::$levelError);
 
-            //fatal errors are displayed in every case
+
+        //Handle  errors.
+        $strLogMessage = basename($this->getFile()).":".$this->getLine()." -- ".$this->getMessage();
+        Logger::getInstance()->addLogRow($strLogMessage, Logger::$levelError);
+
+        //fatal errors are displayed in every case
+        if ($this->intDebuglevel >= 1 || $this->intErrorlevel == Exception::$level_FATALERROR) {
             if (_xmlLoader_ === true) {
                 $strErrormessage = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
                 $strErrormessage .= "<error>".xmlSafeString($this->getMessage())."</error>";
             }
             else {
                 $strErrormessage = "<html><head></head><body><div style=\"border: 1px solid red; padding: 5px; margin: 20px; font-family: arial,verdana,sans-serif; font-size: 12px;  \">\n";
-                $strErrormessage .= "<div style=\"background-color: #cccccc; color: #000000; font-weight: bold; \">A fatal error occurred:</div>\n";
+                $strErrormessage .= "<div style=\"background-color: #cccccc; color: #000000; font-weight: bold; \">An error occurred:</div>\n";
                 $strErrormessage .= "<pre>".(htmlspecialchars($this->getMessage(), ENT_QUOTES, "UTF-8", false))."</pre><br />";
 
-                $strErrormessage .= "Please inform the administration about the error above.";
+                if ($this->intErrorlevel == Exception::$level_FATALERROR || Session::getInstance()->isSuperAdmin()) {
+                    $strErrormessage .= "<pre>Stacktrace:\n".(htmlspecialchars($this->getTraceAsString(), ENT_QUOTES, "UTF-8", false))."</pre><br />";
+                }
+
+                $strErrormessage .= "Please contact the system admin";
                 $strErrormessage .= "</div></body></html>";
 
             }
             print $strErrormessage;
+
             //Execution has to be stopped here!
             if (ResponseObject::getInstance()->getStrStatusCode() == "" || ResponseObject::getInstance()->getStrStatusCode() == HttpStatuscodes::SC_OK) {
                 ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_INTERNAL_SERVER_ERROR);
             }
 
+        }
+
+        if ($this->intErrorlevel == Exception::$level_FATALERROR) {
             ResponseObject::getInstance()->sendHeaders();
             die();
         }
-        elseif ($this->intErrorlevel == Exception::$level_ERROR) {
-            //handle regular errors
-            $strLogMessage = basename($this->getFile()).":".$this->getLine()." -- ".$this->getMessage();
-            Logger::getInstance()->addLogRow($strLogMessage, Logger::$levelWarning);
 
-            //check, if regular errors should be displayed:
-            if ($this->intDebuglevel >= 1) {
-                if (_xmlLoader_ === true) {
-                    $strErrormessage = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-                    $strErrormessage .= "<error>".xmlSafeString($this->getMessage())."</error>";
-                }
-                else {
-                    $strErrormessage = "<html><head></head><body><div style=\"border: 1px solid red; padding: 5px; margin: 20px; font-family: arial,verdana,sans-serif; font-size: 12px; \">\n";
-                    $strErrormessage .= "<div style=\"background-color: #cccccc; color: #000000; font-weight: bold; \">An error occurred:</div>\n";
-                    $strErrormessage .= "<pre>".(htmlspecialchars($this->getMessage(), ENT_QUOTES, "UTF-8", false))."</pre><br />";
-                    //$strErrormessage .= basename($this->getFile()) ." in Line ".$this->getLine();
-
-                    $strErrormessage .= "Please inform the administration about the error above.";
-                    $strErrormessage .= "</div></body></html>";
-                }
-                print $strErrormessage;
-                //if error was displayed, stop execution
-                //die();
-            }
-        }
 
     }
 

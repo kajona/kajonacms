@@ -383,10 +383,10 @@ class Filesystem
         $strFolder = $this->prependRealpath($strFolder);
 
         if (!is_dir($strFolder)) {
-            $bitReturn = mkdir($strFolder, 0777, $bitRecursive);
+            $bitReturn = @mkdir($strFolder, 0777, $bitRecursive);
 
             if(!$bitReturn && $bitThrowExceptionOnError) {
-                throw new Exception("Error creating folder ".$strFolder.", maybe the target is not writable?", Exception::$level_FATALERROR);
+                throw new Exception("Error creating folder ".$strFolder.", maybe the target is not writable?", Exception::$level_ERROR);
             }
         }
 
