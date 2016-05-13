@@ -7,7 +7,7 @@
 /**
  * @deprecated
  */
-class class_stats_report_packageserverqueries extends Kajona\Packageserver\Admin\Statsreports\StatsReportPackageserverqueries
+class class_stats_report_packageserverqueries extends \Kajona\Packageserver\Admin\Reports\StatsReportPackageserverqueries
 {
 
 }

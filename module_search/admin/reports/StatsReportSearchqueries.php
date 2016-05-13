@@ -7,7 +7,7 @@
 *	$Id$                           *
 ********************************************************************************************************/
 
-namespace Kajona\Search\Admin\Statsreports;
+namespace Kajona\Search\Admin\Reports;
 
 use Kajona\Stats\Admin\AdminStatsreportsInterface;
 use Kajona\System\Admin\ToolkitAdmin;

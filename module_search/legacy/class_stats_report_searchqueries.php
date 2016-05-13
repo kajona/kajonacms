@@ -6,6 +6,6 @@
 /**
  * @deprecated
  */
-class class_stats_report_searchqueries extends Kajona\Search\Admin\Statsreports\StatsReportSearchqueries
+class class_stats_report_searchqueries extends \Kajona\Search\Admin\Reports\StatsReportSearchqueries
 {
 }
