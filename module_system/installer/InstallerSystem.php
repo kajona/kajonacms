@@ -409,7 +409,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $strReturn .= "ID of new language: ".$objLanguage->getSystemid()."\n";
 
         //the admin-language
-        $strAdminLanguage = $this->objSession->getAdminLanguage();
+        $strAdminLanguage = $this->strContentLanguage;
 
         //creating a new default-aspect
         $strReturn .= "Registering new default aspects...\n";
