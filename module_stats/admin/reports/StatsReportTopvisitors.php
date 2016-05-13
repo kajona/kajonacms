@@ -9,7 +9,7 @@
 
 namespace Kajona\Stats\Admin\Reports;
 
-use Kajona\Stats\Admin\AdminStatsreportsInterface;
+use Kajona\System\Admin\Reports\AdminStatsreportsInterface;
 use Kajona\System\Admin\ToolkitAdmin;
 use Kajona\System\System\Database;
 use Kajona\System\System\Lang;

@@ -9,7 +9,7 @@
 
 namespace Kajona\Search\Admin\Reports;
 
-use Kajona\Stats\Admin\AdminStatsreportsInterface;
+use Kajona\System\Admin\Reports\AdminStatsreportsInterface;
 use Kajona\System\Admin\ToolkitAdmin;
 use Kajona\System\System\ArraySectionIterator;
 use Kajona\System\System\Database;

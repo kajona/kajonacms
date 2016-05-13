@@ -11,6 +11,7 @@ namespace Kajona\Stats\Admin;
 
 use Kajona\System\Admin\AdminController;
 use Kajona\System\Admin\AdminInterface;
+use Kajona\System\Admin\Reports\AdminStatsreportsInterface;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Pluginmanager;
 use Kajona\System\System\StringUtil;

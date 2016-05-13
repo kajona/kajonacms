@@ -5,7 +5,7 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
-namespace Kajona\Stats\Admin;
+namespace Kajona\System\Admin\Reports;
 
 
 /**
