@@ -235,6 +235,39 @@ class InstallerPages extends InstallerBase implements InstallerInterface {
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.7.2") {
             $strReturn = "Updating to 5.0...\n";
+
+
+            $arrElements = array(
+                "image" => array("ElementImageAdmin.php", "ElementImagePortal.php"),
+                "imagesrc" => array("ElementImagesrcAdmin.php", "ElementImagesrcPortal.php"),
+                "blocks" => array("ElementBlocksAdmin.php", "ElementBlocksPortal.php"),
+                "block" => array("ElementBlockAdmin.php", "ElementBlockPortal.php"),
+                "date" => array("ElementDateAdmin.php", "ElementDatePortal.php"),
+                "plaintext" => array("ElementPlaintextAdmin.php", "ElementPlaintextPortal.php"),
+                "richtext" => array("ElementRichtextAdmin.php", "ElementRichtextPortal.php"),
+                "link" => array("ElementLinkAdmin.php", "ElementLinkPortal.php"),
+            );
+
+            foreach($arrElements as $strOneElement => $arrConfig) {
+
+                //Register the element
+                //check, if not already existing
+                $objElement = PagesElement::getElement($strOneElement);
+                if ($objElement == null) {
+                    $strReturn .= "Registering element ".$strOneElement."...\n";
+                    $objElement = new PagesElement();
+                    $objElement->setStrName($strOneElement);
+                    $objElement->setStrClassAdmin($arrConfig[0]);
+                    $objElement->setStrClassPortal($arrConfig[1]);
+                    $objElement->setIntCachetime(3600);
+                    $objElement->setIntRepeat(1);
+                    $objElement->setStrVersion($this->objMetadata->getStrVersion());
+                    $objElement->updateObjectToDb();
+                }
+
+            }
+
+
             $this->updateModuleVersion("", "5.0");
             $this->updateElementVersion("row", "5.0");
             $this->updateElementVersion("paragraph", "5.0");
