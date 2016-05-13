@@ -91,7 +91,7 @@ class Installer
         }
         else {
             //init correct text-file handling as in admins
-            $this->objLang->setStrTextLanguage($this->objSession->getAdminLanguage(true));
+            $this->objLang->setStrTextLanguage($this->objSession->getAdminLanguage(true, true));
         }
 
         $this->STR_PROJECT_CONFIG_FILE = _realpath_."/project/module_system/system/config/config.php";
