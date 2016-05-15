@@ -31,7 +31,7 @@ class Filesystem
      */
     private function prependRealpath($strPath)
     {
-        if (\Kajona\System\System\StringUtil::indexOf(StringUtil::replace("\\", "/", $strPath), _realpath_) === false) {
+        if (\Kajona\System\System\StringUtil::indexOf(StringUtil::replace("\\", "/", $strPath), _realpath_, false) === false) {
             $strPath = _realpath_.$strPath;
         }
 
@@ -257,6 +257,11 @@ class Filesystem
         if (is_file($strSource)) {
             //bitForce: overwrite existing file
             if (!is_file($strTarget) || $bitForce) {
+
+                if(!is_dir(dirname($strTarget))) {
+                    $this->folderCreate(dirname($strTarget), true);
+                }
+
                 $bitReturn = copy($strSource, $strTarget);
                 //set correct rights
                 @chmod($strTarget, 0777);

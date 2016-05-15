@@ -856,10 +856,11 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
         $objPack = new PackagemanagerTemplate($this->getSystemid());
         $objFilesystem = new Filesystem();
 
-        $arrModules = $this->getParam("pack_modules");
+        $arrModules = $this->getParam("pack_path");
         foreach ($arrModules as $strName => $strValue) {
             if ($strValue != "") {
-                $objFilesystem->folderCopyRecursive(Resourceloader::getInstance()->getAbsolutePathForModule($strName)."/templates/default", _templatepath_."/".$objPack->getStrName(), false);
+                $strTarget = _templatepath_."/".$objPack->getStrName()."/".StringUtil::substring($strName, StringUtil::indexOf($strName, "/default/")+9);
+                $objFilesystem->fileCopy($strName, $strTarget);
             }
         }
 
@@ -887,16 +888,40 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
     /**
      * @return AdminFormgenerator
      */
-    private function getPackAdminForm($objTargetObject = null)
+    private function getPackAdminForm(PackagemanagerTemplate $objTargetObject = null)
     {
         $objFormgenerator = new AdminFormgenerator("pack", $objTargetObject);
         $objFormgenerator->addField(new FormentryText("pack", "name"))->setStrLabel($this->getLang("pack_name"))->setBitMandatory(true)->setStrValue($this->getParam("pack_name"));
         $objFormgenerator->addField(new FormentryHeadline())->setStrValue($this->getLang("pack_copy_include"));
         $arrModules = Classloader::getInstance()->getArrModules();
+        $objFilesystem = new Filesystem();
+
         foreach ($arrModules as $strOneModule) {
             //validate if there's a template-folder existing
-            if (is_dir(Resourceloader::getInstance()->getAbsolutePathForModule($strOneModule)."/templates")) {
-                $objFormgenerator->addField(new FormentryCheckbox("pack", "modules[".$strOneModule."]"))->setStrLabel($strOneModule)->setStrValue($strOneModule == "module_pages");
+            if (is_dir(Resourceloader::getInstance()->getAbsolutePathForModule($strOneModule)."/templates/default/tpl")) {
+
+                $arrContent = $objFilesystem->getFilelist(Resourceloader::getInstance()->getAbsolutePathForModule($strOneModule)."/templates/default", array(".tpl"), true);
+
+                if(count($arrContent) > 0) {
+                    $objFormgenerator->addField(new FormentryHeadline())->setStrValue($strOneModule);
+
+
+                    foreach ($arrContent as $strPath => $strOneFile) {
+
+                        $bitReadonly = false;
+                        if($objTargetObject != null) {
+                            $strPath2 = _templatepath_."/".$objTargetObject->getStrName()."/".StringUtil::substring($strPath, StringUtil::indexOf($strPath, "/default/")+9);
+                            if(is_file(_realpath_.$strPath2)) {
+                                $bitReadonly = true;
+                            }
+                        }
+                        $objFormgenerator->addField(new FormentryCheckbox("pack", "path[".$strPath."]"))->setStrLabel($strOneFile)->setStrValue($bitReadonly)
+                            //->setStrHint($strPath2)
+                            ->setBitReadonly($bitReadonly);
+                        ;
+
+                    }
+                }
             }
 
         }
@@ -929,10 +954,11 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
         $objFilesystem->folderCreate(_templatepath_."/".$strPackName."/css");
         $objFilesystem->folderCreate(_templatepath_."/".$strPackName."/js");
 
-        $arrModules = $this->getParam("pack_modules");
+        $arrModules = $this->getParam("pack_path");
         foreach ($arrModules as $strName => $strValue) {
             if ($strValue != "") {
-                $objFilesystem->folderCopyRecursive(Resourceloader::getInstance()->getAbsolutePathForModule($strName)."/templates/default", _templatepath_."/".$strPackName);
+                $strTarget = _templatepath_."/".$strPackName."/".StringUtil::substring($strName, StringUtil::indexOf($strName, "/default/")+9);
+                $objFilesystem->fileCopy($strName, $strTarget);
             }
         }
 
