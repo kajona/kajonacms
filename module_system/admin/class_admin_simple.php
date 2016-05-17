@@ -528,11 +528,19 @@ abstract class class_admin_simple extends class_admin_controller {
             return "";
         }
 
-        if($objListEntry->rightEdit() && $this->strPeAddon == "") {
+        if ($objListEntry->rightEdit() && $this->strPeAddon == "") {
+            $strQuestion = $this->getLang("commons_copy_record_question", "system", array(strip_tags($objListEntry->getStrDisplayName())));
             $strHref = class_link::getLinkAdminHref($objListEntry->getArrModule("modul"), $this->getActionNameForClass("copyObject", $objListEntry), "&systemid=".$objListEntry->getSystemid().$this->strPeAddon);
-            return $this->objToolkit->listButton(
-                class_link::getLinkAdminManual(" onclick='jsDialog_3.init();' href='".$strHref."'", "", $this->getLang("commons_edit_copy"), "icon_copy")
+
+            //create the list-button and the js code to show the dialog
+            $strButton = class_link::getLinkAdminManual(
+                "href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('".$this->getLang("dialog_copyHeader", "system")."'); jsDialog_1.setContent('".$strQuestion."', '".$this->getLang("dialog_copyButton", "system")."',  function() {jsDialog_3.init(); document.location.href= '{$strHref}';}); jsDialog_1.init(); return false;\"",
+                "",
+                $this->getLang("commons_edit_copy", "system"),
+                "icon_copy"
             );
+
+            return $this->objToolkit->listButton($strButton);
         }
         return "";
     }

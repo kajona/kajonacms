@@ -32,6 +32,7 @@ $lang["commons_create_folder"]           = "Create folder";
 $lang["commons_continue"]                = "Continue";
 $lang["commons_close"]                   = "Close";
 $lang["commons_date"]                    = "Date";
+$lang["commons_copy_record_question"]  = "Do you really want to copy the record &quot;<b>{0}</b>&quot;?";
 $lang["commons_create_date"]             = "Create date";
 $lang["commons_lastmodification_date"]   = "Last modification date";
 $lang["commons_delete"]                  = "Delete";
