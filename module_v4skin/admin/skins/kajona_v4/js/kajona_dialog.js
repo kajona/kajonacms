@@ -46,7 +46,7 @@ KAJONA.admin.ModalDialog = function (strDialogId, intDialogType, bitDragging, bi
             if(jQuery.isFunction(strLinkHref)) {
 
                 $confirmButton.click(function() {
-                    strLinkHref();
+                    var objReturn = strLinkHref();
 
                     if(bitUnbind) {
                         $confirmButton.unbind();
@@ -54,6 +54,8 @@ KAJONA.admin.ModalDialog = function (strDialogId, intDialogType, bitDragging, bi
                             return false;
                         });
                     }
+
+                    return objReturn;
                 });
             }
             else {
