@@ -605,7 +605,7 @@ abstract class AdminSimple extends AdminController
         }
 
         if ($objListEntry->rightEdit() && $this->strPeAddon == "") {
-            $strQuestion = $this->getLang("commons_copy_record_question", "system", array(strip_tags($objListEntry->getStrDisplayName())));
+            $strQuestion = $this->getLang("commons_copy_record_question", "system", array(addslashes(strip_tags($objListEntry->getStrDisplayName()))));
             $strHref = Link::getLinkAdminHref($objListEntry->getArrModule("modul"), $this->getActionNameForClass("copyObject", $objListEntry), "&systemid=".$objListEntry->getSystemid().$this->strPeAddon);
 
             //create the list-button and the js code to show the dialog
