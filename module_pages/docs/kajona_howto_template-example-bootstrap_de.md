@@ -1,4 +1,4 @@
-#Template-Erstellung am Beispiel eines Bootstrap-Templates
+#Template-Erstellung für Kajona am Beispiel eines Bootstrap-Templates
 
 Dieses Tutorial zeigt, wie man ein eigenes Website-Template für Kajona V5 erstellt. Es wird auf Basis des Bootstrap-Templates "Simple Sidebar" ein responsives Kajona-Template mit fontawesome-Icons erstellt, bei dem die Navigationsleiste links angeordnet ist und entwerder manuell eingeklappt werden kann oder bei kleinen Bildschirmgrößen automatisch ausgeblendet wird.
 
