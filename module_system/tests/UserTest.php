@@ -19,12 +19,12 @@ class UserTest extends Testbase
         //blank system - one user should have been created
 
         echo "\tcheck number of users installed...\n";
-        $arrUserInstalled = UserUser::getObjectList();
+        $arrUserInstalled = UserUser::getObjectListFiltered();
         $intStartUsers = count($arrUserInstalled);
         echo "\t ...found " . $intStartUsers . " users.\n";
 
         echo "\tcheck number of groups installed...\n";
-        $arrGroupsInstalled = UserGroup::getObjectList();
+        $arrGroupsInstalled = UserGroup::getObjectListFiltered();
         $intStartGroups = count($arrGroupsInstalled);
         echo "\t ...found " . $intStartUsers . " users.\n";
 
@@ -43,7 +43,7 @@ class UserTest extends Testbase
             $objUser = new UserUser($strID);
             $this->assertEquals($objUser->getStrUsername(), $strUsername, __FILE__ . " checkNameOfUserCreated");
         }
-        $arrUserInstalled = UserUser::getObjectList();
+        $arrUserInstalled = UserUser::getObjectListFiltered();
         $this->assertEquals(count($arrUserInstalled), (10 + $intStartUsers), __FILE__ . " checkNrOfUsersCreatedByModel");
 
 
@@ -60,7 +60,7 @@ class UserTest extends Testbase
             $objGroup = new UserGroup($strID);
             $this->assertEquals($objGroup->getStrName(), $strName, __FILE__ . " checkNameOfGroupCreated");
         }
-        $arrGroupsInstalled = UserGroup::getObjectList();
+        $arrGroupsInstalled = UserGroup::getObjectListFiltered();
         $this->assertEquals(count($arrGroupsInstalled), (10 + $intStartGroups), __FILE__ . " checkNrOfGroupsByModel");
 
 
@@ -74,7 +74,7 @@ class UserTest extends Testbase
 
 
         echo "\tcheck number of users installed...\n";
-        $arrUserInstalled = UserUser::getObjectList();
+        $arrUserInstalled = UserUser::getObjectListFiltered();
         $this->assertEquals(count($arrUserInstalled), $intStartUsers, __FILE__ . " checkNrOfUsers");
 
 
@@ -86,7 +86,7 @@ class UserTest extends Testbase
         $objDB->flushQueryCache();
 
         echo "\tcheck number of groups installed...\n";
-        $arrGroupsInstalled = UserGroup::getObjectList();
+        $arrGroupsInstalled = UserGroup::getObjectListFiltered();
         $this->assertEquals(count($arrGroupsInstalled), $intStartGroups, __FILE__ . " checkNrOfGroups");
 
         echo "\ttest group membership handling...\n";
@@ -118,11 +118,11 @@ class UserTest extends Testbase
 
         $objDB->flushQueryCache();
         echo "\tcheck number of users installed is same as at beginning...\n";
-        $arrUserInstalled = UserUser::getObjectList();
+        $arrUserInstalled = UserUser::getObjectListFiltered();
         $this->assertEquals(count($arrUserInstalled), $intStartUsers, __FILE__ . " checkNrOfUsersAtEnd");
 
         echo "\tcheck number of groups installed is same as at beginning...\n";
-        $arrGroupsInstalled = UserGroup::getObjectList();
+        $arrGroupsInstalled = UserGroup::getObjectListFiltered();
         $this->assertEquals(count($arrGroupsInstalled), $intStartGroups, __FILE__ . " checkNrOfGrpupsAtEnd");
 
     }

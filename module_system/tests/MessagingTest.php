@@ -27,7 +27,7 @@ class MessagingTest extends Testbase
         $objGroup = new UserGroup(SystemSetting::getConfigValue("_admins_group_id_"));
         $arrUsers = $objGroup->getObjSourceGroup()->getUserIdsForGroup();
 
-        $arrMessages = MessagingMessage::getObjectList($arrUsers[0]);
+        $arrMessages = MessagingMessage::getObjectListFiltered(null, $arrUsers[0]);
 
         foreach ($arrMessages as $objOneMessage) {
             if ($objOneMessage->getStrBody() == $strText && $objOneMessage->getStrMessageProvider() == "Kajona\\System\\System\\Messageproviders\\MessageproviderExceptions") {
@@ -70,7 +70,7 @@ class MessagingTest extends Testbase
 
         foreach ($arrUsers as $objOneUser) {
             $bitFound = false;
-            $arrMessages = MessagingMessage::getObjectList($objOneUser);
+            $arrMessages = MessagingMessage::getObjectListFiltered(null, $objOneUser);
 
             foreach ($arrMessages as $objOneMessage) {
                 if ($objOneMessage->getStrBody() == $strText && $objOneMessage->getStrMessageProvider() == "Kajona\\System\\System\\Messageproviders\\MessageproviderExceptions") {
@@ -103,7 +103,7 @@ class MessagingTest extends Testbase
         $objGroup = new UserGroup(SystemSetting::getConfigValue("_admins_group_id_"));
         $arrUsers = $objGroup->getObjSourceGroup()->getUserIdsForGroup();
 
-        $arrMessages = MessagingMessage::getObjectList($arrUsers[0]);
+        $arrMessages = MessagingMessage::getObjectListFiltered(null, $arrUsers[0]);
 
         $intUnread = MessagingMessage::getNumberOfMessagesForUser($arrUsers[0], true);
 

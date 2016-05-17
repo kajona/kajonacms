@@ -85,7 +85,7 @@ class RightAdmin extends AdminController implements AdminInterface {
             //Get Rights
             $arrRights = $objRights->getArrayRights($objTargetRecord->getSystemid());
             //Get groups
-            $arrGroups = UserGroup::getObjectList();
+            $arrGroups = UserGroup::getObjectListFiltered();
 
             //Determine name of the record
             if($objTargetRecord instanceof SystemModule)

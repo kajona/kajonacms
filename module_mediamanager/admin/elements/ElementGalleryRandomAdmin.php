@@ -106,7 +106,7 @@ class ElementGalleryRandomAdmin extends ElementAdmin implements AdminElementInte
     {
         $objForm = parent::getAdminForm();
 
-        $arrRawGals = MediamanagerRepo::getObjectList();
+        $arrRawGals = MediamanagerRepo::getObjectListFiltered();
         $arrGalleries = array();
         foreach ($arrRawGals as $objOneGal) {
             $arrGalleries[$objOneGal->getSystemid()] = $objOneGal->getStrDisplayName();

@@ -139,7 +139,7 @@ class InstallerSearch extends InstallerBase implements InstallerRemovableInterfa
         }
 
         /** @var SearchSearch $objOneObject */
-        foreach(SearchSearch::getObjectList() as $objOneObject) {
+        foreach(SearchSearch::getObjectListFiltered() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
             if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";

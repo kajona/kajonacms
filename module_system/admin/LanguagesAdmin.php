@@ -52,7 +52,7 @@ class LanguagesAdmin extends AdminSimple implements AdminInterface {
 
         $objArraySectionIterator = new ArraySectionIterator(LanguagesLanguage::getNumberOfLanguagesAvailable());
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-        $objArraySectionIterator->setArraySection(LanguagesLanguage::getObjectList(false, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+        $objArraySectionIterator->setArraySection(LanguagesLanguage::getObjectListFiltered(null, false, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
         return $this->renderList($objArraySectionIterator);
 
@@ -221,7 +221,7 @@ class LanguagesAdmin extends AdminSimple implements AdminInterface {
      */
     public static function enableLanguageSwitch() {
         if(self::$arrLanguageSwitchEntries == null) {
-            $arrObjLanguages = LanguagesLanguage::getObjectList(true);
+            $arrObjLanguages = LanguagesLanguage::getObjectListFiltered(null, true);
             if(count($arrObjLanguages) > 1) {
                 self::$arrLanguageSwitchEntries = array();
                 foreach($arrObjLanguages as $objOneLang) {

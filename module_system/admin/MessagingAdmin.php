@@ -314,10 +314,8 @@ JS;
         $objArraySectionIterator = new ArraySectionIterator(MessagingMessage::getNumberOfMessagesForUser($this->objSession->getUserID()));
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(
-            MessagingMessage::getObjectList(
-                $this->objSession->getUserID(),
-                $objArraySectionIterator->calculateStartPos(),
-                $objArraySectionIterator->calculateEndPos()
+            MessagingMessage::getObjectListFiltered(
+                null, $this->objSession->getUserID(), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()
             )
         );
 
@@ -579,7 +577,7 @@ JS;
 
         $intMaxAmount = $this->getParam("limit") != "" ? $this->getParam("limit") : 5;
 
-        $arrMessages = MessagingMessage::getObjectList($this->objSession->getUserID(), 0, $intMaxAmount - 1);
+        $arrMessages = MessagingMessage::getObjectListFiltered(null, $this->objSession->getUserID(), 0, $intMaxAmount - 1);
         $arrReturn = array();
         foreach ($arrMessages as $objOneMessage) {
             $arrReturn[] = array(

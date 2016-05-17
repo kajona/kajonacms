@@ -19,6 +19,7 @@ use Kajona\System\Admin\AdminInterface;
 use Kajona\System\Admin\AdminSimple;
 use Kajona\System\Admin\Formentries\FormentryCheckbox;
 use Kajona\System\Admin\Formentries\FormentryHeadline;
+use Kajona\System\Admin\Formentries\FormentryPlaintext;
 use Kajona\System\Admin\Formentries\FormentryText;
 use Kajona\System\System\AdminskinHelper;
 use Kajona\System\System\ArrayIterator;
@@ -30,6 +31,8 @@ use Kajona\System\System\Exception;
 use Kajona\System\System\Filesystem;
 use Kajona\System\System\History;
 use Kajona\System\System\HttpResponsetypes;
+use Kajona\System\System\Image2;
+use Kajona\System\System\Imageplugins\ImageScale;
 use Kajona\System\System\Link;
 use Kajona\System\System\Model;
 use Kajona\System\System\ModelInterface;
@@ -38,7 +41,6 @@ use Kajona\System\System\Resourceloader;
 use Kajona\System\System\ResponseObject;
 use Kajona\System\System\Root;
 use Kajona\System\System\StringUtil;
-use Kajona\System\System\SystemCommon;
 use Kajona\System\System\SystemSetting;
 
 /**
@@ -410,20 +412,18 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
         $strImages = "";
         foreach ($objHandler->getObjMetadata()->getArrScreenshots() as $strOneScreenshot) {
 
-            $strImage = "";
-            if (uniSubstr($objHandler->getObjMetadata()->getStrPath(), 0, -5) == ".phar") {
-                $strPharImage = "phar://"._realpath_."/".$objHandler->getObjMetadata()->getStrPath()."/".$strOneScreenshot;
-                if (is_file($strPharImage)) {
-                    $strImage = _images_cachepath_."/".generateSystemid().uniSubstr($strOneScreenshot, -4);
-                    copy($strPharImage, _realpath_.$strImage);
-                }
+            if ($objHandler->getObjMetadata()->getBitIsPhar()) {
+                $strImage = "phar://"._realpath_."/".$objHandler->getObjMetadata()->getStrPath()."/".$strOneScreenshot;
             }
             else {
-                $strImage = $objHandler->getObjMetadata()->getStrPath()."/".$strOneScreenshot;
+                $strImage = _realpath_.$objHandler->getObjMetadata()->getStrPath()."/".$strOneScreenshot;
             }
 
-            if ($strImage != "") {
-                $strImages .= "<img src='"._webpath_."/image.php?image=".urlencode(StringUtil::replace(_realpath_, "", $strImage))."&maxWidth=300&maxHeight=200' alt='".$strOneScreenshot."' />&nbsp;";
+            if ($strImage != "" && is_file($strImage)) {
+                $objImage = new Image2();
+                $objImage->load($strImage);
+                $objImage->addOperation(new ImageScale(300, 300));
+                $strImages .= "<img src='".$objImage->getAsBase64Src()."' alt='".$strOneScreenshot."' />&nbsp;";
             }
         }
         $arrRows[] = array($this->getLang("package_screenshots"), $strImages);
@@ -487,13 +487,11 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
 
         if ($objManager->validatePackage($strFile)) {
 
-            if (\Kajona\System\System\StringUtil::indexOf($strFile, "/project") !== false) {
+            if (StringUtil::indexOf($strFile, "/project") !== false) {
                 $objHandler = $objManager->getPackageManagerForPath($strFile);
                 $objHandler->move2Filesystem();
 
-                Classloader::getInstance()->flushCache();
-                Reflection::flushCache();
-                Resourceloader::getInstance()->flushCache();
+                Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_CLASSLOADER);
                 CacheManager::getInstance()->flushCache(null, CacheManager::NS_BOOTSTRAP);
                 //reload the module-ids
                 Classloader::getInstance()->bootstrapIncludeModuleIds();
@@ -566,9 +564,6 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
         $objManager = new PackagemanagerManager();
         $arrContentProvider = $objManager->getContentproviders();
         if ($this->getParam("provider") == "") {
-
-            //todo: temporary switched back to a simple list until the problems with tabs height and the dropdowns width' are resolved completely.
-            // in addition this reduces the workload on both, client, server and remote repositories
 
             $strReturn .= $this->objToolkit->listHeader();
             foreach ($arrContentProvider as $objOneProvider) {
@@ -676,10 +671,10 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
 
         PackagemanagerTemplate::syncTemplatepacks();
 
-        $objArraySectionIterator = new ArraySectionIterator(PackagemanagerTemplate::getObjectCount());
+        $objArraySectionIterator = new ArraySectionIterator(PackagemanagerTemplate::getObjectCountFiltered());
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(
-            PackagemanagerTemplate::getObjectList("", $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos())
+            PackagemanagerTemplate::getObjectListFiltered(null, "", $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos())
         );
 
         return $this->renderList($objArraySectionIterator);
@@ -729,10 +724,16 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
     protected function renderAdditionalActions(Model $objListEntry)
     {
         $arrReturn = array();
-        if($objListEntry instanceof PackagemanagerTemplate) {
+        if ($objListEntry instanceof PackagemanagerTemplate) {
             if ($objListEntry->getMetadata() != null && !$objListEntry->getMetadata()->getBitIsPhar()) {
                 $arrReturn[] = $this->objToolkit->listButton(
                     Link::getLinkAdmin($this->getArrModule("modul"), "downloadAsPhar", "&package=".$objListEntry->getMetadata()->getStrTitle(), $this->getLang("package_downloadasphar"), $this->getLang("package_downloadasphar"), "icon_phar")
+                );
+            }
+
+            if ($objListEntry->getStrName() !== "default") {
+                $arrReturn[] = $this->objToolkit->listButton(
+                    Link::getLinkAdmin($this->getArrModule("modul"), "addTemplates", "&systemid=".$objListEntry->getSystemid(), $this->getLang("action_add_templates"), $this->getLang("action_add_templates"), "icon_new")
                 );
             }
         }
@@ -771,7 +772,7 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
     protected function renderDeleteAction(ModelInterface $objListEntry)
     {
         if ($objListEntry->rightDelete() && $this->getObjModule()->rightDelete()) {
-            if (SystemSetting::getConfigValue("_packagemanager_defaulttemplate_") == $objListEntry->getStrName()) {
+            if (SystemSetting::getConfigValue("_packagemanager_defaulttemplate_") == $objListEntry->getStrName() || $objListEntry->getStrName() === "default") {
                 return $this->objToolkit->listButton(AdminskinHelper::getAdminImage("icon_deleteDisabled", $this->getLang("pack_active_no_delete")));
             }
             else {
@@ -828,6 +829,47 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
     }
 
     /**
+     * @return string
+     * @throws Exception
+     * @permissions edit
+     */
+    protected function actionAddTemplates()
+    {
+        $objPack = new PackagemanagerTemplate($this->getSystemid());
+        $objForm = $this->getPackAdminForm($objPack);
+
+
+        $objForm->addField(new FormentryPlaintext("hint"))->setStrValue($this->objToolkit->warningBox($this->getLang("add_templates_hint", array($objPack->getStrName(), _templatepath_."/".$objPack->getStrName()))));
+        $objForm->setFieldToPosition("hint", 1);
+        $objForm->removeField("pack_name");
+
+        if ($objForm->getField("pack_modules[module_pages]") !== null) {
+            $objForm->getField("pack_modules[module_pages]")->setStrValue(false);
+        }
+
+        $strReturn = $objForm->renderForm(Link::getLinkAdminHref($this->getArrModule("modul"), "addTemplateToPack"));
+        return $strReturn;
+    }
+
+    protected function actionAddTemplateToPack()
+    {
+        $objPack = new PackagemanagerTemplate($this->getSystemid());
+        $objFilesystem = new Filesystem();
+
+        $arrModules = $this->getParam("pack_path");
+        foreach ($arrModules as $strName => $strValue) {
+            if ($strValue != "") {
+                $strTarget = _templatepath_."/".$objPack->getStrName()."/".StringUtil::substring($strName, StringUtil::indexOf($strName, "/default/")+9);
+                $objFilesystem->fileCopy($strName, $strTarget);
+            }
+        }
+
+        Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_CLASSLOADER);
+        $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "listTemplates"));
+        return "";
+    }
+
+    /**
      * @param AdminFormgenerator|null $objForm
      *
      * @return string
@@ -846,16 +888,40 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
     /**
      * @return AdminFormgenerator
      */
-    private function getPackAdminForm()
+    private function getPackAdminForm(PackagemanagerTemplate $objTargetObject = null)
     {
-        $objFormgenerator = new AdminFormgenerator("pack", new SystemCommon());
+        $objFormgenerator = new AdminFormgenerator("pack", $objTargetObject);
         $objFormgenerator->addField(new FormentryText("pack", "name"))->setStrLabel($this->getLang("pack_name"))->setBitMandatory(true)->setStrValue($this->getParam("pack_name"));
         $objFormgenerator->addField(new FormentryHeadline())->setStrValue($this->getLang("pack_copy_include"));
         $arrModules = Classloader::getInstance()->getArrModules();
+        $objFilesystem = new Filesystem();
+
         foreach ($arrModules as $strOneModule) {
             //validate if there's a template-folder existing
-            if (is_dir(Resourceloader::getInstance()->getAbsolutePathForModule($strOneModule)."/templates")) {
-                $objFormgenerator->addField(new FormentryCheckbox("pack", "modules[".$strOneModule."]"))->setStrLabel($strOneModule)->setStrValue($strOneModule == "module_pages");
+            if (is_dir(Resourceloader::getInstance()->getAbsolutePathForModule($strOneModule)."/templates/default/tpl")) {
+
+                $arrContent = $objFilesystem->getFilelist(Resourceloader::getInstance()->getAbsolutePathForModule($strOneModule)."/templates/default", array(".tpl"), true);
+
+                if(count($arrContent) > 0) {
+                    $objFormgenerator->addField(new FormentryHeadline())->setStrValue($strOneModule);
+
+
+                    foreach ($arrContent as $strPath => $strOneFile) {
+
+                        $bitReadonly = false;
+                        if($objTargetObject != null) {
+                            $strPath2 = _templatepath_."/".$objTargetObject->getStrName()."/".StringUtil::substring($strPath, StringUtil::indexOf($strPath, "/default/")+9);
+                            if(is_file(_realpath_.$strPath2)) {
+                                $bitReadonly = true;
+                            }
+                        }
+                        $objFormgenerator->addField(new FormentryCheckbox("pack", "path[".$strPath."]"))->setStrLabel($strOneFile)->setStrValue($bitReadonly)
+                            //->setStrHint($strPath2)
+                            ->setBitReadonly($bitReadonly);
+                        ;
+
+                    }
+                }
             }
 
         }
@@ -888,16 +954,15 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
         $objFilesystem->folderCreate(_templatepath_."/".$strPackName."/css");
         $objFilesystem->folderCreate(_templatepath_."/".$strPackName."/js");
 
-        $arrModules = $this->getParam("pack_modules");
+        $arrModules = $this->getParam("pack_path");
         foreach ($arrModules as $strName => $strValue) {
             if ($strValue != "") {
-                $objFilesystem->folderCopyRecursive(Resourceloader::getInstance()->getAbsolutePathForModule($strName)."/templates/default", _templatepath_."/".$strPackName);
+                $strTarget = _templatepath_."/".$strPackName."/".StringUtil::substring($strName, StringUtil::indexOf($strName, "/default/")+9);
+                $objFilesystem->fileCopy($strName, $strTarget);
             }
         }
 
-        Resourceloader::getInstance()->flushCache();
-        Classloader::getInstance()->flushCache();
-        Reflection::flushCache();
+        Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_CLASSLOADER);
 
         $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "listTemplates"));
         return "";

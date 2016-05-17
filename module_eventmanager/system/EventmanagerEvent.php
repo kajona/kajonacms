@@ -8,6 +8,7 @@
 namespace Kajona\Eventmanager\System;
 
 use Kajona\System\System\AdminListableInterface;
+use Kajona\System\System\ModelInterface;
 use Kajona\System\System\OrmComparatorEnum;
 use Kajona\System\System\OrmObjectlist;
 use Kajona\System\System\OrmObjectlistOrderby;
@@ -29,7 +30,7 @@ use Kajona\System\System\VersionableInterface;
  * @module eventmanager
  * @moduleId _eventmanager_module_id_
  */
-class EventmanagerEvent extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, VersionableInterface, AdminListableInterface
+class EventmanagerEvent extends \Kajona\System\System\Model implements ModelInterface, VersionableInterface, AdminListableInterface
 {
 
     /**
@@ -56,7 +57,9 @@ class EventmanagerEvent extends \Kajona\System\System\Model implements \Kajona\S
      * @blockEscaping
      * @addSearchIndex
      *
-     * @fieldType Kajona\System\Admin\Formentries\FormentryWysiwygsmall
+     * @fieldType Kajona\System\Admin\Formentries\FormentryWysiwyg
+     * @wysiwygConfig minimalimage
+     *
      * @fieldLabel commons_description
      *
      * @addSearchIndex
@@ -181,7 +184,7 @@ class EventmanagerEvent extends \Kajona\System\System\Model implements \Kajona\S
         }
 
         if ($this->getIntRegistrationRequired()) {
-            $strCenter .= ", ".EventmanagerParticipant::getObjectCount($this->getSystemid())." ".$this->getLang("event_participant");
+            $strCenter .= ", ".EventmanagerParticipant::getObjectCountFiltered(null, $this->getSystemid())." ".$this->getLang("event_participant");
         }
 
         $strCenter .= ")";

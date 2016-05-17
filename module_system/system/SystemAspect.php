@@ -103,7 +103,7 @@ class SystemAspect extends Model implements ModelInterface, AdminListableInterfa
     protected function updateStateToDb() {
 
         //if no other aspect exists, we have a new default aspect
-        if(SystemAspect::getObjectCount() == 0) {
+        if(SystemAspect::getObjectCountFiltered() == 0) {
             $this->setBitDefault(1);
         }
 

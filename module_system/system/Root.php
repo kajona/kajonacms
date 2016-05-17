@@ -397,42 +397,6 @@ abstract class Root
         }
     }
 
-
-    /**
-     * A generic approach to count the number of object currently available.
-     * This method is only a simple approach to determine the number of instances in the
-     * database, if you need more specific counts, overwrite this method or add your own
-     * implementation to the derived class.
-     *
-     * @param string $strPrevid
-     *
-     * @return int
-     */
-    public static function getObjectCount($strPrevid = "")
-    {
-        $objORM = new OrmObjectlist();
-        return $objORM->getObjectCount(get_called_class(), $strPrevid);
-    }
-
-    /**
-     * A generic approach to load a list of objects currently available.
-     * This method is only a simple approach to determine the instances in the
-     * database, if you need more specific loaders, overwrite this method or add your own
-     * implementation to the derived class.
-     *
-     * @param string $strPrevid
-     * @param null|int $intStart
-     * @param null|int $intEnd
-     *
-     * @return self[]
-     */
-    public static function getObjectList($strPrevid = "", $intStart = null, $intEnd = null)
-    {
-        $objORM = new OrmObjectlist();
-        return $objORM->getObjectList(get_called_class(), $strPrevid, $intStart, $intEnd);
-    }
-
-
     /**
      * A generic approach to load a list of objects currently available.
      * This list can be filtered via the given filterObject.
@@ -446,7 +410,7 @@ abstract class Root
      * @param null $intStart
      * @param null $intEnd
      *
-     * @return Model[]|ModelInterface[]
+     * @return self[]
      */
     public static function getObjectListFiltered(FilterBase $objFilter = null, $strPrevid = "", $intStart = null, $intEnd = null)
     {
@@ -475,7 +439,7 @@ abstract class Root
      *
      * @return int
      */
-    public static function getObjectListFilteredCount(FilterBase $objFilter = null, $strPrevid = "")
+    public static function getObjectCountFiltered(FilterBase $objFilter = null, $strPrevid = "")
     {
         $objORM = new OrmObjectlist();
 

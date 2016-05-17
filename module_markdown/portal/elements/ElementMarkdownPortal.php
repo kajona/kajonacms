@@ -9,6 +9,7 @@ namespace Kajona\Markdown\Portal\Elements;
 use Kajona\Pages\Portal\ElementPortal;
 use Kajona\Pages\Portal\PortalElementInterface;
 use Kajona\System\System\Remoteloader;
+use Kajona\System\System\StringUtil;
 use Parsedown;
 
 
@@ -41,6 +42,8 @@ class ElementMarkdownPortal extends ElementPortal implements PortalElementInterf
         $objLoader->setIntPort(null);
 
         $strFile = $objLoader->getRemoteContent();
+        
+        $strFile = StringUtil::replace("%%", "\\%\\%", $strFile);
 
         $objMarkdown = new Parsedown();
         $strParsed = $objMarkdown->text($strFile);

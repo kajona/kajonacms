@@ -60,7 +60,7 @@ class NewsNewsFormgenerator extends AdminFormgenerator  {
             }
         }
 
-        $arrCats = NewsCategory::getObjectList();
+        $arrCats = NewsCategory::getObjectListFiltered();
         if(count($arrCats) > 0) {
             $arrKeyValues = array();
             /** @var NewsCategory $objOneCat */

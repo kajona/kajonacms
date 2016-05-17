@@ -79,9 +79,6 @@ class SearchCommons extends \Kajona\System\System\Model implements \Kajona\Syste
             }
         }
 
-        //log the query
-        SearchLog::generateLogEntry($objSearch->getStrQuery());
-
         $arrReturn = $this->mergeDuplicates($arrReturn);
 
         return $arrReturn;
@@ -177,6 +174,9 @@ class SearchCommons extends \Kajona\System\System\Model implements \Kajona\Syste
                 $arrHits[] = $objResult;
             }
         }
+
+        //log the query
+        SearchLog::generateLogEntry($objSearch->getStrQuery());
 
         return $arrHits;
     }

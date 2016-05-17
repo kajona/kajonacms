@@ -36,7 +36,7 @@ class InstallerSamplecontentEventmanager implements SamplecontentInstallerInterf
      */
     public function isInstalled()
     {
-        return EventmanagerEvent::getObjectCount() > 0;
+        return EventmanagerEvent::getObjectCountFiltered() > 0;
     }
 
     public function install()

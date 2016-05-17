@@ -225,6 +225,29 @@ class DatabaseTest extends Testbase
 
     }
 
+    public function testCreateTableIndex()
+    {
+        echo "testing database...\n";
+        echo "current driver: " . Carrier::getInstance()->getObjConfig()->getConfig("dbdriver") . "\n";
+
+        echo "\tcreating a new table...\n";
+        $objDB = Carrier::getInstance()->getObjDB();
+
+        $arrFields = array();
+        $arrFields["temp_id"] = array("char20", false);
+        $arrFields["temp_long"] = array("long", true);
+        $arrFields["temp_double"] = array("double", true);
+        $arrFields["temp_char10"] = array("char10", true);
+        $arrFields["temp_char20"] = array("char20", true);
+        $arrFields["temp_char100"] = array("char100", true);
+        $arrFields["temp_char254"] = array("char254", true);
+        $arrFields["temp_char500"] = array("char500", true);
+        $arrFields["temp_text"] = array("text", true);
+
+        $this->assertTrue($objDB->createTable("temp_autotest", $arrFields, array("temp_id"), array(array("temp_id", "temp_char10", "temp_char100"), "temp_char254")), "testDataBase createTable");
+        $this->flushDBCache();
+    }
+
     public function testEscapeText()
     {
         $this->createTable();

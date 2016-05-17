@@ -3,10 +3,10 @@
 <!-- available placeholders: systemid, folderlist, filelist, pathnavigation, link_back, link_pages, link_forward -->
 <list>
     <ol class="breadcrumb">%%pathnavigation%%</ol>
-    <table class="table table-striped">
+    <table class="table table-striped downloads">
         %%folderlist%%
     </table>
-    <table class="table table-striped">
+    <table class="table table-striped downloads">
         %%filelist%%
     </table>
 
@@ -16,7 +16,7 @@
     </nav>
 </list>
 
-    <!-- available placeholders: folder_name, folder_id, folder_description, folder_subtitle, folder_href, folder_preview -->
+<!-- available placeholders: folder_name, folder_id, folder_description, folder_subtitle, folder_href, folder_preview -->
 <folderlist>
     <tr>
         <td class="image"><i class="fa fa-folder"></i></td>
@@ -34,7 +34,7 @@
     like < filelist >%%file_0%%</ filelist > -->
 <!-- available placeholders: file_(nr) -->
 <filelist>
-     %%file_0%%
+    %%file_0%%
 </filelist>
 
 <!-- represents a single file
@@ -69,25 +69,22 @@
    file_owner, file_lmtime, file_link, file_link_href, file_elementid
 -->
 <filedetail>
-    %%pathnavigation%%
-    <div>
-        <div>
-            <div style="float: left;" data-kajona-editable="%%file_systemid%%#strName#plain">%%file_name%%</div><div style="float: right;">%%file_rating%%</div>
-            <div style="clear: both;"></div>
+    <ol class="breadcrumb">%%pathnavigation%%</ol>
+    <div class="row filedetail">
+        <div class="col-md-4"><span style="float: left;" data-kajona-editable="%%file_systemid%%#strName#plain">%%file_name%%</span></div>
+        <div class="col-md-8"><div class="pull-xs-right">%%file_rating%%</div></div>
+
+
+        <div class="col-md-4">%%file_size%%</div>
+        <div class="col-md-8"><div class="pull-xs-right">%%file_link%%</div></div>
+
+        <div class="col-md-8"><span data-kajona-editable="%%file_systemid%%#strDescription">%%file_description%%</span></div>
+        <div class="col-md-4">
+            <div class="pull-xs-right" id="qr_%%file_systemid%%" ><script type='text/javascript'>if(('[qrcode,%%file_link_href%%,2]').substr(0,8) != '[qrcode,') $("#qr_%%file_systemid%%").html('<img src="[qrcode,%%file_link_href%%,2]" />');</script></div>
         </div>
-        <div>
-            <div style="float: left;">%%file_size%%</div><div style="float: right;">%%file_link%%</div>
-            <div style="clear: both;"></div>
-        </div>
-        <div>
-            <div style="float: right;" id="qr_%%file_systemid%%"><script type='text/javascript'>if(('[qrcode,%%file_link_href%%,2]').substr(0,8) != '[qrcode,') $("#qr_%%file_systemid%%").html('<img src="[qrcode,%%file_link_href%%,2]" />');</script></div>
-            <div style="float: left;">
-                <div>%%file_filename%%</div>
-                <div data-kajona-editable="%%file_systemid%%#strDescription">%%file_description%%</div>
-                <div>%%file_preview%%</div>
-            </div>
-            <div style="clear: both;"></div>
-        </div>
+
+
+        <div class="col-sm-12">%%file_preview%%</div>
     </div>
 </filedetail>
 

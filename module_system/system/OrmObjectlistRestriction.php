@@ -40,8 +40,8 @@ class OrmObjectlistRestriction
             $arrParams = array($arrParams);
         }
 
-        $this->arrParams = $arrParams;
-        $this->strWhere = " ".$strWhere." ";
+        $this->setArrParams($arrParams);
+        $this->setStrWhere($strWhere);
     }
 
     /**

@@ -104,7 +104,7 @@ class VotingsPortal extends PortalController implements PortalInterface
                         $strAnswers = "";
                         //load the list of answers
                         /** @var VotingsAnswer $objOneAnswer */
-                        foreach (VotingsAnswer::getObjectList($objVoting->getSystemid()) as $objOneAnswer) {
+                        foreach (VotingsAnswer::getObjectListFiltered(null, $objVoting->getSystemid()) as $objOneAnswer) {
                             if ($objOneAnswer->getIntRecordStatus() == 0) {
                                 continue;
                             }
@@ -141,7 +141,7 @@ class VotingsPortal extends PortalController implements PortalInterface
 
                 //first run to sum up
                 /** @var VotingsAnswer $objOneAnswer */
-                foreach (VotingsAnswer::getObjectList($objVoting->getSystemid()) as $objOneAnswer) {
+                foreach (VotingsAnswer::getObjectListFiltered(null, $objVoting->getSystemid()) as $objOneAnswer) {
                     if ($objOneAnswer->getIntRecordStatus() == 0) {
                         continue;
                     }
@@ -149,7 +149,7 @@ class VotingsPortal extends PortalController implements PortalInterface
                 }
 
                 /** @var VotingsAnswer $objOneAnswer */
-                foreach (VotingsAnswer::getObjectList($objVoting->getSystemid()) as $objOneAnswer) {
+                foreach (VotingsAnswer::getObjectListFiltered(null, $objVoting->getSystemid()) as $objOneAnswer) {
                     if ($objOneAnswer->getIntRecordStatus() == 0) {
                         continue;
                     }

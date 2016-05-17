@@ -8,6 +8,7 @@
 namespace Kajona\Navigation\System;
 
 use Kajona\System\System\AdminListableInterface;
+use Kajona\System\System\FilterBase;
 use Kajona\System\System\Model;
 use Kajona\System\System\ModelInterface;
 use Kajona\System\System\OrmComparatorEnum;
@@ -98,14 +99,14 @@ class NavigationTree extends Model implements ModelInterface, AdminListableInter
      * @return NavigationTree[]
      * @static
      */
-    public static function getObjectList($strPrevid = "", $intStart = false, $intEnd = false)
+    public static function getObjectListFiltered(FilterBase $objFilter = null, $strPrevid = "", $intStart = null, $intEnd = null)
     {
-        return parent::getObjectList(SystemModule::getModuleIdByNr(_navigation_modul_id_), $intStart, $intEnd);
+        return parent::getObjectListFiltered(null, SystemModule::getModuleIdByNr(_navigation_modul_id_), $intStart, $intEnd);
     }
 
-    public static function getObjectCount($strPrevid = "")
+    public static function getObjectCountFiltered(FilterBase $objFilter = null, $strPrevid = "")
     {
-        return parent::getObjectCount(SystemModule::getModuleIdByNr(_navigation_modul_id_));
+        return parent::getObjectCountFiltered(null, SystemModule::getModuleIdByNr(_navigation_modul_id_));
     }
 
 

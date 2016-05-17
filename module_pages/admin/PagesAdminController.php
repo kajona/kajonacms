@@ -138,7 +138,7 @@ class PagesAdminController extends AdminSimple implements AdminInterface
         $objArraySectionIterator = new ArraySectionIterator(PagesFolder::getPagesAndFolderListCount($this->getSystemid()));
         $objArraySectionIterator->setPageNumber($this->getParam("pv"));
         $objArraySectionIterator->setArraySection(PagesFolder::getPagesAndFolderList($this->getSystemid(), false, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
-        $strPages = $this->renderList($objArraySectionIterator, true, PagesAdminController::STR_LIST_PAGES, true);
+        $strPages = $this->renderList($objArraySectionIterator, false, PagesAdminController::STR_LIST_PAGES, true);
 
         if ($bitPeMode) {
             $strReturn = $strPages;
@@ -864,9 +864,9 @@ JS;
     {
         $strReturn = "";
 
-        $objArraySectionIterator = new ArraySectionIterator(PagesElement::getObjectCount());
+        $objArraySectionIterator = new ArraySectionIterator(PagesElement::getObjectCountFiltered());
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-        $objArraySectionIterator->setArraySection(PagesElement::getObjectList("", $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+        $objArraySectionIterator->setArraySection(PagesElement::getObjectListFiltered(null, "", $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
         $strReturn .= $this->renderList($objArraySectionIterator, false, PagesAdminController::STR_LIST_ELEMENTS);
 
         return $strReturn;

@@ -7,7 +7,7 @@
 /**
  * @deprecated
  */
-class class_stats_report_topdownloads extends Kajona\Mediamanager\Admin\Statsreports\StatsReportTopdownloads
+class class_stats_report_topdownloads extends \Kajona\Mediamanager\Admin\Reports\StatsReportTopdownloads
 {
 
 }

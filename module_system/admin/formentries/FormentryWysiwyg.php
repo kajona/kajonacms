@@ -8,6 +8,7 @@ namespace Kajona\System\Admin\Formentries;
 
 use Kajona\System\Admin\FormentryPrintableInterface;
 use Kajona\System\System\Carrier;
+use Kajona\System\System\Reflection;
 use Kajona\System\System\Validators\TextValidator;
 
 
@@ -17,6 +18,11 @@ use Kajona\System\System\Validators\TextValidator;
  * @package module_formgenerator
  */
 class FormentryWysiwyg extends FormentryBase implements FormentryPrintableInterface {
+    
+    protected $strToolbarset = "standard";
+
+
+    const STR_CONFIG_ANNOTATION = "@wysiwygConfig";
 
 
     public function __construct($strFormName, $strSourceProperty, $objSourceObject = null) {
@@ -33,12 +39,26 @@ class FormentryWysiwyg extends FormentryBase implements FormentryPrintableInterf
      * @return string
      */
     public function renderField() {
+
+
+        if ($this->getObjSourceObject() != null && $this->getStrSourceProperty() != "") {
+            $objReflection = new Reflection($this->getObjSourceObject());
+
+            //try to find the matching source property
+            $strSourceProperty = $this->getCurrentProperty(self::STR_CONFIG_ANNOTATION);
+            if ($strSourceProperty != null) {
+                $this->strToolbarset = $objReflection->getAnnotationValueForProperty($strSourceProperty, self::STR_CONFIG_ANNOTATION);
+            }
+        }
+        
+        
+        
         $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         $strReturn = "";
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
 
-        $strReturn .= $objToolkit->formWysiwygEditor($this->getStrEntryName(), $this->getStrLabel(), $this->getStrValue());
+        $strReturn .= $objToolkit->formWysiwygEditor($this->getStrEntryName(), $this->getStrLabel(), $this->getStrValue(), $this->strToolbarset);
 
         return $strReturn;
     }

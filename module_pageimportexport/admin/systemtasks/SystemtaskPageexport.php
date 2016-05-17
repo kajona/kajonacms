@@ -295,7 +295,7 @@ class SystemtaskPageexport extends SystemtaskBase implements AdminSystemtaskInte
         $objLanguages = new LanguagesLanguage();
         $strCurrentLanguage = $objLanguages->getStrAdminLanguageToWorkOn();
 
-        $arrLanguages = LanguagesLanguage::getObjectList();
+        $arrLanguages = LanguagesLanguage::getObjectListFiltered(null);
         foreach ($arrLanguages as $objOneLanguage) {
             $objLanguages->setStrAdminLanguageToWorkOn($objOneLanguage->getStrName());
 

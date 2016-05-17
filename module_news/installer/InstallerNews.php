@@ -122,7 +122,7 @@ class InstallerNews extends InstallerBase implements InstallerRemovableInterface
         }
 
         /** @var NewsFeed $objOneObject */
-        foreach(NewsFeed::getObjectList() as $objOneObject) {
+        foreach(NewsFeed::getObjectListFiltered() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
             if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";
@@ -131,7 +131,7 @@ class InstallerNews extends InstallerBase implements InstallerRemovableInterface
         }
 
         /** @var NewsCategory $objOneObject */
-        foreach(NewsCategory::getObjectList() as $objOneObject) {
+        foreach(NewsCategory::getObjectListFiltered() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
             if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";
@@ -140,7 +140,7 @@ class InstallerNews extends InstallerBase implements InstallerRemovableInterface
         }
 
         /** @var NewsNews $objOneObject */
-        foreach(NewsNews::getObjectList() as $objOneObject) {
+        foreach(NewsNews::getObjectListFiltered() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
             if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";

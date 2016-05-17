@@ -335,7 +335,11 @@ class DbMysqli extends DbBase {
 
         if(count($arrIndices) > 0) {
             foreach($arrIndices as $strOneIndex) {
-                $strQuery .= ", INDEX ( `" . $strOneIndex . "` ) \n ";
+                if (is_array($strOneIndex)) {
+                    $strQuery .= ", INDEX ( `" . implode("`, `", $strOneIndex) . "` ) \n ";
+                } else {
+                    $strQuery .= ", INDEX ( `" . $strOneIndex . "` ) \n ";
+                }
             }
         }
 

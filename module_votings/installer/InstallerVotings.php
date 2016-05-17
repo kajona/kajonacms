@@ -109,7 +109,7 @@ class InstallerVotings extends InstallerBase implements InstallerRemovableInterf
         }
 
         /** @var VotingsVoting $objOneObject */
-        foreach(VotingsVoting::getObjectList() as $objOneObject) {
+        foreach(VotingsVoting::getObjectListFiltered() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
             if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";

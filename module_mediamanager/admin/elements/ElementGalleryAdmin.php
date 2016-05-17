@@ -122,7 +122,7 @@ class ElementGalleryAdmin extends ElementAdmin implements AdminElementInterface
     {
         $objForm = parent::getAdminForm();
 
-        $arrRawGals = MediamanagerRepo::getObjectList();
+        $arrRawGals = MediamanagerRepo::getObjectListFiltered();
         $arrGalleries = array();
         foreach ($arrRawGals as $objOneGal) {
             $arrGalleries[$objOneGal->getSystemid()] = $objOneGal->getStrDisplayName();

@@ -6,7 +6,7 @@ In general, templates are used to separate the content from the layout. This mea
 
 Kajona v1 to v4 had their own way of handling templates, but v5 makes this all new. Since Kajona v5, it's all about blocks, block and placeholder elements.
 
-#A page template
+##A page template
 
 So, let's have a look at a simple, but comprehensive page-template (see the full version at [GitHub](https://github.com/kajona/kajonacms/blob/master/module_pages/templates/default/tpl/module_pages/standard.tpl)):
 
@@ -71,7 +71,7 @@ So, let's have a look at a simple, but comprehensive page-template (see the full
 
 As you hopefully noticed, the templates is plain html in most cases. Enriched with some special Kajona-flavour: placeholders, constants, blocks and block. Oh, and a special case of a placeholder, the master-page-placeholder (we'll get to this later on).
 
-#blocks and block
+##blocks and block
 In the templates' body section, all relevant parts are wrapped in blocks-elements. A blocks element is used as a brace around a list of possible block elements. Blocks are fixed within their order and are tight to their position within the page-template. 
 
 Each blocks element should contain at least a single block element. In most cases, a list of possible block elements will be placed inside the blocks element. See a single block as an option the page-admin may fill with content. To have a common wording, we'll now say the page-admin will create an instance of the block as soon as the block is filled with content using Kajona.
@@ -126,16 +126,16 @@ or
 		
 Got it? Great! Now, when looking into the details of a block, you may have noticed the weird looking placeholders, e.g. ```%%headline_plaintext%%``` or ```%%content_richtext%%```.
 
-#Placeholders	
+##Placeholders	
 
 A placeholder consists of three/four fragments: the leading and opening and closing chars, a name and an element-reference: ```%%[name]_[element]%%```
 The name may be chosen freely in order to identify the placeholder in the backend. The element must be the (technical) name of an element currently available in your Kajona installation. A list of installed elements is available in the backend, module pages action page-elements. Therefor our ```Text only```block from the example above provides the possibility / obligation to fill a ```%%content_richtext%%``` placeholder.
 
-#Element and module templates
+##Element and module templates
 
 As we've seen above, a placeholder is some kind of link to contents created using the backend. In most cases this is a simple element such as plaintext or formatted rich text, but it could also be a complex element such as a image gallery or a contact form.
 
-Looking at a simple element such as a plaintext element, formatting is an easy one. Just wrap the placeholder ```%%name_plaintext``` with some tags and classes and style the layout directly in the page-template, e.g.
+Looking at a simple element such as a plaintext element, formatting is an easy one. Just wrap the placeholder ```%%name_plaintext%%``` with some tags and classes and style the layout directly in the page-template, e.g.
 
 	<div class="pageintro">%%name_plaintext%%</div>
 	
@@ -179,7 +179,7 @@ As you may have noticed, the template is made out of three sections
 > Heads up! Since Kajona V5 ships modules as phar-archives, you may need to add the faqs-template to your templatepack in order to start modifying it. Copy the template from Github to ```/templates/your_template_name/tpl/module_faqs/demo.tpl``` or add a new template located at ```/templates/your_template_name/tpl/module_faqs/newfaqlayout.tpl```.
 
 
-#Master template and placeholder
+##Master template and placeholder
 So just when you thought you're set up to go writing your own template, we have another thing for you: a mystical master-page with special placeholders. 
 
 Let's face the following scenario: You designed a modern template and start to fill your pages. Naturally, each page needs some common elements such as a navigation or maybe a search-box. A possible solution could be to add the matching placeholder to your page-template: ```%%navi_navigation%%``` and ```%%quicksearch_search%%```. Works, but is a real pain: The placeholders need to be filled on each page and dare to forget it once. In order to avoid those redundant elements and placeholders, Kajona comes with a feature called master-page.

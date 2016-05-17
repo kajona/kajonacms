@@ -3,7 +3,7 @@ var ScreenShotReporter = require('protractor-screenshot-reporter');
 
 exports.config = {
     seleniumAddress: 'http://localhost:4444/wd/hub',
-    baseUrl: 'http://127.0.0.1:8080/',
+    baseUrl: 'http://127.0.0.1:8080',
     specs: [
         'install-spec.js',
         'login-spec.js',
@@ -19,6 +19,16 @@ exports.config = {
         failOnError: true
     }],
     onPrepare: function() {
+        var basePath = __dirname + '/../../temp/kajona/core/_buildfiles/jstests/selenium';
+
+        // "relativePath" - path, relative to "basePath" variable
+
+        // If your entity files have suffixes - you can also keep them here
+        // not to mention them in test files every time
+        global.requireHelper = function (relativePath) {
+            return require(basePath + relativePath);
+        };
+
         jasmine.getEnv().addReporter(new ScreenShotReporter({
             baseDirectory: '../build/screenshots',
             pathBuilder: function(spec, descriptions, results, capabilities){

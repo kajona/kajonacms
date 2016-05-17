@@ -95,7 +95,13 @@ class OrmCompositeCondition extends OrmCondition
         $strWhere = "";
         if(count($arrWhere) > 0) {
             $strWhere = implode(") ".$this->strConditionConnect." (", $arrWhere);
-            $strWhere = "( (".$strWhere.") )";
+
+            if(count($arrWhere) == 1) {
+                $strWhere = "(".$strWhere.")";
+            }
+            else {
+                $strWhere = "( (".$strWhere.") )";
+            }
         }
 
         return $strWhere;

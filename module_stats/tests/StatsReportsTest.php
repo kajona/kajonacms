@@ -2,7 +2,7 @@
 
 namespace Kajona\Stats\Tests;
 
-use Kajona\Stats\Admin\AdminStatsreportsInterface;
+use Kajona\System\Admin\Reports\AdminStatsreportsInterface;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Classloader;
 use Kajona\System\System\Date;
@@ -23,7 +23,7 @@ class StatsReportTest extends Testbase
 
         $arrFiles = Resourceloader::getInstance()->getFolderContent("/admin/reports", array(".php"), false, null, function (&$strOneFile, $strPath) {
 
-            $objInstance = Classloader::getInstance()->getInstanceFromFilename($strPath, null, "Kajona\\Stats\\Admin\\AdminStatsreportsInterface", array(Carrier::getInstance()->getObjDB(), Carrier::getInstance()->getObjToolkit("admin"), Carrier::getInstance()->getObjLang()));
+            $objInstance = Classloader::getInstance()->getInstanceFromFilename($strPath, null, "Kajona\\System\\Admin\\Reports\\AdminStatsreportsInterface", array(Carrier::getInstance()->getObjDB(), Carrier::getInstance()->getObjToolkit("admin"), Carrier::getInstance()->getObjLang()));
 
             if($objInstance != null) {
                 $strOneFile = $objInstance;
@@ -56,7 +56,7 @@ class StatsReportTest extends Testbase
             $objReport->setInterval(2);
         }
 
-        /** @var AdminStatsreportsInterface $objReport */
+        /** @var \Kajona\System\Admin\Reports\AdminStatsreportsInterface $objReport */
         foreach ($arrReports as $objReport) {
             echo "processing report " . $objReport->getTitle() . "\n";
 

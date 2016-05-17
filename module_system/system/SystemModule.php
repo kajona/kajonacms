@@ -207,7 +207,7 @@ class SystemModule extends Model implements ModelInterface, AdminListableInterfa
             if (count(Database::getInstance()->getTables()) == 0) {
                 return array();
             }
-            self::$arrModules = parent::getObjectList();
+            self::$arrModules = parent::getObjectListFiltered();
         }
 
         if ($intStart === null || $intEnd === null) {
@@ -247,10 +247,11 @@ class SystemModule extends Model implements ModelInterface, AdminListableInterfa
      * @return int
      * @static
      */
-    public static function getObjectCount($strPrevid = "")
+    public static function getObjectCountFiltered(FilterBase $objFilter = null, $strPrevid = "")
     {
         return count(self::loadModuleData());
     }
+
 
     /**
      * Tries to look up a module using the given name. If the module

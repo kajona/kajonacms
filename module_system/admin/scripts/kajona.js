@@ -1061,6 +1061,13 @@ KAJONA.admin.lists = {
             if (!KAJONA.admin.lists.bitRenderInfo) {
                 document.location.reload();
             }
+            else {
+                $('#jsDialog_1_cancelButton').css('display', 'none');
+                $('#jsDialog_1_confirmButton').remove('click').on('click', function() {document.location.reload();}).html('<span data-lang-property="system:systemtask_close_dialog"></span>');
+                KAJONA.admin.loader.loadFile('/core/module_system/system/scripts/lang.js', function() {
+                    KAJONA.util.lang.initializeProperties($('#jsDialog_1_confirmButton'));
+                });
+            }
         }
     },
 

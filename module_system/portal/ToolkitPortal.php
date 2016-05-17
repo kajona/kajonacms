@@ -171,7 +171,7 @@ class ToolkitPortal extends Toolkit
         //FowardLink
         if ($intPage < $objArraySectionIterator->getNrOfPages()) {
             if ($bitTemplate) {
-                $strLinkForward = $this->objTemplate->fillTemplate(array("pageHref" => Link::getLinkPortalHref($strPage, "", $strAction, "&".$strPvParam."=".($intPage + 1).$strAdd)), $strTemplate, "pager_fwd");
+                $strLinkForward = $this->objTemplate->fillTemplateFile(array("pageHref" => Link::getLinkPortalHref($strPage, "", $strAction, "&".$strPvParam."=".($intPage + 1).$strAdd)), $strTemplate, "pager_fwd");
             }
             else {
                 $strLinkForward = Link::getLinkPortal($strPage, "", null, $strForward, $strAction, "&".$strPvParam."=".($intPage + 1).$strAdd);

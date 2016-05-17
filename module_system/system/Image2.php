@@ -191,7 +191,7 @@ class Image2
     {
         $bitReturn = false;
         $strPath = removeDirectoryTraversals($strPath);
-        if (is_file(_realpath_.$strPath)) {
+        if (is_file(_realpath_.$strPath) || is_file($strPath)) {
             $this->bitImageIsUpToDate = false;
             $this->strOriginalPath = $strPath;
             $this->arrOperations = array();
@@ -252,6 +252,25 @@ class Image2
             return true;
         }
     }
+
+    /**
+     * Creates a base64 encoded string out of the current image.
+     * May be used to embed the encoded image into a stream or a page.
+     * Please be aware that the size will increase about 30% due to the encoding.
+     *
+     * @return string
+     */
+    public function getAsBase64Src()
+    {
+        $this->processImage(self::FORMAT_PNG);
+        ob_start();
+        imagepng($this->objResource);
+        $strContent = ob_get_contents();
+        ob_end_clean();
+
+        return "data:image/png;base64," . base64_encode($strContent);
+    }
+    
 
     /**
      * Create the image and send it directly to the browser.
@@ -381,7 +400,7 @@ class Image2
         // Load existing file
         if ($this->strOriginalPath != null) {
             $strFormat = self::getFormatFromFilename($this->strOriginalPath);
-            $strAbsolutePath = _realpath_.$this->strOriginalPath;
+            $strAbsolutePath = is_file(_realpath_.$this->strOriginalPath) ? _realpath_.$this->strOriginalPath : $this->strOriginalPath;
 
             switch ($strFormat) {
                 case self::FORMAT_PNG:

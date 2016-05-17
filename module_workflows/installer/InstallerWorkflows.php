@@ -84,7 +84,7 @@ class InstallerWorkflows extends InstallerBase implements InstallerRemovableInte
             SystemSetting::getConfigByName("_workflows_trigger_authkey_")->deleteObjectFromDatabase();
 
         /** @var WorkflowsWorkflow $objOneObject */
-        foreach(WorkflowsWorkflow::getObjectList() as $objOneObject) {
+        foreach(WorkflowsWorkflow::getObjectListFiltered() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
             if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";
@@ -93,7 +93,7 @@ class InstallerWorkflows extends InstallerBase implements InstallerRemovableInte
         }
 
         /** @var WorkflowsHandler $objOneObject */
-        foreach(WorkflowsHandler::getObjectList() as $objOneObject) {
+        foreach(WorkflowsHandler::getObjectListFiltered() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
             if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";

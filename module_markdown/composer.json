@@ -6,6 +6,6 @@
     }
   ],
   "require": {
-    "erusev/parsedown": "1.5.3"
+    "erusev/parsedown": "1.6.*"
   }
 }

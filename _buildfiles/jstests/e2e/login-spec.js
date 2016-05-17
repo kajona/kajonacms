@@ -1,19 +1,19 @@
+"use strict";
 
-describe('login', function() {
+var LoginPage = requireHelper('/pageobject/LoginPage.js');
 
-    beforeEach(function() {
+describe('login', function () {
+    beforeEach(function () {
         browser.ignoreSynchronization = true;
     });
 
-    it('test login', function() {
-        browser.get('index.php?admin=1');
-
-        browser.driver.findElement(by.id('name')).sendKeys('test');
-        browser.driver.findElement(by.id('passwort')).sendKeys('test123');
-        browser.driver.findElement(by.css('.savechanges')).click();
-
-        // check whether login was successful
-        expect(browser.driver.findElement(by.id('moduleTitle')).getText()).toEqual("Übersicht");
+    it('test login', function () {
+        LoginPage.getPage()
+            .then(function (loginPage) {
+                return loginPage.login("test", "test123");
+            })
+            .then(function (landingPage) {
+                expect(landingPage.contentTopBar.getTitle()).toEqual("Übersicht");
+            });
     });
-
 });

@@ -33,8 +33,8 @@ Reference: Formentries
 | upload                     | 4.5        | A simple file-upload entry |
 | user                       | 4.2        | User-selector with auto-complete |
 | textarea                   | 4.0        | Text-input field, multiline |
-| wysiwyg                    | 4.3        | Complex text-editor with markup options, full option set |
-| wysiwygsmall               | 4.0        | Complex text-editor with markup options, reduced option set |
+| wysiwyg                    | 4.3        | Complex text-editor with markup options, full option set. Pass a different config / option set by using the @wysiwygConfig annotation. |
+| wysiwygsmall               | 4.0        | Complex text-editor with markup options, reduced option set. Deprecated in favour of wysiwyg in combination with the @wysiwygConfig annotation. |
 | yesno                      | 4.0        | Dropdown prefilled with yes / no |
 
 

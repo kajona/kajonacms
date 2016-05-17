@@ -13,13 +13,13 @@ class LogicalDeleteTest extends Testbase
     {
 
         OrmBase::setObjHandleLogicalDeletedGlobal(OrmDeletedhandlingEnum::INCLUDED);
-        $intCountTotal = SystemAspect::getObjectCount();
+        $intCountTotal = SystemAspect::getObjectCountFiltered();
 
         OrmBase::setObjHandleLogicalDeletedGlobal(OrmDeletedhandlingEnum::EXCLUDED);
-        $intCountActive = SystemAspect::getObjectCount();
+        $intCountActive = SystemAspect::getObjectCountFiltered();
 
         OrmBase::setObjHandleLogicalDeletedGlobal(OrmDeletedhandlingEnum::EXCLUSIVE);
-        $intCountDeleted = SystemAspect::getObjectCount();
+        $intCountDeleted = SystemAspect::getObjectCountFiltered();
 
         OrmBase::setObjHandleLogicalDeletedGlobal(OrmDeletedhandlingEnum::EXCLUDED);
 
@@ -35,9 +35,9 @@ class LogicalDeleteTest extends Testbase
         $objAspect->updateObjectToDb();
         $strAspectId = $objAspect->getSystemid();
 
-        $this->assertEquals($intCountActive + 2, SystemAspect::getObjectCount());
+        $this->assertEquals($intCountActive + 2, SystemAspect::getObjectCountFiltered());
 
-        $arrAspects = SystemAspect::getObjectList();
+        $arrAspects = SystemAspect::getObjectListFiltered();
         $arrAspects = array_filter($arrAspects, function (SystemAspect $objAspect) use ($strAspectId) {
             return $objAspect->getSystemid() == $strAspectId;
         });
@@ -55,9 +55,9 @@ class LogicalDeleteTest extends Testbase
 
         OrmBase::setObjHandleLogicalDeletedGlobal(OrmDeletedhandlingEnum::EXCLUDED);
         echo "Loading non-deleted only\n";
-        $this->assertEquals($intCountActive + 1, SystemAspect::getObjectCount());
+        $this->assertEquals($intCountActive + 1, SystemAspect::getObjectCountFiltered());
 
-        $arrAspects = SystemAspect::getObjectList();
+        $arrAspects = SystemAspect::getObjectListFiltered();
         $arrAspects = array_filter($arrAspects, function (SystemAspect $objAspect) use ($strAspectId) {
             return $objAspect->getSystemid() == $strAspectId;
         });
@@ -67,24 +67,24 @@ class LogicalDeleteTest extends Testbase
         echo "Loading deleted only\n";
         OrmBase::setObjHandleLogicalDeletedGlobal(OrmDeletedhandlingEnum::EXCLUSIVE);
 
-        $arrAspects = SystemAspect::getObjectList();
+        $arrAspects = SystemAspect::getObjectListFiltered();
         $arrAspects = array_filter($arrAspects, function (SystemAspect $objAspect) use ($strAspectId) {
             return $objAspect->getSystemid() == $strAspectId;
         });
 
-        $this->assertEquals($intCountDeleted + 1, SystemAspect::getObjectCount());
+        $this->assertEquals($intCountDeleted + 1, SystemAspect::getObjectCountFiltered());
         $this->assertEquals(1, count($arrAspects));
 
 
         echo "Loading mixed deleted and non-deleted\n";
         OrmBase::setObjHandleLogicalDeletedGlobal(OrmDeletedhandlingEnum::INCLUDED);
 
-        $arrAspects = SystemAspect::getObjectList();
+        $arrAspects = SystemAspect::getObjectListFiltered();
         $arrAspects = array_filter($arrAspects, function (SystemAspect $objAspect) use ($strAspectId) {
             return $objAspect->getSystemid() == $strAspectId;
         });
 
-        $this->assertEquals($intCountTotal + 2, SystemAspect::getObjectCount());
+        $this->assertEquals($intCountTotal + 2, SystemAspect::getObjectCountFiltered());
         $this->assertEquals(1, count($arrAspects));
 
 
@@ -93,8 +93,8 @@ class LogicalDeleteTest extends Testbase
 
         OrmBase::setObjHandleLogicalDeletedGlobal(OrmDeletedhandlingEnum::EXCLUDED);
         echo "Loading non-deleted only\n";
-        $this->assertEquals($intCountActive + 1, SystemAspect::getObjectCount());
-        $arrAspects = SystemAspect::getObjectList();
+        $this->assertEquals($intCountActive + 1, SystemAspect::getObjectCountFiltered());
+        $arrAspects = SystemAspect::getObjectListFiltered();
         $arrAspects = array_filter($arrAspects, function (SystemAspect $objAspect) use ($strAspectId) {
             return $objAspect->getSystemid() == $strAspectId;
         });
@@ -102,11 +102,11 @@ class LogicalDeleteTest extends Testbase
 
         echo "Loading deleted only\n";
         OrmBase::setObjHandleLogicalDeletedGlobal(OrmDeletedhandlingEnum::EXCLUSIVE);
-        $arrAspects = SystemAspect::getObjectList();
+        $arrAspects = SystemAspect::getObjectListFiltered();
         $arrAspects = array_filter($arrAspects, function (SystemAspect $objAspect) use ($strAspectId) {
             return $objAspect->getSystemid() == $strAspectId;
         });
-        $this->assertEquals($intCountDeleted, SystemAspect::getObjectCount());
+        $this->assertEquals($intCountDeleted, SystemAspect::getObjectCountFiltered());
         $this->assertEquals(0, count($arrAspects));
 
 
@@ -116,11 +116,11 @@ class LogicalDeleteTest extends Testbase
 
         echo "Loading non-deleted only\n";
         OrmBase::setObjHandleLogicalDeletedGlobal(OrmDeletedhandlingEnum::EXCLUDED);
-        $this->assertEquals($intCountActive, SystemAspect::getObjectCount());
+        $this->assertEquals($intCountActive, SystemAspect::getObjectCountFiltered());
 
         echo "Loading deleted only\n";
         OrmBase::setObjHandleLogicalDeletedGlobal(OrmDeletedhandlingEnum::EXCLUSIVE);
-        $this->assertEquals($intCountDeleted, SystemAspect::getObjectCount());
+        $this->assertEquals($intCountDeleted, SystemAspect::getObjectCountFiltered());
 
 
     }

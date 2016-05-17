@@ -45,7 +45,7 @@ class AdminHelper
         foreach ($arrModules as $arrOneModule) {
             $objModule = SystemModule::getModuleByName($arrOneModule["module_name"]);
 
-            if (!$objModule->rightView()) {
+            if ($objModule == null || !$objModule->rightView()) {
                 continue;
             }
 
@@ -116,6 +116,10 @@ class AdminHelper
             }
 
             $objAdminInstance = $objModule->getAdminInstanceOfConcreteModule();
+            if($objAdminInstance == null) {
+                return array();
+            }
+            
             $arrItems = $objAdminInstance->getOutputModuleNavi();
             $arrItems = array_merge($arrItems, $objAdminInstance->getModuleRightNaviEntry());
             $arrFinalItems = array();
@@ -158,7 +162,7 @@ class AdminHelper
     public static function flushActionNavigationCache()
     {
 
-        $arrAspects = SystemAspect::getObjectList();
+        $arrAspects = SystemAspect::getObjectListFiltered();
 
         foreach (SystemModule::getModulesInNaviAsArray() as $arrOneModule) {
             $objOneModule = SystemModule::getModuleByName($arrOneModule["module_name"]);

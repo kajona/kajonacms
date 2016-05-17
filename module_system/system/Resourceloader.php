@@ -164,7 +164,7 @@ class Resourceloader
      *
      * @return array A list of templates, so the merged result of the current template-pack + default-pack + fallback-files
      */
-    public function getTemplatesInFolder($strFolder)
+    public function getTemplatesInFolder($strFolder, $bitPathAsKey = false)
     {
 
         $arrReturn = array();
@@ -174,7 +174,12 @@ class Resourceloader
             $arrFiles = scandir(_realpath_._templatepath_."/".SystemSetting::getConfigValue("_packagemanager_defaulttemplate_")."/tpl".$strFolder);
             foreach ($arrFiles as $strOneFile) {
                 if (substr($strOneFile, -4) == ".tpl") {
-                    $arrReturn[] = $strOneFile;
+                    if($bitPathAsKey) {
+                        $arrReturn[_templatepath_."/".SystemSetting::getConfigValue("_packagemanager_defaulttemplate_")."/tpl".$strFolder."/".$strOneFile] = $strOneFile;
+                    }
+                    else {
+                        $arrReturn[] = $strOneFile;
+                    }
                 }
             }
         }
@@ -184,7 +189,12 @@ class Resourceloader
             $arrFiles = scandir(_realpath_._templatepath_."/default/tpl".$strFolder);
             foreach ($arrFiles as $strOneFile) {
                 if (substr($strOneFile, -4) == ".tpl") {
-                    $arrReturn[] = $strOneFile;
+                    if($bitPathAsKey) {
+                        $arrReturn[_realpath_._templatepath_."/default/tpl".$strFolder."/".$strOneFile] = $strOneFile;
+                    }
+                    else {
+                        $arrReturn[] = $strOneFile;
+                    }
                 }
             }
         }
@@ -195,7 +205,12 @@ class Resourceloader
                 $arrFiles = scandir(_realpath_."/".$strCorePath."/templates/default/tpl".$strFolder);
                 foreach ($arrFiles as $strOneFile) {
                     if (substr($strOneFile, -4) == ".tpl") {
-                        $arrReturn[] = $strOneFile;
+                        if($bitPathAsKey) {
+                            $arrReturn[$strCorePath."/templates/default/tpl".$strFolder."/".$strOneFile] = $strOneFile;
+                        }
+                        else {
+                            $arrReturn[] = $strOneFile;
+                        }
                     }
                 }
             }
@@ -204,7 +219,12 @@ class Resourceloader
                 $objPhar = new PharModule($strCorePath);
                 foreach($objPhar->getContentMap() as $strFilename => $strPharPath) {
                     if (strpos($strFilename, "/templates/default/tpl".$strFolder) !== false) {
-                        $arrReturn[] = basename($strPharPath);
+                        if($bitPathAsKey) {
+                            $arrReturn[$strPharPath] = basename($strPharPath);
+                        }
+                        else {
+                            $arrReturn[] = basename($strPharPath);
+                        }
                     }
                 }
             }

@@ -712,16 +712,22 @@ Upload-Field for multiple files with progress bar
 
 Regular Submit-Button
 <input_submit>
+        <button type="submit" class="btn btn-default savechanges %%class%%" name="%%name%%" value="%%value%%" %%disabled%% %%eventhandler%%>
+            <span class="btn-text">%%value%%</span>
+            <span class="statusicon"></span>
+        </button>
+</input_submit>
+
+
+<input_submit_wrapper>
     <div class="form-group">
         <label class="col-sm-3 control-label"></label>
         <div class="col-sm-6">
-            <button type="submit" class="btn btn-default savechanges %%class%%" name="%%name%%" value="%%value%%" %%disabled%% %%eventhandler%%>
-                <span class="btn-text">%%value%%</span>
-                <span class="statusicon"></span>
-            </button>
+            %%button%%
         </div>
     </div>
-</input_submit>
+</input_submit_wrapper>
+
 
 An easy date-selector
 If you want to use the js-date-picker, leave %%calendarCommands%% at the end of the section

@@ -61,7 +61,7 @@ class PackagemanagerPharModuleGenerator implements PackagemanagerPharGeneratorIn
     public function generateAndStreamPhar($strSourceDir)
     {
         //generate phar
-        $strTarget = _realpath_."/project/temp/".basename($strSourceDir)."_".generateSystemid().".phar";
+        $strTarget = _realpath_."/project/temp/".basename($strSourceDir).".phar";
         $this->generatePhar($strSourceDir, $strTarget);
 
         //read and stream

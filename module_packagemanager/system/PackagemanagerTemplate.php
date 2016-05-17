@@ -150,7 +150,7 @@ class PackagemanagerTemplate extends Model implements ModelInterface, AdminLista
 
         //scan packs installed
         /** @var PackagemanagerTemplate[] $arrPacksInstalled */
-        $arrPacksInstalled = self::getObjectList();
+        $arrPacksInstalled = self::getObjectListFiltered();
 
         foreach ($arrFolders["folders"] as $strOneFolder) {
             $bitFolderFound = false;

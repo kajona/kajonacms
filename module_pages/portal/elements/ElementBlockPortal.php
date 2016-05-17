@@ -89,8 +89,10 @@ class ElementBlockPortal extends ElementPortal implements PortalElementInterface
 
                             /** @var  ElementPortal $objElement */
                             $objElement = $objOneElement->getConcretePortalInstance();
+                            if($objElement !== null) {
+                                $arrTemplate[$objOneElement->getStrPlaceholder()] = $objElement->getRenderedElementOutput(PagesPortaleditor::isActive());
+                            }
 
-                            $arrTemplate[$objOneElement->getStrPlaceholder()] = $objElement->getRenderedElementOutput(PagesPortaleditor::isActive());
                         }
 
                         $this->objTemplate->setTemplate($objOneBlock->getStrContent());
@@ -114,7 +116,9 @@ class ElementBlockPortal extends ElementPortal implements PortalElementInterface
         $arrElementsOnBlock = $this->getElementsOnBlock();
         $intCachetime = null;
         foreach($arrElementsOnBlock as $objOneElement) {
-            $strSum .= $objOneElement->getConcretePortalInstance()->getCacheHashSum();
+            if($objOneElement->getConcretePortalInstance() !== null) {
+                $strSum .= $objOneElement->getConcretePortalInstance()->getCacheHashSum();
+            }
         }
 
         return sha1($strSum);
@@ -129,11 +133,13 @@ class ElementBlockPortal extends ElementPortal implements PortalElementInterface
         $arrElementsOnBlock = $this->getElementsOnBlock();
         $intCachetime = null;
         foreach($arrElementsOnBlock as $objOneElement) {
-            $intElTime = $objOneElement->getConcretePortalInstance()->getCachetimeInSeconds();
-            if($intCachetime === null || $intElTime < $intCachetime) {
-                $intCachetime = (int)$intElTime;
+            if($objOneElement->getConcretePortalInstance() !== null) {
+                $intElTime = $objOneElement->getConcretePortalInstance()->getCachetimeInSeconds();
+                if ($intCachetime === null || $intElTime < $intCachetime) {
+                    $intCachetime = (int)$intElTime;
+                }
             }
-
+            
             if($intCachetime === 0) {
                 break;
             }
@@ -185,5 +191,14 @@ class ElementBlockPortal extends ElementPortal implements PortalElementInterface
     {
         return $strElementOutput;
     }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getAnchorTag()
+    {
+        return "";
+    }
+
 
 }

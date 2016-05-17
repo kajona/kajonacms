@@ -42,6 +42,9 @@ class DownloadManager extends Root
         if (@ini_get("max_execution_time") < 7200 && @ini_get("max_execution_time") > 0) {
             @ini_set("max_execution_time", "7200");
         }
+        
+        
+        ResponseObject::getInstance()->setObjEntrypoint(RequestEntrypointEnum::DOWNLOAD());
     }
 
     /**

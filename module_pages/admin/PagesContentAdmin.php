@@ -153,70 +153,73 @@ class PagesContentAdmin extends AdminSimple implements AdminInterface
             return $objSingleElement->getStrElement() == "blocks";
         });
 
-
         //trigger blocks rendering
         $arrGhostBlocks = array();
         $strBlocks = "";
+        //loop the blocks found on the template
         foreach ($objParsedBlocks->getArrBlocks() as $objOneBlocks) {
 
             $arrGhostBlock = array();
 
             $strCurBlocks = "";
             $strNewBlocks = "";
-            foreach ($objOneBlocks->getArrBlocks() as $objOneBlock) {
 
-                $strNewBlocksSystemid = $objOneBlocks->getStrName();
+            $strNewBlocksSystemid = $objOneBlocks->getStrName();
 
-                //process existing blocks
-                /** @var PagesPageelement $objOneBlocksOnPage */
-                foreach ($arrBlocksOnPage as $objOneBlocksOnPage) {
+            //process existing blocks, try to find the matching blocks element on the page
+            /** @var PagesPageelement $objOneBlocksOnPage */
+            foreach ($arrBlocksOnPage as $objOneBlocksOnPage) {
 
-                    if(!array_key_exists($objOneBlocksOnPage->getSystemid(), $arrGhostBlocks)) {
-                        $arrGhostBlocks[$objOneBlocksOnPage->getSystemid()] = $objOneBlocksOnPage;
-                    }
+                if(!array_key_exists($objOneBlocksOnPage->getSystemid(), $arrGhostBlocks)) {
+                    $arrGhostBlocks[$objOneBlocksOnPage->getSystemid()] = $objOneBlocksOnPage;
+                }
 
-                    if ($objOneBlocksOnPage->getStrName() == $objOneBlocks->getStrName()) {
+                //success: found a blocks element named like the blocks element from the database
+                if ($objOneBlocksOnPage->getStrName() == $objOneBlocks->getStrName()) {
 
-                        $arrGhostBlocks[$objOneBlocksOnPage->getSystemid()] = false;
+                    $arrGhostBlocks[$objOneBlocksOnPage->getSystemid()] = false;
 
-                        $strNewBlocksSystemid = $objOneBlocksOnPage->getSystemid();
-                        $arrSubBlock = PagesPageelement::getElementsOnPage($objOneBlocksOnPage->getSystemid(), false, $this->getLanguageToWorkOn());
+                    $strNewBlocksSystemid = $objOneBlocksOnPage->getSystemid();
 
-                        foreach ($arrSubBlock as $objOneBlockOnPage) {
+                    //load all block elements from the database and render them
+                    $arrSubBlock = PagesPageelement::getElementsOnPage($objOneBlocksOnPage->getSystemid(), false, $this->getLanguageToWorkOn());
 
-                            if(!array_key_exists($objOneBlockOnPage->getSystemid(), $arrGhostBlock)) {
-                                $arrGhostBlock[$objOneBlockOnPage->getSystemid()] = $objOneBlockOnPage;
-                            }
+                    foreach ($arrSubBlock as $objOneBlockOnPage) {
 
-                            $strExistingBlock = "";
+                        if(!array_key_exists($objOneBlockOnPage->getSystemid(), $arrGhostBlock)) {
+                            $arrGhostBlock[$objOneBlockOnPage->getSystemid()] = $objOneBlockOnPage;
+                        }
 
+                        $strExistingBlock = "";
+
+                        //loop the block from the template to find the matching element definitions
+                        foreach ($objOneBlocks->getArrBlocks() as $objOneBlock) {
                             if ($objOneBlockOnPage->getStrName() == $objOneBlock->getStrName()) {
                                 $arrElementsInBlock = PagesPageelement::getElementsOnPage($objOneBlockOnPage->getSystemid(), false, $this->getLanguageToWorkOn());
                                 $strExistingBlock .= $this->renderElementPlaceholderList($objOneBlock->getArrPlaceholder(), $arrElementsInBlock, true, $objOneBlocksOnPage->getSystemid(), $objOneBlockOnPage->getSystemid());
 
                                 $arrGhostBlock[$objOneBlockOnPage->getSystemid()] = false;
                             }
-
-                            if ($strExistingBlock != "") {
-
-                                $strActions = $this->getActionIcons($objOneBlockOnPage);
-
-                                $strCurBlocks .= $this->objToolkit->getFieldset(
-                                    $objOneBlock->getStrName()."<span class='pull-right'>".$strActions."</span>",
-                                    $strExistingBlock,
-                                    "fieldset block",
-                                    $objOneBlockOnPage->getSystemid()
-                                );
-                            }
                         }
 
+                        if ($strExistingBlock != "") {
+
+                            $strActions = $this->getActionIcons($objOneBlockOnPage);
+
+                            $strCurBlocks .= $this->objToolkit->getFieldset(
+                                $objOneBlockOnPage->getStrName()." ".$objOneBlockOnPage->getIntSort()."<span class='pull-right'>".$strActions."</span>",
+                                $strExistingBlock,
+                                "fieldset block",
+                                $objOneBlockOnPage->getSystemid()
+                            );
+                        }
                     }
 
                 }
+            }
 
-
+            foreach ($objOneBlocks->getArrBlocks() as $objOneBlock) {
                 $strNewBlocks .= $this->renderNewBlockLinkRow($strNewBlocksSystemid, $objOneBlock->getStrName());
-
             }
 
             $arrGhostBlock = array_filter($arrGhostBlock, function ($objElement) {
@@ -334,7 +337,7 @@ HTML;
 
                     //Loading all Elements installed on the system ("RAW"-Elements)
                     /** @var PagesElement $objOnePossibleElementInSystem */
-                    foreach (PagesElement::getObjectList() as $objOnePossibleElementInSystem) {
+                    foreach (PagesElement::getObjectListFiltered() as $objOnePossibleElementInSystem) {
                         if ($objOnePossibleElementInSystem->getStrName() == $arrSingleElementOnTemplateplaceholder["element"]) {
 
                             $strNewElementLink = Link::getLinkAdmin(
@@ -567,6 +570,11 @@ HTML;
                             foreach ($arrOnePlaceholder["elementlist"] as $arrElementList) {
                                 //Create dummy elements
                                 $strPlaceholder = $arrOnePlaceholder["placeholder"];
+
+                                //validate if the passed element really exists
+                                if(PagesElement::getElement($arrElementList["element"]) == null) {
+                                    throw new Exception("Element of type ".$arrElementList["element"]." is not installed", Exception::$level_ERROR);
+                                }
 
 
                                 $objPageElement = new PagesPageelement();
@@ -1079,7 +1087,7 @@ JS;
 
 
             //step one: language selection
-            $arrLanguages = LanguagesLanguage::getObjectList(true);
+            $arrLanguages = LanguagesLanguage::getObjectListFiltered(null, true);
             $arrLanguageDD = array();
             foreach ($arrLanguages as $objSingleLanguage) {
                 $arrLanguageDD[$objSingleLanguage->getSystemid()] = $this->getLang("lang_".$objSingleLanguage->getStrName(), "languages");

@@ -109,7 +109,7 @@ class InstallerGuestbook extends InstallerBase implements InstallerRemovableInte
         }
 
         /** @var GuestbookGuestbook $objOneObject */
-        foreach (GuestbookGuestbook::getObjectList() as $objOneObject) {
+        foreach (GuestbookGuestbook::getObjectListFiltered() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
             if (!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";

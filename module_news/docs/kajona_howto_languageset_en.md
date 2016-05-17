@@ -2,10 +2,10 @@
 
 # Languagesets / Languageswitching for News
 
-ntroduced with Version 3.3.0, Kajona supports so called languagesets. What those sets mean and how they work should be explained with this howto. As an example, the languageswitching of news should be configured.
+Introduced with Version 3.3.0, Kajona supports so called languagesets. What those sets mean and how they work should be explained with this howto. As an example, the languageswitching of news should be configured.
 In addition, the second chapter takes a look at the details and how languagesets work behind the scenes.
 
-##Languageswitching for news
+##Language switching for news
 The current concept of languages implemented in Kajona (see http://www.kajona.de/manual_modul_languages.html) only takes care of switching pages directly.
 It's possible to switch the language a page is displayed by using the languageswitch, as long as the site exists with elements in another language.
 But it would be desirable to provide the possibility to switch the language based on the current contents, so not only the page itself, too.

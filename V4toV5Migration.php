@@ -226,8 +226,8 @@ class V4toV5Migration
 
             if (is_file(__DIR__."/../".$strFile)) {
                 echo "Updating ".__DIR__."/../".$strFile."\n";
-                if (!copy($this->getPathForModule($strSourceModule)."/".$strFile.".root", __DIR__."/../".$strFile)) {
-                    echo "<b>Failed to update ".__DIR__."/../".$strFile.", aborting update </b>\n";
+                if (!@copy($this->getPathForModule($strSourceModule)."/".$strFile.".root", __DIR__."/../".$strFile)) {
+                    echo "<b>Failed to update ".__DIR__."/../".$strFile."</b>\n";
                 }
             }
         }
@@ -256,12 +256,12 @@ class V4toV5Migration
             }
 
             if (!copy(__DIR__."/../project/system/config/config.php", __DIR__."/../project/module_system/system/config/config.php")) {
-                echo "<b>Failed to copy config to ".__DIR__."/../project/module_system/system/config, aborting update </b>\n";
+                echo "<b>Failed to copy config to ".__DIR__."/../project/module_system/system/config</b>\n";
             }
 
             echo "Removing old config-file\n";
             if (!unlink(__DIR__."/../project/system/config/config.php")) {
-                echo "<b>Failed to remove old config ".__DIR__."/../project/system/config, aborting update </b>\n";
+                echo "<b>Failed to remove old config ".__DIR__."/../project/system/config</b>\n";
             }
 
             //remove the folder, if empty

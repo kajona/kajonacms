@@ -429,7 +429,7 @@ HTML;
     {
 
         /** @var $arrRepos MediamanagerRepo[] */
-        $arrRepos = MediamanagerRepo::getObjectList();
+        $arrRepos = MediamanagerRepo::getObjectListFiltered();
         $arrSyncs = array("insert" => 0, "delete" => 0);
         foreach ($arrRepos as $objOneRepo) {
             if ($objOneRepo->rightEdit()) {
@@ -456,7 +456,7 @@ HTML;
     {
 
         $this->setStrCurObjectTypeName("file");
-        $this->setCurObjectClassName("MediamanagerFile");
+        $this->setCurObjectClassName('Kajona\Mediamanager\System\MediamanagerFile');
         parent::actionSave();
 
         $objFile = Objectfactory::getInstance()->getObject($this->getSystemid());
@@ -635,7 +635,7 @@ HTML;
         //list repos or contents?
         if ($this->getSystemid() == "") {
             //Load the repos
-            $arrObjRepos = MediamanagerRepo::getObjectList();
+            $arrObjRepos = MediamanagerRepo::getObjectListFiltered();
             //Print every repo
             /** @var MediamanagerRepo $objOneRepo */
             foreach ($arrObjRepos as $objOneRepo) {

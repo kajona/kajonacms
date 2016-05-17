@@ -1,3 +1,6 @@
+"use strict";
+
+var SeleniumUtil = requireHelper('/util/SeleniumUtil.js');
 
 describe('installation', function() {
 
@@ -9,7 +12,7 @@ describe('installation', function() {
         // wait max 5 minutes for the installation
         browser.manage().timeouts().pageLoadTimeout(60000 * 5);
 
-        browser.get('installer.php');
+        SeleniumUtil.gotToUrl('installer.php');
 
         browser.driver.findElement(by.css('.btn-primary')).click();
 

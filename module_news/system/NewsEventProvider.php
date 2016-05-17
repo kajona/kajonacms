@@ -35,7 +35,7 @@ class NewsEventProvider implements EventProviderInterface
         }
 
         $arrResult = array();
-        $arrNews = NewsNews::getObjectList("", null, null, $objStartDate, $objEndDate);
+        $arrNews = NewsNews::getObjectListFiltered(null, "", null, null, $objStartDate, $objEndDate);
         foreach($arrNews as $objOneNews) {
             if ($objOneNews->rightView()) {
                 $objEvent = new EventEntry();

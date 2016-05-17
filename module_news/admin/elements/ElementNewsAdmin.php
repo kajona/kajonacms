@@ -105,7 +105,7 @@ class ElementNewsAdmin extends ElementAdmin implements AdminElementInterface {
     public function getAdminForm() {
         $objForm = parent::getAdminForm();
 
-        $arrRawCats = NewsCategory::getObjectList();
+        $arrRawCats = NewsCategory::getObjectListFiltered();
         $arrCats = array();
         $arrCats[0] = $this->getLang("commons_all_categories");
         foreach($arrRawCats as $objOneCat) {

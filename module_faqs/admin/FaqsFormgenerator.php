@@ -24,7 +24,7 @@ class FaqsFormgenerator extends AdminFormgenerator  {
         parent::generateFieldsFromObject();
 
         //inject the categories formentries
-        $arrCats = FaqsCategory::getObjectList();
+        $arrCats = FaqsCategory::getObjectListFiltered();
         if(count($arrCats) > 0) {
             $arrKeyValues = array();
             /** @var FaqsCategory $objOneCat */

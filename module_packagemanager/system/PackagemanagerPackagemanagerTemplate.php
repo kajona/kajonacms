@@ -234,7 +234,7 @@ class PackagemanagerPackagemanagerTemplate implements PackagemanagerPackagemanag
         }
 
         /** @var PackagemanagerTemplate[] $arrTemplates */
-        $arrTemplates = PackagemanagerTemplate::getObjectList();
+        $arrTemplates = PackagemanagerTemplate::getObjectListFiltered();
 
         foreach ($arrTemplates as $objOneTemplate) {
             if ($objOneTemplate->getStrName() == $this->getObjMetadata()->getStrTitle()) {

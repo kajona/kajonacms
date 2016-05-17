@@ -1,3 +1,8 @@
+"use strict";
+
+var SeleniumUtil = requireHelper('/util/SeleniumUtil.js');
+var SeleniumWaitHelper = requireHelper('/util/SeleniumWaitHelper.js');
+
 
 describe('module_messaging', function() {
 
@@ -6,7 +11,7 @@ describe('module_messaging', function() {
     });
 
     it('test list', function() {
-        browser.get('index.php?admin=1&module=messaging&action=list');
+        SeleniumUtil.gotToUrl('index.php?admin=1&module=messaging&action=list');
 
         expect(browser.driver.findElement(by.id('moduleTitle')).getText()).toEqual('Nachrichten');
 
@@ -33,10 +38,10 @@ describe('module_messaging', function() {
     });
 
     it('provides config page', function() {
-        browser.get('index.php?admin=1&module=messaging&action=config');
+        SeleniumUtil.gotToUrl('index.php?admin=1&module=messaging&action=config');
 
         // check the default values
-        browser.driver.wait(protractor.until.elementLocated(by.id('Kajona-Packagemanager-System-Messageproviders-MessageproviderPackageupdate_bymail')), 5000);
+        SeleniumWaitHelper.getElementWhenPresent(SeleniumUtil.getWebDriver(), By.id('Kajona-Packagemanager-System-Messageproviders-MessageproviderPackageupdate_bymail'));
         expect(browser.driver.findElement(by.id('Kajona-Packagemanager-System-Messageproviders-MessageproviderPackageupdate_enabled')).getAttribute('checked')).not.toBe(null);
         expect(browser.driver.findElement(by.id('Kajona-Packagemanager-System-Messageproviders-MessageproviderPackageupdate_bymail')).getAttribute('checked')).toBe(null);
 
@@ -46,10 +51,10 @@ describe('module_messaging', function() {
         browser.driver.findElement(by.css('.bootstrap-switch-id-Kajona-Packagemanager-System-Messageproviders-MessageproviderPackageupdate_bymail')).click();
 
         // refresh
-        browser.get('index.php?admin=1&module=messaging&action=config');
+        SeleniumUtil.gotToUrl('index.php?admin=1&module=messaging&action=config');
 
         // and revalidate if the ajax request worked as specified
-        browser.driver.wait(protractor.until.elementLocated(by.id('Kajona-Packagemanager-System-Messageproviders-MessageproviderPackageupdate_bymail')), 5000);
+        SeleniumWaitHelper.getElementWhenPresent(SeleniumUtil.getWebDriver(), By.id('Kajona-Packagemanager-System-Messageproviders-MessageproviderPackageupdate_bymail'));
         expect(browser.driver.findElement(by.id('Kajona-Packagemanager-System-Messageproviders-MessageproviderPackageupdate_enabled')).getAttribute('checked')).not.toBe(null);
         expect(browser.driver.findElement(by.id('Kajona-Packagemanager-System-Messageproviders-MessageproviderPackageupdate_bymail')).getAttribute('checked')).not.toBe(null);
     });

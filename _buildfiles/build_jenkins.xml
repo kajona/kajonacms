@@ -178,6 +178,7 @@
                 <include name="core*/_debugging/*/**"/>
                 <include name="core*/*.php"/>
                 <include name="core*/*.htaccess"/>
+                <include name="core/_buildfiles/jstests/selenium/**"/><!-- contains the page objects-->
             </fileset>
         </copy>
 
@@ -454,6 +455,7 @@
             <fileset dir="${basedir}${tempPath}" includes="**/core*/*/tests/**"/>
             <fileset dir="${basedir}${tempPath}" includes="**/setupproject.php"/>
             <fileset dir="${basedir}${tempPath}" includes="**/.git"/>
+            <fileset dir="${basedir}${tempPath}" includes="**/core/_buildfiles/jstests/selenium/**"/>
         </delete>
     </target>
 
@@ -499,6 +501,7 @@
                 <exclude name="**/*min.js" />
                 <exclude name="**/jquery*.js" />
                 <exclude name="**/ckeditor/**/*.js" />
+                <exclude name="core*/module_*/tests/**/*.js" />
             </fileset>
             <globmapper from="*.js" to="*-full.js"/>
         </copy>

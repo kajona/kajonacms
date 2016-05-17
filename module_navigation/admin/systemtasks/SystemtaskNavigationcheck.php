@@ -65,7 +65,7 @@ class SystemtaskNavigationcheck extends SystemtaskBase implements AdminSystemtas
         $strReturn = "";
 
         //load all navigation points, tree by tree
-        $arrTrees = NavigationTree::getObjectList();
+        $arrTrees = NavigationTree::getObjectListFiltered();
         foreach($arrTrees as $objOneTree) {
             $strReturn .= $this->getLang("systemtask_navigationcheck_treescan")." \"".$objOneTree->getStrName()."\"...<br />";
             if(validateSystemid($objOneTree->getStrFolderId()))

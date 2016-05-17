@@ -40,7 +40,7 @@ class LoginAdmin extends AdminController implements AdminInterface
 
         parent::__construct();
 
-        if ($this->getAction() != "pwdReset" || $this->getAction() != "adminLogin" || $this->getAction() != "adminLogout") {
+        if ($this->getAction() != "pwdReset" && $this->getAction() != "login" && $this->getAction() != "adminLogin" && $this->getAction() != "adminLogout") {
             $this->setAction("login");
         }
     }

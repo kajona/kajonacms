@@ -6,34 +6,24 @@
 
 namespace Kajona\System\Admin\Formentries;
 
-use Kajona\System\System\Carrier;
 
 
 /**
  * @author sidler@mulchprod.de
  * @since 4.0
  * @package module_formgenerator
+ *
+ * @dperecated use the wysiwyg in combination with the @ wysiwygConfig annotation
  */
 class FormentryWysiwygsmall extends FormentryWysiwyg {
 
-
-
-
-    /**
-     * Renders the field itself.
-     * In most cases, based on the current toolkit.
-     *
-     * @return string
-     */
-    public function renderField() {
-        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
-        $strReturn = "";
-        if($this->getStrHint() != null)
-            $strReturn .= $objToolkit->formTextRow($this->getStrHint());
-
-        $strReturn .= $objToolkit->formWysiwygEditor($this->getStrEntryName(), $this->getStrLabel(), $this->getStrValue(), "minimalimage");
-
-        return $strReturn;
+    public function __construct($strFormName, $strSourceProperty, $objSourceObject)
+    {
+        parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
+        $this->strToolbarset = "minimalimage";
     }
+
+
+
 
 }

@@ -75,7 +75,7 @@ class PagesPortalController extends PortalController implements PortalInterface
     {
 
         //Determine the pagename
-        $objPageData = $this->getPageData();
+        $objPageData = clone $this->getPageData();
 
         //react on portaleditor commands
         //pe to display, or pe to disable?
@@ -116,7 +116,7 @@ class PagesPortalController extends PortalController implements PortalInterface
         }
         catch(TemplateBlocksParserException $objEx) {
             Logger::getInstance(Logger::SYSTEMLOG)->addLogRow($objEx->getMessage(). " @ /module_pages/".$objPageData->getStrTemplate(), Logger::$levelError);
-            $objPageData = $this->getPageData(true);
+            $objPageData = clone $this->getPageData(true);
             $objPlaceholders = $this->objTemplate->parsePageTemplate("/module_pages/".$objPageData->getStrTemplate(), Template::INT_ELEMENT_MODE_MASTER);
             self::$arrElementsOnPage = PagesPageelement::getElementsOnPage($objPageData->getSystemid(), true, $this->getStrPortalLanguage(), true);
         }
@@ -162,6 +162,9 @@ class PagesPortalController extends PortalController implements PortalInterface
             //Build the class-name for the object
             /** @var  ElementPortal $objElement */
             $objElement = $objOneElementOnPage->getConcretePortalInstance();
+            if($objElement == null) {
+                continue;
+            }
             //let the element do the work and earn the output
             if (!isset($arrTemplate[$objOneElementOnPage->getStrPlaceholder()])) {
                 $arrTemplate[$objOneElementOnPage->getStrPlaceholder()] = "";
@@ -435,6 +438,10 @@ class PagesPortalController extends PortalController implements PortalInterface
         foreach ($arrElementsOnPage as $objOneElement) {
             /** @var  ElementPortal $objElement */
             $objElementInstance = $objOneElement->getConcretePortalInstance();
+            
+            if($objElementInstance == null) {
+                continue;
+            }
 
             $strElementHash .= $objElementInstance->getCacheHashSum();
 

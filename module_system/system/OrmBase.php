@@ -27,7 +27,7 @@ abstract class OrmBase
     protected static $objHandleLogicalDeletedGlobal = null;
 
     /**
-     * Flag to change the handling of deleted obejcts locally, so only for the current instance of the ORM
+     * Flag to change the handling of deleted objects locally, so only for the current instance of the ORM
      * mapper.
      *
      * @var OrmDeletedhandlingEnum
@@ -66,6 +66,15 @@ abstract class OrmBase
                     return $arrOneTable["columnName"] == "system_deleted";
                 })) > 0;
         }
+    }
+
+    /**
+     * Used to reset the internal flag detecting if logical deletions are present, or not
+     * @internal
+     */
+    public static function resetBitLogicalDeleteAvailable()
+    {
+        self::$bitLogcialDeleteAvailable = null;
     }
 
     /**

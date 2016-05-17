@@ -136,7 +136,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
         }
         $objRichtextAdmin->updateForeignElement();
 
-        $objImage = $objHelper->createPageElement("imageright_image", $objBlock);
+        $objImage = $objHelper->createPageElement("imageright_imagesrc", $objBlock);
         /** @var ElementImageAdmin $objImageAdmin */
         $objImageAdmin = $objImage->getConcreteAdminInstance();
         $objImageAdmin->setStrImage("/files/images/upload/teaser.jpg");
@@ -337,7 +337,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
         }
         $objRichtextAdmin->updateForeignElement();
 
-        $objImage = $objHelper->createPageElement("imageright_image", $objBlock);
+        $objImage = $objHelper->createPageElement("imageright_imagesrc", $objBlock);
         /** @var ElementImageAdmin $objImageAdmin */
         $objImageAdmin = $objImage->getConcreteAdminInstance();
         $objImageAdmin->setStrImage("/files/images/samples/IMG_3000.JPG");
@@ -382,7 +382,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
         }
         $objRichtextAdmin->updateForeignElement();
 
-        $objImage = $objHelper->createPageElement("imageright_image", $objBlock);
+        $objImage = $objHelper->createPageElement("imageright_imagesrc", $objBlock);
         /** @var ElementImageAdmin $objImageAdmin */
         $objImageAdmin = $objImage->getConcreteAdminInstance();
         $objImageAdmin->setStrImage("/files/images/samples/IMG_3000.JPG");

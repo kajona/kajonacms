@@ -15,6 +15,8 @@ namespace Kajona\System\System;
  * @package module_system
  * @author sidler@mulchprod.de
  * @since 4.7
+ *
+ * @deprecated
  */
 class OrmObjectlistSystemstatusRestriction extends OrmObjectlistPropertyRestriction
 {
@@ -22,6 +24,8 @@ class OrmObjectlistSystemstatusRestriction extends OrmObjectlistPropertyRestrict
     /**
      * @param OrmComparatorEnum $objComparator
      * @param string $intStatus
+     *
+     * @deprecated
      */
     function __construct(OrmComparatorEnum $objComparator, $intStatus)
     {

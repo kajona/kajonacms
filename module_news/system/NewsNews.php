@@ -13,6 +13,7 @@ use Kajona\Pages\System\PagesPage;
 use Kajona\Search\System\SearchResult;
 use Kajona\System\System\AdminListableInterface;
 use Kajona\System\System\Carrier;
+use Kajona\System\System\FilterBase;
 use Kajona\System\System\LanguagesLanguage;
 use Kajona\System\System\LanguagesLanguageset;
 use Kajona\System\System\Link;
@@ -99,7 +100,8 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      * @blockEscaping
      * @addSearchIndex
      *
-     * @fieldType Kajona\System\Admin\Formentries\FormentryWysiwygsmall
+     * @fieldType Kajona\System\Admin\Formentries\FormentryWysiwyg
+     * @wysiwygConfig minimalimage
      *
      * @versionable
      * @templateExport
@@ -246,6 +248,7 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
         return $this->getStrTitle();
     }
 
+
     /**
      * Loads all news from the database
      * if passed, the filter is used to load the news of the given category
@@ -260,7 +263,8 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      * @return NewsNews[]
      * @static
      */
-    public static function getObjectList($strFilter = "", $intStart = null, $intEnd = null, \Kajona\System\System\Date $objStartDate = null, \Kajona\System\System\Date $objEndDate = null) {
+    public static function getObjectListFiltered(FilterBase $objFilter = null, $strFilter = "", $intStart = null, $intEnd = null, \Kajona\System\System\Date $objStartDate = null, \Kajona\System\System\Date $objEndDate = null)
+    {
         $arrParams = array();
 
         $strWhere = "";
@@ -321,11 +325,19 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      *
      * @return int
      */
-    public static function getObjectCount($strFilter = "") {
+    public static function getObjectCountFiltered(FilterBase $objFilter = null, $strFilter = "", $intStart = null, $intEnd = null, \Kajona\System\System\Date $objStartDate = null, \Kajona\System\System\Date $objEndDate = null)
+    {
         $arrParams = array();
 
+        $strWhere = "";
+        if($objStartDate != null && $objEndDate != null) {
+            $strWhere = "AND (system_date_start >= ? and system_date_start < ?) ";
+            $arrParams[] = $objStartDate->getLongTimestamp();
+            $arrParams[] = $objEndDate->getLongTimestamp();
+        }
+
         $objOrm = new OrmObjectlist();
-        $strWhere = $objOrm->getDeletedWhereRestriction();
+        $strWhere .= $objOrm->getDeletedWhereRestriction();
 
         if($strFilter != "") {
             $strQuery = "SELECT COUNT(*)
@@ -357,6 +369,7 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
         return $arrRow["COUNT(*)"];
     }
+
 
     /**
      * Counts the number of news displayed for the passed portal-setup

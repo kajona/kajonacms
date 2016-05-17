@@ -164,8 +164,8 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
         }
 
         $strReturn = $strFilterForm;
-        $objIterator = new ArraySectionIterator(NewsCategory::getObjectListFilteredCount($objFilter));
-        $objIterator->setIntElementsPerPage(NewsCategory::getObjectListFilteredCount($objFilter));
+        $objIterator = new ArraySectionIterator(NewsCategory::getObjectCountFiltered($objFilter));
+        $objIterator->setIntElementsPerPage(NewsCategory::getObjectCountFiltered($objFilter));
         $objIterator->setPageNumber(1);
         $objIterator->setArraySection(NewsCategory::getObjectListFiltered($objFilter, "", $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
@@ -182,7 +182,7 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
         }
         $strReturn .= $strFilterForm;
 
-        $objIterator = new ArraySectionIterator(NewsNews::getObjectListFilteredCount($objFilter, $this->getParam("filterId")));
+        $objIterator = new ArraySectionIterator(NewsNews::getObjectCountFiltered($objFilter, $this->getParam("filterId")));
         $objIterator->setPageNumber($this->getParam("pv"));
         $objIterator->setArraySection(NewsNews::getObjectListFiltered($objFilter, $this->getParam("filterId"), $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
@@ -209,7 +209,7 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
                 $strReturn .= $this->objToolkit->formHeadline($this->getLang("languageset_addtolanguage"));
 
                 $strReturn .= $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "assignToLanguageset"));
-                $arrLanguages = LanguagesLanguage::getObjectList();
+                $arrLanguages = LanguagesLanguage::getObjectListFiltered(null);
                 $arrDropdown = array();
                 foreach ($arrLanguages as $objOneLanguage) {
                     $arrDropdown[$objOneLanguage->getSystemid()] = $this->getLang("lang_".$objOneLanguage->getStrName(), "languages");
@@ -229,7 +229,7 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
 
                 $strReturn .= $this->objToolkit->formHeadline($this->getLang("languageset_maintainlanguages"));
 
-                $arrLanguages = LanguagesLanguage::getObjectList();
+                $arrLanguages = LanguagesLanguage::getObjectListFiltered(null);
 
                 $strReturn .= $this->objToolkit->listHeader();
                 $intNrOfUnassigned = 0;
@@ -263,7 +263,7 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
                     $strReturn .= $this->objToolkit->formHeadline($this->getLang("languageset_addnewstolanguage"));
 
                     $strReturn .= $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "addNewsToLanguageset"));
-                    $arrLanguages = LanguagesLanguage::getObjectList();
+                    $arrLanguages = LanguagesLanguage::getObjectListFiltered(null);
                     $arrDropdown = array();
                     foreach ($arrLanguages as $objOneLanguage) {
                         if (!in_array($objOneLanguage->getSystemid(), $arrMaintainedLanguages)) {
@@ -274,7 +274,7 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
                     $strReturn .= $this->objToolkit->formInputDropdown("languageset_language", $arrDropdown, $this->getLang("commons_language_field"));
 
 
-                    $arrNews = NewsNews::getObjectList();
+                    $arrNews = NewsNews::getObjectListFiltered();
                     $arrDropdown = array();
                     foreach ($arrNews as $objOneNews) {
                         if (LanguagesLanguageset::getLanguagesetForSystemid($objOneNews->getSystemid()) == null) {
@@ -368,7 +368,7 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
         $strReturn = "";
         if ($this->getObjModule()->rightView()) {
             /** @var NewsCategory[] $arrCategories */
-            $arrCategories = NewsCategory::getObjectList();
+            $arrCategories = NewsCategory::getObjectListFiltered();
             $strReturn .= "<categories>\n";
             foreach ($arrCategories as $objOneCategory) {
                 if ($objOneCategory->rightView()) {
@@ -406,7 +406,7 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
     {
         $strReturn = "";
         if ($this->getObjModule()->rightView()) {
-            $arrNews = NewsNews::getObjectList();
+            $arrNews = NewsNews::getObjectListFiltered();
             $strReturn .= "<newslist>\n";
             foreach ($arrNews as $objOneNews) {
                 if ($objOneNews->rightView()) {

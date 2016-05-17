@@ -92,7 +92,7 @@ class WorkflowWorkflowsMessagesummary implements WorkflowsHandlerInterface
     {
 
         //loop all messages by user
-        foreach (UserUser::getObjectList() as $objOneUser) {
+        foreach (UserUser::getObjectListFiltered() as $objOneUser) {
 
             //skip inactive users
             if ($objOneUser->getIntActive() == 0) {
@@ -104,7 +104,7 @@ class WorkflowWorkflowsMessagesummary implements WorkflowsHandlerInterface
             }
 
             $arrUnreadMessages = array();
-            foreach (MessagingMessage::getObjectList($objOneUser->getSystemid()) as $objOneMessage) {
+            foreach (MessagingMessage::getObjectListFiltered(null, $objOneUser->getSystemid()) as $objOneMessage) {
                 if ($objOneMessage->getBitRead() == 0 && !$objOneMessage->getObjMessageProvider() instanceof MessageproviderSummary) {
                     $arrUnreadMessages[] = $objOneMessage;
                 }

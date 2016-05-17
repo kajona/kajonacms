@@ -151,9 +151,9 @@ class SearchAdmin extends AdminSimple implements AdminInterface
      */
     protected function actionList()
     {
-        $objArraySectionIterator = new ArraySectionIterator(SearchSearch::getObjectCount());
+        $objArraySectionIterator = new ArraySectionIterator(SearchSearch::getObjectCountFiltered());
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-        $objArraySectionIterator->setArraySection(SearchSearch::getObjectList(false, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+        $objArraySectionIterator->setArraySection(SearchSearch::getObjectListFiltered(null, false, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
         return $this->renderList($objArraySectionIterator);
     }

@@ -547,7 +547,7 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
             $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND system_status = 1", array()));
         }
 
-        return $objORM->getObjectCount("Kajona\\Pages\\System\\PagesPageelement");
+        return $objORM->getObjectCount("Kajona\\Pages\\System\\PagesPageelement", $this->getSystemid());
     }
 
     /**

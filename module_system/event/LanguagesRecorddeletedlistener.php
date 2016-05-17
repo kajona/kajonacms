@@ -44,7 +44,7 @@ class LanguagesRecorddeletedlistener implements GenericeventListenerInterface {
 
         if($strSourceClass == "Kajona\\System\\System\\LanguagesLanguage") {
             //if we have just one language remaining, set this one as default
-            $arrObjLanguages = LanguagesLanguage::getObjectList();
+            $arrObjLanguages = LanguagesLanguage::getObjectListFiltered(null);
             if(count($arrObjLanguages) == 1) {
                 $objOneLanguage = $arrObjLanguages[0];
                 $objOneLanguage->setBitDefault(1);
@@ -55,7 +55,7 @@ class LanguagesRecorddeletedlistener implements GenericeventListenerInterface {
 
             //check if the current active one was deleted. if, then reset. #kajona trace id 613
             $objLanguage = new LanguagesLanguage();
-            $arrLangs = LanguagesLanguage::getObjectList();
+            $arrLangs = LanguagesLanguage::getObjectListFiltered(null);
             $arrFiltered = array_filter($arrLangs, function(LanguagesLanguage $objSingleLang) use ($objLanguage) {
                 return $objSingleLang->getStrName() == $objLanguage->getAdminLanguage();
             });

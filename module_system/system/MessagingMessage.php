@@ -117,7 +117,7 @@ class MessagingMessage extends Model implements ModelInterface, AdminListableInt
      */
     public function getStrDisplayName()
     {
-        if ($this->getStrTitle() != "") {
+        if($this->getStrTitle() != "") {
             return uniStrTrim($this->getStrTitle(), 70);
         }
 
@@ -133,7 +133,7 @@ class MessagingMessage extends Model implements ModelInterface, AdminListableInt
      */
     public function getStrIcon()
     {
-        if ($this->getBitRead()) {
+        if($this->getBitRead()) {
             return "icon_mail";
         }
         else {
@@ -159,7 +159,7 @@ class MessagingMessage extends Model implements ModelInterface, AdminListableInt
     public function getStrLongDescription()
     {
         $strHandlerName = $this->getStrMessageProvider();
-        if ($strHandlerName == "") {
+        if($strHandlerName == "") {
             return "";
         }
 
@@ -179,7 +179,7 @@ class MessagingMessage extends Model implements ModelInterface, AdminListableInt
         $objORM->addWhereRestriction(new OrmObjectlistPropertyRestriction("bitRead", OrmComparatorEnum::Equal(), false));
         $objORM->addWhereRestriction(new OrmObjectlistPropertyRestriction("strUser", OrmComparatorEnum::Equal(), $strUserid));
         /** @var MessagingMessage $objOneMessage */
-        foreach ($objORM->getObjectList(__CLASS__) as $objOneMessage) {
+        foreach($objORM->getObjectList(__CLASS__) as $objOneMessage) {
             $objOneMessage->setBitRead(true);
             $objOneMessage->updateObjectToDb();
         }
@@ -196,7 +196,7 @@ class MessagingMessage extends Model implements ModelInterface, AdminListableInt
         $objORM->addWhereRestriction(new OrmObjectlistPropertyRestriction("bitRead", OrmComparatorEnum::Equal(), true));
         $objORM->addWhereRestriction(new OrmObjectlistPropertyRestriction("strUser", OrmComparatorEnum::Equal(), $strUserid));
         /** @var MessagingMessage $objOneMessage */
-        foreach ($objORM->getObjectList(__CLASS__) as $objOneMessage) {
+        foreach($objORM->getObjectList(__CLASS__) as $objOneMessage) {
             $objOneMessage->deleteObject();
         }
     }
@@ -211,24 +211,22 @@ class MessagingMessage extends Model implements ModelInterface, AdminListableInt
         $objORM = new OrmObjectlist();
         $objORM->addWhereRestriction(new OrmObjectlistPropertyRestriction("strUser", OrmComparatorEnum::Equal(), $strUserid));
         /** @var MessagingMessage $objOneMessage */
-        foreach ($objORM->getObjectList(__CLASS__) as $objOneMessage) {
+        foreach($objORM->getObjectList(__CLASS__) as $objOneMessage) {
             $objOneMessage->deleteObject();
         }
     }
 
     /**
-     * Returns an array of all messages available for a single user
-     *
-     * @param string $strUserid
-     * @param bool|int $intStart
-     * @param bool|int $intEnd
+     * @param FilterBase|null $objFilter
+     * @param string $strPrevid
+     * @param null $intStart
+     * @param null $intEnd
      *
      * @return MessagingMessage[]
-     * @static
      */
-    public static function getObjectList($strUserid = "", $intStart = null, $intEnd = null)
+    public static function getObjectListFiltered(FilterBase $objFilter = null, $strUserid = "", $intStart = null, $intEnd = null)
     {
-        if ($strUserid == "") {
+        if($strUserid == "") {
             $strUserid = Carrier::getInstance()->getObjSession()->getUserID();
         }
 
@@ -272,7 +270,7 @@ class MessagingMessage extends Model implements ModelInterface, AdminListableInt
     {
         $objOrm = new OrmObjectlist();
         $objOrm->addWhereRestriction(new OrmObjectlistPropertyRestriction("strUser", OrmComparatorEnum::Equal(), $strUserid));
-        if ($bitOnlyUnread) {
+        if($bitOnlyUnread) {
             $objOrm->addWhereRestriction(new OrmObjectlistRestriction("AND (message_read IS NULL OR message_read = 0 )"));
         }
 
@@ -394,7 +392,7 @@ class MessagingMessage extends Model implements ModelInterface, AdminListableInt
      */
     public function getObjMessageProvider()
     {
-        if ($this->strMessageProvider != "") {
+        if($this->strMessageProvider != "") {
             return new $this->strMessageProvider();
         }
         else {

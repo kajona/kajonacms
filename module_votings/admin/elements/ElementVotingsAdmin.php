@@ -60,7 +60,7 @@ class ElementVotingsAdmin extends ElementAdmin implements AdminElementInterface
     {
         $objForm = parent::getAdminForm();
 
-        $arrRawVotings = VotingsVoting::getObjectList(true);
+        $arrRawVotings = VotingsVoting::getObjectListFiltered(null, "", null, null, true);
         $arrVotings = array();
 
         foreach ($arrRawVotings as $objOneVoting) {

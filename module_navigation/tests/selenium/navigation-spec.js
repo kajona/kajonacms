@@ -1,3 +1,6 @@
+"use strict";
+
+var SeleniumUtil = requireHelper('/util/SeleniumUtil.js');
 
 describe('module_navigation', function() {
 
@@ -6,7 +9,7 @@ describe('module_navigation', function() {
     });
 
     it('test list', function() {
-        browser.get('index.php?admin=1&module=navigation&action=list');
+        SeleniumUtil.gotToUrl('index.php?admin=1&module=navigation&action=list');
 
         expect(browser.driver.findElement(by.id('moduleTitle')).getText()).toEqual('Navigationen');
     });

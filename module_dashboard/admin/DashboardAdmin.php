@@ -12,12 +12,9 @@ namespace Kajona\Dashboard\Admin;
 use Kajona\Dashboard\Admin\Widgets\Adminwidget;
 use Kajona\Dashboard\Admin\Widgets\AdminwidgetInterface;
 use Kajona\Dashboard\System\DashboardWidget;
-use Kajona\Dashboard\System\TodoRepository;
 use Kajona\System\Admin\AdminController;
 use Kajona\System\Admin\AdminFormgenerator;
 use Kajona\System\Admin\AdminInterface;
-use Kajona\System\Admin\Formentries\FormentryDate;
-use Kajona\System\Admin\Formentries\FormentryDropdown;
 use Kajona\System\Admin\Formentries\FormentryText;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Link;
@@ -34,14 +31,16 @@ use Kajona\System\System\SystemJSTreeConfig;
  * @module dashboard
  * @moduleId _dashboard_module_id_
  */
-class DashboardAdmin extends AdminController implements AdminInterface {
+class DashboardAdmin extends AdminController implements AdminInterface
+{
 
     protected $arrColumnsOnDashboard = array("column1", "column2", "column3");
 
     /**
      * @return array
      */
-    public function getOutputModuleNavi() {
+    public function getOutputModuleNavi()
+    {
         $arrReturn = array();
         $arrReturn[] = array("view", Link::getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("modul_titel"), "", "", true, "adminnavi"));
         $arrReturn[] = array("view", Link::getLinkAdmin($this->getArrModule("modul"), "calendar", "", $this->getLang("action_calendar"), "", "", true, "adminnavi"));
@@ -54,10 +53,12 @@ class DashboardAdmin extends AdminController implements AdminInterface {
     /**
      * @return array
      */
-    protected function getArrOutputNaviEntries() {
+    protected function getArrOutputNaviEntries()
+    {
         $arrReturn = parent::getArrOutputNaviEntries();
-        if(isset($arrReturn[count($arrReturn)-2]))
-            unset($arrReturn[count($arrReturn)-2]);
+        if(isset($arrReturn[count($arrReturn) - 2])) {
+            unset($arrReturn[count($arrReturn) - 2]);
+        }
         return $arrReturn;
     }
 
@@ -70,7 +71,8 @@ class DashboardAdmin extends AdminController implements AdminInterface {
      * @autoTestable
      * @permissions view
      */
-    protected function actionList() {
+    protected function actionList()
+    {
         $strReturn = "";
         //load the widgets for each column. currently supporting 3 columns on the dashboard.
         $objDashboardmodel = new DashboardWidget();
@@ -99,7 +101,8 @@ class DashboardAdmin extends AdminController implements AdminInterface {
      *
      * @return string
      */
-    protected function layoutAdminWidget($objDashboardWidget) {
+    protected function layoutAdminWidget($objDashboardWidget)
+    {
         $strWidgetContent = "";
         $objConcreteWidget = $objDashboardWidget->getConcreteAdminwidget();
 
@@ -119,7 +122,7 @@ class DashboardAdmin extends AdminController implements AdminInterface {
                     $this->getLang("widgetDeleteQuestion"),
                     "javascript:KAJONA.admin.dashboard.removeWidget(\'".$objDashboardWidget->getSystemid()."\');"
 //                    getLinkAdminHref($this->getArrModule("modul"), "deleteWidget", "&systemid=".$objDashboardWidget->getSystemid())
-                )  : ""),
+                ) : ""),
                 $objDashboardWidget->getConcreteAdminwidget()->getLayoutSection()
             )
         );
@@ -135,14 +138,15 @@ class DashboardAdmin extends AdminController implements AdminInterface {
      * @autoTestable
      * @permissions view
      */
-    protected function actionCalendar() {
+    protected function actionCalendar()
+    {
         $strReturn = "";
 
-        $strContainerId = "calendar-" . generateSystemid();
+        $strContainerId = "calendar-".generateSystemid();
         $strEventCallback = Link::getLinkAdminXml("dashboard", "getCalendarEvents");
         $strLang = Session::getInstance()->getAdminLanguage();
 
-        $strReturn .= "<div id='" . $strContainerId . "' class='calendar'></div>";
+        $strReturn .= "<div id='".$strContainerId."' class='calendar'></div>";
         $strReturn .= "<script type=\"text/javascript\">";
         $strReturn .= <<<JS
             KAJONA.admin.loader.loadFile(['/core/module_dashboard/admin/scripts/fullcalendar/fullcalendar.min.css',
@@ -194,11 +198,13 @@ JS;
     /**
      * @permissions view
      */
-    protected function actionTodo() {
+    protected function actionTodo()
+    {
 
         $objConfig = new SystemJSTreeConfig();
         $objConfig->setBitDndEnabled(false);
         $objConfig->setStrNodeEndpoint(Link::getLinkAdminXml("dashboard", "treeEndpoint"));
+        $objConfig->setArrNodesToExpand(array(""));
 
         $strContent = $this->getListTodoFilter();
         $strContent .= "<div id='todo-table'></div>";
@@ -238,14 +244,15 @@ JS;
      * @autoTestable
      * @permissions edit
      */
-    protected function actionAddWidgetToDashboard() {
+    protected function actionAddWidgetToDashboard()
+    {
         $strReturn = "";
         //step 1: select a widget, plz
         if($this->getParam("step") == "") {
             $arrWidgetsAvailable = DashboardWidget::getListOfWidgetsAvailable();
 
             $arrDD = array();
-            foreach ($arrWidgetsAvailable as $strOneWidget) {
+            foreach($arrWidgetsAvailable as $strOneWidget) {
                 /** @var $objWidget AdminwidgetInterface|Adminwidget */
                 $objWidget = new $strOneWidget();
                 $arrDD[$strOneWidget] = $objWidget->getWidgetName();
@@ -253,8 +260,9 @@ JS;
             }
 
             $arrColumnsAvailable = array();
-            foreach ($this->arrColumnsOnDashboard as $strOneColumn)
+            foreach($this->arrColumnsOnDashboard as $strOneColumn) {
                 $arrColumnsAvailable[$strOneColumn] = $this->getLang($strOneColumn);
+            }
 
 
             $strReturn .= $this->objToolkit->formHeader(Link::getLinkAdminHref("dashboard", "addWidgetToDashboard"));
@@ -303,10 +311,12 @@ JS;
             $objDashboard->setStrColumn($this->getParam("column"));
             $objDashboard->setStrUser($this->objSession->getUserID());
             $objDashboard->setStrAspect(SystemAspect::getCurrentAspectId());
-            if($objDashboard->updateObjectToDb(DashboardWidget::getWidgetsRootNodeForUser($this->objSession->getUserID(), SystemAspect::getCurrentAspectId())))
+            if($objDashboard->updateObjectToDb(DashboardWidget::getWidgetsRootNodeForUser($this->objSession->getUserID(), SystemAspect::getCurrentAspectId()))) {
                 $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul")));
-            else
+            }
+            else {
                 return $this->getLang("errorSavingWidget");
+            }
         }
 
 
@@ -320,11 +330,13 @@ JS;
      * @return string "" in case of success
      * @permissions delete
      */
-    protected function actionDeleteWidget() {
+    protected function actionDeleteWidget()
+    {
         $strReturn = "";
         $objDashboardwidget = new DashboardWidget($this->getSystemid());
-        if(!$objDashboardwidget->deleteObject())
+        if(!$objDashboardwidget->deleteObject()) {
             throw new Exception("Error deleting widget", Exception::$level_ERROR);
+        }
 
         $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul")));
 
@@ -338,7 +350,8 @@ JS;
      * @return string "" in case of success
      * @permissions edit
      */
-    protected function actionEditWidget() {
+    protected function actionEditWidget()
+    {
         $strReturn = "";
         $this->setArrModuleEntry("template", "/folderview.tpl");
         if($this->getParam("saveWidget") == "") {
@@ -361,8 +374,9 @@ JS;
             $objConcreteWidget->loadFieldsFromArray($this->getAllParams());
 
             $objDashboardwidget->setStrContent($objConcreteWidget->getFieldsAsString());
-            if(!$objDashboardwidget->updateObjectToDb())
+            if(!$objDashboardwidget->updateObjectToDb()) {
                 throw new Exception("Error updating widget to db!", Exception::$level_ERROR);
+            }
 
             $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "", "&peClose=1&blockAction=1"));
         }

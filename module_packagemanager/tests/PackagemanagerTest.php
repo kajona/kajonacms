@@ -30,7 +30,7 @@ class PackagemanagerTest extends Testbase
         $arrModules = $objManager->getAvailablePackages();
 
         foreach ($arrModules as $intKey => $objOneModule) {
-            echo "#" . $intKey . ": " . $objOneModule . "\n";
+            //echo "#" . $intKey . ": " . $objOneModule . "\n";
         }
     }
 

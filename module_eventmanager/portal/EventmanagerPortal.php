@@ -425,7 +425,7 @@ class EventmanagerPortal extends PortalController implements PortalInterface
         $objEvent = new EventmanagerEvent($this->getSystemid());
         if (validateSystemid($this->getParam("participantId"))) {
 
-            $arrParticipants = EventmanagerParticipant::getObjectList($objEvent->getSystemid());
+            $arrParticipants = EventmanagerParticipant::getObjectListFiltered(null, $objEvent->getSystemid());
             foreach ($arrParticipants as $objOneParticipant) {
                 if ($objOneParticipant->getSystemid() == $this->getParam("participantId")) {
                     $objOneParticipant->setIntRecordStatus(1);

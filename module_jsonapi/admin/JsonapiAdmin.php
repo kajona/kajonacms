@@ -137,7 +137,7 @@ class JsonapiAdmin extends AdminController implements AdminInterface
             }
 
             /** @var ModelInterface[]|Root[] $arrEntries */
-            $arrEntries = $strClass::getObjectList($strFilter, $intStartIndex, $intCount, $objStartDate, $objEndDate);
+            $arrEntries = $strClass::getObjectListFiltered(null, $strFilter, $intStartIndex, $intCount, $objStartDate, $objEndDate);
             $arrResult = array();
 
             foreach ($arrEntries as $objEntry) {

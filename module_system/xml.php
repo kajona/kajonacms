@@ -64,6 +64,7 @@ class Xml
         $this->objResponse = ResponseObject::getInstance();
         $this->objResponse->setStrResponseType(HttpResponsetypes::STR_TYPE_XML);
         $this->objResponse->setStrStatusCode(HttpStatuscodes::SC_OK);
+        $this->objResponse->setObjEntrypoint(RequestEntrypointEnum::XML());
 
         $this->objBuilder = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_OBJECT_BUILDER);
 

@@ -41,6 +41,14 @@ CKEDITOR.editorConfig = function(config) {
             ['TextColor','BGColor']
         ];
     
+    //limited toolbar, e.g. used for text-input only
+    config.toolbar_minimaltext =
+        [
+            ['Undo','Redo','-','RemoveFormat'],
+            ['Bold','Italic','Underline'],
+            ['NumberedList','BulletedList','-','Outdent','Indent']
+        ];
+
     //limited toolbar, e.g. used for the downloads and the gallery
     config.toolbar_minimal =
         [

@@ -192,7 +192,7 @@ class WorkflowsHandler extends \Kajona\System\System\Model implements \Kajona\Sy
         }
 
         //find workflows to remove
-        $arrWorkflows = self::getObjectList();
+        $arrWorkflows = self::getObjectListFiltered();
         /** @var WorkflowsHandler $objOneWorkflow */
         foreach ($arrWorkflows as $objOneWorkflow) {
 
