@@ -89,7 +89,7 @@ class DateRange
 
     public static function getIntervalByString($strInterval)
     {
-        return call_user_func(array('DatePeriodEnum', strtoupper($strInterval)));
+        return call_user_func(array('Kajona\System\System\DatePeriodEnum', strtoupper($strInterval)));
     }
 
     /**

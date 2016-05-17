@@ -610,7 +610,7 @@ abstract class AdminSimple extends AdminController
 
             //create the list-button and the js code to show the dialog
             $strButton = Link::getLinkAdminManual(
-                "href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('".$this->getLang("dialog_copyHeader", "system")."'); jsDialog_1.setContent('".$strQuestion."', '".$this->getLang("dialog_copyButton", "system")."',  '".$strHref."'); jsDialog_1.init(); return false;\"",
+                "href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('".$this->getLang("dialog_copyHeader", "system")."'); jsDialog_1.setContent('".$strQuestion."', '".$this->getLang("dialog_copyButton", "system")."',  function() {jsDialog_3.init(); document.location.href= '{$strHref}';}); jsDialog_1.init(); return false;\"",
                 "",
                 $this->getLang("commons_edit_copy", "system"),
                 "icon_copy"
