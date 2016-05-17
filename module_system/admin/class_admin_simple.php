@@ -529,7 +529,7 @@ abstract class class_admin_simple extends class_admin_controller {
         }
 
         if ($objListEntry->rightEdit() && $this->strPeAddon == "") {
-            $strQuestion = $this->getLang("commons_copy_record_question", "system", array(strip_tags($objListEntry->getStrDisplayName())));
+            $strQuestion = $this->getLang("commons_copy_record_question", "system", array(addslashes(strip_tags($objListEntry->getStrDisplayName()))));
             $strHref = class_link::getLinkAdminHref($objListEntry->getArrModule("modul"), $this->getActionNameForClass("copyObject", $objListEntry), "&systemid=".$objListEntry->getSystemid().$this->strPeAddon);
 
             //create the list-button and the js code to show the dialog
