@@ -245,7 +245,7 @@ TXT;
                 continue;
 
             if(is_file($strSourceFolder."/".$strOneEntry) && !is_file($strTargetFolder."/".$strOneEntry)) {
-                echo "copying file ".$strSourceFolder."/".$strOneEntry." to ".$strTargetFolder."/".$strOneEntry."\n";
+                //echo "copying file ".$strSourceFolder."/".$strOneEntry." to ".$strTargetFolder."/".$strOneEntry."\n";
                 if(!is_dir($strTargetFolder))
                     mkdir($strTargetFolder, 0777, true);
 
