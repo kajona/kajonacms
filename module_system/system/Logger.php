@@ -170,9 +170,9 @@ final class Logger
 
         $strText = $strDate." ".$strLevel." ".$strSessid." ".$strFileInfo." ".$strMessage."\r\n";
 
-        $handle = fopen(_realpath_."/project/log/".$this->strFilename, "a");
-        fwrite($handle, $strText);
-        fclose($handle);
+        $handle = @fopen(_realpath_."/project/log/".$this->strFilename, "a");
+        @fwrite($handle, $strText);
+        @fclose($handle);
     }
 
     /**

@@ -68,7 +68,7 @@ class SamplecontentInstallerHelper
     private static function initInstaller(SamplecontentInstallerInterface $objInstaller)
     {
         $objInstaller->setObjDb(Carrier::getInstance()->getObjDB());
-        $objInstaller->setStrContentlanguage(Carrier::getInstance()->getObjSession()->getAdminLanguage());
+        $objInstaller->setStrContentlanguage(Carrier::getInstance()->getObjSession()->getAdminLanguage(true, true));
     }
 
     /**

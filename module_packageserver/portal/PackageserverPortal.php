@@ -51,8 +51,8 @@ class PackageserverPortal extends PortalController implements PortalInterface
         }
 
 
-        $intStart = $this->ensureNumericValue($this->getParam("start"), null);
-        $intEnd = $this->ensureNumericValue($this->getParam("end"), null);
+        $intStart = $this->ensureNumericValue($this->getParam("start"), 0);
+        $intEnd = $this->ensureNumericValue($this->getParam("end"), 15);
         $strTypeFilter = $this->isValidCategoryFilter($this->getParam("type")) ? $this->getParam("type") : false;
 
         $strNameFilter = trim($this->getParam("title")) != "" ? trim($this->getParam("title")) : false;
@@ -154,23 +154,38 @@ class PackageserverPortal extends PortalController implements PortalInterface
         $arrReturn = array();
         $arrSubfiles = MediamanagerFile::loadFilesDB($strParentId, false, true, null, null, true);
 
-        //TODO: category filtering
-
         foreach ($arrSubfiles as $objOneFile) {
             if ($objOneFile->getIntType() == MediamanagerFile::$INT_TYPE_FILE) {
 
+                $bitAdd = true;
+                
                 //filename based check if the file should be included
                 if ($strNameFilter !== false) {
                     if (uniStrpos($strNameFilter, ",") !== false) {
-                        if (in_array($objOneFile->getStrName(), explode(",", $strNameFilter))) {
-                            $arrReturn[] = $objOneFile;
+                        if (!in_array($objOneFile->getStrName(), explode(",", $strNameFilter))) {
+                            $bitAdd = false;
                         }
                     }
-                    elseif (uniSubstr($objOneFile->getStrName(), 0, uniStrlen($strNameFilter)) == $strNameFilter) {
-                        $arrReturn[] = $objOneFile;
+                    elseif (uniSubstr($objOneFile->getStrName(), 0, uniStrlen($strNameFilter)) != $strNameFilter) {
+                        $bitAdd = false;
                     }
                 }
-                else {
+                
+                //validate against the category
+                if($strCategoryFilter !== false) {
+                    try {
+                        $objManager = new PackagemanagerManager();
+                        $objMetadata = $objManager->getPackageManagerForPath($objOneFile->getStrFilename());
+                        if($objMetadata->getObjMetadata()->getStrType() != $strCategoryFilter) {
+                            $bitAdd = false;
+                        }
+                    }
+                    catch (Exception $objEx) {
+
+                    }
+                }
+
+                if($bitAdd) {
                     $arrReturn[] = $objOneFile;
                 }
             }
@@ -179,13 +194,17 @@ class PackageserverPortal extends PortalController implements PortalInterface
             }
         }
 
-        if ($intStart !== null && $intEnd !== null && $intStart > 0 && $intEnd > $intStart) {
+        if(empty($arrReturn)) {
+            return array();
+        }
+
+        if ($intStart !== null && $intEnd !== null && $intStart >= 0 && $intEnd > $intStart) {
             if ($intEnd > count($arrReturn)) {
                 $intEnd = count($arrReturn);
             }
 
             $arrTemp = array();
-            for ($intI = $intStart; $intI <= $intEnd; $intI++) {
+            for ($intI = $intStart; $intI < $intEnd; $intI++) {
                 $arrTemp[] = $arrReturn[$intI];
             }
 
