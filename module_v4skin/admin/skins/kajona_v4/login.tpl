@@ -38,7 +38,7 @@
 
             <div class="panel panelDefault" id="loginContainer">
                 <div class="panel-header">
-                    <h3>Kajona v4</h3>
+                    <h3>Kajona v5</h3>
                 </div>
                 <div class="panel-body">
                     <div id="loginContainer_content">%%content%%</div>
