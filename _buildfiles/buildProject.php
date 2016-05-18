@@ -119,7 +119,6 @@ class BuildHelper {
                     continue;
                 }
 
-                echo dateToString(new \Kajona\System\System\Date())." Installing ".$objOneMetadata->getStrTitle()."...\n";
                 $objHandler = $objManager->getPackageManagerForPath($objOneMetadata->getStrPath());
 
                 if(!$objHandler->isInstallable()) {
@@ -127,6 +126,7 @@ class BuildHelper {
                     continue;
                 }
 
+                echo dateToString(new \Kajona\System\System\Date())." Installing ".$objOneMetadata->getStrTitle()."...\n";
                 $objHandler->installOrUpdate();
 //                echo $objHandler->installOrUpdate();
 
