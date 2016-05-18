@@ -142,7 +142,6 @@
         <echo>Execute composer</echo>
         <exec dir="${basedir}${buildPath}/composerbuild" executable="${path.composer}" failonerror="on">
             <arg line=" install"/>
-            <arg line=" --prefer-source"/>
             <arg line=" --no-dev"/>
         </exec>
     </target>
