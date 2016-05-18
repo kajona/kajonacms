@@ -11,5 +11,5 @@ define("DB_HOST",				                "localhost");
 
 
 
-ini_set("session.save_path", "/tmp");
+ini_set("session.save_path", sys_get_temp_dir());
 ini_set("session.use_cookies", "Off");
