@@ -21,7 +21,7 @@ class PortalTest extends Testbase
 
         /** @var \Kajona\Pages\System\PagesPage $objOnePage */
         foreach ($arrPages as $objOnePage) {
-            echo "generating page ".$objOnePage->getStrName()."\n";
+            //echo "generating page ".$objOnePage->getStrName()."\n";
 
             $objModuleRequested->setParam("page", $objOnePage->getStrName());
             $objModuleRequested->action("");

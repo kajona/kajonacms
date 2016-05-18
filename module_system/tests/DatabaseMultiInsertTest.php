@@ -24,11 +24,8 @@ class DatabaseMultiInsertTest extends Testbase
 
         $objDB = Carrier::getInstance()->getObjDB();
 
-        echo "testing database...\n";
         echo "current driver: " . Carrier::getInstance()->getObjConfig()->getConfig("dbdriver") . "\n";
 
-
-        echo "\tcreating a new table...\n";
 
         $arrFields = array();
         $arrFields["temp_id"] = array("char20", false);
@@ -36,8 +33,6 @@ class DatabaseMultiInsertTest extends Testbase
         $arrFields["temp_char254"] = array("char254", true);
 
         $this->assertTrue($objDB->createTable("temp_autotest", $arrFields, array("temp_id")), "testDataBase createTable");
-
-        echo "\tcreating 50 records...\n";
 
         $arrValues = array();
         for ($intI = 1; $intI <= 50; $intI++) {
@@ -66,7 +61,6 @@ class DatabaseMultiInsertTest extends Testbase
         $this->assertEquals(0, $objDB->getPRow($strQuery, array())["COUNT(*)"], "testDataBase countLimitReach");
 
         $objDB->flushQueryCache();
-        echo "\tcreating 1200 records...\n";
 
         $arrValues = array();
         for ($intI = 1; $intI <= 1200; $intI++) {

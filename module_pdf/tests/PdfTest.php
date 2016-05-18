@@ -11,8 +11,6 @@ class PdfTest extends Testbase
     public function test()
     {
 
-        echo "\tgenerating a sample pdf...\n";
-
         //test code
         $strFile = "/files/public/testPdf.pdf";
 
@@ -84,8 +82,7 @@ class PdfTest extends Testbase
         $objPdf->addTableOfContents("Inhalt");
 
         $objPdf->savePdf($strFile);
-
-        echo "\tsaved pdf to <a href=\"" . _webpath_ . $strFile . "\">" . _webpath_ . $strFile . "</a>\n";
+        $this->assertFileExists(_realpath_.$strFile);
     }
 
 }

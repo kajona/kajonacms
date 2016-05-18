@@ -15,7 +15,6 @@ class NewsTest extends Testbase
 
     public function testCreateDelete()
     {
-        echo "creating a news..\n";
 
         $objNews = new NewsNews();
         $objNews->setStrTitle("autotest");
@@ -24,7 +23,6 @@ class NewsTest extends Testbase
 
         $this->assertTrue($objNews->updateObjectToDb(), __FILE__ . " save news");
 
-        echo "creating category...\n";
         $objCat = new NewsCategory();
         $objCat->setStrTitle("autotest");
         $this->assertTrue($objCat->updateObjectToDb(), __FILE__ . " save cat");
@@ -34,7 +32,6 @@ class NewsTest extends Testbase
         $this->assertEquals(0, count(NewsNews::getObjectListFiltered(null, $objCat->getSystemid())), __FILE__ . " check news for cat");
 
 
-        echo "adding news to category..\n";
         $objNews->setArrCats(array($objCat->getSystemid()));
         $this->assertTrue($objNews->updateObjectToDb(), __FILE__ . " update news");
 
@@ -49,7 +46,6 @@ class NewsTest extends Testbase
         $this->assertEquals(1, count(NewsCategory::getNewsMember($objNews->getSystemid())), __FILE__ . " check cats for news");
         $this->assertEquals(1, count(NewsNews::getObjectListFiltered(null, $objCat->getSystemid())), __FILE__ . " check news for cat");
 
-        echo "deleting news...\n";
         $this->assertTrue($objNews->deleteObjectFromDatabase(), __FILE__ . " delete news");
 
         $this->flushDBCache();
@@ -61,7 +57,6 @@ class NewsTest extends Testbase
 
     public function testRssFeed()
     {
-        echo "creating news & category..\n";
 
         $objNews = new NewsNews();
         $objNews->setStrTitle("autotest");
@@ -76,19 +71,16 @@ class NewsTest extends Testbase
         $objNews2->setStrText("autotest2");
         $this->assertTrue($objNews2->updateObjectToDb(), __FILE__ . " save news");
 
-        echo "creating category...\n";
         $objCat = new NewsCategory();
         $objCat->setStrTitle("autotest");
         $this->assertTrue($objCat->updateObjectToDb(), __FILE__ . " save cat");
         $this->flushDBCache();
 
-        echo "adding news to category..\n";
         $objNews->setArrCats(array($objCat->getSystemid()));
         $this->assertTrue($objNews->updateObjectToDb(), __FILE__ . " update news");
         $this->flushDBCache();
 
 
-        echo "creating feed...\n";
         $objFeed = new NewsFeed();
         $objFeed->setStrTitle("testfeed");
         $objFeed->setStrCat($objCat->getSystemid());
@@ -102,14 +94,12 @@ class NewsTest extends Testbase
         $this->assertEquals(1, count(NewsFeed::getNewsList($objFeed->getStrCat(), 1)), __FILE__ . " check news for feed");
 
 
-        echo "generating feed by creating a fake request...\n";
 
         $objNewsPortalXML = new NewsPortalXml();
         $objNewsPortalXML->setParam("feedTitle", "autotest");
         $strFeed = $objNewsPortalXML->action("newsFeed");
         $this->assertTrue(uniStrpos($strFeed, "<title>autotest</title>") !== false, __FILE__ . " check rss feed");
 
-        echo "parsing feed with xml parser...\n";
         $objXmlParser = new XmlParser();
         $objXmlParser->loadString($strFeed);
         $arrFeed = $objXmlParser->xmlToArray();
@@ -119,7 +109,6 @@ class NewsTest extends Testbase
         $this->assertEquals("autotest", $strTitle, __FILE__ . " check items-title for feed");
 
 
-        echo "adding news to category..\n";
         $objNews2->setArrCats(array($objCat->getSystemid()));
         $this->assertTrue($objNews2->updateObjectToDb(), __FILE__ . " update news");
         $this->flushDBCache();
@@ -130,7 +119,6 @@ class NewsTest extends Testbase
         $strFeed = $objNewsPortalXML->action("newsFeed");
         $this->assertTrue(uniStrpos($strFeed, "<title>autotest</title>") !== false, __FILE__ . " check rss feed");
 
-        echo "parsing feed with xml parser...\n";
         $objXmlParser = new XmlParser();
         $objXmlParser->loadString($strFeed);
         $arrFeed = $objXmlParser->xmlToArray();
@@ -139,7 +127,6 @@ class NewsTest extends Testbase
         $this->assertEquals(2, $intNrOfNews, __FILE__ . " check items for feed");
 
 
-        echo "deleting news & category...\n";
         $this->assertTrue($objNews->deleteObjectFromDatabase(), __FILE__ . " delete news");
         $this->assertTrue($objNews2->deleteObjectFromDatabase(), __FILE__ . " delete news");
         $this->assertTrue($objCat->deleteObjectFromDatabase(), __FILE__ . " delete cat");

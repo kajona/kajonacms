@@ -15,7 +15,6 @@ class ZipTest extends Testbase
         $objFileSystem = new Filesystem();
 
         $objZip = new Zip();
-        echo "\topening " . _realpath_ . "/test.zip\n";
         $this->assertTrue($objZip->openArchiveForWriting("/files/cache/test.zip"), __FILE__ . " openArchive");
 
         $this->assertTrue($objZip->addFile(Resourceloader::getInstance()->getCorePathForModule("module_system") . "/module_system/metadata.xml"), __FILE__ . " addFile");
@@ -27,7 +26,6 @@ class ZipTest extends Testbase
 
         $this->assertFileExists(_realpath_ . "/files/cache/test.zip", __FILE__ . " checkFileExists");
 
-        echo "\textracting files\n";
         $objFileSystem->folderCreate("/files/cache/zipextract");
         $this->assertFileExists(_realpath_ . "/files/cache/zipextract", __FILE__ . " checkFileExists");
 
@@ -40,7 +38,6 @@ class ZipTest extends Testbase
         $this->assertFileExists(_realpath_ . "/files/cache/zipextract" . Resourceloader::getInstance()->getCorePathForModule("module_system") . "/module_system/system/config/config.php", __FILE__ . " extractArchive");
 
 
-        echo "\tremoving testfile";
         $this->assertTrue($objFileSystem->fileDelete("/files/cache/test.zip"), __FILE__ . " deleteFile");
         $this->assertFileNotExists(_realpath_ . "/files/cache/test.zip", __FILE__ . " checkFileNotExists");
 
@@ -54,7 +51,6 @@ class ZipTest extends Testbase
         $objFileSystem = new Filesystem();
 
 
-        echo "\t creating test structure\n";
         $objFileSystem->folderCreate("/files/cache/ziptest");
         $this->assertFileExists(_realpath_ . "/files/cache/ziptest", __FILE__ . " checkFileNotExists");
 
@@ -65,13 +61,11 @@ class ZipTest extends Testbase
 
 
         $objZip = new Zip();
-        echo "\topening test.zip\n";
         $this->assertTrue($objZip->openArchiveForWriting("/files/cache/test.zip"), __FILE__ . " openArchive");
         $this->assertTrue($objZip->addFolder("/files/cache/ziptest"), __FILE__ . " addFolder");
         $this->assertTrue($objZip->closeArchive(), __FILE__ . " closeArchive");
         $this->assertFileExists(_realpath_ . "/files/cache/test.zip", __FILE__ . " checkFileExists");
 
-        echo "\textracting files\n";
         $objFileSystem->folderCreate("/files/cache/zipextract");
         $this->assertFileExists(_realpath_ . "/files/cache/zipextract", __FILE__ . " checkFileExists");
 
@@ -83,7 +77,6 @@ class ZipTest extends Testbase
         $this->assertFileExists(_realpath_ . "/files/cache/zipextract/files/cache/ziptest/subdir/licence_lgpl.txt", __FILE__ . " extractArchive");
 
 
-        echo "\tremoving testfile\n";
         $this->assertTrue($objFileSystem->fileDelete("/files/cache/test.zip"), __FILE__ . " deleteFile");
         $this->assertFileNotExists(_realpath_ . "/files/cache/test.zip", __FILE__ . " checkFileNotExists");
 
@@ -101,18 +94,15 @@ class ZipTest extends Testbase
 
 
         $objZip = new Zip();
-        echo "\topening " . _realpath_ . "/test.zip\n";
         $this->assertTrue($objZip->openArchiveForWriting("/files/cache/test.zip"), __FILE__ . " openArchive");
         $this->assertTrue($objZip->addFile(Resourceloader::getInstance()->getCorePathForModule("module_system") . "/module_system/metadata.xml"), __FILE__ . " addFile");
         $this->assertTrue($objZip->closeArchive(), __FILE__ . " closeArchive");
 
         $this->assertFileExists(_realpath_ . "/files/cache/test.zip", __FILE__ . " checkFileExists");
 
-        echo "\treading files\n";
         $strContent = $objZip->getFileFromArchive("/files/cache/test.zip", Resourceloader::getInstance()->getCorePathForModule("module_system") . "/module_system/metadata.xml");
         $this->assertTrue(uniStrpos($strContent, "xsi:noNamespaceSchemaLocation=\"https://apidocs.kajona.de/xsd/package.xsd\"") !== false);
 
-        echo "\tremoving testfile\n";
         $this->assertTrue($objFileSystem->fileDelete("/files/cache/test.zip"), __FILE__ . " deleteFile");
         $this->assertFileNotExists(_realpath_ . "/files/cache/test.zip", __FILE__ . " checkFileNotExists");
 

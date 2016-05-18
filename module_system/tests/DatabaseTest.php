@@ -10,7 +10,6 @@ class DatabaseTest extends Testbase
 
     public function tearDown()
     {
-        echo "Dropping tables...\n";
         $this->flushDBCache();
         if (in_array(_dbprefix_ . "temp_autotest", Carrier::getInstance()->getObjDB()->getTables())) {
             $strQuery = "DROP TABLE " . _dbprefix_ . "temp_autotest";
@@ -149,10 +148,8 @@ class DatabaseTest extends Testbase
 
     private function createTable()
     {
-        echo "testing database...\n";
         echo "current driver: " . Carrier::getInstance()->getObjConfig()->getConfig("dbdriver") . "\n";
 
-        echo "\tcreating a new table...\n";
         $objDB = Carrier::getInstance()->getObjDB();
 
         $arrFields = array();
@@ -176,13 +173,9 @@ class DatabaseTest extends Testbase
 
         $objDB = Carrier::getInstance()->getObjDB();
 
-
-        echo "\tcreating a new table...\n";
-
+        
         $this->createTable();
-
-        echo "\tcreating 50 records...\n";
-
+        
         for ($intI = 1; $intI <= 50; $intI++) {
             $strQuery = "INSERT INTO " . _dbprefix_ . "temp_autotest
                 (temp_id, temp_long, temp_double, temp_char10, temp_char20, temp_char100, temp_char254, temp_char500, temp_text)
@@ -193,13 +186,11 @@ class DatabaseTest extends Testbase
         }
 
 
-        echo "\tgetRow test\n";
         $strQuery = "SELECT * FROM " . _dbprefix_ . "temp_autotest ORDER BY temp_long ASC";
         $arrRow = $objDB->getPRow($strQuery, array());
         $this->assertTrue(count($arrRow) >= 9, "testDataBase getRow count");
         $this->assertEquals($arrRow["temp_char10"], "1", "testDataBase getRow content");
 
-        echo "\tgetArray test\n";
         $strQuery = "SELECT * FROM " . _dbprefix_ . "temp_autotest ORDER BY temp_long ASC";
         $arrRow = $objDB->getPArray($strQuery, array());
         $this->assertEquals(count($arrRow), 50, "testDataBase getArray count");
@@ -208,7 +199,6 @@ class DatabaseTest extends Testbase
         foreach ($arrRow as $arrSingleRow)
             $this->assertEquals($arrSingleRow["temp_char10"], $intI++, "testDataBase getArray content");
 
-        echo "\tgetArraySection test\n";
         $strQuery = "SELECT * FROM " . _dbprefix_ . "temp_autotest ORDER BY temp_long ASC";
         $arrRow = $objDB->getPArray($strQuery, array(), 0, 9);
         $this->assertEquals(count($arrRow), 10, "testDataBase getArraySection count");
@@ -217,9 +207,7 @@ class DatabaseTest extends Testbase
         foreach ($arrRow as $arrSingleRow)
             $this->assertEquals($arrSingleRow["temp_char10"], $intI++, "testDataBase getArraySection content");
 
-
-        echo "\tdeleting table\n";
-
+        
         $strQuery = "DROP TABLE " . _dbprefix_ . "temp_autotest";
         $this->assertTrue($objDB->_pQuery($strQuery, array()), "testDataBase dropTable");
 
@@ -227,10 +215,8 @@ class DatabaseTest extends Testbase
 
     public function testCreateTableIndex()
     {
-        echo "testing database...\n";
         echo "current driver: " . Carrier::getInstance()->getObjConfig()->getConfig("dbdriver") . "\n";
 
-        echo "\tcreating a new table...\n";
         $objDB = Carrier::getInstance()->getObjDB();
 
         $arrFields = array();

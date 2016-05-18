@@ -9,7 +9,7 @@ class GeocoderTest extends \Kajona\System\Tests\Testbase {
     public function test() {
 
         //disabled due to runtime problems, remote lookups to google / yahoo at each build are not that clever
-        return "";
+        $this->markTestSkipped("skipped due to licence issues");
 
         //some test addresses
         $arrAddresses = array();
@@ -27,9 +27,7 @@ class GeocoderTest extends \Kajona\System\Tests\Testbase {
         $arrAddresses[] = array("45 King William Street", "EC4R 9AN", "London", "UK");
         $arrAddresses[] = array("4150 Network Circle", "CA 95054", "Santa Clara", "USA");
 
-        echo "\ttry to geocode some addresses using google...\n\n";
         $this->processResult(0, $arrAddresses);
-        echo "\ttry to geocode some addresses using yahoo...\n\n";
         $this->processResult(1, $arrAddresses);
 
     }

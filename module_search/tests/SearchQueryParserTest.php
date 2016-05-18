@@ -32,18 +32,14 @@ class SearchQueryParserTest extends Testbase
 
     public function testQueryParser()
     {
-        echo "Test Query Parser\n";
-
         $objParser = new SearchQueryParser();
 
         // Must
-        echo "Must...\n";
         $objQuery = $objParser->parseText("hello");
         /** @var $objQuery SearchTermQuery */
         $this->assertTrue($objQuery instanceof SearchTermQuery, "wrong query type");
         $this->assertEquals($objQuery->getObjTerm()->getStrText(), "hello");
 
-        echo "Must...\n";
         $objQuery = $objParser->parseText("glückwunsch");
         /** @var $objQuery SearchTermQuery */
         $this->assertTrue($objQuery instanceof SearchTermQuery, "wrong query type");
@@ -51,7 +47,6 @@ class SearchQueryParserTest extends Testbase
 
 
         // Must - Must
-        echo "Must - Must...\n";
         $objQuery = $objParser->parseText("hello world");
         $this->assertTrue($objQuery instanceof SearchBooleanQuery, "wrong query type");
         if ($objQuery instanceof SearchBooleanQuery) {
@@ -66,7 +61,6 @@ class SearchQueryParserTest extends Testbase
         }
 
         // Must - Should
-        echo "Must - Should...\n";
         $objQuery = $objParser->parseText("+hello world");
         $this->assertTrue($objQuery instanceof SearchBooleanQuery, "wrong query type");
         if ($objQuery instanceof SearchBooleanQuery) {
@@ -80,7 +74,6 @@ class SearchQueryParserTest extends Testbase
         }
 
         // Must - Must - Should
-        echo "Must - Must - Should...\n";
         $objQuery = $objParser->parseText("+hello +world blub");
         $this->assertTrue($objQuery instanceof SearchBooleanQuery, "wrong query type");
         if ($objQuery instanceof SearchBooleanQuery) {
@@ -95,7 +88,6 @@ class SearchQueryParserTest extends Testbase
         }
 
         // Must - Must - MustNot
-        echo "Must - Must - MustNot...\n";
         $objQuery = $objParser->parseText("+hello +world -blub");
         $this->assertTrue($objQuery instanceof SearchBooleanQuery, "wrong query type");
         if ($objQuery instanceof SearchBooleanQuery) {
@@ -110,7 +102,6 @@ class SearchQueryParserTest extends Testbase
         }
 
         // Must - MustNot
-        echo "Must - MustNot...\n";
         $objQuery = $objParser->parseText("hello -world");
         $this->assertTrue($objQuery instanceof SearchBooleanQuery, "wrong query type");
         if ($objQuery instanceof SearchBooleanQuery) {

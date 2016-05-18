@@ -19,7 +19,7 @@ class PackagemanagerTest extends Testbase
         $objReader = new PackagemanagerMetadata();
         $objReader->autoInit(Resourceloader::getInstance()->getCorePathForModule("module_packagemanager") . "/module_packagemanager");
 
-        echo $objReader . "\n\n";
+        //echo $objReader . "\n\n";
     }
 
 

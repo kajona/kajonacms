@@ -18,20 +18,16 @@ class PagesTest extends Testbase
 
         $objDB = Carrier::getInstance()->getObjDB();
 
-        echo "testing module_pages\n";
-
         //pages at startup:
         $intPagesAtStartup = count(PagesFolder::getPagesInFolder(SystemModule::getModuleByName("pages")->getSystemid()));
         $objDB->flushQueryCache();
 
 
-        echo "\tcreate a new folder...\n";
         $objFolder = new PagesFolder();
         $objFolder->setStrName("autotest");
         $objFolder->updateObjectToDb(SystemModule::getModuleByName("pages")->getSystemid());
         $strTestFolderID = $objFolder->getSystemid();
 
-        echo "\tcreate 10 folders using the model...\n";
         $arrFoldersCreated = array();
         for ($intI = 0; $intI < 10; $intI++) {
             $objFolder = new PagesFolder();
@@ -48,7 +44,6 @@ class PagesTest extends Testbase
         $this->assertEquals(count($arrFoldersAtLevel), 10, __FILE__." checkNrOfFoldersCreatedByModel");
 
 
-        echo "\tcreate 10 pages on root level using the model...\n";
         $arrPagesCreated = array();
         for ($intI = 0; $intI < 10; $intI++) {
             $objPages = new PagesPage();
@@ -65,28 +60,23 @@ class PagesTest extends Testbase
         $arrPagesAtLevel = PagesFolder::getPagesInFolder(SystemModule::getModuleByName("pages")->getSystemid());
         $this->assertEquals(count($arrPagesAtLevel), 10 + $intPagesAtStartup, __FILE__." checkNrOfPagesCreatedByModel");
 
-        echo "\tdeleting pages created...\n";
         foreach ($arrPagesCreated as $strOnePageID) {
             $objDelPage = new PagesPage($strOnePageID);
             $objDelPage->deleteObjectFromDatabase();
             $objDB->flushQueryCache();
         }
-        echo "\tcheck number of pages installed...\n";
         $arrPagesAtLevel = PagesFolder::getPagesInFolder(SystemModule::getModuleByName("pages")->getSystemid());
         $this->assertEquals(count($arrPagesAtLevel), $intPagesAtStartup, __FILE__." checkNrOfPagesAtLevel");
 
-        echo "\tdeleting folders created...\n";
         foreach ($arrFoldersCreated as $strOneFolderID) {
             $objFolder = new PagesFolder($strOneFolderID);
             $objFolder->deleteObjectFromDatabase();
             $objDB->flushQueryCache();
         }
-        echo "\tcheck number of folders installed...\n";
         $arrFoldersAtLevel = PagesFolder::getFolderList($strTestFolderID);
         $this->assertEquals(count($arrFoldersAtLevel), 0, __FILE__." checkNrOfFoldersAtLevel");
 
 
-        echo "\tdeleting folder...\n";
         $objFolder = new PagesFolder($strTestFolderID);
         $objFolder->deleteObjectFromDatabase();
 

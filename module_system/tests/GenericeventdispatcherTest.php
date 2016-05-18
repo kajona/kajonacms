@@ -41,7 +41,6 @@ class GenericeventdispatcherTest extends Testbase  {
 PHP;
 
 
-        echo "Saving testfiles to ".Resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/system/GenericeventdispatcherTestModel.php\n";
         file_put_contents(Resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/system/GenericeventdispatcherTestModel.php", $strClass);
 
         Classloader::getInstance()->flushCache();

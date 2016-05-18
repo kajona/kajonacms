@@ -8,11 +8,9 @@ class ChartsEzcTest extends Testbase  {
 
     public function testCharts() {
 
-        echo "test ezc...\n";
 
         srand((double)microtime()*1000000);
         //--- system kernel -------------------------------------------------------------------------------------
-        echo "\tcreating a few charts...\n";
 
 
         echo "\t pie chart...\n";

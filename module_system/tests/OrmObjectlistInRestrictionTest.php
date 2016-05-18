@@ -62,9 +62,7 @@ class OrmObjectlistInRestrictionTest extends Testbase
         $arrFields["temp_name"] = array("char254", true);
 
         $this->assertTrue($objDB->createTable("temp_propertyintest", $arrFields, array("temp_systemid")), "testDataBase createTable");
-
-        echo "\tcreating 50 records...\n";
-
+        
         $arrValues = array();
         for ($intI = 1; $intI <= 50; $intI++) {
             $arrValues[] = array(generateSystemid(), "text " . $intI);

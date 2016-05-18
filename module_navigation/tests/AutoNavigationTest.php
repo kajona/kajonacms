@@ -88,7 +88,6 @@ class AutoNavigationTest extends Testbase
     public function testGeneration()
     {
 
-        echo "test auto navigation...\n";
 
         Carrier::getInstance()->getObjDB()->flushQueryCache();
 

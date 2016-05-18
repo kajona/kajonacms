@@ -19,7 +19,7 @@ class StatsReportTest extends Testbase
             define("_skinwebpath_", "1");
         }
 
-        echo "processing reports...\n";
+        //echo "processing reports...\n";
 
         $arrFiles = Resourceloader::getInstance()->getFolderContent("/admin/reports", array(".php"), false, null, function (&$strOneFile, $strPath) {
 
@@ -58,7 +58,7 @@ class StatsReportTest extends Testbase
 
         /** @var \Kajona\System\Admin\Reports\AdminStatsreportsInterface $objReport */
         foreach ($arrReports as $objReport) {
-            echo "processing report " . $objReport->getTitle() . "\n";
+            //echo "processing report " . $objReport->getTitle() . "\n";
 
             $objReport->getReport();
             $objReport->getReportGraph();
