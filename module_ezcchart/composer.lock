@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "953cee3d1b415a4729399c677a785fc7",
-    "content-hash": "f76dd074876fd550a5cbf057f0678063",
+    "hash": "cb29c20c15ac612913ffdc6d7b951bcf",
+    "content-hash": "14211985ac11c5edf055f505e3145db3",
     "packages": [
         {
             "name": "zetacomponents/base",

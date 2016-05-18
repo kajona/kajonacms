@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9721eba9f673688660413b8f88b8d320",
-    "content-hash": "928ed6024abefe80a88320765f46cb4a",
+    "hash": "8892ca6129e958e500970be8ffd9768e",
+    "content-hash": "2acf88908e89dcc0e610ebc7ebc8509f",
     "packages": [
         {
             "name": "garetjax/phpbrowscap",
