@@ -38,7 +38,7 @@ $lang["_system_portal_disablepage_"]     = "Temporär sida";
 $lang["_system_portal_disablepage_hint"] = "Denna sida visas när portalen är deaktiverad.";
 $lang["_system_release_time_"]           = "Sessions varaktighet";
 $lang["_system_release_time_hint"]       = "Efter denna tid i sekunder blir en session ogiltig.";
-$lang["about_part1"]                     = "<h2>Kajona V5 - Öppen kod Content Management System</h2>Kajona V 4.7, Kodnamn \"springtide\"<br /><br /><a href=\"http://www.kajona.de\" target=\"_blank\">www.kajona.de</a><br /><a href=\"mailto:info@kajona.de\" target=\"_blank\">info@kajona.de</a><br /><br />För ytterligare information, support eller förslag besök vår hemsida.<br />Support kan också fås i vårt forum <a href=\"http://board.kajona.de/\" target=\"_blank\">Forum</a>.";
+$lang["about_part1"]                     = "<h2>Kajona V5 - Öppen kod Content Management System</h2>Kajona V 5.0, Kodnamn \"phartastic\"<br /><br /><a href=\"http://www.kajona.de\" target=\"_blank\">www.kajona.de</a><br /><a href=\"mailto:info@kajona.de\" target=\"_blank\">info@kajona.de</a><br /><br />För ytterligare information, support eller förslag besök vår hemsida.<br />Support kan också fås i vårt forum <a href=\"http://board.kajona.de/\" target=\"_blank\">Forum</a>.";
 $lang["about_part2_header"]              = "<h2>Utvecklingsledning</h2>";
 $lang["about_part2a_header"]             = "<h2>Bidragsgivare / Utvecklare</h2>";
 $lang["about_part2b_header"]             = "<h2>Översättningar</h2>";
