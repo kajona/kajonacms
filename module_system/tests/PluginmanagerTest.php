@@ -67,10 +67,7 @@ PHP;
             }
 
 PHP;
-
-        echo "Saving testfiles to " . Resourceloader::getInstance()->getCorePathForModule("module_system", true) . "/module_system/system/PluginmanagerTestModel.php\n";
-        echo "Saving testfiles to " . Resourceloader::getInstance()->getCorePathForModule("module_system", true) . "/module_system/system/PluginmanagerTestModel2.php\n";
-        echo "Saving testfiles to " . Resourceloader::getInstance()->getCorePathForModule("module_system", true) . "/module_system/system/PluginmanagerTestModel3.php\n";
+        
         file_put_contents(Resourceloader::getInstance()->getCorePathForModule("module_system", true) . "/module_system/system/PluginmanagerTestModel.php", $strClass);
         file_put_contents(Resourceloader::getInstance()->getCorePathForModule("module_system", true) . "/module_system/system/PluginmanagerTestModel2.php", $strClass2);
         file_put_contents(Resourceloader::getInstance()->getCorePathForModule("module_system", true) . "/module_system/system/PluginmanagerTestModel3.php", $strClass3);

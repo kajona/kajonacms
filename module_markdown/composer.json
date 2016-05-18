@@ -2,7 +2,7 @@
   "repositories": [
     {
       "type": "composer",
-      "url": "https://buildpackages.kajona.de:5443/"
+      "url": "https://buildpackages.kajona.de:5443"
     }
   ],
   "require": {

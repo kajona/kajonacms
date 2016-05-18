@@ -46,17 +46,12 @@ class GeneralActionTest extends Testbase
         Carrier::getInstance()->getObjRights()->setBitTestMode(true);
 
         //load all admin-classes
-        $arrFiles = Resourceloader::getInstance()->getFolderContent("/portal", array(".php"), false, function ($strOneFile) {
-            if (preg_match("/class_module_(.*)_portal.php/i", $strOneFile)) {
-                $strClassname = uniSubstr($strOneFile, 0, -4);
-                $objReflection = new ReflectionClass($strClassname);
-                if (!$objReflection->isAbstract()) {
-                    return true;
-                }
-            }
-            return false;
-        },
+        $arrFiles = Resourceloader::getInstance()->getFolderContent("/portal", array(".php"), false, null,
             function (&$strOneFile, $strPath) {
+                if($strOneFile == "global_includes.php") {
+                    $strOneFile = null;
+                    return;
+                }
                 $strOneFile = Classloader::getInstance()->getInstanceFromFilename($strPath, "Kajona\\System\\Portal\\PortalController", null, array(), true);
             });
 
@@ -85,8 +80,8 @@ class GeneralActionTest extends Testbase
         //collect the autotestable annotations located on class-level
         foreach ($objAnnotations->getAnnotationValuesFromClass("@autoTestable") as $strValue) {
             foreach (explode(",", $strValue) as $strOneMethod) {
-                echo "found method " . get_class($objViewInstance) . "@" . $strOneMethod . " marked as class-based @autoTestable, preparing call\n";
-                echo "   calling via action() method\n";
+                //echo "found method " . get_class($objViewInstance) . "@" . $strOneMethod . " marked as class-based @autoTestable, preparing call\n";
+                //echo "   calling via action() method\n";
                 $objViewInstance->action($strOneMethod);
             }
         }
@@ -96,13 +91,13 @@ class GeneralActionTest extends Testbase
         foreach ($arrMethods as $objOneMethod) {
 
             if ($objAnnotations->hasMethodAnnotation($objOneMethod->getName(), "@autoTestable")) {
-                echo "found method " . get_class($objViewInstance) . "@" . $objOneMethod->getName() . " marked as @autoTestable, preparing call\n";
+                //echo "found method " . get_class($objViewInstance) . "@" . $objOneMethod->getName() . " marked as @autoTestable, preparing call\n";
 
                 if (uniSubstr($objOneMethod->getName(), 0, 6) == "action" && $objReflection->hasMethod("action")) {
-                    echo "   calling via action() method\n";
+                    //echo "   calling via action() method\n";
                     $objViewInstance->action(uniSubstr($objOneMethod->getName(), 6));
                 } else {
-                    echo "   direct call";
+                    //echo "   direct call";
                     $objOneMethod->invoke($objViewInstance);
                 }
             }

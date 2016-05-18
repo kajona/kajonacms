@@ -73,7 +73,7 @@ class SearchDeferredIndexerTest extends Testbase
         $arrNewsIds = array();
 
 
-        echo "Indexing without deferred indexer...\n";
+        //echo "Indexing without deferred indexer...\n";
         SystemChangelog::$bitChangelogEnabled = false;
         $intTimeStart = microtime(true);
         $intQueriesStart = Database::getInstance()->getNumber();
@@ -87,18 +87,18 @@ class SearchDeferredIndexerTest extends Testbase
             $arrNewsIds[] = $objNews->getSystemid();
         }
 
-        echo "Queries pre indexing: ", Database::getInstance()->getNumber() - $intQueriesStart . " \n";
+        //echo "Queries pre indexing: ", Database::getInstance()->getNumber() - $intQueriesStart . " \n";
 
         $objHandler = new SearchRequestEndprocessinglistener();
         $objHandler->handleEvent(SystemEventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array());
 
         $intTimeEnd = microtime(true);
         $time = $intTimeEnd - $intTimeStart;
-        echo "Object updates: ", sprintf('%f', $time), " sec.\n";
-        echo "Queries total: ", Database::getInstance()->getNumber() - $intQueriesStart . " \n";
+        //echo "Object updates: ", sprintf('%f', $time), " sec.\n";
+        //echo "Queries total: ", Database::getInstance()->getNumber() - $intQueriesStart . " \n";
 
 
-        echo "\nIndexing with deferred indexer...\n";
+        //echo "\nIndexing with deferred indexer...\n";
         $objConfig = SystemSetting::getConfigByName("_search_deferred_indexer_");
         $objConfig->setStrValue("true");
         $objConfig->updateObjectToDb();
@@ -115,16 +115,16 @@ class SearchDeferredIndexerTest extends Testbase
             $arrNewsIds[] = $objNews->getSystemid();
         }
 
-        echo "Queries pre indexing: ", Database::getInstance()->getNumber() - $intQueriesStart . " \n";
+        //echo "Queries pre indexing: ", Database::getInstance()->getNumber() - $intQueriesStart . " \n";
 
-        echo "Triggering queue update event...\n";
+        //echo "Triggering queue update event...\n";
         $objHandler = new SearchRequestEndprocessinglistener();
         $objHandler->handleEvent(SystemEventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array());
 
         $intTimeEnd = microtime(true);
         $time = $intTimeEnd - $intTimeStart;
-        echo "Object updates: ", sprintf('%f', $time), " sec.\n";
-        echo "Queries total: ", Database::getInstance()->getNumber() - $intQueriesStart . " \n";
+        //echo "Object updates: ", sprintf('%f', $time), " sec.\n";
+        //echo "Queries total: ", Database::getInstance()->getNumber() - $intQueriesStart . " \n";
 
 
         $objConfig = SystemSetting::getConfigByName("_search_deferred_indexer_");

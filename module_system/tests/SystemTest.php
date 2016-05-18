@@ -16,9 +16,7 @@ class SystemTest extends Testbase
         $objDB = Carrier::getInstance()->getObjDB();
 
         //--- system kernel -------------------------------------------------------------------------------------
-        echo "\tsystem-kernel...\n";
 
-        echo "\tcreating 100 system-records with right-records...\n";
         //nr of records currently
         $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM " . _dbprefix_ . "system", array(), 0, false);
         $intNrSystemRecords = $arrRow["COUNT(*)"];
@@ -38,7 +36,6 @@ class SystemTest extends Testbase
         }
 
 
-        echo "\tdeleting 100 system-records with right-records...\n";
         foreach ($arrSysRecords as $strOneId) {
             $objAspect = new SystemAspect($strOneId);
             $objAspect->deleteObjectFromDatabase();
@@ -57,7 +54,6 @@ class SystemTest extends Testbase
         $objDB = Carrier::getInstance()->getObjDB();
 
         //test sections
-        echo "\tsection-handling of class db...\n";
         //create 10 test records
         $objAspect = new SystemAspect();
         //new base-node
@@ -91,19 +87,16 @@ class SystemTest extends Testbase
 
 
         $objDB = Carrier::getInstance()->getObjDB();
-        echo "\ttesting tree-behaviour...\n";
         //nr of records currently
         $arrSysRecords = array();
         $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM " . _dbprefix_ . "system", array(), 0, false);
         $intNrSystemRecords = $arrRow["COUNT(*)"];
         $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM " . _dbprefix_ . "system_right", array(), 0, false);
         //base-id
-        echo "\tcreating root node...\n";
         $objAspect = new SystemAspect();
         $objAspect->updateObjectToDb();
         $intBaseId = $objAspect->getSystemid();
         //two under the base
-        echo "\tcreating child nodes...\n";
         $objAspect = new SystemAspect();
         $objAspect->updateObjectToDb($intBaseId);
         $intSecOneId = $objAspect->getSystemid();
@@ -137,7 +130,6 @@ class SystemTest extends Testbase
         $this->assertEquals($arrRow["COUNT(*)"], 20, __FILE__ . " checkNrOfChildsInTree3");
 
         //deleting all records
-        echo "\tdeleting nodes...\n";
         foreach ($arrSysRecords as $strOneId) {
             $objAspect->deleteSystemRecord($strOneId);
         }

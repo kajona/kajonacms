@@ -10,9 +10,6 @@ class SortTest extends Testbase
 
     public function testSorting()
     {
-        echo "testing sorting-behaviour....\n";
-
-
         $objRootPage = new \Kajona\Pages\System\PagesPage();
 
         $objRootPage->setStrName("test1");

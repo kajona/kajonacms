@@ -892,7 +892,7 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
     {
         $objFormgenerator = new AdminFormgenerator("pack", $objTargetObject);
         $objFormgenerator->addField(new FormentryText("pack", "name"))->setStrLabel($this->getLang("pack_name"))->setBitMandatory(true)->setStrValue($this->getParam("pack_name"));
-        $objFormgenerator->addField(new FormentryHeadline())->setStrValue($this->getLang("pack_copy_include"));
+        $objFormgenerator->addField(new FormentryPlaintext())->setStrValue($this->objToolkit->warningBox($this->getLang("pack_copy_include"), "alert-info"));
         $arrModules = Classloader::getInstance()->getArrModules();
         $objFilesystem = new Filesystem();
 
@@ -903,7 +903,7 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
                 $arrContent = $objFilesystem->getFilelist(Resourceloader::getInstance()->getAbsolutePathForModule($strOneModule)."/templates/default", array(".tpl"), true);
 
                 if(count($arrContent) > 0) {
-                    $objFormgenerator->addField(new FormentryHeadline())->setStrValue($strOneModule);
+                    $objFormgenerator->addField(new FormentryHeadline())->setStrValue(StringUtil::replace("module_", "", $strOneModule));
 
 
                     foreach ($arrContent as $strPath => $strOneFile) {
@@ -915,8 +915,12 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
                                 $bitReadonly = true;
                             }
                         }
-                        $objFormgenerator->addField(new FormentryCheckbox("pack", "path[".$strPath."]"))->setStrLabel($strOneFile)->setStrValue($bitReadonly)
-                            //->setStrHint($strPath2)
+
+                        $strOneFileAppend = " <code>".StringUtil::substring($strPath, StringUtil::indexOf($strPath, "/tpl")+4)."</code>";
+
+
+                        $objFormgenerator->addField(new FormentryCheckbox("pack", "path[".$strPath."]"))->setStrLabel($strOneFile.$strOneFileAppend)->setStrValue($bitReadonly || ($objTargetObject == null && $strOneModule == "module_pages" && $strOneFile == "home.tpl" || $strOneFile == "standard.tpl"))
+                            //->setStrHint(" <code>".$strPath."</code>")
                             ->setBitReadonly($bitReadonly);
                         ;
 

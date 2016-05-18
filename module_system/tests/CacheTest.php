@@ -15,7 +15,6 @@ class CacheTest extends Testbase
         self::$strTestId = generateSystemid();
         parent::setUp();
 
-        echo "test cache...\n";
     }
 
 

@@ -113,29 +113,24 @@ class BuildHelper {
             /** @var \Kajona\Packagemanager\System\PackagemanagerMetadata $objOneMetadata */
             foreach($arrPackagesToInstall as $intKey => $objOneMetadata) {
 
-                echo "---------------------------------------------------------------\n";
-
                 if(!$objOneMetadata->getBitProvidesInstaller()) {
-                    echo "skipping ".$objOneMetadata->getStrTitle().", no installer provided...\n\n";
+                    //echo "skipping ".$objOneMetadata->getStrTitle().", no installer provided...\n";
                     unset($arrPackagesToInstall[$intKey]);
                     continue;
                 }
 
-
-                echo dateToString(new \Kajona\System\System\Date())." Installing ".$objOneMetadata->getStrTitle()."...\n\n";
                 $objHandler = $objManager->getPackageManagerForPath($objOneMetadata->getStrPath());
 
                 if(!$objHandler->isInstallable()) {
-                    echo "skipping ".$objOneMetadata->getStrTitle()." due to unresolved requirements\n";
+                    //echo "skipping ".$objOneMetadata->getStrTitle()." due to unresolved requirements\n";
                     continue;
                 }
 
+                echo dateToString(new \Kajona\System\System\Date())." Installing ".$objOneMetadata->getStrTitle()."...\n";
                 $objHandler->installOrUpdate();
 //                echo $objHandler->installOrUpdate();
 
                 unset($arrPackagesToInstall[$intKey]);
-
-                echo "\n\n";
             }
         }
 
@@ -143,7 +138,7 @@ class BuildHelper {
         echo "Installing samplecontent...\n\n";
         foreach(\Kajona\Samplecontent\System\SamplecontentInstallerHelper::getSamplecontentInstallers() as $objOneInstaller) {
             if(!$objOneInstaller->isInstalled()) {
-                echo dateToString(new \Kajona\System\System\Date())." Installing ".get_class($objOneInstaller)."...\n\n";
+                echo dateToString(new \Kajona\System\System\Date())." Installing ".get_class($objOneInstaller)."...\n";
                 $objOneInstaller->install();
 //                echo $objOneInstaller->install();
             }

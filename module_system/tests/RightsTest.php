@@ -20,38 +20,29 @@ class RightsTest extends Testbase
 
     public function testInheritance()
     {
-        echo "\tRIGHTS INHERITANCE...\n";
         $objRights = Carrier::getInstance()->getObjRights();
         $this->objRights = Carrier::getInstance()->getObjRights();
 
 
         //create a new user & group to be used during testing
-        echo "\tcreating a test user\n";
         $objUser = new UserUser();
         //$objUser->setStrEmail(generateSystemid()."@".generateSystemid()."de");
         $strUsername = "user_" . generateSystemid();
         $objUser->setStrUsername($strUsername);
         $objUser->updateObjectToDb();
-        echo "\tid of user: " . $objUser->getSystemid() . "\n";
         $this->strUserId = $objUser->getSystemid();
 
-        echo "\tcreating a test group\n";
         $objGroup = new UserGroup();
         $strName = "name_" . generateSystemid();
         $objGroup->setStrName($strName);
         $objGroup->updateObjectToDb();
-        echo "\tid of group: " . $objGroup->getSystemid() . "\n";
 
-        echo "\tadding user to group\n";
         $objGroup->getObjSourceGroup()->addMember($objUser->getObjSourceUser());
 
-        echo "\tcreating node-tree\n";
         $objAspect = new SystemAspect();
         $objAspect->setStrName("autotest 0");
         $objAspect->updateObjectToDb();
         $strRootId = $objAspect->getSystemid();
-        echo "\tid of root-node: " . $strRootId . "\n";
-        echo "\tcreating child nodes...\n";
         $objAspect = new SystemAspect();
         $objAspect->setStrName("autotest 01");
         $objAspect->updateObjectToDb($strRootId);
@@ -113,31 +104,19 @@ class RightsTest extends Testbase
         $arrThirdLevelNodes = array($strThird111, $strThird112, $strThird121, $strThird122, $strThird211, $strThird212, $strThird221, $strThird222);
 
 
-        echo "\tchecking leaf nodes for initial rights\n";
-//        Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBQUERIES | Carrier::INT_CACHE_TYPE_ORMCACHE);
         foreach ($arrThirdLevelNodes as $strOneRootNode) {
             $this->checkNodeRights($strOneRootNode, false, false);
         }
 
-        echo "\tadding group with right view & edit\n";
-//        Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBQUERIES | Carrier::INT_CACHE_TYPE_ORMCACHE);
         $objRights->addGroupToRight($objGroup->getSystemid(), $strRootId, "view");
         $objRights->addGroupToRight($objGroup->getSystemid(), $strRootId, "edit");
 
 
-        echo "\tchecking leaf nodes for inherited rights\n";
-//        Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBQUERIES | Carrier::INT_CACHE_TYPE_ORMCACHE);
         foreach ($arrThirdLevelNodes as $strOneRootNode) {
             $this->checkNodeRights($strOneRootNode, true, true);
         }
 
-//        echo "\n\n\n";
-//        $this->printTree($strRootId, 1);
-//        echo "\n\n\n";
-
-        echo "\tremoving right view from node secTwo\n";
         $objRights->removeGroupFromRight($objGroup->getSystemid(), $strSecTwo, "view");
-        echo "\tchecking node rights\n";
         $this->checkNodeRights($strRootId, true, true);
         $this->checkNodeRights($strSecOne, true, true);
         $this->checkNodeRights($strSecTwo, false, true);
@@ -155,12 +134,10 @@ class RightsTest extends Testbase
         $this->checkNodeRights($strThird222, false, true);
 
 
-        echo "\tmove SecOne as child to 221\n";
         $objTempCommons = new SystemAspect($strSecOne);
         $objTempCommons->setStrPrevId($strThird221);
         $objTempCommons->updateObjectToDb();
-        //$objSystemCommon->setPrevId($strThird221, $strSecOne);
-        echo "\tchecking node rights\n";
+        
         $this->checkNodeRights($strRootId, true, true);
         $this->checkNodeRights($strSecOne, false, true);
         $this->checkNodeRights($strSecTwo, false, true);
@@ -178,10 +155,8 @@ class RightsTest extends Testbase
         $this->checkNodeRights($strThird222, false, true);
 
 
-        echo "\tsetting rights of third21 to only view\n";
         $objRights->removeGroupFromRight($objGroup->getSystemid(), $strThirdTwo1, "edit");
         $objRights->addGroupToRight($objGroup->getSystemid(), $strThirdTwo1, "view");
-        echo "\tchecking node rights\n";
         $this->checkNodeRights($strRootId, true, true);
         $this->checkNodeRights($strSecOne, false, true);
         $this->checkNodeRights($strSecTwo, false, true);
@@ -199,12 +174,10 @@ class RightsTest extends Testbase
         $this->checkNodeRights($strThird222, false, true);
 
 
-        echo "\tsetting 211 as parent node for third11\n";
         $objTempCommons = new SystemAspect($strThirdOne1);
         $objTempCommons->setStrPrevId($strThird211);
         $objTempCommons->updateObjectToDb();
-        //$objSystemCommon->setPrevId($strThird211, $strThirdOne1);
-        echo "\tchecking node rights\n";
+        
         $this->checkNodeRights($strRootId, true, true);
         $this->checkNodeRights($strSecOne, false, true);
         $this->checkNodeRights($strSecTwo, false, true);
@@ -221,12 +194,7 @@ class RightsTest extends Testbase
         $this->checkNodeRights($strThird221, false, true);
         $this->checkNodeRights($strThird222, false, true);
 
-//        echo "\n\n\n";
-//        $this->printTree($strRootId, 1);
-//        echo "\n\n\n";
 
-
-        echo "\trebuilding initial tree structure\n";
         $objTempCommons = new SystemAspect($strSecOne);
         $objTempCommons->setStrPrevId($strRootId);
         $objTempCommons->updateObjectToDb();
@@ -236,7 +204,6 @@ class RightsTest extends Testbase
         $objTempCommons->updateObjectToDb();
         //$objSystemCommon->setPrevId($strSecOne, $strThirdOne1);
         $objRights->setInherited(true, $strThirdOne1);
-        echo "\tchecking node rights\n";
         $this->checkNodeRights($strRootId, true, true);
         $this->checkNodeRights($strSecOne, true, true);
         $this->checkNodeRights($strSecTwo, false, true);
@@ -257,10 +224,8 @@ class RightsTest extends Testbase
 //        $this->printTree($strRootId, 1);
 //        echo "\n\n\n";
 
-        echo "\trebuilding initial inheritance structure\n";
         $objRights->setInherited(true, $strSecTwo);
         $objRights->setInherited(true, $strThirdTwo1);
-        echo "\tchecking node rights\n";
         $this->checkNodeRights($strRootId, true, true);
         $this->checkNodeRights($strSecOne, true, true);
         $this->checkNodeRights($strSecTwo, true, true);
@@ -282,7 +247,6 @@ class RightsTest extends Testbase
 //        $this->printTree($strRootId, 1);
 //        echo "\n\n\n";
 
-        echo "\tdeleting systemnodes\n";
 
         $objAspect->deleteObjectFromDatabase($strThird111);
         $objAspect->deleteObjectFromDatabase($strThird112);
@@ -303,9 +267,7 @@ class RightsTest extends Testbase
 
         $objAspect->deleteObjectFromDatabase($strRootId);
 
-        echo "\tdeleting the test user\n";
         $objUser->deleteObjectFromDatabase();
-        echo "\tdeleting the test group\n";
         $objGroup->deleteObjectFromDatabase();
 
     }

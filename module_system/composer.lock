@@ -4,7 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9cca6fbd32714155b773c578d890cfa9",
+    "hash": "fcc3994142b9e86c3240dcca01f9639f",
+    "content-hash": "f828505d8c0373dd119ace69ed7e89b3",
     "packages": [
         {
             "name": "doctrine/cache",
@@ -16,7 +17,7 @@
             },
             "dist": {
                 "type": "tar",
-                "url": "https://api.github.com/repos/doctrine/cache/zipball/f8af318d14bdb0eff0336795b428b547bd39ccb6",
+                "url": "https://buildpackages.kajona.de:5443//dist/doctrine-cache-f8af318d14bdb0eff0336795b428b547bd39ccb6-zip-1c5416.tar",
                 "reference": "f8af318d14bdb0eff0336795b428b547bd39ccb6",
                 "shasum": "2fe072d46f2161bd1527dc7ab927f101d8921bc0"
             },
@@ -93,10 +94,10 @@
                 "reference": "a30f7d6e57565a2e1a316e1baf2a483f788b258a"
             },
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/silexphp/Pimple/zipball/a30f7d6e57565a2e1a316e1baf2a483f788b258a",
+                "type": "tar",
+                "url": "https://buildpackages.kajona.de:5443//dist/pimple-pimple-a30f7d6e57565a2e1a316e1baf2a483f788b258a-zip-9c6676.tar",
                 "reference": "a30f7d6e57565a2e1a316e1baf2a483f788b258a",
-                "shasum": ""
+                "shasum": "e7bfca47266555fe1ecd778697939d885e335724"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -112,7 +113,6 @@
                     "Pimple": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -128,6 +128,10 @@
                 "container",
                 "dependency injection"
             ],
+            "support": {
+                "source": "https://github.com/silexphp/Pimple/tree/v3.0.2",
+                "issues": "https://github.com/silexphp/Pimple/issues"
+            },
             "time": "2015-09-11 15:10:35"
         }
     ],

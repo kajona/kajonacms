@@ -11,9 +11,7 @@ class LoggerTest extends Testbase
 
     public function testLogger()
     {
-
-        echo "test logger...\n";
-
+        
         $objLogger = Logger::getInstance("test.log");
 
         $objLogger->setIntLogLevel(Logger::$levelError);

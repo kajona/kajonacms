@@ -29,11 +29,9 @@ class SortTest extends Testbase
 
         //delete the 5th element - massive queries required
         $intQueriesPre = Database::getInstance()->getNumber();
-        echo " Setting new position\n";
         $arrAspects[5]->deleteObjectFromDatabase();
 
         $intQueriesPost = Database::getInstance()->getNumber();
-        echo "Queries: " . ($intQueriesPost - $intQueriesPre) . " \n";
 
         $objOrm = new OrmObjectlist();
         $arrChilds = $objOrm->getObjectList("Kajona\\System\\System\\SystemAspect", $objRootAspect->getSystemid());
@@ -53,7 +51,6 @@ class SortTest extends Testbase
         $objDB = Carrier::getInstance()->getObjDB();
 
         //test the setToPos
-        echo "\tposition handling...\n";
         //create 10 test records
         $objAspect = new SystemAspect();
         //new base-node
@@ -70,7 +67,6 @@ class SortTest extends Testbase
         $objAspect = new SystemAspect($arrNodes[1]);
         $objAspect->setPosition("upwards");
         $arrNodes = $objDB->getPArray("SELECT system_id FROM " . _dbprefix_ . "system WHERE system_prev_id = ? ORDER BY system_sort ASC", array($strBaseNodeId));
-        echo "\trelative shiftings...\n";
         //move the third to the first pos
         $objAspect = new SystemAspect($arrNodes[2]["system_id"]);
         $objAspect->setPosition("upwards");
@@ -86,7 +82,6 @@ class SortTest extends Testbase
         $this->assertEquals($arrNodesAfter[2]["system_id"], $arrNodes[1]["system_id"], __FILE__ . " checkPositionShitftingByRelativeShift");
 
         //moving by set pos
-        echo "\tabsolute shifting..\n";
         $objDB->flushQueryCache();
         $arrNodes = $objDB->getPArray("SELECT system_id FROM " . _dbprefix_ . "system WHERE system_prev_id = ? ORDER BY system_sort ASC", array($strBaseNodeId));
         $objDB->flushQueryCache();

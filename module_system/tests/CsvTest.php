@@ -11,8 +11,6 @@ class CsvTest extends Testbase
     public function test()
     {
 
-        echo "\ttesting Csv...\n";
-
         //test code
         $strFile = "/files/public/testCsv.csv";
 
@@ -62,8 +60,6 @@ class CsvTest extends Testbase
         $this->assertEquals(count(array_diff($arrValues[2], $arrValuesFromCsv[2])), 0, __FILE__ . " checkCsvEncloserCreateArrayFromFile");
         $this->assertEquals(count(array_diff($arrValues[3], $arrValuesFromCsv[3])), 0, __FILE__ . " checkCsvEncloserCreateArrayFromFile");
         $this->assertEquals(count(array_diff($arrValues[4], $arrValuesFromCsv[4])), 0, __FILE__ . " checkCsvEncloserCreateArrayFromFile");
-
-        echo "\tsaved generated CSV file to <a href=\"" . _webpath_ . $strFile . "\">" . _webpath_ . $strFile . "</a>\n";
 
     }
 

@@ -15,7 +15,6 @@ class MediamanagerTest extends Testbase
     public function testFileSync()
     {
 
-        echo "test mediamanager...\n";
 
         if (SystemModule::getModuleByName("samplecontent") == null || !is_file(_realpath_ . "/files/images/samples/IMG_3000.JPG")) {
             return;

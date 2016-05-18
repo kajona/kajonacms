@@ -159,8 +159,8 @@ class SearchIndexerTest extends Testbase
         $indexWriter->indexRebuild();
         $intTimeEnd = microtime(true);
         $time = $intTimeEnd - $intTimeStart;
-        echo "Index erstellt in " . sprintf('%f', $time) . " sec.\n";
-        echo "Index erstellt mit " . (Database::getInstance()->getNumber() - $intQueriesStart) . " queries.\n";
+//        echo "Index erstellt in " . sprintf('%f', $time) . " sec.\n";
+//        echo "Index erstellt mit " . (Database::getInstance()->getNumber() - $intQueriesStart) . " queries.\n";
 
     }
 
@@ -178,7 +178,7 @@ class SearchIndexerTest extends Testbase
         $objNews->updateObjectToDb();
         $strNewsId = $objNews->getSystemid();
 
-        echo "Status changes with disabled changelog indexer integration...\n";
+        //echo "Status changes with disabled changelog indexer integration...\n";
         SystemChangelog::$bitChangelogEnabled = false;
         $intTimeStart = microtime(true);
         $intQueriesStart = Database::getInstance()->getNumber();
@@ -190,11 +190,11 @@ class SearchIndexerTest extends Testbase
 
         $intTimeEnd = microtime(true);
         $time = $intTimeEnd - $intTimeStart;
-        echo "Object updates: ", sprintf('%f', $time), " sec.\n";
-        echo "Queries: ", Database::getInstance()->getNumber() - $intQueriesStart . " \n";
+        //echo "Object updates: ", sprintf('%f', $time), " sec.\n";
+        //echo "Queries: ", Database::getInstance()->getNumber() - $intQueriesStart . " \n";
 
 
-        echo "Status changes with enabled changelog indexer integration...\n";
+        //echo "Status changes with enabled changelog indexer integration...\n";
         SystemChangelog::$bitChangelogEnabled = true;
         $intTimeStart = microtime(true);
         $intQueriesStart = Database::getInstance()->getNumber();
@@ -206,8 +206,8 @@ class SearchIndexerTest extends Testbase
 
         $intTimeEnd = microtime(true);
         $time = $intTimeEnd - $intTimeStart;
-        echo "Object updates: ", sprintf('%f', $time), " sec.\n";
-        echo "Queries: ", Database::getInstance()->getNumber() - $intQueriesStart . " \n";
+        //echo "Object updates: ", sprintf('%f', $time), " sec.\n";
+        //echo "Queries: ", Database::getInstance()->getNumber() - $intQueriesStart . " \n";
 
 
         Objectfactory::getInstance()->getObject($strNewsId)->deleteObjectFromDatabase();

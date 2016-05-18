@@ -55,7 +55,7 @@
     <!-- composer-folder, required for composer dependcy management -->
     <property name="composerPath"     value="/composer" />
     <!-- path to the composer binaries -->
-    <property name="composerBinariesPath" value="${composerHome}/vendor/bin" />
+    <property name="composerBinariesPath" value="${basedir}${buildPath}/composerbuild/vendor/bin" />
 
 
 
@@ -106,7 +106,7 @@
 		    								init,
 					    					buildProject, installProjectSqlite,
 					    					lint,phpunit,jasmine,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox,phpcb,
-					    					buildAllInOneZip, buildFullZip" />
+					    					buildAllInOneZip" />
 
     <target name="buildMysql" depends="
 		    								init,
@@ -131,8 +131,8 @@
 
     <!-- installs all composer dependencies required for the build itself, so mainly external tools -->
     <target name="installComposerBuildDependencies" >
-        <echo>Copy composer.json and composer.lock to ${composerHome}</echo>
-        <copy todir="${composerHome}" overwrite="true"  includeEmptyDirs="true" >
+        <echo>Copy composer.json and composer.lock to ${basedir}${tempPath}</echo>
+        <copy todir="${basedir}${buildPath}/composerbuild" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="composer.dirs" dir="${basedir}${composerPath}">
                 <include name="composer.json"/>
                 <include name="composer.lock"/>
@@ -140,10 +140,8 @@
         </copy>
 
         <echo>Execute composer</echo>
-        <exec executable="${path.composer}" failonerror="on">
-            <arg line=" global"/>
+        <exec dir="${basedir}${buildPath}/composerbuild" executable="${path.composer}" failonerror="on">
             <arg line=" install"/>
-            <arg line=" --prefer-source"/>
             <arg line=" --no-dev"/>
         </exec>
     </target>
@@ -229,6 +227,7 @@
     </target>
 
     <target name="protractorPhar" depends="protractorSetup">
+        <sleep seconds="10"/>
         <antcall target="modulePharHelper" />
 
         <!-- call extract phar -->
@@ -259,6 +258,7 @@
         <mkdir  dir="${basedir}${buildPath}/code-browser"/>
         <mkdir  dir="${basedir}${buildPath}/pdepend"/>
         <mkdir  dir="${basedir}${buildPath}/phpdox"/>
+        <mkdir  dir="${basedir}${buildPath}/composerbuild"/>
 
     </target>
 

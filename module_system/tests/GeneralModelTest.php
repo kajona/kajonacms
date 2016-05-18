@@ -17,8 +17,6 @@ class GeneralModelTest extends Testbase
     public function testModuleModels()
     {
 
-        echo "preparing object saves...\n";
-
         Carrier::getInstance()->getObjRights()->setBitTestMode(true);
 
         $arrFiles = Resourceloader::getInstance()->getFolderContent("/system", array(".php"), false, null,
@@ -53,16 +51,16 @@ class GeneralModelTest extends Testbase
                 continue;
             }
 
-            echo "testing object of type " . get_class($objOneInstance) . "@" . $objOneInstance->getSystemid() . "\n";
+            //echo "testing object of type " . get_class($objOneInstance) . "@" . $objOneInstance->getSystemid() . "\n";
             $this->assertTrue($objOneInstance->updateObjectToDb(), "saving object " . get_class($objOneInstance));
             $arrSystemids[$objOneInstance->getSystemid()] = get_class($objOneInstance);
-            echo " ...saved object of type " . get_class($objOneInstance) . "@" . $objOneInstance->getSystemid() . "\n";
+            //echo " ...saved object of type " . get_class($objOneInstance) . "@" . $objOneInstance->getSystemid() . "\n";
         }
 
         $objObjectfactory = Objectfactory::getInstance();
         foreach ($arrSystemids as $strSystemid => $strClass) {
 
-            echo "instantiating " . $strSystemid . "@" . $strClass . "\n";
+            //echo "instantiating " . $strSystemid . "@" . $strClass . "\n";
 
             $objInstance = $objObjectfactory->getObject($strSystemid);
 
@@ -71,7 +69,7 @@ class GeneralModelTest extends Testbase
             $this->assertEquals(get_class($objInstance), $strClass);
 
 
-            echo "deleting " . $strSystemid . "@" . $strClass . "\n";
+            //echo "deleting " . $strSystemid . "@" . $strClass . "\n";
             $objInstance->deleteObjectFromDatabase();
         }
 

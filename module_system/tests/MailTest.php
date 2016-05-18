@@ -12,9 +12,7 @@ class MailTest extends Testbase
 
         $strTo = "postmaster@localhost";
         $intSentMails = 0;
-
-        echo "\tsend a test email to " . $strTo . "...\n";
-
+        
         $objMail = new Mail();
         $objMail->setSender("test@kajona.de");
         $objMail->setSenderName("Kajona System a ö ü ");
