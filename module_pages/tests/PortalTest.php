@@ -11,8 +11,6 @@ class PortalTest extends Testbase
     public function testPortal()
     {
 
-        echo "generating all pages existing to find notices...\n";
-
         $arrPages = \Kajona\Pages\System\PagesPage::getAllPages();
         $objModule = SystemModule::getModuleByName("pages");
 

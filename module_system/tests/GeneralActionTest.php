@@ -48,6 +48,10 @@ class GeneralActionTest extends Testbase
         //load all admin-classes
         $arrFiles = Resourceloader::getInstance()->getFolderContent("/portal", array(".php"), false, null,
             function (&$strOneFile, $strPath) {
+                if($strOneFile == "global_includes.php") {
+                    $strOneFile = null;
+                    return;
+                }
                 $strOneFile = Classloader::getInstance()->getInstanceFromFilename($strPath, "Kajona\\System\\Portal\\PortalController", null, array(), true);
             });
 
