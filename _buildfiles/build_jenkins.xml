@@ -383,6 +383,9 @@
     </target>
 
     <target name="buildPackageHelperProject" description="triggers the project setup and the compilation / compression of css / js files">
+        <exec executable="php" dir="${basedir}"  failonerror="on" >
+            <arg line="-f buildProject.php ${tempPath} onlySetup"/>
+        </exec>
         <antcall target="compileLess" />
         <antcall target="compressCss" />
         <antcall target="compressJs" />
