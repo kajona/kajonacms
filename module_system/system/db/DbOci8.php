@@ -160,7 +160,7 @@ class DbOci8 extends DbBase
         if ($this->bitTxOpen) {
             $bitAddon = OCI_NO_AUTO_COMMIT;
         }
-        $bitResult = oci_execute($objStatement, $bitAddon);
+        $bitResult = @oci_execute($objStatement, $bitAddon);
         @oci_free_statement($objStatement);
         return $bitResult;
     }
@@ -195,7 +195,7 @@ class DbOci8 extends DbBase
         if ($this->bitTxOpen) {
             $bitAddon = OCI_NO_AUTO_COMMIT;
         }
-        $resultSet = oci_execute($objStatement, $bitAddon);
+        $resultSet = @oci_execute($objStatement, $bitAddon);
 
         if (!$resultSet) {
             $this->objErrorStmt = $objStatement;
