@@ -16,8 +16,8 @@ use Kajona\News\System\NewsNews;
 use Kajona\System\Admin\AdminEvensimpler;
 use Kajona\System\Admin\AdminFormgeneratorFilter;
 use Kajona\System\Admin\AdminInterface;
+use Kajona\System\System\AdminskinHelper;
 use Kajona\System\System\ArraySectionIterator;
-use Kajona\System\System\FilterBase;
 use Kajona\System\System\LanguagesLanguage;
 use Kajona\System\System\LanguagesLanguageset;
 use Kajona\System\System\Link;
@@ -26,7 +26,6 @@ use Kajona\System\System\Objectfactory;
 /**
  * Admin class of the news-module. Responsible for editing news, organizing them in categories and creating feeds
  *
- * @package module_news
  * @author sidler@mulchprod.de
  *
  * @objectListNews Kajona\News\System\NewsNews
@@ -100,7 +99,15 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
             if (LanguagesLanguage::getNumberOfLanguagesAvailable() > 1) {
                 return array(
                     $this->objToolkit->listButton(
-                        Link::getLinkAdminDialog($this->getArrModule("modul"), "editLanguageset", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("news_languageset"), "icon_language")
+                        Link::getLinkAdminDialog(
+                            $this->getArrModule("modul"),
+                            "editLanguageset",
+                            "&systemid=".$objListEntry->getSystemid(),
+                            "",
+                            $this->getLang("news_languageset"),
+                            "icon_language",
+                            $this->getLang("languageset_addtolanguage")
+                        )
                     )
                 );
             }
@@ -135,7 +142,7 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
         if ($strListIdentifier == NewsAdmin::STR_CAT_LIST) {
             return $this->objToolkit->listButton(Link::getLinkAdmin($this->getArrModule("modul"), "newCategory", "", $this->getLang("commons_create_category"), $this->getLang("commons_create_category"), "icon_new"));
         }
-        else if ($strListIdentifier == NewsAdmin::STR_NEWS_LIST) {
+        elseif ($strListIdentifier == NewsAdmin::STR_NEWS_LIST) {
             return $this->objToolkit->listButton(Link::getLinkAdmin($this->getArrModule("modul"), "newNews", "", $this->getLang("action_new_news"), $this->getLang("action_new_news"), "icon_new"));
         }
 
@@ -205,10 +212,10 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
 
             $objLanguageset = LanguagesLanguageset::getLanguagesetForSystemid($this->getSystemid());
             if ($objLanguageset == null) {
-                $strReturn .= $this->objToolkit->formTextRow($this->getLang("languageset_notmaintained"));
-                $strReturn .= $this->objToolkit->formHeadline($this->getLang("languageset_addtolanguage"));
-
                 $strReturn .= $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "assignToLanguageset"));
+                $strReturn .= $this->objToolkit->warningBox($this->getLang("languageset_notmaintained"));
+                $strReturn .= $this->objToolkit->formTextRow($objNews->getStrDisplayName());
+
                 $arrLanguages = LanguagesLanguage::getObjectListFiltered(null);
                 $arrDropdown = array();
                 foreach ($arrLanguages as $objOneLanguage) {
@@ -223,9 +230,8 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
             else {
 
                 $objLanguage = new LanguagesLanguage($objLanguageset->getLanguageidForSystemid($this->getSystemid()));
-                $strReturn .= $this->objToolkit->formHeadline($this->getLang("languageset_addtolanguage"));
-                $strReturn .= $this->objToolkit->formTextRow($this->getLang("languageset_currentlanguage"));
-                $strReturn .= $this->objToolkit->formTextRow($this->getLang("lang_".$objLanguage->getStrName(), "languages"));
+
+                $strReturn .= $this->objToolkit->warningBox($this->getLang("languageset_currentlanguage", array($this->getLang("lang_".$objLanguage->getStrName(), "languages"))));
 
                 $strReturn .= $this->objToolkit->formHeadline($this->getLang("languageset_maintainlanguages"));
 
@@ -243,19 +249,19 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
                         $objNews = new NewsNews($strNewsid);
                         $strNewsName = $objNews->getStrTitle();
                         $strActions .= $this->objToolkit->listButton(Link::getLinkAdmin($this->getArrModule("modul"), "removeFromLanguageset", "&systemid=".$objNews->getSystemid(), "", $this->getLang("languageset_remove"), "icon_delete"));
-                        $strReturn .= $this->objToolkit->genericAdminList(
-                            $objOneLanguage->getSystemid(), $this->getLang("lang_".$objOneLanguage->getStrName(), "languages").": ".$strNewsName, getImageAdmin("icon_language"), $strActions
-                        );
+                        $strReturn .= $this->objToolkit->genericAdminList($objOneLanguage->getSystemid(), $this->getLang("lang_".$objOneLanguage->getStrName(), "languages").": ".$strNewsName, getImageAdmin("icon_language"), $strActions);
                     }
                     else {
                         $intNrOfUnassigned++;
                         $strReturn .= $this->objToolkit->genericAdminList(
-                            $objOneLanguage->getSystemid(), $this->getLang("lang_".$objOneLanguage->getStrName(), "languages").": ".$this->getLang("languageset_news_na"), getImageAdmin("icon_language"), $strActions
+                            $objOneLanguage->getSystemid(),
+                            $this->getLang("lang_".$objOneLanguage->getStrName(), "languages").": ".$this->getLang("languageset_news_na"),
+                            AdminskinHelper::getAdminImage("icon_language"),
+                            $strActions
                         );
                     }
 
                 }
-
                 $strReturn .= $this->objToolkit->listFooter();
 
                 //provide a form to add further news-items
@@ -271,7 +277,7 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
                         }
                     }
 
-                    $strReturn .= $this->objToolkit->formInputDropdown("languageset_language", $arrDropdown, $this->getLang("commons_language_field"));
+                    $strReturn .= $this->objToolkit->formInputDropdown("languageset_language", $arrDropdown, $this->getLang("commons_language_field"), array_keys($arrDropdown)[0]);
 
 
                     $arrNews = NewsNews::getObjectListFiltered();
@@ -282,7 +288,7 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
                         }
                     }
 
-                    $strReturn .= $this->objToolkit->formInputDropdown("languageset_news", $arrDropdown, $this->getLang("languageset_news"));
+                    $strReturn .= $this->objToolkit->formInputDropdown("languageset_news", $arrDropdown, $this->getLang("languageset_news"), array_keys($arrDropdown)[0]);
 
                     $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
                     $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));

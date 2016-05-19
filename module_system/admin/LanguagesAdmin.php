@@ -27,14 +27,16 @@ use Kajona\System\System\Model;
  * @module languages
  * @moduleId _languages_modul_id_
  */
-class LanguagesAdmin extends AdminSimple implements AdminInterface {
+class LanguagesAdmin extends AdminSimple implements AdminInterface
+{
 
     private static $arrLanguageSwitchEntries = null;
     private static $strOnChangeHandler = "KAJONA.admin.switchLanguage(this.value);";
     private static $strActiveKey = "";
 
 
-    public function getOutputModuleNavi() {
+    public function getOutputModuleNavi()
+    {
         $arrReturn = array();
         $arrReturn[] = array("view", Link::getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
         return $arrReturn;
@@ -48,7 +50,8 @@ class LanguagesAdmin extends AdminSimple implements AdminInterface {
      * @autoTestable
      * @permissions view
      */
-    protected function actionList() {
+    protected function actionList()
+    {
 
         $objArraySectionIterator = new ArraySectionIterator(LanguagesLanguage::getNumberOfLanguagesAvailable());
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
@@ -58,7 +61,8 @@ class LanguagesAdmin extends AdminSimple implements AdminInterface {
 
     }
 
-    protected function renderCopyAction(Model $objListEntry) {
+    protected function renderCopyAction(Model $objListEntry)
+    {
         return "";
     }
 
@@ -67,7 +71,8 @@ class LanguagesAdmin extends AdminSimple implements AdminInterface {
      * @return string
      * @permissions edit
      */
-    protected function actionEdit() {
+    protected function actionEdit()
+    {
         return $this->actionNew("edit");
     }
 
@@ -80,26 +85,28 @@ class LanguagesAdmin extends AdminSimple implements AdminInterface {
      * @permissions edit
      * @autoTestable
      */
-    protected function actionNew($strMode = "new") {
+    protected function actionNew($strMode = "new", AdminFormgenerator $objForm = null)
+    {
 
         $objLang = new LanguagesLanguage();
         $arrLanguages = $objLang->getAllLanguagesAvailable();
         $arrLanguagesDD = array();
-        foreach($arrLanguages as $strLangShort) {
-            $arrLanguagesDD[$strLangShort] = $this->getLang("lang_" . $strLangShort);
+        foreach ($arrLanguages as $strLangShort) {
+            $arrLanguagesDD[$strLangShort] = $this->getLang("lang_".$strLangShort);
         }
 
-        if($strMode == "new") {
+        if ($strMode == "new") {
             $objLanguage = new LanguagesLanguage();
-        }
-        else {
+        } else {
             $objLanguage = new LanguagesLanguage($this->getSystemid());
-            if(!$objLanguage->rightEdit()) {
+            if (!$objLanguage->rightEdit()) {
                 return $this->getLang("commons_error_permissions");
             }
         }
 
-        $objForm = $this->getAdminForm($objLanguage);
+        if ($objForm == null) {
+            $objForm = $this->getAdminForm($objLanguage);
+        }
 
         $objForm->addField(new FormentryHidden("", "mode"))->setStrValue($strMode);
         return $objForm->renderForm(Link::getLinkAdminHref($this->getArrModule("modul"), "saveLanguage"));
@@ -113,13 +120,14 @@ class LanguagesAdmin extends AdminSimple implements AdminInterface {
      *
      * @return AdminFormgenerator
      */
-    private function getAdminForm(LanguagesLanguage $objLanguage) {
+    private function getAdminForm(LanguagesLanguage $objLanguage)
+    {
 
         $objLang = new LanguagesLanguage();
         $arrLanguages = $objLang->getAllLanguagesAvailable();
         $arrLanguagesDD = array();
-        foreach($arrLanguages as $strLangShort) {
-            $arrLanguagesDD[$strLangShort] = $this->getLang("lang_" . $strLangShort);
+        foreach ($arrLanguages as $strLangShort) {
+            $arrLanguagesDD[$strLangShort] = $this->getLang("lang_".$strLangShort);
         }
 
         $objForm = new AdminFormgenerator("language", $objLanguage);
@@ -136,49 +144,49 @@ class LanguagesAdmin extends AdminSimple implements AdminInterface {
      * @return string, "" in case of success
      * @permissions edit
      */
-    protected function actionSaveLanguage() {
+    protected function actionSaveLanguage()
+    {
         $strOldLang = "";
-        if($this->getParam("mode") == "new") {
+        if ($this->getParam("mode") == "new") {
             $objLanguage = new LanguagesLanguage();
-        }
-        else {
+        } else {
             $objLanguage = new LanguagesLanguage($this->getSystemid());
             $strOldLang = $objLanguage->getStrName();
-            if(!$objLanguage->rightEdit()) {
+            if (!$objLanguage->rightEdit()) {
                 return $this->getLang("commons_error_permissions");
             }
         }
 
         $objForm = $this->getAdminForm($objLanguage);
 
-        if(!$objForm->validateForm())
+        if (!$objForm->validateForm()) {
             return $this->actionNew($this->getParam("mode"), $objForm);
+        }
 
 
         $objForm->updateSourceObject();
 
 
-        if($this->getParam("mode") == "new") {
+        if ($this->getParam("mode") == "new") {
             //language already existing?
-            if(LanguagesLanguage::getLanguageByName($objLanguage->getStrName()) !== false) {
+            if (LanguagesLanguage::getLanguageByName($objLanguage->getStrName()) !== false) {
                 return $this->getLang("language_existing");
             }
-        }
-        elseif($this->getParam("mode") == "edit") {
+        } elseif ($this->getParam("mode") == "edit") {
             $objTestLang = LanguagesLanguage::getLanguageByName($objLanguage->getStrName());
-            if($objTestLang !== false && $objTestLang->getSystemid() != $objLanguage->getSystemid()) {
+            if ($objTestLang !== false && $objTestLang->getSystemid() != $objLanguage->getSystemid()) {
                 return $this->getLang("language_existing");
             }
         }
 
-        if(!$objLanguage->updateObjectToDb()) {
+        if (!$objLanguage->updateObjectToDb()) {
             throw new Exception("Error creating new language", Exception::$level_ERROR);
         }
 
-        if($this->getParam("mode") == "edit") {
+        if ($this->getParam("mode") == "edit") {
             //move contents to a new language
-            if($strOldLang != $objLanguage->getStrName()) {
-                if(!$objLanguage->moveContentsToCurrentLanguage($strOldLang)) {
+            if ($strOldLang != $objLanguage->getStrName()) {
+                if (!$objLanguage->moveContentsToCurrentLanguage($strOldLang)) {
                     throw new Exception("Error moving contents to new language", Exception::$level_ERROR);
                 }
             }
@@ -194,11 +202,12 @@ class LanguagesAdmin extends AdminSimple implements AdminInterface {
      *
      * @return string
      */
-    public function getLanguageSwitch() {
+    public function getLanguageSwitch()
+    {
         $strReturn = "";
         $strButtons = "";
-        if(self::$arrLanguageSwitchEntries != null && count(self::$arrLanguageSwitchEntries) > 1) {
-            foreach(self::$arrLanguageSwitchEntries as $strKey => $strValue) {
+        if (self::$arrLanguageSwitchEntries != null && count(self::$arrLanguageSwitchEntries) > 1) {
+            foreach (self::$arrLanguageSwitchEntries as $strKey => $strValue) {
                 $strButtons .= $this->objToolkit->getLanguageButton(
                     $strKey,
                     $strValue,
@@ -219,13 +228,14 @@ class LanguagesAdmin extends AdminSimple implements AdminInterface {
      *
      * @static
      */
-    public static function enableLanguageSwitch() {
-        if(self::$arrLanguageSwitchEntries == null) {
+    public static function enableLanguageSwitch()
+    {
+        if (self::$arrLanguageSwitchEntries == null) {
             $arrObjLanguages = LanguagesLanguage::getObjectListFiltered(null, true);
-            if(count($arrObjLanguages) > 1) {
+            if (count($arrObjLanguages) > 1) {
                 self::$arrLanguageSwitchEntries = array();
-                foreach($arrObjLanguages as $objOneLang) {
-                    self::$arrLanguageSwitchEntries[$objOneLang->getStrName()] = Carrier::getInstance()->getObjLang()->getLang("lang_" . $objOneLang->getStrName(), "languages");
+                foreach ($arrObjLanguages as $objOneLang) {
+                    self::$arrLanguageSwitchEntries[$objOneLang->getStrName()] = Carrier::getInstance()->getObjLang()->getLang("lang_".$objOneLang->getStrName(), "languages");
                 }
                 $objLanguage = new LanguagesLanguage();
                 self::$strActiveKey = $objLanguage->getAdminLanguage();
@@ -241,7 +251,8 @@ class LanguagesAdmin extends AdminSimple implements AdminInterface {
      *
      * @param $arrLanguageSwitchEntries
      */
-    public static function setArrLanguageSwitchEntries($arrLanguageSwitchEntries) {
+    public static function setArrLanguageSwitchEntries($arrLanguageSwitchEntries)
+    {
         self::$arrLanguageSwitchEntries = $arrLanguageSwitchEntries;
     }
 
@@ -252,7 +263,8 @@ class LanguagesAdmin extends AdminSimple implements AdminInterface {
      *
      * @param $onChangeHandler
      */
-    public static function setStrOnChangeHandler($onChangeHandler) {
+    public static function setStrOnChangeHandler($onChangeHandler)
+    {
         self::$strOnChangeHandler = $onChangeHandler;
     }
 
@@ -263,7 +275,8 @@ class LanguagesAdmin extends AdminSimple implements AdminInterface {
      *
      * @param $strActiveKey
      */
-    public static function setStrActiveKey($strActiveKey) {
+    public static function setStrActiveKey($strActiveKey)
+    {
         self::$strActiveKey = $strActiveKey;
     }
 
