@@ -2005,7 +2005,9 @@ HTML;
 
         foreach ($arrErrors as $strKey => $arrOneErrors) {
             foreach ($arrOneErrors as $strOneError) {
-                $strRows .= $this->objTemplate->fillTemplateFile(array("field_errortext" => $strOneError), "/elements.tpl", "error_row");
+                if ($strOneError != "") {
+                    $strRows .= $this->objTemplate->fillTemplateFile(array("field_errortext" => $strOneError), "/elements.tpl", "error_row");
+                }
                 $strRendercode .= "[ '".$strKey."' ], ";
             }
         }

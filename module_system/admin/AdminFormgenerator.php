@@ -168,7 +168,8 @@ class AdminFormgenerator
             if ($objOneField->getBitMandatory()) {
                 //if field is mandatory and empty -> validation error
                 if ($bitFieldIsEmpty) {
-                    $this->addValidationError($objOneField->getStrEntryName(), $objLang->getLang("commons_validator_field_empty", "system", array($objOneField->getStrLabel())));
+                    $strErrorMesage = $objOneField->getStrLabel() != "" ? $objLang->getLang("commons_validator_field_empty", "system", array($objOneField->getStrLabel())) : "";
+                    $this->addValidationError($objOneField->getStrEntryName(), $strErrorMesage);
                 }
             }
 
@@ -188,7 +189,7 @@ class AdminFormgenerator
 
                 $strObjectValidator = $arrObjectValidator[0];
                 if (!class_exists($strObjectValidator)) {
-                    throw new Exception("object validator ".$strObjectValidator." not existing", Exception::$level_ERROR);
+                    throw new Exception("object validator " . $strObjectValidator . " not existing", Exception::$level_ERROR);
                 }
 
                 /** @var ObjectvalidatorBase $objValidator */
@@ -259,8 +260,8 @@ class AdminFormgenerator
         }
 
         $strGeneratedFormname = $this->strFormname;
-        if($strGeneratedFormname == null) {
-            $strGeneratedFormname = "form".generateSystemid();
+        if ($strGeneratedFormname == null) {
+            $strGeneratedFormname = "form" . generateSystemid();
         }
         $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         if ($strTargetURI !== null) {
@@ -272,8 +273,7 @@ class AdminFormgenerator
         foreach ($this->arrFields as $objOneField) {
             if (in_array($objOneField->getStrEntryName(), $this->arrHiddenElements)) {
                 $strHidden .= $objOneField->renderField();
-            }
-            else {
+            } else {
                 $strReturn .= $objOneField->renderField();
             }
         }
@@ -358,13 +358,12 @@ class AdminFormgenerator
                     //register a new unlock-handler
                     // KAJONA.admin.ajax.genericAjaxCall('system', 'unlockRecord', '".$this->objSourceobject->getSystemid()."');
                     $strReturn .= "<script type='text/javascript'>
-                        $(window).on('unload', function() { $.ajax({url: KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=unlockRecord&systemid=".$this->objSourceobject->getSystemid()."', async:false}) ; });
+                        $(window).on('unload', function() { $.ajax({url: KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=unlockRecord&systemid=" . $this->objSourceobject->getSystemid() . "', async:false}) ; });
 //                        $('#{$strGeneratedFormname}').on('submit', function() { $(window).off('unload'); return true;});
                     </script>";
-                }
-                else {
+                } else {
                     $objUser = new UserUser($this->objSourceobject->getLockManager()->getLockId());
-                    throw new Exception("Current record is already locked by user '".$objUser->getStrDisplayName()."'.\nCannot be locked for the current user", Exception::$level_ERROR);
+                    throw new Exception("Current record is already locked by user '" . $objUser->getStrDisplayName() . "'.\nCannot be locked for the current user", Exception::$level_ERROR);
                 }
             }
         }
@@ -415,7 +414,7 @@ class AdminFormgenerator
         $objReflection = new Reflection($this->objSourceobject);
         $strGetter = $objReflection->getGetter($strPropertyName);
         if ($strGetter === null) {
-            throw new Exception("unable to find getter for property ".$strPropertyName."@".get_class($this->objSourceobject), Exception::$level_ERROR);
+            throw new Exception("unable to find getter for property " . $strPropertyName . "@" . get_class($this->objSourceobject), Exception::$level_ERROR);
         }
 
         //load detailed properties
@@ -483,7 +482,7 @@ class AdminFormgenerator
     {
 
         if (!isset($this->arrFields[$strField])) {
-            throw new Exception("field ".$strField." not found in list ".implode(", ", array_keys($this->arrFields)), Exception::$level_ERROR);
+            throw new Exception("field " . $strField . " not found in list " . implode(", ", array_keys($this->arrFields)), Exception::$level_ERROR);
         }
 
         $objField = $this->arrFields[$strField];
@@ -531,18 +530,17 @@ class AdminFormgenerator
 
         //backslash given?
         //the V5 way: namespaces
-        if(uniStrpos($strName, "\\") !== false) {
+        if (uniStrpos($strName, "\\") !== false) {
             $strClassname = $strName;
-        }
-        else {
+        } else {
             //backwards support for v4
-            $strClassname = "class_formentry_".$strName;
-            $strPath = Resourceloader::getInstance()->getPathForFile("/admin/formentries/".$strClassname.".php");
+            $strClassname = "class_formentry_" . $strName;
+            $strPath = Resourceloader::getInstance()->getPathForFile("/admin/formentries/" . $strClassname . ".php");
 
-            if(!$strPath) {
-                $strPath = Resourceloader::getInstance()->getPathForFile("/legacy/".$strClassname.".php");
+            if (!$strPath) {
+                $strPath = Resourceloader::getInstance()->getPathForFile("/legacy/" . $strClassname . ".php");
 
-                if($strPath == null) {
+                if ($strPath == null) {
                     $strClassname = null;
                 }
             }
@@ -551,9 +549,8 @@ class AdminFormgenerator
 
         if ($strClassname !== null) {
             return new $strClassname($this->strFormname, $strPropertyname, $this->objSourceobject);
-        }
-        else {
-            throw new Exception("failed to load form-entry of type ".$strClassname, Exception::$level_ERROR);
+        } else {
+            throw new Exception("failed to load form-entry of type " . $strClassname, Exception::$level_ERROR);
         }
 
     }
@@ -573,14 +570,13 @@ class AdminFormgenerator
         }
 
         if (uniStrpos($strClassname, "class_") === false) {
-            $strClassname = "class_".$strClassname."_validator";
+            $strClassname = "class_" . $strClassname . "_validator";
         }
 
-        if (Resourceloader::getInstance()->getPathForFile("/system/validators/".$strClassname.".php")) {
+        if (Resourceloader::getInstance()->getPathForFile("/system/validators/" . $strClassname . ".php")) {
             return new $strClassname();
-        }
-        else {
-            throw new Exception("failed to load validator of type ".$strClassname, Exception::$level_ERROR);
+        } else {
+            throw new Exception("failed to load validator of type " . $strClassname, Exception::$level_ERROR);
         }
     }
 
@@ -689,8 +685,7 @@ class AdminFormgenerator
     {
         if (isset($this->arrFields[$strName])) {
             return $this->arrFields[$strName];
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -701,6 +696,7 @@ class AdminFormgenerator
      * The array must contain as values the keys of the form fields
      *
      * @param $arrFieldOrder
+     *
      * @return int
      * @throws Exception
      */
@@ -708,8 +704,8 @@ class AdminFormgenerator
     {
         $intPosition = 1;
 
-        foreach($arrFieldOrder as $strFieldName) {
-            if($this->getField($strFieldName) != null) {
+        foreach ($arrFieldOrder as $strFieldName) {
+            if ($this->getField($strFieldName) != null) {
                 $this->setFieldToPosition($strFieldName, $intPosition);
                 $intPosition++;
             }
@@ -843,6 +839,7 @@ class AdminFormgenerator
 
     /**
      * @param string $strMethod
+     *
      * @throws Exception
      */
     public function setStrMethod($strMethod)
