@@ -113,6 +113,7 @@ class AdminskinImageresolver implements AdminskinImageresolverInterface {
         "icon_language"                    => "<i class='kj-icon fa fa-microphone'></i>",
         "icon_lens"                        => "<i class='kj-icon fa fa-search'></i>",
         "icon_lockerOpen"                  => "<i class='kj-icon fa fa-unlock'></i>",
+        "icon_lockerClosed"                => "<i class='kj-icon fa fa-lock'></i>",
         "icon_mail"                        => "<i class='kj-icon fa fa-envelope-o'></i>",
         "icon_mailDisabled"                => "<span class='kj-icon fa-stack'><i class='fa fa-envelope-o'></i><i class='fa fa-ban fa-stack-1x kj-stack' style='color: red'></i></span>",
         "icon_mailNew"                     => "<i class='kj-icon fa fa-envelope'></i>",
