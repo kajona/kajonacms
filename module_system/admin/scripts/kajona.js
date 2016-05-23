@@ -1191,9 +1191,8 @@ KAJONA.admin.messaging = {
  */
 KAJONA.admin.renderTocNavigation = function (selector) {
 
-
-    if(!$('#toc-navigation').length) {
-        return;
+    if(!$('.sidebar-nav').length) {
+         return;
     }
 
     //handled before?
