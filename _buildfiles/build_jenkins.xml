@@ -105,8 +105,8 @@
     <target name="buildSqliteFull" depends="
 		    								init,
 					    					buildProject, installProjectSqlite,
-					    					lint,phpunit,jasmine,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox,phpcb,
-					    					buildAllInOneZip" />
+					    					lint,phpunitFast,jasmine,
+					    					buildAllInOneZip, buildFullZip" />
 
     <target name="buildMysql" depends="
 		    								init,
