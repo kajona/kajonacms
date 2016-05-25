@@ -188,8 +188,13 @@ class WorkflowsWorkflow extends \Kajona\System\System\Model implements \Kajona\S
      */
     public function getStrLongDescription()
     {
-        if ($this->getObjWorkflowHandler() instanceof WorkflowsHandlerExtendedinfoInterface) {
-            return $this->getObjWorkflowHandler()->getInstanceInfo();
+        try {
+            if ($this->getObjWorkflowHandler() instanceof WorkflowsHandlerExtendedinfoInterface) {
+                return $this->getObjWorkflowHandler()->getInstanceInfo();
+            }
+        }
+        catch(Exception $objEx) {
+
         }
 
         return "";
@@ -202,7 +207,11 @@ class WorkflowsWorkflow extends \Kajona\System\System\Model implements \Kajona\S
      */
     public function getStrDisplayName()
     {
-        return $this->getObjWorkflowHandler()->getStrName();
+        try {
+            return $this->getObjWorkflowHandler()->getStrName();
+        } catch(Exception $objExc) {
+            return $objExc->getMessage();
+        }
     }
 
 
