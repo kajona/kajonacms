@@ -106,7 +106,7 @@
 		    								init,
 					    					buildProject, installProjectSqlite,
 					    					lint,phpunit,jasmine,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox,phpcb,
-					    					buildAllInOneZip" />
+					    					buildAllInOneZip, buildFullZip" />
 
     <target name="buildMysql" depends="
 		    								init,
