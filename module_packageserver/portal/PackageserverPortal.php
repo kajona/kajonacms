@@ -161,6 +161,8 @@ class PackageserverPortal extends PortalController implements PortalInterface
                 
                 //filename based check if the file should be included
                 if ($strNameFilter !== false) {
+                    $intStart = null;
+                    $intEnd = null;
                     if (uniStrpos($strNameFilter, ",") !== false) {
                         if (!in_array($objOneFile->getStrName(), explode(",", $strNameFilter))) {
                             $bitAdd = false;
