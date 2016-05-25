@@ -510,7 +510,6 @@ class SystemAdminXml extends AdminController implements XmlAdminInterface
      * Returns all properties for the given module
      *
      * @return string
-     * @permissions view
      */
     public function actionFetchProperty() {
         ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
