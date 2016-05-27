@@ -2,7 +2,7 @@
 
 Dieses Tutorial zeigt, wie man ein eigenes Website-Template für Kajona V5 erstellt. Es wird auf Basis des Bootstrap-Templates "Simple Sidebar" ein responsives Kajona-Template mit fontawesome-Icons erstellt, bei dem die Navigationsleiste links angeordnet ist und entwerder manuell eingeklappt werden kann oder bei kleinen Bildschirmgrößen automatisch ausgeblendet wird.
 
-_Die Grundlagen zur Funktionsweise von Kajona-Templates zeigt das Tutorial "tutorial_kajona_templates_de"._
+_Die Grundlagen zur Funktionsweise von Kajona-Templates zeigt das Tutorial "tutorial_kajona_templates_de". 
 
 ##Kajona installieren
 Es wird ein laufendes Kajona-System der Version 4.x oder 5.x vorausgesetzt. Der Webserver und der Benutzer müssen Schreibrechte im Ordner /templates haben.
@@ -25,7 +25,7 @@ startbootstrap-simple-sidebar-1.0.5
 ##Neues Template-Pack anlegen
 Im Kajona-Backend wird nun unter Paketverwaltung -> Template-Verwaltung ein neues Template-Pack angelegt. Es muss ein Name angegeben werden (z.B. demo-simple-sidebar) und es müssen mindestens die Elemente home.tpl und standard.tpl per Checkbox ausgewählt werden (damit der Sample Content weiter funktioniert! Grds. können natürlich eigene tpl erstellt werden). Nach dem Speichern erscheint das neue Template in der Liste und kann aktiv geschaltet werden.
 
-![](https://www.kajona.de/image.php?image=/files/images/upload/howtos/kajona_templates_backend.png&maxWidth=500)
+![](https://www.kajona.de/image.php?image=/files/images/upload/howtos/module_pages/kajona_templates_backend.png&maxWidth=500)
 
 > ###Zwischen-Resultat :-)
 _Ruft man nun das Portal auf sieht alles aus wie zuvor, das neue Template entspricht genau dem Default-Template._
@@ -103,7 +103,7 @@ Dann werden die Dateien home_org.tpl und die neue home.tpl (am besten in zwei Ed
 > ###Zwischen-Resultat :-)
 _Ruft man zu diesem Zeitpunkt das Portal auf sieht man schon den ersten Effekt: Es wird kein Kajona-Sample-Content mehr angezeigt sondern nur der (statische) Demo-Inhalt des Boorstrap-Templates. Styles und Javascript klappt allerdings nicht weil die Pfade nicht stimmen._
 
-![](https://www.kajona.de/image.php?image=/files/images/upload/howtos/kajona_templates_simplesidebar-1.png&maxWidth=500)
+![](https://www.kajona.de/image.php?image=/files/images/upload/howtos/module_pages/kajona_templates_simplesidebar-1.png&maxWidth=500)
 
 ###Title und URL für SEO anpassen
 Vorher 
@@ -201,7 +201,7 @@ Nachher (Achtung, ggf. Template-Namen anpassen, hier: demo-simple-sidebar)
 > ###Zwischen-Resultat :-)
 _Ruft man zu diesem Zeitpunkt das Portal auf sieht man schon mehr: Die Seite verwendet die Style-Sheets und Javascript. Die Navigation kann auf- und zugeklappt werden._
 
-![](https://www.kajona.de/image.php?image=/files/images/upload/howtos/kajona_templates_simplesidebar-2.png&maxWidth=500)
+![](https://www.kajona.de/image.php?image=/files/images/upload/howtos/module_pages/kajona_templates_simplesidebar-2.png&maxWidth=500)
 
 ###Kajona-Inhalte im Template anzeigen
 Damit im Template die Inhalte wie Navigationselemente, Seiteninhalte usw. angezeigt werden müssen die Platzhalte im Template angelegt werden.
@@ -262,7 +262,7 @@ Nachher
 > ###Zwischen-Resultat :-)
  _Ruft man jetzt das Portal auf wird bereits die Kajona-Navigation angezeigt! Klickt man einen Link an wird die entsprechende Seite aufgerufen, allerdings mit dem Layout des Default-Template-Packs (hier: standard.tpl)._
 
-![](https://www.kajona.de/image.php?image=/files/images/upload/howtos/kajona_templates_simplesidebar-3.png&maxWidth=500)
+![](https://www.kajona.de/image.php?image=/files/images/upload/howtos/module_pages/kajona_templates_simplesidebar-3.png&maxWidth=500)
 
 ####Seiteninhalte einbinden
 Es fehlen noch die Platzhalter für Seiteninhalte. Diese werden nun eingebunden.
@@ -601,5 +601,5 @@ Nun noch die CSS-Datei und die für den body gewählte (Google-) Schrift im head
 
 Nun erscheint die Seite in neuer Optik:
 
-![](https://www.kajona.de/image.php?image=/files/images/upload/howtos/kajona_templates_simplesidebar-4.png&maxWidth=500)
+![](https://www.kajona.de/image.php?image=/files/images/upload/howtos/module_pages/kajona_templates_simplesidebar-4.png&maxWidth=500)
  
