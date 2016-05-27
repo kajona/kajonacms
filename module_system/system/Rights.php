@@ -200,6 +200,8 @@ class Rights
             Logger::getInstance()->addLogRow("saving rights of record ".$strSystemid." failed", Logger::$levelError);
             throw new Exception("saving rights of record ".$strSystemid." failed", Exception::$level_ERROR);
         }
+        
+        CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_PERMISSIONSCHANGED, array($strSystemid, $arrRights));
 
         return $bitSave;
 

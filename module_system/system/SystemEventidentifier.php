@@ -123,6 +123,17 @@ interface SystemEventidentifier {
 
 
     /**
+     * Invoked if the permissions of a record have been changed.
+     * Triggered only by the "root" node of the change cascade.
+     *
+     * @param string $strSystemid
+     * @param array $arrPermissions
+     *
+     * @since 5.1
+     */
+    const EVENT_SYSTEM_PERMISSIONSCHANGED = "core.system.permissionschanged";
+
+    /**
      * Invoked every time a records previd was changed.
      * Please note that the event is only triggered on changes, not during a records creation.
      *

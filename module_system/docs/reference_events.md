@@ -166,6 +166,27 @@ The relevant object and the name of the changed property are passed, too.<br />R
 		</tr>
 		
 		
+		
+		<tr>
+        			<td rowspan="3" style="border-top: 1px solid #ccc; border-right: 1px solid #ccc;vertical-align: top;">core.system.permissionschanged</td>
+        			<td style="border-top: 1px solid #ccc;">Since</td>
+        			<td style="border-top: 1px solid #ccc;">4.5</td>
+        		</tr>
+        		<tr>
+        			<td>Arguments</td>
+        			<td>string $strSystemid&nbsp;<br />
+        			array $arrPermissions&nbsp;</td>
+        		</tr>
+        		<tr>
+        			<td>Description</td>
+        			<td>Invoked if the permissions of a record have been changed.
+                            Triggered only by the "root" node of the change cascade.</td>
+        		</tr>	
+		
+		
+		
+		
+		
 		<tr>
 			<td rowspan="3" style="border-top: 1px solid #ccc; border-right: 1px solid #ccc;vertical-align: top;">core.system.previdchanged</td>
 			<td style="border-top: 1px solid #ccc;">Since</td>
