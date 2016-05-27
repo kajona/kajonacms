@@ -85,8 +85,8 @@ class PackagemanagerPackagemanagerTemplate implements PackagemanagerPackagemanag
 
             $objPharModules = new PharModule($strSource);
             foreach($objPharModules->getContentMap() as $strFilename => $strPath) {
-                $objFilesystem->folderCreate(dirname($this->getStrTargetPath().$strFilename), true);
-                copy($strPath, _realpath_.$this->getStrTargetPath().$strFilename);
+                $objFilesystem->folderCreate(dirname($this->getStrTargetPath()."/".$strFilename), true);
+                copy($strPath, _realpath_.$this->getStrTargetPath()."/".$strFilename);
             }
 
             $objFilesystem->fileDelete($strSource);

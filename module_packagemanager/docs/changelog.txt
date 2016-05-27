@@ -1,30 +1,5 @@
 Module Packagemanager
 
-V4.6 ----------------------------------------------------------------------------------------------------
-NEW: module_packagemanager | remoteloader_kajona -> changed the access from http to https
-BUG: module_packagemanager | package details view -> fixed the rendering of screenshots while processing a zipped package
+V5.0.1 --------------------------------------------------------------------------------------------------
+BUG: packagemanager | PackagemanagerPackagemanagerTemplate.php -> copying a template-pack to the new location could fail on some phar-environments
 
-
-V4.5 ----------------------------------------------------------------------------------------------------
-NEW: module_packagemanager | admin -> added a info-view per package
-NEW: module_packagemanager | admin-view -> When updating a zip-based package, the request is restarted right after extracting the package. This causes the class-loader to load the new classes when installing the update
-NEW: module_packagemanager | packagemanagers -> Increase cache buster on package update [ticket #898]
-NEW: module_packagemanager | manager -> added a method to get the required-by list of a single package, so the list of packages depending on the queried on
-NEW: module_packagemanager | commons -> Added remove-operations for packages. This allows to remove installed packages from a kajona installation. In order to be removed a package is not allowed to be required by another package. If the package provides an installer, the installer has to implement the new interface interface_installer_removable. This interface is queried in order to find the removal-status and to trigger the removal. [ticket #835]
-
-
-V4.4 ----------------------------------------------------------------------------------------------------
-NEW: styled the package-overview window, e.g. during the installation of a package
-
-
-V4.3 ----------------------------------------------------------------------------------------------------
-BUG: the packagemanager / user list filter could trigger reloads to each other instead of reloading the matching list
-
-
-V4.2 ----------------------------------------------------------------------------------------------------
-BUG: for packages with providesInstaller = false, the default template was not updated.
-BUG: installing a module-package could corrupt the database due to a missing module-id. therefore the module-ids are reloaded between package extraction and package installation. #807
-
-V 4.1.1 -------------------------------------------------------------------------------------------------
-BUG: fixed the handling of "non standard" package-names (e.g. containing whitespaces)
-BUG: when installing a package, the cache is flushed , too
