@@ -88,7 +88,7 @@ final class Session
     {
         //New session needed or using the already started one?
         if (!session_id()) {
-            if (@session_start()) {
+            if (session_start()) {
                 $bitReturn = true;
             }
             else {
