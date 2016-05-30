@@ -1,5 +1,5 @@
 <?php
-namespace Kajona\Pageimportexport\Admin\Tests;
+namespace Kajona\Pageimportexport\Tests;
 
 use Kajona\Pageimportexport\Admin\Systemtasks\SystemtaskPageexport;
 use Kajona\Pageimportexport\Admin\Systemtasks\SystemtaskPageimport;
