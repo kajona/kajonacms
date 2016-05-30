@@ -381,6 +381,36 @@ class Classloader
             if (!empty($strNamespace)) {
                 $strClassname = $strNamespace."\\".$strFile;
             }
+            else {
+                //ugly fallback for ioncube encoded files, could be upgrade to an improved regex
+                //TODO: move this name-based detection to the general approach, replacing the content parsing
+                if(strpos($strSource, "ioncube") !== false) {
+                    $strFilename = str_replace("\\", "/", uniSubstr($strFilename, 0, -4));
+
+                    $strClassname = "Kajona\\";
+                    if(strpos($strFilename, "core_") !== false) {
+                        $strClassname = "AGP\\";
+                    }
+
+                    $arrPath = array();
+                    $arrSections = array_reverse(explode("/", $strFilename));
+                    foreach($arrSections as $strOnePart) {
+                        if(strpos($strOnePart, "core") === false && strpos($strOnePart, ".phar") === false) {
+                            if(strpos($strOnePart, "module_") !== false) {
+                                $strOnePart = substr($strOnePart, 7);
+                            }
+                            $arrPath[] = ucfirst($strOnePart);
+                        }
+                        else {
+                            break;
+                        }
+                    }
+
+                    $strClassname .= implode("\\", array_reverse($arrPath));
+                }
+
+
+            }
         }
 
         return $strClassname;
