@@ -254,7 +254,16 @@ class Resourceloader
 
         //loop all given modules
         foreach (Classloader::getInstance()->getArrModules() as $strCorePath => $strSingleModule) {
-            if (is_dir(_realpath_."/".$strCorePath._langpath_."/".$strFolder)) {
+            if (PharModule::isPhar(_realpath_."/".$strCorePath)) {
+
+                $objPhar = new PharModule($strCorePath);
+                foreach($objPhar->getContentMap() as $strFilename => $strPharPath) {
+                    if (strpos($strFilename, _langpath_."/".$strFolder."/") !== false) {
+                        $arrReturn[$strPharPath] = basename($strPharPath);
+                    }
+                }
+                
+            } elseif (is_dir(_realpath_."/".$strCorePath._langpath_."/".$strFolder)) {
                 $arrContent = scandir(_realpath_."/".$strCorePath._langpath_."/".$strFolder);
                 foreach ($arrContent as $strSingleEntry) {
 
@@ -263,14 +272,6 @@ class Resourceloader
                     }
                 }
 
-            } elseif (PharModule::isPhar(_realpath_."/".$strCorePath)) {
-
-                $objPhar = new PharModule($strCorePath);
-                foreach($objPhar->getContentMap() as $strFilename => $strPharPath) {
-                    if (strpos($strFilename, _langpath_."/".$strFolder."/") !== false) {
-                        $arrReturn[$strPharPath] = basename($strPharPath);
-                    }
-                }
             }
 
 
@@ -330,26 +331,7 @@ class Resourceloader
 
         //loop all given modules
         foreach ($arrModules as $strCorePath => $strSingleModule) {
-            if (is_dir(_realpath_."/".$strCorePath.$strFolder)) {
-                $arrContent = scandir(_realpath_."/".$strCorePath.$strFolder);
-                foreach ($arrContent as $strSingleEntry) {
-
-                    if (($strSingleEntry != "." && $strSingleEntry != "..") && ($bitWithSubfolders || is_file(_realpath_."/".$strCorePath.$strFolder."/".$strSingleEntry))) {
-                        //Wanted Type?
-                        if (count($arrExtensionFilter) == 0) {
-                            $arrReturn[_realpath_.$strCorePath.$strFolder."/".$strSingleEntry] = $strSingleEntry;
-                        }
-                        else {
-                            //check, if suffix is in allowed list
-                            $strFileSuffix = uniSubstr($strSingleEntry, uniStrrpos($strSingleEntry, "."));
-                            if (in_array($strFileSuffix, $arrExtensionFilter)) {
-                                $arrReturn[_realpath_.$strCorePath.$strFolder."/".$strSingleEntry] = $strSingleEntry;
-                            }
-                        }
-                    }
-
-                }
-            } elseif (is_file(_realpath_."/".$strCorePath)) {
+            if (is_file(_realpath_."/".$strCorePath)) {
                 $objPhar = new PharModule($strCorePath);
 
                 foreach($objPhar->getContentMap() as $strPath => $strAbsolutePath) {
@@ -367,6 +349,26 @@ class Resourceloader
                             $arrReturn[StringUtil::substring($strAbsolutePath, 0, StringUtil::indexOf($strAbsolutePath, $strEntry)+StringUtil::length($strEntry))] = $strEntry;
                         }
                     }
+                }
+            }
+            elseif (is_dir(_realpath_."/".$strCorePath.$strFolder)) {
+                $arrContent = scandir(_realpath_."/".$strCorePath.$strFolder);
+                foreach ($arrContent as $strSingleEntry) {
+
+                    if (($strSingleEntry != "." && $strSingleEntry != "..") && ($bitWithSubfolders || is_file(_realpath_."/".$strCorePath.$strFolder."/".$strSingleEntry))) {
+                        //Wanted Type?
+                        if (count($arrExtensionFilter) == 0) {
+                            $arrReturn[_realpath_.$strCorePath.$strFolder."/".$strSingleEntry] = $strSingleEntry;
+                        }
+                        else {
+                            //check, if suffix is in allowed list
+                            $strFileSuffix = uniSubstr($strSingleEntry, uniStrrpos($strSingleEntry, "."));
+                            if (in_array($strFileSuffix, $arrExtensionFilter)) {
+                                $arrReturn[_realpath_.$strCorePath.$strFolder."/".$strSingleEntry] = $strSingleEntry;
+                            }
+                        }
+                    }
+
                 }
             }
         }
