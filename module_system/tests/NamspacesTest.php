@@ -6,6 +6,7 @@
 
 namespace Kajona\System\Tests;
 
+use Kajona\System\System\BootstrapCache;
 use Kajona\System\System\Classloader;
 use Kajona\System\System\StringUtil;
 
@@ -27,6 +28,14 @@ class NamspacesTest extends \PHPUnit_Framework_TestCase
      */
     public function testNamespaceAndFilePath()
     {
+
+        //rename the packageconfig if present
+        if(is_file(_realpath_."project/packageconfig.php")) {
+            rename(_realpath_."project/packageconfig.php", _realpath_."project/packageconfig.php.back");
+            Classloader::getInstance()->flushCache();
+        }
+
+
         //get all files and check if namespace is equals to file path
         $objReflection = new \ReflectionClass(Classloader::getInstance());
         $objReflectionPropertyCodeFolders = $objReflection->getProperty("arrCodeFolders");
@@ -66,6 +75,10 @@ class NamspacesTest extends \PHPUnit_Framework_TestCase
         }
 
 
+        if(is_file(_realpath_."project/packageconfig.php.back")) {
+            rename(_realpath_."project/packageconfig.php.back", _realpath_."project/packageconfig.php");
+            Classloader::getInstance()->flushCache();
+        }
 
 
     }

@@ -1,5 +1,5 @@
 <?php
-namespace Kajona\Maps\Test;
+namespace Kajona\Maps\Tests;
 
 // includes
 use Kajona\Maps\System\Geocoder;
