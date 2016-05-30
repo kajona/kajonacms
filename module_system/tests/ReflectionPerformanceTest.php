@@ -1,7 +1,8 @@
 <?php
 
-namespace Kajona\System\System;
+namespace Kajona\System\Tests;
 
+use Kajona\System\System\SystemAspect;
 use Kajona\System\Tests\Testbase;
 use ReflectionMethod;
 

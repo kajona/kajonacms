@@ -4,7 +4,7 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
-namespace Kajona\Workflows\Test;
+namespace Kajona\Workflows\Tests;
 
 use Kajona\System\Tests\Testbase;
 use Kajona\Workflows\System\WorkflowsWorkflow;

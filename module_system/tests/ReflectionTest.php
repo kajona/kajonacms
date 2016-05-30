@@ -1,10 +1,15 @@
 <?php
 
-namespace Kajona\System\System;
+namespace Kajona\System\Tests;
 
-use Kajona\System\Tests\Testbase;
+use Kajona\System\System\A;
+use Kajona\System\System\B;
+use Kajona\System\System\C;
+use Kajona\System\System\Reflection;
+use Kajona\System\System\ReflectionEnum;
 
-class ReflectionTest extends Testbase  {
+class ReflectionTest extends Testbase
+{
 
     /**
      * Dummy dataprovider which is being used to call each test case twice.
@@ -22,7 +27,8 @@ class ReflectionTest extends Testbase  {
     /**
      * @dataProvider additionProvider
      */
-    public function testAnnotationsValueFromClass($a) {
+    public function testAnnotationsValueFromClass($a)
+    {
         $objAnnotations = new Reflection(new B());
 
         $arrClassAnnotations = $objAnnotations->getAnnotationValuesFromClass("@noval");
@@ -33,7 +39,7 @@ class ReflectionTest extends Testbase  {
         $this->assertTrue(in_array("val1", $arrClassAnnotations));
         $this->assertTrue(in_array("val2", $arrClassAnnotations));
         $this->assertTrue(in_array("val3", $arrClassAnnotations));
-        
+
         $objAnnotations = new Reflection(new A());
 
         $arrClassAnnotations = $objAnnotations->getAnnotationValuesFromClass("@noval");
@@ -42,7 +48,7 @@ class ReflectionTest extends Testbase  {
         $arrClassAnnotations = $objAnnotations->getAnnotationValuesFromClass("@classTest");
         $this->assertEquals(1, count($arrClassAnnotations));
         $this->assertTrue(in_array("val1", $arrClassAnnotations));
-        
+
         $arrClassAnnotations = $objAnnotations->getAnnotationValuesFromClass("@emptyAnnotation");
         $this->assertEquals(1, count($arrClassAnnotations));
         $this->assertTrue(in_array("", $arrClassAnnotations));
@@ -51,7 +57,8 @@ class ReflectionTest extends Testbase  {
     /**
      * @dataProvider additionProvider
      */
-    public function testGetAnnotationsWithValueFromClass($a) {
+    public function testGetAnnotationsWithValueFromClass($a)
+    {
         $objAnnotations = new Reflection(new B());
 
         $arrClassAnnotations = $objAnnotations->getAnnotationsWithValueFromClass("val2");
@@ -63,7 +70,8 @@ class ReflectionTest extends Testbase  {
     /**
      * @dataProvider additionProvider
      */
-    public function testHasMethodAnnotation($a) {
+    public function testHasMethodAnnotation($a)
+    {
 
         $objAnnotations = new Reflection(new B());
 
@@ -76,7 +84,8 @@ class ReflectionTest extends Testbase  {
     /**
      * @dataProvider additionProvider
      */
-    public function testHasPropertyAnnotation($a) {
+    public function testHasPropertyAnnotation($a)
+    {
 
         $objAnnotations = new Reflection(new B());
 
@@ -90,7 +99,8 @@ class ReflectionTest extends Testbase  {
     /**
      * @dataProvider additionProvider
      */
-    public function testGetMethodAnnotationValue($a) {
+    public function testGetMethodAnnotationValue($a)
+    {
 
         $objAnnotations = new Reflection(new B());
 
@@ -101,14 +111,15 @@ class ReflectionTest extends Testbase  {
     /**
      * @dataProvider additionProvider
      */
-    public function testGetPropertiesWithAnnotation($a) {
+    public function testGetPropertiesWithAnnotation($a)
+    {
 
         $objAnnotations = new Reflection(new B());
 
         $this->assertEquals(3, count($objAnnotations->getPropertiesWithAnnotation("@propertyTest")));
 
         $arrProps = $objAnnotations->getPropertiesWithAnnotation("@propertyTest");
-        
+
         $arrKeys = array_keys($arrProps);
         $arrValues = array_values($arrProps);
 
@@ -122,7 +133,6 @@ class ReflectionTest extends Testbase  {
         $this->assertEquals("propertyB2", $arrKeys[2]);
 
 
-
         $this->assertEquals("valB1", $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyTest"));
         $this->assertEquals("valA1", $objAnnotations->getAnnotationValueForProperty("propertyA1", "@propertyTest"));
         $this->assertNull($objAnnotations->getAnnotationValueForProperty("propertyA1", "@notAPropertyTest"));
@@ -132,7 +142,8 @@ class ReflectionTest extends Testbase  {
     /**
      * @dataProvider additionProvider
      */
-    public function testGetAnnotationValueForProperty($a) {
+    public function testGetAnnotationValueForProperty($a)
+    {
         $objAnnotations = new Reflection(new C());
 
         $strValues = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyTest");
@@ -154,7 +165,8 @@ class ReflectionTest extends Testbase  {
     /**
      * @dataProvider additionProvider
      */
-    public function testGetGetters($a) {
+    public function testGetGetters($a)
+    {
         $objReflection = new Reflection(new A());
         $this->assertEquals(strtolower("getLongPropertyA1"), strtolower($objReflection->getGetter("propertyA1")));
 
@@ -166,7 +178,8 @@ class ReflectionTest extends Testbase  {
     /**
      * @dataProvider additionProvider
      */
-    public function testGetSetters($a) {
+    public function testGetSetters($a)
+    {
         $objReflection = new Reflection(new A());
         $this->assertEquals(strtolower("setStrPropertyA1"), strtolower($objReflection->getSetter("propertyA1")));
 
@@ -178,7 +191,8 @@ class ReflectionTest extends Testbase  {
     /**
      * @dataProvider additionProvider
      */
-    public function testPropertyAnnotationInheritance($a) {
+    public function testPropertyAnnotationInheritance($a)
+    {
         $objReflection = new Reflection(new A());
         $this->assertEquals("val CA", $objReflection->getAnnotationValueForProperty("propertyC", "@propertyTestInheritance"));
 
@@ -190,7 +204,8 @@ class ReflectionTest extends Testbase  {
     /**
      * @dataProvider additionProvider
      */
-    public function testGetAnnotationValuesFromClassParameter($a) {
+    public function testGetAnnotationValuesFromClassParameter($a)
+    {
         $objReflection = new Reflection(new C());
 
         $this->assertTrue($objReflection->hasClassAnnotation("@classTest"));
@@ -288,7 +303,8 @@ class ReflectionTest extends Testbase  {
     /**
      * @dataProvider additionProvider
      */
-    public function testGetAnnotationsWithValueFromClassParameter($a) {
+    public function testGetAnnotationsWithValueFromClassParameter($a)
+    {
         $objAnnotations = new Reflection(new C());
 
         $arrClassAnnotations = $objAnnotations->getAnnotationsWithValueFromClass(54, ReflectionEnum::PARAMS);
@@ -317,7 +333,8 @@ class ReflectionTest extends Testbase  {
     /**
      * @dataProvider additionProvider
      */
-    public function testGetMethodAnnotationValueParameter($a) {
+    public function testGetMethodAnnotationValueParameter($a)
+    {
 
         $objAnnotations = new Reflection(new C());
 
@@ -331,11 +348,11 @@ class ReflectionTest extends Testbase  {
     }
 
 
-
     /**
      * @dataProvider additionProvider
      */
-    public function testGetAnnotationValueForPropertyParameter($a) {
+    public function testGetAnnotationValueForPropertyParameter($a)
+    {
         $objAnnotations = new Reflection(new C());
 
         $arrParams = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyTest", ReflectionEnum::PARAMS);
@@ -376,6 +393,9 @@ class ReflectionTest extends Testbase  {
         $this->assertNull($strParamValue);
     }
 }
+namespace Kajona\System\System;
+
+use Kajona\System\Tests\Testbase;
 
 //set up test-structures
 

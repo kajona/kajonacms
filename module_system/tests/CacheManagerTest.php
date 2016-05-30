@@ -4,7 +4,10 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
-namespace Kajona\System\System;
+namespace Kajona\System\Tests;
+
+use Kajona\System\System\CacheManager;
+use Kajona\System\System\Exception;
 
 /**
  * @author christoph.kappestein@gmail.com

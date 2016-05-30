@@ -9,12 +9,9 @@
 
 namespace Kajona\Dashboard\Admin\Widgets;
 
-use AGP\Commons\System\ArtemeonCommon;
 use Kajona\Dashboard\System\DashboardWidget;
 use Kajona\Dashboard\System\TodoRepository;
 use Kajona\System\System\Link;
-use Kajona\System\System\SystemAspect;
-use Kajona\System\System\SystemModule;
 
 /**
  * @package module_dashboard
