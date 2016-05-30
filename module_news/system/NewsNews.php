@@ -574,7 +574,7 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
                            )
                         )
                         AND system_status = 1
-                        AND news_view = 0
+                        AND news_view = 1
                         ".$objORM->getDeletedWhereRestriction()."
                         AND page_element_ph_language = ? ";
 
