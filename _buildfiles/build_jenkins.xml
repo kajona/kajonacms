@@ -35,10 +35,6 @@
     <condition property="script-suffix-cmd" value=".cmd" else="">
         <os family="windows" />
     </condition>
-    <condition property="composerHome" value="${user.home}/AppData/Roaming/Composer" else="${user.home}/.composer">
-        <os family="windows" />
-    </condition>
-
 
     <!-- target dir for the sources from the svn repo -->
     <property name="sourcesPath"  value="/../../" />
@@ -200,16 +196,16 @@
 
         <!-- start internal webserver -->
         <exec dir="${basedir}" executable="${path.php}" spawn="true">
-            <!--param1=server root path, param2 = sevver IP, param3=Server Port, param4=filename where pid of the server is stored-->
-            <arg line="start_phpserver.php ${basedir}${tempPath} 127.0.0.1 8080 server_pid_file"/>
+            <!--param1=server root path, param2 = sevver IP, param3=Server Port, param4=path to file server pid file, param5=filename where pid of the server is stored-->
+            <arg line="start_phpserver.php ${basedir}${tempPath} 127.0.0.1 8080 ${user.home}/ kajona_server_pid_file.lock"/>
         </exec>
     </target>
 
     <target name="stopWebServer">
         <!-- stop internal webserver -->
         <exec dir="${basedir}" executable="${path.php}">
-            <!--param1=filename where pid of the server is stored in order to kill the process-->
-            <arg line="stop_phpserver.php server_pid_file"/>
+            <!--param1=path to file server pid file, param2=filename where pid of the server is stored in order to kill the process-->
+            <arg line="stop_phpserver.php ${user.home}/ kajona_server_pid_file.lock"/>
         </exec>
     </target>
 

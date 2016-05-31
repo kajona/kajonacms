@@ -7,9 +7,10 @@
 $strServerRootPath = $argv[1];
 $strServerIp = $argv[2];
 $strServerPort = $argv[3];
-$strFileName = $argv[4];
+$strPathToFileName = $argv[4];
+$strFileName = $argv[5];
 
-startProcess($strFileName, "php -S $strServerIp:$strServerPort -t $strServerRootPath ./server.php");
+startProcess($strPathToFileName.$strFileName, "php -S $strServerIp:$strServerPort -t $strServerRootPath ./server.php");
 
 function startProcess($name, $cmd)
 {
@@ -17,6 +18,6 @@ function startProcess($name, $cmd)
     $process = proc_open($cmd, array(), $pipes);
     $status  = proc_get_status($process);
     $pid  = $status['pid'];
-    $file = __DIR__ . './temp/' . $name . '.lock';
+    $file = $name;
     file_put_contents($file, $pid);
 }

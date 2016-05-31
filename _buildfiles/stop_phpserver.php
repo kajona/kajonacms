@@ -5,13 +5,14 @@
  * The process id is being retrivied from the given filename $strFileName = $argv[1];
  */
 
-$strFileName = $argv[1];
+$strPathToFileName = $argv[1];
+$strFileName = $argv[2];
 
-stopProcess($strFileName);
+stopProcess($strPathToFileName.$strFileName);
 
 function stopProcess($name)
 {
-    $file = __DIR__ . './temp/' . $name . '.lock';
+    $file = $name;
     if (is_file($file)) {
         $pid = (int) file_get_contents($file);
         if ($pid > 0) {
