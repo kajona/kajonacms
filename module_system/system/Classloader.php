@@ -385,6 +385,10 @@ class Classloader
                 //ugly fallback for ioncube encoded files, could be upgrade to an improved regex
                 //TODO: move this name-based detection to the general approach, replacing the content parsing
                 if(strpos($strSource, "ioncube") !== false) {
+                    if($strFile === "functions") {
+                        return null;
+                    }
+
                     $strFilename = str_replace("\\", "/", uniSubstr($strFilename, 0, -4));
 
                     $strClassname = "Kajona\\";
@@ -395,7 +399,10 @@ class Classloader
                     $arrPath = array();
                     $arrSections = array_reverse(explode("/", $strFilename));
                     foreach($arrSections as $strOnePart) {
-                        if(strpos($strOnePart, "core") === false && strpos($strOnePart, ".phar") === false) {
+                        if($strOnePart !== "core"
+                            && $strOnePart !== "project"
+                            && strpos($strOnePart, "core_") === false)
+                        {
                             if(strpos($strOnePart, "module_") !== false) {
                                 $strOnePart = substr($strOnePart, 7);
                             }
@@ -414,13 +421,20 @@ class Classloader
                         }
                     }
 
+                    //file is in project path?
+                    if(strpos($strFilename, "/project/") !== false) {
+                        if(is_dir(_realpath_."core/module_".strtolower(array_reverse($arrPath)[0]))) {
+                            $strClassname = "Kajona\\";
+                        }
+                        else {
+                            $strClassname = "AGP\\";
+                        }
+                    }
+
                     $strClassname .= implode("\\", array_reverse($arrPath));
                 }
-
-
             }
         }
-
         return $strClassname;
     }
 
