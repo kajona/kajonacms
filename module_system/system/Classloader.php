@@ -399,7 +399,15 @@ class Classloader
                             if(strpos($strOnePart, "module_") !== false) {
                                 $strOnePart = substr($strOnePart, 7);
                             }
-                            $arrPath[] = ucfirst($strOnePart);
+
+                            //e.g. agp_commons will become Agp_Commons
+                            //e.g. commons will become Commons
+                            $arrExp = explode("_", $strOnePart);
+                            $arrNew = array();
+                            foreach ($arrExp as $str) {
+                                $arrNew[] = ucfirst($str);
+                            }
+                            $arrPath[] = implode("_", $arrNew);
                         }
                         else {
                             break;
