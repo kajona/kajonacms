@@ -43,7 +43,7 @@ class PharModule
                     continue;
                 }
 
-                $arrTemp[$this->getRelativeFilePath($objFile)] = $objFile->getPathname();
+                $arrTemp[$this->getRelativeFilePath($objFile)] = str_replace("\\", "/", $objFile->getPathname());
             }
 
             BootstrapCache::getInstance()->addCacheRow(BootstrapCache::CACHE_PHARCONTENT, $this->strPharPath, $arrTemp);
