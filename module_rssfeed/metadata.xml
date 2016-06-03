@@ -5,7 +5,7 @@
         >
     <title>rssfeed</title>
     <description>Include external rss-/atom feeds into your website. This element is used by the complex-pageelement tutorial.</description>
-    <version>5.0</version>
+    <version>5.0.1</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>

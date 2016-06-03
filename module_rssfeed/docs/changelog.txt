@@ -1,0 +1,12 @@
+Module Rssfeed
+
+V5.0.1 --------------------------------------------------------------------------------------------------
+NEW: rssfeed | ElementRssfeedAdmin.php -> the element registers a readable dfault-content
+
+V4.4 ----------------------------------------------------------------------------------------------------
+NEW: sample content uses 2 different templates for 'home' and all other sites
+
+V4.3 ----------------------------------------------------------------------------------------------------
+NEW: cleaned up placeholders in default template; adjusted sample content installer
+NEW: updated the samplecontent to demonstrate element-moving by drag n drop
+BUG: fixed the alignment of the faqs' rating-icons (samplecontent)
