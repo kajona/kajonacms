@@ -54,6 +54,7 @@ $lang["element_loeschen_frage"]          = "Do you really want to delete the pag
 $lang["element_pos"]                     = "Position at placeholder";
 $lang["element_runter"]                  = "Shift element down";
 $lang["elemente_liste_leer"]             = "No page elements installed";
+$lang["element_in_block_missing"]        = "The block makes use of elements not installed: ";
 $lang["exception_template_parse"]        = "<b>Whoops!</b> There was an error parsing the provided page-template. Maybe a block / blocks name uses some illegal chars? <br /><br />Template parsed: {0}<br /><br />Error occured when parsing template: <br />{1}";
 $lang["entry_down"]                      = "Shift down";
 $lang["entry_up"]                        = "Shift up";

@@ -1,5 +1,9 @@
 Module Pages
 
+V5.0.1 --------------------------------------------------------------------------------------------------
+BUG: module_pages | PagesContent -> the backend and the portal-editor both allowed to create blocks containing elements not existing, causing an exception afterwards (thx to Gerriet)
+
+
 V4.7.1 --------------------------------------------------------------------------------------------------
 BUG: module_pages | formentry_template -> if only one template is available, the first entry is pre-selected by default. fixes #66.
 
