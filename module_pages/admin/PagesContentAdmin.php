@@ -219,7 +219,7 @@ class PagesContentAdmin extends AdminSimple implements AdminInterface
             }
 
             foreach ($objOneBlocks->getArrBlocks() as $objOneBlock) {
-                $strNewBlocks .= $this->renderNewBlockLinkRow($strNewBlocksSystemid, $objOneBlock->getStrName());
+                $strNewBlocks .= $this->renderNewBlockLinkRow($strNewBlocksSystemid, $objOneBlock);
             }
 
             $arrGhostBlock = array_filter($arrGhostBlock, function ($objElement) {
@@ -269,21 +269,34 @@ HTML;
 
     }
 
-    private function renderNewBlockLinkRow($strBlocks, $strBlock)
+    private function renderNewBlockLinkRow($strBlocks, TemplateBlockContainer $objBlock)
     {
-        $strNewElementLink = Link::getLinkAdmin(
-            "pages_content",
-            "newBlock",
-            "&blocks={$strBlocks}&block={$strBlock}&systemid={$this->getSystemid()}",
-            "",
-            $this->getLang("element_anlegen"),
-            "icon_new"
-        );
+        //validate if all linked elements are present on the current system
+        $arrNotPresent = PagesElement::getElementsNotInstalledFromBlock($objBlock);
+
+        $strNewElementLink = "";
+        $strBlockName = $objBlock->getStrName();
+
+        if(count($arrNotPresent) == 0) {
+            $strNewElementLink = Link::getLinkAdmin(
+                "pages_content",
+                "newBlock",
+                "&blocks={$strBlocks}&block={$objBlock->getStrName()}&systemid={$this->getSystemid()}",
+                "",
+                $this->getLang("element_anlegen"),
+                "icon_new"
+            );
+        }
+        else {
+            $strBlockName .= " <i class='fa fa-exclamation-triangle'></i> ".$this->getLang("element_in_block_missing").implode(", ", $arrNotPresent)."";
+        }
+
+
 
         //So, the Row for a new element: element is repeatable or not yet created
         $strActions = $this->objToolkit->listButton($strNewElementLink);
         $strReturn = $this->objToolkit->listHeader();
-        $strReturn .= $this->objToolkit->genericAdminList("", $strBlock, "", $strActions);
+        $strReturn .= $this->objToolkit->genericAdminList("", $strBlockName, "", $strActions);
         $strReturn .= $this->objToolkit->listFooter();
         return $strReturn;
     }

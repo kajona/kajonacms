@@ -207,13 +207,15 @@ class PagesPortalController extends PortalController implements PortalInterface
                             $strId = $arrBlocksIds[$objOneBlocks->getStrName()];
                         }
 
-                        PagesPortaleditor::getInstance()->registerAction(
-                            new PagesPortaleditorPlaceholderAction(
-                                PagesPortaleditorActionEnum::CREATE(),
-                                Link::getLinkAdminHref("pages_content", "newBlock", "&blocks={$strId}&block={$objOneBlock->getStrName()}&systemid={$objPageData->getSystemid()}&peClose=1"), "blocks_".$objOneBlocks->getStrName(),
-                                $objOneBlock->getStrName()
-                            )
-                        );
+                        if(empty(PagesElement::getElementsNotInstalledFromBlock($objOneBlock))) {
+                            PagesPortaleditor::getInstance()->registerAction(
+                                new PagesPortaleditorPlaceholderAction(
+                                    PagesPortaleditorActionEnum::CREATE(),
+                                    Link::getLinkAdminHref("pages_content", "newBlock", "&blocks={$strId}&block={$objOneBlock->getStrName()}&systemid={$objPageData->getSystemid()}&peClose=1"), "blocks_".$objOneBlocks->getStrName(),
+                                    $objOneBlock->getStrName()
+                                )
+                            );
+                        }
                     }
                 }
                 if (!isset($arrBlocks[$objOneBlocks->getStrName()])) {

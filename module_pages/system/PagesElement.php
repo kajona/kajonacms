@@ -21,6 +21,7 @@ use Kajona\System\System\Exception;
 use Kajona\System\System\OrmObjectlist;
 use Kajona\System\System\OrmObjectlistRestriction;
 use Kajona\System\System\Resourceloader;
+use Kajona\System\System\TemplateBlockContainer;
 
 
 /**
@@ -289,6 +290,27 @@ class PagesElement extends \Kajona\System\System\Model implements \Kajona\System
         }
     }
 
+    /**
+     * Searches all elements from a given block currently not installed.
+     * Useful to trigger/block new element actions.
+     * @param TemplateBlockContainer $objBlock
+     *
+     * @return String[]
+     */
+    public static function getElementsNotInstalledFromBlock(TemplateBlockContainer $objBlock)
+    {
+        $arrNotPresent = array();
+        foreach($objBlock->getArrPlaceholder() as $arrOnePlaceholder) {
+            foreach($arrOnePlaceholder["elementlist"] as $arrElement) {
+                if(PagesElement::getElement($arrElement["element"]) === null) {
+                    $arrNotPresent[] = $arrElement["element"];
+                }
+            }
+        }
+        
+        return $arrNotPresent;
+    }
+    
 
     /**
      * @return string

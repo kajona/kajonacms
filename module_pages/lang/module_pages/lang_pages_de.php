@@ -54,6 +54,7 @@ $lang["element_loeschen_frage"]          = "Möchten Sie das Element &quot;<b>%%
 $lang["element_pos"]                     = "Position am Platzhalter";
 $lang["element_runter"]                  = "Element nach unten verschieben";
 $lang["elemente_liste_leer"]             = "Keine Elemente installiert";
+$lang["element_in_block_missing"]        = "Der Block verwendet nicht installierte Elemente: ";
 $lang["exception_template_parse"]        = "<b>Oha!</b>Es gab einen Fehler beim Auslesen des Seiten-Templates. Verwendet ein block / blocks Element nicht erlaubte Zeichen als Name?<br /><br />Seiten-Template: {0}<br /><br />Abschnitt in dem der Fehler auftrat: <br />{1}";
 $lang["entry_down"]                      = "Nach unten";
 $lang["entry_up"]                        = "Nach oben";
