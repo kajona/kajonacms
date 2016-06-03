@@ -156,12 +156,14 @@ abstract class FilterBase
         }
         else {
             /*
-             * Get objFilter from Session and create a clone of the filter
-             * (reason to return a clone: changes in the object are not reflected to the session object )
+             * Get objFilter from Session
              */
             if(Session::getInstance()->sessionIsset($strFilterId)) {
                 $objFilter = Session::getInstance()->getSession($strFilterId);
-                $objFilter = clone $objFilter;
+            }
+            else {
+                //in case filter is not in session yet -> set default values
+                $objFilter->configureDefaultValues();
             }
         }
 
@@ -170,7 +172,12 @@ abstract class FilterBase
          */
         $objFilter->writeFilterToSession();
 
-        return $objFilter;
+        /**
+         * return a clone of the filter
+         * (reason to return a clone: it might be that $objFilter is the filter session object.
+         *                            So changes in the object are not reflected to the session object)
+         */
+        return clone $objFilter;
     }
 
 
