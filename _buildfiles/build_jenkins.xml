@@ -342,6 +342,7 @@
                 <include name="core*/module_pages/**"/>
                 <include name="core*/module_postacomment/**"/>
                 <include name="core*/module_rating/**"/>
+                <include name="core*/module_rssfeed/**"/>
                 <include name="core*/module_samplecontent/**"/>
                 <include name="core*/module_search/**"/>
                 <include name="core*/module_stats/**"/>
