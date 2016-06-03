@@ -65,8 +65,8 @@ class InstallerRssfeed extends InstallerBase implements InstallerRemovableInterf
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if ($arrModule["module_version"] == "5.0") {
-            $strReturn .= "Updating 5.0 to 5.1...\n";
-            $this->updateElementAndModule("5.1");
+            $strReturn .= "Updating 5.0 to 5.0.1...\n";
+            $this->updateElementAndModule("5.0.1");
         }
 
         return $strReturn;
