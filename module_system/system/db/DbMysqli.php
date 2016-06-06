@@ -117,12 +117,10 @@ class DbMysqli extends DbBase {
             $intCount = 0;
             while ($intCount < 3) {
                 $bitReturn = $objStatement->execute();
-                if ($bitReturn === false) {
-                    if ($objStatement->errno == 1213) {
-                        // in case we have a dead lock wait a bit and retry the query
-                        $intCount++;
-                        sleep(2);
-                    }
+                if ($bitReturn === false && $objStatement->errno == 1213) {
+                    // in case we have a dead lock wait a bit and retry the query
+                    $intCount++;
+                    sleep(2);
                 } else {
                     break;
                 }
