@@ -306,8 +306,8 @@ class Classloader
         }
 
         foreach ($arrModules as $strPath => $strSingleModule) {
-            if (is_dir(_realpath_."/".$strPath.$strFolder)) {
-                $arrTempFiles = scandir(_realpath_."/".$strPath.$strFolder);
+            if (is_dir(_realpath_.$strPath.$strFolder)) {
+                $arrTempFiles = scandir(_realpath_.$strPath.$strFolder);
                 foreach ($arrTempFiles as $strSingleFile) {
                     if (strpos($strSingleFile, ".php") !== false) {
 
@@ -320,7 +320,7 @@ class Classloader
                         else {
                             $strClassName = $this->getClassnameFromFilename(_realpath_.$strPath.$strFolder.$strSingleFile);
                             if (!empty($strClassName)) {
-                                $arrFiles[$strClassName] = _realpath_."/".$strPath.$strFolder.$strSingleFile;
+                                $arrFiles[$strClassName] = _realpath_.$strPath.$strFolder.$strSingleFile;
                             }
                         }
                     }
@@ -364,6 +364,15 @@ class Classloader
         // if empty we cant resolve a class name
         if (empty($strFilename) || uniSubstr($strFilename, -4) != '.php') {
             return null;
+        }
+
+        //perform a reverse lookup using the cache, maybe the file was indexed before
+        $arrMap = BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_CLASSES);
+        if($arrMap !== false) {
+            $strHit = array_search($strFilename, $arrMap);
+            if ($strHit !== false && $strHit !== null) {
+                return $strHit;
+            }
         }
 
         $strFile = uniSubstr(basename($strFilename), 0, -4);
@@ -434,6 +443,9 @@ class Classloader
                     $strClassname .= implode("\\", array_reverse($arrPath));
                 }
             }
+        }
+        if($arrMap !== false) {
+            BootstrapCache::getInstance()->addCacheRow(BootstrapCache::CACHE_CLASSES, $strClassname, $strFilename);
         }
         return $strClassname;
     }
