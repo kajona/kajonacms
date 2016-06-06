@@ -156,7 +156,7 @@ class Classloader
                 continue;
             }
 
-            foreach (scandir(_realpath_."/".$strRootFolder) as $strOneModule) {
+            foreach (scandir(_realpath_.$strRootFolder) as $strOneModule) {
                 $strModuleName = null;
                 $boolIsPhar = PharModule::isPhar($strOneModule);
 
