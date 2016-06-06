@@ -468,7 +468,7 @@ class Classloader
         if ($strResolvedClassname != null) {
             // if the class does not exist we simply include the filename and hope that the class is defined there. This
             // is the case where the filename is not equal to the class name i.e. installer_sc_zzlanguages.php
-            if (!class_exists($strResolvedClassname)) {
+            if (!class_exists($strResolvedClassname, false)) {
                 if ($strResolvedClassname[0] != strtoupper($strResolvedClassname[0]) && !preg_match("/(class|interface|trait)(.*)$/i", $strResolvedClassname)) {
                     $strResolvedClassname = "class_".$strResolvedClassname;
                 }
