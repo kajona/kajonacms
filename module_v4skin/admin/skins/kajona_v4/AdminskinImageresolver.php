@@ -144,6 +144,7 @@ class AdminskinImageresolver implements AdminskinImageresolverInterface {
         "icon_treeBranchOpenDisabled"      => "<span class='kj-icon fa-stack'><i class='fa fa-sitemap'></i><i class='fa fa-ban fa-stack-1x kj-stack' style='color: red'></i></span>",
         "icon_treeLeaf"                    => "<i class='kj-icon fa fa-sitemap'></i>",
         "icon_treeLeaf_link"               => "<span class='kj-icon fa-stack'><i class='fa fa-sitemap'></i><i class='fa fa-link fa-stack-1x kj-stack'></i></span>",
+        "icon_treeLink"                    => "<i class='kj-icon fa fa-link'></i>",
         "icon_treeLevelUp"                 => "<span class='kj-icon fa-stack'><i class='fa fa-sitemap'></i><i class='fa fa-chevron-up fa-stack-1x kj-stack'></i></span>",
         "icon_treeRoot"                    => "<i class='kj-icon fa fa-sitemap'></i>",
         "icon_undo"                        => "<i class='kj-icon fa fa-undo'></i>",
