@@ -9,7 +9,6 @@ describe("search.js", function() {
     });
 
     it("test functions available", function() {
-        expect(typeof KAJONA.admin.search.switchFilterAllModules).toBe("function");
         expect(typeof KAJONA.admin.search.triggerFullSearch).toBe("function");
     });
 
