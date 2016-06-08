@@ -916,7 +916,7 @@ KAJONA.admin.forms.renderMissingMandatoryFields = function(arrFields) {
         if($("#"+strFieldName) && !$("#"+strFieldName).hasClass('inputWysiwyg')) {
             $("#"+strFieldName).closest(".form-group").addClass("has-error has-feedback");
 			var objNode = $('<span class="glyphicon glyphicon-warning-sign form-control-feedback" aria-hidden="true"></span>');
-            $("#"+strFieldName).closest("div").append(objNode);
+            $("#"+strFieldName).closest("div:not(.input-group)").append(objNode);
         }
     });
 };
