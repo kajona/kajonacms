@@ -156,7 +156,7 @@ class SearchSearch extends Model implements ModelInterface, SortableRatingInterf
      */
     private function getModuleNumbers()
     {
-        $strQuery = "SELECT DISTINCT system_module_nr FROM "._dbprefix_."system WHERE system_prev_id != '0' AND system_id != '0' AND system_deleted = 0";
+        $strQuery = "SELECT DISTINCT system_module_nr FROM "._dbprefix_."system, "._dbprefix_."search_ix_document WHERE system_id = search_ix_system_id AND system_prev_id != '0' AND system_id != '0' AND system_deleted = 0";
 
         $arrRows = $this->objDB->getPArray($strQuery, array());
 
