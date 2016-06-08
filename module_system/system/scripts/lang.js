@@ -68,8 +68,9 @@ KAJONA.util.lang.queue = [];
  * <span data-lang-property="faqs:action_new_faq" data-lang-params="foo,bar"></span>
  *
  * @param {HTMLElement} containerEl
+ * @param {function} onReady
  */
-KAJONA.util.lang.initializeProperties = function(containerEl){
+KAJONA.util.lang.initializeProperties = function(containerEl, onReady){
     if (!containerEl) {
         containerEl = "body";
     }
@@ -99,16 +100,21 @@ KAJONA.util.lang.initializeProperties = function(containerEl){
         }
     });
 
-    KAJONA.util.lang.fetchProperties();
+    KAJONA.util.lang.fetchProperties(onReady);
 };
 
 /**
  * Fetches all properties for the given module and stores them in the local storage. Calls then the callback with the
  * fitting property value as argument. The callback is called directly if the property exists already in the storage.
  * The requests are triggered sequential so that we send per module only one request
+ *
+ * @param {function} onReady
  */
-KAJONA.util.lang.fetchProperties = function(){
+KAJONA.util.lang.fetchProperties = function(onReady){
     if (KAJONA.util.lang.queue.length == 0) {
+        if (onReady) {
+            onReady.apply(this);
+        }
         return;
     }
 
@@ -134,7 +140,7 @@ KAJONA.util.lang.fetchProperties = function(){
             arrData.callback.apply(arrData.scope ? arrData.scope : this, [strResp, arrData.module, arrData.text]);
         }
 
-        KAJONA.util.lang.fetchProperties();
+        KAJONA.util.lang.fetchProperties(onReady);
         return;
     }
 
@@ -161,7 +167,7 @@ KAJONA.util.lang.fetchProperties = function(){
                 }
             }
 
-            KAJONA.util.lang.fetchProperties();
+            KAJONA.util.lang.fetchProperties(onReady);
         }
     });
 
