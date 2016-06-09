@@ -1409,6 +1409,73 @@ HTML;
         return $strReturn;
     }
 
+    public function getActionIcons($objOneIterable, $strListIdentifier = "")
+    {
+        $strFormElement = $this->getParam("form_element");
+        if ($strListIdentifier == "userGroupList" && $this->getSystemid() == "" && $objOneIterable instanceof UserGroup) {
+            $strAction = "";
+            $strAction .= $this->objToolkit->listButton(
+                Link::getLinkAdmin(
+                    "user",
+                    "userBrowser",
+                    "&form_element=".$this->getParam("form_element")."&systemid=".$objOneIterable->getSystemid()."&filter=".$this->getParam("filter")."&checkid=".$this->getParam("checkid"),
+                    $this->getLang("user_browser_show"),
+                    $this->getLang("user_browser_show"),
+                    "icon_folderActionOpen"
+                )
+            );
+
+            if ($this->getParam("allowGroup") == "1") {
+                $strAction .= $this->objToolkit->listButton(
+                    "<a href=\"#\" title=\"".$this->getLang("group_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strFormElement."', '".addslashes($objOneIterable->getStrName())."'], ['".$strFormElement."_id', '".$objOneIterable->getSystemid()."']]);\">".getImageAdmin("icon_accept")
+                );
+            }
+
+            return $strAction;
+        } elseif ($strListIdentifier == "userGroupUserList" && $objOneIterable instanceof UserUser) {
+            $strCheckId = $this->getParam("checkid");
+            $arrCheckIds = json_decode($strCheckId);
+
+            $bitRenderAcceptLink = true;
+            if (!empty($arrCheckIds) && is_array($arrCheckIds)) {
+                foreach ($arrCheckIds as $strCheckId) {
+                    if (!$this->hasUserViewPermissions($strCheckId, $objOneIterable)) {
+                        $bitRenderAcceptLink = false;
+                        break;
+                    }
+                }
+            }
+
+            $strAction = "";
+            if (!$bitRenderAcceptLink || $objOneIterable->getIntActive() == 0 || ($this->getParam("filter") == "current" && $objOneIterable->getSystemid() == $this->objSession->getUserID())) {
+                $strAction .= $this->objToolkit->listButton(getImageAdmin("icon_acceptDisabled"));
+            } else {
+                $strAction .= $this->objToolkit->listButton(
+                    "<a href=\"#\" title=\"".$this->getLang("user_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strFormElement."', '".addslashes($objOneIterable->getStrUsername())."'], ['".$strFormElement."_id', '".$objOneIterable->getSystemid()."']]);\">".getImageAdmin("icon_accept")
+                );
+            }
+
+            return $strAction;
+        } else {
+            return parent::getActionIcons($objOneIterable, $strListIdentifier);
+        }
+    }
+
+    public function renderLevelUpAction($strListIdentifier)
+    {
+        if ($strListIdentifier == "userGroupUserList") {
+            return Link::getLinkAdmin(
+                $this->getArrModule("modul"),
+                "userBrowser",
+                "&form_element=".$this->getParam("form_element")."&filter=".$this->getParam("filter")."&allowGroup=".$this->getParam("allowGroup")."&checkid=".$this->getParam("checkid"),
+                $this->getLang("user_list_parent"),
+                $this->getLang("user_list_parent"),
+                "icon_folderActionLevelup"
+            );
+        } else {
+            return parent::renderLevelUpAction($strListIdentifier);
+        }
+    }
 
     /**
      * Creates a browser-like view of the users available
@@ -1419,91 +1486,37 @@ HTML;
     {
         $this->setArrModuleEntry("template", "/folderview.tpl");
         $strReturn = "";
-        $strFormElement = $this->getParam("form_element");
         if ($this->getSystemid() == "") {
             //show groups
-            $arrUsers = UserGroup::getObjectListFiltered();
-            $strReturn .= $this->objToolkit->listHeader();
-            foreach ($arrUsers as $objSingleGroup) {
-                $strAction = "";
-                $strAction .= $this->objToolkit->listButton(
-                    Link::getLinkAdmin(
-                        "user",
-                        "userBrowser",
-                        "&form_element=".$this->getParam("form_element")."&systemid=".$objSingleGroup->getSystemid()."&filter=".$this->getParam("filter")."&checkid=".$this->getParam("checkid"),
-                        $this->getLang("user_browser_show"),
-                        $this->getLang("user_browser_show"),
-                        "icon_folderActionOpen"
-                    )
-                );
-
-                if ($this->getParam("allowGroup") == "1") {
-                    $strAction .= $this->objToolkit->listButton(
-                        "<a href=\"#\" title=\"".$this->getLang("group_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strFormElement."', '".addslashes($objSingleGroup->getStrName())."'], ['".$strFormElement."_id', '".$objSingleGroup->getSystemid()."']]);\">".getImageAdmin("icon_accept")
-                    );
-                }
-
-                $strReturn .= $this->objToolkit->simpleAdminList($objSingleGroup, $strAction);
-
-            }
-        }
-        else {
-            //show members of group
-            $objGroup = new UserGroup($this->getSystemid());
-            $arrUsers = $objGroup->getObjSourceGroup()->getUserIdsForGroup();
-            $strReturn .= $this->objToolkit->listHeader();
-
-            $strReturn .= $this->objToolkit->genericAdminList(
-                generateSystemid(),
-                "",
-                "",
-                $this->objToolkit->listButton(
-                    Link::getLinkAdmin(
-                        $this->getArrModule("modul"),
-                        "userBrowser",
-                        "&form_element=".$this->getParam("form_element")."&filter=".$this->getParam("filter")."&allowGroup=".$this->getParam("allowGroup")."&checkid=".$this->getParam("checkid"),
-                        $this->getLang("user_list_parent"),
-                        $this->getLang("user_list_parent"),
-                        "icon_folderActionLevelup"
-                    )
+            $objIterator = new ArraySectionIterator(UserGroup::getObjectCountFiltered());
+            $objIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+            $objIterator->setArraySection(
+                UserGroup::getObjectListFiltered(
+                    null,
+                    "",
+                    $objIterator->calculateStartPos(),
+                    $objIterator->calculateEndPos()
                 )
             );
 
-            $strCheckId = $this->getParam("checkid");
-            $arrCheckIds = json_decode($strCheckId);
+            $strReturn .= $this->renderList($objIterator, false, "userGroupList");
+        } else {
+            //show members of group
+            $objGroup = new UserGroup($this->getSystemid());
+            $objSourceGroup = $objGroup->getObjSourceGroup();
 
+            $objIterator = new ArraySectionIterator($objSourceGroup->getNumberOfMembers());
+            $objIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
 
-            foreach ($arrUsers as $strSingleUser) {
-                $objSingleUser = new UserUser($strSingleUser);
+            $arrUserIds = $objSourceGroup->getUserIdsForGroup($objIterator->calculateStartPos(), $objIterator->calculateEndPos());
+            $arrUsers = array_map(function($strUserId) { return new UserUser($strUserId); }, $arrUserIds);
 
-                $bitRenderAcceptLink = true;
-                if (!empty($arrCheckIds) && is_array($arrCheckIds)) {
+            $objIterator->setArraySection($arrUsers);
 
-                    foreach ($arrCheckIds as $strCheckId) {
-
-                        if (!$this->hasUserViewPermissions($strCheckId, $objSingleUser)) {
-                            $bitRenderAcceptLink = false;
-                            break;
-                        }
-                    }
-                }
-
-                $strAction = "";
-                if (!$bitRenderAcceptLink || $objSingleUser->getIntActive() == 0 || ($this->getParam("filter") == "current" && $objSingleUser->getSystemid() == $this->objSession->getUserID())) {
-                    $strAction .= $this->objToolkit->listButton(getImageAdmin("icon_acceptDisabled"));
-                }
-                else {
-                    $strAction .= $this->objToolkit->listButton(
-                        "<a href=\"#\" title=\"".$this->getLang("user_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strFormElement."', '".addslashes($objSingleUser->getStrUsername())."'], ['".$strFormElement."_id', '".$objSingleUser->getSystemid()."']]);\">".getImageAdmin("icon_accept")
-                    );
-                }
-                $strReturn .= $this->objToolkit->simpleAdminList($objSingleUser, $strAction);
-
-            }
+            $strReturn .= $this->renderList($objIterator, false, "userGroupUserList");
         }
 
         return $strReturn;
-
     }
 
     /**
