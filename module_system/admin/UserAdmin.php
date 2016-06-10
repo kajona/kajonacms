@@ -1499,7 +1499,7 @@ HTML;
                 )
             );
 
-            $strReturn .= $this->renderList($objIterator, false, "userGroupList");
+            $strReturn .= $this->renderList($objIterator, false, "userGroupList", false, "&form_element=".$this->getParam("form_element")."&filter=".$this->getParam("filter")."&allowGroup=".$this->getParam("allowGroup")."&checkid=".$this->getParam("checkid"));
         } else {
             //show members of group
             $objGroup = new UserGroup($this->getSystemid());
@@ -1513,7 +1513,7 @@ HTML;
 
             $objIterator->setArraySection($arrUsers);
 
-            $strReturn .= $this->renderList($objIterator, false, "userGroupUserList");
+            $strReturn .= $this->renderList($objIterator, false, "userGroupUserList", false, "&form_element=".$this->getParam("form_element")."&filter=".$this->getParam("filter")."&allowGroup=".$this->getParam("allowGroup")."&checkid=".$this->getParam("checkid"));
         }
 
         return $strReturn;
