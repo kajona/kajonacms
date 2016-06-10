@@ -30,7 +30,7 @@ class FormentryMonthYearDropdown extends FormentryDate
     private $bitRenderDay = false;
 
 
-    static function classInit()
+    public static function classInit()
     {
         if (self::$arrDropDownMonth == null) {
             self::$arrDropDownMonth = self::getArrMonths();
