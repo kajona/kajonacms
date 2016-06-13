@@ -20,7 +20,9 @@ namespace Kajona\System\System;
 class OrmInOrEmptyCondition extends OrmInCondition
 {
     const NULL_OR_EMPTY = "NULL_OR_EMPTY";
+    const NULL = "NULL";
     private $bitIncludeNullOrEmptyValues = false;
+    private $bitIncludeNullValues = false;
 
     /**
      * OrmObjectlistInOrEmptyRestriction constructor.
@@ -31,8 +33,32 @@ class OrmInOrEmptyCondition extends OrmInCondition
     {
         parent::__construct($strColumnName, $arrParams, $strInCondition);
 
-        if(in_array(self::NULL_OR_EMPTY, $this->arrParams)) {
+        $intIndex = array_search(self::NULL_OR_EMPTY, $this->arrParams);
+        if($intIndex !== false) {
             $this->bitIncludeNullOrEmptyValues = true;
+            unset($this->arrParams[$intIndex]);
+        }
+
+        $intIndex = array_search(self::NULL, $this->arrParams);
+        if($intIndex !== false) {
+            $this->bitIncludeNullValues = true;
+            unset($this->arrParams[$intIndex]);
+        }
+
+        //magic guessowrk - try to find the data-types of all params and flip the condition in case of non-string only values - then no comparison against '', plz
+        if($this->bitIncludeNullOrEmptyValues && count($this->arrParams) > 0) {
+            $bitItString = false;
+            foreach($this->arrParams as $objOneParam) {
+                if(is_string($objOneParam)) {
+                    $bitItString = true;
+                    break;
+                }
+            }
+            
+            if(!$bitItString) {
+                $this->bitIncludeNullOrEmptyValues = false;
+                $this->bitIncludeNullValues = true;
+            }
         }
     }
 
@@ -41,7 +67,17 @@ class OrmInOrEmptyCondition extends OrmInCondition
         $strWhere = parent::getStrWhere();
 
         if($this->bitIncludeNullOrEmptyValues) {
-            return "(($strWhere) OR ($this->strColumnName IS NULL) OR ($this->strColumnName = ''))";
+            if($strWhere != "") {
+                $strWhere = "({$strWhere}) OR ";
+            }
+            return "({$strWhere}($this->strColumnName IS NULL) OR ($this->strColumnName = ''))";
+        }  
+        
+        if($this->bitIncludeNullValues) {
+            if($strWhere != "") {
+                $strWhere = "({$strWhere}) OR ";
+            }
+            return "({$strWhere}$this->strColumnName IS NULL)";
         }
 
         return $strWhere;

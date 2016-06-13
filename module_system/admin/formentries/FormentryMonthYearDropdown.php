@@ -17,7 +17,8 @@ use Kajona\System\System\Date;
  * @since 4.4
  * @package module_formgenerator
  */
-class FormentryMonthYearDropdown extends FormentryDate {
+class FormentryMonthYearDropdown extends FormentryDate
+{
 
     const DAY_SUFFIX = "_day";
     const MONTH_SUFFIX = "_month";
@@ -29,11 +30,12 @@ class FormentryMonthYearDropdown extends FormentryDate {
     private $bitRenderDay = false;
 
 
-    static function classInit() {
-        if(self::$arrDropDownMonth == null) {
+    public static function classInit()
+    {
+        if (self::$arrDropDownMonth == null) {
             self::$arrDropDownMonth = self::getArrMonths();
         }
-        if(self::$arrDropDownYear == null) {
+        if (self::$arrDropDownYear == null) {
             self::$arrDropDownYear = self::getArrYear();
         }
     }
@@ -45,21 +47,23 @@ class FormentryMonthYearDropdown extends FormentryDate {
      *
      * @return string
      */
-    public function renderField() {
+    public function renderField()
+    {
         $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
 
         //create a date object if possible
         $objDate = null;
-        if($this->getStrValue() instanceof Date)
+        if ($this->getStrValue() instanceof Date) {
             $objDate = $this->getStrValue();
-        elseif($this->getStrValue() != "")
+        } elseif ($this->getStrValue() != "") {
             $objDate = new Date($this->getStrValue());
+        }
 
         //set selected value
         $intMonth = null;
         $intYear = null;
         $intDay = 1;
-        if($objDate != null) {
+        if ($objDate != null) {
             $intMonth = $objDate->getIntMonth();
             $intYear = $objDate->getIntYear();
             $intDay = $objDate->getIntDay();
@@ -67,18 +71,17 @@ class FormentryMonthYearDropdown extends FormentryDate {
 
         //create hint and form elements
         $strReturn = "";
-        if($this->getStrHint() != null) {
+        if ($this->getStrHint() != null) {
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
         }
 
-        if($this->bitRenderDay) {
+        if ($this->bitRenderDay) {
             $strReturn .= $objToolkit->formInputText($this->getStrEntryName()."ph", $this->getStrLabel(), $intDay, "", "", true);
             $strReturn .= $objToolkit->formInputHidden($this->getStrEntryName().self::DAY_SUFFIX, $intDay);
-        }
-        else {
+        } else {
             $strReturn .= $objToolkit->formInputHidden($this->getStrEntryName().self::DAY_SUFFIX, $intDay);
         }
-        $strReturn .=  $objToolkit->formInputDropdown(
+        $strReturn .= $objToolkit->formInputDropdown(
             $this->getStrEntryName().self::MONTH_SUFFIX,
             self::$arrDropDownMonth,
             $this->bitRenderDay ? "" : $this->getStrLabel(),
@@ -87,7 +90,7 @@ class FormentryMonthYearDropdown extends FormentryDate {
             !$this->getBitReadonly()
         );
 
-        $strReturn .=  $objToolkit->formInputDropdown(
+        $strReturn .= $objToolkit->formInputDropdown(
             $this->getStrEntryName().self::YEAR_SUFFIX,
             self::$arrDropDownYear,
             "",
@@ -95,6 +98,14 @@ class FormentryMonthYearDropdown extends FormentryDate {
             "",
             !$this->getBitReadonly()
         );
+
+        if($this->getBitMandatory()) {
+            $strReturn .= "<script type='text/javascript'>
+                $(document).ready(function () {
+                    KAJONA.admin.forms.renderMandatoryFields([[ '".$this->getStrEntryName().self::MONTH_SUFFIX."', '' ], ['".$this->getStrEntryName().self::YEAR_SUFFIX."' ,  '' ]]); 
+                });
+            </script>";
+        }
 
         return $strReturn;
     }
@@ -111,14 +122,15 @@ class FormentryMonthYearDropdown extends FormentryDate {
      *
      * @return array
      */
-    private static function getArrMonths() {
+    private static function getArrMonths()
+    {
         $strMonthNames = Carrier::getInstance()->getObjLang()->getLang("toolsetCalendarMonth", "system");
         $strMonthNames = uniStrReplace("\"", "", $strMonthNames);
         $arrMonthNames = explode(",", $strMonthNames);
 
         $arrDropDownMonth = array();
-        for($intI = 0; $intI < count($arrMonthNames); $intI++) {
-            $arrDropDownMonth[($intI+1).""] = $arrMonthNames[$intI];
+        for ($intI = 0; $intI < count($arrMonthNames); $intI++) {
+            $arrDropDownMonth[($intI + 1).""] = $arrMonthNames[$intI];
         }
 
         return $arrDropDownMonth;
@@ -129,10 +141,11 @@ class FormentryMonthYearDropdown extends FormentryDate {
      *
      * @return array
      */
-    private static function getArrYear() {
+    private static function getArrYear()
+    {
         $arrDropDownYear = array();
 
-        for($intI = 2000; $intI < 2100; $intI++ ) {
+        for ($intI = 2000; $intI < 2100; $intI++) {
             $arrDropDownYear[$intI.""] = $intI;
         }
 
@@ -142,23 +155,25 @@ class FormentryMonthYearDropdown extends FormentryDate {
     /**
      * @return boolean
      */
-    public function isBitRenderDay() {
+    public function isBitRenderDay()
+    {
         return $this->bitRenderDay;
     }
 
     /**
      * @param boolean $bitRenderDay
      */
-    public function setBitRenderDay($bitRenderDay) {
+    public function setBitRenderDay($bitRenderDay)
+    {
         $this->bitRenderDay = $bitRenderDay;
     }
 
     public function validateValue()
     {
-        if($this->getBitMandatory()) {
+        if ($this->getBitMandatory()) {
             $arrParams = Carrier::getAllParams();
 
-            if (array_key_exists($this->getStrEntryName() . self::DAY_SUFFIX, $arrParams)
+            if (array_key_exists($this->getStrEntryName().self::DAY_SUFFIX, $arrParams)
 
             ) {
                 $objDate = new Date("0");

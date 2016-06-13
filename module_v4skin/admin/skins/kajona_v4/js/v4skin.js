@@ -39,7 +39,6 @@ $(function () {
         minLength: 2,
         delay: 500,
 
-        //source: '_skinwebpath_/search.json',
         source: function(request, response) {
             $.ajax({
                 url: KAJONA_WEBPATH+'/xml.php?admin=1',

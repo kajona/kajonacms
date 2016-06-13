@@ -7,6 +7,7 @@
 namespace Kajona\System\Admin\Formentries;
 
 use Kajona\System\Admin\FormentryPrintableInterface;
+use Kajona\System\System\AdminskinHelper;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Link;
@@ -186,6 +187,9 @@ class FormentryObjectlist extends FormentryBase implements FormentryPrintableInt
                             }
                         }
                         $strHtml .= $strTitle."<br/>\n";
+                    }
+                    else {
+                        $strHtml .= AdminskinHelper::getAdminImage("icon_lockerClosed")." ".Carrier::getInstance()->getObjLang()->getLang("commons_error_permissions", "system")."<br/>\n";
                     }
                 }
                 else {

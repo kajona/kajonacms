@@ -15,9 +15,7 @@ use Kajona\Search\System\SearchSearch;
 use Kajona\System\Admin\AdminFormgenerator;
 use Kajona\System\Admin\AdminInterface;
 use Kajona\System\Admin\AdminSimple;
-use Kajona\System\Admin\Formentries\FormentryCheckbox;
 use Kajona\System\Admin\Formentries\FormentryHidden;
-use Kajona\System\Admin\Formentries\FormentryPlaintext;
 use Kajona\System\System\AdminListableInterface;
 use Kajona\System\System\AdminskinHelper;
 use Kajona\System\System\ArraySectionIterator;
@@ -129,9 +127,6 @@ class SearchAdmin extends AdminSimple implements AdminInterface
             }
 
             $objForm->updateSourceObject();
-            if ($this->getParam("search_filter_all") != "") {
-                $objSearch->setStrInternalFilterModules("-1");
-            }
 
             $objSearch->updateObjectToDb();
 
@@ -175,7 +170,7 @@ class SearchAdmin extends AdminSimple implements AdminInterface
         $objForm->updateSourceObject();
 
 
-        if ($this->getParam("filtermodules") == "" && $this->getParam("search_filter_all") == "") {
+        if ($this->getParam("filtermodules") == "") {
             $arrNrs = array_keys($objSearch->getPossibleModulesForFilter());
             $intSearch = array_search(SystemModule::getModuleByName("messaging")->getIntNr(), $arrNrs);
             if ($intSearch !== false) {
@@ -187,10 +182,6 @@ class SearchAdmin extends AdminSimple implements AdminInterface
 
         if ($this->getParam("filtermodules") != "") {
             $objSearch->setStrInternalFilterModules($this->getParam("filtermodules"));
-        }
-
-        if ($this->getParam("search_filter_all") != "") {
-            $objSearch->setStrInternalFilterModules("-1");
         }
 
         // Search Form
@@ -353,7 +344,7 @@ class SearchAdmin extends AdminSimple implements AdminInterface
 
         $objSearchFunc = function (SearchResult $objA, SearchResult $objB) {
             //first by module, second by score
-            if ($objA->getObjObject() instanceof \Kajona\System\System\Model && $objB->getObjObject() instanceof \Kajona\System\System\Model) {
+            if ($objA->getObjObject() instanceof Model && $objB->getObjObject() instanceof Model) {
                 $intCmp = strcmp($objA->getObjObject()->getArrModule("modul"), $objB->getObjObject()->getArrModule("modul"));
 
                 if ($intCmp != 0) {
@@ -493,34 +484,15 @@ class SearchAdmin extends AdminSimple implements AdminInterface
         $arrFilterModules = $objSearch->getPossibleModulesForFilter();
         $objForm->getField("formfiltermodules")->setArrKeyValues($arrFilterModules);
 
-        $objForm->addField(new FormentryCheckbox("search", "filter_all"))
-            ->setStrLabel($this->getLang("select_all"))
-            ->setStrValue($objSearch->getStrInternalFilterModules() == "-1" || $objSearch->getStrInternalFilterModules() == "");
-        $objForm->setFieldToPosition("search_filter_all", 3);
 
         $bitVisible = $objSearch->getObjChangeEnddate() != null || $objSearch->getObjChangeStartdate() != null;
 
         $objForm->setStrHiddenGroupTitle($this->getLang("form_additionalheader"));
         $objForm->addFieldToHiddenGroup($objForm->getField("formfiltermodules"));
         $objForm->addFieldToHiddenGroup($objForm->getField("formfilteruser"));
-        $objForm->addFieldToHiddenGroup($objForm->getField("search_filter_all"));
         $objForm->addFieldToHiddenGroup($objForm->getField("changestartdate"));
         $objForm->addFieldToHiddenGroup($objForm->getField("changeenddate"));
         $objForm->setBitHiddenElementsVisible($bitVisible);
-
-
-        //add js-code for enabling and disabling multiselect box for modules
-        $strCore = Resourceloader::getInstance()->getCorePathForModule("module_search");
-        $strJS = <<<JS
-            KAJONA.admin.loader.loadFile('{$strCore}/module_search/admin/scripts/search.js', function() {
-                    KAJONA.admin.search.switchFilterAllModules();
-                    $('#search_filter_all').click(function() {KAJONA.admin.search.switchFilterAllModules()});
-
-                });
-JS;
-        $strPlain = "<script type='text/javascript'>".$strJS."</script>";
-        $objForm->addField(new FormentryPlaintext())->setStrValue($strPlain);
-
 
         return $objForm;
     }

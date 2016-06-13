@@ -9,19 +9,6 @@ if (!KAJONA) {
 
 KAJONA.admin.search = {
 
-    /**
-     * Enables or disables the field "search_formfiltermodules" depending on the field "search_filter_all".
-     *
-     */
-    switchFilterAllModules : function() {
-        var checkBox = $($('#search_filter_all')[0]);
-        if(checkBox.is(':checked')) {
-            $("input[name=search_formfiltermodules\\[\\]]").closest("label").addClass("disabled");
-        }
-        else {
-            $("input[name=search_formfiltermodules\\[\\]]").closest("label").removeClass("disabled");
-        }
-    },
 
     triggerFullSearch : function() {
 
@@ -40,9 +27,6 @@ KAJONA.admin.search = {
             filtermodules += ($(this).val());
         });
 
-        if($('#search_filter_all').prop('checked')) {
-            filtermodules = "";
-        }
         var startdate = $('#search_changestartdate').val();
         var enddate = $('#search_changeenddate').val();
         var userfilter = $('#search_formfilteruser_id').val();

@@ -88,6 +88,29 @@ class Resourceloader
         }
 
         $strFilename = null;
+
+
+        //check the backend at first to avoid garbled paths
+        if ($bitScanAdminSkin) {
+            //scan directly
+            if (is_file($strTemplateName)) {
+                $strFilename = $strTemplateName;
+            }
+
+            //prepend path
+            if (is_file(AdminskinHelper::getPathForSkin(Session::getInstance()->getAdminSkin()).$strTemplateName)) {
+                $strFilename = AdminskinHelper::getPathForSkin(Session::getInstance()->getAdminSkin()).$strTemplateName;
+            }
+
+            if ($strFilename !== null) {
+                BootstrapCache::getInstance()->addCacheRow(BootstrapCache::CACHE_TEMPLATES, $strTemplateName, $strFilename);
+                return $strFilename;
+            }
+
+        }
+
+
+
         //first try: load the file in the current template-pack
         $strDefaultTemplate = SystemSetting::getConfigValue("_packagemanager_defaulttemplate_");
         if (is_file(_realpath_._templatepath_."/".$strDefaultTemplate."/tpl".$strTemplateName)) {
@@ -103,46 +126,27 @@ class Resourceloader
 
         //third try: try to load the file from a given module
         foreach (Classloader::getInstance()->getArrModules() as $strCorePath => $strOneModule) {
-            if (is_dir(_realpath_."/".$strCorePath)) {
-                if (is_file(_realpath_."/".$strCorePath."/templates/default/tpl".$strTemplateName)) {
-                    $strFilename = _realpath_."/".$strCorePath."/templates/default/tpl".$strTemplateName;
+            if (is_dir(_realpath_.$strCorePath)) {
+                if (is_file(_realpath_.$strCorePath."/templates/default/tpl".$strTemplateName)) {
+                    $strFilename = _realpath_.$strCorePath."/templates/default/tpl".$strTemplateName;
                     break;
                 }
-                if (is_file(_realpath_."/".$strCorePath.$strTemplateName)) {
-                    $strFilename = _realpath_."/".$strCorePath.$strTemplateName;
+                if (is_file(_realpath_.$strCorePath.$strTemplateName)) {
+                    $strFilename = _realpath_.$strCorePath.$strTemplateName;
                     break;
                 }
-            } elseif (PharModule::isPhar(_realpath_."/".$strCorePath)) {
-                $strAbsolutePath = PharModule::getPharStreamPath(_realpath_."/".$strCorePath, "/templates/default/tpl".$strTemplateName);
+            } elseif (PharModule::isPhar(_realpath_.$strCorePath)) {
+                $strAbsolutePath = PharModule::getPharStreamPath(_realpath_.$strCorePath, "/templates/default/tpl".$strTemplateName);
                 if (is_file($strAbsolutePath)) {
                     $strFilename = $strAbsolutePath;
                     break;
                 }
 
-                $strAbsolutePath = PharModule::getPharStreamPath(_realpath_."/".$strCorePath, $strTemplateName);
+                $strAbsolutePath = PharModule::getPharStreamPath(_realpath_.$strCorePath, $strTemplateName);
                 if (is_file($strAbsolutePath)) {
                     $strFilename = $strAbsolutePath;
                     break;
                 }
-            }
-        }
-
-        if($strFilename !== null) {
-            BootstrapCache::getInstance()->addCacheRow(BootstrapCache::CACHE_TEMPLATES, $strTemplateName, $strFilename);
-            return $strFilename;
-        }
-
-
-
-        if ($bitScanAdminSkin) {
-            //scan directly
-            if (is_file($strTemplateName)) {
-                $strFilename = $strTemplateName;
-            }
-
-            //prepend path
-            if (is_file(AdminskinHelper::getPathForSkin(Session::getInstance()->getAdminSkin()).$strTemplateName)) {
-                $strFilename = AdminskinHelper::getPathForSkin(Session::getInstance()->getAdminSkin()).$strTemplateName;
             }
         }
 
@@ -262,7 +266,7 @@ class Resourceloader
                         $arrReturn[$strPharPath] = basename($strPharPath);
                     }
                 }
-                
+
             } elseif (is_dir(_realpath_."/".$strCorePath._langpath_."/".$strFolder)) {
                 $arrContent = scandir(_realpath_."/".$strCorePath._langpath_."/".$strFolder);
                 foreach ($arrContent as $strSingleEntry) {

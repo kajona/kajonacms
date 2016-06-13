@@ -14,7 +14,7 @@ class PharCreator
 {
 
     public $strDeployPath = "";
-//    public $strDeployPath = "/Users/sidler/web/kajona_phar_only";
+//    public $strDeployPath = "/Users/sidler/web/kajona_build/kajona";
 
     public $bitRemoveSource = false;
 
@@ -37,6 +37,10 @@ class PharCreator
 
                     $strModuleName = substr($strFile, 7);
                     $strPharName = "module_".$strModuleName.".phar";
+                    
+//                    if($strModuleName != "system") {
+//                        continue;
+//                    }
 
                     $strTargetPath = __DIR__."/../".$strOneCore."/".$strPharName;
                     if ($this->strDeployPath != "" && is_dir($this->strDeployPath."/".$strOneCore)) {
