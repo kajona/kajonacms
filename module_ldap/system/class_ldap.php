@@ -63,6 +63,10 @@ class class_ldap
         if ($this->objCx == null) {
             $this->objCx = ldap_connect($this->arrConfig["ldap_server"], $this->arrConfig["ldap_port"]);
 
+            //set options to avoid errors with references on top-level
+            ldap_set_option($this->objCx, LDAP_OPT_REFERRALS, 0);
+            ldap_set_option($this->objCx, LDAP_OPT_PROTOCOL_VERSION, 3);
+
             class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("new ldap-connection to ".$this->arrConfig["ldap_server"].":".$this->arrConfig["ldap_port"], class_logger::$levelInfo);
 
             $this->internalBind();
@@ -336,7 +340,7 @@ class class_ldap
                 "loading of user failed: ".ldap_errno($this->objCx)." # ".ldap_error($this->objCx)." \n Username: ".utf8_decode($strUsername)." Userfilter: ".$this->arrConfig["ldap_user_filter"],
                 class_logger::$levelError
             );
-            throw new class_exception("loading of user failed: ".ldap_errno($this->objCx)." # ".ldap_error($this->objCx), class_exception::$level_FATALERROR);
+            throw new class_exception("loading of user by dn failed: ".ldap_errno($this->objCx)." # ".ldap_error($this->objCx), class_exception::$level_FATALERROR);
         }
 
         return $arrReturn;
@@ -389,7 +393,7 @@ class class_ldap
                 class_logger::$levelError
             );
 
-            throw new class_exception("loading of user failed: ".ldap_errno($this->objCx)." # ".ldap_error($this->objCx), class_exception::$level_FATALERROR);
+            throw new class_exception("loading of user by name failed: ".ldap_errno($this->objCx)." # ".ldap_error($this->objCx), class_exception::$level_FATALERROR);
         }
 
         return $arrReturn;
