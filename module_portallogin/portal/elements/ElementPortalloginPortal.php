@@ -318,11 +318,8 @@ class ElementPortalloginPortal extends ElementPortal implements PortalElementInt
                 $arrTemplate["mobile"] = $objUser->getObjSourceUser()->getStrMobile();
                 $arrTemplate["portallogin_elsystemid"] = $this->arrElementData["content_id"];
 
-                $objDate = new \Kajona\System\System\Date($objUser->getObjSourceUser()->getLongDate());
 
-                $arrTemplate["date_day"] = $objDate->getIntDay();
-                $arrTemplate["date_month"] = $objDate->getIntMonth();
-                $arrTemplate["date_year"] = $objDate->getIntYear();
+
                 $arrTemplate["formaction"] = Link::getLinkPortalHref($this->getPagename(), "", "portalEditProfile");
 
                 $arrTemplate["formErrors"] = "";
@@ -355,12 +352,7 @@ class ElementPortalloginPortal extends ElementPortal implements PortalElementInt
                     $objUser->getObjSourceUser()->setStrTel($this->getParam("phone"));
                     $objUser->getObjSourceUser()->setStrMobile($this->getParam("mobile"));
 
-                    $objDate = new \Kajona\System\System\Date();
-                    $objDate->setIntDay($this->getParam("date_day"));
-                    $objDate->setIntMonth($this->getParam("date_month"));
-                    $objDate->setIntYear($this->getParam("date_year"));
 
-                    $objUser->getObjSourceUser()->setLongDate($objDate->getLongTimestamp());
                 }
 
                 $objUser->getObjSourceUser()->updateObjectToDb();

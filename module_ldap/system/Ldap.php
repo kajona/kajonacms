@@ -70,6 +70,10 @@ class Ldap
         if ($this->objCx == null) {
             $this->objCx = ldap_connect($this->arrConfig["ldap_server"], $this->arrConfig["ldap_port"]);
 
+            //set options to avoid errors with references on top-level
+            ldap_set_option($this->objCx, LDAP_OPT_REFERRALS, 0);
+            ldap_set_option($this->objCx, LDAP_OPT_PROTOCOL_VERSION, 3);
+
             Logger::getInstance(Logger::USERSOURCES)->addLogRow("new ldap-connection to " . $this->arrConfig["ldap_server"] . ":" . $this->arrConfig["ldap_port"], Logger::$levelInfo);
 
             $this->internalBind();
