@@ -413,7 +413,13 @@ abstract class AdminEvensimpler extends AdminSimple
 
                 $this->setSystemid($objRecord->getStrSystemid());
 
-                $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), $this->getActionNameForClass("list", $objRecord), "&systemid=".$objRecord->getStrPrevId().($this->getParam("pe") != "" ? "&peClose=1&blockAction=1" : "")));
+                //Check if save reload param is set
+                $strReloadAction = $this->getParam(AdminFormgenerator::STR_FORM_ON_SAVE_RELOAD_PARAM);
+                if($strReloadAction == "") {
+                    $strReloadAction = Link::getLinkAdminHref($this->getArrModule("modul"), $this->getActionNameForClass("list", $objRecord), "&systemid=" . $objRecord->getStrPrevId() . ($this->getParam("pe") != "" ? "&peClose=1&blockAction=1" : ""));
+                }
+
+                $this->adminReload($strReloadAction);
                 return "";
             }
         }

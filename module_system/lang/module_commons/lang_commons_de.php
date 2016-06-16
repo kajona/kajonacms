@@ -76,6 +76,7 @@ $lang["commons_result_page"]             = "Treffer-Seite";
 $lang["commons_save"]                    = "Speichern";
 $lang["commons_cancel"]                  = "Abbrechen";
 $lang["commons_back"]                    = "Zurück";
+$lang["commons_savenext"]                = "Speichern & Weiter";
 $lang["commons_select_all"]              = "Alle auswählen";
 $lang["commons_show_selected_only"]      = "Nur selektierte anzeigen";
 $lang["commons_sort_totree"]             = "Übergeordneten Knoten durch Fallenlassen im Baum anpassen";

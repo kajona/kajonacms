@@ -65,9 +65,12 @@ class AdminFormgenerator
     const  BIT_BUTTON_RESET = 64;
     const  BIT_BUTTON_CONTINUE = 128;
     const  BIT_BUTTON_BACK = 256;
+    const  BIT_BUTTON_SAVENEXT = 512;
 
     const FORM_ENCTYPE_MULTIPART = "multipart/form-data";
     const FORM_ENCTYPE_TEXTPLAIN = "text/plain";
+
+    const STR_FORM_ON_SAVE_RELOAD_PARAM = "onsavereloadaction";
 
     /**
      * The list of form-entries
@@ -101,6 +104,22 @@ class AdminFormgenerator
     private $strOnSubmit = "";
     private $strMethod = "POST";
     private $objLang;
+
+
+    /**
+     * After save action is being called, this URL will used for the reload URL
+     *
+     * @var null
+     */
+    private $strOnSaveRedirectUrl = null;//
+
+    /**
+     * A list of buttons to attach to the end of the form.
+     * pass them single or combined by a bitwise OR, e.g. AdminFormgenerator::BIT_BUTTON_SAVE | AdminFormgenerator::$BIT_BUTTON_CANCEL
+     *
+     * @var null
+     */
+    private $intButtonConfig = null;
 
     /**
      * Creates a new instance of the form-generator.
@@ -252,17 +271,26 @@ class AdminFormgenerator
     {
         $strReturn = "";
 
-        //add a hidden systemid-field
+        /*add a hidden systemid-field*/
         if ($this->objSourceobject != null && $this->objSourceobject instanceof Model) {
             $objField = new FormentryHidden($this->strFormname, "systemid");
             $objField->setStrEntryName("systemid")->setStrValue($this->objSourceobject->getSystemid())->setObjValidator(new SystemidValidator());
             $this->addField($objField);
         }
 
+        /*add reload URL param*/
+        if ($this->strOnSaveRedirectUrl != "") {
+            $objField = new FormentryHidden($this->strFormname, self::STR_FORM_ON_SAVE_RELOAD_PARAM);
+            $objField->setStrEntryName(self::STR_FORM_ON_SAVE_RELOAD_PARAM)->setStrValue($this->strOnSaveRedirectUrl);
+            $this->addField($objField);
+        }
+
+        /*generate form name*/
         $strGeneratedFormname = $this->strFormname;
         if ($strGeneratedFormname == null) {
             $strGeneratedFormname = "form" . generateSystemid();
         }
+        
         $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         if ($strTargetURI !== null) {
             $strReturn .= $objToolkit->formHeader($strTargetURI, $strGeneratedFormname, $this->strFormEncoding, $this->strOnSubmit, $this->strMethod);
@@ -282,7 +310,13 @@ class AdminFormgenerator
             $strReturn .= $objToolkit->formOptionalElementsWrapper($strHidden, $this->strHiddenGroupTitle, $this->bitHiddenElementsVisible);
         }
 
+        /*Render form buttons*/
         $strButtons = "";
+
+        //Check if class property is set
+        if($this->intButtonConfig !== null) {
+            $intButtonConfig = $this->intButtonConfig;
+        }
 
         if ($intButtonConfig & self::BIT_BUTTON_SUBMIT) {
             $strButtons .= $objToolkit->formInputSubmit(Lang::getInstance()->getLang("commons_submit", "system"), "submitbtn", "", "", true, false);
@@ -314,6 +348,10 @@ class AdminFormgenerator
 
         if ($intButtonConfig & self::BIT_BUTTON_BACK) {
             $strButtons .= $objToolkit->formInputSubmit(Lang::getInstance()->getLang("commons_back", "system"), "backbtn", "", "", true, false);
+        }
+
+        if ($intButtonConfig & self::BIT_BUTTON_SAVENEXT) {
+            $strButtons .= $objToolkit->formInputSubmit(Lang::getInstance()->getLang("commons_savenext", "system"), "savenextbtn", "", "", true, false);
         }
 
         $strReturn .= $objToolkit->formInputButtonWrapper($strButtons);
@@ -857,5 +895,37 @@ class AdminFormgenerator
     public function getStrMethod()
     {
         return $this->strMethod;
+    }
+
+    /**
+     * @return null
+     */
+    public function getStrOnSaveRedirectUrl()
+    {
+        return $this->strOnSaveRedirectUrl;
+    }
+
+    /**
+     * @param null $strOnSaveRedirectUrl
+     */
+    public function setStrOnSaveRedirectUrl($strOnSaveRedirectUrl)
+    {
+        $this->strOnSaveRedirectUrl = $strOnSaveRedirectUrl;
+    }
+
+    /**
+     * @return null
+     */
+    public function getIntButtonConfig()
+    {
+        return $this->intButtonConfig;
+    }
+
+    /**
+     * @param null $intButtonConfig
+     */
+    public function setIntButtonConfig($intButtonConfig)
+    {
+        $this->intButtonConfig = $intButtonConfig;
     }
 }
