@@ -72,6 +72,16 @@ abstract class Adminwidget
     }
 
     /**
+     * Use this method to add a key
+     *
+     * @param string $strKey
+     */
+    protected final function addPersistenceKey($strKey)
+    {
+        $this->arrPersistenceKeys[] = $strKey;
+    }
+
+    /**
      * This method invokes the rendering of the widget. Calls
      * the implementing class.
      *
