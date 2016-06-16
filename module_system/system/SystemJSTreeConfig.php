@@ -25,7 +25,7 @@ class SystemJSTreeConfig
     const STR_CONTEXTMENU_OPEN_ALL_NODES = "OPEN_ALL_NODES";
 
     /**
-     * The rrot id of the tree
+     * The root id of the tree
      *
      * @var null
      */
