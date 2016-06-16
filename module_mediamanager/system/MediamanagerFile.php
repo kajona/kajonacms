@@ -111,6 +111,8 @@ class MediamanagerFile extends \Kajona\System\System\Model implements \Kajona\Sy
      * @var int
      * @tableColumn mediamanager_file.file_ispackage
      * @tableColumnDatatype int
+     *
+     * @addSearchIndex
      */
     private $bitIspackage = 0;
 
@@ -118,6 +120,8 @@ class MediamanagerFile extends \Kajona\System\System\Model implements \Kajona\Sy
      * @var int
      * @tableColumn mediamanager_file.file_cat
      * @tableColumnDatatype char254
+     *
+     * @addSearchIndex
      */
     private $strCat = "";
 
