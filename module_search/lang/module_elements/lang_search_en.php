@@ -14,3 +14,5 @@
 $lang["element_search_name"]             = "Search";
 $lang["search_amount"]                   = "Number of hits per page";
 $lang["search_search"]                   = "Search";
+$lang["search_append"]                   = "Additional queries";
+$lang["search_append_hint"]              = "Appended to the term internally, not in ajax mode";

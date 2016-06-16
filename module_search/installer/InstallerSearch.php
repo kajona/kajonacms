@@ -14,6 +14,7 @@ use Kajona\Pages\System\PagesElement;
 use Kajona\Search\System\SearchIndexwriter;
 use Kajona\Search\System\SearchSearch;
 use Kajona\System\System\Carrier;
+use Kajona\System\System\DbDatatypes;
 use Kajona\System\System\Filesystem;
 use Kajona\System\System\InstallerBase;
 use Kajona\System\System\InstallerRemovableInterface;
@@ -196,6 +197,11 @@ class InstallerSearch extends InstallerBase implements InstallerRemovableInterfa
             $this->updateElementVersion("search", "5.0");
         }
 
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.0") {
+            $strReturn .= $this->update_50_51();
+        }
+
         if($this->bitIndexRebuild) {
             $strReturn .= "Rebuilding search index...\n";
             $this->updateIndex();
@@ -265,6 +271,21 @@ class InstallerSearch extends InstallerBase implements InstallerRemovableInterfa
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("search", "4.6.1");
         $this->updateElementVersion("search", "4.6.1");
+
+        return $strReturn;
+
+    }
+    private function update_50_51() {
+        $strReturn = "Updating to 5.1...\n";
+        $strReturn .= "Updating element table...";
+
+
+        if(!$this->objDB->addColumn("element_search", "search_query_append", DbDatatypes::STR_TYPE_CHAR254))
+            $strReturn .= "An error occurred! ...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("search", "5.1");
+        $this->updateElementVersion("search", "5.1");
 
         return $strReturn;
 

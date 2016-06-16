@@ -217,6 +217,7 @@ class MediamanagerFile extends \Kajona\System\System\Model implements \Kajona\Sy
                 $objCurResult = clone($objResult);
                 $objCurResult->setStrPagelink(Link::getLinkPortal($objCur->getStrName(), "", "_self", $this->getStrDisplayName(), "mediaFolder", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8")), $this->getPrevId(), "", "", $this->getStrDisplayName()));
                 $objCurResult->setStrPagename($objCur->getStrName());
+                $objCurResult->setStrAdditionalTitle($this->getStrName());
                 $objCurResult->setStrDescription($this->getStrDescription());
                 $arrReturn[] = $objCurResult;
 

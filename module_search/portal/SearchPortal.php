@@ -52,6 +52,15 @@ class SearchPortal extends PortalController implements PortalInterface
         if ($this->getParam("searchterm") != "") {
             $this->objSearchSearch->setStrQuery(htmlToString(urldecode($this->getParam("searchterm")), true));
         }
+
+        if($this->getParam("searchmodule") != "") {
+            $this->objSearchSearch->setFilterModules(array(urldecode($this->getParam("searchmodule"))));
+        }
+
+        if($this->arrElementData["search_query_append"] != "") {
+            $this->objSearchSearch->setStrQuery($this->arrElementData["search_query_append"]." ".$this->objSearchSearch->getStrQuery());
+        }
+
     }
 
 
@@ -75,6 +84,7 @@ class SearchPortal extends PortalController implements PortalInterface
         }
 
         $arrTemplate["action"] = Link::getLinkPortalHref($strPage, "", "search");
+        $arrTemplate["search_term"] = htmlToString(urldecode($this->getParam("searchterm")), true);
         return $this->objTemplate->fillTemplateFile($arrTemplate, "/module_search/".$this->arrElementData["search_template"], "search_form");
     }
 
@@ -113,7 +123,7 @@ class SearchPortal extends PortalController implements PortalInterface
             $this->getLang("commons_back"),
             "search",
             ($this->arrElementData["search_page"] != "" ? $this->arrElementData["search_page"] : $this->getPagename()),
-            "&searchterm=".urlencode(html_entity_decode($this->objSearchSearch->getStrQuery(), ENT_COMPAT, "UTF-8")),
+            "&searchterm=".urlencode(html_entity_decode(htmlToString(urldecode($this->getParam("searchterm")), true), ENT_COMPAT, "UTF-8")),
             "pv",
             "/module_search/".$this->arrElementData["search_template"]
 
@@ -139,18 +149,20 @@ class SearchPortal extends PortalController implements PortalInterface
                     "_self",
                     $objHit->getStrPagename(),
                     "",
-                    "&highlight=".urlencode(html_entity_decode($this->objSearchSearch->getStrQuery(), ENT_QUOTES, "UTF-8"))."#".uniStrtolower(urlencode(html_entity_decode($this->objSearchSearch->getStrQuery(), ENT_QUOTES, "UTF-8")))
+                    "&highlight=".urlencode(html_entity_decode(htmlToString(urldecode($this->getParam("searchterm")), true), ENT_QUOTES, "UTF-8"))."#".uniStrtolower(urlencode(html_entity_decode(htmlToString(urldecode($this->getParam("searchterm")), true), ENT_QUOTES, "UTF-8")))
                 );
             }
             else {
                 $arrRow["page_link"] = $objHit->getStrPagelink();
             }
             $arrRow["page_description"] = uniStrTrim($objHit->getStrDescription(), 200);
+            $arrRow["additionaltitle"] = $objHit->getStrAdditionalTitle();
+            $arrRow["systemid"] = $objHit->getStrSystemid();
             $arrTemplate["hitlist"] .= $this->objTemplate->fillTemplateFile($arrRow, "/module_search/".$this->arrElementData["search_template"], "search_hitlist_hit", false);
         }
 
         //Collect global data
-        $arrTemplate["search_term"] = $this->objSearchSearch->getStrQuery();
+        $arrTemplate["search_term"] = htmlToString(urldecode($this->getParam("searchterm")), true);
         $arrTemplate["search_nrresults"] = count($arrHitsSorted);
         $arrTemplate["link_forward"] = $arrHitsFilter["strForward"];
         $arrTemplate["link_back"] = $arrHitsFilter["strBack"];

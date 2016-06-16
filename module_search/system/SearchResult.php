@@ -29,6 +29,7 @@ class SearchResult
     private $intScore = 0;
     private $strSystemid;
     private $strPagelink;
+    private $strAdditionalTitle;
     private $strPagename;
     private $strDescription;
     private $objObject = null;
@@ -216,6 +217,22 @@ class SearchResult
     public function getObjSearch()
     {
         return $this->objSearch;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStrAdditionalTitle()
+    {
+        return $this->strAdditionalTitle;
+    }
+
+    /**
+     * @param mixed $strAdditionalTitle
+     */
+    public function setStrAdditionalTitle($strAdditionalTitle)
+    {
+        $this->strAdditionalTitle = $strAdditionalTitle;
     }
 
 

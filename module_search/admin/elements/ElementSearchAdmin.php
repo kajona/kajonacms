@@ -22,7 +22,8 @@ use Kajona\Search\System\SearchSearch;
  * @targetTable element_search.content_id
  *
  */
-class ElementSearchAdmin extends ElementAdmin implements AdminElementInterface {
+class ElementSearchAdmin extends ElementAdmin implements AdminElementInterface
+{
 
     /**
      * @var string
@@ -69,63 +70,83 @@ class ElementSearchAdmin extends ElementAdmin implements AdminElementInterface {
 
 
     /**
+     * @var string
+     * @tableColumn element_search.search_query_append
+     * @tableColumnDatatype char254
+     *
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
+     * @fieldLabel search_append
+     *
+     */
+    private $strQueryAppend;
+
+    /**
      * @param string $strTemplate
      */
-    public function setStrTemplate($strTemplate) {
+    public function setStrTemplate($strTemplate)
+    {
         $this->strTemplate = $strTemplate;
     }
 
     /**
      * @return string
      */
-    public function getStrTemplate() {
+    public function getStrTemplate()
+    {
         return $this->strTemplate;
     }
 
     /**
      * @param string $strPage
      */
-    public function setStrPage($strPage) {
+    public function setStrPage($strPage)
+    {
         $this->strPage = $strPage;
     }
 
     /**
      * @return string
      */
-    public function getStrPage() {
+    public function getStrPage()
+    {
         return $this->strPage;
     }
 
     /**
      * @param int $intAmount
      */
-    public function setIntAmount($intAmount) {
+    public function setIntAmount($intAmount)
+    {
         $this->intAmount = $intAmount;
     }
 
     /**
      * @return int
      */
-    public function getIntAmount() {
+    public function getIntAmount()
+    {
         return $this->intAmount;
     }
 
     /**
      * @param string $strQuery
      */
-    public function setStrQuery($strQuery) {
+    public function setStrQuery($strQuery)
+    {
         $this->strQuery = $strQuery;
     }
 
     /**
      * @return string
      */
-    public function getStrQuery(){
+    public function getStrQuery()
+    {
         return $this->strQuery;
     }
 
 
-    public function getAdminForm() {
+    public function getAdminForm()
+    {
         $objForm = parent::getAdminForm();
 
         $arrRawQueries = SearchSearch::getObjectListFiltered();
@@ -138,5 +159,22 @@ class ElementSearchAdmin extends ElementAdmin implements AdminElementInterface {
 
         return $objForm;
     }
+
+    /**
+     * @return string
+     */
+    public function getStrQueryAppend()
+    {
+        return $this->strQueryAppend;
+    }
+
+    /**
+     * @param string $strQueryAppend
+     */
+    public function setStrQueryAppend($strQueryAppend)
+    {
+        $this->strQueryAppend = $strQueryAppend;
+    }
+
 
 }

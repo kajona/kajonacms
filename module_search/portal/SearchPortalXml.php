@@ -49,13 +49,21 @@ class SearchPortalXml extends PortalController implements XmlPortalInterface
             $objSearch->setStrQuery(htmlToString(urldecode($this->getParam("searchterm")), true));
         }
 
+        if($this->getParam("searchmodule") != "") {
+            $objSearch->setFilterModules(array(urldecode($this->getParam("searchmodule")), true));
+        }
+
+        if($this->getParam("additionalfilters") != "") {
+            $objSearch->setStrQuery(htmlToString(urldecode($this->getParam("additionalfilters")), true). " ".$objSearch->getStrQuery());
+        }
+
         $arrResult = array();
         $objSearchCommons = new SearchCommons();
         if ($objSearch->getStrQuery() != "") {
             $arrResult = $objSearchCommons->doPortalSearch($objSearch);
         }
 
-        $strReturn .= $this->createSearchXML($objSearch->getStrQuery(), $arrResult);
+        $strReturn .= $this->createSearchXML(htmlToString(urldecode($this->getParam("searchterm")), true), $arrResult);
 
         return $strReturn;
     }

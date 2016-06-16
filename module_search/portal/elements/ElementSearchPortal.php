@@ -23,13 +23,15 @@ use Kajona\System\System\SystemModule;
  *
  * @targetTable element_search.content_id
  */
-class ElementSearchPortal extends ElementPortal implements PortalElementInterface {
+class ElementSearchPortal extends ElementPortal implements PortalElementInterface
+{
 
 
     /**
      * @param PagesPageelement|mixed $objElementData
      */
-    public function __construct($objElementData) {
+    public function __construct($objElementData)
+    {
         parent::__construct($objElementData);
         $this->setStrCacheAddon(getPost("searchterm").getGet("searchterm"));
     }
@@ -39,11 +41,12 @@ class ElementSearchPortal extends ElementPortal implements PortalElementInterfac
      *
      * @return string
      */
-    public function loadData() {
+    public function loadData()
+    {
         $strReturn = "";
         //Load the data
         $objSearchModule = SystemModule::getModuleByName("search");
-        if($objSearchModule != null) {
+        if ($objSearchModule != null) {
             $objSearch = $objSearchModule->getPortalInstanceOfConcreteModule($this->arrElementData);
             $strReturn = $objSearch->action();
         }
