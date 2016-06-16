@@ -57,7 +57,7 @@ class SearchPortal extends PortalController implements PortalInterface
             $this->objSearchSearch->setFilterModules(array(urldecode($this->getParam("searchmodule"))));
         }
 
-        if($this->arrElementData["search_query_append"] != "") {
+        if(isset($this->arrElementData["search_query_append"]) && $this->arrElementData["search_query_append"] != "") {
             $this->objSearchSearch->setStrQuery($this->arrElementData["search_query_append"]." ".$this->objSearchSearch->getStrQuery());
         }
 
