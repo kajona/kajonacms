@@ -359,6 +359,7 @@ class MediamanagerPortal extends PortalController implements PortalInterface
         $arrDetailsTemplate["file_hits"] = $objFile->getIntHits();
         $arrDetailsTemplate["file_systemid"] = $objFile->getSystemid();
         $arrDetailsTemplate["file_elementid"] = $this->arrElementData["content_id"];
+        $arrDetailsTemplate["file_cat"] = $objFile->getStrCat();
 
         $arrDetailsTemplate["file_lmtime"] = timeToString(filemtime(_realpath_.$objFile->getStrFilename()));
         if (validateSystemid($objFile->getOwnerId())) {
@@ -369,6 +370,15 @@ class MediamanagerPortal extends PortalController implements PortalInterface
         if ($objFile->rightRight2()) {
             $arrDetailsTemplate["file_link_href"] = _webpath_."/download.php?systemid=".$objFile->getSystemid();
             $arrDetailsTemplate["file_link"] = "<a href=\""._webpath_."/download.php?systemid=".$objFile->getSystemid()."\">".$this->getLang("download_link")."</a>";
+        }
+
+        for($intI = 1; $intI <=3; $intI++) {
+            if($objFile->{"getStrScreen".$intI}() != "") {
+                $arrScreenshot = array(
+                    "screenshot_url" => $objFile->{"getStrScreen".$intI}()
+                );
+                $arrDetailsTemplate["screen_".$intI] = $this->objTemplate->fillTemplateFile($arrScreenshot, "/module_mediamanager/".$this->arrElementData["repo_template"], "detail_screenshot");
+            }
         }
 
         //if its an image, provide additional information

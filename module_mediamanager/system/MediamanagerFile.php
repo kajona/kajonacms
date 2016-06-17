@@ -399,7 +399,7 @@ class MediamanagerFile extends \Kajona\System\System\Model implements \Kajona\Sy
             $objMetadata->autoInit($this->getStrFilename());
             $this->setBitIspackage(1);
             $this->setStrName($objMetadata->getStrTitle());
-            $this->setStrDescription($objMetadata->getStrDescription());
+            $this->setStrDescription($objMetadata->getStrDescription(). "<br />Version: ".$objMetadata->getStrVersion());
             $this->setStrCat($objMetadata->getStrType());
         }
         else {
