@@ -366,7 +366,7 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
         $objManager = new PackagemanagerManager();
 
         $strReturn = $this->objToolkit->formHeadline($objHandler->getObjMetadata()->getStrTitle());
-        $strReturn .= $this->objToolkit->getTextRow($objHandler->getObjMetadata()->getStrDescription());
+        $strReturn .= $this->objToolkit->getTextRow(nl2br($objHandler->getObjMetadata()->getStrDescription()));
 
         $arrRows = array();
         $arrRows[] = array($this->getLang("package_type"), $this->getLang("type_".$objHandler->getObjMetadata()->getStrType()));
