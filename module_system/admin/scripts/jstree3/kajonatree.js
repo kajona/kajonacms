@@ -376,3 +376,17 @@ KAJONA.kajonatree.contextmenu.openAllNodes = function (data) {
         objTreeInstance.open_all(objNode);
     }
 };
+
+
+KAJONA.kajonatree.toggleTreeView = function() {
+    var $treeviewPane = $(".treeViewColumn");
+    if($treeviewPane.hasClass("col-md-4")) {
+        $treeviewPane.addClass("hidden").removeClass("col-md-4");
+        $(".treeViewContent").addClass("col-md-12").removeClass("col-md-8");
+    } else {
+        $treeviewPane.addClass("col-md-4").removeClass("hidden");
+        $(".treeViewContent").addClass("col-md-8").removeClass("col-md-12");
+    }
+
+    return false;
+};

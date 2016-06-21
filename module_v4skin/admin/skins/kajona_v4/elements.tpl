@@ -1596,6 +1596,7 @@ The language switch surrounds the buttons
             "/core/module_system/system/scripts/lang.js"
         ], function() {
 
+
             var jsTree = new KAJONA.kajonatree.jstree();
             jsTree.loadNodeDataUrl = "%%loadNodeDataUrl%%";
             jsTree.rootNodeSystemid = '%%rootNodeSystemid%%';
@@ -1609,18 +1610,17 @@ The language switch surrounds the buttons
 </tree>
 
 <treeview>
-    <table width="100%" cellpadding="3">
-        <tr>
-            <td valign="top" width="250" >
-                <div class="treeViewWrapper">
-                    %%treeContent%%
-                </div>
-            </td>
-            <td valign="top" style="border-left: 1px solid #cccccc;">
-                %%sideContent%%
-            </td>
-        </tr>
-    </table>
+    <div class="row">
+        <div class="col-md-4 treeViewColumn" >
+            <div class="treeViewWrapper">
+                %%treeContent%%
+            </div>
+        </div>
+        <div class="col-md-8 treeViewContent">
+            <div class=""><a href="#" onclick="KAJONA.kajonatree.toggleTreeView();" title="[lang,treeviewtoggle,system]" rel="tooltip"><i class="fa fa-bars"></i></a></div>
+            %%sideContent%%
+        </div>
+    </div>
 </treeview>
 
 The tag-wrapper is the section used to surround the list of tag.
