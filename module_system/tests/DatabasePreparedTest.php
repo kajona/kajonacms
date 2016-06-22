@@ -122,17 +122,18 @@ class DatabasePreparedTest extends Testbase
         $this->assertTrue($objDB->_pQuery($strQuery, array()), "testDataBase truncateTable");
         $objDB->flushQueryCache();
 
-
         $strQuery = "INSERT INTO " . _dbprefix_ . "temp_autotest
             (temp_id, temp_long, temp_double) VALUES (?, ?, ?)";
-
         $this->assertTrue($objDB->_pQuery($strQuery, array("id1", 123456, 1.7)), "testTx insert");
-        $this->assertTrue($objDB->_pQuery($strQuery, array("id2", "123456", "1.7")), "testTx insert");
 
         $arrRow = $objDB->getPRow("SELECT * FROM " . _dbprefix_ . "temp_autotest WHERE temp_id = ?", array("id1"));
 
         $this->assertEquals($arrRow["temp_long"], 123456);
         $this->assertEquals($arrRow["temp_double"], 1.7);
+
+        $objDB->flushQueryCache();
+
+        $this->assertTrue($objDB->_pQuery($strQuery, array("id2", "123456", "1.7")), "testTx insert");
 
         $arrRow = $objDB->getPRow("SELECT * FROM " . _dbprefix_ . "temp_autotest WHERE temp_id = ?", array("id2"));
 
