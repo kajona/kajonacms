@@ -116,3 +116,6 @@ $lang["commons_object_validator_number_fieldcompare_less_than"] = "'{0}' must be
 $lang["commons_object_validator_number_fieldcompare_lessequals_than"] = "'{0}' must be <= '{1}'.";
 
 $lang["commons_tree_contextmenu_loadallsubnodes"] = "Expand all";
+
+$lang["commons_from"] = "From";
+$lang["commons_to"] = "To";
