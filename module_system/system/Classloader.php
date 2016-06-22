@@ -398,15 +398,15 @@ class Classloader
                         return null;
                     }
 
-                    $strFilename = str_replace("\\", "/", uniSubstr($strFilename, 0, -4));
+                    $strParsedFilename = str_replace("\\", "/", uniSubstr($strFilename, 0, -4));
 
                     $strClassname = "Kajona\\";
-                    if(strpos($strFilename, "core_") !== false) {
+                    if(strpos($strParsedFilename, "core_") !== false) {
                         $strClassname = "AGP\\";
                     }
 
                     $arrPath = array();
-                    $arrSections = array_reverse(explode("/", $strFilename));
+                    $arrSections = array_reverse(explode("/", $strParsedFilename));
                     foreach($arrSections as $strOnePart) {
                         if($strOnePart !== "core"
                             && $strOnePart !== "project"
@@ -431,7 +431,7 @@ class Classloader
                     }
 
                     //file is in project path?
-                    if(strpos($strFilename, "/project/") !== false) {
+                    if(strpos($strParsedFilename, "/project/") !== false) {
                         if(is_dir(_realpath_."core/module_".strtolower(array_reverse($arrPath)[0]))) {
                             $strClassname = "Kajona\\";
                         }
