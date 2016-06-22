@@ -118,6 +118,10 @@ class DatabasePreparedTest extends Testbase
 
         $this->assertTrue($objDB->createTable("temp_autotest", $arrFields, array("temp_id")), "testDataBase createTable");
 
+        $strQuery = "DELETE FROM " . _dbprefix_ . "temp_autotest";
+        $this->assertTrue($objDB->_pQuery($strQuery, array()), "testDataBase truncateTable");
+        $objDB->flushQueryCache();
+
 
         $strQuery = "INSERT INTO " . _dbprefix_ . "temp_autotest
             (temp_id, temp_long, temp_double) VALUES (?, ?, ?)";
