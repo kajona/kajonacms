@@ -189,7 +189,15 @@ class DatabaseTest extends Testbase
         $strQuery = "SELECT * FROM " . _dbprefix_ . "temp_autotest ORDER BY temp_long ASC";
         $arrRow = $objDB->getPRow($strQuery, array());
         $this->assertTrue(count($arrRow) >= 9, "testDataBase getRow count");
+        
+        $this->assertEquals($arrRow["temp_long"], "1234561", "testDataBase getRow content");
+        $this->assertEquals($arrRow["temp_double"], "23.451", "testDataBase getRow content");
         $this->assertEquals($arrRow["temp_char10"], "1", "testDataBase getRow content");
+        $this->assertEquals($arrRow["temp_char20"], "char201", "testDataBase getRow content");
+        $this->assertEquals($arrRow["temp_char100"], "char1001", "testDataBase getRow content");
+        $this->assertEquals($arrRow["temp_char254"], "char2541", "testDataBase getRow content");
+        $this->assertEquals($arrRow["temp_char500"], "char5001", "testDataBase getRow content");
+        $this->assertEquals($arrRow["temp_text"], "text1", "testDataBase getRow content");
 
         $strQuery = "SELECT * FROM " . _dbprefix_ . "temp_autotest ORDER BY temp_long ASC";
         $arrRow = $objDB->getPArray($strQuery, array());
@@ -215,7 +223,7 @@ class DatabaseTest extends Testbase
 
     public function testCreateTableIndex()
     {
-        echo "current driver: " . Carrier::getInstance()->getObjConfig()->getConfig("dbdriver") . "\n";
+        //echo "current driver: " . Carrier::getInstance()->getObjConfig()->getConfig("dbdriver") . "\n";
 
         $objDB = Carrier::getInstance()->getObjDB();
 
