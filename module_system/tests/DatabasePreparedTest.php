@@ -121,7 +121,7 @@ class DatabasePreparedTest extends Testbase
         $objDB->multiInsert(
             "temp_autotest",
             array("temp_id", "temp_long", "temp_double"),
-            array(array("id1", 123456, 1.7), array("id2", "123456", "1.7"))
+            array(array("id1", 123456, 1.7), array("id2", 123, 1.95))
         );
 
         $arrRow = $objDB->getPRow("SELECT * FROM " . _dbprefix_ . "temp_autotest WHERE temp_id = ?", array("id1"));
@@ -131,8 +131,8 @@ class DatabasePreparedTest extends Testbase
 
         $arrRow = $objDB->getPRow("SELECT * FROM " . _dbprefix_ . "temp_autotest WHERE temp_id = ?", array("id2"));
 
-        $this->assertEquals($arrRow["temp_long"], 123456);
-        $this->assertEquals($arrRow["temp_double"], 1.7);
+        $this->assertEquals($arrRow["temp_long"], 123);
+        $this->assertEquals($arrRow["temp_double"], 1.95);
 
         $strQuery = "DROP TABLE " . _dbprefix_ . "temp_autotest";
         $this->assertTrue($objDB->_pQuery($strQuery, array()), "testDataBase dropTable");
