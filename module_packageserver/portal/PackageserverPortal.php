@@ -192,7 +192,7 @@ class PackageserverPortal extends PortalController implements PortalInterface
                 }
             }
             else {
-                $arrReturn = array_merge($arrReturn, $this->getAllPackages($objOneFile->getSystemid()));
+                $arrReturn = array_merge($arrReturn, $this->getAllPackages($objOneFile->getSystemid(), $strCategoryFilter, $intStart, $intEnd, $strNameFilter));
             }
         }
 
