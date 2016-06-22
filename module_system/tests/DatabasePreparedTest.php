@@ -116,25 +116,25 @@ class DatabasePreparedTest extends Testbase
         $arrFields["temp_long"] = array("long", true);
         $arrFields["temp_double"] = array("double", true);
 
-        $this->assertTrue($objDB->createTable("temp_autotest", $arrFields, array("temp_id")), "testDataBase createTable");
+        $this->assertTrue($objDB->createTable("temp_autotest_float", $arrFields, array("temp_id")), "testDataBase createTable");
 
         $objDB->multiInsert(
-            "temp_autotest",
+            "temp_autotest_float",
             array("temp_id", "temp_long", "temp_double"),
-            array(array("id1", 123456, 1.7), array("id2", 123, 1.95))
+            array(array("id1", 123456, 1.7), array("id2", "123456", "1.7"))
         );
 
-        $arrRow = $objDB->getPRow("SELECT * FROM " . _dbprefix_ . "temp_autotest WHERE temp_id = ?", array("id1"));
+        $arrRow = $objDB->getPRow("SELECT * FROM " . _dbprefix_ . "temp_autotest_float WHERE temp_id = ?", array("id1"));
 
         $this->assertEquals($arrRow["temp_long"], 123456);
         $this->assertEquals($arrRow["temp_double"], 1.7);
 
-        $arrRow = $objDB->getPRow("SELECT * FROM " . _dbprefix_ . "temp_autotest WHERE temp_id = ?", array("id2"));
+        $arrRow = $objDB->getPRow("SELECT * FROM " . _dbprefix_ . "temp_autotest_float WHERE temp_id = ?", array("id2"));
 
-        $this->assertEquals($arrRow["temp_long"], 123);
-        $this->assertEquals($arrRow["temp_double"], 1.95);
+        $this->assertEquals($arrRow["temp_long"], 123456);
+        $this->assertEquals($arrRow["temp_double"], 1.7);
 
-        $strQuery = "DROP TABLE " . _dbprefix_ . "temp_autotest";
+        $strQuery = "DROP TABLE " . _dbprefix_ . "temp_autotest_float";
         $this->assertTrue($objDB->_pQuery($strQuery, array()), "testDataBase dropTable");
 
     }
