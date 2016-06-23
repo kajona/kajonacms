@@ -1596,6 +1596,7 @@ The language switch surrounds the buttons
             "/core/module_system/system/scripts/lang.js"
         ], function() {
 
+            KAJONA.kajonatree.toggleInitial('%%rootNodeSystemid%%');
 
             var jsTree = new KAJONA.kajonatree.jstree();
             jsTree.loadNodeDataUrl = "%%loadNodeDataUrl%%";
@@ -1611,13 +1612,13 @@ The language switch surrounds the buttons
 
 <treeview>
     <div class="row">
-        <div class="col-md-4 treeViewColumn" >
+        <div class="col-md-4 treeViewColumn" data-kajona-treeid="%%treeId%%" >
             <div class="treeViewWrapper">
                 %%treeContent%%
             </div>
         </div>
-        <div class="col-md-8 treeViewContent">
-            <div class=""><a href="#" onclick="KAJONA.kajonatree.toggleTreeView();" title="[lang,treeviewtoggle,system]" rel="tooltip"><i class="fa fa-bars"></i></a></div>
+        <div class="col-md-8 treeViewContent" data-kajona-treeid="%%treeId%%">
+            <div class=""><a href="#" onclick="KAJONA.kajonatree.toggleTreeView('%%treeId%%');" title="[lang,treeviewtoggle,system]" rel="tooltip"><i class="fa fa-bars"></i></a></div>
             %%sideContent%%
         </div>
     </div>
@@ -1803,13 +1804,13 @@ It containes a list of aspects and provides the possibility to switch the differ
 </sitemap_wrapper>
 
 <sitemap_combined_entry_header>
-    <a data-toggle="collapse" data-parent="#moduleNavigation" href="#%%systemid%%" rel="tooltip" title="%%moduleName%%">
+    <a data-toggle="collapse" data-parent="#moduleNavigation" href="#menu_%%systemid%%" rel="tooltip" title="%%moduleName%%">
         <i class="fa %%faicon%%"></i>
     </a>
 </sitemap_combined_entry_header>
 
 <sitemap_combined_entry_body>
-    <div id="%%systemid%%" class="panel-collapse collapse">
+    <div id="menu_%%systemid%%" class="panel-collapse collapse">
         <div class="panel-body">
             <ul>%%actions%%</ul>
         </div>
@@ -1817,7 +1818,7 @@ It containes a list of aspects and provides the possibility to switch the differ
 </sitemap_combined_entry_body>
 
 <sitemap_combined_entry_body_active>
-    <div id="%%systemid%%" class="panel-collapse collapge in">
+    <div id="menu_%%systemid%%" class="panel-collapse collapge in">
         <div class="panel-body">
             <ul>%%actions%%</ul>
         </div>
@@ -1851,11 +1852,11 @@ It containes a list of aspects and provides the possibility to switch the differ
 <sitemap_module_wrapper>
     <div class="panel panel-default">
         <div class="panel-heading">
-            <a data-toggle="collapse" data-parent="#moduleNavigation" href="#%%systemid%%">
+            <a data-toggle="collapse" data-parent="#moduleNavigation" href="#menu_%%systemid%%">
                 %%moduleName%%
             </a>
         </div>
-        <div id="%%systemid%%" class="panel-collapse collapse">
+        <div id="menu_%%systemid%%" class="panel-collapse collapse">
             <div class="panel-body">
                 <ul>%%actions%%</ul>
             </div>
@@ -1866,11 +1867,11 @@ It containes a list of aspects and provides the possibility to switch the differ
 <sitemap_module_wrapper_active>
     <div class="panel panel-default">
         <div class="panel-heading">
-            <a class="active" data-toggle="collapse" data-parent="#moduleNavigation" href="#%%systemid%%">
+            <a class="active" data-toggle="collapse" data-parent="#moduleNavigation" href="#menu_%%systemid%%">
                 %%moduleName%%
             </a>
         </div>
-        <div id="%%systemid%%" class="panel-collapse collapse in">
+        <div id="menu_%%systemid%%" class="panel-collapse collapse in">
             <div class="panel-body">
                 <ul>%%actions%%</ul>
             </div>
