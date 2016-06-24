@@ -118,8 +118,8 @@ class SamplecontentInstallerHelper
         Carrier::getInstance()->getObjDB()->flushQueryCache();
 
         //TODO: move to another place
-        if (!file_exists(_realpath_."/favicon.ico")) {
-            if (!copy(Resourceloader::getInstance()->getAbsolutePathForModule("module_samplecontent")."/favicon.ico.root", _realpath_."/favicon.ico")) {
+        if (!file_exists(_realpath_."favicon.ico")) {
+            if (!copy(Resourceloader::getInstance()->getAbsolutePathForModule("module_samplecontent")."/favicon.ico.root", _realpath_."favicon.ico")) {
                 $strReturn .= "<b>Copying the favicon.ico.root to top level failed!!!</b>";
             }
         }

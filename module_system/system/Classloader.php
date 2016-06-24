@@ -141,8 +141,8 @@ class Classloader
 
         $arrExcludedModules = array();
         $arrIncludedModules = array();
-        if (is_file(_realpath_."/project/packageconfig.php")) {
-            include(_realpath_."/project/packageconfig.php");
+        if (is_file(_realpath_."project/packageconfig.php")) {
+            include(_realpath_."project/packageconfig.php");
         }
 
         //Module-Constants
@@ -300,7 +300,7 @@ class Classloader
         // add project folders
         foreach ($arrModules as $strPath => $strSingleModule) {
             $strPath = "project" . substr($strPath, strpos($strPath, "/"));
-            if (is_dir(_realpath_."/".$strPath.$strFolder)) {
+            if (is_dir(_realpath_.$strPath.$strFolder)) {
                 $arrModules[$strPath] = $strSingleModule;
             }
         }
@@ -517,10 +517,10 @@ class Classloader
             foreach (BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_MODULES) as $strPath => $strOneModule) {
 
                 if (!in_array($strOneModule, BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_PHARMODULES))) {
-                    if (is_dir(_realpath_."/".$strPath."/system/") && is_dir(_realpath_."/".$strPath."/system/config/")) {
-                        foreach (scandir(_realpath_."/".$strPath."/system/config/") as $strModuleEntry) {
+                    if (is_dir(_realpath_.$strPath."/system/") && is_dir(_realpath_.$strPath."/system/config/")) {
+                        foreach (scandir(_realpath_.$strPath."/system/config/") as $strModuleEntry) {
                             if (preg_match("/module\_([a-z0-9\_])+\_id\.php/", $strModuleEntry)) {
-                                @include_once _realpath_."/".$strPath."/system/config/".$strModuleEntry;
+                                @include_once _realpath_.$strPath."/system/config/".$strModuleEntry;
                             }
                         }
                     }

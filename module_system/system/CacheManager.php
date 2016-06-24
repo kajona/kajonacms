@@ -247,7 +247,7 @@ class CacheManager
 
         if ($intType & self::TYPE_FILESYSTEM) {
             try {
-                $arrDriver[] = new FilesystemCache(_realpath_."/project/temp/cache", ".cache");
+                $arrDriver[] = new FilesystemCache(_realpath_."project/temp/cache", ".cache");
             }
             catch(\InvalidArgumentException $objEx) {
                 $arrDriver[] = new ArrayCache();
@@ -256,7 +256,7 @@ class CacheManager
 
         if ($intType & self::TYPE_PHPFILE) {
             try {
-                $arrDriver[] = new PhpFileCache(_realpath_."/project/temp/cache", ".cache.php");
+                $arrDriver[] = new PhpFileCache(_realpath_."project/temp/cache", ".cache.php");
             }
             catch(\InvalidArgumentException $objEx) {
                 $arrDriver[] = new ArrayCache();

@@ -69,8 +69,8 @@ class InstallerMediamanager extends InstallerBase implements InstallerInterface
         $this->registerConstant("_mediamanager_default_filesrepoid_", "", SystemSetting::$int_TYPE_STRING, _mediamanager_module_id_);
 
         $strReturn .= "Trying to copy the *.root files to top-level...\n";
-        if (!file_exists(_realpath_."/download.php")) {
-            if (!copy(Resourceloader::getInstance()->getAbsolutePathForModule("module_mediamanager")."/download.php.root", _realpath_."/download.php")) {
+        if (!file_exists(_realpath_."download.php")) {
+            if (!copy(Resourceloader::getInstance()->getAbsolutePathForModule("module_mediamanager")."/download.php.root", _realpath_."download.php")) {
                 $strReturn .= "<b>Copying the download.php.root to top level failed!!!</b>";
             }
         }

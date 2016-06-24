@@ -47,7 +47,7 @@ class PharModuleExtractor
                 //check for matching suffix and move to temp dir
                 if (preg_match($this->strExtractPattern, $strKey)) {
                     //extract the file and export it
-                    $strTargetPath = _realpath_."/files/extract/".$strModule."/".$strKey;
+                    $strTargetPath = _realpath_."files/extract/".$strModule."/".$strKey;
 
                     try {
                         $objFilesystem->folderCreate(dirname($strTargetPath), true, true);

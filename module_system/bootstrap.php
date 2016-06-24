@@ -44,8 +44,8 @@ set_exception_handler(array("Kajona\\System\\System\\Exception", "globalExceptio
 
 // -- Custom bootstrap -------------------------------------------------------------------------------------------------
 // See if there's a custom bootstrap.php to include
-if (file_exists(_realpath_."/project/bootstrap.php")) {
-    include_once _realpath_."/project/bootstrap.php";
+if (file_exists(_realpath_."project/bootstrap.php")) {
+    include_once _realpath_."project/bootstrap.php";
 }
 
 // -- The Path on web --------------------------------------------------------------------------------------------------

@@ -94,7 +94,7 @@ class Installer
             $this->objLang->setStrTextLanguage($this->objSession->getAdminLanguage(true, true));
         }
 
-        $this->STR_PROJECT_CONFIG_FILE = _realpath_."/project/module_system/system/config/config.php";
+        $this->STR_PROJECT_CONFIG_FILE = _realpath_."project/module_system/system/config/config.php";
     }
 
 

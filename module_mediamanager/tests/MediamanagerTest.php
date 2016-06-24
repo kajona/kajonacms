@@ -16,7 +16,7 @@ class MediamanagerTest extends Testbase
     {
 
 
-        if (SystemModule::getModuleByName("samplecontent") == null || !is_file(_realpath_ . "/files/images/samples/IMG_3000.JPG")) {
+        if (SystemModule::getModuleByName("samplecontent") == null || !is_file(_realpath_ . "files/images/samples/IMG_3000.JPG")) {
             return;
         }
 

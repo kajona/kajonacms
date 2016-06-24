@@ -459,8 +459,8 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
             "index.php", "image.php", "xml.php", ".htaccess", "v3_v4_postupdate.php"
         );
         foreach($arrFiles as $strOneFile) {
-            if(!file_exists(_realpath_."/".$strOneFile) && is_file(Resourceloader::getInstance()->getAbsolutePathForModule("module_system")."/".$strOneFile.".root")) {
-                if(!copy(Resourceloader::getInstance()->getAbsolutePathForModule("module_system")."/".$strOneFile.".root", _realpath_."/".$strOneFile))
+            if(!file_exists(_realpath_.$strOneFile) && is_file(Resourceloader::getInstance()->getAbsolutePathForModule("module_system")."/".$strOneFile.".root")) {
+                if(!copy(Resourceloader::getInstance()->getAbsolutePathForModule("module_system")."/".$strOneFile.".root", _realpath_.$strOneFile))
                     $strReturn .= "<b>Copying ".$strOneFile.".root to top level failed!!!</b>";
             }
         }
@@ -621,7 +621,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $strReturn = "Updating 4.6.5 to 4.7...\n";
 
         $strReturn .= "Patching bootstrap.php < 4.7\n";
-        if(is_file(_realpath_."/core/bootstrap.php")) {
+        if(is_file(_realpath_."core/bootstrap.php")) {
             $objFileystem = new Filesystem();
             if(!$objFileystem->isWritable("/core/bootstrap.php")) {
                 $strReturn .= "Error! /core/bootstrap.php is not writable. Please set up write permissions for the update-procedure.\nAborting update.";
