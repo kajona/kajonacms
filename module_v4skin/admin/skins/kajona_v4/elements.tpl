@@ -1596,7 +1596,7 @@ The language switch surrounds the buttons
             "/core/module_system/system/scripts/lang.js"
         ], function() {
 
-            KAJONA.kajonatree.toggleInitial('%%rootNodeSystemid%%');
+            KAJONA.kajonatree.toggleInitial('%%treeId%%');
 
             var jsTree = new KAJONA.kajonatree.jstree();
             jsTree.loadNodeDataUrl = "%%loadNodeDataUrl%%";

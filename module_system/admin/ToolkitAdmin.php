@@ -2329,7 +2329,7 @@ HTML;
         $arrTemplate = array();
         $arrTemplate["sideContent"] = $strSideContent;
         $arrTemplate["treeContent"] = $this->getTree($objTreeConfig);
-        $arrTemplate["treeId"] = $objTreeConfig->getStrRootNodeId();
+        $arrTemplate["treeId"] = "tree_".$objTreeConfig->getStrRootNodeId();
         return $this->objTemplate->fillTemplateFile($arrTemplate, "/elements.tpl", "treeview");
     }
 
