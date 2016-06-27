@@ -275,6 +275,7 @@ $lang["titel_root"]                      = "Rechte-Root-Satz";
 $lang["titleTime"]                       = "Uhr";
 $lang["toolsetCalendarMonth"]            = "\"Januar\", \"Februar\", \"März\", \"April\", \"Mai\", \"Juni\", \"Juli\", \"August\", \"September\", \"Oktober\", \"November\", \"Dezember\"";
 $lang["toolsetCalendarWeekday"]          = "\"So\", \"Mo\", \"Di\", \"Mi\", \"Do\", \"Fr\", \"Sa\"";
+$lang["treeviewtoggle"]                  = "Baum anzeigen / ausblenden";
 $lang["update_available"]                = "Bitte updaten!";
 $lang["update_invalidXML"]               = "Die Antwort vom Server war leider nicht korrekt. Bitte versuchen Sie die letzte Aktion erneut.";
 $lang["update_module_localversion"]      = "Diese Installation";

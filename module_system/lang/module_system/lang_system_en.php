@@ -280,6 +280,7 @@ $lang["titel_erben"]                     = "Inherit rights";
 $lang["titel_leer"]                      = "<em>No title defined</em>";
 $lang["titel_root"]                      = "Rights root-record";
 $lang["titleTime"]                       = "Time of day";
+$lang["treeviewtoggle"]                  = "Show / hide tree";
 $lang["toolsetCalendarMonth"]            = "\"January\", \"February\", \"March\", \"April\", \"May\", \"June\", \"July\", \"August\", \"September\", \"October\", \"November\", \"December\"";
 $lang["toolsetCalendarWeekday"]          = "\"Su\", \"Mu\", \"Tu\", \"We\", \"Th\", \"Fr\", \"Sa\"";
 $lang["update_available"]                = "Please update!";
