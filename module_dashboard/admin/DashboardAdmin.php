@@ -206,12 +206,14 @@ JS;
         $objConfig->setStrNodeEndpoint(Link::getLinkAdminXml("dashboard", "treeEndpoint"));
         $objConfig->setArrNodesToExpand(array(""));
 
+        $strCategory = $this->getParam("listfilter_category");
+
         $strContent = $this->getListTodoFilter();
         $strContent .= "<div id='todo-table'></div>";
         $strContent .= "<script type=\"text/javascript\">";
         $strContent .= <<<JS
             KAJONA.admin.loader.loadFile(['/core/module_dashboard/admin/scripts/dashboard.js'], function(){
-                KAJONA.admin.dashboard.todo.loadCategory('', '');
+                KAJONA.admin.dashboard.todo.loadCategory('{$strCategory}', '');
             });
 JS;
 
