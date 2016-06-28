@@ -230,12 +230,12 @@ class DashboardAdminXml extends AdminController implements XmlAdminInterface
                     $objTodo->getStrDisplayName(),
                     $strCategory,
                     $strValidDate,
-                    "4 align-right" => $strActions
+                    "4 align-right actions" => $strActions
                 );
             }
         }
 
-        return $this->objToolkit->dataTable($arrHeaders, $arrValues);
+        return $this->objToolkit->dataTable($arrHeaders, $arrValues, "admintable");
     }
 
     /**

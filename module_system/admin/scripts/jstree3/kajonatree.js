@@ -376,3 +376,43 @@ KAJONA.kajonatree.contextmenu.openAllNodes = function (data) {
         objTreeInstance.open_all(objNode);
     }
 };
+
+
+KAJONA.kajonatree.toggleInitial = function(strTreeId) {
+    var treeStates = KAJONA.util.cacheManager.get("treestate");
+    if(treeStates != null && treeStates != '') {
+        treeStates = JSON.parse(treeStates);
+
+        if(treeStates[strTreeId] == 'false') {
+            KAJONA.kajonatree.toggleTreeView(strTreeId);
+        }
+    }
+};
+
+KAJONA.kajonatree.toggleTreeView = function(strTreeId) {
+    var $treeviewPane = $(".treeViewColumn[data-kajona-treeid="+strTreeId+"]");
+    var $contentPane = $(".treeViewContent[data-kajona-treeid="+strTreeId+"]");
+    var treeStates = KAJONA.util.cacheManager.get("treestate");
+    if(treeStates == null || treeStates == '') {
+        treeStates = {};
+    }
+    else {
+        treeStates = JSON.parse(treeStates);
+    }
+    if(!treeStates[strTreeId])
+        treeStates[strTreeId] = 'true';
+
+    if($treeviewPane.hasClass("col-md-4")) {
+        $treeviewPane.addClass("hidden").removeClass("col-md-4");
+        $contentPane.addClass("col-md-12").removeClass("col-md-8");
+        treeStates[strTreeId] = 'false';
+
+    } else {
+        $treeviewPane.addClass("col-md-4").removeClass("hidden");
+        $contentPane.addClass("col-md-8").removeClass("col-md-12");
+        treeStates[strTreeId] = 'true';
+    }
+
+    KAJONA.util.cacheManager.set("treestate", JSON.stringify(treeStates));
+    return false;
+};
