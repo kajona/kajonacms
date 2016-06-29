@@ -275,5 +275,34 @@ SQL;
         $this->assertEquals('Foo\\Bar\\Baz', $arrRow['temp_char20']);
     }
 
+    public function testGetPArray()
+    {
+        $objDB = Carrier::getInstance()->getObjDB();
+
+        $this->createTable();
+
+        $arrData = array();
+        for ($intI = 0; $intI < 50; $intI++) {
+            $arrData[] = array(generateSystemid(), $intI, $intI, $intI, $intI, $intI, $intI, $intI, $intI);
+        }
+
+        $objDB->multiInsert("temp_autotest", array("temp_id", "temp_long", "temp_double", "temp_char10", "temp_char20", "temp_char100", "temp_char254", "temp_char500", "temp_text"), $arrData);
+
+        $arrResult = $objDB->getPArray("SELECT * FROM " . _dbprefix_ . "temp_autotest ORDER BY temp_long ASC", array(), 0, 0);
+        $this->assertEquals(1, count($arrResult));
+        $this->assertEquals(0, $arrResult[0]["temp_long"]);
+
+        $arrResult = $objDB->getPArray("SELECT * FROM " . _dbprefix_ . "temp_autotest ORDER BY temp_long ASC", array(), 0, 7);
+        $this->assertEquals(8, count($arrResult));
+        for ($intI = 0; $intI < 8; $intI++) {
+            $this->assertEquals($intI, $arrResult[$intI]["temp_long"]);
+        }
+
+        $arrResult = $objDB->getPArray("SELECT * FROM " . _dbprefix_ . "temp_autotest ORDER BY temp_long ASC", array(), 4, 7);
+        $this->assertEquals(4, count($arrResult));
+        for ($intI = 4; $intI < 8; $intI++) {
+            $this->assertEquals($intI, $arrResult[$intI - 4]["temp_long"]);
+        }
+    }
 }
 

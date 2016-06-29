@@ -302,11 +302,13 @@ interface DbDriverInterface
     public function escape($strValue);
 
     /**
-     * Appends a limit expression to the provided query
+     * Appends a limit expression to the provided query. The start and end parameter are the positions of the start and
+     * end row which you want include in your resultset. I.e. to return a single row use 0, 0. To return the first 8
+     * rows use 0, 7.
      *
      * @param string $strQuery
      * @param int $intStart
-     * @param int $intLength
+     * @param int $intEnd
      * @return string
      */
     public function appendLimitExpression($strQuery, $intStart, $intEnd);
