@@ -68,7 +68,7 @@ class MediamanagerAdminXml extends AdminController implements XmlAdminInterface
             //Create the folder
             $strFolder = createFilename($strFolder, true);
             //folder already existing?
-            if (!is_dir(_realpath_."/".$strPrevPath."/".$strFolder)) {
+            if (!is_dir(_realpath_.$strPrevPath."/".$strFolder)) {
 
                 Logger::getInstance()->addLogRow("creating folder ".$strPrevPath."/".$strFolder, Logger::$levelInfo);
 
@@ -165,7 +165,7 @@ class MediamanagerAdminXml extends AdminController implements XmlAdminInterface
         $strTarget = $strFolder."/".createFilename($strFilename);
         $objFilesystem = new Filesystem();
 
-        if (!file_exists(_realpath_."/".$strFolder)) {
+        if (!file_exists(_realpath_.$strFolder)) {
             $objFilesystem->folderCreate($strFolder, true);
         }
 

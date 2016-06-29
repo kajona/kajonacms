@@ -170,7 +170,7 @@ final class Logger
 
         $strText = $strDate." ".$strLevel." ".$strSessid." ".$strFileInfo." ".$strMessage."\r\n";
 
-        $handle = @fopen(_realpath_."/project/log/".$this->strFilename, "a");
+        $handle = @fopen(_realpath_."project/log/".$this->strFilename, "a");
         @fwrite($handle, $strText);
         @fclose($handle);
     }
@@ -183,7 +183,7 @@ final class Logger
     public function getLogFileContent()
     {
         $objFile = new Filesystem();
-        if (!is_file(_realpath_."/project/log/".$this->strFilename)) {
+        if (!is_file(_realpath_."project/log/".$this->strFilename)) {
             return "";
         }
 

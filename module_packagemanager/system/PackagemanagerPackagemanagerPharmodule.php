@@ -157,7 +157,7 @@ class PackagemanagerPackagemanagerPharmodule extends PackagemanagerPackagemanage
 
                 $intStrPos = StringUtil::indexOf($strFullPath, "templates/default/{$strOneSubfolder}", false);
                 if ($intStrPos !== false) {
-                    $strTargetPath = _realpath_."/templates/default/{$strOneSubfolder}/".StringUtil::substring($strFullPath, $intStrPos + StringUtil::length("templates/default/{$strOneSubfolder}"));
+                    $strTargetPath = _realpath_."templates/default/{$strOneSubfolder}/".StringUtil::substring($strFullPath, $intStrPos + StringUtil::length("templates/default/{$strOneSubfolder}"));
                     $objFilesystem->folderCreate(dirname($strTargetPath), true, true);
                     //copy
                     copy($strFullPath, $strTargetPath);

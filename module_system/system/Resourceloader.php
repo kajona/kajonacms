@@ -205,8 +205,8 @@ class Resourceloader
 
         //third try: try to load the file from given modules
         foreach (Classloader::getInstance()->getArrModules() as $strCorePath => $strOneModule) {
-            if (is_dir(_realpath_."/".$strCorePath."/templates/default/tpl".$strFolder)) {
-                $arrFiles = scandir(_realpath_."/".$strCorePath."/templates/default/tpl".$strFolder);
+            if (is_dir(_realpath_.$strCorePath."/templates/default/tpl".$strFolder)) {
+                $arrFiles = scandir(_realpath_.$strCorePath."/templates/default/tpl".$strFolder);
                 foreach ($arrFiles as $strOneFile) {
                     if (substr($strOneFile, -4) == ".tpl") {
                         if($bitPathAsKey) {
@@ -218,7 +218,7 @@ class Resourceloader
                     }
                 }
             }
-            elseif (PharModule::isPhar(_realpath_."/".$strCorePath)) {
+            elseif (PharModule::isPhar(_realpath_.$strCorePath)) {
 
                 $objPhar = new PharModule($strCorePath);
                 foreach($objPhar->getContentMap() as $strFilename => $strPharPath) {
@@ -258,7 +258,7 @@ class Resourceloader
 
         //loop all given modules
         foreach (Classloader::getInstance()->getArrModules() as $strCorePath => $strSingleModule) {
-            if (PharModule::isPhar(_realpath_."/".$strCorePath)) {
+            if (PharModule::isPhar(_realpath_.$strCorePath)) {
 
                 $objPhar = new PharModule($strCorePath);
                 foreach($objPhar->getContentMap() as $strFilename => $strPharPath) {
@@ -267,8 +267,8 @@ class Resourceloader
                     }
                 }
 
-            } elseif (is_dir(_realpath_."/".$strCorePath._langpath_."/".$strFolder)) {
-                $arrContent = scandir(_realpath_."/".$strCorePath._langpath_."/".$strFolder);
+            } elseif (is_dir(_realpath_.$strCorePath._langpath_."/".$strFolder)) {
+                $arrContent = scandir(_realpath_.$strCorePath._langpath_."/".$strFolder);
                 foreach ($arrContent as $strSingleEntry) {
 
                     if (substr($strSingleEntry, -4) == ".php") {
@@ -328,14 +328,14 @@ class Resourceloader
         // add project folders
         foreach ($arrModules as $strCorePath => $strSingleModule) {
             $strPath = "project" . substr($strCorePath, strpos($strCorePath, "/"));
-            if (is_dir(_realpath_."/".$strPath.$strFolder)) {
+            if (is_dir(_realpath_.$strPath.$strFolder)) {
                 $arrModules[$strPath] = $strSingleModule;
             }
         }
 
         //loop all given modules
         foreach ($arrModules as $strCorePath => $strSingleModule) {
-            if (is_file(_realpath_."/".$strCorePath)) {
+            if (is_file(_realpath_.$strCorePath)) {
                 $objPhar = new PharModule($strCorePath);
 
                 foreach($objPhar->getContentMap() as $strPath => $strAbsolutePath) {
@@ -355,11 +355,11 @@ class Resourceloader
                     }
                 }
             }
-            elseif (is_dir(_realpath_."/".$strCorePath.$strFolder)) {
-                $arrContent = scandir(_realpath_."/".$strCorePath.$strFolder);
+            elseif (is_dir(_realpath_.$strCorePath.$strFolder)) {
+                $arrContent = scandir(_realpath_.$strCorePath.$strFolder);
                 foreach ($arrContent as $strSingleEntry) {
 
-                    if (($strSingleEntry != "." && $strSingleEntry != "..") && ($bitWithSubfolders || is_file(_realpath_."/".$strCorePath.$strFolder."/".$strSingleEntry))) {
+                    if (($strSingleEntry != "." && $strSingleEntry != "..") && ($bitWithSubfolders || is_file(_realpath_.$strCorePath.$strFolder."/".$strSingleEntry))) {
                         //Wanted Type?
                         if (count($arrExtensionFilter) == 0) {
                             $arrReturn[_realpath_.$strCorePath.$strFolder."/".$strSingleEntry] = $strSingleEntry;
@@ -563,7 +563,7 @@ class Resourceloader
      */
     public function getCorePathForPath($strPath, $bitPrependRealpath = false)
     {
-        $strPath = uniStrReplace(_realpath_."/", "", $strPath);
+        $strPath = uniStrReplace(_realpath_, "", $strPath);
         $strPath = uniSubstr($strPath, 0, uniStrpos($strPath, "/"));
 
         return ($bitPrependRealpath ? _realpath_ : "")."/".$strPath;

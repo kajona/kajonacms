@@ -118,7 +118,7 @@ class PharModule
      */
     private function getFileIterator()
     {
-        return new \RecursiveIteratorIterator(new \Phar(_realpath_."/".$this->strPharPath, 0));
+        return new \RecursiveIteratorIterator(new \Phar(_realpath_.$this->strPharPath, 0));
     }
 
     /**
@@ -168,7 +168,7 @@ class PharModule
      */
     private function getRelativeFilePath($objFile)
     {
-        $strPharPath = "phar://".str_replace("//", "/", _realpath_."/".$this->strPharPath);
+        $strPharPath = "phar://".str_replace("//", "/", _realpath_.$this->strPharPath);
         $strArchivePath = substr($objFile->getPathName(), strlen($strPharPath));
         $strArchivePath = str_replace("\\", "/", $strArchivePath);
         return $strArchivePath;

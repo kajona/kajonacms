@@ -65,8 +65,8 @@ class PackagemanagerTest extends Testbase
 
         $objPackageManager->move2Filesystem();
 
-        $this->assertFileExists(_realpath_ . "/core/module_autotest/metadata.xml");
-        $this->assertFileExists(_realpath_ . "/core/module_autotest/system/test.txt");
+        $this->assertFileExists(_realpath_ . "core/module_autotest/metadata.xml");
+        $this->assertFileExists(_realpath_ . "core/module_autotest/system/test.txt");
 
         $objMetadata = new PackagemanagerMetadata();
         $objMetadata->autoInit("/core/module_autotest/");

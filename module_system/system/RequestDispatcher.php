@@ -230,7 +230,7 @@ class RequestDispatcher
             }
             else {
 
-                if (count(Carrier::getInstance()->getObjDB()->getTables()) == 0 && file_exists(_realpath_."/installer.php")) {
+                if (count(Carrier::getInstance()->getObjDB()->getTables()) == 0 && file_exists(_realpath_."installer.php")) {
                     ResponseObject::getInstance()->setStrRedirectUrl(_webpath_."/installer.php");
                     return "";
                 }
@@ -299,7 +299,7 @@ class RequestDispatcher
         else {
 
             if (_xmlLoader_ === false) {
-                if (count(Carrier::getInstance()->getObjDB()->getTables()) == 0 && file_exists(_realpath_."/installer.php")) {
+                if (count(Carrier::getInstance()->getObjDB()->getTables()) == 0 && file_exists(_realpath_."installer.php")) {
                     ResponseObject::getInstance()->setStrRedirectUrl(_webpath_."/installer.php");
                     return "";
                 }

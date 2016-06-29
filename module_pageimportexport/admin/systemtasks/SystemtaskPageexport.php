@@ -93,7 +93,7 @@ class SystemtaskPageexport extends SystemtaskBase implements AdminSystemtaskInte
                 $strExportFolder = _realpath_._projectpath_."/temp";
             }
             else {
-                $strExportFolder = _realpath_."/".$strExportFolder;
+                $strExportFolder = _realpath_.$strExportFolder;
             }
 
             if ($strExportPrefix != "") {

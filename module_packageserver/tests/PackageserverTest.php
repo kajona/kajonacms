@@ -23,20 +23,20 @@ class PackageserverTest extends Testbase
         $objFilesystem->folderCreate("/files/packagesv5");
         $objFilesystem->folderCreate("/files/packagesv5/t");
 
-        file_put_contents(_realpath_ . "/files/packagesv5/t/metadata.xml", $this->getStrMetadata());
+        file_put_contents(_realpath_ . "files/packagesv5/t/metadata.xml", $this->getStrMetadata());
         $objFilesystem->folderCreate("/files/packagesv5/t/system");
-        file_put_contents(_realpath_ . "/files/packagesv5/t/system/test.txt", $this->getStrMetadata());
+        file_put_contents(_realpath_ . "files/packagesv5/t/system/test.txt", $this->getStrMetadata());
 
 
         $objPhar = new Phar(
-            _realpath_ . "/files/packagesv5/autotest.phar",
+            _realpath_ . "files/packagesv5/autotest.phar",
             FilesystemIterator::CURRENT_AS_FILEINFO | FilesystemIterator::KEY_AS_FILENAME,
             "autotest.phar"
         );
-        $objPhar->buildFromDirectory(_realpath_ . "/files/packagesv5/t");
+        $objPhar->buildFromDirectory(_realpath_ . "files/packagesv5/t");
         $objPhar->setStub($objPhar->createDefaultStub());
 
-        $this->assertFileExists(_realpath_ . "/files/packagesv5/autotest.phar");
+        $this->assertFileExists(_realpath_ . "files/packagesv5/autotest.phar");
 
         $objFilesystem->folderDeleteRecursive("/files/packagesv5/t");
 
@@ -74,9 +74,9 @@ class PackageserverTest extends Testbase
 
         unset($objPhar);
         $objMediamanagerRepo->deleteObjectFromDatabase();
-        Phar::unlinkArchive(_realpath_ . "/files/packagesv5/autotest.phar");
+        Phar::unlinkArchive(_realpath_ . "files/packagesv5/autotest.phar");
 
-        $this->assertFileNotExists(_realpath_ . "/files/packagesv5/autotest.phar");
+        $this->assertFileNotExists(_realpath_ . "files/packagesv5/autotest.phar");
 
     }
 

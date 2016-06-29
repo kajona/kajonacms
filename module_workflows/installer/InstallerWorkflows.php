@@ -163,11 +163,11 @@ class InstallerWorkflows extends InstallerBase implements InstallerRemovableInte
         $strReturn .= "Removing messagesummary login-listeners...\n";
 
         $objFilesystem = new Filesystem();
-        if(is_file(_realpath_."/core/module_workflows/system/class_module_messagesummary_firstloginlistener.php")) {
+        if(is_file(_realpath_."core/module_workflows/system/class_module_messagesummary_firstloginlistener.php")) {
             $objFilesystem->fileDelete("/core/module_workflows/system/class_module_messagesummary_firstloginlistener.php");
         }
 
-        if(is_file(_realpath_."/project/system/class_module_messagesummary_firstloginlistener.php")) {
+        if(is_file(_realpath_."project/system/class_module_messagesummary_firstloginlistener.php")) {
             $objFilesystem->fileDelete("/project/system/class_module_messagesummary_firstloginlistener.php");
         }
 

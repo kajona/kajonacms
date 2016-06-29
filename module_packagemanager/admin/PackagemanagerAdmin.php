@@ -413,7 +413,7 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
         foreach ($objHandler->getObjMetadata()->getArrScreenshots() as $strOneScreenshot) {
 
             if ($objHandler->getObjMetadata()->getBitIsPhar()) {
-                $strImage = "phar://"._realpath_."/".$objHandler->getObjMetadata()->getStrPath()."/".$strOneScreenshot;
+                $strImage = "phar://"._realpath_.$objHandler->getObjMetadata()->getStrPath()."/".$strOneScreenshot;
             }
             else {
                 $strImage = _realpath_.$objHandler->getObjMetadata()->getStrPath()."/".$strOneScreenshot;

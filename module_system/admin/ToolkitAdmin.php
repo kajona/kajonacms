@@ -147,7 +147,7 @@ class ToolkitAdmin extends Toolkit
 
         //check if a customized editor-config is available
         $strConfigFile = "'config_kajona_standard.js'";
-        if (is_file(_realpath_."/project/module_system/admin/scripts/ckeditor/config_kajona_standard.js")) {
+        if (is_file(_realpath_."project/module_system/admin/scripts/ckeditor/config_kajona_standard.js")) {
             $strConfigFile = "KAJONA_WEBPATH+'/project/module_system/admin/scripts/ckeditor/config_kajona_standard.js'";
         }
 
@@ -2329,6 +2329,7 @@ HTML;
         $arrTemplate = array();
         $arrTemplate["sideContent"] = $strSideContent;
         $arrTemplate["treeContent"] = $this->getTree($objTreeConfig);
+        $arrTemplate["treeId"] = "tree_".$objTreeConfig->getStrRootNodeId();
         return $this->objTemplate->fillTemplateFile($arrTemplate, "/elements.tpl", "treeview");
     }
 
@@ -2349,7 +2350,7 @@ HTML;
         $arrTemplate = array();
         $arrTemplate["rootNodeSystemid"] = $objTreeConfig->getStrRootNodeId();
         $arrTemplate["loadNodeDataUrl"] = $objTreeConfig->getStrNodeEndpoint();
-        $arrTemplate["treeId"] = generateSystemid();
+        $arrTemplate["treeId"] = "tree_".$objTreeConfig->getStrRootNodeId();
         $arrTemplate["treeConfig"] = $objTreeConfig->toJson();
         $arrTemplate["treeviewExpanders"] = "";
         for ($intI = 0; $intI < count($arrNodesToExpand); $intI++) {

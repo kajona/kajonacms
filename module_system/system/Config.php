@@ -63,7 +63,7 @@ class Config
         }
 
         // project config
-        $strProjPath = _realpath_."/project/".$strModule."/system/config/".$strConfigFile;
+        $strProjPath = _realpath_."project/".$strModule."/system/config/".$strConfigFile;
         if (is_file($strProjPath)) {
             include $strProjPath;
         }

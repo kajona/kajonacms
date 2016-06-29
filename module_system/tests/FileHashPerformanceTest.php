@@ -27,7 +27,7 @@ class FileHashPerformanceTest extends Testbase
         $arrTestStartDate = gettimeofday();
 
         for ($intI = 0; $intI < $intRuns; $intI++) {
-            sha1_file(_realpath_ . "/project/temp/hashes.temp");
+            sha1_file(_realpath_ . "project/temp/hashes.temp");
         }
 
         $arrTimestampEnde = gettimeofday();
@@ -41,7 +41,7 @@ class FileHashPerformanceTest extends Testbase
         $arrTestStartDate = gettimeofday();
 
         for ($intI = 0; $intI < $intRuns; $intI++) {
-            md5_file(_realpath_ . "/project/temp/hashes.temp");
+            md5_file(_realpath_ . "project/temp/hashes.temp");
         }
 
         $arrTimestampEnde = gettimeofday();
@@ -55,7 +55,7 @@ class FileHashPerformanceTest extends Testbase
         $arrTestStartDate = gettimeofday();
 
         for ($intI = 0; $intI < $intRuns; $intI++) {
-            filemtime(_realpath_ . "/project/temp/hashes.temp");
+            filemtime(_realpath_ . "project/temp/hashes.temp");
         }
 
         $arrTimestampEnde = gettimeofday();

@@ -24,7 +24,7 @@ if(issetPost("format")) {
 
     foreach(Classloader::getInstance()->getCoreDirectories() as $strOneCore) {
 
-        $strJavaCommand = "java -jar '"._realpath_."/".$strOneCore."/_debugging/debug/KajonaLanguageEditorCore.jar' --formatLangfiles --projectFolder '"._realpath_."' ";
+        $strJavaCommand = "java -jar '"._realpath_.$strOneCore."/_debugging/debug/KajonaLanguageEditorCore.jar' --formatLangfiles --projectFolder '"._realpath_."' ";
 
         echo "starting formatting...\n";
         echo "\rcalling ".$strJavaCommand."\n";

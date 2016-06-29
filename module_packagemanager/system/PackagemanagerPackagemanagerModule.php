@@ -155,15 +155,15 @@ class PackagemanagerPackagemanagerModule implements PackagemanagerPackagemanager
     {
         $objFilesystem = new Filesystem();
         Logger::getInstance(Logger::PACKAGEMANAGEMENT)->addLogRow("updating default template from /".$this->objMetadata->getStrPath(), Logger::$levelInfo);
-        if (is_dir(_realpath_."/".$this->objMetadata->getStrPath()."/templates/default/js")) {
+        if (is_dir(_realpath_.$this->objMetadata->getStrPath()."/templates/default/js")) {
             $objFilesystem->folderCopyRecursive($this->objMetadata->getStrPath()."/templates/default/js", "/templates/default/js", true);
         }
 
-        if (is_dir(_realpath_."/".$this->objMetadata->getStrPath()."/templates/default/css")) {
+        if (is_dir(_realpath_.$this->objMetadata->getStrPath()."/templates/default/css")) {
             $objFilesystem->folderCopyRecursive($this->objMetadata->getStrPath()."/templates/default/css", "/templates/default/css", true);
         }
 
-        if (is_dir(_realpath_."/".$this->objMetadata->getStrPath()."/templates/default/pics")) {
+        if (is_dir(_realpath_.$this->objMetadata->getStrPath()."/templates/default/pics")) {
             $objFilesystem->folderCopyRecursive($this->objMetadata->getStrPath()."/templates/default/pics", "/templates/default/pics", true);
         }
 

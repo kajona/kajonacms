@@ -392,7 +392,7 @@ class MediamanagerFile extends \Kajona\System\System\Model implements \Kajona\Sy
     {
         //if it's either a phar or a zip based package, do some extracts
         $objZip = new Zip();
-        if ((StringUtil::endsWith($this->getStrFilename(), ".phar") && is_file("phar://"._realpath_."/".$this->getStrFilename()."/metadata.xml")) ||
+        if ((StringUtil::endsWith($this->getStrFilename(), ".phar") && is_file("phar://"._realpath_.$this->getStrFilename()."/metadata.xml")) ||
             (StringUtil::endsWith($this->getStrFilename(), ".zip") && $objZip->getFileFromArchive($this->getStrFilename(), "/metadata.xml") !== false)
         ) {
             $objMetadata = new PackagemanagerMetadata();
