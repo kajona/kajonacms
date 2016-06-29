@@ -146,12 +146,7 @@ abstract class DbBase implements DbDriverInterface
      */
     public function getPArraySection($strQuery, $arrParams, $intStart, $intEnd)
     {
-        //calculate the end-value: mysql limit: start, nr of records, so:
-        $intEnd = $intEnd - $intStart + 1;
-        //add the limits to the query
-        $strQuery .= " LIMIT ".$intStart.", ".$intEnd;
-        //and load the array
-        return $this->getPArray($strQuery, $arrParams);
+        return $this->getPArray($this->appendLimitExpression($strQuery, $intStart, $intEnd), $arrParams);
     }
 
     /**
@@ -202,5 +197,13 @@ abstract class DbBase implements DbDriverInterface
         return $strValue;
     }
 
+    public function appendLimitExpression($strQuery, $intStart, $intEnd)
+    {
+        //calculate the end-value: mysql limit: start, nr of records, so:
+        $intEnd = $intEnd - $intStart + 1;
+        //add the limits to the query
+
+        return $strQuery . " LIMIT " . $intStart . ", " . $intEnd;
+    }
 }
 

@@ -131,29 +131,6 @@ class DbPostgres extends DbBase {
     }
 
     /**
-     * Returns just a part of a recodset, defined by the start- and the end-rows,
-     * defined by the params. Makes use of prepared statements.
-     * <b>Note:</b> Use array-like counters, so the first row is startRow 0 whereas
-     * the n-th row is the (n-1)th key!!!
-     *
-     * @param string $strQuery
-     * @param array $arrParams
-     * @param int $intStart
-     * @param int $intEnd
-     *
-     * @return array
-     * @since 3.4
-     */
-    public function getPArraySection($strQuery, $arrParams, $intStart, $intEnd) {
-        //calculate the end-value:
-        $intEnd = $intEnd - $intStart + 1;
-        //add the limits to the query
-        $strQuery .= " LIMIT  ".$intEnd." OFFSET ".$intStart;
-        //and load the array
-        return $this->getPArray($strQuery, $arrParams);
-    }
-
-    /**
      * Returns the last error reported by the database.
      * Is being called after unsuccessful queries
      *
@@ -491,6 +468,12 @@ class DbPostgres extends DbBase {
         return $strSum;
     }
 
-
+    public function appendLimitExpression($strQuery, $intStart, $intEnd)
+    {
+        //calculate the end-value:
+        $intEnd = $intEnd - $intStart + 1;
+        //add the limits to the query
+        return $strQuery . " LIMIT  " . $intEnd . " OFFSET " . $intStart;
+    }
 }
 

@@ -211,39 +211,6 @@ class DbOci8 extends DbBase
     }
 
     /**
-     * Returns just a part of a recordset, defined by the start- and the end-rows,
-     * defined by the params. Makes use of prepared statements.
-     * <b>Note:</b> Use array-like counters, so the first row is startRow 0 whereas
-     * the n-th row is the (n-1)th key!!!
-     *
-     * @param string $strQuery
-     * @param array $arrParams
-     * @param int $intStart
-     * @param int $intEnd
-     *
-     * @return array
-     * @since 3.4
-     */
-    public function getPArraySection($strQuery, $arrParams, $intStart, $intEnd)
-    {
-        //calculate the end-value:
-        //array-counters to real-counters
-        $intStart++;
-        $intEnd++;
-
-        //modify the query
-        $strQuery = "SELECT * FROM (
-             SELECT a.*, ROWNUM rnum FROM
-                ( ".$strQuery.") a
-             WHERE ROWNUM <= ".$intEnd."
-        )
-        WHERE rnum >= ".$intStart;
-
-        //and load the array
-        return $this->getPArray($strQuery, $arrParams);
-    }
-
-    /**
      * Returns the last error reported by the database.
      * Is being called after unsuccessful queries
      *
@@ -652,5 +619,17 @@ class DbOci8 extends DbBase
     {
     }
 
+    public function appendLimitExpression($strQuery, $intStart, $intEnd)
+    {
+        $intStart++;
+        $intEnd++;
+
+        return "SELECT * FROM (
+                     SELECT a.*, ROWNUM rnum FROM
+                        ( " . $strQuery . ") a
+                     WHERE ROWNUM <= " . $intEnd . "
+                )
+                WHERE rnum >= " . $intStart;
+    }
 }
 

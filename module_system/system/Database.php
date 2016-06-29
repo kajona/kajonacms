@@ -1153,4 +1153,16 @@ class Database
         return $strQuery;
     }
 
+    /**
+     * Appends a limit expression to the provded query
+     *
+     * @param string $strQuery
+     * @param int $intStart
+     * @param int $intEnd
+     * @return string
+     */
+    public function appendLimitExpression($strQuery, $intStart, $intEnd)
+    {
+        return $this->objDbDriver->appendLimitExpression($strQuery, $intStart, $intEnd);
+    }
 }

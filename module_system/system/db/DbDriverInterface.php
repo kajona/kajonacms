@@ -301,6 +301,15 @@ interface DbDriverInterface
      */
     public function escape($strValue);
 
+    /**
+     * Appends a limit expression to the provided query
+     *
+     * @param string $strQuery
+     * @param int $intStart
+     * @param int $intLength
+     * @return string
+     */
+    public function appendLimitExpression($strQuery, $intStart, $intEnd);
 }
 
 
