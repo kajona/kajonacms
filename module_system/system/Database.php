@@ -1154,7 +1154,7 @@ class Database
     }
 
     /**
-     * Appends a limit expression to the provded query
+     * Appends a limit expression to the provided query
      *
      * @param string $strQuery
      * @param int $intStart
