@@ -197,6 +197,9 @@ abstract class DbBase implements DbDriverInterface
         return $strValue;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function appendLimitExpression($strQuery, $intStart, $intEnd)
     {
         //calculate the end-value: mysql limit: start, nr of records, so:

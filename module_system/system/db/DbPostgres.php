@@ -468,6 +468,9 @@ class DbPostgres extends DbBase {
         return $strSum;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function appendLimitExpression($strQuery, $intStart, $intEnd)
     {
         //calculate the end-value:

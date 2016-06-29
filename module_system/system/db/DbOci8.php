@@ -619,6 +619,9 @@ class DbOci8 extends DbBase
     {
     }
 
+    /**
+     * @inheritdoc
+     */
     public function appendLimitExpression($strQuery, $intStart, $intEnd)
     {
         $intStart++;
