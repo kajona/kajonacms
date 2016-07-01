@@ -295,11 +295,12 @@ class Classloader
     private function getClassesInFolder($strFolder)
     {
         $arrFiles = array();
+
         $arrModules = BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_MODULES);
 
-        // add project folders
-        foreach ($arrModules as $strPath => $strSingleModule) {
-            $strPath = "project" . substr($strPath, strpos($strPath, "/"));
+        // add module redefinitions from /project for both, phars and non phars
+        foreach ($this->getArrModules() as $strModulePath => $strSingleModule) {
+            $strPath = "project/" . $strSingleModule;
             if (is_dir(_realpath_.$strPath.$strFolder)) {
                 $arrModules[$strPath] = $strSingleModule;
             }
