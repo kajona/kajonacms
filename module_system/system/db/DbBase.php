@@ -205,7 +205,7 @@ abstract class DbBase implements DbDriverInterface
     /**
      * @return int
      */
-    public function getAffectedRows()
+    public function getIntAffectedRow()
     {
         return $this->intAffectedRows;
     }

@@ -253,9 +253,9 @@ class Database
     /**
      * @return integer
      */
-    public function getAffectedRows()
+    public function getIntAffectedRow()
     {
-        return $this->objDbDriver->getAffectedRows();
+        return $this->objDbDriver->getIntAffectedRow();
     }
 
     /**
