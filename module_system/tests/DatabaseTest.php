@@ -309,23 +309,29 @@ SQL;
     {
         $objDB = Carrier::getInstance()->getObjDB();
 
-        $this->createTable();
+        // create table
+        $arrFields = array();
+        $arrFields["temp_id"] = array("char20", false);
+        $arrFields["temp_char20"] = array("char20", true);
+
+        $this->assertTrue($objDB->createTable("temp_autotest_temp", $arrFields, array("temp_id")), "testDataBase createTable");
+        $this->flushDBCache();
 
         $strSystemId = generateSystemid();
 
         // insert which affects onw row
-        $objDB->multiInsert("temp_autotest",
-            array("temp_id", "temp_long", "temp_double", "temp_char10", "temp_char20", "temp_char100", "temp_char254", "temp_char500", "temp_text"),
-            array(array(generateSystemid(), "1", "1", "1", $strSystemId, "1", "1", "1", "1"))
+        $objDB->multiInsert("temp_autotest_temp",
+            array("temp_id", "temp_char20"),
+            array(array(generateSystemid(), $strSystemId))
         );
         $this->assertEquals(1, $objDB->getAffectedRows());
 
         // insert which affects two rows
-        $objDB->multiInsert("temp_autotest",
-            array("temp_id", "temp_long", "temp_double", "temp_char10", "temp_char20", "temp_char100", "temp_char254", "temp_char500", "temp_text"),
+        $objDB->multiInsert("temp_autotest_temp",
+            array("temp_id", "temp_char20"),
             array(
-                array(generateSystemid(), "1", "1", "1", $strSystemId, "1", "1", "1", "1"),
-                array(generateSystemid(), "1", "1", "1", $strSystemId, "1", "1", "1", "1")
+                array(generateSystemid(), $strSystemId),
+                array(generateSystemid(), $strSystemId)
             )
         );
         $this->assertEquals(2, $objDB->getAffectedRows());
@@ -333,19 +339,19 @@ SQL;
         $strNewSystemId = generateSystemid();
 
         // update which affects multiple rows
-        $objDB->_pQuery("UPDATE " . _dbprefix_ . "temp_autotest SET temp_char20 = ? WHERE temp_char20 = ?", array($strNewSystemId, $strSystemId));
+        $objDB->_pQuery("UPDATE " . _dbprefix_ . "temp_autotest_temp SET temp_char20 = ? WHERE temp_char20 = ?", array($strNewSystemId, $strSystemId));
         $this->assertEquals(3, $objDB->getAffectedRows());
 
         // update which does not affect a row
-        $objDB->_pQuery("UPDATE " . _dbprefix_ . "temp_autotest SET temp_char20 = ? WHERE temp_char20 = ?", array(generateSystemid(), generateSystemid()));
+        $objDB->_pQuery("UPDATE " . _dbprefix_ . "temp_autotest_temp SET temp_char20 = ? WHERE temp_char20 = ?", array(generateSystemid(), generateSystemid()));
         $this->assertEquals(0, $objDB->getAffectedRows());
 
         // delete which affects two rows
-        $objDB->_pQuery("DELETE FROM " . _dbprefix_ . "temp_autotest WHERE temp_char20 = ?", array($strNewSystemId));
+        $objDB->_pQuery("DELETE FROM " . _dbprefix_ . "temp_autotest_temp WHERE temp_char20 = ?", array($strNewSystemId));
         $this->assertEquals(3, $objDB->getAffectedRows());
 
         // delete which affects no rows
-        $objDB->_pQuery("DELETE FROM " . _dbprefix_ . "temp_autotest WHERE temp_char20 = ?", array(generateSystemid()));
+        $objDB->_pQuery("DELETE FROM " . _dbprefix_ . "temp_autotest_temp WHERE temp_char20 = ?", array(generateSystemid()));
         $this->assertEquals(0, $objDB->getAffectedRows());
     }
 }
