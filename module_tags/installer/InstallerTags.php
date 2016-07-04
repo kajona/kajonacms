@@ -187,6 +187,14 @@ class InstallerTags extends InstallerBase implements InstallerRemovableInterface
             $this->objDB->flushQueryCache();
         }
 
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.0") {
+            $strReturn .= "Updating to 5.1...\n";
+            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1");
+            $this->updateElementVersion($this->objMetadata->getStrTitle(), "5.1");
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn."\n\n";
 	}
 

@@ -5,11 +5,11 @@
         >
     <title>workflows</title>
     <description>A complex workflow-engine to trigger events by multiple triggers.</description>
-    <version>5.0</version>
+    <version>5.1</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="system" version="5.0" />
+        <module name="system" version="5.1" />
     </requiredModules>
 </package>

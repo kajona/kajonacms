@@ -5,11 +5,11 @@
     >
     <title>ezcchart</title>
     <description>ezComponents charting engine. Used to render charts on the server-side, generating an image. Makes use of the ezComponents library.</description>
-    <version>5.0</version>
+    <version>5.1</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>FALSE</providesInstaller>
     <requiredModules>
-        <module name="system" version="5.0" />
+        <module name="system" version="5.1" />
     </requiredModules>
 </package>
