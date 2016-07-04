@@ -88,7 +88,15 @@ class DbPostgres extends DbBase {
         if($strName === false)
             return false;
 
-        return @pg_execute($this->linkDB, $strName, $arrParams) !== false;
+        $objResult = @pg_execute($this->linkDB, $strName, $arrParams);
+
+        if ($objResult !== false) {
+            $this->intAffectedRows = @pg_affected_rows($objResult);
+
+            return $objResult;
+        } else {
+            return false;
+        }
     }
 
     /**

@@ -250,6 +250,13 @@ class Database
         return $this->getPRow($strQuery, array(), $intNr, $bitCache);
     }
 
+    /**
+     * @return integer
+     */
+    public function getAffectedRows()
+    {
+        return $this->objDbDriver->getAffectedRows();
+    }
 
     /**
      * Returns one row from a result-set.

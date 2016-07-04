@@ -325,6 +325,8 @@ class DbSqlite3 extends DbBase
             return false;
         }
 
+        $this->intAffectedRows = $this->linkDB->changes();
+
         return true;
     }
 

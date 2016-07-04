@@ -125,6 +125,8 @@ class DbMysqli extends DbBase {
                     break;
                 }
             }
+
+            $this->intAffectedRows = $objStatement->affected_rows;
         }
 
         return $bitReturn;

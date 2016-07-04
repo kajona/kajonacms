@@ -304,5 +304,49 @@ SQL;
             $this->assertEquals($intI, $arrResult[$intI - 4]["temp_long"]);
         }
     }
+
+    public function testGetAffectedRows()
+    {
+        $objDB = Carrier::getInstance()->getObjDB();
+
+        $this->createTable();
+
+        $strSystemId = generateSystemid();
+
+        // insert which affects onw row
+        $objDB->multiInsert("temp_autotest",
+            array("temp_id", "temp_long", "temp_double", "temp_char10", "temp_char20", "temp_char100", "temp_char254", "temp_char500", "temp_text"),
+            array(array(generateSystemid(), "1", "1", "1", $strSystemId, "1", "1", "1", "1"))
+        );
+        $this->assertEquals(1, $objDB->getAffectedRows());
+
+        // insert which affects two rows
+        $objDB->multiInsert("temp_autotest",
+            array("temp_id", "temp_long", "temp_double", "temp_char10", "temp_char20", "temp_char100", "temp_char254", "temp_char500", "temp_text"),
+            array(
+                array(generateSystemid(), "1", "1", "1", $strSystemId, "1", "1", "1", "1"),
+                array(generateSystemid(), "1", "1", "1", $strSystemId, "1", "1", "1", "1")
+            )
+        );
+        $this->assertEquals(2, $objDB->getAffectedRows());
+
+        $strNewSystemId = generateSystemid();
+
+        // update which affects multiple rows
+        $objDB->_pQuery("UPDATE " . _dbprefix_ . "temp_autotest SET temp_char20 = ? WHERE temp_char20 = ?", array($strNewSystemId, $strSystemId));
+        $this->assertEquals(3, $objDB->getAffectedRows());
+
+        // update which does not affect a row
+        $objDB->_pQuery("UPDATE " . _dbprefix_ . "temp_autotest SET temp_char20 = ? WHERE temp_char20 = ?", array(generateSystemid(), generateSystemid()));
+        $this->assertEquals(0, $objDB->getAffectedRows());
+
+        // delete which affects two rows
+        $objDB->_pQuery("DELETE FROM " . _dbprefix_ . "temp_autotest WHERE temp_char20 = ?", array($strNewSystemId));
+        $this->assertEquals(3, $objDB->getAffectedRows());
+
+        // delete which affects no rows
+        $objDB->_pQuery("DELETE FROM " . _dbprefix_ . "temp_autotest WHERE temp_char20 = ?", array(generateSystemid()));
+        $this->assertEquals(0, $objDB->getAffectedRows());
+    }
 }
 

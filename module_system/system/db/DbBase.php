@@ -22,6 +22,11 @@ abstract class DbBase implements DbDriverInterface
     protected $arrStatementsCache = array();
 
     /**
+     * @var int
+     */
+    protected $intAffectedRows = 0;
+
+    /**
      * Renames a table
      *
      * @param $strOldName
@@ -195,6 +200,14 @@ abstract class DbBase implements DbDriverInterface
     public function escape($strValue)
     {
         return $strValue;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAffectedRows()
+    {
+        return $this->intAffectedRows;
     }
 
     /**

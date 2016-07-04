@@ -161,6 +161,9 @@ class DbOci8 extends DbBase
             $bitAddon = OCI_NO_AUTO_COMMIT;
         }
         $bitResult = @oci_execute($objStatement, $bitAddon);
+
+        $this->intAffectedRows = @oci_num_rows($objStatement);
+
         @oci_free_statement($objStatement);
         return $bitResult;
     }

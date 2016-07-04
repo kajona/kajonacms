@@ -312,6 +312,13 @@ interface DbDriverInterface
      * @return string
      */
     public function appendLimitExpression($strQuery, $intStart, $intEnd);
+
+    /**
+     * Returns the number of affected rows from the last _pQuery call
+     *
+     * @return int
+     */
+    public function getAffectedRows();
 }
 
 
