@@ -104,4 +104,88 @@ class DateRangeTest extends Testbase
         $this->assertEquals(20151201000000, $arrRanges[0][0]->getLongTimestamp());
         $this->assertEquals(20151231235959, $arrRanges[0][1]->getLongTimestamp());
     }
+
+    public function testGetDateRangeCompleteWeek()
+    {
+        $arrRanges = DateRange::getDateRangeComplete(new Date(20160706000000), new Date(20160715000000), DatePeriodEnum::WEEK());
+
+        $this->assertEquals(2, count($arrRanges));
+
+        $this->assertEquals(20160704000000, $arrRanges[0][0]->getLongTimestamp());
+        $this->assertEquals(20160710235959, $arrRanges[0][1]->getLongTimestamp());
+        $this->assertEquals(20160711000000, $arrRanges[1][0]->getLongTimestamp());
+        $this->assertEquals(20160717235959, $arrRanges[1][1]->getLongTimestamp());
+
+        $arrRanges = DateRange::getDateRangeComplete(new Date(20160704000000), new Date(20160710235959), DatePeriodEnum::WEEK());
+
+        $this->assertEquals(1, count($arrRanges));
+
+        $this->assertEquals(20160704000000, $arrRanges[0][0]->getLongTimestamp());
+        $this->assertEquals(20160710235959, $arrRanges[0][1]->getLongTimestamp());
+
+        $arrRanges = DateRange::getDateRangeComplete(new Date(20160704000000), new Date(20160711000000), DatePeriodEnum::WEEK());
+
+        $this->assertEquals(2, count($arrRanges));
+
+        $this->assertEquals(20160704000000, $arrRanges[0][0]->getLongTimestamp());
+        $this->assertEquals(20160710235959, $arrRanges[0][1]->getLongTimestamp());
+        $this->assertEquals(20160711000000, $arrRanges[1][0]->getLongTimestamp());
+        $this->assertEquals(20160717235959, $arrRanges[1][1]->getLongTimestamp());
+    }
+
+    public function testGetDateRangeCompleteMonth()
+    {
+        $arrRanges = DateRange::getDateRangeComplete(new Date(20160606000000), new Date(20160713000000), DatePeriodEnum::MONTH());
+
+        $this->assertEquals(2, count($arrRanges));
+
+        $this->assertEquals(20160601000000, $arrRanges[0][0]->getLongTimestamp());
+        $this->assertEquals(20160630235959, $arrRanges[0][1]->getLongTimestamp());
+        $this->assertEquals(20160701000000, $arrRanges[1][0]->getLongTimestamp());
+        $this->assertEquals(20160731235959, $arrRanges[1][1]->getLongTimestamp());
+
+        $arrRanges = DateRange::getDateRangeComplete(new Date(20160601000000), new Date(20160630235959), DatePeriodEnum::MONTH());
+
+        $this->assertEquals(1, count($arrRanges));
+
+        $this->assertEquals(20160601000000, $arrRanges[0][0]->getLongTimestamp());
+        $this->assertEquals(20160630235959, $arrRanges[0][1]->getLongTimestamp());
+
+        $arrRanges = DateRange::getDateRangeComplete(new Date(20160601000000), new Date(20160701000000), DatePeriodEnum::MONTH());
+
+        $this->assertEquals(2, count($arrRanges));
+
+        $this->assertEquals(20160601000000, $arrRanges[0][0]->getLongTimestamp());
+        $this->assertEquals(20160630235959, $arrRanges[0][1]->getLongTimestamp());
+        $this->assertEquals(20160701000000, $arrRanges[1][0]->getLongTimestamp());
+        $this->assertEquals(20160731235959, $arrRanges[1][1]->getLongTimestamp());
+    }
+
+    public function testGetDateRangeCompleteYear()
+    {
+        $arrRanges = DateRange::getDateRangeComplete(new Date(20150606000000), new Date(20160713000000), DatePeriodEnum::YEAR());
+
+        $this->assertEquals(2, count($arrRanges));
+
+        $this->assertEquals(20150101000000, $arrRanges[0][0]->getLongTimestamp());
+        $this->assertEquals(20151231235959, $arrRanges[0][1]->getLongTimestamp());
+        $this->assertEquals(20160101000000, $arrRanges[1][0]->getLongTimestamp());
+        $this->assertEquals(20161231235959, $arrRanges[1][1]->getLongTimestamp());
+
+        $arrRanges = DateRange::getDateRangeComplete(new Date(20150101000000), new Date(20151231235959), DatePeriodEnum::YEAR());
+
+        $this->assertEquals(1, count($arrRanges));
+
+        $this->assertEquals(20150101000000, $arrRanges[0][0]->getLongTimestamp());
+        $this->assertEquals(20151231235959, $arrRanges[0][1]->getLongTimestamp());
+
+        $arrRanges = DateRange::getDateRangeComplete(new Date(20150101000000), new Date(20160101000000), DatePeriodEnum::YEAR());
+
+        $this->assertEquals(2, count($arrRanges));
+
+        $this->assertEquals(20150101000000, $arrRanges[0][0]->getLongTimestamp());
+        $this->assertEquals(20151231235959, $arrRanges[0][1]->getLongTimestamp());
+        $this->assertEquals(20160101000000, $arrRanges[1][0]->getLongTimestamp());
+        $this->assertEquals(20161231235959, $arrRanges[1][1]->getLongTimestamp());
+    }
 }

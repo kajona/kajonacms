@@ -64,6 +64,45 @@ class DateRange
     }
 
     /**
+     * Returns only complete weeks, months and years. The method modifies the start and end date borders to match
+     * a complete period.
+     *
+     * @param Date $objStartDate
+     * @param Date $objEndDate
+     * @param DatePeriodEnum $objInterval
+     * @return array
+     */
+    public static function getDateRangeComplete(Date $objStartDate, Date $objEndDate, DatePeriodEnum $objInterval)
+    {
+        $objTmpStartDate = clone $objStartDate;
+        $objTmpEndDate = clone $objEndDate;
+
+        if ($objInterval->equals(DatePeriodEnum::WEEK())) {
+            $objTmpStartDate->setBeginningOfDay();
+            $intCurrentWeek = date('W', $objTmpStartDate->getTimeInOldStyle());
+            while ($intCurrentWeek == date('W', $objTmpStartDate->getTimeInOldStyle())) {
+                $objTmpStartDate->setPreviousDay();
+            }
+            $objTmpStartDate->setNextDay();
+
+            $objTmpEndDate->setEndOfDay();
+            $intCurrentWeek = date('W', $objTmpEndDate->getTimeInOldStyle());
+            while ($intCurrentWeek == date('W', $objTmpEndDate->getTimeInOldStyle())) {
+                $objTmpEndDate->setNextDay();
+            }
+            $objTmpEndDate->setPreviousDay();
+        } elseif ($objInterval->equals(DatePeriodEnum::MONTH())) {
+            $objTmpStartDate->setBeginningOfDay()->setIntDay(1);
+            $objTmpEndDate->setEndOfDay()->setIntDay(1)->setNextMonth()->setPreviousDay();
+        } elseif ($objInterval->equals(DatePeriodEnum::YEAR())) {
+            $objTmpStartDate->setBeginningOfDay()->setIntDay(1)->setIntMonth(1);
+            $objTmpEndDate->setEndOfDay()->setIntDay(1)->setIntMonth(1)->setNextYear()->setPreviousDay();
+        }
+
+        return self::getDateRange($objTmpStartDate, $objTmpEndDate, $objInterval);
+    }
+
+    /**
      * Transforms the result of the getDateRange format to another format
      *
      * @param array $arrRanges
