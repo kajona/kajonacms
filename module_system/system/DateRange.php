@@ -65,7 +65,19 @@ class DateRange
 
     /**
      * Returns only complete weeks, months and years. The method modifies the start and end date borders to match
-     * a complete period.
+     * a complete period. Also the start date is set to 00:00:00 and the end date to 23:59:59. For example:
+     *
+     * 06.07         07.07         ...           15.07         16.07
+     * |-------------|-------------|-------------|-------------|
+     *        | <----------------------------------> |
+     *        06.07 12:00                            15.07 08:00
+     *
+     * In this case we get the following array
+     *
+     * array(
+     *   array(new Date("2016-07-04 00:00:00"), new Date("2016-07-10 23:59:59"))
+     *   array(new Date("2016-07-11 00:00:00"), new Date("2016-07-17 23:59:59"))
+     * )
      *
      * @param Date $objStartDate
      * @param Date $objEndDate

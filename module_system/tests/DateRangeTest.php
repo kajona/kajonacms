@@ -131,6 +131,15 @@ class DateRangeTest extends Testbase
         $this->assertEquals(20160710235959, $arrRanges[0][1]->getLongTimestamp());
         $this->assertEquals(20160711000000, $arrRanges[1][0]->getLongTimestamp());
         $this->assertEquals(20160717235959, $arrRanges[1][1]->getLongTimestamp());
+
+        $arrRanges = DateRange::getDateRangeComplete(new Date(20160706120000), new Date(20160715080000), DatePeriodEnum::WEEK());
+
+        $this->assertEquals(2, count($arrRanges));
+
+        $this->assertEquals(20160704000000, $arrRanges[0][0]->getLongTimestamp());
+        $this->assertEquals(20160710235959, $arrRanges[0][1]->getLongTimestamp());
+        $this->assertEquals(20160711000000, $arrRanges[1][0]->getLongTimestamp());
+        $this->assertEquals(20160717235959, $arrRanges[1][1]->getLongTimestamp());
     }
 
     public function testGetDateRangeCompleteMonth()
