@@ -46,7 +46,7 @@ class OrmAssignmentArray extends ArrayObject
      * @param Root $objTargetObject
      * @param int $strProperty
      */
-    function __construct(Root $objTargetObject, $strProperty, $objDeletedHandling)
+    public function __construct(Root $objTargetObject, $strProperty, $objDeletedHandling)
     {
         $this->objTargetObject = $objTargetObject;
         $this->strProperty = $strProperty;
@@ -74,7 +74,8 @@ class OrmAssignmentArray extends ArrayObject
         foreach ($objInit->getAssignmentsFromDatabase($this->strProperty) as $strOneId) {
 
             $objObject = Objectfactory::getInstance()->getObject($strOneId);
-            if ($objObject !== null && ($objCfg->getArrTypeFilter() == null || count(array_filter($objCfg->getArrTypeFilter(), function ($strSingleClass) use ($objObject) {
+            if ($objObject !== null && ($objCfg->getArrTypeFilter() == null ||
+                    count(array_filter($objCfg->getArrTypeFilter(), function ($strSingleClass) use ($objObject) {
                         return $objObject instanceof $strSingleClass;
                     })) > 0)
             ) {
