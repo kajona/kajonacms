@@ -251,11 +251,13 @@ class Database
     }
 
     /**
+     * Returns the number of affected rows from the last _pQuery call
+     *
      * @return integer
      */
-    public function getIntAffectedRow()
+    public function getIntAffectedRows()
     {
-        return $this->objDbDriver->getIntAffectedRow();
+        return $this->objDbDriver->getIntAffectedRows();
     }
 
     /**

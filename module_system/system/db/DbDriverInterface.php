@@ -318,7 +318,7 @@ interface DbDriverInterface
      *
      * @return int
      */
-    public function getIntAffectedRow();
+    public function getIntAffectedRows();
 }
 
 
