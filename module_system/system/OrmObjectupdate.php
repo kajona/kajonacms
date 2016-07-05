@@ -158,7 +158,7 @@ class OrmObjectupdate extends OrmBase
             //try to restore the object-set from the database using the same config as when initializing the object
             $objOldHandling = $this->getIntCombinedLogicalDeletionConfig();
             $this->setObjHandleLogicalDeleted($objAssignmentDeleteHandling);
-            $arrAssignmentsFromObject = $this->getAssignmentValuesFromObject($strPropertyName, $objCfg->getArrTypeFilter());
+            $arrAssignmentsFromObject = $this->getAssignmentValuesFromObject($strPropertyName, $objCfg->getArrTypeFilter(), true);
             $arrAssignmentsFromDatabase = $this->getAssignmentsFromDatabase($strPropertyName);
             $this->setObjHandleLogicalDeleted($objOldHandling);
 
@@ -201,14 +201,15 @@ class OrmObjectupdate extends OrmBase
             }
 
             $bitReturn = $bitReturn && $objDB->_pQuery(
-                    "DELETE FROM ".$objDB->encloseTableName(_dbprefix_.$objCfg->getStrTableName())." WHERE ".$objDB->encloseColumnName($objCfg->getStrSourceColumn())." = ?", array($this->getObjObject()->getSystemid())
-                );
+                "DELETE FROM ".$objDB->encloseTableName(_dbprefix_.$objCfg->getStrTableName())." WHERE ".$objDB->encloseColumnName($objCfg->getStrSourceColumn())." = ?",
+                array($this->getObjObject()->getSystemid())
+            );
             $bitReturn = $bitReturn && $objDB->multiInsert($objCfg->getStrTableName(), array($objCfg->getStrSourceColumn(), $objCfg->getStrTargetColumn()), $arrInserts);
 
             $bitReturn = $bitReturn && CoreEventdispatcher::getInstance()->notifyGenericListeners(
-                    SystemEventidentifier::EVENT_SYSTEM_OBJECTASSIGNMENTSUPDATED,
-                    array(array_values($arrNewAssignments), array_values($arrDeletedAssignments), array_values($arrAssignmentsFromObject), $this->getObjObject(), $strPropertyName)
-                );
+                SystemEventidentifier::EVENT_SYSTEM_OBJECTASSIGNMENTSUPDATED,
+                array(array_values($arrNewAssignments), array_values($arrDeletedAssignments), array_values($arrAssignmentsFromObject), $this->getObjObject(), $strPropertyName)
+            );
 
             if ($objReflection->hasPropertyAnnotation($strPropertyName, SystemChangelog::ANNOTATION_PROPERTY_VERSIONABLE)) {
                 $objChanges = new SystemChangelog();
@@ -229,7 +230,7 @@ class OrmObjectupdate extends OrmBase
      *
      * @return array
      */
-    private function getAssignmentValuesFromObject($strPropertyName, $arrClassFilter)
+    private function getAssignmentValuesFromObject($strPropertyName, $arrClassFilter, $bitCreateIfNotExisting = false)
     {
         $objReflection = new Reflection($this->getObjObject());
 
@@ -247,10 +248,16 @@ class OrmObjectupdate extends OrmBase
         foreach ($arrValues as $objOneValue) {
 
             if (is_object($objOneValue) && $objOneValue instanceof Model) {
-                if ($arrClassFilter == null || count(array_filter($arrClassFilter, function ($strSingleClass) use ($objOneValue) {
+                if ($arrClassFilter == null ||
+                    count(array_filter($arrClassFilter, function ($strSingleClass) use ($objOneValue) {
                         return $objOneValue instanceof $strSingleClass;
                     })) > 0
                 ) {
+                    if($bitCreateIfNotExisting && !validateSystemid($objOneValue->getSystemid())) {
+                        //seems we need an insert right here!
+                        $objOneValue->updateObjectToDb();
+                    }
+
                     $arrReturn[] = $objOneValue->getSystemid();
                 }
             } elseif (is_string($objOneValue) && validateSystemid($objOneValue)) {
