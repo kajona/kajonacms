@@ -10,7 +10,7 @@
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="system" version="5.0" />
-        <module name="packagemanager" version="5.0" />
+        <module name="system" version="5.1" />
+        <module name="packagemanager" version="5.1" />
     </requiredModules>
 </package>

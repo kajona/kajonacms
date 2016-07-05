@@ -5,11 +5,11 @@
         >
     <title>portalregistration</title>
     <description>Allows users to sign up and create an account using the portal.</description>
-    <version>5.0</version>
+    <version>5.1</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="pages" version="5.0" />
+        <module name="pages" version="5.1" />
     </requiredModules>
 </package>

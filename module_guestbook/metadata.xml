@@ -5,12 +5,12 @@
         >
     <title>guestbook</title>
     <description>A simple module providing a guestbook. New posts may be visible immediately or after an admins' review, depending on the configuration.</description>
-    <version>5.0</version>
+    <version>5.1</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="system" version="5.0" />
-        <module name="pages" version="5.0" />
+        <module name="system" version="5.1" />
+        <module name="pages" version="5.1" />
     </requiredModules>
 </package>

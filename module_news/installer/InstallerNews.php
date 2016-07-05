@@ -201,6 +201,13 @@ class InstallerNews extends InstallerBase implements InstallerRemovableInterface
             $this->updateModuleVersion("news", "5.0.1");
             $this->updateElementVersion("news", "5.0.1");
         }
+
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.0.1") {
+            $strReturn .= "Updating to 5.1...\n";
+            $this->updateModuleVersion("news", "5.1");
+            $this->updateElementVersion("news", "5.1");
+        }
         
         return $strReturn."\n\n";
 	}

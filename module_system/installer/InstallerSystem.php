@@ -579,6 +579,11 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         if($arrModule["module_version"] == "4.7.6") {
             $strReturn .= $this->update_476_50();
         }
+        
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.0") {
+            $strReturn .= $this->update_50_51();
+        }
 
         return $strReturn."\n\n";
     }
@@ -685,6 +690,13 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $this->registerConstant("_system_mod_rewrite_admin_only_", "false", SystemSetting::$int_TYPE_BOOL, _system_modul_id_);
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.0");
+        return $strReturn;
+    }
+
+    private function update_50_51() {
+        $strReturn = "Updating 5.0 to 5.1...\n";
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1");
         return $strReturn;
     }
     

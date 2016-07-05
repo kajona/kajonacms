@@ -287,6 +287,16 @@ class InstallerPages extends InstallerBase implements InstallerInterface {
                 $this->updateElementVersion($strOneElement, "5.0.1");
             }
         }
+        
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.0.1") {
+            $strReturn = "Updating to 5.1...\n";
+
+            $this->updateModuleVersion("", "5.1");
+            foreach(array("row", "paragraph", "image", "imagesrc", "gallery", "galleryRandom", "downloads", "blocks", "block", "date", "plaintext", "richtext", "link") as $strOneElement) {
+                $this->updateElementVersion($strOneElement, "5.1");
+            }
+        }
 
         return $strReturn."\n\n";
 	}
