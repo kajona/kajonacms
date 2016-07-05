@@ -227,8 +227,10 @@ class OrmObjectupdate extends OrmBase
      *
      * @param string $strPropertyName
      * @param string[]|null $arrClassFilter
+     * @param bool $bitCreateIfNotExisting persists new objects to the database instead of skipping them
      *
      * @return array
+     * @throws Exception
      */
     private function getAssignmentValuesFromObject($strPropertyName, $arrClassFilter, $bitCreateIfNotExisting = false)
     {
