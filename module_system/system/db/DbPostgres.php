@@ -93,7 +93,7 @@ class DbPostgres extends DbBase {
         if ($objResult !== false) {
             $this->intAffectedRows = @pg_affected_rows($objResult);
 
-            return $objResult;
+            return true;
         } else {
             return false;
         }
