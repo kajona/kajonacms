@@ -641,12 +641,12 @@ class DateHelper
             $strRelativeString = "first day of this month";
         }
         elseif($objPeriod->equals(DatePeriodEnum::WEEK())) {
-            if($objDate->getIntDayOfWeek() == 0) {
-                $strRelativeString = "monday last week";
-            }
-            else {
+//            if($objDate->getIntDayOfWeek() == 0) {
+//                $strRelativeString = "monday last week";
+//            }
+//            else {
                 $strRelativeString = "monday this week";
-            }
+//            }
         }
 
         $objNewDate = self::calcDateRelativeFormatString($objDate, $strRelativeString);
