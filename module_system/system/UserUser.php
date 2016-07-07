@@ -239,42 +239,21 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
         }
         else {
 
-            if (version_compare(SystemModule::getModuleByName("user")->getStrVersion(), "4.6.5", ">=")) {
-                $strQuery = "UPDATE "._dbprefix_."user SET
-                        user_active=?, user_admin=?, user_portal=?, user_admin_skin=?, user_admin_language=?, user_logins = ?, user_lastlogin = ?, user_authcode = ?, user_subsystem = ?,
-                        user_username =?, user_admin_module = ?, user_items_per_page = ?
-                        WHERE user_id = ?";
-            }
-            else if (version_compare(SystemModule::getModuleByName("user")->getStrVersion(), "4.4", ">=")) {
-                $strQuery = "UPDATE "._dbprefix_."user SET
-                        user_active=?, user_admin=?, user_portal=?, user_admin_skin=?, user_admin_language=?, user_logins = ?, user_lastlogin = ?, user_authcode = ?, user_subsystem = ?,
-                        user_username =?, user_admin_module = ?
-                        WHERE user_id = ?";
-            }
-            else {
-                $strQuery = "UPDATE "._dbprefix_."user SET
-                        user_active=?, user_admin=?, user_portal=?, user_admin_skin=?, user_admin_language=?, user_logins = ?, user_lastlogin = ?, user_authcode = ?, user_subsystem = ?,
-                        user_username =?
-                        WHERE user_id = ?";
-            }
+            $strQuery = "UPDATE "._dbprefix_."user SET
+                    user_active=?, user_admin=?, user_portal=?, user_admin_skin=?, user_admin_language=?, user_logins = ?, user_lastlogin = ?, user_authcode = ?, user_subsystem = ?,
+                    user_username =?, user_admin_module = ?, user_items_per_page = ?
+                    WHERE user_id = ?";
+            
 
             $arrParams = array(
                 (int)$this->getIntActive(),
                 (int)$this->getIntAdmin(), (int)$this->getIntPortal(), $this->getStrAdminskin(), $this->getStrAdminlanguage(),
                 (int)$this->getIntLogins(), (int)$this->getIntLastLogin(), $this->getStrAuthcode(),
-                $this->getStrSubsystem(), $this->getStrUsername()
+                $this->getStrSubsystem(), $this->getStrUsername(),
+                $this->getStrAdminModule(),
+                $this->getIntItemsPerPage(),
+                $this->getSystemid()
             );
-
-            if (version_compare(SystemModule::getModuleByName("user")->getStrVersion(), "4.4", ">=")) {
-                $arrParams[] = $this->getStrAdminModule();
-            }
-
-            if (version_compare(SystemModule::getModuleByName("user")->getStrVersion(), "4.6.5", ">=")) {
-                $arrParams[] = $this->getIntItemsPerPage();
-            }
-
-            $arrParams[] = $this->getSystemid();
-
 
             Logger::getInstance(Logger::USERSOURCES)->addLogRow("updated user for subsystem ".$this->getStrSubsystem()." / ".$this->getStrUsername(), Logger::$levelInfo);
             return $this->objDB->_pQuery($strQuery, $arrParams);
@@ -305,27 +284,17 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
     public static function getObjectListFiltered(FilterBase $objFilter = null, $strUsernameFilter = "", $intStart = null, $intEnd = null)
     {
         $strDbPrefix = _dbprefix_;
-        $arrParams = array();
 
-        if (version_compare(SystemModule::getModuleByName("user")->getStrVersion(), "4.5", ">=")) {
+        $strQuery = "SELECT user_tbl.user_id
+                      FROM {$strDbPrefix}user AS user_tbl
+                      LEFT JOIN {$strDbPrefix}user_kajona AS user_kajona ON user_tbl.user_id = user_kajona.user_id
+                      WHERE
+                          (user_tbl.user_username LIKE ? OR user_kajona.user_forename LIKE ? OR user_kajona.user_name LIKE ?)
 
-            $strQuery = "SELECT user_tbl.user_id
-                          FROM {$strDbPrefix}user AS user_tbl
-                          LEFT JOIN {$strDbPrefix}user_kajona AS user_kajona ON user_tbl.user_id = user_kajona.user_id
-                          WHERE
-                              (user_tbl.user_username LIKE ? OR user_kajona.user_forename LIKE ? OR user_kajona.user_name LIKE ?)
+                          AND (user_tbl.user_deleted = 0 OR user_tbl.user_deleted IS NULL)
+                      ORDER BY user_tbl.user_username, user_tbl.user_subsystem ASC";
 
-                              AND (user_tbl.user_deleted = 0 OR user_tbl.user_deleted IS NULL)
-                          ORDER BY user_tbl.user_username, user_tbl.user_subsystem ASC";
-
-            $arrParams = array("%".$strUsernameFilter."%", "%".$strUsernameFilter."%", "%".$strUsernameFilter."%");
-        }
-        else {
-            $strQuery = "SELECT user_id FROM {$strDbPrefix}user
-                            WHERE user_username LIKE ? ORDER BY user_username, user_subsystem ASC";
-
-            $arrParams = array("%".$strUsernameFilter."%");
-        }
+        $arrParams = array("%".$strUsernameFilter."%", "%".$strUsernameFilter."%", "%".$strUsernameFilter."%");
 
         $arrIds = Carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
 
@@ -346,25 +315,16 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
     public static function getObjectCountFiltered(FilterBase $objFilter = null, $strUsernameFilter = "")
     {
         $strDbPrefix = _dbprefix_;
-        $arrParams = array();
 
-        if (version_compare(SystemModule::getModuleByName("user")->getStrVersion(), "4.5", ">=")) {
-            $strQuery = "SELECT COUNT(*)
-                          FROM {$strDbPrefix}user AS user_tbl
-                          LEFT JOIN {$strDbPrefix}user_kajona AS user_kajona ON user_tbl.user_id = user_kajona.user_id
-                          WHERE
-                              (user_tbl.user_username LIKE ? OR user_kajona.user_forename LIKE ? OR user_kajona.user_name LIKE ?)
+        $strQuery = "SELECT COUNT(*)
+                      FROM {$strDbPrefix}user AS user_tbl
+                      LEFT JOIN {$strDbPrefix}user_kajona AS user_kajona ON user_tbl.user_id = user_kajona.user_id
+                      WHERE
+                          (user_tbl.user_username LIKE ? OR user_kajona.user_forename LIKE ? OR user_kajona.user_name LIKE ?)
 
-                              AND (user_tbl.user_deleted = 0 OR user_tbl.user_deleted IS NULL)";
+                          AND (user_tbl.user_deleted = 0 OR user_tbl.user_deleted IS NULL)";
 
-            $arrParams = array("%".$strUsernameFilter."%", "%".$strUsernameFilter."%", "%".$strUsernameFilter."%");
-        }
-        else {
-            $strQuery = "SELECT COUNT(*) FROM {$strDbPrefix}user
-                            WHERE user_username LIKE ? ";
-
-            $arrParams = array("%".$strUsernameFilter."%");
-        }
+        $arrParams = array("%".$strUsernameFilter."%", "%".$strUsernameFilter."%", "%".$strUsernameFilter."%");
 
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
         return $arrRow["COUNT(*)"];

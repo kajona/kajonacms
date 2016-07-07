@@ -100,13 +100,7 @@ class UserSourcefactory
 
         //validate if a group with the given name is available
 
-        if (SystemModule::getModuleByName("user") != null && version_compare(SystemModule::getModuleByName("user")->getStrVersion(), "4.5", ">=")) {
-            $strQuery = "SELECT user_id FROM "._dbprefix_."user where user_username = ? AND (user_deleted = 0 OR user_deleted IS NULL)";
-        }
-        else {
-            $strQuery = "SELECT user_id FROM "._dbprefix_."user where user_username = ?";
-        }
-
+        $strQuery = "SELECT user_id FROM "._dbprefix_."user where user_username = ? AND (user_deleted = 0 OR user_deleted IS NULL)";
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
 
         if (isset($arrRow["user_id"]) && validateSystemid($arrRow["user_id"])) {
@@ -139,24 +133,18 @@ class UserSourcefactory
 
         $strDbPrefix = _dbprefix_;
         //validate if a group with the given name is available
-        if (version_compare(SystemModule::getModuleByName("user")->getStrVersion(), "4.5", ">=")) {
+        $strQuery = "SELECT user_tbl.user_id, user_tbl.user_subsystem
+                      FROM {$strDbPrefix}user AS user_tbl
+                      LEFT JOIN {$strDbPrefix}user_kajona AS user_kajona ON user_tbl.user_id = user_kajona.user_id
+                      WHERE
+                          (user_tbl.user_username LIKE ? OR user_kajona.user_forename LIKE ? OR user_kajona.user_name LIKE ?)
 
-            $strQuery = "SELECT user_tbl.user_id, user_tbl.user_subsystem
-                          FROM {$strDbPrefix}user AS user_tbl
-                          LEFT JOIN {$strDbPrefix}user_kajona AS user_kajona ON user_tbl.user_id = user_kajona.user_id
-                          WHERE
-                              (user_tbl.user_username LIKE ? OR user_kajona.user_forename LIKE ? OR user_kajona.user_name LIKE ?)
+                          AND (user_tbl.user_deleted = 0 OR user_tbl.user_deleted IS NULL)
+                          AND user_active = 1
+                      ORDER BY user_tbl.user_username, user_tbl.user_subsystem ASC";
 
-                              AND (user_tbl.user_deleted = 0 OR user_tbl.user_deleted IS NULL)
-                              AND user_active = 1
-                          ORDER BY user_tbl.user_username, user_tbl.user_subsystem ASC";
-
-            $arrParams = array("%".$strParam."%", "%".$strParam."%", "%".$strParam."%");
-        }
-        else {
-            $strQuery = "SELECT user_id, user_subsystem FROM {$strDbPrefix}user where user_username LIKE ? AND user_active = 1";
-            $arrParams = array("%".$strParam."%");
-        }
+        $arrParams = array("%".$strParam."%", "%".$strParam."%", "%".$strParam."%");
+        
 
         $arrRows = Carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
 

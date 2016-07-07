@@ -49,8 +49,6 @@ class Rights
 
     private $bitTestMode = false;
 
-    private $bitChangelog = true;
-
     private static $arrPermissionMap = array();
 
     /**
@@ -58,15 +56,9 @@ class Rights
      */
     private function __construct()
     {
-        $this->objDb = Carrier::getInstance()->getObjDb();
+        $this->objDb = Carrier::getInstance()->getObjDB();
         $this->objSession = Carrier::getInstance()->getObjSession();
 
-        if (count($this->objDb->getTables()) > 0) {
-            $objModule = SystemModule::getModuleByName("system");
-            if ($objModule !== null && version_compare($objModule->getStrVersion(), "4.3.1") < 0) {
-                $this->bitChangelog = false;
-            }
-        }
     }
 
     /**
@@ -124,20 +116,11 @@ class Rights
         $arrParams[] = $arrRights[self::$STR_RIGHT_RIGHT3];
         $arrParams[] = $arrRights[self::$STR_RIGHT_RIGHT4];
         $arrParams[] = $arrRights[self::$STR_RIGHT_RIGHT5];
-        if ($this->bitChangelog) {
-            $arrParams[] = $arrRights[self::$STR_RIGHT_CHANGELOG];
-        }
+        $arrParams[] = $arrRights[self::$STR_RIGHT_CHANGELOG];
         $arrParams[] = $strSystemid;
 
-
-        if ($this->bitChangelog) {
-            $strQuery = "UPDATE "._dbprefix_."system_right
+        $strQuery = "UPDATE "._dbprefix_."system_right
             SET right_inherit=?, right_view=?, right_edit=?, right_delete=?, right_right=?, right_right1=?, right_right2=?, right_right3=?, right_right4=?, right_right5=?, right_changelog=? WHERE right_id=?";
-        }
-        else {
-            $strQuery = "UPDATE "._dbprefix_."system_right
-            SET right_inherit=?, right_view=?, right_edit=?, right_delete=?, right_right=?, right_right1=?, right_right2=?, right_right3=?, right_right4=?, right_right5=? WHERE right_id=?";
-        }
 
 
         if ($this->objDb->_pQuery($strQuery, $arrParams)) {
