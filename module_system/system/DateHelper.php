@@ -641,11 +641,20 @@ class DateHelper
             $strRelativeString = "first day of this month";
         }
         elseif($objPeriod->equals(DatePeriodEnum::WEEK())) {
+
+            $strRelativeString = "monday this week";
+
             if($objDate->getIntDayOfWeek() == 0) {
-                $strRelativeString = "monday last week";
-            }
-            else {
-                $strRelativeString = "monday this week";
+
+                //php 7.0.0 - 7.0.7
+                if(version_compare(PHP_VERSION, "7", ">=") && version_compare(PHP_VERSION, "7.0.8", "<")) {
+                    $strRelativeString = "monday last week";
+                }
+                //php < 5.6.23
+                else if(version_compare(PHP_VERSION, "5.6.23", "<")) {
+                    $strRelativeString = "monday last week";
+                }
+                
             }
         }
 
