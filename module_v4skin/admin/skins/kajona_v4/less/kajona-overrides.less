@@ -104,10 +104,6 @@ body {
 
     &.dialogBody {
         padding: 0;
-
-        #content {
-            padding: 0 15px 0 0;
-        }
     }
 
 
@@ -960,6 +956,12 @@ footer {
         .form-opener {
             vertical-align: top;
             padding: 7px 0 0 0;
+
+
+            @media (max-width: @screen-sm-min) {
+                padding: 7px 15px 0 15px;
+
+            }
         }
 
     }
