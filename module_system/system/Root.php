@@ -919,7 +919,7 @@ abstract class Root
 
         Logger::getInstance()->addLogRow("updated systemrecord ".$this->getStrSystemid()." data", Logger::$levelInfo);
 
-        if (SystemModule::getModuleByName("system") != null && version_compare(SystemModule::getModuleByName("system")->getStrVersion(), 4.5, "lt")) {
+        if (SystemModule::getModuleByName("system") != null && version_compare(SystemModule::getModuleByName("system")->getStrVersion(), "4.7.5", "lt")) {
             $strQuery = "UPDATE "._dbprefix_."system
                         SET system_prev_id = ?,
                             system_module_nr = ?,
