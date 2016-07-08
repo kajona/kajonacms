@@ -174,9 +174,10 @@ class FormentryObjectlist extends FormentryBase implements FormentryPrintableInt
             foreach ($this->arrKeyValues as $objObject) {
                 if ($objObject instanceof Model && $objObject instanceof ModelInterface) {
 
+                    $strTitle = self::getDisplayName($objObject);
+                    
                     if($objObject->rightView()) {
-                        $strTitle = self::getDisplayName($objObject);
-
+                        
                         //see, if the matching target-module provides a showSummary method
                         $objModule = SystemModule::getModuleByName($objObject->getArrModule("modul"));
                         if ($objModule != null) {
@@ -186,18 +187,13 @@ class FormentryObjectlist extends FormentryBase implements FormentryPrintableInt
                                 $strTitle = Link::getLinkAdmin($objObject->getArrModule("modul"), "showSummary", "&systemid=" . $objObject->getSystemid()."&folderview=".Carrier::getInstance()->getParam("folderview"), $strTitle);
                             }
                         }
-                        $strHtml .= $strTitle."<br/>\n";
                     }
-                    else {
-                        $strHtml .= AdminskinHelper::getAdminImage("icon_lockerClosed")." ".Carrier::getInstance()->getObjLang()->getLang("commons_error_permissions", "system")."<br/>\n";
-                    }
+                    $strHtml .= $strTitle."<br/>\n";
                 }
                 else {
                     throw new Exception("Array must contain objects", Exception::$level_ERROR);
                 }
             }
-            $strHtml .= "";
-
             return $strHtml;
         }
 
