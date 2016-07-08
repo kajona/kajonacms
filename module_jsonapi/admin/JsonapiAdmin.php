@@ -9,13 +9,20 @@ namespace Kajona\Jsonapi\Admin;
 use Kajona\Jsonapi\System\InvalidRequestException;
 use Kajona\Jsonapi\System\ObjectSerializer;
 use Kajona\System\Admin\AdminController;
+use Kajona\System\Admin\AdminEvensimpler;
+use Kajona\System\Admin\AdminFormgenerator;
+use Kajona\System\Admin\AdminFormgeneratorFactory;
+use Kajona\System\Admin\AdminFormgeneratorFilter;
 use Kajona\System\Admin\AdminInterface;
+use Kajona\System\Admin\AdminSimple;
 use Kajona\System\System\AuthenticationException;
 use Kajona\System\System\Exception;
+use Kajona\System\System\FilterBase;
 use Kajona\System\System\HttpResponsetypes;
 use Kajona\System\System\HttpStatuscodes;
 use Kajona\System\System\ModelInterface;
 use Kajona\System\System\Objectfactory;
+use Kajona\System\System\Reflection;
 use Kajona\System\System\ResponseObject;
 use Kajona\System\System\Root;
 use Kajona\System\System\SystemModule;
@@ -29,13 +36,11 @@ use Kajona\System\System\SystemModule;
  * @module jsonapi
  * @moduleId _jsonapi_module_id_
  */
-class JsonapiAdmin extends AdminController implements AdminInterface
+class JsonapiAdmin extends AdminEvensimpler implements AdminInterface
 {
-
-
     /**
      * Handles the incomming request. Catches all exceptions so that we return
-     * an clean json response with an fitting status code if an error occured
+     * a clean json response with a fitting status code if an error occured
      *
      * @xml
      */
@@ -59,8 +64,6 @@ class JsonapiAdmin extends AdminController implements AdminInterface
         } catch (InvalidRequestException $e) {
             ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_BADREQUEST);
 
-            $e->processException();
-
             $arrResponse = array(
                 'success' => false,
                 'message' => $e->getMessage(),
@@ -68,8 +71,6 @@ class JsonapiAdmin extends AdminController implements AdminInterface
 
         } catch (Exception $e) {
             ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_INTERNAL_SERVER_ERROR);
-
-            $e->processException();
 
             $arrResponse = array(
                 'success' => false,
@@ -90,8 +91,8 @@ class JsonapiAdmin extends AdminController implements AdminInterface
     }
 
     /**
-     * Is called on an GET request. If an systemId is available only the
-     * specific entry gets returned else an complete list
+     * Is called on a GET request. If a systemId is available only the
+     * specific entry gets returned else a complete list
      *
      * @return array
      * @throws InvalidRequestException
@@ -100,63 +101,154 @@ class JsonapiAdmin extends AdminController implements AdminInterface
      */
     protected function actionGet()
     {
-        // if we have no systemId we return an list else only an specific entry
+        // if we have no systemId we return a list else only a specific entry
+        $objObject = $this->getCurrentObject();
+
         if (!validateSystemid($this->getSystemid())) {
-
-            $strClass = $this->getParam('class');
-
-            if (empty($strClass) || !class_exists($strClass)) {
-                throw new InvalidRequestException('Invalid class name', Exception::$level_ERROR);
-            }
-
-            if (!method_exists($strClass, 'getObjectList')) {
-                throw new InvalidRequestException('Invalid class type', Exception::$level_ERROR);
-            }
-
-            // filter parameters
-            $strFilter = $this->getParam('filter');
-            $intStartIndex = (int)$this->getParam('startIndex');
-
-            $intCount = (int)$this->getParam('count');
-            if ($intCount <= 0) {
-                $intCount = 8;
-            }
-
-            $strStartDate = $this->getParam('startDate');
-            if (!empty($strStartDate)) {
-                $objStartDate = new \Kajona\System\System\Date(strtotime($strStartDate));
+            if ($this->getParam("form")) {
+                $objAdminForm = AdminFormgeneratorFactory::createByModel($objObject);
+                return $this->getAdminJsonForm($objAdminForm);
             } else {
-                $objStartDate = null;
-            }
+                // pagination
+                $intStartIndex = (int) $this->getParam('startIndex');
+                $intStartIndex = $intStartIndex <= 0 ? 0 : $intStartIndex;
+                $intCount = (int) $this->getParam('count');
+                $intCount = $intCount <= 0 ? 8 : $intCount;
 
-            $strEndDate = $this->getParam('endDate');
-            if (!empty($strEndDate)) {
-                $objEndDate = new \Kajona\System\System\Date(strtotime($strEndDate));
+                $strPrevId = $this->getParam("previd") ?: "";
+                $objFilter = $this->getFilterForModel($objObject);
+
+                if ($objFilter !== null) {
+                    $arrFilter = $this->getAdminJsonFilterForm($objFilter);
+                } else {
+                    $arrFilter = null;
+                }
+
+                $intTotalCount = $objObject::getObjectCountFiltered($objFilter, $strPrevId);
+                $arrEntries = $objObject::getObjectListFiltered($objFilter, $strPrevId, $intStartIndex, $intCount);
+
+                $arrResult = array();
+                /** @var ModelInterface[]|Root[] $arrEntries */
+                foreach ($arrEntries as $objEntry) {
+                    // internal permission handling right here
+                    if (!$objEntry->rightView()) {
+                        continue;
+                    }
+
+                    $arrRow = $this->serializeObject($objEntry);
+                    if (!empty($arrRow)) {
+                        $arrResult[] = $arrRow;
+                    }
+                }
+
+                return array(
+                    'totalCount' => $intTotalCount,
+                    'startIndex' => $intStartIndex,
+                    'filter' => $arrFilter,
+                    'entries' => $arrResult,
+                );
+            }
+        } else {
+            if ($this->getParam("form")) {
+                $objAdminForm = AdminFormgeneratorFactory::createByModel($objObject);
+                return $this->getAdminJsonForm($objAdminForm);
             } else {
-                $objEndDate = null;
+                return $this->serializeObject($objObject);
+            }
+        }
+    }
+
+    /**
+     * Returns an array representation of the form structure which can be used by the client
+     *
+     * @param Root $objObject
+     * @return array
+     * @throws Exception
+     * @throws InvalidRequestException
+     */
+    protected function getAdminJsonForm(AdminFormgenerator $objAdminForm)
+    {
+        if ($this->getParam("form") == "html") {
+            $strTargetUri = $this->getParam("target_uri");
+            if (!filter_var($strTargetUri, FILTER_VALIDATE_URL)) {
+                $strTargetUri = "";
             }
 
-            /** @var ModelInterface[]|Root[] $arrEntries */
-            $arrEntries = $strClass::getObjectListFiltered(null, $strFilter, $intStartIndex, $intCount, $objStartDate, $objEndDate);
+            $intButtonConfig = (int) $this->getParam("button_config") ?: 2;
+
+            return array(
+                "form" => $objAdminForm->renderForm($strTargetUri, $intButtonConfig),
+            );
+        } else {
+            $arrFields = $objAdminForm->getArrFields();
             $arrResult = array();
 
-            foreach ($arrEntries as $objEntry) {
-                // internal permission handling right here
-                if (!$objEntry->rightView()) {
-                    continue;
-                }
-
-                $arrRow = $this->serializeObject($objEntry);
-                if (!empty($arrRow)) {
-                    $arrResult[] = $arrRow;
-                }
+            foreach ($arrFields as $objField) {
+                $arrResult[] = array(
+                    "_class" => get_class($objField),
+                    "entryName" => $objField->getStrEntryName(),
+                    "label" => $objField->getStrLabel(),
+                    "hint" => $objField->getStrHint(),
+                    "readonly" => $objField->getBitReadonly(),
+                    "value" => $objField->getStrValue(),
+                    "mandatory" => $objField->getBitMandatory(),
+                );
             }
 
-            return $arrResult;
-        } else {
-            $objObject = Objectfactory::getInstance()->getObject($this->getSystemid());
-            return $this->serializeObject($objObject);
+            return array(
+                "name" => $objAdminForm->getStrFormname(),
+                "fields" => $arrResult,
+            );
         }
+    }
+
+    /**
+     * Returns the filter object for a model
+     *
+     * @param string $strClassName
+     * @return FilterBase|null
+     * @throws Exception
+     */
+    protected function getFilterForModel(Root $objObject)
+    {
+        // @TODO since we have no clean way to get the fitting filter for a model we simply try to guess through the
+        // name. Maybe we should add an annotation to the model which declares the default filter
+
+        $strObjectFilterClass = $this->getObjectFilterClass($objObject);
+
+        if (class_exists($strObjectFilterClass)) {
+            $objFilter = new $strObjectFilterClass();
+            if ($objFilter instanceof FilterBase) {
+                $objFilter->updateFilterPropertiesFromParams();
+            }
+
+            return $objFilter;
+        }
+
+        return null;
+    }
+
+    protected function getAdminJsonFilterForm($objFilter)
+    {
+        $objFilterForm = new AdminFormgeneratorFilter($objFilter->getFilterId(), $objFilter);
+        $objFilterForm->generateFieldsFromObject();
+        $objFilterForm->updateSourceObject();
+
+        return $this->getAdminJsonForm($objFilterForm);
+    }
+
+    private function getObjectFilterClass(Root $objObject)
+    {
+        $strCurObjectTypeName = $this->getParam("object_type");
+        $objAdminController = SystemModule::getModuleByName($objObject->getArrModule("module"))->getAdminInstanceOfConcreteModule($objObject->getStrSystemid());
+        $objReflection = new Reflection($objAdminController);
+        $arrAnnotations = $objReflection->getAnnotationValuesFromClass(AdminEvensimpler::STR_OBJECT_LISTFILTER_ANNOTATION.$strCurObjectTypeName);
+
+        if (count($arrAnnotations) > 0) {
+            return reset($arrAnnotations);
+        }
+
+        return null;
     }
 
     /**
@@ -177,11 +269,18 @@ class JsonapiAdmin extends AdminController implements AdminInterface
             throw new AuthenticationException("You are not allowed to create new records", Exception::$level_ERROR);
         }
 
-        $this->injectData($objObject);
+        // insert data
+        $objAdminForm = AdminFormgeneratorFactory::createByModel($objObject);
 
-        // @TODO validate the model data which can contain any data from the json request
-        // we could use the form-validators, so field- and object validators right here. currently this is all rather fixed inside AdminFormgenerator,
-        // but we should refactor it from there into separate classes, so in order to reuse it here -> filing a ticket?
+        // validate
+        if (!$objAdminForm->validateForm()) {
+            return array(
+                'success' => false,
+                'errors'  => $objAdminForm->getValidationErrors(),
+            );
+        }
+
+        $objAdminForm->updateSourceObject();
 
         $objObject->updateObjectToDb();
 
@@ -209,9 +308,18 @@ class JsonapiAdmin extends AdminController implements AdminInterface
             throw new AuthenticationException("You are not allowed to update records", Exception::$level_ERROR);
         }
 
-        $this->injectData($objObject);
+        // insert data
+        $objAdminForm = AdminFormgeneratorFactory::createByModel($objObject);
 
-        // @TODO validate the model data which can contain any data from the json request 
+        // validate
+        if (!$objAdminForm->validateForm()) {
+            return array(
+                'success' => false,
+                'errors'  => $objAdminForm->getValidationErrors(),
+            );
+        }
+
+        $objAdminForm->updateSourceObject();
 
         $objObject->updateObjectToDb();
 
@@ -235,7 +343,7 @@ class JsonapiAdmin extends AdminController implements AdminInterface
         $objObject = $this->getCurrentObject($this->getSystemid());
 
         if (!$objObject->rightDelete()) {
-            throw new AuthenticationException("You are not allowed to delete new records", Exception::$level_ERROR);
+            throw new AuthenticationException("You are not allowed to delete records", Exception::$level_ERROR);
         }
 
         $objObject->deleteObject();
@@ -251,36 +359,32 @@ class JsonapiAdmin extends AdminController implements AdminInterface
      * searches in the model for @jsonExport annotations. The system id is
      * always added
      *
-     * @param \Kajona\System\System\ModelInterface $objModel
+     * @param Root $objModel
      * @return array
      */
-    protected function serializeObject(\Kajona\System\System\ModelInterface $objModel)
+    protected function serializeObject(Root $objModel)
     {
         $objSerializer = new ObjectSerializer($objModel);
+        $objAdminController = SystemModule::getModuleByName($objModel->getArrModule("module"))->getAdminInstanceOfConcreteModule($objModel->getStrSystemid());
+
+        if ($objAdminController instanceof AdminSimple) {
+            $arrActions = $objAdminController->getActionIcons($objModel);
+        } else {
+            $arrActions = [];
+        }
 
         return array_merge(
-            array('_id' => $objModel->getSystemid()),
+            array(
+                '_id' => $objModel->getSystemid(),
+                '_class' => get_class($objModel),
+                '_icon' => is_array($objModel->getStrIcon()) ? current($objModel->getStrIcon()) : $objModel->getStrIcon(),
+                '_displayName' => $objModel->getStrDisplayName(),
+                '_additionalInfo' => $objModel->getStrAdditionalInfo(),
+                '_longDescription' => $objModel->getStrLongDescription(),
+                '_actions' => $arrActions,
+            ),
             $objSerializer->getArrMapping()
         );
-    }
-
-    /**
-     * Injects the request data into the model
-     *
-     * @param \Kajona\System\System\ModelInterface $objModel
-     */
-    protected function injectData(\Kajona\System\System\ModelInterface $objModel)
-    {
-        $arrData = $this->getRequestBody();
-        $objSerializer = new ObjectSerializer($objModel);
-        $arrProperties = $objSerializer->getPropertyNames();
-
-        foreach ($arrProperties as $strProperty) {
-            $strSetterMethod = 'set' . ucfirst($strProperty);
-            if (isset($arrData[$strProperty]) && method_exists($objModel, $strSetterMethod)) {
-                $objModel->$strSetterMethod($arrData[$strProperty]);
-            }
-        }
     }
 
     /**
@@ -289,7 +393,7 @@ class JsonapiAdmin extends AdminController implements AdminInterface
      * @return array
      * @throws InvalidRequestException
      */
-    protected function getRequestBody()
+    protected function readRequestBody()
     {
         $strRawBody = file_get_contents('php://input');
         if (!empty($strRawBody)) {
@@ -297,7 +401,11 @@ class JsonapiAdmin extends AdminController implements AdminInterface
             $strLastError = json_last_error();
 
             if ($strLastError == JSON_ERROR_NONE) {
-                return $arrBody;
+                // set the request data as params so that we can use updateSourceObject to inject the data into the
+                // object. Note this may overwrites GET params which have the same name
+                foreach ($arrBody as $strKey => $strValue) {
+                    $this->setParam($strKey, $strValue);
+                }
             } else {
                 throw new InvalidRequestException('Invalid JSON request', Exception::$level_ERROR);
             }
@@ -312,7 +420,7 @@ class JsonapiAdmin extends AdminController implements AdminInterface
      * exists
      *
      * @param string $strSystemId
-     * @return \Kajona\System\System\ModelInterface
+     * @return \Kajona\System\System\Root
      * @throws InvalidRequestException
      */
     protected function getCurrentObject($strSystemId = null)
@@ -337,7 +445,7 @@ class JsonapiAdmin extends AdminController implements AdminInterface
             $objObject = new $strClassName();
         }
 
-        if (!$objObject instanceof \Kajona\System\System\ModelInterface) {
+        if (!$objObject instanceof \Kajona\System\System\Root) {
             throw new InvalidRequestException('Selected class must be a model', Exception::$level_ERROR);
         }
 
