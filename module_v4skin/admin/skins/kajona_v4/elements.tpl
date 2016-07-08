@@ -304,7 +304,7 @@ data list footer. at the bottom of the datatable
     </table>
     <script type="text/javascript">
         KAJONA.admin.loader.loadFile("/core/module_v4skin/admin/skins/kajona_v4/js/jquery.floatThead.min.js", function() {
-            $('table.kajona-data-table').floatThead({
+            $('table.kajona-data-table:not(.kajona-data-table-ignore-floatthread)').floatThead({
                 scrollingTop: $("body.dialogBody").size() > 0 ? 0 : 70,
                 useAbsolutePositioning: true
             });
