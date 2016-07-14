@@ -99,6 +99,7 @@ $lang["change_type_setting"]             = "Setting";
 $lang["change_user"]                     = "User";
 $lang["change_report_title"]             = "Change history";
 $lang["change_export_excel"]             = "Excel export";
+$lang["change_diff"]                     = "Compare";
 $lang["dateStyleLong"]                   = "m/d/Y H:i:s";
 $lang["dateStyleShort"]                  = "m/d/Y";
 $lang["datekajona"]                      = "System date";

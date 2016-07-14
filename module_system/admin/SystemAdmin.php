@@ -33,6 +33,7 @@ use Kajona\System\System\Objectfactory;
 use Kajona\System\System\OrmBase;
 use Kajona\System\System\OrmDeletedhandlingEnum;
 use Kajona\System\System\Pluginmanager;
+use Kajona\System\System\Reflection;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemChangelog;
@@ -962,15 +963,71 @@ JS;
         }
 
         $objManager = new PackagemanagerManager();
+        $arrToolbar = array();
         if ($objManager->getPackage("phpexcel") != null) {
-            $strReturn .= $this->objToolkit->getContentToolbar(array(
-                Link::getLinkAdmin($this->getArrModule("modul"), "genericChangelogExportExcel", "&systemid=" . $strSystemid, AdminskinHelper::getAdminImage("icon_excel") . " " . $this->getLang("change_export_excel"), "", "", false)
-            ));
+            $arrToolbar[] = Link::getLinkAdmin($this->getArrModule("modul"), "genericChangelogExportExcel", "&systemid=" . $strSystemid, AdminskinHelper::getAdminImage("icon_excel") . " " . $this->getLang("change_export_excel"), "", "", false);
         }
+
+        $arrToolbar[] = Link::getLinkAdmin($this->getArrModule("modul"), "changelogDiff", "&systemid=" . $strSystemid . "&folderview=1", AdminskinHelper::getAdminImage("icon_sync") . " " . $this->getLang("change_diff"), "", "", false);
+
+        $strReturn .= $this->objToolkit->getContentToolbar($arrToolbar);
 
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrData);
 
         $strReturn .= $this->objToolkit->getPageview($objArraySectionIterator, $strSourceModule, $strSourceAction, "&systemid=" . $strSystemid . "&bitBlockFolderview=" . $this->getParam("bitBlockFolderview"));
+
+        return $strReturn;
+    }
+
+    protected function actionChangelogDiff()
+    {
+        $strSystemId = $this->getSystemid();
+        $objObject = Objectfactory::getInstance()->getObject($strSystemId);
+        $arrDates = SystemChangelog::getDatesForSystemid($strSystemId);
+
+        $arrResult = array();
+        foreach ($arrDates as $arrDate) {
+            $objDate = new Date($arrDate["change_date"]);
+            $arrResult[$objDate->getLongTimestamp()] = date("d.m.Y", $objDate->getTimeInOldStyle());
+        }
+        $arrResult = array_unique($arrResult);
+
+        $strList = "<ul>";
+        foreach ($arrResult as $strLongDate => $strDate) {
+            $strList .= "<li><a href='#' onclick='KAJONA.admin.changelog.loadDate(\"" . $objObject->getStrSystemid() . "\", \"" . $strLongDate . "\", \"right\")'>" . $strDate . "</a></li>";
+        }
+        $strList .= "</ul>";
+
+        $strReturn = "<div id='changelogTimeline' style='height:200px'>" . $strList . "</div>";
+
+        $objReflection = new Reflection($objObject);
+        $arrProps = $objReflection->getPropertiesWithAnnotation(SystemChangelog::ANNOTATION_PROPERTY_VERSIONABLE);
+        $arrData = array();
+
+        foreach ($arrProps as $strPropertyName => $strValue) {
+            $strGetter = $objReflection->getGetter($strPropertyName);
+            if (!empty($strGetter)) {
+                $arrRow = array();
+                $arrRow['0 border-right'] = $strPropertyName;
+                $arrRow['1 border-right'] = "<div id='property_" . $strPropertyName . "_left' class='changelog_property_left' data-name='" . $strPropertyName . "'></div>";
+                $arrRow[] = "<div id='property_" . $strPropertyName . "_right' class='changelog_property_right' data-name='" . $strPropertyName . "'></div>";
+                $arrData[] = $arrRow;
+            }
+        }
+
+        $arrHeader = array(
+            '0 border-right' => "Eigenschaft",
+            '1 border-right" style="width:30%;"' => "<div id='date_left'></div>",
+            '2" style="width:30%;"' => "<div id='date_right'></div>",
+        );
+
+        $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrData);
+
+        $arrDates = array_keys($arrResult);
+        $strReturn .= "<script type='text/javascript'>";
+        $strReturn .= "KAJONA.admin.changelog.loadDate(\"" . $objObject->getStrSystemid() . "\", \"" . array_pop($arrDates) . "\", \"left\");";
+        $strReturn .= "KAJONA.admin.changelog.loadDate(\"" . $objObject->getStrSystemid() . "\", \"" . array_pop($arrDates) . "\", \"right\");";
+        $strReturn .= "</script>";
 
         return $strReturn;
     }

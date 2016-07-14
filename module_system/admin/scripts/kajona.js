@@ -1448,3 +1448,48 @@ KAJONA.admin.forms.getObjField = function (objField) {
         return $(objField);
     }
 };
+
+
+
+/**
+ * Gets the jQuery object
+ *
+ * @param objField - my be a jquery object or an id selector
+ */
+KAJONA.admin.changelog = {};
+KAJONA.admin.changelog.compareTable = function () {
+    var propsLeft = {};
+    $('.changelog_property_left').each(function(){
+        propsLeft[$(this).data('name')] = $(this).html();
+    });
+
+    var propsRight = {};
+    $('.changelog_property_right').each(function(){
+        propsRight[$(this).data('name')] = $(this).html();
+    });
+
+    for (var key in propsLeft) {
+        if (propsLeft[key] != "" && propsRight[key] != "") {
+            if (propsLeft[key] != propsRight[key]) {
+                $('#property_' + key + '_left').parent().parent().css('background-color', '#CEC');
+            } else {
+                $('#property_' + key + '_left').parent().parent().css('background-color', '');
+            }
+        }
+    }
+};
+
+KAJONA.admin.changelog.loadDate = function (strSystemId, strDate, strType) {
+    $('#date_' + strType).html("");
+    $('.changelog_property_' + strType).html("");
+    KAJONA.admin.ajax.genericAjaxCall("system", "changelogPropertiesForDate", "&systemid="+strSystemId+"&date="+strDate, function(data, status, jqXHR) {
+        data = JSON.parse(data);
+        var props = data.properties;
+        $('#date_' + strType).html(data.date);
+        for (var prop in props) {
+            $('#property_' + prop + '_' + strType).html(props[prop]);
+        }
+        KAJONA.admin.changelog.compareTable();
+    });
+};
+

@@ -92,6 +92,7 @@ $lang["change_type_setting"]             = "Einstellung";
 $lang["change_user"]                     = "Benutzer";
 $lang["change_report_title"]             = "Änderungshistorie";
 $lang["change_export_excel"]             = "Daten nach Excel exportieren";
+$lang["change_diff"]                     = "Vergleich";
 $lang["dateStyleLong"]                   = "d.m.Y H:i:s";
 $lang["dateStyleShort"]                  = "d.m.Y";
 $lang["datekajona"]                      = "System-Datum";

@@ -12,6 +12,8 @@ namespace Kajona\System\Admin;
 use Kajona\Pages\System\PagesPageelement;
 use Kajona\System\Admin\Systemtasks\AdminSystemtaskInterface;
 use Kajona\System\Admin\Systemtasks\SystemtaskBase;
+use Kajona\System\System\Date;
+use Kajona\System\System\Exception;
 use Kajona\System\System\Filesystem;
 use Kajona\System\System\HttpResponsetypes;
 use Kajona\System\System\HttpStatuscodes;
@@ -19,12 +21,17 @@ use Kajona\System\System\Lang;
 use Kajona\System\System\Logger;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Pluginmanager;
+use Kajona\System\System\Reflection;
+use Kajona\System\System\ReflectionEnum;
 use Kajona\System\System\ResponseObject;
+use Kajona\System\System\SystemChangelog;
+use Kajona\System\System\SystemChangelogRestorer;
 use Kajona\System\System\SysteminfoInterface;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\SystemSession;
 use Kajona\System\System\SystemSetting;
 use Kajona\System\System\UserUser;
+use Kajona\System\System\VersionableInterface;
 
 
 /**
@@ -520,4 +527,35 @@ class SystemAdminXml extends AdminController implements XmlAdminInterface
         return json_encode($strReturn);
     }
 
+    protected function actionChangelogPropertiesForDate()
+    {
+        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
+
+        $objObject = Objectfactory::getInstance()->getObject($this->getSystemid());
+        $strDate = new Date($this->getParam("date"));
+
+        if ($objObject instanceof VersionableInterface) {
+            $objChangelog = new SystemChangelogRestorer();
+            $objChangelog->restoreObject($objObject, $strDate);
+
+            $objReflection = new Reflection($objObject);
+            $arrProps = $objReflection->getPropertiesWithAnnotation(SystemChangelog::ANNOTATION_PROPERTY_VERSIONABLE);
+            $arrData = array();
+
+            foreach ($arrProps as $strPropertyName => $strValue) {
+                $strGetter = $objReflection->getGetter($strPropertyName);
+                if (!empty($strGetter)) {
+                    $arrData[$strPropertyName] = $objObject->$strGetter();
+                }
+            }
+
+            return json_encode(array(
+                "systemid" => $objObject->getStrSystemid(),
+                "date" => date("d.m.Y", $strDate->getTimeInOldStyle()),
+                "properties" => $arrData,
+            ));
+        } else {
+            throw new Exception("Invalid object type", Exception::$level_ERROR);
+        }
+    }
 }
