@@ -23,7 +23,8 @@ use ArrayObject;
  * @author sidler@mulchprod.de
  * @since 4.6
  */
-class OrmObjectupdate extends OrmBase {
+class OrmObjectupdate extends OrmBase
+{
 
 
     /**
@@ -36,25 +37,25 @@ class OrmObjectupdate extends OrmBase {
      * @throws Exception
      * @return bool
      */
-    public function updateStateToDb() {
+    public function updateStateToDb()
+    {
 
-        if(!validateSystemid($this->getObjObject()->getSystemid()) || !$this->hasTargetTable()) {
+        if (!validateSystemid($this->getObjObject()->getSystemid()) || !$this->hasTargetTable()) {
             return true;
         }
-
 
 
         //fetch properties with annotations
         $objReflection = new Reflection($this->getObjObject());
         $arrTargetTables = $objReflection->getAnnotationValuesFromClass(OrmBase::STR_ANNOTATION_TARGETTABLE);
-        if(count($arrTargetTables) == 0) {
+        if (count($arrTargetTables) == 0) {
             //no table mapping found - skip
             return true;
         }
 
         $bitReturn = true;
 
-        foreach($arrTargetTables as $strOneTable) {
+        foreach ($arrTargetTables as $strOneTable) {
             $arrTableDef = explode(".", $strOneTable);
 
             //scan all properties
@@ -64,34 +65,38 @@ class OrmObjectupdate extends OrmBase {
             //get the mapped properties
             $arrProperties = $objReflection->getPropertiesWithAnnotation(OrmBase::STR_ANNOTATION_TABLECOLUMN);
 
-            foreach($arrProperties as $strPropertyName => $strColumn) {
+            foreach ($arrProperties as $strPropertyName => $strColumn) {
 
                 //check if there are table annotation available
                 $arrColumnDef = explode(".", $strColumn);
 
                 //if the column doesn't declare a target table whereas the class defines more then one - skip it.
-                if(count($arrColumnDef) == 1 && count($arrTargetTables) > 1 )
+                if (count($arrColumnDef) == 1 && count($arrTargetTables) > 1) {
                     throw new OrmException("property ".$strPropertyName." declares no target table, class ".get_class($this->getObjObject())." declares more than one target table.", OrmException::$level_FATALERROR);
+                }
 
 
                 //skip if property targets another table
-                if(count($arrColumnDef) == 2 && $arrColumnDef[0] != $arrTableDef[0])
+                if (count($arrColumnDef) == 2 && $arrColumnDef[0] != $arrTableDef[0]) {
                     continue;
+                }
 
-                if(count($arrColumnDef) == 2)
+                if (count($arrColumnDef) == 2) {
                     $strColumn = $arrColumnDef[1];
+                }
 
                 //all prerequisites match, start creating query
                 $strGetter = $objReflection->getGetter($strPropertyName);
-                if($strGetter !== null) {
+                if ($strGetter !== null) {
                     //explicit casts required? could be relevant, depending on the target column type / database system
                     $mixedValue = $this->getObjObject()->{$strGetter}();
-                    if($mixedValue !== null && (uniStrtolower(uniSubstr($strGetter, 0, 6)) == "getint" || uniStrtolower(uniSubstr($strGetter, 0, 6)) == "getbit")) {
+                    if ($mixedValue !== null && (uniStrtolower(uniSubstr($strGetter, 0, 6)) == "getint" || uniStrtolower(uniSubstr($strGetter, 0, 6)) == "getbit")) {
                         //different casts on 32bit / 64bit
-                        if($mixedValue > PHP_INT_MAX)
+                        if ($mixedValue > PHP_INT_MAX) {
                             $mixedValue = (float)$mixedValue;
-                        else
+                        } else {
                             $mixedValue = (int)$mixedValue;
+                        }
                     }
                     $arrColValues[$strColumn] = $mixedValue;
                     $arrEscapes[] = !$objReflection->hasPropertyAnnotation($strPropertyName, OrmBase::STR_ANNOTATION_BLOCKESCAPING);
@@ -99,32 +104,34 @@ class OrmObjectupdate extends OrmBase {
             }
 
             //update table
-            if(count($arrColValues) > 0)
+            if (count($arrColValues) > 0) {
                 $bitReturn = $bitReturn && $this->updateSingleTable($arrColValues, $arrEscapes, $arrTableDef[0], $arrTableDef[1]);
+            }
 
         }
 
         //see, if we should process object lists, too
-        if($bitReturn) {
+        if ($bitReturn) {
             $bitReturn = $this->updateAssignments();
         }
 
 
-        if($this->getObjObject() instanceof VersionableInterface) {
+        if ($this->getObjObject() instanceof VersionableInterface) {
             $objChanges = new SystemChangelog();
             $objChanges->createLogEntry($this->getObjObject(), SystemChangelog::$STR_ACTION_EDIT);
         }
 
         return $bitReturn;
 
-
     }
 
     /**
      * Triggers the update sequence for assignment properties
+     *
      * @return bool
      */
-    private function updateAssignments() {
+    private function updateAssignments()
+    {
         $bitReturn = true;
 
         $objReflection = new Reflection($this->getObjObject());
@@ -132,18 +139,18 @@ class OrmObjectupdate extends OrmBase {
         //get the mapped properties
         $arrProperties = $objReflection->getPropertiesWithAnnotation(OrmBase::STR_ANNOTATION_OBJECTLIST, ReflectionEnum::PARAMS);
 
-        foreach($arrProperties as $strPropertyName => $arrValues) {
+        foreach ($arrProperties as $strPropertyName => $arrValues) {
 
             $objCfg = OrmAssignmentConfig::getConfigForProperty($this->getObjObject(), $strPropertyName);
 
             //try to load the orm config of the arrayObject - if given
             $strGetter = $objReflection->getGetter($strPropertyName);
             $arrValues = null;
-            if($strGetter !== null) {
+            if ($strGetter !== null) {
                 $arrValues = $this->getObjObject()->{$strGetter}();
             }
             $objAssignmentDeleteHandling = $this->getIntCombinedLogicalDeletionConfig();
-            if($arrValues != null && $arrValues instanceof OrmAssignmentArray) {
+            if ($arrValues != null && $arrValues instanceof OrmAssignmentArray) {
                 $objAssignmentDeleteHandling = $arrValues->getObjDeletedHandling();
             }
 
@@ -151,26 +158,25 @@ class OrmObjectupdate extends OrmBase {
             //try to restore the object-set from the database using the same config as when initializing the object
             $objOldHandling = $this->getIntCombinedLogicalDeletionConfig();
             $this->setObjHandleLogicalDeleted($objAssignmentDeleteHandling);
-            $arrAssignmentsFromObject = $this->getAssignmentValuesFromObject($strPropertyName, $objCfg->getArrTypeFilter());
+            $arrAssignmentsFromObject = $this->getAssignmentValuesFromObject($strPropertyName, $objCfg->getArrTypeFilter(), true);
             $arrAssignmentsFromDatabase = $this->getAssignmentsFromDatabase($strPropertyName);
             $this->setObjHandleLogicalDeleted($objOldHandling);
 
             //if the delete handling was set to excluded when loading the assignment, the logically deleted nodes should be merged with the values from db
-            if($objAssignmentDeleteHandling === OrmDeletedhandlingEnum::EXCLUDED) {
+            if ($objAssignmentDeleteHandling === OrmDeletedhandlingEnum::EXCLUDED) {
                 $this->setObjHandleLogicalDeleted(OrmDeletedhandlingEnum::EXCLUSIVE);
                 $arrDeletedIds = $this->getAssignmentsFromDatabase($strPropertyName);
                 $this->setObjHandleLogicalDeleted($objOldHandling);
 
-                foreach($arrDeletedIds as $strOneId) {
-                    if(!in_array($strOneId, $arrAssignmentsFromDatabase)) {
+                foreach ($arrDeletedIds as $strOneId) {
+                    if (!in_array($strOneId, $arrAssignmentsFromDatabase)) {
                         $arrAssignmentsFromDatabase[] = $strOneId;
                     }
 
-                    if(!in_array($strOneId, $arrAssignmentsFromObject)) {
+                    if (!in_array($strOneId, $arrAssignmentsFromObject)) {
                         $arrAssignmentsFromObject[] = $strOneId;
                     }
                 }
-
 
             }
 
@@ -183,18 +189,21 @@ class OrmObjectupdate extends OrmBase {
             $arrDeletedAssignments = array_diff($arrAssignmentsFromDatabase, $arrAssignmentsFromObject);
 
             //skip in case there's nothing to do
-            if(count($arrNewAssignments) == 0 && count($arrDeletedAssignments) == 0)
+            if (count($arrNewAssignments) == 0 && count($arrDeletedAssignments) == 0) {
                 continue;
+            }
 
             $objDB = Carrier::getInstance()->getObjDB();
 
             $arrInserts = array();
-            foreach($arrAssignmentsFromObject as $strOneTargetId)
+            foreach ($arrAssignmentsFromObject as $strOneTargetId) {
                 $arrInserts[] = array($this->getObjObject()->getSystemid(), $strOneTargetId);
+            }
 
-                $bitReturn = $bitReturn && $objDB->_pQuery(
-                "DELETE FROM ".$objDB->encloseTableName(_dbprefix_.$objCfg->getStrTableName())." WHERE ".$objDB->encloseColumnName($objCfg->getStrSourceColumn())." = ?", array($this->getObjObject()->getSystemid())
-                    );
+            $bitReturn = $bitReturn && $objDB->_pQuery(
+                "DELETE FROM ".$objDB->encloseTableName(_dbprefix_.$objCfg->getStrTableName())." WHERE ".$objDB->encloseColumnName($objCfg->getStrSourceColumn())." = ?",
+                array($this->getObjObject()->getSystemid())
+            );
             $bitReturn = $bitReturn && $objDB->multiInsert($objCfg->getStrTableName(), array($objCfg->getStrSourceColumn(), $objCfg->getStrTargetColumn()), $arrInserts);
 
             $bitReturn = $bitReturn && CoreEventdispatcher::getInstance()->notifyGenericListeners(
@@ -202,7 +211,7 @@ class OrmObjectupdate extends OrmBase {
                 array(array_values($arrNewAssignments), array_values($arrDeletedAssignments), array_values($arrAssignmentsFromObject), $this->getObjObject(), $strPropertyName)
             );
 
-            if($objReflection->hasPropertyAnnotation($strPropertyName, SystemChangelog::ANNOTATION_PROPERTY_VERSIONABLE)) {
+            if ($objReflection->hasPropertyAnnotation($strPropertyName, SystemChangelog::ANNOTATION_PROPERTY_VERSIONABLE)) {
                 $objChanges = new SystemChangelog();
                 $objChanges->setOldValueForSystemidAndProperty($this->getObjObject()->getSystemid(), $strPropertyName, implode(",", $arrAssignmentsFromDatabase));
             }
@@ -218,30 +227,44 @@ class OrmObjectupdate extends OrmBase {
      *
      * @param string $strPropertyName
      * @param string[]|null $arrClassFilter
+     * @param bool $bitCreateIfNotExisting persists new objects to the database instead of skipping them
+     *
      * @return array
+     * @throws Exception
      */
-    private function getAssignmentValuesFromObject($strPropertyName, $arrClassFilter) {
+    private function getAssignmentValuesFromObject($strPropertyName, $arrClassFilter, $bitCreateIfNotExisting = false)
+    {
         $objReflection = new Reflection($this->getObjObject());
 
         $strGetter = $objReflection->getGetter($strPropertyName);
         $arrValues = array();
-        if($strGetter !== null) {
+        if ($strGetter !== null) {
             $arrValues = $this->getObjObject()->{$strGetter}();
 
-            if(!is_array($arrValues) && !($arrValues instanceof ArrayObject))
+            if (!is_array($arrValues) && !($arrValues instanceof ArrayObject)) {
                 $arrValues = array();
+            }
         }
 
         $arrReturn = array();
-        foreach($arrValues as $objOneValue) {
+        foreach ($arrValues as $objOneValue) {
 
-            if(is_object($objOneValue) && $objOneValue instanceof Model) {
-                if($arrClassFilter == null || count(array_filter($arrClassFilter, function($strSingleClass) use ($objOneValue) { return $objOneValue instanceof $strSingleClass; })) > 0) {
+            if (is_object($objOneValue) && $objOneValue instanceof Model) {
+                if ($arrClassFilter == null ||
+                    count(array_filter($arrClassFilter, function ($strSingleClass) use ($objOneValue) {
+                        return $objOneValue instanceof $strSingleClass;
+                    })) > 0
+                ) {
+                    if($bitCreateIfNotExisting && !validateSystemid($objOneValue->getSystemid())) {
+                        //seems we need an insert right here!
+                        $objOneValue->updateObjectToDb();
+                    }
+
                     $arrReturn[] = $objOneValue->getSystemid();
                 }
-            }
-            elseif(is_string($objOneValue) && validateSystemid($objOneValue))
+            } elseif (is_string($objOneValue) && validateSystemid($objOneValue)) {
                 $arrReturn[] = $objOneValue;
+            }
         }
 
         return $arrReturn;
@@ -258,7 +281,8 @@ class OrmObjectupdate extends OrmBase {
      *
      * @return bool
      */
-    private function updateSingleTable($arrColValues, $arrEscapes, $strTargetTable, $strPrimaryCol) {
+    private function updateSingleTable($arrColValues, $arrEscapes, $strTargetTable, $strPrimaryCol)
+    {
 
         $objDB = Carrier::getInstance()->getObjDB();
 
@@ -267,12 +291,13 @@ class OrmObjectupdate extends OrmBase {
         $strQuery = "UPDATE ".$objDB->encloseTableName(_dbprefix_.$strTargetTable)." SET ";
 
         $intI = 0;
-        foreach($arrColValues as $strColumn => $objValue) {
+        foreach ($arrColValues as $strColumn => $objValue) {
             $strQuery .= $objDB->encloseColumnName($strColumn)." = ? ";
             $arrValues[] = $objValue;
 
-            if(++$intI < count($arrColValues))
+            if (++$intI < count($arrColValues)) {
                 $strQuery .= ", ";
+            }
         }
 
         $strQuery .= " WHERE ".$objDB->encloseColumnName($strPrimaryCol)." = ? ";
@@ -281,7 +306,6 @@ class OrmObjectupdate extends OrmBase {
         return $objDB->_pQuery($strQuery, $arrValues, $arrEscapes);
 
     }
-
 
 
 }
