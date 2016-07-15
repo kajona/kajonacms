@@ -303,6 +303,7 @@ $lang["systemtask_permissions_finished"]     = "Finished execution";
 $lang["systemtask_permissions_name"]     = "Set permissions recursively";
 $lang["generic_changelog_no_systemid"]  = "Calling this action is only possible with a valid systemid. Please enter the systemid to be investigated.";
 
+$lang["cache"]  = "Cache";
 $lang["cache_apc"]  = "APC";
 $lang["cache_filesystem"]  = "Filesystem";
 $lang["cache_hits"]  = "Hits";
