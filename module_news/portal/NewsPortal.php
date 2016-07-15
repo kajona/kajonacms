@@ -27,7 +27,7 @@ use Kajona\System\System\SystemModule;
 use Kajona\System\System\TemplateMapper;
 
 /**
- * Portal-class of the news. Handles thd printing of news lists / detail
+ * Portal-class of the news. Handles the printing of news lists / detail
  *
  * @package module_news
  * @author sidler@mulchprod.de
@@ -48,10 +48,12 @@ class NewsPortal extends PortalController implements PortalInterface
         parent::__construct($arrElementData, $strSystemid);
 
         $strAction = $this->getParam("action");
-        if ($strAction == "newsDetail" && $this->arrElementData["news_view"] == 1) {
+
+        if ($this->arrElementData["news_view"] != "0" &&
+            ($strAction == "newsDetail" || (validateSystemid($this->getSystemid()) && Objectfactory::getInstance()->getObject($this->getSystemid()) instanceof NewsNews))) {
             $this->setAction("newsDetail");
         }
-        elseif (!isset($this->arrElementData["news_view"]) || $this->arrElementData["news_view"] == 0 || $strAction == "newsList") {
+        else {
             $this->setAction("newsList");
         }
     }
@@ -121,10 +123,11 @@ class NewsPortal extends PortalController implements PortalInterface
                 $objMapper = new TemplateMapper($objOneNews);
 
                 //generate a link to the details
+                $strDetailspage = $this->arrElementData["news_detailspage"] != "" ? $this->arrElementData["news_detailspage"] : $this->getPagename();
                 $objMapper->addPlaceholder(
-                    "news_more_link", Link::getLinkPortal($this->arrElementData["news_detailspage"], "", "", $this->getLang("news_mehr"), "newsDetail", "", $objOneNews->getSystemid(), "", "", $objOneNews->getStrTitle())
+                    "news_more_link", Link::getLinkPortal($strDetailspage, "", "", $this->getLang("news_mehr"), "", "", $objOneNews->getSystemid(), "", "", $objOneNews->getStrTitle())
                 );
-                $objMapper->addPlaceholder("news_more_link_href", Link::getLinkPortalHref($this->arrElementData["news_detailspage"], "", "newsDetail", "", $objOneNews->getSystemid(), "", $objOneNews->getStrTitle()));
+                $objMapper->addPlaceholder("news_more_link_href", Link::getLinkPortalHref($strDetailspage, "", "", "", $objOneNews->getSystemid(), "", $objOneNews->getStrTitle()));
                 $objMapper->addPlaceholder("news_start_date", dateToString($objOneNews->getObjStartDate(), false));
                 $objMapper->addPlaceholder("news_id", $objOneNews->getSystemid());
                 $objMapper->addPlaceholder("news_title", $objOneNews->getStrTitle());
