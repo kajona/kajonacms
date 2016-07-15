@@ -12,6 +12,6 @@
  * @author sidler@mulchprod.de
  * @since 4.7
  */
-class class_module_basicauth_startprocessinglistener extends \Kajona\BasicAuthentication\Event\BasicAuthStartProcessingListener
+class class_module_basicauth_startprocessinglistener extends \Kajona\Basicauthentication\Event\BasicAuthStartProcessingListener
 {
 }

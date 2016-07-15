@@ -4,7 +4,7 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
-namespace Kajona\BasicAuthentication\Event;
+namespace Kajona\Basicauthentication\Event;
 
 use Kajona\System\System\Carrier;
 use Kajona\System\System\CoreEventdispatcher;
