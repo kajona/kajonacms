@@ -982,23 +982,64 @@ JS;
     protected function actionChangelogDiff()
     {
         $strSystemId = $this->getSystemid();
+        /** @var VersionableInterface $objObject */
         $objObject = Objectfactory::getInstance()->getObject($strSystemId);
         $arrDates = SystemChangelog::getDatesForSystemid($strSystemId);
 
         $arrResult = array();
+        $arrChart = array();
         foreach ($arrDates as $arrDate) {
             $objDate = new Date($arrDate["change_date"]);
             $arrResult[$objDate->getLongTimestamp()] = date("d.m.Y", $objDate->getTimeInOldStyle());
+            $arrChart[substr($objDate->getLongTimestamp(), 0, 8)] = $arrDate["cnt"];
         }
         $arrResult = array_unique($arrResult);
 
-        $strList = "<ul>";
-        foreach ($arrResult as $strLongDate => $strDate) {
-            $strList .= "<li><a href='#' onclick='KAJONA.admin.changelog.loadDate(\"" . $objObject->getStrSystemid() . "\", \"" . $strLongDate . "\", \"right\")'>" . $strDate . "</a></li>";
-        }
-        $strList .= "</ul>";
+        $strReturn = "";
+        $strReturn .= $this->objToolkit->getContentToolbar(array(
+            Link::getLinkAdmin($this->getArrModule("modul"), "genericChangelog", "&systemid=" . $objObject->getStrSystemid() . "&folderview=1", AdminskinHelper::getAdminImage("icon_history") . " " . $this->getLang("commons_edit_history"), "", "", false),
+        ));
 
-        $strReturn = "<div id='changelogTimeline' style='height:200px'>" . $strList . "</div>";
+        $strReturn .= "<div id='changelogTimeline' style='text-align:center;'></div>";
+
+        $strChartData = json_encode($arrChart);
+        $strReturn .= <<<HTML
+<script type="text/javascript">
+KAJONA.admin.loader.loadFile([
+    '/core/module_system/admin/scripts/moment/moment.min.js', 
+    '/core/module_system/admin/scripts/moment/moment.min.js', 
+    '/core/module_system/admin/scripts/d3/d3.min.js', 
+    '/core/module_system/admin/scripts/d3/calendar-heatmap.js', 
+    '/core/module_system/admin/scripts/d3/calendar-heatmap.css'], function() {
+    
+    var data = {$strChartData};
+    var now = moment().endOf('day').toDate();
+    var yearAgo = moment().startOf('day').subtract(1, 'year').toDate();
+    var chartData = d3.time.days(yearAgo, now).map(function (dateElement) {
+        var count = 0;
+        if (data.hasOwnProperty(moment(dateElement).format("YYYYMMDD"))) {
+            count = data.hasOwnProperty(moment(dateElement).format("YYYYMMDD"));
+        }
+        return {
+            date: dateElement,
+            count: count
+        };
+    });
+
+    var heatmap = calendarHeatmap()
+        .data(chartData)
+        .selector('#changelogTimeline')
+        .tooltipEnabled(false)
+        .legendEnabled(false)
+        .colorRange(['#eeeeee', '#6cb121'])
+        .onClick(function (data) {
+            var date = moment(data.date).format("YYYYMMDD235959");
+            KAJONA.admin.changelog.loadDate("{$strSystemId}", date, "right", KAJONA.admin.changelog.compareTable);
+        });
+    heatmap();  // render the chart
+});
+</script>
+HTML;
 
         $objReflection = new Reflection($objObject);
         $arrProps = $objReflection->getPropertiesWithAnnotation(SystemChangelog::ANNOTATION_PROPERTY_VERSIONABLE);
@@ -1008,26 +1049,32 @@ JS;
             $strGetter = $objReflection->getGetter($strPropertyName);
             if (!empty($strGetter)) {
                 $arrRow = array();
-                $arrRow['0 border-right'] = $strPropertyName;
-                $arrRow['1 border-right'] = "<div id='property_" . $strPropertyName . "_left' class='changelog_property_left' data-name='" . $strPropertyName . "'></div>";
-                $arrRow[] = "<div id='property_" . $strPropertyName . "_right' class='changelog_property_right' data-name='" . $strPropertyName . "'></div>";
+                $arrRow['0 border-right'] = $objObject->getVersionPropertyName($strPropertyName);
+                $arrRow['1 border-right'] = "<div id='property_" . $strPropertyName . "_left' class='changelog_property changelog_property_left' data-name='" . $strPropertyName . "'></div>";
+                $arrRow[] = "<div id='property_" . $strPropertyName . "_right' class='changelog_property changelog_property_right' data-name='" . $strPropertyName . "'></div>";
                 $arrData[] = $arrRow;
             }
         }
 
         $arrHeader = array(
-            '0 border-right' => "Eigenschaft",
+            '0 border-right' => $this->getLang("change_property"),
             '1 border-right" style="width:30%;"' => "<div id='date_left'></div>",
             '2" style="width:30%;"' => "<div id='date_right'></div>",
         );
 
-        $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrData);
+        $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrData, "kajona-data-table-ignore-floatthread");
 
         $arrDates = array_keys($arrResult);
-        $strReturn .= "<script type='text/javascript'>";
-        $strReturn .= "KAJONA.admin.changelog.loadDate(\"" . $objObject->getStrSystemid() . "\", \"" . array_pop($arrDates) . "\", \"left\");";
-        $strReturn .= "KAJONA.admin.changelog.loadDate(\"" . $objObject->getStrSystemid() . "\", \"" . array_pop($arrDates) . "\", \"right\");";
-        $strReturn .= "</script>";
+        $strLeftDate = array_pop($arrDates);
+        $strRightDate = array_pop($arrDates);
+
+        $strReturn .= <<<HTML
+<script type="text/javascript">
+KAJONA.admin.changelog.loadDate("{$strSystemId}", "{$strLeftDate}", "left", function(){
+    KAJONA.admin.changelog.loadDate("{$strSystemId}", "{$strRightDate}", "right", KAJONA.admin.changelog.compareTable);
+});
+</script>
+HTML;
 
         return $strReturn;
     }

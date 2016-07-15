@@ -545,7 +545,7 @@ class SystemAdminXml extends AdminController implements XmlAdminInterface
             foreach ($arrProps as $strPropertyName => $strValue) {
                 $strGetter = $objReflection->getGetter($strPropertyName);
                 if (!empty($strGetter)) {
-                    $arrData[$strPropertyName] = $objObject->$strGetter();
+                    $arrData[$strPropertyName] = $objObject->renderVersionValue($strPropertyName, $objObject->$strGetter());
                 }
             }
 

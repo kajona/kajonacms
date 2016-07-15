@@ -1,0 +1,7 @@
+{
+    "name" : "d3",
+    "version" : "3.5.17",
+    "source" : "https://d3js.org/",
+    "license" : "BSD license",
+    "licenseurl" : "https://github.com/d3/d3"
+}

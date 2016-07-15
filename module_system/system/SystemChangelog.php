@@ -888,7 +888,8 @@ class SystemChangelog
      */
     public static function getDatesForSystemid($strSystemid)
     {
-        $strQuery = "SELECT change_date
+        $strQuery = "SELECT change_date,
+                            COUNT(change_id) AS cnt
                        FROM "._dbprefix_.self::getTableForClass(Objectfactory::getInstance()->getClassNameForId($strSystemid))."
                       WHERE change_systemid = ?
                    GROUP BY change_date

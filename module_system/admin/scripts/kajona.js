@@ -1449,27 +1449,16 @@ KAJONA.admin.forms.getObjField = function (objField) {
     }
 };
 
-
+KAJONA.admin.changelog = {};
 
 /**
- * Gets the jQuery object
- *
- * @param objField - my be a jquery object or an id selector
+ * Method to compare and highlite changes of two version properties table
  */
-KAJONA.admin.changelog = {};
 KAJONA.admin.changelog.compareTable = function () {
-    var propsLeft = {};
-    $('.changelog_property_left').each(function(){
-        propsLeft[$(this).data('name')] = $(this).html();
-    });
-
-    var propsRight = {};
-    $('.changelog_property_right').each(function(){
-        propsRight[$(this).data('name')] = $(this).html();
-    });
-
+    var propsLeft = KAJONA.admin.changelog.getTableProperties("left");
+    var propsRight = KAJONA.admin.changelog.getTableProperties("right");
     for (var key in propsLeft) {
-        if (propsLeft[key] != "" && propsRight[key] != "") {
+        if (propsLeft[key] != "" || propsRight[key] != "") {
             if (propsLeft[key] != propsRight[key]) {
                 $('#property_' + key + '_left').parent().parent().css('background-color', '#CEC');
             } else {
@@ -1479,7 +1468,29 @@ KAJONA.admin.changelog.compareTable = function () {
     }
 };
 
-KAJONA.admin.changelog.loadDate = function (strSystemId, strDate, strType) {
+/**
+ * Returns an object containing all version properties from either the left or right table
+ *
+ * @param {string} type
+ * @returns {object}
+ */
+KAJONA.admin.changelog.getTableProperties = function (type) {
+    var props = {};
+    $('.changelog_property_' + type).each(function(){
+        props[$(this).data('name')] = $(this).html();
+    });
+    return props;
+};
+
+/**
+ * Loads the version properties for a specific date and inserts the values either in the left or right table
+ *
+ * @param {string} strSystemId
+ * @param {string} strDate
+ * @param {string} strType
+ * @param {function} objCallback
+ */
+KAJONA.admin.changelog.loadDate = function (strSystemId, strDate, strType, objCallback) {
     $('#date_' + strType).html("");
     $('.changelog_property_' + strType).html("");
     KAJONA.admin.ajax.genericAjaxCall("system", "changelogPropertiesForDate", "&systemid="+strSystemId+"&date="+strDate, function(data, status, jqXHR) {
@@ -1489,7 +1500,9 @@ KAJONA.admin.changelog.loadDate = function (strSystemId, strDate, strType) {
         for (var prop in props) {
             $('#property_' + prop + '_' + strType).html(props[prop]);
         }
-        KAJONA.admin.changelog.compareTable();
+        if (typeof objCallback === "function") {
+            objCallback.apply();
+        }
     });
 };
 
