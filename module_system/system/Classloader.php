@@ -399,7 +399,8 @@ class Classloader
                         return null;
                     }
 
-                    $strParsedFilename = str_replace("\\", "/", uniSubstr($strFilename, 0, -4));
+                    $strParsedFilename = str_replace(array("\\", ".phar"), array("/", ""), uniSubstr($strFilename, 0, -4));
+
 
                     $strClassname = "Kajona\\";
                     if(strpos($strParsedFilename, "core_") !== false) {
