@@ -394,7 +394,7 @@ class Classloader
             else {
                 //ugly fallback for ioncube encoded files, could be upgrade to an improved regex
                 //TODO: move this name-based detection to the general approach, replacing the content parsing
-                if(strpos($strSource, "ioncube") !== false) {
+                if(strpos($strSource, "ioncube") !== false|| strpos($strSource, "sg_load") !== false) {
                     if($strFile === "functions") {
                         return null;
                     }
