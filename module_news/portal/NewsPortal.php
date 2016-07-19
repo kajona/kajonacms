@@ -49,7 +49,7 @@ class NewsPortal extends PortalController implements PortalInterface
 
         $strAction = $this->getParam("action");
 
-        if ($this->arrElementData["news_view"] != "0" &&
+        if (isset($this->arrElementData["news_view"]) && $this->arrElementData["news_view"] != "0" &&
             ($strAction == "newsDetail" || (validateSystemid($this->getSystemid()) && Objectfactory::getInstance()->getObject($this->getSystemid()) instanceof NewsNews))) {
             $this->setAction("newsDetail");
         }
