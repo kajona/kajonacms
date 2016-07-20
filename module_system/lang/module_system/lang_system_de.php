@@ -270,6 +270,7 @@ $lang["titel_erben"]                     = "Rechte erben";
 $lang["permissions_toggle_visible"]                     = "Nicht-konfigurierte Zeilen einblenden";
 $lang["permissions_toggle_hidden"]                     = "Nicht-konfigurierte Zeilen ausblenden";
 $lang["permissions_success"]                     = "Die Berechtigungen wurden erfolgreich gespeichert.";
+$lang["permissons_filter"]                     = "Filter-Text";
 $lang["titel_leer"]                      = "<em>Kein Titel hinterlegt</em>";
 $lang["titel_root"]                      = "Rechte-Root-Satz";
 $lang["titleTime"]                       = "Uhr";
