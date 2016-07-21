@@ -358,9 +358,11 @@ class Classloader
      *
      * @param $strFilename
      *
+     * @param bool $bitAddToClassmap Disables the writing to the classmap
+     *
      * @return null|string
      */
-    public function getClassnameFromFilename($strFilename)
+    public function getClassnameFromFilename($strFilename, $bitAddToClassmap = true)
     {
         // if empty we cant resolve a class name
         if (empty($strFilename) || uniSubstr($strFilename, -4) != '.php') {
@@ -446,7 +448,7 @@ class Classloader
                 }
             }
         }
-        if($arrMap !== false) {
+        if($arrMap !== false && $bitAddToClassmap) {
             BootstrapCache::getInstance()->addCacheRow(BootstrapCache::CACHE_CLASSES, $strClassname, $strFilename);
         }
         return $strClassname;
@@ -465,9 +467,17 @@ class Classloader
      */
     public function getInstanceFromFilename($strFilename, $strBaseclass = null, $strImplementsInterface = null, $arrConstructorParams = null, $bitInject = false)
     {
-        $strResolvedClassname = $this->getClassnameFromFilename($strFilename);
+        $strResolvedClassname = $this->getClassnameFromFilename($strFilename, false);
 
         if ($strResolvedClassname != null) {
+
+            //see if the class was overwritten/index at a different location - then replace the passed filename
+            $strPathFromCache = BootstrapCache::getInstance()->getCacheRow(BootstrapCache::CACHE_CLASSES, $strResolvedClassname);
+            if($strPathFromCache !== false && $strPathFromCache != $strFilename) {
+                $strFilename = $strPathFromCache;
+            }
+
+
             // if the class does not exist we simply include the filename and hope that the class is defined there. This
             // is the case where the filename is not equal to the class name i.e. installer_sc_zzlanguages.php
             if (!class_exists($strResolvedClassname, false)) {
