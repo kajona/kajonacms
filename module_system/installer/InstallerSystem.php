@@ -251,7 +251,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $arrFields = array();
         $arrFields["languageset_id"] = array("char20", false);
         $arrFields["languageset_language"] = array("char20", true);
-        $arrFields["languageset_systemid"] = array("char20", true);
+        $arrFields["languageset_systemid"] = array("char20", false);
 
         if(!$this->objDB->createTable("languages_languageset", $arrFields, array("languageset_id", "languageset_systemid")))
             $strReturn .= "An error occurred! ...\n";
