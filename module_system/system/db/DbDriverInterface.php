@@ -65,11 +65,13 @@ interface DbDriverInterface
      * @param $strTable
      * @param $arrColumns
      * @param $arrValues
-     * @param $strPrimaryColumn
+     * @param $arrPrimaryColumns
      *
      * @return bool
+     * @internal param $strPrimaryColumn
+     *
      */
-    public function insertOrUpdate($strTable, $arrColumns, $arrValues, $strPrimaryColumn);
+    public function insertOrUpdate($strTable, $arrColumns, $arrValues, $arrPrimaryColumns);
 
     /**
      * Sends a prepared statement to the database. All params must be represented by the ? char.

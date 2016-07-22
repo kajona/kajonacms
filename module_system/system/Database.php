@@ -193,11 +193,18 @@ class Database
      * @param $arrColumns
      * @param $arrValues
      *
+     * @param $arrPrimaryColumns
+     *
      * @return bool
      */
-    public function insertOrUpdate($strTable, $arrColumns, $arrValues, $strPrimaryColumn)
+    public function insertOrUpdate($strTable, $arrColumns, $arrValues, $arrPrimaryColumns)
     {
-        return $this->objDbDriver->insertOrUpdate($strTable, $arrColumns, $arrValues, $strPrimaryColumn);
+        $bitReturn = $this->objDbDriver->insertOrUpdate($strTable, $arrColumns, $arrValues, $arrPrimaryColumns);
+        if (!$bitReturn) {
+            $this->getError("", array());
+        }
+
+        return $bitReturn;
     }
 
     /**

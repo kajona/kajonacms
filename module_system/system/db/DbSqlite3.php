@@ -291,7 +291,7 @@ class DbSqlite3 extends DbBase
     /**
      * @inheritDoc
      */
-    public function insertOrUpdate($strTable, $arrColumns, $arrValues, $strPrimaryColumn)
+    public function insertOrUpdate($strTable, $arrColumns, $arrValues, $arrPrimaryColumns)
     {
         $arrPlaceholder = array();
         $arrMappedColumns = array();

@@ -142,7 +142,7 @@ class DbPostgres extends DbBase {
     /**
      * @inheritDoc
      */
-    public function insertOrUpdate($strTable, $arrColumns, $arrValues, $strPrimaryColumn)
+    public function insertOrUpdate($strTable, $arrColumns, $arrValues, $arrPrimaryColumns)
     {
         $arrPlaceholder = array();
         $arrMappedColumns = array();
@@ -152,7 +152,7 @@ class DbPostgres extends DbBase {
             $arrPlaceholder[] = "?";
             $arrMappedColumns[] = $this->encloseColumnName($strOneCol);
 
-            if($strOneCol != $strPrimaryColumn) {
+            if(!in_array($strOneCol, $arrPrimaryColumns)) {
                 $arrKeyValuePairs[] = $this->encloseColumnName($strOneCol) ." = ?";
                 $arrValues[] = $arrValues[$intI];
             }
