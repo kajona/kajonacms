@@ -57,6 +57,21 @@ interface DbDriverInterface
     public function triggerMultiInsert($strTable, $arrColumns, $arrValueSets, Database $objDb);
 
     /**
+     * Fires an insert or update of a single record. it's up to the database (driver)
+     * to detect whether a row is already present or not.
+     * Please note: since some dbrms fire a delete && insert, make sure to pass ALL colums and values,
+     * otherwise data might be lost.
+     *
+     * @param $strTable
+     * @param $arrColumns
+     * @param $arrValues
+     * @param $strPrimaryColumn
+     *
+     * @return bool
+     */
+    public function insertOrUpdate($strTable, $arrColumns, $arrValues, $strPrimaryColumn);
+
+    /**
      * Sends a prepared statement to the database. All params must be represented by the ? char.
      * The params themselves are stored using the second params using the matching order.
      *

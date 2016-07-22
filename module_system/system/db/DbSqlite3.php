@@ -289,6 +289,24 @@ class DbSqlite3 extends DbBase
     }
 
     /**
+     * @inheritDoc
+     */
+    public function insertOrUpdate($strTable, $arrColumns, $arrValues, $strPrimaryColumn)
+    {
+        $arrPlaceholder = array();
+        $arrMappedColumns = array();
+
+        foreach ($arrColumns as $strOneCol) {
+            $arrPlaceholder[] = "?";
+            $arrMappedColumns[] = $this->encloseColumnName($strOneCol);
+        }
+
+        $strQuery = "INSERT OR REPLACE INTO ".$this->encloseTableName(_dbprefix_.$strTable)." (".implode(", ", $arrMappedColumns).") VALUES (".implode(", ", $arrPlaceholder).")";
+        return $this->_pQuery($strQuery, $arrValues);
+    }
+
+
+    /**
      * Sends a prepared statement to the database. All params must be represented by the ? char.
      * The params themselves are stored using the second params using the matching order.
      *

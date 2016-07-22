@@ -189,6 +189,26 @@ class DbMysqli extends DbBase {
         return $arrReturn;
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function insertOrUpdate($strTable, $arrColumns, $arrValues, $strPrimaryColumn)
+    {
+        $arrPlaceholder = array();
+        $arrMappedColumns = array();
+        $arrKeyValuePairs = array();
+
+        foreach ($arrColumns as $strOneCol) {
+            $arrPlaceholder[] = "?";
+            $arrMappedColumns[] = $this->encloseColumnName($strOneCol);
+            $arrKeyValuePairs[] = $this->encloseColumnName($strOneCol) ." = ?";
+        }
+
+        $strQuery = "INSERT INTO ".$this->encloseTableName(_dbprefix_.$strTable)." (".implode(", ", $arrMappedColumns).") VALUES (".implode(", ", $arrPlaceholder).")
+                        ON DUPLICATE KEY UPDATE ".implode(", ", $arrKeyValuePairs);
+        return $this->_pQuery($strQuery, array_merge($arrValues, $arrValues));
+    }
+
 
     /**
      * Returns the last error reported by the database.

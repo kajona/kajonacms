@@ -138,6 +138,33 @@ class DbPostgres extends DbBase {
         return $arrReturn;
     }
 
+
+    /**
+     * @inheritDoc
+     */
+    public function insertOrUpdate($strTable, $arrColumns, $arrValues, $strPrimaryColumn)
+    {
+        $arrPlaceholder = array();
+        $arrMappedColumns = array();
+        $arrKeyValuePairs = array();
+
+        foreach ($arrColumns as $intI => $strOneCol) {
+            $arrPlaceholder[] = "?";
+            $arrMappedColumns[] = $this->encloseColumnName($strOneCol);
+
+            if($strOneCol != $strPrimaryColumn) {
+                $arrKeyValuePairs[] = $this->encloseColumnName($strOneCol) ." = ?";
+                $arrValues[] = $arrValues[$intI];
+            }
+        }
+
+
+        $strQuery = "INSERT INTO ".$this->encloseTableName(_dbprefix_.$strTable)." (".implode(", ", $arrMappedColumns).") VALUES (".implode(", ", $arrPlaceholder).")
+                        ON CONFLICT ON CONSTRAINT "._dbprefix_.$strTable."_pkey DO UPDATE SET ".implode(", ", $arrKeyValuePairs);
+
+        return $this->_pQuery($strQuery, $arrValues);
+    }
+
     /**
      * Returns the last error reported by the database.
      * Is being called after unsuccessful queries

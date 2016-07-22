@@ -168,6 +168,59 @@ class DbOci8 extends DbBase
         return $bitResult;
     }
 
+
+    /**
+     * @inheritDoc
+     */
+    public function insertOrUpdate($strTable, $arrColumns, $arrValues, $strPrimaryColumn)
+    {
+
+        /*
+
+
+        merge into mergetest m using dual on (a = xa)
+         when not matched then insert (a,b) values (xa,1)
+             when matched then update set b = b+1;
+
+         */
+
+        $arrPlaceholder = array();
+        $arrMappedColumns = array();
+        $arrKeyValuePairs = array();
+
+        $strPrimaryValue = "";
+
+        foreach ($arrColumns as $intKey => $strOneCol) {
+            $arrPlaceholder[] = "?";
+            $arrMappedColumns[] = $this->encloseColumnName($strOneCol);
+
+            if($strOneCol == $strPrimaryColumn) {
+                $strPrimaryValue = $arrValues[$intKey];
+            }
+        }
+
+        $arrParams = array();
+        $arrParams[] = $strPrimaryValue;
+        $arrParams = array_merge($arrParams, $arrValues);
+
+
+
+        foreach ($arrColumns as $intKey => $strOneCol) {
+            if($strOneCol != $strPrimaryColumn) {
+                $arrKeyValuePairs[] = $this->encloseColumnName($strOneCol)." = ?";
+                $arrParams[] = $arrValues[$intKey];
+            }
+        }
+
+
+        $strQuery = "MERGE INTO ".$this->encloseTableName(_dbprefix_.$strTable)." using dual on ({$strPrimaryColumn} = ?) 
+                       WHEN NOT MATCHED THEN INSERT (".implode(", ", $arrMappedColumns).") values (".implode(", ", $arrPlaceholder).")
+                       WHEN MATCHED then update set ".implode(", ", $arrKeyValuePairs)."";
+                         
+        return $this->_pQuery($strQuery, $arrParams);
+    }
+
+
     /**
      * This method is used to retrieve an array of resultsets from the database using
      * a prepared statement
