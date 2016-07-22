@@ -44,7 +44,7 @@ class InstallerPages extends InstallerBase implements InstallerInterface {
 		$arrFields["pageproperties_description"]= array("char254", true);
 		$arrFields["pageproperties_template"] 	= array("char254", true);
 		$arrFields["pageproperties_seostring"] 	= array("char254", true);
-		$arrFields["pageproperties_language"] 	= array("char20", true);
+		$arrFields["pageproperties_language"] 	= array("char20", false);
 		$arrFields["pageproperties_alias"] 	    = array("char254", true);
         $arrFields["pageproperties_path"] 	    = array("char254", true);
         $arrFields["pageproperties_target"] 	= array("char254", true);
