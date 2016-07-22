@@ -139,6 +139,7 @@
         <exec dir="${basedir}${buildPath}/composerbuild" executable="${path.composer}" failonerror="on" >
             <arg line=" install"/>
             <arg line=" --no-dev"/>
+            <arg line=" --quiet"/>
         </exec>
     </target>
 

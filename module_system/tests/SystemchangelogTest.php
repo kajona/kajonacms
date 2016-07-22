@@ -240,7 +240,7 @@ class SystemchangelogTest extends Testbase
 
         $this->assertTrue(($intFiredAfter - $intFired) >= 100);
 
-        echo "Queries: " . ($intFiredAfter - $intFired) . "\n";
+//        echo "Queries: " . ($intFiredAfter - $intFired) . "\n";
 
 
         $intFired = (Carrier::getInstance()->getObjDB()->getNumber() - Carrier::getInstance()->getObjDB()->getNumberCache());
@@ -254,7 +254,7 @@ class SystemchangelogTest extends Testbase
 
         $this->assertTrue(($intFiredAfter - $intFired) < 10);
 
-        echo "Queries: " . ($intFiredAfter - $intFired) . "\n";
+//        echo "Queries: " . ($intFiredAfter - $intFired) . "\n";
 
 
     }
