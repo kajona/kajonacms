@@ -11,14 +11,13 @@ class DatabaseMultiInsertTest extends Testbase
     public function tearDown()
     {
         $this->flushDBCache();
-        if (in_array(_dbprefix_ . "temp_upserttest", Carrier::getInstance()->getObjDB()->getTables())) {
-            $strQuery = "DROP TABLE " . _dbprefix_ . "temp_upserttest";
-            Carrier::getInstance()->getObjDB()->_pQuery($strQuery, array());
-        }
+        foreach(array("temp_upserttest", "temp_upserttest2", "temp_upserttest3") as $strOneTable) {
 
-        if (in_array(_dbprefix_ . "temp_upserttest2", Carrier::getInstance()->getObjDB()->getTables())) {
-            $strQuery = "DROP TABLE " . _dbprefix_ . "temp_upserttest2";
-            Carrier::getInstance()->getObjDB()->_pQuery($strQuery, array());
+            if (in_array(_dbprefix_.$strOneTable, Carrier::getInstance()->getObjDB()->getTables())) {
+                $strQuery = "DROP TABLE "._dbprefix_.$strOneTable;
+                Carrier::getInstance()->getObjDB()->_pQuery($strQuery, array());
+            }
+
         }
 
         parent::tearDown();
@@ -153,6 +152,104 @@ class DatabaseMultiInsertTest extends Testbase
         $this->assertTrue($objDB->_pQuery($strQuery, array()));
     }
 
+
+    public function testUpsertPerformance()
+    {
+        $objDB = Carrier::getInstance()->getObjDB();
+        if (in_array(_dbprefix_ . "temp_upserttest3", Carrier::getInstance()->getObjDB()->getTables())) {
+            $strQuery = "DROP TABLE " . _dbprefix_ . "temp_upserttest3";
+            Carrier::getInstance()->getObjDB()->_pQuery($strQuery, array());
+        }
+
+        $arrFields = array();
+        $arrFields["temp_id"] = array("char20", false);
+        $arrFields["temp_id2"] = array("int", false);
+        $arrFields["temp_int"] = array("int", true);
+        $arrFields["temp_text"] = array("text", true);
+
+        $this->assertTrue($objDB->createTable("temp_upserttest3", $arrFields, array("temp_id", "temp_id2")));
+
+
+        $strId1 = generateSystemid();
+        $strId2 = generateSystemid();
+        $strId3 = generateSystemid();
+
+        $arrTestData = array(
+            array($strId1, 1, 1, "text 1"),
+            array($strId1, 1, 1, "text 1"),
+            array($strId1, 1, 1, "text 2"),
+            array($strId1, 2, 1, "text 1"),
+            array($strId1, 2, 3, "text 1"),
+            array($strId2, 1, 1, "text 1"),
+            array($strId2, 1, 1, "text 1"),
+            array($strId2, 1, 3, "text 1"),
+            array($strId1, 1, 3, "text 4"),
+            array($strId1, 1, 3, "text 5"),
+            array($strId3, 3, 3, "text 3"),
+            array($strId3, 3, 3, "text 4"),
+            array($strId3, 4, 3, "text 4"),
+            array($strId3, 4, 3, "text 4"),
+            array($strId3, 4, 5, "text 4"),
+        );
+
+
+        $intTime = -microtime(true);
+        foreach($arrTestData as $arrOneRow) {
+            $this->runInsertAndUpdate($arrOneRow[0], $arrOneRow[1], $arrOneRow[2], $arrOneRow[3]);
+        }
+        $intTime += microtime(true);
+        echo "runInsertAndUpdate: ".sprintf('%f', $intTime) ." sec".PHP_EOL;
+
+
+
+        $intTime2 = -microtime(true);
+        foreach($arrTestData as $arrOneRow) {
+            $this->runUpsert($arrOneRow[0], $arrOneRow[1], $arrOneRow[2], $arrOneRow[3]);
+        }
+        $intTime2 += microtime(true);
+        echo "runUpsert:          ".sprintf('%f', $intTime2) ." sec".PHP_EOL;
+
+
+        //Disbaled due to performance glitches on oracle
+        //$this->assertTrue($intTime2 < $intTime, "compare upsert performance");
+
+        $strQuery = "DROP TABLE " . _dbprefix_ . "temp_upserttest3";
+        $this->assertTrue($objDB->_pQuery($strQuery, array()));
+    }
+
+    private function runUpsert($intId, $intId2, $intInt, $strText)
+    {
+        Carrier::getInstance()->getObjDB()->insertOrUpdate("temp_upserttest3", array("temp_id", "temp_id2", "temp_int", "temp_text"), array($intId, $intId2, $intInt, $strText), array("temp_id", "temp_id2"));
+    }
+
+    private function runInsertAndUpdate($intId, $intId2, $intInt, $strText)
+    {
+        $objDb = Carrier::getInstance()->getObjDB();
+        $arrRow = $objDb->getPRow("SELECT COUNT(*) FROM "._dbprefix_."temp_upserttest3 WHERE temp_id = ? AND temp_id2 = ?", array($intId, $intId2), 0, false);
+        if($arrRow["COUNT(*)"] == "0") {
+            $strQuery = "INSERT INTO "._dbprefix_."temp_upserttest3 (temp_id, temp_id2, temp_int, temp_text) VALUES (?, ?, ?, ?)";
+            $objDb->_pQuery($strQuery, array($intId, $intId2, $intInt, $strText));
+        }
+        else {
+            $strQuery = "UPDATE "._dbprefix_."temp_upserttest3 SET temp_int = ?, temp_text = ? WHERE temp_id = ? AND temp_id2 = ?";
+            $objDb->_pQuery($strQuery, array($intInt, $strText, $intId, $intId2));
+        }
+
+    }
+
+    // this approach is not feasible! in an update matches a row with the same data, at least mysql returns 0.
+    // where not matching: 0 affected, where matching but update not required: 0 affected
+    private function runInsertAndUpdateChangedRows($intId, $intId2, $intInt, $strText)
+    {
+        $objDb = Carrier::getInstance()->getObjDB();
+
+        $strQuery = "UPDATE "._dbprefix_."temp_upserttest3 SET temp_int = ?, temp_text = ? WHERE temp_id = ? AND temp_id2 = ?";
+        $objDb->_pQuery($strQuery, array($intInt, $strText, $intId, $intId2));
+        if($objDb->getIntAffectedRows() == 0) {
+            $strQuery = "INSERT INTO "._dbprefix_."temp_upserttest3 (temp_id, temp_id2, temp_int, temp_text) VALUES (?, ?, ?, ?)";
+            $objDb->_pQuery($strQuery, array($intId, $intId2, $intInt, $strText));
+        }
+    }
 
 }
 
