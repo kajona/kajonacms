@@ -29,6 +29,8 @@ class DbPostgres extends DbBase {
     private $strDumpBin = "pg_dump"; //Binary to dump db (if not in path, add the path here)
     private $strRestoreBin = "psql"; //Binary to restore db (if not in path, add the path here)
 
+    private $arrCxInfo = array();
+
     /**
      * This method makes sure to connect to the database properly
      *
@@ -56,6 +58,8 @@ class DbPostgres extends DbBase {
 
         if($this->linkDB !== false) {
             $this->_pQuery("SET client_encoding='UTF8'", array());
+
+            $this->arrCxInfo = pg_version($this->linkDB);
             return true;
         }
         else {
@@ -140,10 +144,20 @@ class DbPostgres extends DbBase {
 
 
     /**
+     * Postgres supports UPSERTS since 9.5, see http://michael.otacoo.com/postgresql-2/postgres-9-5-feature-highlight-upsert/.
+     * A fallback is the base select / update method.
+     *
      * @inheritDoc
      */
     public function insertOrUpdate($strTable, $arrColumns, $arrValues, $arrPrimaryColumns)
     {
+
+        //get the current postgres version to validate the upsert features
+        if(version_compare($this->arrCxInfo["server"], "9.5", "<")) {
+            //base implementation
+            return parent::insertOrUpdate($strTable, $arrColumns, $arrValues, $arrPrimaryColumns);
+        }
+
         $arrPlaceholder = array();
         $arrMappedColumns = array();
         $arrKeyValuePairs = array();

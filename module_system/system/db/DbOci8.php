@@ -175,20 +175,12 @@ class DbOci8 extends DbBase
     public function insertOrUpdate($strTable, $arrColumns, $arrValues, $arrPrimaryColumns)
     {
 
-        /*
-
-
-        merge into mergetest m using dual on (a = xa)
-         when not matched then insert (a,b) values (xa,1)
-             when matched then update set b = b+1;
-
-         */
+        //return parent::insertOrUpdate($strTable, $arrColumns, $arrValues, $arrPrimaryColumns);
 
         $arrPlaceholder = array();
         $arrMappedColumns = array();
         $arrKeyValuePairs = array();
 
-        $strPrimaryValue = "";
 
         $arrParams = array();
         $arrPrimaryCompares = array();
