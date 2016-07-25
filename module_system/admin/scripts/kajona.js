@@ -531,9 +531,12 @@ KAJONA.admin.permissions = {
         return false;
     },
 
+    /**
+     * Filters the rows of the permission matrix based on the value of the input element
+     * @param evt
+     * @returns {boolean}
+     */
     filterMatrix : function(evt) {
-
-
 
         // If it's the propertychange event, make sure it's the value that changed.
         if (window.event && event.type == "propertychange" && event.propertyName != "value")
