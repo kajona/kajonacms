@@ -4,7 +4,7 @@ namespace Kajona\System\Tests;
 
 use Kajona\System\System\Carrier;
 
-class DatabaseMultiInsertTest extends Testbase
+class DatabaseUpsertTest extends Testbase
 {
 
 
