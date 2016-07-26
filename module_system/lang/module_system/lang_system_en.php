@@ -159,6 +159,7 @@ $lang["modul_titel"]                     = "System";
 $lang["permissions_toggle_visible"]                     = "Show non-configured rows";
 $lang["permissions_toggle_hidden"]                     = "Hide non-configured rows";
 $lang["permissions_success"]                     = "Permissions saved successfully.";
+$lang["permissons_filter"]                     = "Text-filter";
 $lang["moduleRightsTitle"]               = "Permissions";
 $lang["numberStyleDecimal"]              = ".";
 $lang["numberStyleThousands"]            = ",";
