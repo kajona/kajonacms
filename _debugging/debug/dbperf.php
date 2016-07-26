@@ -20,6 +20,7 @@ echo "+-------------------------------------------------------------------------
 
 $strCsvFile = _realpath_."/files/public/dbperf.csv";
 @unlink($strCsvFile);
+$arrTimeSteps=array();
 
 echo "\n-----------------------------------------------------";
 
@@ -41,8 +42,8 @@ $arrTimestampEnde = gettimeofday();
 $intTimeUsed = (($arrTimestampEnde['sec'] * 1000000 + $arrTimestampEnde['usec'])
         - ($arrTimestampStart['sec'] * 1000000 + $arrTimestampStart['usec'])) / 1000000;
 echo  "<b>PHP-Time</b> of creating records with sortmanager:             " . number_format($intTimeUsed, 6) . " sec \n";
-file_put_contents($strCsvFile, "1) Create with sm;".number_format($intTimeUsed, 3, ',','.')."\r\n", FILE_APPEND | LOCK_EX);
-
+//file_put_contents($strCsvFile, "1) Create with sm;".number_format($intTimeUsed, 3, ',','.')."\r\n", FILE_APPEND | LOCK_EX);
+$arrTimeSteps[1]=number_format($intTimeUsed, 3, ',','.');
 
 
 echo "\n\n<b>Step 2:</b> Deletion of entries...\n";
@@ -62,7 +63,8 @@ $arrTimestampEnde = gettimeofday();
 $intTimeUsed = (($arrTimestampEnde['sec'] * 1000000 + $arrTimestampEnde['usec'])
         - ($arrTimestampStart['sec'] * 1000000 + $arrTimestampStart['usec'])) / 1000000;
 echo  "<b>PHP-Time</b> of deleting entries:                              " . number_format($intTimeUsed, 6) . " sec \n";
-file_put_contents($strCsvFile, "2) Delete;".number_format($intTimeUsed, 3, ',','.')."\r\n", FILE_APPEND | LOCK_EX);
+//file_put_contents($strCsvFile, "2) Delete;".number_format($intTimeUsed, 3, ',','.')."\r\n", FILE_APPEND | LOCK_EX);
+$arrTimeSteps[2]=number_format($intTimeUsed, 3, ',','.');
 
 
 
@@ -86,7 +88,8 @@ $arrTimestampEnde = gettimeofday();
 $intTimeUsed = (($arrTimestampEnde['sec'] * 1000000 + $arrTimestampEnde['usec'])
         - ($arrTimestampStart['sec'] * 1000000 + $arrTimestampStart['usec'])) / 1000000;
 echo  "<b>PHP-Time</b> of creating without sortmanager:               " . number_format($intTimeUsed, 6) . " sec \n";
-file_put_contents($strCsvFile, "3) Create without sm;".number_format($intTimeUsed, 3, ',','.')."\r\n", FILE_APPEND | LOCK_EX);
+//file_put_contents($strCsvFile, "3) Create without sm;".number_format($intTimeUsed, 3, ',','.')."\r\n", FILE_APPEND | LOCK_EX);
+$arrTimeSteps[3]=number_format($intTimeUsed, 3, ',','.');
 
 
 
@@ -107,7 +110,13 @@ $arrTimestampEnde = gettimeofday();
 $intTimeUsed = (($arrTimestampEnde['sec'] * 1000000 + $arrTimestampEnde['usec'])
         - ($arrTimestampStart['sec'] * 1000000 + $arrTimestampStart['usec'])) / 1000000;
 echo  "<b>PHP-Time</b> deleting entries:                              " . number_format($intTimeUsed, 6) . " sec \n";
-file_put_contents($strCsvFile, "4) Delete;".number_format($intTimeUsed, 3, ',','.')."\r\n", FILE_APPEND | LOCK_EX);
+//file_put_contents($strCsvFile, "4) Delete;".number_format($intTimeUsed, 3, ',','.')."\r\n", FILE_APPEND | LOCK_EX);
+$arrTimeSteps[4]=number_format($intTimeUsed, 3, ',','.');
+
+file_put_contents($strCsvFile, "1) Create with sm Delete;2) Delete;3) Create without sm;4) Delete\r\n", FILE_APPEND | LOCK_EX);
+file_put_contents($strCsvFile, $arrTimeSteps[1].";".$arrTimeSteps[2].";".$arrTimeSteps[3].";".$arrTimeSteps[4].";\r\n\"", FILE_APPEND | LOCK_EX);
+
+
 
 echo "\n-----------------------------------------------------";
 
