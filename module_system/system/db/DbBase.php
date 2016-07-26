@@ -135,6 +135,64 @@ abstract class DbBase implements DbDriverInterface
         return $objDb->_pQuery($strQuery, $arrParams);
     }
 
+
+
+    /**
+     * Dummy implementation, using a select & insert combination. This is not threadsafe, so the
+     * make sure to implement it in each driver specifically.
+     * Nevertheless, this may be used as a fallback.
+     *
+     * @inheritDoc
+     */
+    public function insertOrUpdate($strTable, $arrColumns, $arrValues, $arrPrimaryColumns)
+    {
+
+        $arrPlaceholder = array();
+        $arrMappedColumns = array();
+
+        $arrUpdateKeyValue = array();
+        $arrUpdateKeyValueKey = array();
+        $arrUpdateParams = array();
+        $arrUpdateKeyParams = array();
+
+        $arrPrimaryCompares = array();
+        $arrPrimaryValues = array();
+
+        foreach ($arrColumns as $intKey => $strOneCol) {
+            $arrPlaceholder[] = "?";
+            $arrMappedColumns[] = $this->encloseColumnName($strOneCol);
+
+            if(in_array($strOneCol, $arrPrimaryColumns)) {
+                $arrPrimaryCompares[] = $strOneCol ." = ? ";
+                $arrPrimaryValues[] = $arrValues[$intKey];
+
+                $arrUpdateKeyValueKey[] = $strOneCol ." = ? ";
+                $arrUpdateKeyParams[] = $arrValues[$intKey];
+            }
+            else {
+                $arrUpdateKeyValue[] = $strOneCol ." = ? ";
+                $arrUpdateParams[] = $arrValues[$intKey];
+            }
+        }
+
+        $arrRow = $this->getPArraySection("SELECT COUNT(*) FROM ".$this->encloseTableName(_dbprefix_.$strTable)." WHERE ".implode(" AND ", $arrPrimaryCompares), $arrPrimaryValues, 0, 1);
+
+        if($arrRow === false) {
+            return false;
+        }
+
+        $arrSingleRow = isset($arrRow[0]) ? $arrRow[0] : null;
+
+        if($arrSingleRow === null || $arrSingleRow["COUNT(*)"] == "0") {
+            $strQuery = "INSERT INTO ".$this->encloseTableName(_dbprefix_.$strTable)." (".implode(", ", $arrMappedColumns).") VALUES (".implode(", ", $arrPlaceholder).")";
+            return $this->_pQuery($strQuery, $arrValues);
+        }
+        else {
+            $strQuery = "UPDATE ".$this->encloseTableName(_dbprefix_.$strTable)." SET ".implode(", ", $arrUpdateKeyValue)." WHERE ".implode(" AND ", $arrUpdateKeyValueKey);
+            return $this->_pQuery($strQuery, array_merge($arrUpdateParams, $arrUpdateKeyParams));
+        }
+    }
+
     /**
      * Returns just a part of a recordset, defined by the start- and the end-rows,
      * defined by the params. Makes use of prepared statements.

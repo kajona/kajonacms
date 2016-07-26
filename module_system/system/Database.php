@@ -182,6 +182,31 @@ class Database
         return $bitReturn;
     }
 
+
+    /**
+     * Fires an insert or update of a single record. it's up to the database (driver)
+     * to detect whether a row is already present or not.
+     * Please note: since some dbrms fire a delete && insert, make sure to pass ALL colums and values,
+     * otherwise data might be lost.
+     *
+     * @param $strTable
+     * @param $arrColumns
+     * @param $arrValues
+     *
+     * @param $arrPrimaryColumns
+     *
+     * @return bool
+     */
+    public function insertOrUpdate($strTable, $arrColumns, $arrValues, $arrPrimaryColumns)
+    {
+        $bitReturn = $this->objDbDriver->insertOrUpdate($strTable, $arrColumns, $arrValues, $arrPrimaryColumns);
+        if (!$bitReturn) {
+            $this->getError("", array());
+        }
+
+        return $bitReturn;
+    }
+
     /**
      * Sending a query to the database
      *
