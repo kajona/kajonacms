@@ -94,7 +94,7 @@ abstract class AdminEvensimpler extends AdminSimple
      *          @ objectListOtherObject Kajona\Demo\System\DemoDemo is declared
      *
      * @param string $strAction
-     * @param $objInstance
+     * @param $objInstance - may be either an object instance or the class name as string
      *
      * @return string
      */
@@ -108,7 +108,12 @@ abstract class AdminEvensimpler extends AdminSimple
             }
             else {
                 $objReflection = new Reflection($this);
-                $arrAnnotations = $objReflection->getAnnotationsWithValueFromClass(get_class($objInstance));
+
+                $strClassName = $objInstance;
+                if(is_object($objInstance)) {
+                    $strClassName = get_class($objInstance);
+                }
+                $arrAnnotations = $objReflection->getAnnotationsWithValueFromClass($strClassName);
 
                 foreach($arrAnnotations as $strProperty) {
                     if(uniStrpos($strProperty, $strAnnotationPrefix) === 0) {
