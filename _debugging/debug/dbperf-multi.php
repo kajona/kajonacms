@@ -11,22 +11,16 @@ namespace Kajona\Debugging\Debug;
 use Kajona\Navigation\System\NavigationPoint;
 use Kajona\Navigation\System\NavigationTree;
 use Kajona\System\System\Carrier;
-use Kajona\System\System\Filesystem;
+use Kajona\System\System\OrmObjectlist;
 
-$strReturn = "";
+echo  "\nHint: You can give get parameter like output=file and/or runs=n (n=integer)!";
 
-$strReturn .= "+-------------------------------------------------------------------------------+\n";
-$strReturn .= "| Kajona Debug Subsystem                                                        |\n";
-$strReturn .= "+-------------------------------------------------------------------------------+\n";
-
-$strReturn .= "\nHint: You can give get parameter like output=file and/or runs=n (n=integer)!";
-
-if (issetGet("runs") && intval(getGet("runs")) >= 1) {
-    $intRuns2Do = getGet("runs");
-    $strReturn .= "\n\nRunning ".$intRuns2Do." times!\n";
+if (Carrier::getInstance()->issetParam("runs") && intval(Carrier::getInstance()->getParam("runs")) >= 1) {
+    $intRuns2Do = Carrier::getInstance()->getParam("runs");
+    echo  "\n\nRunning ".$intRuns2Do." times!\n";
 } else {
     $intRuns2Do = 1;
-    $strReturn .= "\nNo get parameter for 'runs'. Running just 1 time!\n";
+    echo  "\nNo get parameter for 'runs'. Running just 1 time!\n";
 }
 
 $strDBDriver = Carrier::getInstance()->getObjConfig()->getConfig("dbdriver");
@@ -41,17 +35,25 @@ file_put_contents($strCsvFile, _webpath_."; \r\n", FILE_APPEND | LOCK_EX);
 file_put_contents($strCsvFile, date('d.m.Y - H:i:s')."; \r\n", FILE_APPEND | LOCK_EX);
 file_put_contents($strCsvFile, $strDBDriver."; \r\n", FILE_APPEND | LOCK_EX);
 
-file_put_contents($strCsvFile, "Create (".$strDBDriver.");Delete (".$strDBDriver.");\r\n", FILE_APPEND | LOCK_EX);
+file_put_contents($strCsvFile, "Create (".$strDBDriver.");Read (".$strDBDriver.");Delete (".$strDBDriver.");\r\n", FILE_APPEND | LOCK_EX);
+
+
+ob_flush(); flush();
 
 for ($intRun = 1; $intRun <= $intRuns2Do; $intRun++) {
     $arrTimeSteps = array();
 
-    $strReturn .= "\n\n-----------------------------------------------------";
-    $strReturn .= "\n---------------    Run ".$intRun." of ".$intRuns2Do." -----------------------";
-    $strReturn .= "\n-----------------------------------------------------";
+    echo  "\n\n-----------------------------------------------------";
+    echo  "\n---------------    Run ".$intRun." of ".$intRuns2Do." -----------------------";
+    echo  "\n-----------------------------------------------------";
 
-    $strReturn .= "\n\n<b>Step 1:</b> Creating 200 records with sortmanager...\n";
-    $arrTimestampStart = gettimeofday();
+
+
+
+    echo  "\n\n<b>Step 1:</b> Creating 200 records with sortmanager...\n";
+    ob_flush();
+    flush();
+    $intTimer = -microtime(true);
 
     $objNaviTree = new NavigationTree();
     $objNaviTree->updateObjectToDb();
@@ -64,15 +66,34 @@ for ($intRun = 1; $intRun <= $intRuns2Do; $intRun++) {
         $arrRecords[] = $objPoint;
     }
 
-    $arrTimestampEnde = gettimeofday();
-    $intTimeUsed = (($arrTimestampEnde['sec'] * 1000000 + $arrTimestampEnde['usec'])
-            - ($arrTimestampStart['sec'] * 1000000 + $arrTimestampStart['usec'])) / 1000000;
-    $strReturn .= "<b>PHP-Time</b> of creating records with sortmanager:             ".number_format($intTimeUsed, 6)." sec";
-    $arrTimeSteps[1] = number_format($intTimeUsed, 3, ',', '.');
+
+    $intTimer += microtime(true);
+    echo  "<b>PHP-Time</b> of creating records with sortmanager:             ".sprintf('%f', $intTimer)." sec";
+    $arrTimeSteps[1] = number_format(sprintf('%f', $intTimer), 3, ',', '.');
 
 
-    $strReturn .= "\n\n<b>Step 2:</b> Deletion of entries...\n";
-    $arrTimestampStart = gettimeofday();
+
+
+
+    echo  "\n\n<b>Step 2:</b> Reading of entries...\n";
+    ob_flush();
+    flush();
+    $intTimer = -microtime(true);
+
+    $objOrm = new OrmObjectlist();
+    $objOrm->getObjectList(NavigationPoint::class, $objNaviTree->getSystemid());
+
+    $intTimer += microtime(true);
+    echo  "<b>PHP-Time</b> of deleting entries:                              ".sprintf('%f', $intTimer)." sec";
+    $arrTimeSteps[2] = number_format(sprintf('%f', $intTimer), 3, ',', '.');
+
+
+
+
+    echo  "\n\n<b>Step 3:</b> Deletion of entries...\n";
+    ob_flush();
+    flush();
+    $intTimer = -microtime(true);
     for ($intI = 40; $intI <= 60; $intI++) {
         $arrRecords[$intI]->deleteObjectFromDatabase();
         unset($arrRecords[$intI]);
@@ -84,35 +105,32 @@ for ($intRun = 1; $intRun <= $intRuns2Do; $intRun++) {
 
     $objNaviTree->deleteObjectFromDatabase();
 
-    $arrTimestampEnde = gettimeofday();
-    $intTimeUsed = (($arrTimestampEnde['sec'] * 1000000 + $arrTimestampEnde['usec'])
-            - ($arrTimestampStart['sec'] * 1000000 + $arrTimestampStart['usec'])) / 1000000;
-    $strReturn .= "<b>PHP-Time</b> of deleting entries:                              ".number_format($intTimeUsed, 6)." sec";
-    $arrTimeSteps[2] = number_format($intTimeUsed, 3, ',', '.');
+    $intTimer += microtime(true);
+    echo  "<b>PHP-Time</b> of deleting entries:                              ".sprintf('%f', $intTimer)." sec";
+    $arrTimeSteps[3] = number_format(sprintf('%f', $intTimer), 3, ',', '.');
+    ob_flush();
+    flush();
 
-    file_put_contents($strCsvFile, $arrTimeSteps[1].";".$arrTimeSteps[2].";\r\n  ", FILE_APPEND | LOCK_EX);
-    $arrResultTable[] = array($arrTimeSteps[1], $arrTimeSteps[2]);
+
+
+    file_put_contents($strCsvFile, $arrTimeSteps[1].";".$arrTimeSteps[2].";".$arrTimeSteps[3].";\r\n  ", FILE_APPEND | LOCK_EX);
+    $arrResultTable[] = array($arrTimeSteps[1], $arrTimeSteps[2], $arrTimeSteps[3]);
 }
 
 
-$strReturn .= "\n\n\n-----------------------------------------------------";
-$strReturn .= "\nDownload <a href=\""._webpath_."/files/public/".$strCsvFileName."\">CSV file with results</a>";
-$strReturn .= "\n-----------------------------------------------------";
+echo  "\n\n\n-----------------------------------------------------";
+echo  "\nDownload <a href=\""._webpath_."/files/public/".$strCsvFileName."\">CSV file with results</a>";
+echo  "\n-----------------------------------------------------";
 
 
-$strReturn .= "\n\n<table border='1'>";
-$strReturn .= "<tr><td>Create (".$strDBDriver.")</td><td>Delete (".$strDBDriver.")</td></tr>";
+echo  "\n\n<table border='1'>";
+echo  "<tr><td>Create (".$strDBDriver.")</td><td>Read (".$strDBDriver.")</td><td>Delete (".$strDBDriver.")</td></tr>";
 foreach ($arrResultTable as $oneRow) {
-    $strReturn .= "<tr><td>".$oneRow[0]."</td><td>".$oneRow[1]."</td></tr>";
+    echo  "<tr><td>".$oneRow[0]."</td><td>".$oneRow[1]."</td><td>".$oneRow[2]."</td></tr>";
 }
-$strReturn .= "</table>";
+echo  "</table>";
 
 
-if (issetGet("output") && getGet("output") == "file") {
-    $objFilesystem = new Filesystem();
-    $objFilesystem->streamFile($strCsvFile);
-    die;
-} else {
-    echo $strReturn;
-}
+
+
 
