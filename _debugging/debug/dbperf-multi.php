@@ -28,7 +28,7 @@ if (issetGet("runs") && intval(getGet("runs")) >= 1 ) {
 }
 else {
     $intRuns2Do = 1;
-    $strReturn.= "\nNo get parameter for runs. Running just 1 time!\n";
+    $strReturn.= "\nNo get parameter for 'runs'. Running just 1 time!\n";
 }
 
 $strDBDriver = Carrier::getInstance()->getObjConfig()->getConfig("dbdriver");
