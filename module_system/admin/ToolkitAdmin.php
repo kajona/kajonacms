@@ -27,6 +27,7 @@ use Kajona\System\System\ModelInterface;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\Session;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemJSTreeConfig;
 use Kajona\System\System\SystemModule;
@@ -1041,6 +1042,51 @@ class ToolkitAdmin extends Toolkit
         $arrTemplate["elements"] = $strElements;
 
         return $this->objTemplate->fillTemplateFile($arrTemplate, "/elements.tpl", "input_checkboxarray", true);
+    }
+
+    /**
+     * @param $strName
+     * @param $strTitle
+     * @param array $availableItems
+     * @param array $arrSelectedItems
+     * @param bool $bitReadonly
+     * @return string
+     */
+    public function formInputCheckboxArrayObjectList($strName, $strTitle, array $availableItems, array $arrSelectedItems, $bitReadonly = false)
+    {
+        $arrTemplate = array();
+        $arrTemplate["name"] = $strName;
+        $arrTemplate["title"] = $strTitle;
+
+        //Render list
+        $intCount = count($availableItems);
+        $objArraySectionIterator = new ArraySectionIterator($intCount);
+        $objArraySectionIterator->setPageNumber(1);
+        $objArraySectionIterator->setArraySection($availableItems);
+
+        $strList = $this->listHeader();
+        foreach($objArraySectionIterator as $objObject) {
+            $strRow = $this->genericAdminList($objObject->getStrSystemid(), $objObject->getStrDisplayName(), AdminskinHelper::getAdminImage($objObject->getStrIcon()), "", "", "", true, "");
+
+            //1. replace ids
+            $strToFind = "kj_cb_{$objObject->getStrSystemid()}";
+            $strToReplacement = $strName."[{$objObject->getStrSystemid()}]";
+            $strRow = StringUtil::replace($strToFind, $strToReplacement, $strRow);
+
+            //2. added checked and disabled
+            $bitSelected = in_array($objObject->getStrSystemid(), $arrSelectedItems);
+            $strChecked = $bitSelected ? "checked=\"checked\"" : "";
+            $strDisabled  = $bitReadonly ? "disabled" : "";
+            $strAdditional = $strChecked." ".$strDisabled;
+            $strRow = StringUtil::replace("id=\"{$strToReplacement}\"", "id=\"{$strToReplacement}\" {$strAdditional}", $strRow);
+
+            //3. add row to list
+            $strList .= $strRow;
+        }
+        $strList .= $this->listFooter();
+
+        $arrTemplate["elements"] = $strList;
+        return $this->objTemplate->fillTemplateFile($arrTemplate, "/elements.tpl", "input_checkboxarrayobjectlist", true);
     }
 
     /**

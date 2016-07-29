@@ -1046,6 +1046,19 @@ A list of checkbox or radio input elements
     </div>
 </input_checkboxarray_checkbox>
 
+A list of checkbox for object elements
+<input_checkboxarrayobjectlist>
+    <div class="form-group">
+        <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
+
+        <div class="col-sm-6 inputText">
+            <div id="%%name%%" class="inputContainer %%class%%">
+                %%elements%%
+            </div>
+        </div>
+    </div>
+</input_checkboxarrayobjectlist>
+
 ---------------------------------------------------------------------------------------------------------
 -- MISC ELEMENTS ----------------------------------------------------------------------------------------
 Used to fold elements / hide/unhide elements
