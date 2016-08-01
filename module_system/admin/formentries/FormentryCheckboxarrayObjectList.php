@@ -23,8 +23,21 @@ use Kajona\System\System\StringUtil;
  */
 class FormentryCheckboxarrayObjectList extends FormentryCheckboxarray {
 
+    protected $bitShowPath = true;
+
     public function __construct($strFormName, $strSourceProperty, $objSourceObject = null) {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
+    }
+
+    public function setBitShowPath($bitShowPath)
+    {
+        $this->bitShowPath = $bitShowPath;
+        return $this;
+    }
+
+    public function getBitShowPath()
+    {
+        return $this->bitShowPath;
     }
 
     public function renderField()
@@ -34,7 +47,7 @@ class FormentryCheckboxarrayObjectList extends FormentryCheckboxarray {
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
 
-        $strReturn .= $objToolkit->formInputCheckboxArrayObjectList($this->getStrEntryName(), $this->getStrLabel(), $this->getAvailableItems(), $this->getSelectedItems(), $this->getBitReadonly());
+        $strReturn .= $objToolkit->formInputCheckboxArrayObjectList($this->getStrEntryName(), $this->getStrLabel(), $this->getAvailableItems(), $this->getSelectedItems(), $this->getBitReadonly(), $this->getBitShowPath());
 
         return $strReturn;
 
