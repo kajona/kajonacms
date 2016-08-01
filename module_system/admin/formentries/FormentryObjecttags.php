@@ -10,6 +10,7 @@ use Kajona\System\System\Carrier;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Model;
 use Kajona\System\System\Objectfactory;
+use Kajona\System\System\UserGroup;
 use Kajona\System\System\UserUser;
 use Traversable;
 
@@ -25,9 +26,17 @@ class FormentryObjecttags extends FormentryTageditor
 {
     const TYPE_USER = 1;
     const TYPE_OBJECT = 2;
+    const TYPE_USERGROUP = 3;
 
     protected $strSource;
-    protected $intType = self::TYPE_USER;
+    protected $intType;
+
+
+    public function __construct($strFormName, $strSourceProperty, $objSourceObject = null, $intType = self::TYPE_USER)
+    {
+        $this->intType = $intType;
+        parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
+    }
 
     /**
      * @param string $strSource
@@ -120,6 +129,8 @@ class FormentryObjecttags extends FormentryTageditor
                 $objObject = null;
                 if ($intType === FormentryObjecttags::TYPE_USER) {
                     $objObject = new UserUser($strId);
+                } elseif ($intType === FormentryObjecttags::TYPE_USERGROUP) {
+                    $objObject = new UserGroup($strId);
                 } elseif ($intType === FormentryObjecttags::TYPE_OBJECT) {
                     $objObject = Objectfactory::getInstance()->getObject($strId);
                 }
