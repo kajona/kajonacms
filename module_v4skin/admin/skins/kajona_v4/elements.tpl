@@ -1059,6 +1059,19 @@ A list of checkbox for object elements
     </div>
 </input_checkboxarrayobjectlist>
 
+<input_checkboxarrayobjectlist_row>
+    <tbody class="%%cssaddon%%">
+        <tr data-systemid="%%systemid%%">
+            <td class="listcheckbox"><input type="checkbox" name="%%name%%[%%systemid%%]" data-systemid="%%systemid%%" %%checked%% %%readonly%%></td>
+            <td class="listimage">%%icon%%</td>
+            <td class="title">
+                <div class="small" style="color:#aaa">%%path%%</div>
+                %%title%%
+            </td>
+        </tr>
+    </tbody>
+</input_checkboxarrayobjectlist_row>
+
 ---------------------------------------------------------------------------------------------------------
 -- MISC ELEMENTS ----------------------------------------------------------------------------------------
 Used to fold elements / hide/unhide elements

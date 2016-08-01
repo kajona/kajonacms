@@ -1052,7 +1052,7 @@ class ToolkitAdmin extends Toolkit
      * @param bool $bitReadonly
      * @return string
      */
-    public function formInputCheckboxArrayObjectList($strName, $strTitle, array $availableItems, array $arrSelectedItems, $bitReadonly = false)
+    public function formInputCheckboxArrayObjectList($strName, $strTitle, array $availableItems, array $arrSelectedItems, $bitReadonly = false, $bitShowPath = true)
     {
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
@@ -1066,22 +1066,34 @@ class ToolkitAdmin extends Toolkit
 
         $strList = $this->listHeader();
         foreach($objArraySectionIterator as $objObject) {
-            $strRow = $this->genericAdminList($objObject->getStrSystemid(), $objObject->getStrDisplayName(), AdminskinHelper::getAdminImage($objObject->getStrIcon()), "", "", "", true, "");
-
-            //1. replace ids
-            $strToFind = "kj_cb_{$objObject->getStrSystemid()}";
-            $strToReplacement = $strName."[{$objObject->getStrSystemid()}]";
-            $strRow = StringUtil::replace($strToFind, $strToReplacement, $strRow);
-
-            //2. added checked and disabled
+            /** @var $objObject Model */
             $bitSelected = in_array($objObject->getStrSystemid(), $arrSelectedItems);
-            $strChecked = $bitSelected ? "checked=\"checked\"" : "";
-            $strDisabled  = $bitReadonly ? "disabled" : "";
-            $strAdditional = $strChecked." ".$strDisabled;
-            $strRow = StringUtil::replace("id=\"{$strToReplacement}\"", "id=\"{$strToReplacement}\" {$strAdditional}", $strRow);
 
-            //3. add row to list
-            $strList .= $strRow;
+            $strPath = "";
+            if ($bitShowPath) {
+                $arrPath = $objObject->getPathArray();
+                // remove module and prozroot id
+                array_shift($arrPath);
+                array_shift($arrPath);
+                // remove current systemid
+                array_pop($arrPath);
+                $arrPath = array_map(function($strSystemId){
+                    return Objectfactory::getInstance()->getObject($strSystemId)->getStrDisplayName();
+                }, $arrPath);
+                $strPath = implode(" &gt; ", $arrPath);
+            }
+
+            $arrSubTemplate = array(
+                "icon" => AdminskinHelper::getAdminImage($objObject->getStrIcon()),
+                "title" => $objObject->getStrDisplayName(),
+                "path" => $strPath,
+                "name" => $strName,
+                "systemid" => $objObject->getStrSystemId(),
+                "checked" => $bitSelected ? "checked=\"checked\"" : "",
+                "readonly" => $bitReadonly ? "disabled" : "",
+            );
+
+            $strList .= $this->objTemplate->fillTemplateFile($arrSubTemplate, "/elements.tpl", "input_checkboxarrayobjectlist_row", true);
         }
         $strList .= $this->listFooter();
 
