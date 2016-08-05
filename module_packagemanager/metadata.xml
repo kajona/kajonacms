@@ -5,7 +5,7 @@
         >
     <title>packagemanager</title>
     <description>The packagemanager wraps all logic to handle packages on the client side. It queries remote-repositories and downloads new or updated packages from them. In addition, the packagemanager handles the local update and installation of packages.</description>
-    <version>5.0.1</version>
+    <version>5.0.2</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>

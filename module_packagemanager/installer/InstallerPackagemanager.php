@@ -96,6 +96,12 @@ class InstallerPackagemanager extends InstallerBase implements InstallerInterfac
             $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.0.1");
         }
 
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.0.1") {
+            $strReturn .= "Updating to 5.0.2...\n";
+            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.0.2");
+        }
+
         return $strReturn."\n\n";
     }
 
