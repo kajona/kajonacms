@@ -580,6 +580,13 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
             $strReturn .= $this->update_476_50();
         }
 
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.0") {
+            $strReturn .= "Updating 5.0 to 5.0.1...\n";
+            $this->updateModuleVersion("", "5.0.1");
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn."\n\n";
     }
 
