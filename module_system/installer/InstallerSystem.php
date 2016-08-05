@@ -581,7 +581,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         }
         
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "5.0") {
+        if($arrModule["module_version"] == "5.0" || $arrModule["module_version"] == "5.0.1") {
             $strReturn .= $this->update_50_51();
         }
 
