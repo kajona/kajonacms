@@ -1,12 +1,4 @@
 Module Eventmanager
 
-V4.5 ----------------------------------------------------------------------------------------------------
-NEW: module_eventmanager | portal view -> updated the eventmanager to make use of the new templatemapper
-
-V4.3 ----------------------------------------------------------------------------------------------------
-NEW: events got a status, currently tentative, scheduled, canceled and postponed. The status' index is available in the portal using the placeholder %%eventStatus%%. The placeholder may be used to load lang-entries or to create css-class names.  #814
-NEW: the eventmanager supports logged-in users to register by a "register now" button. In addition, a participant may define a participation status (accepted, declined, maybe). Registered users may update their participation status. #816
-NEW: the eventmanager renders a filter-form when showing events in list mode #815
-
-V4.2 ----------------------------------------------------------------------------------------------------
-NEW: added a messageprovider to module eventmanager, sending a notification in case of new participants #788
+V5.0.1 ----------------------------------------------------------------------------------------------------
+BUG: eventmanager | EventmanagerPortal.php -> fixed a possible XSS injection, thx to https://www.netsparker.com
