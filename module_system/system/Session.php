@@ -19,7 +19,6 @@ namespace Kajona\System\System;
 final class Session
 {
 
-    private $objDB;
     private $strKey;
 
     private $arrRequestArray;
@@ -55,10 +54,6 @@ final class Session
      */
     private function __construct()
     {
-
-        //Loading the needed Objects
-        $this->objDB = Database::getInstance();
-
         //Generating a session-key using a few characteristic values
         $this->strKey = md5(_realpath_.getServer("REMOTE_ADDR"));
         $this->sessionStart();
@@ -720,7 +715,7 @@ final class Session
     {
 
 
-        $arrTables = $this->objDB->getTables();
+        $arrTables = Database::getInstance()->getTables();
         if (!in_array(_dbprefix_."session", $arrTables) || SystemSetting::getConfigValue("_guests_group_id_") === null) {
             return;
         }
