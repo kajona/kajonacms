@@ -6,26 +6,23 @@
 
 namespace Kajona\System\Admin\Formentries;
 
-use Kajona\System\System\AdminskinHelper;
-use Kajona\System\System\ArraySectionIterator;
 use Kajona\System\System\Carrier;
-use Kajona\System\System\Objectfactory;
-use Kajona\System\System\StringUtil;
 
 
 /**
- * A formelement rendering an array of checkboxes.
- * Requires both, a set of possible options and the set of options currently selected.
+ * Formelement which lists objects
  *
- * @author sidler@mulchprod.de
+ * @author stefan.meyer@mulchprod.de
+ * @author christoph.kappestein@mulchprod.de
  * @since 4.8
- * @package module_formgenerator
+ * @package module_system
  */
-class FormentryCheckboxarrayObjectList extends FormentryCheckboxarray {
-
+class FormentryCheckboxarrayObjectList extends FormentryCheckboxarray
+{
     protected $bitShowPath = true;
 
-    public function __construct($strFormName, $strSourceProperty, $objSourceObject = null) {
+    public function __construct($strFormName, $strSourceProperty, $objSourceObject = null)
+    {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
     }
 
@@ -44,8 +41,9 @@ class FormentryCheckboxarrayObjectList extends FormentryCheckboxarray {
     {
         $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         $strReturn = "";
-        if($this->getStrHint() != null)
+        if ($this->getStrHint() != null) {
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
+        }
 
         $strReturn .= $objToolkit->formInputCheckboxArrayObjectList($this->getStrEntryName(), $this->getStrLabel(), $this->getAvailableItems(), $this->getSelectedItems(), $this->getBitReadonly(), $this->getBitShowPath());
 
@@ -58,7 +56,8 @@ class FormentryCheckboxarrayObjectList extends FormentryCheckboxarray {
      *
      * @return array|null
      */
-    private function getSelectedItems() {
+    private function getSelectedItems()
+    {
         $arrSelectedItems = is_array($this->getStrValue()) ? $this->getStrValue() : array();
         return $arrSelectedItems;
     }
@@ -68,7 +67,8 @@ class FormentryCheckboxarrayObjectList extends FormentryCheckboxarray {
      *
      * @return array
      */
-    private function getAvailableItems() {
+    private function getAvailableItems()
+    {
         return $this->getArrKeyValues();
     }
 }
