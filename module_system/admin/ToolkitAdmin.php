@@ -1045,11 +1045,14 @@ class ToolkitAdmin extends Toolkit
     }
 
     /**
-     * @param $strName
-     * @param $strTitle
+     * Creates a list of checkboxes based on an object array
+     *
+     * @param string $strName
+     * @param string $strTitle
      * @param array $availableItems
      * @param array $arrSelectedItems
      * @param bool $bitReadonly
+     * @param bool $bitShowPath
      * @return string
      */
     public function formInputCheckboxArrayObjectList($strName, $strTitle, array $availableItems, array $arrSelectedItems, $bitReadonly = false, $bitShowPath = true)
