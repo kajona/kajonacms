@@ -174,6 +174,15 @@ abstract class OrmBase
                        WHERE system_id =  ".$objDB->encloseColumnName($objCfg->getStrTargetColumn())."
                          AND ".$objDB->encloseColumnName($objCfg->getStrSourceColumn())." = ?
                              ".$this->getDeletedWhereRestriction();
+
+        /**FIXME REMOVE IN FUTURE--------------------------------------------------------------------------**/
+        if($objCfg->getArrTypeFilter() !== null && in_array(UserGroup::class, $objCfg->getArrTypeFilter())) {
+            $strQuery = " SELECT *
+                FROM ".$objDB->encloseTableName(_dbprefix_.$objCfg->getStrTableName())."
+                 WHERE ".$objDB->encloseColumnName($objCfg->getStrSourceColumn())." = ?";
+        }
+        /**FIXME REMOVE IN FUTURE--------------------------------------------------------------------------**/
+
         $arrRows = $objDB->getPArray($strQuery, array($this->getObjObject()->getSystemid()));
 
         $strTargetCol = $objCfg->getStrTargetColumn();
