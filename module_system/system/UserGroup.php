@@ -95,21 +95,6 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface
     }
 
 
-    public function rightView()
-    {
-        return SystemModule::getModuleByName("user")->rightView();
-    }
-
-    public function rightEdit()
-    {
-        return SystemModule::getModuleByName("user")->rightEdit();
-    }
-
-    public function rightDelete()
-    {
-        return SystemModule::getModuleByName("user")->rightDelete();
-    }
-
     /**
      * @inheritDoc
      */
