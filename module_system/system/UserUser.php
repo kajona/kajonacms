@@ -31,6 +31,7 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
      * @var string
      * @tableColumn user_user.user_subsystem
      * @tableColumnDatatype char254
+     * @tableColumnIndex
      */
     private $strSubsystem = "kajona";
 
@@ -44,6 +45,7 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
      * @var string
      * @tableColumn user_user.user_username
      * @tableColumnDatatype char254
+     * @tableColumnIndex
      */
     private $strUsername = "";
 
@@ -65,6 +67,7 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
      * @var int
      * @tableColumn user_user.user_active
      * @tableColumnDatatype int
+     * @tableColumnIndex
      */
     private $intActive = 0;
 
@@ -114,6 +117,9 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
      * @var int
      * @tableColumn user_user.user_deleted
      * @tableColumnDatatype int
+     *
+     * @internal
+     * @todo migrate to system.system_deleted
      */
     private $intDeleted = 0;
 

@@ -91,7 +91,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
         // Modul table ----------------------------------------------------------------------------------
         $strReturn .= "Installing table system_module...\n";
-        $objManager->createTable("Kajona\\System\\System\\SystemModule");
+        $objManager->createTable(SystemModule::class);
 
 
         // Date table -----------------------------------------------------------------------------------
@@ -122,25 +122,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
         // User table -----------------------------------------------------------------------------------
         $strReturn .= "Installing table user...\n";
-
-        $arrFields = array();
-        $arrFields["user_id"] = array("char20", false);
-        $arrFields["user_username"] = array("char254", true);
-        $arrFields["user_subsystem"] = array("char254", true);
-        $arrFields["user_logins"] = array("int", true);
-        $arrFields["user_lastlogin"] = array("int", true);
-        $arrFields["user_active"] = array("int", true);
-        $arrFields["user_admin"] = array("int", true);
-        $arrFields["user_portal"] = array("int", true);
-        $arrFields["user_deleted"] = array("int", true);
-        $arrFields["user_admin_skin"] = array("char254", true);
-        $arrFields["user_admin_language"] = array("char254", true);
-        $arrFields["user_admin_module"] = array("char254", true);
-        $arrFields["user_authcode"] = array("char20", true);
-        $arrFields["user_items_per_page"] = array("int", true);
-
-        if(!$this->objDB->createTable("user", $arrFields, array("user_id"), array("user_username", "user_subsystem", "user_active", "user_deleted")))
-            $strReturn .= "An error occurred! ...\n";
+        $objManager->createTable(UserUser::class);
 
         // User table kajona subsystem  -----------------------------------------------------------------
         $strReturn .= "Installing table user_kajona...\n";
@@ -164,15 +146,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
         // User group table -----------------------------------------------------------------------------
         $strReturn .= "Installing table user_group...\n";
-
-        $arrFields = array();
-        $arrFields["group_id"] = array("char20", false);
-        $arrFields["group_name"] = array("char254", true);
-        $arrFields["group_subsystem"] = array("char254", true);
-
-        if(!$this->objDB->createTable("user_group", $arrFields, array("group_id"), array("group_name", "group_subsystem")))
-            $strReturn .= "An error occurred! ...\n";
-
+        $objManager->createTable(UserGroup::class);
 
         $strReturn .= "Installing table user_group_kajona...\n";
 

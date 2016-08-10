@@ -31,6 +31,7 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface
      * @var string
      * @tableColumn user_group.group_subsystem
      * @tableColumnDatatype char254
+     * @tableColumnIndex
      */
     private $strSubsystem = "kajona";
 
@@ -38,6 +39,7 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface
      * @var string
      * @tableColumn user_group.group_name
      * @tableColumnDatatype char254
+     * @tableColumnIndex
      */
     private $strName = "";
 
