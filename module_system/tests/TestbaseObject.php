@@ -262,7 +262,6 @@ abstract class TestbaseObject extends Testbase
         $strUserName = $arrParameters["strUsername"];
 
         $objUser = new UserUser();
-        $objUser->setIntActive(1);
         $objUser->setIntAdmin(1);
         $objUser->setStrUsername($strUserName);
         $objUser->updateObjectToDb();

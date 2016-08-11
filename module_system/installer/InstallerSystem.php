@@ -21,6 +21,7 @@ use Kajona\System\System\MessagingMessage;
 use Kajona\System\System\OrmBase;
 use Kajona\System\System\OrmSchemamanager;
 use Kajona\System\System\Resourceloader;
+use Kajona\System\System\Rights;
 use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemChangelog;
 use Kajona\System\System\SystemCommon;
@@ -403,7 +404,6 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
         $objUser = new UserUser();
         $objUser->setStrUsername($strUsername);
-        $objUser->setIntActive(1);
         $objUser->setIntAdmin(1);
         $objUser->setStrAdminlanguage($strAdminLanguage);
         $objUser->updateObjectToDb();
@@ -673,6 +673,72 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
     private function update_50_51() {
         $strReturn = "Updating 5.0 to 5.1...\n";
+
+
+
+        $strReturn .= "Updating users and groups\n";
+        foreach($this->objDB->getPArray("SELECT * FROM "._dbprefix_."user", array()) as $arrOneRow) {
+            //fire two inserts
+            $this->objDB->_pQuery(
+                "INSERT INTO "._dbprefix_."system SET system_id = ?, system_prev_id = ?, system_module_nr = ?, system_sort = -1, system_status = ?, system_class = ?, system_deleted = ?",
+                array(
+                    $arrOneRow["user_id"],
+                    SystemModule::getModuleIdByNr(_user_modul_id_),
+                    _user_modul_id_,
+                    $arrOneRow["user_active"],
+                    UserUser::class,
+                    $arrOneRow["user_deleted"]
+                )
+            );
+
+            $this->objDB->_pQuery(
+                "INSERT INTO "._dbprefix_."system_right SET right_id = ?, right_inherit = ?, right_view = ?, right_edit = ?, right_delete = ?, right_right = ?, right_right1 = ?, right_right2 = ?, right_right3 = ?, right_right4 = ?, right_right5 = ?, right_changelog = ?",
+                array(
+                    $arrOneRow["user_id"],
+                    1,
+                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_VIEW)),
+                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_EDIT)),
+                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_DELETE)),
+                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_RIGHT)),
+                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_RIGHT1)),
+                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_RIGHT2)),
+                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_RIGHT3)),
+                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_RIGHT4)),
+                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_RIGHT5)),
+                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_CHANGELOG))
+                )
+            );
+        }
+
+        foreach($this->objDB->getPArray("SELECT * FROM "._dbprefix_."user_group", array()) as $arrOneRow) {
+            //fire two inserts
+            $this->objDB->_pQuery(
+                "INSERT INTO "._dbprefix_."system SET system_id = ?, system_prev_id = ?, system_module_nr = ?, system_sort = -1, system_status = ?, system_class = ?, system_deleted = ?",
+                array($arrOneRow["group_id"], SystemModule::getModuleIdByNr(_user_modul_id_), _user_modul_id_, 1, UserGroup::class, 0)
+            );
+
+            $this->objDB->_pQuery(
+                "INSERT INTO "._dbprefix_."system_right SET right_id = ?, right_inherit = ?, right_view = ?, right_edit = ?, right_delete = ?, right_right = ?, right_right1 = ?, right_right2 = ?, right_right3 = ?, right_right4 = ?, right_right5 = ?, right_changelog = ?",
+                array(
+                    $arrOneRow["group_id"],
+                    1,
+                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_VIEW)),
+                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_EDIT)),
+                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_DELETE)),
+                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_RIGHT)),
+                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_RIGHT1)),
+                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_RIGHT2)),
+                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_RIGHT3)),
+                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_RIGHT4)),
+                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_RIGHT5)),
+                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_CHANGELOG))
+                )
+            );
+        }
+
+        $this->objDB->removeColumn(_dbprefix_."user", "user_active");
+        $this->objDB->removeColumn(_dbprefix_."user", "user_deleted");
+
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1");
         return $strReturn;

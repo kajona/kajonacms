@@ -100,7 +100,7 @@ class UserSourcefactory
 
         //validate if a group with the given name is available
 
-        $strQuery = "SELECT user_id FROM "._dbprefix_."user where user_username = ? AND (user_deleted = 0 OR user_deleted IS NULL)";
+        $strQuery = "SELECT user_id FROM "._dbprefix_."user, "._dbprefix_."system where user_id = system_id AND user_username = ? AND (system_deleted = 0 OR system_deleted IS NULL)";
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
 
         if (isset($arrRow["user_id"]) && validateSystemid($arrRow["user_id"])) {
@@ -126,7 +126,7 @@ class UserSourcefactory
      *
      * @param string $strParam
      *
-     * @return UserUser
+     * @return UserUser[]
      */
     public function getUserlistByUserquery($strParam)
     {
@@ -134,13 +134,13 @@ class UserSourcefactory
         $strDbPrefix = _dbprefix_;
         //validate if a group with the given name is available
         $strQuery = "SELECT user_tbl.user_id, user_tbl.user_subsystem
-                      FROM {$strDbPrefix}user AS user_tbl
+                      FROM {$strDbPrefix}system, {$strDbPrefix}user AS user_tbl
                       LEFT JOIN {$strDbPrefix}user_kajona AS user_kajona ON user_tbl.user_id = user_kajona.user_id
                       WHERE
                           (user_tbl.user_username LIKE ? OR user_kajona.user_forename LIKE ? OR user_kajona.user_name LIKE ?)
-
-                          AND (user_tbl.user_deleted = 0 OR user_tbl.user_deleted IS NULL)
-                          AND user_active = 1
+                          AND user_tbl.user_id = system_id
+                          AND (system_deleted = 0 OR system_deleted IS NULL)
+                          AND system_status = 1
                       ORDER BY user_tbl.user_username, user_tbl.user_subsystem ASC";
 
         $arrParams = array("%".$strParam."%", "%".$strParam."%", "%".$strParam."%");

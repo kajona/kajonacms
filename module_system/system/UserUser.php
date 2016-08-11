@@ -65,17 +65,6 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
 
     /**
      * @var int
-     * @tableColumn user.user_active
-     * @tableColumnDatatype int
-     * @tableColumnIndex
-     *
-     * @internal
-     * @todo migrate to system.system_status
-     */
-    private $intActive = 0;
-
-    /**
-     * @var int
      * @tableColumn user.user_admin
      * @tableColumnDatatype int
      */
@@ -404,7 +393,7 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
      */
     public function getIntActive()
     {
-        return $this->intActive;
+        return $this->getIntRecordStatus();
     }
 
     /**
@@ -486,16 +475,13 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
     /**
      * @param int $intActive
      *
-     * @return void
+     * @throws Exception
      * @deprecated
      * @todo remove
      */
     public function setIntActive($intActive)
     {
-        if ($intActive == "") {
-            $intActive = 0;
-        }
-        $this->intActive = $intActive;
+        throw new Exception("this call is no longer supported", Exception::$level_ERROR);
     }
 
     /**

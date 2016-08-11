@@ -54,7 +54,7 @@ class FormentryUser extends FormentryBase implements FormentryPrintableInterface
             $strUserid = "";
             if(validateSystemid($this->getStrValue())) {
                 $objUser = new UserUser($this->getStrValue());
-                if($objUser->getIntActive() == 1) {
+                if($objUser->getIntRecordStatus() == 1) {
                     $strUsername = $objUser->getStrDisplayName();
                     $strUserid = $this->getStrValue();
                 }

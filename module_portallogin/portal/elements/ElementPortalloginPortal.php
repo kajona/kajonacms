@@ -187,7 +187,7 @@ class ElementPortalloginPortal extends ElementPortal implements PortalElementInt
             $objUser = $objSubsystem->getUserByUsername($this->getParam("portallogin_username"));
             if ($objUser != null) {
                 $objValidator = new EmailValidator();
-                if ($objUser->getStrEmail() != "" && $objValidator->validate($objUser->getStrEmail()) && $objUser->getIntPortal() == 1 && $objUser->getIntActive() == 1) {
+                if ($objUser->getStrEmail() != "" && $objValidator->validate($objUser->getStrEmail()) && $objUser->getIntPortal() == 1 && $objUser->getIntRecordStatus() == 1) {
 
                     //generate an authcode and save it with the user
                     $strAuthcode = generateSystemid();

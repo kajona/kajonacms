@@ -155,25 +155,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
         return $strReturn;
     }
 
-    /**
-     * @param Model $objListEntry
-     * @param string $strAltActive tooltip text for the icon if record is active
-     * @param string $strAltInactive tooltip text for the icon if record is inactive
-     *
-     * @return string
-     */
-    protected function renderStatusAction(Model $objListEntry, $strAltActive = "", $strAltInactive = "")
-    {
-        if ($objListEntry instanceof UserUser && $objListEntry->rightEdit()) {
-            if ($objListEntry->getIntActive() == 1) {
-                return $this->objToolkit->listButton(Link::getLinkAdmin("user", "setUserStatus", "&systemid=".$objListEntry->getSystemid()."&pv=".$this->getParam("pv"), "", $this->getLang("user_active"), "icon_enabled"));
-            }
-            else {
-                return $this->objToolkit->listButton(Link::getLinkAdmin("user", "setUserStatus", "&systemid=".$objListEntry->getSystemid()."&pv=".$this->getParam("pv"), "", $this->getLang("user_inactive"), "icon_disabled"));
-            }
-        }
-        return "";
-    }
+
 
     /**
      * @param ModelInterface $objListEntry
@@ -280,7 +262,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
 
         if ($objListEntry instanceof UserUser
             && $objListEntry->getObjSourceUser()->isEditable()
-            && $objListEntry->getIntActive() == 1
+            && $objListEntry->getIntRecordStatus() == 1
             && $objListEntry->getObjSourceUser()->isPasswordResettable()
             && $objListEntry->rightEdit()
             && $objValidator->validate($objListEntry->getStrEmail())
@@ -288,11 +270,11 @@ class UserAdmin extends AdminSimple implements AdminInterface
             $arrReturn[] = $this->objToolkit->listButton(Link::getLinkAdmin("user", "sendPassword", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("user_password_resend"), "icon_mailNew"));
         }
 
-        if ($objListEntry instanceof UserUser && $objListEntry->getIntActive() == 1) {
+        if ($objListEntry instanceof UserUser && $objListEntry->getIntRecordStatus() == 1) {
             $arrReturn[] = $this->objToolkit->listButton(Link::getLinkAdminDialog("messaging", "new", "&messaging_user_id=".$objListEntry->getSystemid(), "", $this->getLang("user_send_message"), "icon_mail", $this->getLang("user_send_message")));
         }
 
-        if ($objListEntry instanceof UserUser && $objListEntry->getIntActive() == 1 && Carrier::getInstance()->getObjSession()->isSuperAdmin()) {
+        if ($objListEntry instanceof UserUser && $objListEntry->getIntRecordStatus() == 1 && Carrier::getInstance()->getObjSession()->isSuperAdmin()) {
             $arrReturn[] = $this->objToolkit->listButton(Link::getLinkAdmin("user", "switchToUser", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("user_switch_to"), "icon_userswitch"));
         }
 
@@ -400,33 +382,6 @@ class UserAdmin extends AdminSimple implements AdminInterface
         return $strReturn;
     }
 
-    /**
-     * Negates the status of an existing user
-     *
-     * @throws Exception
-     * @return string "" in case of success
-     * @permissions edit
-     */
-    protected function actionSetUserStatus()
-    {
-        $strReturn = "";
-        $objUser = new UserUser($this->getSystemid());
-        if ($objUser->getIntActive() == 1) {
-            $objUser->setIntActive(0);
-        }
-        else {
-            $objUser->setIntActive(1);
-        }
-
-        if ($objUser->updateObjectToDb()) {
-            $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "list", "&pv=".$this->getParam("pv")));
-        }
-        else {
-            throw new Exception("Error updating user ".$this->getSystemid(), Exception::$level_ERROR);
-        }
-
-        return $strReturn;
-    }
 
     /**
      * @return string
@@ -563,10 +518,6 @@ class UserAdmin extends AdminSimple implements AdminInterface
                 if ($objForm->getField("user_portal") != null) {
                     $objForm->getField("user_portal")->setStrValue($objUser->getIntPortal());
                 }
-
-                if ($objForm->getField("user_active") != null) {
-                    $objForm->getField("user_active")->setStrValue($objUser->getIntActive());
-                }
             }
 
             $objForm->addField(new FormentryHidden("", "usersource"))->setStrValue($this->getParam("usersource"));
@@ -680,7 +631,6 @@ class UserAdmin extends AdminSimple implements AdminInterface
         if (!$bitSelfedit) {
             $objForm->addField(new FormentryCheckbox("user", "adminlogin"))->setStrLabel($this->getLang("user_admin"));
             $objForm->addField(new FormentryCheckbox("user", "portal"))->setStrLabel($this->getLang("user_portal"));
-            $objForm->addField(new FormentryCheckbox("user", "active"))->setStrLabel($this->getLang("user_aktiv"));
         }
 
         if (count($objUser->getGroupIdsForUser()) == 0 && empty($strInheritPermissionsId)) {
@@ -745,7 +695,6 @@ class UserAdmin extends AdminSimple implements AdminInterface
             $objUser->setStrSubsystem($this->getParam("usersource"));
 
             $objUser->setStrUsername($this->getParam("user_username"));
-            $objUser->setIntActive(($this->getParam("user_active") != "" && $this->getParam("user_active") == "checked") ? 1 : 0);
             $objUser->setIntAdmin(($this->getParam("user_adminlogin") != "" && $this->getParam("user_adminlogin") == "checked") ? 1 : 0);
             $objUser->setIntPortal(($this->getParam("user_portal") != "" && $this->getParam("user_portal") == "checked") ? 1 : 0);
 
@@ -757,7 +706,6 @@ class UserAdmin extends AdminSimple implements AdminInterface
 
             if (!$bitSelfedit) {
                 $objUser->setStrUsername($this->getParam("user_username"));
-                $objUser->setIntActive(($this->getParam("user_active") != "" && $this->getParam("user_active") == "checked") ? 1 : 0);
                 $objUser->setIntAdmin(($this->getParam("user_adminlogin") != "" && $this->getParam("user_adminlogin") == "checked") ? 1 : 0);
                 $objUser->setIntPortal(($this->getParam("user_portal") != "" && $this->getParam("user_portal") == "checked") ? 1 : 0);
             }
@@ -1447,7 +1395,7 @@ HTML;
             }
 
             $strAction = "";
-            if (!$bitRenderAcceptLink || $objOneIterable->getIntActive() == 0 || ($this->getParam("filter") == "current" && $objOneIterable->getSystemid() == $this->objSession->getUserID())) {
+            if (!$bitRenderAcceptLink || $objOneIterable->getIntRecordStatus() == 0 || ($this->getParam("filter") == "current" && $objOneIterable->getSystemid() == $this->objSession->getUserID())) {
                 $strAction .= $this->objToolkit->listButton(getImageAdmin("icon_acceptDisabled"));
             } else {
                 $strAction .= $this->objToolkit->listButton(

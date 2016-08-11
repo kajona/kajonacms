@@ -231,7 +231,6 @@ class UsersourcesSourceLdap implements UsersourcesUsersourceInterface
                 $objUser = new UserUser();
                 $objUser->setStrUsername($strUsername);
                 $objUser->setStrSubsystem("ldap");
-                $objUser->setIntActive(1);
                 $objUser->setIntAdmin(1);
                 $objUser->updateObjectToDb();
 

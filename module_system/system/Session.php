@@ -412,7 +412,7 @@ final class Session
     public function isActive()
     {
         if ($this->isLoggedin()) {
-            if ($this->getUser() && $this->getUser()->getIntActive() == 1) {
+            if ($this->getUser() && $this->getUser()->getIntRecordStatus() == 1) {
                 return true;
             }
             else {
@@ -515,7 +515,7 @@ final class Session
     private function internalLoginHelper(UserUser $objUser)
     {
 
-        if ($objUser->getIntActive() == 1) {
+        if ($objUser->getIntRecordStatus() == 1) {
 
 
             $this->getObjInternalSession()->setStrLoginstatus(SystemSession::$LOGINSTATUS_LOGGEDIN);
