@@ -568,12 +568,16 @@ class Link
 
                 unset($arrParams[$strKey]);
             }
-            else if ($strValue == "") {
+            elseif ($strValue == "") {
                 unset($arrParams[$strKey]);
             }
 
             if (count($arrEntry) == 2) {
                 $arrEntry[1] = urlencode($arrEntry[1]);
+            }
+            else {
+                //if more  / less then two entries, remove the param completely
+                unset($arrParams[$strKey]);
             }
 
             $strValue = implode("=", $arrEntry);

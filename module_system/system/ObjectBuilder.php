@@ -39,7 +39,7 @@ class ObjectBuilder
      *
      * @return object
      *
-     * @todo the constructor call should get obsolte. by convention the constructor shouldn't require access to properties injected by the dependency container. Currently used e.g. in AdminController.
+     * @todo the constructor call should get obsolete. by convention the constructor shouldn't require access to properties injected by the dependency container. Currently used e.g. in AdminController.
      *       We need to scan all classes making use of the DI and update them accordingly, afterwards the constructor call will be removed
      *
      */

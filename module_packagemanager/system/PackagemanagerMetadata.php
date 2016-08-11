@@ -13,6 +13,7 @@ use Kajona\System\System\AdminListableInterface;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Exception;
 use Kajona\System\System\PharModule;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\XmlParser;
 use Kajona\System\System\Zip;
 use Phar;
@@ -173,13 +174,22 @@ class PackagemanagerMetadata implements AdminListableInterface
             $strFile = _realpath_.$strPackage;
         }
 
-        $objPhar = new Phar($strFile);
+        $strMetadata = "";
+        //if its a project phar, we need to set another alias
+        if(StringUtil::indexOf($strPackage, "/project") !== false) {
+            //load the metadata without registering the phar, this could lead to multiple registered aliases
+            $strMetadata = file_get_contents("phar://{$strFile}/metadata.xml");
 
-        if (!isset($objPhar["metadata.xml"])) {
-            throw new Exception("file not found: "._realpath_.$strPackage."/metadata.xml", Exception::$level_ERROR);
+        } else {
+            $objPhar = new Phar($strFile);
+            if(isset($objPhar["metadata.xml"])) {
+                $strMetadata = file_get_contents($objPhar["metadata.xml"]->getPathname());
+            }
         }
 
-        $strMetadata = file_get_contents($objPhar["metadata.xml"]->getPathname());
+        if ($strMetadata == "") {
+            throw new Exception("file not found: "._realpath_.$strPackage."/metadata.xml", Exception::$level_ERROR);
+        }
         $this->parseXMLDocument($strMetadata);
     }
 
