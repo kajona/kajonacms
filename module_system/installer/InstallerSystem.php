@@ -738,8 +738,8 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
             );
         }
 
-        $this->objDB->removeColumn(_dbprefix_."user", "user_active");
-        $this->objDB->removeColumn(_dbprefix_."user", "user_deleted");
+        $this->objDB->removeColumn("user", "user_active");
+        $this->objDB->removeColumn("user", "user_deleted");
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1");
