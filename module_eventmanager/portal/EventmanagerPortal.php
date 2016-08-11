@@ -263,12 +263,12 @@ class EventmanagerPortal extends PortalController implements PortalInterface
 
         $objMapper = new TemplateMapper($objEvent);
 
-        $objMapper->addPlaceholder("forename", $this->getParam("forename"));
-        $objMapper->addPlaceholder("lastname", $this->getParam("lastname"));
-        $objMapper->addPlaceholder("phone", $this->getParam("phone"));
-        $objMapper->addPlaceholder("comment", $this->getParam("comment"));
-        $objMapper->addPlaceholder("email", $this->getParam("email"));
-        $objMapper->addPlaceholder("participant_status", $this->getParam("participant_status"));
+        $objMapper->addPlaceholder("forename", htmlspecialchars($this->getParam("forename"), ENT_QUOTES, "UTF-8", false));
+        $objMapper->addPlaceholder("lastname", htmlspecialchars($this->getParam("lastname"), ENT_QUOTES, "UTF-8", false));
+        $objMapper->addPlaceholder("phone", htmlspecialchars($this->getParam("phone"), ENT_QUOTES, "UTF-8", false));
+        $objMapper->addPlaceholder("comment", htmlspecialchars($this->getParam("comment"), ENT_QUOTES, "UTF-8", false));
+        $objMapper->addPlaceholder("email", htmlspecialchars($this->getParam("email"), ENT_QUOTES, "UTF-8", false));
+        $objMapper->addPlaceholder("participant_status", htmlspecialchars($this->getParam("participant_status"), ENT_QUOTES, "UTF-8", false));
         $objMapper->addPlaceholder("title", $objEvent->getStrTitle());
         $objMapper->addPlaceholder("dateTimeFrom", dateToString($objEvent->getObjStartDate(), true));
         $objMapper->addPlaceholder("dateFrom", dateToString($objEvent->getObjStartDate(), false));
