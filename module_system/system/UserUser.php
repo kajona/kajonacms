@@ -107,16 +107,6 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
 
     /**
      * @var int
-     * @tableColumn user.user_deleted
-     * @tableColumnDatatype int
-     *
-     * @internal
-     * @todo migrate to system.system_deleted
-     */
-    private $intDeleted = 0;
-
-    /**
-     * @var int
      * @tableColumn user.user_items_per_page
      * @tableColumnDatatype int
      */
@@ -363,7 +353,7 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
      */
     private function loadSourceObject()
     {
-        if ($this->objSourceUser == null && $this->intDeleted != 1) {
+        if ($this->objSourceUser == null && $this->getIntRecordDeleted() != 1) {
             $objUsersources = new UserSourcefactory();
             $this->setObjSourceUser($objUsersources->getSourceUser($this));
         }
@@ -481,7 +471,7 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
      */
     public function setIntActive($intActive)
     {
-        throw new Exception("this call is no longer supported", Exception::$level_ERROR);
+        $this->setIntRecordStatus($intActive);
     }
 
     /**
@@ -611,7 +601,7 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
      */
     public function getIntDeleted()
     {
-        return $this->intDeleted;
+        return $this->getIntRecordDeleted();
     }
 
     /**

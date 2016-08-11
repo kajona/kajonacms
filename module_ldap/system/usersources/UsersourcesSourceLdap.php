@@ -174,7 +174,7 @@ class UsersourcesSourceLdap implements UsersourcesUsersourceInterface
      */
     public function getUserById($strId)
     {
-        $strQuery = "SELECT user_id FROM " . _dbprefix_ . "user WHERE user_id = ? AND user_subsystem = 'ldap' AND (user_deleted = 0 OR user_deleted IS NULL)";
+        $strQuery = "SELECT user_id FROM " . _dbprefix_ . "user, "._dbprefix_."system WHERE user_id = system_id AND user_id = ? AND user_subsystem = 'ldap' AND (system_deleted = 0 OR system_deleted IS NULL)";
 
         $arrIds = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strId));
         if (isset($arrIds["user_id"]) && validateSystemid($arrIds["user_id"])) {
@@ -215,7 +215,7 @@ class UsersourcesSourceLdap implements UsersourcesUsersourceInterface
      */
     public function getUserByUsername($strUsername)
     {
-        $strQuery = "SELECT user_id FROM " . _dbprefix_ . "user WHERE user_username = ? AND user_subsystem = 'ldap' AND (user_deleted = 0 OR user_deleted IS NULL)";
+        $strQuery = "SELECT user_id FROM " . _dbprefix_ . "user, "._dbprefix_."system WHERE user_id = system_id AND user_username = ? AND user_subsystem = 'ldap' AND (system_deleted = 0 OR system_deleted IS NULL)";
 
         $arrIds = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strUsername));
         if (isset($arrIds["user_id"]) && validateSystemid($arrIds["user_id"])) {
@@ -285,9 +285,11 @@ class UsersourcesSourceLdap implements UsersourcesUsersourceInterface
     {
         $strQuery = "SELECT user_id
                        FROM " . _dbprefix_ . "user_ldap,
-                            " . _dbprefix_ . "user
+                            " . _dbprefix_ . "user,
+                            " . _dbprefix_ . "system
                       WHERE user_id = user_ldap_id
-                        AND (user_deleted = 0 OR user_deleted IS NULL)
+                        AND user_id = system_id
+                        AND (system_deleted = 0 OR system_deleted IS NULL)
                       ORDER BY user_username";
         $arrRows = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
         $arrReturn = array();

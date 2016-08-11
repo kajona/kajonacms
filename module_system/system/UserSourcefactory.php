@@ -221,7 +221,7 @@ class UserSourcefactory
      */
     public function getSourceUser(UserUser $objLeightweightUser)
     {
-        if ($objLeightweightUser->getIntDeleted() == 1) {
+        if ($objLeightweightUser->getIntRecordDeleted() == 1) {
             throw new Exception("User was deleted, source user no longer available", Exception::$level_ERROR);
         }
 
