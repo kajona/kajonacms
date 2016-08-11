@@ -6,6 +6,7 @@
 
 namespace Kajona\System\System\Validators;
 
+use Kajona\System\System\Objectfactory;
 use Kajona\System\System\UserGroup;
 use Kajona\System\System\UserUser;
 
@@ -34,13 +35,12 @@ class UserValidator extends SystemidValidator
         }
 
         //check if the user or usergroup exists
-        $objUser = new UserUser($objValue);
-        $objUserGroup = new UserGroup($objValue);
-        if ($objUser->getStrUsername() == "" && $objUserGroup->getStrName() == "") {
+        $objObject = Objectfactory::getInstance()->getObject($objValue);
+        if (!$objObject instanceof UserUser && !$objObject instanceof UserGroup) {
             return false;
         }
 
-        if ($objUser->getIntRecordDeleted() == 1) {
+        if ($objObject->getIntRecordDeleted() == 1) {
             return false;
         }
 

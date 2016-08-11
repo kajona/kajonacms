@@ -15,6 +15,7 @@ use Kajona\System\System\ArraySectionIterator;
 use Kajona\System\System\Database;
 use Kajona\System\System\GraphFactory;
 use Kajona\System\System\Lang;
+use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Session;
 use Kajona\System\System\UserUser;
 
@@ -121,7 +122,7 @@ class StatsReportSearchqueries implements AdminStatsreportsInterface
 
         $intI = 0;
         $arrLogs = array();
-        $objUser = new UserUser(Session::getInstance()->getUserID());
+        $objUser = Session::getInstance()->getUser();
         foreach ($objArraySectionIterator as $intKey => $arrOneLog) {
             if ($intI++ >= $objUser->getIntItemsPerPage()) {
                 break;
@@ -194,7 +195,7 @@ class StatsReportSearchqueries implements AdminStatsreportsInterface
      */
     private function getTopQueries($intStart = false, $intEnd = false)
     {
-        $objUser = new UserUser(Session::getInstance()->getUserID());
+        $objUser = Session::getInstance()->getUser();
         $strQuery = "SELECT search_log_query, COUNT(*) as hits
 					  FROM "._dbprefix_."search_log
 					  WHERE search_log_date > ?

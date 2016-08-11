@@ -93,7 +93,7 @@ class UserSourcefactory
      *
      * @param string $strName
      *
-     * @return UserUser or null
+     * @return UserUser|null
      */
     public function getUserByUsername($strName)
     {
@@ -104,7 +104,7 @@ class UserSourcefactory
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
 
         if (isset($arrRow["user_id"]) && validateSystemid($arrRow["user_id"])) {
-            return new UserUser($arrRow["user_id"]);
+            return Objectfactory::getInstance()->getObject($arrRow["user_id"]);
         }
 
         //since some login-provides may trigger additional searches, query them now
@@ -112,7 +112,7 @@ class UserSourcefactory
             $objUser = $this->getUsersource($strOneSubsystem)->getUserByUsername($strName);
             //convert the user to a real one
             if ($objUser != null) {
-                return new UserUser($objUser->getSystemid());
+                return Objectfactory::getInstance()->getObject($objUser->getSystemid());
             }
         }
 
@@ -151,7 +151,7 @@ class UserSourcefactory
         $arrReturn = array();
         foreach ($arrRows as $arrOneRow) {
             if (in_array($arrOneRow["user_subsystem"], $this->arrSubsystemsAvailable)) {
-                $arrReturn[] = new UserUser($arrOneRow["user_id"]);
+                $arrReturn[] = Objectfactory::getInstance()->getObject($arrOneRow["user_id"]);
             }
         }
 

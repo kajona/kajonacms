@@ -12,6 +12,7 @@ use Kajona\System\Admin\ToolkitAdmin;
 use Kajona\System\System\Database;
 use Kajona\System\System\GraphFactory;
 use Kajona\System\System\Lang;
+use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Session;
 use Kajona\System\System\UserUser;
 
@@ -121,7 +122,7 @@ class StatsReportTopcountries implements AdminStatsreportsInterface
         }
 
         $intI = 0;
-        $objUser = new UserUser(Session::getInstance()->getUserID());
+        $objUser = Session::getInstance()->getUser();
         foreach ($arrStats as $strCountry => $arrOneStat) {
             //Escape?
             if ($intI >= $objUser->getIntItemsPerPage()) {

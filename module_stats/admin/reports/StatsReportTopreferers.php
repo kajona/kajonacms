@@ -14,6 +14,7 @@ use Kajona\System\Admin\ToolkitAdmin;
 use Kajona\System\System\Database;
 use Kajona\System\System\Lang;
 use Kajona\System\System\Link;
+use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Session;
 use Kajona\System\System\SystemSetting;
 use Kajona\System\System\UserUser;
@@ -122,7 +123,7 @@ class StatsReportTopreferers implements AdminStatsreportsInterface
         }
 
         $intI = 0;
-        $objUser = new UserUser(Session::getInstance()->getUserID());
+        $objUser = Session::getInstance()->getUser();
         foreach ($arrStats as $arrOneStat) {
             //Escape?
             if ($intI >= $objUser->getIntItemsPerPage()) {
@@ -175,7 +176,7 @@ class StatsReportTopreferers implements AdminStatsreportsInterface
             }
         }
 
-        $objUser = new UserUser(Session::getInstance()->getUserID());
+        $objUser = Session::getInstance()->getUser();
         $strQuery = "SELECT stats_referer as refurl, COUNT(*) as anzahl
 						FROM "._dbprefix_."stats_data
 						WHERE stats_referer NOT LIKE ?

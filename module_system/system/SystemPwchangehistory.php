@@ -93,7 +93,7 @@ class SystemPwchangehistory extends Model implements ModelInterface, AdminListab
 
     public function getStrDisplayName()
     {
-        $objUser = new UserUser($this->getStrOwner());
+        $objUser = Objectfactory::getInstance()->getObject($this->getStrOwner());
         return $objUser->getStrDisplayName() . " (" . dateToString($this->getStrChangeDate()) . ")";
     }
 

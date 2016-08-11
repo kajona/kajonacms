@@ -7,7 +7,7 @@
 namespace Kajona\System\Portal\Templatemapper;
 
 use Kajona\System\Portal\TemplatemapperInterface;
-use Kajona\System\System\UserUser;
+use Kajona\System\System\Objectfactory;
 
 
 /**
@@ -17,7 +17,8 @@ use Kajona\System\System\UserUser;
  * @author sidler@mulchpropd.de
  * @since 4.6
  */
-class UserTemplatemapper implements TemplatemapperInterface {
+class UserTemplatemapper implements TemplatemapperInterface
+{
 
     /**
      * Converts the passed value to a formatted value.
@@ -27,10 +28,11 @@ class UserTemplatemapper implements TemplatemapperInterface {
      *
      * @return string
      */
-    public function format($strValue) {
+    public function format($strValue)
+    {
 
-        if(validateSystemid($strValue)) {
-            $objUser = new UserUser($strValue);
+        if (validateSystemid($strValue)) {
+            $objUser = Objectfactory::getInstance()->getObject($strValue);
             return $objUser->getStrDisplayName();
         }
 

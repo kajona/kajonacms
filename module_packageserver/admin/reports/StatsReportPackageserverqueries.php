@@ -111,7 +111,7 @@ class StatsReportPackageserverqueries implements AdminStatsreportsInterface
 
         $arrLogs = array();
         $intI = 0;
-        $objUser = new UserUser(Session::getInstance()->getUserID());
+        $objUser = Session::getInstance()->getUser();
         foreach ($arrData as $arrOneLog) {
             if ($intI++ >= $objUser->getIntItemsPerPage()) {
                 break;

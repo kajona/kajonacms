@@ -217,7 +217,7 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
 
         $arrReturn = array();
         foreach ($arrIds as $arrOneId) {
-            $arrReturn[] = new UserUser($arrOneId["user_id"]);
+            $arrReturn[] = Objectfactory::getInstance()->getObject($arrOneId["user_id"]);
         }
 
         return $arrReturn;

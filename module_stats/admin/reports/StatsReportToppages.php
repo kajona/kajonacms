@@ -12,6 +12,7 @@ use Kajona\System\Admin\ToolkitAdmin;
 use Kajona\System\System\Database;
 use Kajona\System\System\GraphFactory;
 use Kajona\System\System\Lang;
+use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Session;
 use Kajona\System\System\UserUser;
 
@@ -119,7 +120,7 @@ class StatsReportToppages implements AdminStatsreportsInterface
         }
 
         $intI = 0;
-        $objUser = new UserUser(Session::getInstance()->getUserID());
+        $objUser = Session::getInstance()->getUser();
         foreach ($arrPages as $arrOnePage) {
             //Escape?
             if ($intI >= $objUser->getIntItemsPerPage()) {
@@ -153,7 +154,7 @@ class StatsReportToppages implements AdminStatsreportsInterface
      */
     public function getTopPages()
     {
-        $objUser = new UserUser(Session::getInstance()->getUserID());
+        $objUser = Session::getInstance()->getUser();
         $strQuery = "SELECT stats_page as name, count(*) as anzahl, stats_language as language
 						FROM "._dbprefix_."stats_data
 						WHERE stats_date > ?

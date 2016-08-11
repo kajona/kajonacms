@@ -111,7 +111,7 @@ class StatsReportTopdownloads implements AdminStatsreportsInterface
         $arrLogs = array();
         $intI = 0;
         foreach ($arrLogsRaw as $intKey => $arrOneLog) {
-            $objUser = new UserUser(Session::getInstance()->getUserID());
+            $objUser = Session::getInstance()->getUser();
             if ($intI++ >= $objUser->getIntItemsPerPage()) {
                 break;
             }
@@ -137,7 +137,7 @@ class StatsReportTopdownloads implements AdminStatsreportsInterface
      */
     private function getLogbookData()
     {
-        $objUser = new UserUser(Session::getInstance()->getUserID());
+        $objUser = Session::getInstance()->getUser();
         $strQuery = "SELECT COUNT(*) as amount, downloads_log_file
 					  FROM "._dbprefix_."mediamanager_dllog
 					  WHERE downloads_log_date > ?

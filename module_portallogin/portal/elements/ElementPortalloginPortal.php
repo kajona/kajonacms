@@ -13,6 +13,7 @@ use Kajona\System\System\Link;
 use Kajona\System\System\Logger;
 use Kajona\System\System\Mail;
 use Kajona\System\System\ScriptletHelper;
+use Kajona\System\System\Session;
 use Kajona\System\System\UserSourcefactory;
 use Kajona\System\System\Usersources\UsersourcesUserKajona;
 use Kajona\System\System\UserUser;
@@ -303,7 +304,7 @@ class ElementPortalloginPortal extends ElementPortal implements PortalElementInt
             $arrTemplate = array();
 
 
-            $objUser = new UserUser($this->objSession->getUserID());
+            $objUser = Session::getInstance()->getUser();
             if ($objUser->getObjSourceUser()->isEditable() && $objUser->getStrSubsystem() == "kajona" && $objUser->getObjSourceUser() instanceof UsersourcesUserKajona) {
 
                 $arrTemplate["username"] = $objUser->getStrUsername();
@@ -336,7 +337,7 @@ class ElementPortalloginPortal extends ElementPortal implements PortalElementInt
             }
         }
         else {
-            $objUser = new UserUser($this->objSession->getUserID());
+            $objUser = Session::getInstance()->getUser();
 
             if ($objUser->getObjSourceUser() instanceof UsersourcesUserKajona) {
 

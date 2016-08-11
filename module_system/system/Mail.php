@@ -228,7 +228,8 @@ class Mail
             if ($this->strSender == "") {
                 //try to load the current users' mail adress
                 if (validateSystemid(Carrier::getInstance()->getObjSession()->getUserID())) {
-                    $objUser = new UserUser(Carrier::getInstance()->getObjSession()->getUserID());
+                    /** @var UserUser $objUser */
+                    $objUser = Objectfactory::getInstance()->getObject(Carrier::getInstance()->getObjSession()->getUserID());
                     if (checkEmailaddress($objUser->getStrEmail())) {
                         $this->strSender = $objUser->getStrEmail();
                     }

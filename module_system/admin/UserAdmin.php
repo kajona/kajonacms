@@ -317,7 +317,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
     protected function actionSendPassword()
     {
         $strReturn = "";
-        $objUser = new UserUser($this->getSystemid());
+        $objUser = Objectfactory::getInstance()->getObject($this->getSystemid());
 
         $strReturn .= $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "sendPasswordFinal"));
         $strReturn .= $this->objToolkit->getTextRow($this->getLang("user_resend_password_hint"));
@@ -348,7 +348,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
     protected function actionSendPasswordFinal()
     {
         $strReturn = "";
-        $objUser = new UserUser($this->getSystemid());
+        $objUser = Objectfactory::getInstance()->getObject($this->getSystemid());
 
         //add a one-time token and reset the password
         $strToken = generateSystemid();
@@ -481,7 +481,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
             }
 
             //get user and userForm
-            $objUser = new UserUser($this->getSystemid());
+            $objUser = Objectfactory::getInstance()->getObject($this->getSystemid());
             $objSourceUser = $objUsersources->getSourceUser($objUser);
 
             if ($objForm == null) {
@@ -599,7 +599,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
             $objForm->addField(new FormentryHidden("user", "inherit_permissions_id"))
                 ->setStrValue($strInheritPermissionsId);
 
-            $objInheritUser = new UserUser($strInheritPermissionsId);
+            $objInheritUser = Objectfactory::getInstance()->getObject($strInheritPermissionsId);
             $objForm->addField(new FormentryPlaintext("inherit_hint"))
                 ->setStrValue($this->objToolkit->warningBox($this->getLang("user_copy_info", "", array($objInheritUser->getStrDisplayName())), "alert-info"));
 
@@ -674,7 +674,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
                 }
             }
 
-            $objUser = new UserUser($this->getSystemid());
+            $objUser = Objectfactory::getInstance()->getObject($this->getSystemid());
             $objSourceUser = $objUsersources->getSourceUser($objUser);
             $objForm = $this->getUserForm($objSourceUser, $bitSelfedit, "edit");
         }
@@ -702,7 +702,8 @@ class UserAdmin extends AdminSimple implements AdminInterface
         elseif ($this->getParam("mode") == "edit") {
 
             //create a new user and pass all relevant data
-            $objUser = new UserUser($this->getSystemid());
+            /** @var UserUser $objUser */
+            $objUser = Objectfactory::getInstance()->getObject($this->getSystemid());
 
             if (!$bitSelfedit) {
                 $objUser->setStrUsername($this->getParam("user_username"));
@@ -726,7 +727,8 @@ class UserAdmin extends AdminSimple implements AdminInterface
         if ($this->getParam("mode") == "new") {
             $strInheritUserId = $this->getParam("user_inherit_permissions_id");
             if (!empty($strInheritUserId)) {
-                $objInheritUser = new UserUser($strInheritUserId);
+                /** @var UserUser $objInheritUser */
+                $objInheritUser = Objectfactory::getInstance()->getObject($strInheritUserId);
                 $arrGroupIds = $objInheritUser->getArrGroupIds();
 
                 foreach ($arrGroupIds as $strGroupId) {
@@ -1030,7 +1032,8 @@ class UserAdmin extends AdminSimple implements AdminInterface
 
             $strReturn .= $this->objToolkit->listHeader();
             foreach ($objIterator as $strSingleMemberId) {
-                $objSingleMember = new UserUser($strSingleMemberId);
+                /** @var UserUser $objSingleMember */
+                $objSingleMember = Objectfactory::getInstance()->getObject($strSingleMemberId);
 
                 $strAction = "";
                 if ($objUsersources->getUsersource($objGroup->getStrSubsystem())->getMembersEditable() && $bitRenderEdit) {
@@ -1066,8 +1069,8 @@ class UserAdmin extends AdminSimple implements AdminInterface
             return $this->actionGroupMember($objForm);
         }
 
-
-        $objUser = new UserUser($objForm->getField("addusertogroup_user")->getStrValue());
+        /** @var UserUser $objUser */
+        $objUser = Objectfactory::getInstance()->getObject($objForm->getField("addusertogroup_user")->getStrValue());
         $objSourceGroup = $objGroup->getObjSourceGroup();
 
         $objSourceGroup->addMember($objUser->getObjSourceUser());
@@ -1103,7 +1106,8 @@ class UserAdmin extends AdminSimple implements AdminInterface
             return $this->getLang("commons_error_permissions");
         }
 
-        $objUser = new UserUser($this->getParam("userid"));
+        /** @var UserUser $objUser */
+        $objUser = Objectfactory::getInstance()->getObject($this->getParam("userid"));
         if ($objGroup->getObjSourceGroup()->removeMember($objUser->getObjSourceUser())) {
             $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "groupMember", "systemid=".$this->getParam("groupid")));
         }
@@ -1153,7 +1157,8 @@ class UserAdmin extends AdminSimple implements AdminInterface
         //open the form
         $strReturn .= $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "saveMembership"));
         //Create a list of checkboxes
-        $objUser = new UserUser($this->getSystemid());
+        /** @var UserUser $objUser */
+        $objUser = Objectfactory::getInstance()->getObject($this->getSystemid());
 
         $strReturn .= $this->objToolkit->formHeadline($this->getLang("user_memberships")."\"".$objUser->getStrUsername()."\"");
 
@@ -1208,7 +1213,8 @@ HTML;
      */
     protected function actionBrowseMemberships()
     {
-        $objUser = new UserUser($this->getSystemid());
+        /** @var UserUser $objUser */
+        $objUser = Objectfactory::getInstance()->getObject($this->getSystemid());
         $strReturn = $this->objToolkit->listHeader();
         foreach ($objUser->getObjSourceUser()->getGroupIdsForUser() as $strOneId) {
             $objGroup = new UserGroup($strOneId);

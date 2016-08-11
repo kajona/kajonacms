@@ -645,7 +645,7 @@ abstract class Root
         }
 
         if (!$this->getLockManager()->isAccessibleForCurrentUser()) {
-            $objUser = new UserUser($this->getLockManager()->getLockId());
+            $objUser = Objectfactory::getInstance()->getObject($this->getLockManager()->getLockId());
             throw new Exception("current object is locked by user ".$objUser->getStrDisplayName(), Exception::$level_ERROR);
         }
 
@@ -1878,7 +1878,7 @@ abstract class Root
         }
 
         if (validateSystemid($this->getStrLmUser())) {
-            $objUser = new UserUser($this->getStrLmUser());
+            $objUser = Objectfactory::getInstance()->getObject($this->getStrLmUser());
             return $objUser->getStrDisplayName();
         }
         else {

@@ -18,6 +18,7 @@ use Kajona\System\System\Exception;
 use Kajona\System\System\Lang;
 use Kajona\System\System\Model;
 use Kajona\System\System\ModelInterface;
+use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Reflection;
 use Kajona\System\System\ReflectionEnum;
 use Kajona\System\System\Resourceloader;
@@ -400,7 +401,7 @@ class AdminFormgenerator
 //                        $('#{$strGeneratedFormname}').on('submit', function() { $(window).off('unload'); return true;});
                     </script>";
                 } else {
-                    $objUser = new UserUser($this->objSourceobject->getLockManager()->getLockId());
+                    $objUser = Objectfactory::getInstance()->getObject($this->objSourceobject->getLockManager()->getLockId());
                     throw new Exception("Current record is already locked by user '" . $objUser->getStrDisplayName() . "'.\nCannot be locked for the current user", Exception::$level_ERROR);
                 }
             }
