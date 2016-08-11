@@ -677,10 +677,12 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
 
         $strReturn .= "Updating users and groups\n";
+        $arrRightsRow = Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_));
+
         foreach($this->objDB->getPArray("SELECT * FROM "._dbprefix_."user", array()) as $arrOneRow) {
             //fire two inserts
             $this->objDB->_pQuery(
-                "INSERT INTO "._dbprefix_."system SET system_id = ?, system_prev_id = ?, system_module_nr = ?, system_sort = -1, system_status = ?, system_class = ?, system_deleted = ?",
+                "INSERT INTO "._dbprefix_."system (system_id, system_prev_id, system_module_nr, system_sort, system_status, system_class, system_deleted) VALUES (?, ?, ?, -1, ?, ?, ?)",
                 array(
                     $arrOneRow["user_id"],
                     SystemModule::getModuleIdByNr(_user_modul_id_),
@@ -692,20 +694,20 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
             );
 
             $this->objDB->_pQuery(
-                "INSERT INTO "._dbprefix_."system_right SET right_id = ?, right_inherit = ?, right_view = ?, right_edit = ?, right_delete = ?, right_right = ?, right_right1 = ?, right_right2 = ?, right_right3 = ?, right_right4 = ?, right_right5 = ?, right_changelog = ?",
+                "INSERT INTO "._dbprefix_."system_right (right_id, right_inherit, right_view, right_edit, right_delete, right_right, right_right1, right_right2, right_right3, right_right4, right_right5, right_changelog) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 array(
                     $arrOneRow["user_id"],
                     1,
-                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_VIEW)),
-                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_EDIT)),
-                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_DELETE)),
-                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_RIGHT)),
-                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_RIGHT1)),
-                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_RIGHT2)),
-                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_RIGHT3)),
-                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_RIGHT4)),
-                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_RIGHT5)),
-                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_CHANGELOG))
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_VIEW]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_EDIT]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_DELETE]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_RIGHT]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_RIGHT1]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_RIGHT2]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_RIGHT3]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_RIGHT4]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_RIGHT5]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_CHANGELOG])
                 )
             );
         }
@@ -713,25 +715,25 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         foreach($this->objDB->getPArray("SELECT * FROM "._dbprefix_."user_group", array()) as $arrOneRow) {
             //fire two inserts
             $this->objDB->_pQuery(
-                "INSERT INTO "._dbprefix_."system SET system_id = ?, system_prev_id = ?, system_module_nr = ?, system_sort = -1, system_status = ?, system_class = ?, system_deleted = ?",
+                "INSERT INTO "._dbprefix_."system (system_id, system_prev_id, system_module_nr, system_sort, system_status, system_class, system_deleted) VALUES (?, ?, ?, -1, ?, ?, ?)",
                 array($arrOneRow["group_id"], SystemModule::getModuleIdByNr(_user_modul_id_), _user_modul_id_, 1, UserGroup::class, 0)
             );
 
             $this->objDB->_pQuery(
-                "INSERT INTO "._dbprefix_."system_right SET right_id = ?, right_inherit = ?, right_view = ?, right_edit = ?, right_delete = ?, right_right = ?, right_right1 = ?, right_right2 = ?, right_right3 = ?, right_right4 = ?, right_right5 = ?, right_changelog = ?",
+                "INSERT INTO "._dbprefix_."system_right (right_id, right_inherit, right_view, right_edit, right_delete, right_right, right_right1, right_right2, right_right3, right_right4, right_right5, right_changelog) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 array(
                     $arrOneRow["group_id"],
                     1,
-                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_VIEW)),
-                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_EDIT)),
-                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_DELETE)),
-                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_RIGHT)),
-                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_RIGHT1)),
-                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_RIGHT2)),
-                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_RIGHT3)),
-                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_RIGHT4)),
-                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_RIGHT5)),
-                    implode(",", Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_), Rights::$STR_RIGHT_CHANGELOG))
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_VIEW]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_EDIT]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_DELETE]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_RIGHT]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_RIGHT1]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_RIGHT2]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_RIGHT3]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_RIGHT4]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_RIGHT5]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_CHANGELOG])
                 )
             );
         }
