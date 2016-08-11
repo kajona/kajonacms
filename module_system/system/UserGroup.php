@@ -131,7 +131,7 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface
         if($strFilter != "") {
             $objOrm->addWhereRestriction(new OrmPropertyCondition("strName", OrmComparatorEnum::Like(), "%".$strFilter."%"));
         }
-        return $objOrm->getObjectList(UserUser::class, "", $intStart, $intEnd);
+        return $objOrm->getObjectList(UserGroup::class, "", $intStart, $intEnd);
     }
 
 
@@ -149,7 +149,7 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface
         if($strFilter != "") {
             $objOrm->addWhereRestriction(new OrmPropertyCondition("strName", OrmComparatorEnum::Like(), "%".$strFilter."%"));
         }
-        return $objOrm->getObjectCount(UserUser::class);
+        return $objOrm->getObjectCount(UserGroup::class);
     }
 
 

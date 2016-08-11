@@ -16,12 +16,16 @@ use Kajona\System\System\Filesystem;
 use Kajona\System\System\InstallerBase;
 use Kajona\System\System\InstallerInterface;
 use Kajona\System\System\LanguagesLanguage;
+use Kajona\System\System\MessagingConfig;
+use Kajona\System\System\MessagingMessage;
 use Kajona\System\System\OrmBase;
 use Kajona\System\System\OrmSchemamanager;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemChangelog;
+use Kajona\System\System\SystemCommon;
 use Kajona\System\System\SystemModule;
+use Kajona\System\System\SystemPwchangehistory;
 use Kajona\System\System\SystemSetting;
 use Kajona\System\System\UserGroup;
 use Kajona\System\System\UserUser;
@@ -219,7 +223,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
         //languages -------------------------------------------------------------------------------------
         $strReturn .= "Installing table languages...\n";
-        $objManager->createTable("Kajona\\System\\System\\LanguagesLanguage");
+        $objManager->createTable(LanguagesLanguage::class);
 
         $strReturn .= "Installing table languages_languageset...\n";
         $arrFields = array();
@@ -232,7 +236,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
         //aspects --------------------------------------------------------------------------------------
         $strReturn .= "Installing table aspects...\n";
-        $objManager->createTable("Kajona\\System\\System\\SystemAspect");
+        $objManager->createTable(SystemAspect::class);
 
         //changelog -------------------------------------------------------------------------------------
         $strReturn .= "Installing table changelog...\n";
@@ -240,12 +244,12 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
         //messages
         $strReturn .= "Installing table messages...\n";
-        $objManager->createTable("Kajona\\System\\System\\MessagingMessage");
-        $objManager->createTable("Kajona\\System\\System\\MessagingConfig");
+        $objManager->createTable(MessagingMessage::class);
+        $objManager->createTable(MessagingConfig::class);
 
         // password change history
         $strReturn .= "Installing password reset history...\n";
-        $objManager->createTable("Kajona\\System\\System\\SystemPwchangehistory");
+        $objManager->createTable(SystemPwchangehistory::class);
 
         //Now we have to register module by module
 
@@ -334,7 +338,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         //Send the query to the db
         $this->objDB->_pQuery(
             $strQuery,
-            array(0, 0, _system_modul_id_, Date::getCurrentTimestamp(), time(), 1, 1, "Kajona\\System\\System\\SystemCommon")
+            array(0, 0, _system_modul_id_, Date::getCurrentTimestamp(), time(), 1, 1, SystemCommon::class)
         );
 
 
@@ -430,7 +434,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
         $strReturn .= "Trying to copy the *.root files to top-level...\n";
         $arrFiles = array(
-            "index.php", "image.php", "xml.php", ".htaccess", "v3_v4_postupdate.php"
+            "index.php", "image.php", "xml.php", ".htaccess"
         );
         foreach($arrFiles as $strOneFile) {
             if(!file_exists(_realpath_.$strOneFile) && is_file(Resourceloader::getInstance()->getAbsolutePathForModule("module_system")."/".$strOneFile.".root")) {

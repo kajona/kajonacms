@@ -22,14 +22,14 @@ use Kajona\System\System\Usersources\UsersourcesUserInterface;
  * @module user
  * @moduleId _user_modul_id_
  *
- * @targetTable user_user.user_id
+ * @targetTable user.user_id
  */
 class UserUser extends Model implements ModelInterface, AdminListableInterface
 {
 
     /**
      * @var string
-     * @tableColumn user_user.user_subsystem
+     * @tableColumn user.user_subsystem
      * @tableColumnDatatype char254
      * @tableColumnIndex
      */
@@ -43,7 +43,7 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
 
     /**
      * @var string
-     * @tableColumn user_user.user_username
+     * @tableColumn user.user_username
      * @tableColumnDatatype char254
      * @tableColumnIndex
      */
@@ -51,71 +51,74 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
 
     /**
      * @var int
-     * @tableColumn user_user.user_logins
+     * @tableColumn user.user_logins
      * @tableColumnDatatype int
      */
     private $intLogins = 0;
 
     /**
      * @var int
-     * @tableColumn user_user.user_lastlogin
+     * @tableColumn user.user_lastlogin
      * @tableColumnDatatype int
      */
     private $intLastlogin = 0;
 
     /**
      * @var int
-     * @tableColumn user_user.user_active
+     * @tableColumn user.user_active
      * @tableColumnDatatype int
      * @tableColumnIndex
+     *
+     * @internal
+     * @todo migrate to system.system_status
      */
     private $intActive = 0;
 
     /**
      * @var int
-     * @tableColumn user_user.user_admin
+     * @tableColumn user.user_admin
      * @tableColumnDatatype int
      */
     private $intAdmin = 0;
 
     /**
      * @var int
-     * @tableColumn user_user.user_portal
+     * @tableColumn user.user_portal
      * @tableColumnDatatype int
      */
     private $intPortal = 0;
 
     /**
      * @var string
-     * @tableColumn user_user.user_admin_skin
+     * @tableColumn user.user_admin_skin
      * @tableColumnDatatype char254
      */
     private $strAdminskin = "";
 
     /**
      * @var string
-     * @tableColumn user_user.user_admin_language
+     * @tableColumn user.user_admin_language
      * @tableColumnDatatype char254
      */
     private $strAdminlanguage = "";
 
     /**
      * @var string
-     * @tableColumn user_user.user_admin_module
+     * @tableColumn user.user_admin_module
      * @tableColumnDatatype char254
      */
     private $strAdminModule = "";
 
     /**
      * @var string
-     * @tableColumn user_user.user_authcode
-     * @tableColumnDatatype string20
+     * @tableColumn user.user_authcode
+     * @tableColumnDatatype char20
      */
     private $strAuthcode = "";
 
     /**
      * @var int
-     * @tableColumn user_user.user_deleted
+     * @tableColumn user.user_deleted
      * @tableColumnDatatype int
      *
      * @internal
@@ -125,7 +128,7 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
 
     /**
      * @var int
-     * @tableColumn user_user.user_items_per_page
+     * @tableColumn user.user_items_per_page
      * @tableColumnDatatype int
      */
     private $intItemsPerPage = 0;
@@ -143,7 +146,7 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
             $strReturn .= " (".$this->getStrName().", ".$this->getStrForename().")";
         }
 
-        if ($this->intDeleted == 1) {
+        if ($this->getIntRecordDeleted() == 1) {
             $strReturn = $this->getStrUsername()." (".$this->getLang("user_deleted").")";
         }
 
@@ -225,8 +228,8 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
                       LEFT JOIN {$strDbPrefix}user_kajona AS user_kajona ON user_tbl.user_id = user_kajona.user_id
                       WHERE
                           (user_tbl.user_username LIKE ? OR user_kajona.user_forename LIKE ? OR user_kajona.user_name LIKE ?)
-                          AND user_id = system_id
-                          AND (system_deleted = 0 OR system_deleted IS NULL)\";
+                          AND user_tbl.user_id = system_id
+                          AND (system_deleted = 0 OR system_deleted IS NULL)
                       ORDER BY user_tbl.user_username, user_tbl.user_subsystem ASC";
 
         $arrParams = array("%".$strUsernameFilter."%", "%".$strUsernameFilter."%", "%".$strUsernameFilter."%");
@@ -256,7 +259,7 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
                       LEFT JOIN {$strDbPrefix}user_kajona AS user_kajona ON user_tbl.user_id = user_kajona.user_id
                       WHERE
                           (user_tbl.user_username LIKE ? OR user_kajona.user_forename LIKE ? OR user_kajona.user_name LIKE ?)
-                          AND user_id = system_id
+                          AND user_tbl.user_id = system_id
                           AND (system_deleted = 0 OR system_deleted IS NULL)";
 
         $arrParams = array("%".$strUsernameFilter."%", "%".$strUsernameFilter."%", "%".$strUsernameFilter."%");
@@ -396,6 +399,8 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
 
     /**
      * @return int
+     * @deprecated
+     * @todo remove
      */
     public function getIntActive()
     {
@@ -482,6 +487,8 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
      * @param int $intActive
      *
      * @return void
+     * @deprecated
+     * @todo remove
      */
     public function setIntActive($intActive)
     {
@@ -592,13 +599,6 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
         $this->objSourceUser = $objSourceUser;
     }
 
-    /**
-     * @return int
-     */
-    public function getIntRecordStatus()
-    {
-        return $this->intActive;
-    }
 
     /**
      * @param string $strAdminModule
@@ -620,6 +620,8 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
 
     /**
      * @return int
+     * @deprecated
+     * @todo remove
      */
     public function getIntDeleted()
     {
