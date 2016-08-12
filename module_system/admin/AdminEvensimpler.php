@@ -343,12 +343,16 @@ abstract class AdminEvensimpler extends AdminSimple
      */
     public function renderFilter(FilterBase $objFilter, $strFilterUrl = null, $bitInitiallyVisible = false)
     {
+        if ($strFilterUrl === null) {
+            $arrParams = array(
+                "systemid" => $this->getSystemid(),
+                "folderview" => $this->getParam("folderview"),
+            );
 
-        if($strFilterUrl === null) {
-            $strFilterUrl = Link::getLinkAdminHref($this->getArrModule("module"), $this->getAction(), "&systemid=".$this->getSystemid());
+            $strFilterUrl = Link::getLinkAdminHref($this->getArrModule("module"), $this->getAction(), "&" . http_build_query($arrParams));
         }
 
-        if($objFilter->getBitFilterUpdated()) {
+        if ($objFilter->getBitFilterUpdated()) {
             $this->adminReload($strFilterUrl);
             return AdminFormgeneratorFilter::STR_FILTER_REDIRECT;
         }
