@@ -157,7 +157,6 @@ class StatsReportTopsessions implements AdminStatsreportsInterface
      */
     public function getTopSessions()
     {
-        $objUser = Session::getInstance()->getUser();
 
         $strQuery = "SELECT stats_session,
                             stats_ip,
@@ -174,11 +173,13 @@ class StatsReportTopsessions implements AdminStatsreportsInterface
                      GROUP BY  stats_session, stats_ip, stats_hostname
                       ORDER BY enddate DESC";
 
-        $arrSessions = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), 0, $objUser->getIntItemsPerPage() - 1);
+        $objUser = Session::getInstance()->getUser();
+        $intItemsPerPage = $objUser != null ? $objUser->getIntItemsPerPage() : SystemSetting::getConfigValue("_admin_nr_of_rows_");
+        $arrSessions = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), 0, $intItemsPerPage - 1);
 
         $intI = 0;
         foreach ($arrSessions as $intKey => $arrOneSession) {
-            if ($intI++ >= $objUser->getIntItemsPerPage()) {
+            if ($intI++ >= $intItemsPerPage) {
                 break;
             }
 

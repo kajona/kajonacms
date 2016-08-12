@@ -177,7 +177,6 @@ class StatsReportTopreferers implements AdminStatsreportsInterface
             }
         }
 
-        $objUser = Session::getInstance()->getUser();
         $strQuery = "SELECT stats_referer as refurl, COUNT(*) as anzahl
 						FROM "._dbprefix_."stats_data
 						WHERE stats_referer NOT LIKE ?
@@ -187,7 +186,9 @@ class StatsReportTopreferers implements AdminStatsreportsInterface
 						GROUP BY stats_referer
 						ORDER BY anzahl desc";
 
-        return $this->objDB->getPArray($strQuery, $arrParams, 0, $objUser->getIntItemsPerPage() - 1);
+        $objUser = Session::getInstance()->getUser();
+        $intItemsPerPage = $objUser != null ? $objUser->getIntItemsPerPage() : SystemSetting::getConfigValue("_admin_nr_of_rows_");
+        return $this->objDB->getPArray($strQuery, $arrParams, 0, $intItemsPerPage - 1);
     }
 
     /**

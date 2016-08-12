@@ -156,7 +156,6 @@ class StatsReportToppages implements AdminStatsreportsInterface
      */
     public function getTopPages()
     {
-        $objUser = Session::getInstance()->getUser();
         $strQuery = "SELECT stats_page as name, count(*) as anzahl, stats_language as language
 						FROM "._dbprefix_."stats_data
 						WHERE stats_date > ?
@@ -164,7 +163,9 @@ class StatsReportToppages implements AdminStatsreportsInterface
 						GROUP BY stats_page, stats_language
 							ORDER BY anzahl desc";
 
-        return $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), 0, $objUser->getIntItemsPerPage() - 1);
+        $objUser = Session::getInstance()->getUser();
+        $intItemsPerPage = $objUser != null ? $objUser->getIntItemsPerPage() : SystemSetting::getConfigValue("_admin_nr_of_rows_");
+        return $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), 0, $intItemsPerPage - 1);
     }
 
     /**

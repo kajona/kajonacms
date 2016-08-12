@@ -10,6 +10,7 @@ namespace Kajona\Packageserver\Admin\Reports;
 use Kajona\System\Admin\Reports\AdminStatsreportsInterface;
 use Kajona\System\Admin\ToolkitAdmin;
 use Kajona\System\System\Database;
+use Kajona\System\System\Date;
 use Kajona\System\System\GraphFactory;
 use Kajona\System\System\Lang;
 use Kajona\System\System\Session;
@@ -140,8 +141,8 @@ class StatsReportPackageserverqueries implements AdminStatsreportsInterface
      */
     public function getTotalHitsInInterval()
     {
-        $objStart = new \Kajona\System\System\Date($this->intDateStart);
-        $objEnd = new \Kajona\System\System\Date($this->intDateEnd);
+        $objStart = new Date($this->intDateStart);
+        $objEnd = new Date($this->intDateEnd);
         $strQuery = "SELECT COUNT(*)
 						FROM "._dbprefix_."packageserver_log
 						WHERE log_date > ?
@@ -165,8 +166,8 @@ class StatsReportPackageserverqueries implements AdminStatsreportsInterface
      */
     public function getTotalUniqueHostsInInterval()
     {
-        $objStart = new \Kajona\System\System\Date($this->intDateStart);
-        $objEnd = new \Kajona\System\System\Date($this->intDateEnd);
+        $objStart = new Date($this->intDateStart);
+        $objEnd = new Date($this->intDateEnd);
         $strQuery = "SELECT log_hostname, COUNT(*) as anzahl
 						FROM "._dbprefix_."packageserver_log
 						WHERE log_date > ?

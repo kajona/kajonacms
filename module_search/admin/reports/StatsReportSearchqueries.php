@@ -209,7 +209,9 @@ class StatsReportSearchqueries implements AdminStatsreportsInterface
             $arrReturn = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), $intStart, $intEnd);
         }
         else {
-            $arrReturn = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), 0, $objUser->getIntItemsPerPage() - 1);
+            $objUser = Session::getInstance()->getUser();
+            $intItemsPerPage = $objUser != null ? $objUser->getIntItemsPerPage() : SystemSetting::getConfigValue("_admin_nr_of_rows_");
+            $arrReturn = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), 0, $intItemsPerPage - 1);
         }
 
         return $arrReturn;
