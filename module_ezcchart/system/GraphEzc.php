@@ -240,7 +240,7 @@ class GraphEzc implements GraphInterface
         $this->intMinValue -= $intMin;
 
         $this->intCurrentGraphMode = $this->GRAPH_TYPE_STACKEDBAR;
-        $this->addBarChartSet(GraphCommons::getDataPointFloatValues($arrDataPoints), $strLegend);
+        $this->addBarChartSet(GraphCommons::getDataPointFloatValues($arrDataPoints), $strLegend, $bitWriteValues);
         $this->intCurrentGraphMode = $this->GRAPH_TYPE_STACKEDBAR;
 
     }
