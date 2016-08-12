@@ -17,6 +17,7 @@ use Kajona\System\System\GraphFactory;
 use Kajona\System\System\Lang;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Session;
+use Kajona\System\System\SystemSetting;
 use Kajona\System\System\UserUser;
 
 /**
@@ -123,8 +124,9 @@ class StatsReportSearchqueries implements AdminStatsreportsInterface
         $intI = 0;
         $arrLogs = array();
         $objUser = Session::getInstance()->getUser();
+        $intItemsPerPage = $objUser != null ? $objUser->getIntItemsPerPage() : SystemSetting::getConfigValue("_admin_nr_of_rows_");
         foreach ($objArraySectionIterator as $intKey => $arrOneLog) {
-            if ($intI++ >= $objUser->getIntItemsPerPage()) {
+            if ($intI++ >= $intItemsPerPage) {
                 break;
             }
 

@@ -14,6 +14,7 @@ use Kajona\System\System\Database;
 use Kajona\System\System\GraphFactory;
 use Kajona\System\System\Lang;
 use Kajona\System\System\Session;
+use Kajona\System\System\SystemSetting;
 use Kajona\System\System\UserUser;
 
 /**
@@ -110,9 +111,10 @@ class StatsReportTopdownloads implements AdminStatsreportsInterface
         $arrLogsRaw = $this->getLogbookData();
         $arrLogs = array();
         $intI = 0;
+        $objUser = Session::getInstance()->getUser();
+        $intItemsPerPage = $objUser != null ? $objUser->getIntItemsPerPage() : SystemSetting::getConfigValue("_admin_nr_of_rows_");
         foreach ($arrLogsRaw as $intKey => $arrOneLog) {
-            $objUser = Session::getInstance()->getUser();
-            if ($intI++ >= $objUser->getIntItemsPerPage()) {
+            if ($intI++ >= $intItemsPerPage) {
                 break;
             }
 

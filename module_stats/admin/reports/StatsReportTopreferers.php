@@ -124,9 +124,10 @@ class StatsReportTopreferers implements AdminStatsreportsInterface
 
         $intI = 0;
         $objUser = Session::getInstance()->getUser();
+        $intItemsPerPage = $objUser != null ? $objUser->getIntItemsPerPage() : SystemSetting::getConfigValue("_admin_nr_of_rows_");
         foreach ($arrStats as $arrOneStat) {
             //Escape?
-            if ($intI >= $objUser->getIntItemsPerPage()) {
+            if ($intI >= $intItemsPerPage) {
                 break;
             }
 

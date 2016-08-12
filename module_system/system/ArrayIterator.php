@@ -36,7 +36,7 @@ class ArrayIterator implements IteratorInterface, Iterator
     {
         $objUser = Session::getInstance()->getUser();
 
-        $this->intElementsPerPage = $objUser->getIntItemsPerPage();
+        $this->intElementsPerPage = $objUser != null ? $objUser->getIntItemsPerPage() : SystemSetting::getConfigValue("_admin_nr_of_rows_");
         $this->setArrElements($arrElements);
     }
 
