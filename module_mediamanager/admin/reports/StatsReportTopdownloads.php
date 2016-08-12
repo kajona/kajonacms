@@ -147,7 +147,9 @@ class StatsReportTopdownloads implements AdminStatsreportsInterface
 					  GROUP BY downloads_log_file
 					  ORDER BY amount DESC";
 
-        return $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), 0, $objUser->getIntItemsPerPage() - 1);
+        $objUser = Session::getInstance()->getUser();
+        $intItemsPerPage = $objUser != null ? $objUser->getIntItemsPerPage() : SystemSetting::getConfigValue("_admin_nr_of_rows_");
+        return $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), 0, $intItemsPerPage - 1);
     }
 
     /**
