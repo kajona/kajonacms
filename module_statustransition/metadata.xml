@@ -5,6 +5,6 @@
     <version>6.0</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
-    <providesInstaller>TRUE</providesInstaller>
+    <providesInstaller>FALSE</providesInstaller>
     <requiredModules />
 </package>

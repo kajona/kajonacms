@@ -5,7 +5,7 @@
 *	$Id$                                         *
 ********************************************************************************************************/
 
-namespace AGP\Statustransition\System;
+namespace Kajona\Statustransition\System;
 
 use Kajona\System\System\Model;
 

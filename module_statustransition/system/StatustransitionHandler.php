@@ -5,7 +5,7 @@
 *	$Id$                                         *
 ********************************************************************************************************/
 
-namespace AGP\Statustransition\System;
+namespace Kajona\Statustransition\System;
 
 use Kajona\System\System\Database;
 use Kajona\System\System\Exception;
@@ -21,17 +21,17 @@ use Kajona\System\System\Model;
 abstract class StatustransitionHandler
 {
     /**
-     * @var WorkflowStatus[]
+     * @var StatustransitionStatus[]
      */
     protected $arrStatus = array();
 
     /**
      * Adds a new status to the workflow
      *
-     * @param WorkflowStatus $objStatus
-     * @return WorkflowStatus
+     * @param StatustransitionStatus $objStatus
+     * @return StatustransitionStatus
      */
-    public function addStatus(WorkflowStatus $objStatus)
+    public function addStatus(StatustransitionStatus $objStatus)
     {
         $this->arrStatus[] = $objStatus;
 
@@ -56,7 +56,7 @@ abstract class StatustransitionHandler
             if ($objStatus !== null) {
 
                 $objTransition = $objStatus->getTransitionByKey($strTransitionKey, $objObject);
-                if($objTransition !== null) {
+                if ($objTransition !== null) {
                     $intNewStatus = $objTransition->getIntTargetStatus();
 
                     if ($intNewStatus !== null && $intNewStatus != $objObject->getIntRecordStatus()) {
@@ -74,8 +74,7 @@ abstract class StatustransitionHandler
                 }
             }
             Database::getInstance()->transactionCommit();
-        }
-        catch(Exception $e) {
+        } catch (Exception $e) {
             Database::getInstance()->transactionRollback();
             return false;
         }
@@ -87,7 +86,7 @@ abstract class StatustransitionHandler
      * Returns the fitting status for the provided status
      *
      * @param integer $intOldStatus
-     * @return WorkflowStatus|null
+     * @return StatustransitionStatus|null
      */
     public function getStatus($intOldStatus)
     {

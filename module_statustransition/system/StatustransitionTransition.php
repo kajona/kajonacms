@@ -5,7 +5,7 @@
 *	$Id$                                         *
 ********************************************************************************************************/
 
-namespace AGP\Statustransition\System;
+namespace Kajona\Statustransition\System;
 
 use Kajona\System\System\Exception;
 use Kajona\System\System\Model;
@@ -75,7 +75,8 @@ class StatustransitionTransition
      * @param Model $objModel
      * @return bool
      */
-    public function bitCheckTransitionRight(Model $objModel) {
+    public function bitCheckTransitionRight(Model $objModel)
+    {
         return $this->getObjRightCallback() === null || call_user_func_array($this->getObjRightCallback(), array($objModel)) === true;
     }
 
@@ -84,12 +85,12 @@ class StatustransitionTransition
      * @param $newStatus
      * @param Model $objModel
      */
-    public function executeTransitionActions($oldStatus, $newStatus, Model $objModel) 
+    public function executeTransitionActions($oldStatus, $newStatus, Model $objModel)
     {
         $arrActions = $this->getArrWorkflowActions();
         if (!empty($arrActions)) {
             foreach ($arrActions as $objAction) {
-                if ($objAction instanceof WorkflowTransitionActionInterface) {
+                if ($objAction instanceof StatustransitionActionInterface) {
                     $objAction->executeAction($oldStatus, $newStatus, $objModel);
                 }
             }
@@ -102,14 +103,15 @@ class StatustransitionTransition
      * @param Model $objModel
      * @throws Exception
      */
-    public function executeTransitionPreConditions($oldStatus, $newStatus, Model $objModel) {
+    public function executeTransitionPreConditions($oldStatus, $newStatus, Model $objModel)
+    {
         $arrActions = $this->getArrPreConditions();
         if (!empty($arrActions)) {
             foreach ($arrActions as $objAction) {
-                if ($objAction instanceof WorkflowTransitionConditionInterface) {
+                if ($objAction instanceof StatustransitionConditionInterface) {
                     $bitResult = $objAction->validateCondition($oldStatus, $newStatus, $objModel);
 
-                    if(!$bitResult) {
+                    if (!$bitResult) {
                         throw new Exception("Validation of condition failed", Exception::$level_ERROR);
                     }
                 }

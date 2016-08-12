@@ -5,7 +5,7 @@
 *	$Id$                                         *
 ********************************************************************************************************/
 
-namespace AGP\Statustransition\System;
+namespace Kajona\Statustransition\System;
 
 use Kajona\System\System\Exception;
 use Kajona\System\System\Model;
@@ -35,12 +35,13 @@ class StatustransitionStatus
     protected $strIcon;
 
     /**
-     * @var WorkflowTransition[]
+     * @var StatustransitionTransition[]
      */
     protected $arrTransitions;
 
     /**
      * WorkflowStatus constructor.
+     *
      * @param $intStatus
      * @param $strTitle - Title of the status
      * @param $strIcon - Icon of the status
@@ -85,11 +86,10 @@ class StatustransitionStatus
      */
     public function getArrTransitions(Model $objObject)
     {
-        // check for each option the right callback if available
-        //never use array_values here -> indexex should remain!!!!
-        $arrTransitions = array_filter($this->arrTransitions, function (WorkflowTransition $objTransition) use ($objObject) {
-            return $objTransition->bitCheckTransitionRight($objObject);
-        });
+        $arrTransitions = array_filter($this->arrTransitions,
+            function (StatustransitionTransition $objTransition) use ($objObject) {
+                return $objTransition->bitCheckTransitionRight($objObject);
+            });
 
         return $arrTransitions;
     }
@@ -97,10 +97,10 @@ class StatustransitionStatus
     /**
      * Adds a new transition to the status.
      *
-     * @param WorkflowTransition $objTransition
+     * @param StatustransitionTransition $objTransition
      * @return $this
      */
-    public function addTransition(WorkflowTransition $objTransition)
+    public function addTransition(StatustransitionTransition $objTransition)
     {
         if (array_key_exists($objTransition->getStrTransitionKey(), $this->arrTransitions)) {
             throw new Exception("Key already exists: ".$objTransition->getStrTransitionKey(), Exception::$level_ERROR);
@@ -113,8 +113,8 @@ class StatustransitionStatus
     /**
      * Gets the transition by the given key
      *
-     * @param $strTransitionKey
-     * @return WorkflowTransition|mixed|null
+     * @param string $strTransitionKey
+     * @return StatustransitionTransition|null
      */
     public function getTransitionByKey($strTransitionKey, Model $objObject)
     {

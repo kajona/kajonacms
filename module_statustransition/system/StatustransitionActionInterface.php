@@ -3,7 +3,7 @@
 *   (c) 2010-2016 ARTEMEON                                                                              *
 ********************************************************************************************************/
 
-namespace AGP\Statustransition\System;
+namespace Kajona\Statustransition\System;
 
 use Kajona\System\System\Model;
 
