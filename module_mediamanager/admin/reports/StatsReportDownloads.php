@@ -150,7 +150,10 @@ class StatsReportDownloads implements AdminStatsreportsInterface
 							AND downloads_log_date <= ?
 					  ORDER BY downloads_log_date DESC";
 
-        $arrReturn = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), 0, ($objUser->getIntItemsPerPage() - 1));
+        $objUser = Session::getInstance()->getUser();
+        $intItemsPerPage = $objUser != null ? $objUser->getIntItemsPerPage() : SystemSetting::getConfigValue("_admin_nr_of_rows_");
+
+        $arrReturn = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), 0, ($intItemsPerPage - 1));
 
         foreach ($arrReturn as &$arrOneRow) {
             //Load hostname, if available. faster, then mergin per LEFT JOIN
