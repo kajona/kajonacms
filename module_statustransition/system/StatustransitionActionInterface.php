@@ -10,7 +10,8 @@ namespace Kajona\Statustransition\System;
 use Kajona\System\System\Model;
 
 /**
- * StatustransitionActionInterface
+ * The action class is executed if a status transition happens. A status transition is always triggered by a user
+ * interaction and not by an automatic event. Actions can be attached to a StatustransitionTransition object
  *
  * @author christoph.kappestein@artemeon.de
  * @author stefan.meyer@artemeon.de

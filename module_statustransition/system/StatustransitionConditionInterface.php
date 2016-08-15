@@ -10,7 +10,9 @@ namespace Kajona\Statustransition\System;
 use Kajona\System\System\Model;
 
 /**
- * StatustransitionConditionInterface
+ * The condition validates whether a model has all required fields available to go into the next status. So it is called
+ * before a status transition happens. It must explicit return true if all conditions are correct. If it returns false
+ * or throws an Exception the transition to the next status fails
  *
  * @author christoph.kappestein@artemeon.de
  * @author stefan.meyer@artemeon.de

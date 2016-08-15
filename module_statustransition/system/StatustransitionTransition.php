@@ -11,7 +11,8 @@ use Kajona\System\System\Exception;
 use Kajona\System\System\Model;
 
 /**
- * Class StatustransitionTransition
+ * The status transition represents a transition from status A to B. If this happens the provided actions and conditions
+ * are executed. The right callback checks whether a user is allowed to executed this specific transition.
  *
  * @author christoph.kappestein@artemeon.de
  * @author stefan.meyer@artemeon.de

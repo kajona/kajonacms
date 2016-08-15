@@ -11,7 +11,8 @@ use Kajona\System\System\Exception;
 use Kajona\System\System\Model;
 
 /**
- * Class StatustransitionStatus
+ * Represents a concrete status. A status can have multiple transitions which are executed if a specific transition
+ * happens. A status transition is always triggered by a user interaction and not by an automatic event.
  *
  * @author christoph.kappestein@artemeon.de
  * @author stefan.meyer@artemeon.de

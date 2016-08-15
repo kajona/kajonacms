@@ -26,7 +26,7 @@ abstract class StatustransitionHandler
     protected $arrStatus = array();
 
     /**
-     * Adds a new status to the workflow
+     * Adds a new status to the transition handler
      *
      * @param StatustransitionStatus $objStatus
      * @return StatustransitionStatus
