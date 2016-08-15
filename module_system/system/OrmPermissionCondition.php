@@ -38,11 +38,11 @@ class OrmPermissionCondition extends OrmCondition
         $this->strPermission = $strPermission;
         $this->strAlternativeColumn = $strColumn;
 
-        if($this->arrUserGroupIds === null) {
+        if ($this->arrUserGroupIds === null) {
             $this->arrUserGroupIds = Carrier::getInstance()->getObjSession()->getGroupIdsAsArray();
         }
 
-        if($this->strColumn == null) {
+        if ($this->strColumn == null) {
             $this->strColumn = "right_".$strPermission;
         }
     }
@@ -52,12 +52,13 @@ class OrmPermissionCondition extends OrmCondition
      *
      * @return OrmCompositeCondition
      */
-    private function generateCompundCondition() {
+    private function generateCompundCondition()
+    {
         $strLikeOperator = OrmComparatorEnum::Like;
 
         $objCompound = new OrmCompositeCondition(array(), OrmCondition::STR_CONDITION_OR);
-        foreach($this->arrUserGroupIds as $strUserGroupId) {
-            $objCompound->addCondition(new OrmCondition("{$this->strColumn} {$strLikeOperator}  ?",array("%".$strUserGroupId."%")));
+        foreach ($this->arrUserGroupIds as $strUserGroupId) {
+            $objCompound->addCondition(new OrmCondition("{$this->strColumn} {$strLikeOperator}  ?", array("%".$strUserGroupId."%")));
         }
 
         return $objCompound;
@@ -68,7 +69,7 @@ class OrmPermissionCondition extends OrmCondition
      */
     public function getStrWhere()
     {
-        if($this->objCompundCondition === null) {
+        if ($this->objCompundCondition === null) {
             $this->objCompundCondition = $this->generateCompundCondition();
         }
 
@@ -80,7 +81,7 @@ class OrmPermissionCondition extends OrmCondition
      */
     public function getArrParams()
     {
-        if($this->objCompundCondition === null) {
+        if ($this->objCompundCondition === null) {
             $this->objCompundCondition = $this->generateCompundCondition();
         }
 
