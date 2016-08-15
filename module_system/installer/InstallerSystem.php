@@ -222,7 +222,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $arrFields["session_releasetime"] = array("int", true);
         $arrFields["session_loginstatus"] = array("char254", true);
         $arrFields["session_loginprovider"] = array("char20", true);
-        $arrFields["session_lasturl"] = array("char500", true);
+        $arrFields["session_lasturl"] = array("text", true);
 
         if(!$this->objDB->createTable("session", $arrFields, array("session_id"), array("session_phpid", "session_releasetime", "session_userid")))
             $strReturn .= "An error occurred! ...\n";
