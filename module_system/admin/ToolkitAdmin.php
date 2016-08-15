@@ -1370,7 +1370,7 @@ class ToolkitAdmin extends Toolkit
         $strEntries = "";
 
         foreach ($arrActions as $objOneAction) {
-            $strEntries .= $this->objTemplate->fillTemplateFile(
+            $strEntries .= $this->listButton($this->objTemplate->fillTemplateFile(
                 array(
                     "title"      => $objOneAction->getStrTitle(),
                     "icon"       => $objOneAction->getStrIcon(),
@@ -1379,7 +1379,7 @@ class ToolkitAdmin extends Toolkit
                     "onclick"    => $objOneAction->getStrOnClickHandler()
                 ),
                 "/elements.tpl", "batchactions_entry"
-            );
+            ));
         }
 
         return $this->objTemplate->fillTemplateFile(array("entries" => $strEntries), "/elements.tpl", "batchactions_wrapper");
