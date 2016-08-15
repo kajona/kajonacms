@@ -14,7 +14,7 @@ use Kajona\System\System\Carrier;
  *
  * @author stefan.meyer@mulchprod.de
  * @author christoph.kappestein@mulchprod.de
- * @since 4.8
+ * @since 5.1
  * @package module_system
  */
 class FormentryCheckboxarrayObjectList extends FormentryCheckboxarray
