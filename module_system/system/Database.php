@@ -181,8 +181,8 @@ class Database
     /**
      * Fires an insert or update of a single record. it's up to the database (driver)
      * to detect whether a row is already present or not.
-     * Please note: since some dbrms fire a delete && insert, make sure to pass ALL colums and values,
-     * otherwise data might be lost.
+     * Please note: since some dbrms fire a delete && insert, make sure to pass ALL columns and values,
+     * otherwise data might be lost. And: params are sent to the datebase unescaped.
      *
      * @param $strTable
      * @param $arrColumns
