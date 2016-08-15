@@ -205,11 +205,12 @@ class GraphEzc implements GraphInterface
      * @param array $arrValues - an array with simple values or an array of data points (GraphDatapoint).
      *                           The advantage of a data points are that action handlers can be defined for each data point which will be executed when clicking on the data point in the chart.
      * @param string $strLegend
+     * @param bool $bitWriteValues Enables the rendering of values on top of the graphs
      *
      * @throws Exception
      * @return void
      */
-    public function addStackedBarChartSet($arrValues, $strLegend)
+    public function addStackedBarChartSet($arrValues, $strLegend, $bitWriteValues = true)
     {
         $arrDataPoints = GraphCommons::convertArrValuesToDataPointArray($arrValues);
 
@@ -239,7 +240,7 @@ class GraphEzc implements GraphInterface
         $this->intMinValue -= $intMin;
 
         $this->intCurrentGraphMode = $this->GRAPH_TYPE_STACKEDBAR;
-        $this->addBarChartSet(GraphCommons::getDataPointFloatValues($arrDataPoints), $strLegend);
+        $this->addBarChartSet(GraphCommons::getDataPointFloatValues($arrDataPoints), $strLegend, $bitWriteValues);
         $this->intCurrentGraphMode = $this->GRAPH_TYPE_STACKEDBAR;
 
     }
