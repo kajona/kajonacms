@@ -21,6 +21,13 @@ use Kajona\System\System\Model;
 abstract class StatustransitionHandler
 {
     /**
+     * Name of the parameter which contains the transition identifier
+     *
+     * @var string
+     */
+    const STR_PARAM_TRANSITIONKEY = "transitionkey";
+
+    /**
      * @var StatustransitionStatus[]
      */
     protected $arrStatus = array();
