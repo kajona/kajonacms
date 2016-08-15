@@ -31,8 +31,12 @@ class Filesystem
      */
     private function prependRealpath($strPath)
     {
-        if (\Kajona\System\System\StringUtil::indexOf(StringUtil::replace("\\", "/", $strPath), _realpath_, false) === false) {
+        if (StringUtil::indexOf(StringUtil::replace("\\", "/", $strPath), _realpath_, false) === false) {
             $strPath = _realpath_.$strPath;
+            //double-check duplicate slashes
+            if(StringUtil::indexOf($strPath, _realpath_."/") !== false) {
+                $strPath = StringUtil::replace(_realpath_."/", _realpath_, $strPath);
+            }
         }
 
         return $strPath;
