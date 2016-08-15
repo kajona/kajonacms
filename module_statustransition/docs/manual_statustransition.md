@@ -28,20 +28,20 @@ $objHandler->addStatus(new StatustransitionStatus(Model::INT_STATUS_OPEN, "enum_
 $objHandler->addStatus(new WorkflowStatus(Model::INT_STATUS_IN_REVIEW, "enum_container_status_2", "icon_flag_yellow"))
     ->addTransition(new WorkflowTransition(Model::INT_STATUS_OPEN, Model::STR_STATUS_KEY_REVIEW_TO_OPEN, "enum_container_status_transition_".Model::STR_STATUS_KEY_REVIEW_TO_OPEN, array(
         //objects implements StatustransitionActionInterface
-    ), function (RiskContainer $objRiskContainer) {
+    ), function (Model $objModel) {
         // right check whether the user is allowed to execute the transition
         return true;
     }))
     ->addTransition(new WorkflowTransition(Model::INT_STATUS_RELEASED, Model::STR_STATUS_KEY_REVIEW_TO_RELEASED, "enum_container_status_transition_".Model::STR_STATUS_KEY_REVIEW_TO_RELEASED, array(
         //objects implements StatustransitionActionInterface
-    ), function (RiskContainer $objRiskContainer) {
+    ), function (Model $objModel) {
         // right check whether the user is allowed to execute the transition
         return true;
     }, array(
         //objects implements StatustransitionConditionInterface
     )));
 
-$objHandler->addStatus(new WorkflowStatus(RiskContainer::Model, "enum_container_status_1", "icon_flag_green"));
+$objHandler->addStatus(new WorkflowStatus(Model::INT_STATUS_RELEASED, "enum_container_status_1", "icon_flag_green"));
 ```
 
 In most cases you want to register the handler as a service in the ServiceProvider. Then you
