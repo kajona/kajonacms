@@ -50,6 +50,7 @@ class Classloader
         "/admin/reports/",
         "/admin/systemtasks/",
         "/admin/widgets/",
+        "/admin/formgenerator/", // contains all form generator classes (extends Kajona\System\Admin\AdminFormgenerator)
         "/admin/",
         "/portal/elements/",
         "/portal/forms/",
@@ -62,6 +63,8 @@ class Classloader
         "/system/workflows/",
         "/system/messageproviders/",
         "/system/scriptlets/",
+        "/system/models/", // contains all model classes (extends Kajona\System\System\Root / ModelInterface)
+        "/system/filter/", // contains form filter classes (extends Kajona\System\System\FilterBase)
         "/system/",
         "/installer/",
         "/event/",
