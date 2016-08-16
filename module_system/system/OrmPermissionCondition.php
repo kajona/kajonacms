@@ -21,7 +21,7 @@ class OrmPermissionCondition extends OrmCondition
     private $arrUserGroupIds = null;
     private $strPermission = null;
     private $strColumn = null;
-    private $objCompundCondition = null;
+    private $objCompositeCondition = null;
 
     /**
      * OrmPermissionCondition constructor.
@@ -69,11 +69,11 @@ class OrmPermissionCondition extends OrmCondition
      */
     public function getStrWhere()
     {
-        if ($this->objCompundCondition === null) {
-            $this->objCompundCondition = $this->generateCompundCondition();
+        if ($this->objCompositeCondition === null) {
+            $this->objCompositeCondition = $this->generateCompundCondition();
         }
 
-        return $this->objCompundCondition->getStrWhere();
+        return $this->objCompositeCondition->getStrWhere();
     }
 
     /**
@@ -81,11 +81,11 @@ class OrmPermissionCondition extends OrmCondition
      */
     public function getArrParams()
     {
-        if ($this->objCompundCondition === null) {
-            $this->objCompundCondition = $this->generateCompundCondition();
+        if ($this->objCompositeCondition === null) {
+            $this->objCompositeCondition = $this->generateCompundCondition();
         }
 
-        return $this->objCompundCondition->getArrParams();
+        return $this->objCompositeCondition->getArrParams();
     }
 
 
