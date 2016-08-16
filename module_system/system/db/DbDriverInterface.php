@@ -241,13 +241,10 @@ interface DbDriverInterface
     public function transactionRollback();
 
     /**
-     * returns an array with infos about the current database
+     * returns an array of key value pairs with infos about the current database
      * The array returned should have tho following structure:
-     * ["dbserver"]
-     * ["dbclient"]
-     * ["dbconnection"]
      *
-     * @return mixed
+     * @return array
      */
     public function getDbInfo();
 
