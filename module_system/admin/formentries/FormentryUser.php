@@ -55,12 +55,12 @@ class FormentryUser extends FormentryBase implements FormentryPrintableInterface
 
 
         if ($this->getBitReadonly()) {
-            $strUsername = "";
+            $strUsername = "n.a.";
             $strUserid = "";
             if (validateSystemid($this->getStrValue())) {
                 /** @var UserUser $objUser */
                 $objUser = Objectfactory::getInstance()->getObject($this->getStrValue());
-                if ($objUser->getIntRecordStatus() == 1) {
+                if ($objUser !== null && $objUser->getIntRecordStatus() == 1) {
                     $strUsername = $objUser->getStrDisplayName();
                     $strUserid = $this->getStrValue();
                 }
