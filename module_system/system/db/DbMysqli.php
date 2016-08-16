@@ -20,7 +20,8 @@ use mysqli_stmt;
  *
  * @package module_system
  */
-class DbMysqli extends DbBase {
+class DbMysqli extends DbBase
+{
 
     /**
      * @var mysqli
@@ -48,8 +49,9 @@ class DbMysqli extends DbBase {
      * @return bool
      * @throws Exception
      */
-    public function dbconnect($strHost, $strUsername, $strPass, $strDbName, $intPort) {
-        if($intPort == "") {
+    public function dbconnect($strHost, $strUsername, $strPass, $strDbName, $intPort)
+    {
+        if ($intPort == "") {
             $intPort = "3306";
         }
 
@@ -61,8 +63,8 @@ class DbMysqli extends DbBase {
         $this->intPort = $intPort;
 
         $this->linkDB = @new mysqli($strHost, $strUsername, $strPass, $strDbName, $intPort);
-        if($this->linkDB !== false) {
-            if(@$this->linkDB->select_db($strDbName)) {
+        if ($this->linkDB !== false) {
+            if (@$this->linkDB->select_db($strDbName)) {
                 //erst ab mysql-client-bib > 4
                 //mysqli_set_charset($this->linkDB, "utf8");
                 $this->_pQuery("SET NAMES 'utf8'", array());
@@ -71,21 +73,21 @@ class DbMysqli extends DbBase {
                 $this->_pQuery("SET character_set_database ='utf8'", array());
                 $this->_pQuery("SET character_set_server ='utf8'", array());
                 return true;
-            }
-            else {
+            } else {
                 throw new Exception("Error selecting database", Exception::$level_FATALERROR);
             }
-        }
-        else {
+        } else {
             throw new Exception("Error connecting to database", Exception::$level_FATALERROR);
         }
     }
 
     /**
      * Closes the connection to the database
+     *
      * @return void
      */
-    public function dbclose() {
+    public function dbclose()
+    {
         $this->linkDB->close();
     }
 
@@ -100,16 +102,17 @@ class DbMysqli extends DbBase {
      * @return bool
      * @since 3.4
      */
-    public function _pQuery($strQuery, $arrParams) {
+    public function _pQuery($strQuery, $arrParams)
+    {
         $objStatement = $this->getPreparedStatement($strQuery);
         $bitReturn = false;
-        if($objStatement !== false) {
+        if ($objStatement !== false) {
             $strTypes = "";
-            foreach($arrParams as $strOneParam) {
+            foreach ($arrParams as $strOneParam) {
                 $strTypes .= "s";
             }
 
-            if(count($arrParams) > 0) {
+            if (count($arrParams) > 0) {
                 $arrParams = array_merge(array($strTypes), $arrParams);
                 call_user_func_array(array($objStatement, 'bind_param'), $this->refValues($arrParams));
             }
@@ -140,23 +143,24 @@ class DbMysqli extends DbBase {
      * @param array $arrParams
      *
      * @since 3.4
-     * @return array
+     * @return array|bool
      */
-    public function getPArray($strQuery, $arrParams) {
+    public function getPArray($strQuery, $arrParams)
+    {
         $objStatement = $this->getPreparedStatement($strQuery);
         $arrReturn = array();
-        if($objStatement !== false) {
+        if ($objStatement !== false) {
             $strTypes = "";
-            foreach($arrParams as $strOneParam) {
+            foreach ($arrParams as $strOneParam) {
                 $strTypes .= "s";
             }
 
-            if(count($arrParams) > 0) {
+            if (count($arrParams) > 0) {
                 $arrParams = array_merge(array($strTypes), $arrParams);
                 call_user_func_array(array($objStatement, 'bind_param'), $this->refValues($arrParams));
             }
 
-            if(!$objStatement->execute()) {
+            if (!$objStatement->execute()) {
                 return false;
             }
 
@@ -166,23 +170,22 @@ class DbMysqli extends DbBase {
             $objMetadata = $objStatement->result_metadata();
             $arrParams = array();
             $arrRow = array();
-            while($objField = $objMetadata->fetch_field()) {
+            while ($objField = $objMetadata->fetch_field()) {
                 $arrParams[] = &$arrRow[$objField->name];
             }
 
             call_user_func_array(array($objStatement, 'bind_result'), $arrParams);
 
-            while($objStatement->fetch()) {
+            while ($objStatement->fetch()) {
                 $arrSingleRow = array();
-                foreach($arrRow as $key => $val) {
+                foreach ($arrRow as $key => $val) {
                     $arrSingleRow[$key] = $val;
                 }
                 $arrReturn[] = $arrSingleRow;
             }
 
             $objStatement->free_result();
-        }
-        else {
+        } else {
             return false;
         }
 
@@ -201,7 +204,7 @@ class DbMysqli extends DbBase {
         foreach ($arrColumns as $strOneCol) {
             $arrPlaceholder[] = "?";
             $arrMappedColumns[] = $this->encloseColumnName($strOneCol);
-            $arrKeyValuePairs[] = $this->encloseColumnName($strOneCol) ." = ?";
+            $arrKeyValuePairs[] = $this->encloseColumnName($strOneCol)." = ?";
         }
 
         $strQuery = "INSERT INTO ".$this->encloseTableName(_dbprefix_.$strTable)." (".implode(", ", $arrMappedColumns).") VALUES (".implode(", ", $arrPlaceholder).")
@@ -216,8 +219,9 @@ class DbMysqli extends DbBase {
      *
      * @return string
      */
-    public function getError() {
-        $strError = $this->strErrorMessage . " " . $this->linkDB->error;
+    public function getError()
+    {
+        $strError = $this->strErrorMessage." ".$this->linkDB->error;
         $this->strErrorMessage = "";
 
         return $strError;
@@ -228,9 +232,10 @@ class DbMysqli extends DbBase {
      *
      * @return mixed
      */
-    public function getTables() {
+    public function getTables()
+    {
         $arrTemp = $this->getPArray("SHOW TABLE STATUS", array());
-        foreach($arrTemp as $intKey => $arrOneTemp) {
+        foreach ($arrTemp as $intKey => $arrOneTemp) {
             $arrTemp[$intKey]["name"] = $arrTemp[$intKey]["Name"];
         }
         return $arrTemp;
@@ -245,15 +250,16 @@ class DbMysqli extends DbBase {
      *
      * @return array
      */
-    public function getColumnsOfTable($strTableName) {
+    public function getColumnsOfTable($strTableName)
+    {
         $arrReturn = array();
         $arrTemp = $this->getPArray("SHOW COLUMNS FROM ".$this->encloseTableName(Database::getInstance()->dbsafeString($strTableName)), array());
 
-        if(empty($arrTemp)) {
+        if (empty($arrTemp)) {
             return array();
         }
 
-        foreach($arrTemp as $arrOneColumn) {
+        foreach ($arrTemp as $arrOneColumn) {
             $arrReturn[] = array(
                 "columnName" => $arrOneColumn["Field"],
                 "columnType" => $arrOneColumn["Type"],
@@ -269,40 +275,31 @@ class DbMysqli extends DbBase {
      *
      * @return string
      */
-    public function getDatatype($strType) {
+    public function getDatatype($strType)
+    {
         $strReturn = "";
 
-        if($strType == DbDatatypes::STR_TYPE_INT) {
+        if ($strType == DbDatatypes::STR_TYPE_INT) {
             $strReturn .= " INT ";
-        }
-        elseif($strType == DbDatatypes::STR_TYPE_LONG) {
+        } elseif ($strType == DbDatatypes::STR_TYPE_LONG) {
             $strReturn .= " BIGINT ";
-        }
-        elseif($strType == DbDatatypes::STR_TYPE_DOUBLE) {
+        } elseif ($strType == DbDatatypes::STR_TYPE_DOUBLE) {
             $strReturn .= " DOUBLE ";
-        }
-        elseif($strType == DbDatatypes::STR_TYPE_CHAR10) {
+        } elseif ($strType == DbDatatypes::STR_TYPE_CHAR10) {
             $strReturn .= " VARCHAR( 10 ) ";
-        }
-        elseif($strType == DbDatatypes::STR_TYPE_CHAR20) {
+        } elseif ($strType == DbDatatypes::STR_TYPE_CHAR20) {
             $strReturn .= " VARCHAR( 20 ) ";
-        }
-        elseif($strType == DbDatatypes::STR_TYPE_CHAR100) {
+        } elseif ($strType == DbDatatypes::STR_TYPE_CHAR100) {
             $strReturn .= " VARCHAR( 100 ) ";
-        }
-        elseif($strType == DbDatatypes::STR_TYPE_CHAR254) {
+        } elseif ($strType == DbDatatypes::STR_TYPE_CHAR254) {
             $strReturn .= " VARCHAR( 254 ) ";
-        }
-        elseif($strType == DbDatatypes::STR_TYPE_CHAR500) {
+        } elseif ($strType == DbDatatypes::STR_TYPE_CHAR500) {
             $strReturn .= " VARCHAR( 500 ) ";
-        }
-        elseif($strType == DbDatatypes::STR_TYPE_TEXT) {
+        } elseif ($strType == DbDatatypes::STR_TYPE_TEXT) {
             $strReturn .= " TEXT ";
-        }
-        elseif($strType == DbDatatypes::STR_TYPE_LONGTEXT) {
+        } elseif ($strType == DbDatatypes::STR_TYPE_LONGTEXT) {
             $strReturn .= " LONGTEXT ";
-        }
-        else {
+        } else {
             $strReturn .= " VARCHAR( 254 ) ";
         }
 
@@ -335,42 +332,42 @@ class DbMysqli extends DbBase {
      *
      * @return bool
      */
-    public function createTable($strName, $arrFields, $arrKeys, $arrIndices = array(), $bitTxSafe = true) {
+    public function createTable($strName, $arrFields, $arrKeys, $arrIndices = array(), $bitTxSafe = true)
+    {
         $strQuery = "";
 
         //build the mysql code
-        $strQuery .= "CREATE TABLE IF NOT EXISTS `" .$strName . "` ( \n";
+        $strQuery .= "CREATE TABLE IF NOT EXISTS `".$strName."` ( \n";
 
         //loop the fields
-        foreach($arrFields as $strFieldName => $arrColumnSettings) {
-            $strQuery .= " `" . $strFieldName . "` ";
+        foreach ($arrFields as $strFieldName => $arrColumnSettings) {
+            $strQuery .= " `".$strFieldName."` ";
 
             $strQuery .= $this->getDatatype($arrColumnSettings[0]);
 
             //any default?
-            if(isset($arrColumnSettings[2])) {
-                $strQuery .= "DEFAULT " . $arrColumnSettings[2] . " ";
+            if (isset($arrColumnSettings[2])) {
+                $strQuery .= "DEFAULT ".$arrColumnSettings[2]." ";
             }
 
             //nullable?
-            if($arrColumnSettings[1] === true) {
+            if ($arrColumnSettings[1] === true) {
                 $strQuery .= " NULL , \n";
-            }
-            else {
+            } else {
                 $strQuery .= " NOT NULL , \n";
             }
 
         }
 
         //primary keys
-        $strQuery .= " PRIMARY KEY ( `" . implode("` , `", $arrKeys) . "` ) \n";
+        $strQuery .= " PRIMARY KEY ( `".implode("` , `", $arrKeys)."` ) \n";
 
-        if(count($arrIndices) > 0) {
-            foreach($arrIndices as $strOneIndex) {
+        if (count($arrIndices) > 0) {
+            foreach ($arrIndices as $strOneIndex) {
                 if (is_array($strOneIndex)) {
-                    $strQuery .= ", INDEX ( `" . implode("`, `", $strOneIndex) . "` ) \n ";
+                    $strQuery .= ", INDEX ( `".implode("`, `", $strOneIndex)."` ) \n ";
                 } else {
-                    $strQuery .= ", INDEX ( `" . $strOneIndex . "` ) \n ";
+                    $strQuery .= ", INDEX ( `".$strOneIndex."` ) \n ";
                 }
             }
         }
@@ -378,10 +375,9 @@ class DbMysqli extends DbBase {
 
         $strQuery .= ") ";
 
-        if(!$bitTxSafe) {
+        if (!$bitTxSafe) {
             $strQuery .= " ENGINE = myisam CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
-        }
-        else {
+        } else {
             $strQuery .= " ENGINE = innodb CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
         }
 
@@ -390,9 +386,11 @@ class DbMysqli extends DbBase {
 
     /**
      * Starts a transaction
+     *
      * @return void
      */
-    public function transactionBegin() {
+    public function transactionBegin()
+    {
         //Autocommit 0 setzten
         $strQuery = "SET AUTOCOMMIT = 0";
         $strQuery2 = "BEGIN";
@@ -402,9 +400,11 @@ class DbMysqli extends DbBase {
 
     /**
      * Ends a successful operation by Commiting the transaction
+     *
      * @return void
      */
-    public function transactionCommit() {
+    public function transactionCommit()
+    {
         $str_pQuery = "COMMIT";
         $str_pQuery2 = "SET AUTOCOMMIT = 1";
         $this->_pQuery($str_pQuery, array());
@@ -413,9 +413,11 @@ class DbMysqli extends DbBase {
 
     /**
      * Ends a non-successful transaction by using a rollback
+     *
      * @return void
      */
-    public function transactionRollback() {
+    public function transactionRollback()
+    {
         $strQuery = "ROLLBACK";
         $strQuery2 = "SET AUTOCOMMIT = 1";
         $this->_pQuery($strQuery, array());
@@ -425,12 +427,16 @@ class DbMysqli extends DbBase {
     /**
      * @return array|mixed
      */
-    public function getDbInfo() {
+    public function getDbInfo()
+    {
         $arrReturn = array();
-        $arrReturn["dbdriver"] = "mysqli-extension";
-        $arrReturn["dbserver"] = "MySQL " . $this->linkDB->server_info;
-        $arrReturn["dbclient"] =  $this->linkDB->client_info;
+        $arrReturn["dbserver"] = "MySQL ".$this->linkDB->server_info;
+        $arrReturn["server version"] = $this->linkDB->server_version;
+        $arrReturn["dbclient"] = $this->linkDB->client_info;
+        $arrReturn["client version"] = $this->linkDB->client_version;
         $arrReturn["dbconnection"] = $this->linkDB->host_info;
+        $arrReturn["protocol version"] = $this->linkDB->protocol_version;
+        $arrReturn["thread id"] = $this->linkDB->thread_id;
         return $arrReturn;
     }
 
@@ -442,8 +448,9 @@ class DbMysqli extends DbBase {
      *
      * @return string
      */
-    public function encloseColumnName($strColumn) {
-        return "`" . $strColumn . "`";
+    public function encloseColumnName($strColumn)
+    {
+        return "`".$strColumn."`";
     }
 
     /**
@@ -453,8 +460,9 @@ class DbMysqli extends DbBase {
      *
      * @return string
      */
-    public function encloseTableName($strTable) {
-        return "`" . $strTable . "`";
+    public function encloseTableName($strTable)
+    {
+        return "`".$strTable."`";
     }
 
 
@@ -468,23 +476,25 @@ class DbMysqli extends DbBase {
      *
      * @return bool
      */
-    public function dbExport($strFilename, $arrTables) {
-        $strFilename = _realpath_ . $strFilename;
+    public function dbExport($strFilename, $arrTables)
+    {
+        $strFilename = _realpath_.$strFilename;
         $strTables = implode(" ", $arrTables);
         $strParamPass = "";
 
-        if($this->strPass != "") {
-            $strParamPass = " -p\"" . $this->strPass . "\"";
+        if ($this->strPass != "") {
+            $strParamPass = " -p\"".$this->strPass."\"";
         }
 
-        $strCommand = $this->strDumpBin . " -h" . $this->strHost . " -u" . $this->strUsername . $strParamPass . " -P" . $this->intPort . " " . $this->strDbName . " " . $strTables . " > \"" . $strFilename . "\"";
+        $strCommand = $this->strDumpBin." -h".$this->strHost." -u".$this->strUsername.$strParamPass." -P".$this->intPort." ".$this->strDbName." ".$strTables." > \"".$strFilename."\"";
         //Now do a systemfork
         $intTemp = "";
         system($strCommand, $intTemp);
-        if($intTemp == 0)
-            Logger::getInstance(Logger::DBLOG)->addLogRow($this->strDumpBin . " exited with code " . $intTemp, Logger::$levelInfo);
-        else
-            Logger::getInstance(Logger::DBLOG)->addLogRow($this->strDumpBin . " exited with code " . $intTemp, Logger::$levelWarning);
+        if ($intTemp == 0) {
+            Logger::getInstance(Logger::DBLOG)->addLogRow($this->strDumpBin." exited with code ".$intTemp, Logger::$levelInfo);
+        } else {
+            Logger::getInstance(Logger::DBLOG)->addLogRow($this->strDumpBin." exited with code ".$intTemp, Logger::$levelWarning);
+        }
 
         return $intTemp == 0;
     }
@@ -496,21 +506,23 @@ class DbMysqli extends DbBase {
      *
      * @return bool
      */
-    public function dbImport($strFilename) {
-        $strFilename = _realpath_ . $strFilename;
+    public function dbImport($strFilename)
+    {
+        $strFilename = _realpath_.$strFilename;
         $strParamPass = "";
 
-        if($this->strPass != "") {
-            $strParamPass = " -p\"" . $this->strPass . "\"";
+        if ($this->strPass != "") {
+            $strParamPass = " -p\"".$this->strPass."\"";
         }
 
-        $strCommand = $this->strRestoreBin . " -h" . $this->strHost . " -u" . $this->strUsername . $strParamPass . " -P" . $this->intPort . " " . $this->strDbName . " < \"" . $strFilename . "\"";
+        $strCommand = $this->strRestoreBin." -h".$this->strHost." -u".$this->strUsername.$strParamPass." -P".$this->intPort." ".$this->strDbName." < \"".$strFilename."\"";
         $intTemp = "";
         system($strCommand, $intTemp);
-        if($intTemp == 0)
-            Logger::getInstance(Logger::DBLOG)->addLogRow($this->strDumpBin . " exited with code " . $intTemp, Logger::$levelInfo);
-        else
-            Logger::getInstance(Logger::DBLOG)->addLogRow($this->strDumpBin . " exited with code " . $intTemp, Logger::$levelWarning);
+        if ($intTemp == 0) {
+            Logger::getInstance(Logger::DBLOG)->addLogRow($this->strDumpBin." exited with code ".$intTemp, Logger::$levelInfo);
+        } else {
+            Logger::getInstance(Logger::DBLOG)->addLogRow($this->strDumpBin." exited with code ".$intTemp, Logger::$levelWarning);
+        }
         return $intTemp == 0;
     }
 
@@ -522,10 +534,11 @@ class DbMysqli extends DbBase {
      *
      * @return array
      */
-    private function refValues($arrValues) {
-        if(strnatcmp(phpversion(), '5.3') >= 0) { //Reference is required for PHP 5.3+
+    private function refValues($arrValues)
+    {
+        if (strnatcmp(phpversion(), '5.3') >= 0) { //Reference is required for PHP 5.3+
             $refs = array();
-            foreach($arrValues as $key => $value) {
+            foreach ($arrValues as $key => $value) {
                 $refs[$key] = &$arrValues[$key];
             }
             return $refs;
@@ -540,18 +553,19 @@ class DbMysqli extends DbBase {
      *
      * @return mysqli_stmt
      */
-    private function getPreparedStatement($strQuery) {
+    private function getPreparedStatement($strQuery)
+    {
 
         $strName = md5($strQuery);
 
-        if(isset($this->arrStatementsCache[$strName])) {
+        if (isset($this->arrStatementsCache[$strName])) {
             return $this->arrStatementsCache[$strName];
         }
 
 
-        if(count($this->arrStatementsCache) > 300) {
+        if (count($this->arrStatementsCache) > 300) {
             /** @var mysqli_stmt $objOneEntry */
-            foreach($this->arrStatementsCache as $objOneEntry) {
+            foreach ($this->arrStatementsCache as $objOneEntry) {
                 $objOneEntry->close();
             }
 
@@ -559,7 +573,7 @@ class DbMysqli extends DbBase {
         }
 
         $objStatement = $this->linkDB->stmt_init();
-        if(!$objStatement->prepare($strQuery)) {
+        if (!$objStatement->prepare($strQuery)) {
             $this->strErrorMessage = $objStatement->error;
             return false;
         }
@@ -571,9 +585,11 @@ class DbMysqli extends DbBase {
 
     /**
      * @param string $strValue
+     *
      * @return mixed
      */
-    public function escape($strValue) {
+    public function escape($strValue)
+    {
         return str_replace("\\", "\\\\", $strValue);
     }
 

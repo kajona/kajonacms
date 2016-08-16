@@ -277,6 +277,13 @@ class Carrier
 
     /**
      * @return \Pimple\Container
+     * @internal - Please dont use this method directly it is only intended for internal usage where we have (currently)
+     * no other option to access a service. Using this method inside a class makes it difficult to test and creates a
+     * global state thus we loose all advantages of the DI. In almost every case you should add the dependency to the
+     * constructor instead of getting the service through this method. Inside a controller you should use the @inject
+     * annotation to get the service. If you are required to use it please try to move the usage to the upmost layer
+     * i.e.: Workflow, Event, Controller, Report, Installer. Dont use it inside a model instead try to move the logic
+     * into a seperate service.
      */
     public function getContainer()
     {

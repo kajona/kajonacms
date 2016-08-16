@@ -54,12 +54,7 @@ class DbSqlite3 extends DbBase
         $this->strDbFile = _projectpath_.'/dbdumps/'.$strDbName.'.db3';
 
         try {
-
-
             $strPath = _realpath_.$this->strDbFile;
-            /*if(defined("_autotesting_")) {
-                $strPath = ":memory:";
-            }*/
             $this->linkDB = new SQLite3($strPath);
             $this->_pQuery('PRAGMA encoding = "UTF-8"', array());
             //TODO deprecated in sqlite, so may be removed
@@ -356,7 +351,7 @@ class DbSqlite3 extends DbBase
      * @param array $arrParams
      *
      * @since 3.4
-     * @return array
+     * @return array|bool
      */
     public function getPArray($strQuery, $arrParams)
     {
@@ -575,10 +570,10 @@ class DbSqlite3 extends DbBase
     {
         $arrDB = $this->linkDB->version();
         $arrReturn = array();
-        $arrReturn["dbdriver"] = "sqlite3-extension";
         $arrReturn["dbserver"] = "SQLite3 ".$arrDB["versionString"]." ".$arrDB["versionNumber"];
-        $arrReturn["dbclient"] = "";
-        $arrReturn["dbconnection"] = "";
+        $arrReturn["location"] = $this->strDbFile;
+        $arrReturn["busy timeout"] = $this->getPArray("PRAGMA busy_timeout", array())[0]["timeout"];
+        $arrReturn["encoding"] = $this->getPArray("PRAGMA encoding", array())[0]["encoding"];
         return $arrReturn;
     }
 

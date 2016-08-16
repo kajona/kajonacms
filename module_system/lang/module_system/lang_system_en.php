@@ -303,6 +303,7 @@ $lang["systemtask_permissions_groupid"]     = "Relevant group";
 $lang["systemtask_permissions_finished"]     = "Finished execution";
 $lang["systemtask_permissions_name"]     = "Set permissions recursively";
 $lang["generic_changelog_no_systemid"]  = "Calling this action is only possible with a valid systemid. Please enter the systemid to be investigated.";
+$lang["generic_record_locked"]  = "This record cannot be edited because it was locked by the user '{0}'.";
 
 $lang["cache"]  = "Cache";
 $lang["cache_apc"]  = "APC";
