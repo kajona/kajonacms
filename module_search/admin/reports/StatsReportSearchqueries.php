@@ -197,7 +197,6 @@ class StatsReportSearchqueries implements AdminStatsreportsInterface
      */
     private function getTopQueries($intStart = false, $intEnd = false)
     {
-        $objUser = Session::getInstance()->getUser();
         $strQuery = "SELECT search_log_query, COUNT(*) as hits
 					  FROM "._dbprefix_."search_log
 					  WHERE search_log_date > ?
