@@ -39,6 +39,10 @@ class DbOci8 extends DbBase
 
     private $objErrorStmt = null;
 
+    /**
+     * Flag whether the sring comparison method (case sensitive / insensitive) should be reset back to default after the current query
+     * @var bool
+     */
     private $bitResetOrder = false;
 
     /**
@@ -701,12 +705,18 @@ class DbOci8 extends DbBase
                 WHERE rnum >= " . $intStart;
     }
 
+    /**
+     * Sets the sorting and comparison of strings to case insensitive
+     */
     private function setCaseInsensitiveSort()
     {
         $this->_pQuery("alter session set nls_sort=binary_ci", array());
         $this->_pQuery("alter session set nls_comp=LINGUISTIC", array());
     }
 
+    /**
+     * Sets the sorting and comparison of strings to case sensitive
+     */
     private function setCaseSensitiveSort()
     {
         $this->_pQuery("alter session set nls_sort=binary", array());
