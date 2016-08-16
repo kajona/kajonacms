@@ -177,7 +177,9 @@ class StringUtil
      * @param $mixedSearch
      * @param $mixedReplace
      * @param $strSubject
-     * @param bool|false $bitUnicodesafe
+     * @param bool $bitUnicodesafe
+     * @param bool $bitCaseSensitive
+     *
      * @return mixed
      */
     public static function replace($mixedSearch, $mixedReplace, $strSubject, $bitUnicodesafe = false, $bitCaseSensitive = true)
