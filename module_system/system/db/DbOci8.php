@@ -11,6 +11,7 @@ use Kajona\System\System\Database;
 use Kajona\System\System\DbDatatypes;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Logger;
+use Kajona\System\System\StringUtil;
 
 
 /**
@@ -37,6 +38,8 @@ class DbOci8 extends DbBase
     private $bitTxOpen = false;
 
     private $objErrorStmt = null;
+
+    private $bitResetOrder = false;
 
     /**
      * This method makes sure to connect to the database properly
@@ -257,6 +260,12 @@ class DbOci8 extends DbBase
             $arrReturn[$intCounter++] = $arrRow;
         }
         @oci_free_statement($objStatement);
+
+        if($this->bitResetOrder) {
+            $this->setCaseSensitiveSort();
+            $this->bitResetOrder = false;
+        }
+
         return $arrReturn;
     }
 
@@ -542,6 +551,8 @@ class DbOci8 extends DbBase
         $arrReturn = array();
         $arrReturn["dbserver"] = oci_server_version($this->linkDB);
         $arrReturn["dbclient"] = function_exists("oci_client_version") ? oci_client_version() : "";
+        $arrReturn["nls_sort"] = $this->getPArray("select sys_context ('userenv', 'nls_sort') val1 from sys.dual", array())[0]["val1"];
+        $arrReturn["nls_comp"] = $this->getPArray("select sys_context ('userenv', 'nls_comp') val1 from sys.dual", array())[0]["val1"];
         return $arrReturn;
     }
 
@@ -610,6 +621,12 @@ class DbOci8 extends DbBase
             $intPos = uniStrpos($strQuery, "?");
             $strQuery = substr($strQuery, 0, $intPos).":".$intCount++.substr($strQuery, $intPos + 1);
         }
+
+        if(StringUtil::indexOf($strQuery, " like ", false) !== false) {
+            $this->setCaseInsensitiveSort();
+            $this->bitResetOrder = true;
+        }
+
         return $strQuery;
     }
 
@@ -682,6 +699,18 @@ class DbOci8 extends DbBase
                      WHERE ROWNUM <= " . $intEnd . "
                 )
                 WHERE rnum >= " . $intStart;
+    }
+
+    private function setCaseInsensitiveSort()
+    {
+        $this->_pQuery("alter session set nls_sort=binary_ci", array());
+        $this->_pQuery("alter session set nls_comp=LINGUISTIC", array());
+    }
+
+    private function setCaseSensitiveSort()
+    {
+        $this->_pQuery("alter session set nls_sort=binary", array());
+        $this->_pQuery("alter session set nls_comp=ANSI", array());
     }
 }
 

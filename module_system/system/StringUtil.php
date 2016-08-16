@@ -180,21 +180,21 @@ class StringUtil
      * @param bool|false $bitUnicodesafe
      * @return mixed
      */
-    public static function replace($mixedSearch, $mixedReplace, $strSubject, $bitUnicodesafe = false)
+    public static function replace($mixedSearch, $mixedReplace, $strSubject, $bitUnicodesafe = false, $bitCaseSensitive = true)
     {
         if ($bitUnicodesafe) {
             if (!is_array($mixedSearch)) {
-                $mixedSearch = '!'.preg_quote($mixedSearch, '!').'!u';
+                $mixedSearch = '!'.preg_quote($mixedSearch, '!').'!u'.($bitCaseSensitive ? '': 'i');
             }
             else {
                 foreach ($mixedSearch as $strKey => $strValue) {
-                    $mixedSearch[$strKey] = '!'.preg_quote($strValue).'!u';
+                    $mixedSearch[$strKey] = '!'.preg_quote($strValue).'!u'.($bitCaseSensitive ? '': 'i');
                 }
             }
             return preg_replace($mixedSearch, $mixedReplace, $strSubject);
         }
         else {
-            return str_replace($mixedSearch, $mixedReplace, $strSubject);
+            return $bitCaseSensitive ? str_replace($mixedSearch, $mixedReplace, $strSubject) : str_ireplace($mixedSearch, $mixedReplace, $strSubject);
         }
     }
 
