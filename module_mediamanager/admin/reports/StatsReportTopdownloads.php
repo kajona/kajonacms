@@ -139,7 +139,6 @@ class StatsReportTopdownloads implements AdminStatsreportsInterface
      */
     private function getLogbookData()
     {
-        $objUser = Session::getInstance()->getUser();
         $strQuery = "SELECT COUNT(*) as amount, downloads_log_file
 					  FROM "._dbprefix_."mediamanager_dllog
 					  WHERE downloads_log_date > ?

@@ -143,7 +143,6 @@ class StatsReportDownloads implements AdminStatsreportsInterface
      */
     private function getLogbookData()
     {
-        $objUser = Session::getInstance()->getUser();
         $strQuery = "SELECT *
 					  FROM "._dbprefix_."mediamanager_dllog
 					  WHERE downloads_log_date > ?
