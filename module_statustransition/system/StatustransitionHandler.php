@@ -12,7 +12,9 @@ use Kajona\System\System\Exception;
 use Kajona\System\System\Model;
 
 /**
- * Class StatustransitionHandler
+ * The status handler contains all informations about the status flow. Through the status handler we can move the model
+ * to the next state and get a list of available status transitions. So we have one handler object which can have
+ * multiple status options.
  *
  * @author christoph.kappestein@artemeon.de
  * @author stefan.meyer@artemeon.de
