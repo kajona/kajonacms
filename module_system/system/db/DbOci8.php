@@ -540,7 +540,6 @@ class DbOci8 extends DbBase
     public function getDbInfo()
     {
         $arrReturn = array();
-        $arrReturn["dbdriver"] = "oci8-oracle-extension";
         $arrReturn["dbserver"] = oci_server_version($this->linkDB);
         $arrReturn["dbclient"] = function_exists("oci_client_version") ? oci_client_version() : "";
         return $arrReturn;

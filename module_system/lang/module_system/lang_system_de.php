@@ -296,6 +296,7 @@ $lang["systemtask_permissions_groupid"]     = "Relevante Gruppe";
 $lang["systemtask_permissions_finished"]     = "Ausführung abgeschlossen";
 $lang["systemtask_permissions_name"]     = "Rechte rekursiv setzen";
 $lang["generic_changelog_no_systemid"]  = "Diese Aktion kann nur mit einer gültigen Systemid aufgerufen werden. Bitte eine entsprechende Systemid angeben.";
+$lang["generic_record_locked"]  = "Dieser Datensatz wurde von dem Benutzer '{0}' gesperrt und kann daher nicht bearbeitet werden.";
 
 $lang["cache"]  = "Cache";
 $lang["cache_apc"]  = "APC";
