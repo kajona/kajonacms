@@ -741,6 +741,9 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $this->objDB->removeColumn("user", "user_active");
         $this->objDB->removeColumn("user", "user_deleted");
 
+        // alter session last url column
+        $this->objDB->_pQuery("ALTER TABLE "._dbprefix_."session MODIFY session_lasturl TEXT", array());
+
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1");
         return $strReturn;
