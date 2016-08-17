@@ -996,8 +996,13 @@ JS;
         $arrChart = array();
         foreach ($arrDates as $arrDate) {
             $objDate = new Date($arrDate["change_date"]);
+            $strDate = substr($objDate->getLongTimestamp(), 0, 8);
             $arrResult[$objDate->getLongTimestamp()] = date("d.m.Y", $objDate->getTimeInOldStyle());
-            $arrChart[substr($objDate->getLongTimestamp(), 0, 8)] = $arrDate["cnt"];
+            if (isset($arrChart[$strDate])) {
+                $arrChart[$strDate]+= $arrDate["cnt"];
+            } else {
+                $arrChart[$strDate] = $arrDate["cnt"];
+            }
         }
         $arrResult = array_unique($arrResult);
 
