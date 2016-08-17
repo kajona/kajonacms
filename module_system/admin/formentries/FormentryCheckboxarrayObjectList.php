@@ -20,6 +20,7 @@ use Kajona\System\System\Carrier;
 class FormentryCheckboxarrayObjectList extends FormentryCheckboxarray
 {
     protected $bitShowPath = true;
+    protected $bitPathCallback;
 
     public function __construct($strFormName, $strSourceProperty, $objSourceObject = null)
     {
@@ -37,6 +38,17 @@ class FormentryCheckboxarrayObjectList extends FormentryCheckboxarray
         return $this->bitShowPath;
     }
 
+    public function setBitPathCallback($bitPathCallback)
+    {
+        $this->bitPathCallback = $bitPathCallback;
+        return $this;
+    }
+
+    public function getBitPathCallback()
+    {
+        return $this->bitPathCallback;
+    }
+
     public function renderField()
     {
         $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
@@ -45,7 +57,7 @@ class FormentryCheckboxarrayObjectList extends FormentryCheckboxarray
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
         }
 
-        $strReturn .= $objToolkit->formInputCheckboxArrayObjectList($this->getStrEntryName(), $this->getStrLabel(), $this->getAvailableItems(), $this->getSelectedItems(), $this->getBitReadonly(), $this->getBitShowPath());
+        $strReturn .= $objToolkit->formInputCheckboxArrayObjectList($this->getStrEntryName(), $this->getStrLabel(), $this->getAvailableItems(), $this->getSelectedItems(), $this->getBitReadonly(), $this->getBitShowPath(), $this->getBitPathCallback());
 
         return $strReturn;
 
