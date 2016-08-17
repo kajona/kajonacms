@@ -235,7 +235,7 @@ class LoginAdmin extends AdminController implements AdminInterface
             //route to the default module
             $strModule = "dashboard";
             if (Session::getInstance()->isLoggedin()) {
-                $objUser = new UserUser(Session::getInstance()->getUserID());
+                $objUser = Session::getInstance()->getUser();
                 if ($objUser->getStrAdminModule() != "") {
                     $strModule = $objUser->getStrAdminModule();
                 }

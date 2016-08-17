@@ -412,7 +412,7 @@ final class Session
     public function isActive()
     {
         if ($this->isLoggedin()) {
-            if ($this->getUser() && $this->getUser()->getIntActive() == 1) {
+            if ($this->getUser() && $this->getUser()->getIntRecordStatus() == 1) {
                 return true;
             }
             else {
@@ -515,7 +515,7 @@ final class Session
     private function internalLoginHelper(UserUser $objUser)
     {
 
-        if ($objUser->getIntActive() == 1) {
+        if ($objUser->getIntRecordStatus() == 1) {
 
 
             $this->getObjInternalSession()->setStrLoginstatus(SystemSession::$LOGINSTATUS_LOGGEDIN);
@@ -623,14 +623,14 @@ final class Session
      *
      * @return UserUser
      */
-    private function getUser()
+    public function getUser()
     {
         if ($this->objUser != null) {
             return $this->objUser;
         }
 
         if ($this->getUserID() != "") {
-            $this->objUser = new UserUser($this->getUserID());
+            $this->objUser = Objectfactory::getInstance()->getObject($this->getUserID());
             return $this->objUser;
         }
 
@@ -645,7 +645,7 @@ final class Session
     public function resetUser()
     {
         if ($this->getUserID() != "") {
-            $this->objUser = new UserUser($this->getUserID());
+            $this->objUser = Objectfactory::getInstance()->getObject($this->getUserID());
         }
     }
 
@@ -742,7 +742,7 @@ final class Session
         //try to load the matching groups
         $strGroups = SystemSetting::getConfigValue("_guests_group_id_");
         if (validateSystemid($this->getUserID())) {
-            $this->objUser = new UserUser($this->getUserID());
+            $this->objUser = Objectfactory::getInstance()->getObject($this->getUserID());
             $strGroups = implode(",", $this->objUser->getArrGroupIds());
         }
 

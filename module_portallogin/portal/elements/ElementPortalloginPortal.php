@@ -13,6 +13,7 @@ use Kajona\System\System\Link;
 use Kajona\System\System\Logger;
 use Kajona\System\System\Mail;
 use Kajona\System\System\ScriptletHelper;
+use Kajona\System\System\Session;
 use Kajona\System\System\UserSourcefactory;
 use Kajona\System\System\Usersources\UsersourcesUserKajona;
 use Kajona\System\System\UserUser;
@@ -187,7 +188,7 @@ class ElementPortalloginPortal extends ElementPortal implements PortalElementInt
             $objUser = $objSubsystem->getUserByUsername($this->getParam("portallogin_username"));
             if ($objUser != null) {
                 $objValidator = new EmailValidator();
-                if ($objUser->getStrEmail() != "" && $objValidator->validate($objUser->getStrEmail()) && $objUser->getIntPortal() == 1 && $objUser->getIntActive() == 1) {
+                if ($objUser->getStrEmail() != "" && $objValidator->validate($objUser->getStrEmail()) && $objUser->getIntPortal() == 1 && $objUser->getIntRecordStatus() == 1) {
 
                     //generate an authcode and save it with the user
                     $strAuthcode = generateSystemid();
@@ -303,7 +304,7 @@ class ElementPortalloginPortal extends ElementPortal implements PortalElementInt
             $arrTemplate = array();
 
 
-            $objUser = new UserUser($this->objSession->getUserID());
+            $objUser = Session::getInstance()->getUser();
             if ($objUser->getObjSourceUser()->isEditable() && $objUser->getStrSubsystem() == "kajona" && $objUser->getObjSourceUser() instanceof UsersourcesUserKajona) {
 
                 $arrTemplate["username"] = $objUser->getStrUsername();
@@ -336,7 +337,7 @@ class ElementPortalloginPortal extends ElementPortal implements PortalElementInt
             }
         }
         else {
-            $objUser = new UserUser($this->objSession->getUserID());
+            $objUser = Session::getInstance()->getUser();
 
             if ($objUser->getObjSourceUser() instanceof UsersourcesUserKajona) {
 

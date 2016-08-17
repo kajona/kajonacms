@@ -645,7 +645,7 @@ abstract class Root
         }
 
         if (!$this->getLockManager()->isAccessibleForCurrentUser()) {
-            $objUser = new UserUser($this->getLockManager()->getLockId());
+            $objUser = Objectfactory::getInstance()->getObject($this->getLockManager()->getLockId());
             throw new Exception("current object is locked by user ".$objUser->getStrDisplayName(), Exception::$level_ERROR);
         }
 
@@ -1539,7 +1539,7 @@ abstract class Root
      * * @todo find ussages and make private
      *
      */
-    public final function deleteSystemRecord($strSystemid, $bitRight = true, $bitDate = true)
+    final public function deleteSystemRecord($strSystemid, $bitRight = true, $bitDate = true)
     {
         $bitResult = true;
 
@@ -1878,7 +1878,7 @@ abstract class Root
         }
 
         if (validateSystemid($this->getStrLmUser())) {
-            $objUser = new UserUser($this->getStrLmUser());
+            $objUser = Objectfactory::getInstance()->getObject($this->getStrLmUser());
             return $objUser->getStrDisplayName();
         }
         else {
@@ -2050,7 +2050,7 @@ abstract class Root
      * @throws Exception
      * @return bool
      */
-    public final function setOwnerId($strOwner, $strSystemid = "")
+    final public function setOwnerId($strOwner, $strSystemid = "")
     {
         if ($strSystemid != "") {
             throw new Exception("unsupported param @ ".__METHOD__, Exception::$level_FATALERROR);
@@ -2065,7 +2065,7 @@ abstract class Root
      */
     public function getIntRecordStatus()
     {
-        return $this->intRecordStatus;
+        return (int)$this->intRecordStatus;
     }
 
     /**
@@ -2073,7 +2073,7 @@ abstract class Root
      */
     public function getIntRecordDeleted()
     {
-        return $this->intRecordDeleted;
+        return (int)$this->intRecordDeleted;
     }
 
     /**

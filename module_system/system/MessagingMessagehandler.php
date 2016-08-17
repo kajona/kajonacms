@@ -94,7 +94,7 @@ class MessagingMessagehandler
         foreach ($arrRecipients as $objOneUser) {
 
             //skip inactive users
-            if ($objOneUser->getIntActive() != 1) {
+            if ($objOneUser->getIntRecordStatus() != 1) {
                 continue;
             }
 
@@ -148,7 +148,8 @@ class MessagingMessagehandler
 
         //try to get a matching sender and place it into the mail
         if (validateSystemid($objMessage->getStrSenderId())) {
-            $objSenderUser = new UserUser($objMessage->getStrSenderId());
+            /** @var UserUser $objSenderUser */
+            $objSenderUser = Objectfactory::getInstance()->getObject($objMessage->getStrSenderId());
             $objValidator = new EmailValidator();
             if ($objValidator->validate($objSenderUser->getStrEmail())) {
                 $objMail->setSender($objSenderUser->getStrEmail());
@@ -186,7 +187,7 @@ class MessagingMessagehandler
 
                     foreach ($arrMembers as $strOneId) {
                         if (!isset($arrReturn[$strOneId])) {
-                            $arrReturn[$strOneId] = new UserUser($strOneId);
+                            $arrReturn[$strOneId] = Objectfactory::getInstance()->getObject($strOneId);
                         }
                     }
                 }

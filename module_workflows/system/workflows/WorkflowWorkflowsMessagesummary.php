@@ -95,7 +95,7 @@ class WorkflowWorkflowsMessagesummary implements WorkflowsHandlerInterface
         foreach (UserUser::getObjectListFiltered() as $objOneUser) {
 
             //skip inactive users
-            if ($objOneUser->getIntActive() == 0) {
+            if ($objOneUser->getIntRecordStatus() == 0) {
                 continue;
             }
 

@@ -121,9 +121,7 @@ $lang["required_user_existing"]          = "Benutername bereits vergeben";
 $lang["required_username"]               = "Benutzername";
 $lang["user"]                            = "Benutzer: ";
 $lang["user_accept"]                     = "Benutzer auswählen";
-$lang["user_active"]                     = "Aktiv";
 $lang["user_admin"]                      = "Admin-Login";
-$lang["user_aktiv"]                      = "Aktiv";
 $lang["user_browser"]                    = "Benutzer suchen";
 $lang["user_browser_reset"]              = "Benutzer entfernen";
 $lang["user_browser_show"]               = "Benutzer anzeigen";
@@ -134,7 +132,6 @@ $lang["user_fehler_mail"]                = "E-Mail Adresse angeben <a href=\"jav
 $lang["user_fehler_name"]                = "Bitte Benutzername angeben <a href=\"javascript:history.back(-1)\">zurück</a>";
 $lang["user_fehler_namedoppelt"]         = "Benutzername schon vorhanden, bitte wählen Sie einen anderen Benutzernamen <a href=\"javascript:history.back(-1)\">zurück</a>";
 $lang["user_fehler_pass"]                = "Passwörter sind unterschiedlich <a href=\"javascript:history.back(-1)\">zurück</a>";
-$lang["user_inactive"]                   = "Inaktiv";
 $lang["user_language"]                   = "Admin-Sprache";
 $lang["user_lastlogin"]                  = "Letzter Login";
 $lang["user_list_parent"]                = "Gruppen anzeigen";

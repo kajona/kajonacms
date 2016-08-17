@@ -26,7 +26,6 @@ class LockmanagerTest extends Testbase
 
         $objUser = new UserUser();
         $objUser->setStrUsername(generateSystemid());
-        $objUser->setIntActive(1);
         $objUser->updateObjectToDb();
 
         $this->assertTrue(Carrier::getInstance()->getObjSession()->loginUser($objUser));
@@ -67,7 +66,6 @@ class LockmanagerTest extends Testbase
 
         $objUser1 = new UserUser();
         $objUser1->setStrUsername(generateSystemid());
-        $objUser1->setIntActive(1);
         $objUser1->updateObjectToDb();
 
         $this->assertTrue(Carrier::getInstance()->getObjSession()->loginUser($objUser1));
@@ -81,7 +79,6 @@ class LockmanagerTest extends Testbase
 
         $objUser2 = new UserUser();
         $objUser2->setStrUsername(generateSystemid());
-        $objUser2->setIntActive(1);
         $objUser2->updateObjectToDb();
 
 
@@ -156,7 +153,6 @@ class LockmanagerTest extends Testbase
 
         $objUser1 = new UserUser();
         $objUser1->setStrUsername(generateSystemid());
-        $objUser1->setIntActive(1);
         $objUser1->updateObjectToDb();
 
         $this->assertTrue(Carrier::getInstance()->getObjSession()->loginUser($objUser1));
@@ -166,7 +162,6 @@ class LockmanagerTest extends Testbase
 
         $objUser2 = new UserUser();
         $objUser2->setStrUsername(generateSystemid());
-        $objUser2->setIntActive(1);
         $objUser2->updateObjectToDb();
 
         $this->assertTrue(Carrier::getInstance()->getObjSession()->loginUser($objUser2));

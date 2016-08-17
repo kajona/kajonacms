@@ -14,6 +14,7 @@ use Kajona\System\Admin\ToolkitAdmin;
 use Kajona\System\System\Database;
 use Kajona\System\System\Lang;
 use Kajona\System\System\Link;
+use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Session;
 use Kajona\System\System\SystemSetting;
 use Kajona\System\System\UserUser;
@@ -122,10 +123,11 @@ class StatsReportTopreferers implements AdminStatsreportsInterface
         }
 
         $intI = 0;
-        $objUser = new UserUser(Session::getInstance()->getUserID());
+        $objUser = Session::getInstance()->getUser();
+        $intItemsPerPage = $objUser != null ? $objUser->getIntItemsPerPage() : SystemSetting::getConfigValue("_admin_nr_of_rows_");
         foreach ($arrStats as $arrOneStat) {
             //Escape?
-            if ($intI >= $objUser->getIntItemsPerPage()) {
+            if ($intI >= $intItemsPerPage) {
                 break;
             }
 
@@ -175,7 +177,6 @@ class StatsReportTopreferers implements AdminStatsreportsInterface
             }
         }
 
-        $objUser = new UserUser(Session::getInstance()->getUserID());
         $strQuery = "SELECT stats_referer as refurl, COUNT(*) as anzahl
 						FROM "._dbprefix_."stats_data
 						WHERE stats_referer NOT LIKE ?
@@ -185,7 +186,9 @@ class StatsReportTopreferers implements AdminStatsreportsInterface
 						GROUP BY stats_referer
 						ORDER BY anzahl desc";
 
-        return $this->objDB->getPArray($strQuery, $arrParams, 0, $objUser->getIntItemsPerPage() - 1);
+        $objUser = Session::getInstance()->getUser();
+        $intItemsPerPage = $objUser != null ? $objUser->getIntItemsPerPage() : SystemSetting::getConfigValue("_admin_nr_of_rows_");
+        return $this->objDB->getPArray($strQuery, $arrParams, 0, $intItemsPerPage - 1);
     }
 
     /**
