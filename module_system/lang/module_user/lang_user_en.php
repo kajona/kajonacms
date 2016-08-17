@@ -122,9 +122,7 @@ $lang["required_user_existing"]          = "Username already exists";
 $lang["required_username"]               = "Username";
 $lang["user"]                            = "User: ";
 $lang["user_accept"]                     = "Select user";
-$lang["user_active"]                     = "active";
 $lang["user_admin"]                      = "Admin login";
-$lang["user_aktiv"]                      = "Active";
 $lang["user_browser"]                    = "Search user";
 $lang["user_browser_reset"]              = "Remove user";
 $lang["user_browser_show"]               = "Show users";
@@ -135,7 +133,6 @@ $lang["user_fehler_mail"]                = "Pleae enter a valid mail-address <a 
 $lang["user_fehler_name"]                = "Please enter an username <a href=\"javascript:history.back(-1)\">back</a>";
 $lang["user_fehler_namedoppelt"]         = "The username already exits, please choose another one <a href=\"javascript:history.back(-1)\">back</a>";
 $lang["user_fehler_pass"]                = "Passwords provided are different <a href=\"javascript:history.back(-1)\">back</a>";
-$lang["user_inactive"]                   = "inactive";
 $lang["user_language"]                   = "Admin language";
 $lang["user_lastlogin"]                  = "Last login";
 $lang["user_list_parent"]                = "Show groups";

@@ -20,7 +20,8 @@ use Kajona\System\System\Logger;
  * @since 3.4.1
  * @package module_usersource
  */
-class UsersourcesSourceKajona implements UsersourcesUsersourceInterface {
+class UsersourcesSourceKajona implements UsersourcesUsersourceInterface
+{
 
 
     private static $arrUserCache = array();
@@ -30,7 +31,8 @@ class UsersourcesSourceKajona implements UsersourcesUsersourceInterface {
     /**
      * Default constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->objDB = Carrier::getInstance()->getObjDB();
     }
 
@@ -39,7 +41,8 @@ class UsersourcesSourceKajona implements UsersourcesUsersourceInterface {
      *
      * @return mixed
      */
-    public function getStrReadableName() {
+    public function getStrReadableName()
+    {
         return Carrier::getInstance()->getObjLang()->getLang("usersource_kajona_name", "user");
     }
 
@@ -53,13 +56,14 @@ class UsersourcesSourceKajona implements UsersourcesUsersourceInterface {
      *
      * @return bool
      */
-    public function authenticateUser(UsersourcesUserInterface $objUser, $strPassword) {
-        if($objUser instanceof UsersourcesUserKajona) {
+    public function authenticateUser(UsersourcesUserInterface $objUser, $strPassword)
+    {
+        if ($objUser instanceof UsersourcesUserKajona) {
             $bitMD5Encryption = false;
-            if(uniStrlen($objUser->getStrFinalPass()) == 32) {
+            if (uniStrlen($objUser->getStrFinalPass()) == 32) {
                 $bitMD5Encryption = true;
             }
-            if($objUser->getStrFinalPass() == self::encryptPassword($strPassword, $objUser->getStrSalt(), $bitMD5Encryption)) {
+            if ($objUser->getStrFinalPass() == self::encryptPassword($strPassword, $objUser->getStrSalt(), $bitMD5Encryption)) {
                 return true;
             }
         }
@@ -70,21 +74,24 @@ class UsersourcesSourceKajona implements UsersourcesUsersourceInterface {
     /**
      * @return bool
      */
-    public function getCreationOfGroupsAllowed() {
+    public function getCreationOfGroupsAllowed()
+    {
         return true;
     }
 
     /**
      * @return bool
      */
-    public function getCreationOfUsersAllowed() {
+    public function getCreationOfUsersAllowed()
+    {
         return true;
     }
 
     /**
      * @return bool
      */
-    public function getMembersEditable() {
+    public function getMembersEditable()
+    {
         return true;
     }
 
@@ -95,11 +102,12 @@ class UsersourcesSourceKajona implements UsersourcesUsersourceInterface {
      *
      * @return UsersourcesGroupInterface or null
      */
-    public function getGroupById($strId) {
-        $strQuery = "SELECT group_id FROM " . _dbprefix_ . "user_group_kajona WHERE group_id = ?";
+    public function getGroupById($strId)
+    {
+        $strQuery = "SELECT group_id FROM "._dbprefix_."user_group_kajona WHERE group_id = ?";
 
         $arrIds = $this->objDB->getPRow($strQuery, array($strId));
-        if(isset($arrIds["group_id"]) && validateSystemid($arrIds["group_id"])) {
+        if (isset($arrIds["group_id"]) && validateSystemid($arrIds["group_id"])) {
             return new UsersourcesGroupKajona($arrIds["group_id"]);
         }
 
@@ -112,7 +120,8 @@ class UsersourcesSourceKajona implements UsersourcesUsersourceInterface {
      *
      * @return UsersourcesGroupInterface
      */
-    public function getNewGroup() {
+    public function getNewGroup()
+    {
         return new UsersourcesGroupKajona();
     }
 
@@ -122,7 +131,8 @@ class UsersourcesSourceKajona implements UsersourcesUsersourceInterface {
      *
      * @return UsersourcesUserInterface
      */
-    public function getNewUser() {
+    public function getNewUser()
+    {
         return new UsersourcesUserKajona();
     }
 
@@ -133,16 +143,17 @@ class UsersourcesSourceKajona implements UsersourcesUsersourceInterface {
      *
      * @return UsersourcesUserInterface or null
      */
-    public function getUserById($strId) {
+    public function getUserById($strId)
+    {
 
-        if(isset(self::$arrUserCache[$strId])) {
+        if (isset(self::$arrUserCache[$strId])) {
             return self::$arrUserCache[$strId];
         }
 
-        $strQuery = "SELECT user_id FROM " . _dbprefix_ . "user_kajona  WHERE user_id = ? ";
+        $strQuery = "SELECT user_id FROM "._dbprefix_."user_kajona  WHERE user_id = ? ";
 
         $arrIds = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strId));
-        if(isset($arrIds["user_id"]) && validateSystemid($arrIds["user_id"])) {
+        if (isset($arrIds["user_id"]) && validateSystemid($arrIds["user_id"])) {
             self::$arrUserCache[$strId] = new UsersourcesUserKajona($arrIds["user_id"]);
             return self::$arrUserCache[$strId];
         }
@@ -159,13 +170,14 @@ class UsersourcesSourceKajona implements UsersourcesUsersourceInterface {
      *
      * @return UsersourcesUserInterface or null
      */
-    public function getUserByUsername($strUsername) {
-        $strQuery = "SELECT user_id FROM " . _dbprefix_ . "user  WHERE user_username = ? AND user_subsystem = 'kajona' AND (user_deleted = 0 OR user_deleted IS NULL)";
+    public function getUserByUsername($strUsername)
+    {
+        $strQuery = "SELECT user_id FROM "._dbprefix_."user, "._dbprefix_."system WHERE user_id = system_id AND user_username = ? AND user_subsystem = 'kajona' AND (system_deleted = 0 OR system_deleted IS NULL)";
 
         $arrIds = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strUsername));
-        if(isset($arrIds["user_id"]) && validateSystemid($arrIds["user_id"])) {
+        if (isset($arrIds["user_id"]) && validateSystemid($arrIds["user_id"])) {
 
-            if(!isset(self::$arrUserCache[$arrIds["user_id"]])) {
+            if (!isset(self::$arrUserCache[$arrIds["user_id"]])) {
                 self::$arrUserCache[$arrIds["user_id"]] = new UsersourcesUserKajona($arrIds["user_id"]);
             }
 
@@ -185,17 +197,17 @@ class UsersourcesSourceKajona implements UsersourcesUsersourceInterface {
      *
      * @return string
      */
-    public static function encryptPassword($strPassword, $strSalt = "", $bitMD5Encryption = false) {
-        if($bitMD5Encryption) {
+    public static function encryptPassword($strPassword, $strSalt = "", $bitMD5Encryption = false)
+    {
+        if ($bitMD5Encryption) {
             Logger::getInstance(Logger::USERSOURCES)->addLogRow("usage of old md5-encrypted password!", Logger::$levelWarning);
             return md5($strPassword);
         }
 
-        if($strSalt == "") {
+        if ($strSalt == "") {
             return sha1($strPassword);
-        }
-        else {
-            return sha1(md5($strSalt) . $strPassword);
+        } else {
+            return sha1(md5($strSalt).$strPassword);
         }
     }
 
@@ -205,15 +217,16 @@ class UsersourcesSourceKajona implements UsersourcesUsersourceInterface {
      *
      * @return string
      */
-    public function getAllGroupIds() {
+    public function getAllGroupIds()
+    {
         $strQuery = "SELECT gk.group_id as group_id
-                       FROM " . _dbprefix_ . "user_group_kajona AS gk,
-                            " . _dbprefix_ . "user_group AS g
+                       FROM "._dbprefix_."user_group_kajona AS gk,
+                            "._dbprefix_."user_group AS g
                       WHERE g.group_id = gk.group_id
                       ORDER BY g.group_name";
         $arrRows = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
         $arrReturn = array();
-        foreach($arrRows as $arrOneRow) {
+        foreach ($arrRows as $arrOneRow) {
             $arrReturn[] = $arrOneRow["group_id"];
         }
 

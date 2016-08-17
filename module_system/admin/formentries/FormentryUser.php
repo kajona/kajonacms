@@ -8,6 +8,7 @@ namespace Kajona\System\Admin\Formentries;
 
 use Kajona\System\Admin\FormentryPrintableInterface;
 use Kajona\System\System\Carrier;
+use Kajona\System\System\Objectfactory;
 use Kajona\System\System\UserUser;
 use Kajona\System\System\Validators\DifferentuserValidator;
 use Kajona\System\System\Validators\UserValidator;
@@ -22,14 +23,16 @@ use Kajona\System\System\Validators\UserValidator;
  * @since 4.2
  * @package module_formgenerator
  */
-class FormentryUser extends FormentryBase implements FormentryPrintableInterface {
+class FormentryUser extends FormentryBase implements FormentryPrintableInterface
+{
 
     private $bitUser = true;
     private $bitGroups = false;
     private $bitBlockCurrentUser = false;
     private $arrValidateId = null;
 
-    public function __construct($strFormName, $strSourceProperty, $objSourceObject = null) {
+    public function __construct($strFormName, $strSourceProperty, $objSourceObject = null)
+    {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
 
         //set the default validator
@@ -42,19 +45,22 @@ class FormentryUser extends FormentryBase implements FormentryPrintableInterface
      *
      * @return string
      */
-    public function renderField() {
+    public function renderField()
+    {
         $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         $strReturn = "";
-        if($this->getStrHint() != null)
+        if ($this->getStrHint() != null) {
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
+        }
 
 
-        if($this->getBitReadonly()) {
-            $strUsername = "";
+        if ($this->getBitReadonly()) {
+            $strUsername = "n.a.";
             $strUserid = "";
-            if(validateSystemid($this->getStrValue())) {
-                $objUser = new UserUser($this->getStrValue());
-                if($objUser->getIntActive() == 1) {
+            if (validateSystemid($this->getStrValue())) {
+                /** @var UserUser $objUser */
+                $objUser = Objectfactory::getInstance()->getObject($this->getStrValue());
+                if ($objUser !== null && $objUser->getIntRecordStatus() == 1) {
                     $strUsername = $objUser->getStrDisplayName();
                     $strUserid = $this->getStrValue();
                 }
@@ -63,8 +69,7 @@ class FormentryUser extends FormentryBase implements FormentryPrintableInterface
             $strReturn .= $objToolkit->formInputText($this->getStrEntryName(), $this->getStrLabel(), $strUsername, "", "", true);
             $strReturn .= $objToolkit->formInputHidden($this->getStrEntryName()."_id", $strUserid);
 
-        }
-        else {
+        } else {
             $strReturn .= $objToolkit->formInputUserSelector($this->getStrEntryName(), $this->getStrLabel(), $this->getStrValue(), "", $this->bitUser, $this->bitGroups, $this->bitBlockCurrentUser, $this->arrValidateId);
         }
 
@@ -75,12 +80,14 @@ class FormentryUser extends FormentryBase implements FormentryPrintableInterface
     /**
      * Overwritten base method, processes the hidden fields, too.
      */
-    protected function updateValue() {
+    protected function updateValue()
+    {
         $arrParams = Carrier::getAllParams();
-        if(isset($arrParams[$this->getStrEntryName()."_id"]))
+        if (isset($arrParams[$this->getStrEntryName()."_id"])) {
             $this->setStrValue($arrParams[$this->getStrEntryName()."_id"]);
-        else
+        } else {
             $this->setStrValue($this->getValueFromObject());
+        }
     }
 
     /**
@@ -89,9 +96,10 @@ class FormentryUser extends FormentryBase implements FormentryPrintableInterface
      *
      * @return string
      */
-    public function getValueAsText() {
-        if(validateSystemid($this->getStrValue())) {
-            $objUser = new UserUser($this->getStrValue());
+    public function getValueAsText()
+    {
+        if (validateSystemid($this->getStrValue())) {
+            $objUser = Objectfactory::getInstance()->getObject($this->getStrValue());
             return $objUser->getStrDisplayName();
         }
 
@@ -101,15 +109,16 @@ class FormentryUser extends FormentryBase implements FormentryPrintableInterface
 
     /**
      * @param mixed $bitBlockCurrentUser
+     *
      * @return FormentryUser
      */
-    public function setBitBlockCurrentUser($bitBlockCurrentUser) {
+    public function setBitBlockCurrentUser($bitBlockCurrentUser)
+    {
         $this->bitBlockCurrentUser = $bitBlockCurrentUser;
 
-        if($this->bitBlockCurrentUser) {
+        if ($this->bitBlockCurrentUser) {
             $this->setObjValidator(new DifferentuserValidator());
-        }
-        else {
+        } else {
             $this->setObjValidator(new UserValidator());
         }
 
@@ -118,18 +127,22 @@ class FormentryUser extends FormentryBase implements FormentryPrintableInterface
 
     /**
      * @param mixed $bitGroups
+     *
      * @return FormentryUser
      */
-    public function setBitGroups($bitGroups) {
+    public function setBitGroups($bitGroups)
+    {
         $this->bitGroups = $bitGroups;
         return $this;
     }
 
     /**
      * @param mixed $bitUser
+     *
      * @return FormentryUser
      */
-    public function setBitUser($bitUser) {
+    public function setBitUser($bitUser)
+    {
         $this->bitUser = $bitUser;
         return $this;
     }
@@ -140,17 +153,15 @@ class FormentryUser extends FormentryBase implements FormentryPrintableInterface
      * @deprecated
      * @return $this
      */
-    public function setArrValidateId($arrValidateId) {
-        if(!is_array($arrValidateId)) {
+    public function setArrValidateId($arrValidateId)
+    {
+        if (!is_array($arrValidateId)) {
             $arrValidateId = array($arrValidateId);
         }
 
         $this->arrValidateId = $arrValidateId;
         return $this;
     }
-
-
-
 
 
 }

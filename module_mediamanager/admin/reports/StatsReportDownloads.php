@@ -12,6 +12,7 @@ use Kajona\System\Admin\ToolkitAdmin;
 use Kajona\System\System\Database;
 use Kajona\System\System\Lang;
 use Kajona\System\System\Session;
+use Kajona\System\System\SystemSetting;
 use Kajona\System\System\UserUser;
 
 /**
@@ -108,9 +109,10 @@ class StatsReportDownloads implements AdminStatsreportsInterface
         $arrLogs = array();
         $intI = 0;
 
-        $objUser = new UserUser(Session::getInstance()->getUserID());
+        $objUser = Session::getInstance()->getUser();
+        $intItemsPerPage = $objUser != null ? $objUser->getIntItemsPerPage() : SystemSetting::getConfigValue("_admin_nr_of_rows_");
         foreach ($arrLogsRaw as $intKey => $arrOneLog) {
-            if ($intI++ >= $objUser->getIntItemsPerPage()) {
+            if ($intI++ >= $intItemsPerPage) {
                 break;
             }
 
@@ -141,14 +143,16 @@ class StatsReportDownloads implements AdminStatsreportsInterface
      */
     private function getLogbookData()
     {
-        $objUser = new UserUser(Session::getInstance()->getUserID());
         $strQuery = "SELECT *
 					  FROM "._dbprefix_."mediamanager_dllog
 					  WHERE downloads_log_date > ?
 							AND downloads_log_date <= ?
 					  ORDER BY downloads_log_date DESC";
 
-        $arrReturn = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), 0, ($objUser->getIntItemsPerPage() - 1));
+        $objUser = Session::getInstance()->getUser();
+        $intItemsPerPage = $objUser != null ? $objUser->getIntItemsPerPage() : SystemSetting::getConfigValue("_admin_nr_of_rows_");
+
+        $arrReturn = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), 0, ($intItemsPerPage - 1));
 
         foreach ($arrReturn as &$arrOneRow) {
             //Load hostname, if available. faster, then mergin per LEFT JOIN

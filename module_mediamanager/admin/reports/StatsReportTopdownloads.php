@@ -14,6 +14,7 @@ use Kajona\System\System\Database;
 use Kajona\System\System\GraphFactory;
 use Kajona\System\System\Lang;
 use Kajona\System\System\Session;
+use Kajona\System\System\SystemSetting;
 use Kajona\System\System\UserUser;
 
 /**
@@ -110,9 +111,10 @@ class StatsReportTopdownloads implements AdminStatsreportsInterface
         $arrLogsRaw = $this->getLogbookData();
         $arrLogs = array();
         $intI = 0;
+        $objUser = Session::getInstance()->getUser();
+        $intItemsPerPage = $objUser != null ? $objUser->getIntItemsPerPage() : SystemSetting::getConfigValue("_admin_nr_of_rows_");
         foreach ($arrLogsRaw as $intKey => $arrOneLog) {
-            $objUser = new UserUser(Session::getInstance()->getUserID());
-            if ($intI++ >= $objUser->getIntItemsPerPage()) {
+            if ($intI++ >= $intItemsPerPage) {
                 break;
             }
 
@@ -137,7 +139,6 @@ class StatsReportTopdownloads implements AdminStatsreportsInterface
      */
     private function getLogbookData()
     {
-        $objUser = new UserUser(Session::getInstance()->getUserID());
         $strQuery = "SELECT COUNT(*) as amount, downloads_log_file
 					  FROM "._dbprefix_."mediamanager_dllog
 					  WHERE downloads_log_date > ?
@@ -145,7 +146,9 @@ class StatsReportTopdownloads implements AdminStatsreportsInterface
 					  GROUP BY downloads_log_file
 					  ORDER BY amount DESC";
 
-        return $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), 0, $objUser->getIntItemsPerPage() - 1);
+        $objUser = Session::getInstance()->getUser();
+        $intItemsPerPage = $objUser != null ? $objUser->getIntItemsPerPage() : SystemSetting::getConfigValue("_admin_nr_of_rows_");
+        return $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), 0, $intItemsPerPage - 1);
     }
 
     /**

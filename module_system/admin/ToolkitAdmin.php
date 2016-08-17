@@ -383,7 +383,7 @@ class ToolkitAdmin extends Toolkit
 
         //value is a systemid
         if (validateSystemid($strValue)) {
-            $objUser = new UserUser($strValue);
+            $objUser = Objectfactory::getInstance()->getObject($strValue);
             $strUserName = $objUser->getStrDisplayName();
             $strUserId = $strValue;
         }

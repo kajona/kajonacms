@@ -2,12 +2,11 @@
 /*"******************************************************************************************************
 *   (c) 2007-2016 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                                   *
 ********************************************************************************************************/
 
 namespace Kajona\System\System\Validators;
 
+use Kajona\System\System\Objectfactory;
 use Kajona\System\System\UserGroup;
 use Kajona\System\System\UserUser;
 
@@ -17,31 +16,33 @@ use Kajona\System\System\UserUser;
  *
  * @author stefan.meyer1@yahoo.de
  * @since 4.5
- * @package module_system
  */
-class UserValidator extends SystemidValidator {
+class UserValidator extends SystemidValidator
+{
 
     /**
      * Validates the passed chunk of data.
      * In most cases, this'll be a string-object.
      *
      * @param string $objValue
+     *
      * @return bool
      */
-    public function validate($objValue) {
-        if(!parent::validate($objValue)) {
+    public function validate($objValue)
+    {
+        if (!parent::validate($objValue)) {
             return false;
         }
 
         //check if the user or usergroup exists
-        $objUser = new UserUser($objValue);
-        $objUserGroup = new UserGroup($objValue);
-        if($objUser->getStrUsername() == "" && $objUserGroup->getStrName() == "") {
+        $objObject = Objectfactory::getInstance()->getObject($objValue);
+        if (!$objObject instanceof UserUser && !$objObject instanceof UserGroup) {
             return false;
         }
 
-        if($objUser->getIntDeleted() == 1)
+        if ($objObject->getIntRecordDeleted() == 1) {
             return false;
+        }
 
         return true;
     }

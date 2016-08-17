@@ -74,13 +74,6 @@ class OrmAssignmentArray extends ArrayObject
         foreach ($objInit->getAssignmentsFromDatabase($this->strProperty) as $strOneId) {
 
             $objObject = Objectfactory::getInstance()->getObject($strOneId);
-
-            /**FIXME REMOVE IN FUTURE--------------------------------------------------------------------------**/
-            if($objCfg->getArrTypeFilter() !== null && in_array(UserGroup::class, $objCfg->getArrTypeFilter())) {
-                $objObject = new UserGroup($strOneId);
-            }
-            /**FIXME REMOVE IN FUTURE--------------------------------------------------------------------------**/
-
             if ($objObject !== null && ($objCfg->getArrTypeFilter() == null ||
                     count(array_filter($objCfg->getArrTypeFilter(), function ($strSingleClass) use ($objObject) {
                         return $objObject instanceof $strSingleClass;

@@ -10,7 +10,6 @@ use Kajona\System\System\Carrier;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Model;
 use Kajona\System\System\Objectfactory;
-use Kajona\System\System\UserGroup;
 use Kajona\System\System\UserUser;
 use Traversable;
 
@@ -24,19 +23,15 @@ use Traversable;
  */
 class FormentryObjecttags extends FormentryTageditor
 {
+    /**
+     * @deprecated
+     */
     const TYPE_USER = 1;
     const TYPE_OBJECT = 2;
-    const TYPE_USERGROUP = 3;
 
     protected $strSource;
-    protected $intType;
 
-
-    public function __construct($strFormName, $strSourceProperty, $objSourceObject = null, $intType = self::TYPE_USER)
-    {
-        $this->intType = $intType;
-        parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
-    }
+    protected $intType = self::TYPE_USER;
 
     /**
      * @param string $strSource
@@ -50,6 +45,7 @@ class FormentryObjecttags extends FormentryTageditor
 
     /**
      * @param integer $intType
+     * @deprecated
      */
     public function setIntType($intType)
     {
@@ -124,17 +120,8 @@ class FormentryObjecttags extends FormentryTageditor
         $strValue = $this->getStrValue();
         if (!empty($strValue)) {
             $arrIds = explode(",", $strValue);
-            $intType = $this->intType;
-            $arrObjects = array_map(function ($strId) use ($intType) {
-                $objObject = null;
-                if ($intType === FormentryObjecttags::TYPE_USER) {
-                    $objObject = new UserUser($strId);
-                } elseif ($intType === FormentryObjecttags::TYPE_USERGROUP) {
-                    $objObject = new UserGroup($strId);
-                } elseif ($intType === FormentryObjecttags::TYPE_OBJECT) {
-                    $objObject = Objectfactory::getInstance()->getObject($strId);
-                }
-                return $objObject;
+            $arrObjects = array_map(function ($strId) {
+                return Objectfactory::getInstance()->getObject($strId);
             }, $arrIds);
             return $arrObjects;
         }
