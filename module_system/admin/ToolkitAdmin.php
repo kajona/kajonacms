@@ -1055,7 +1055,7 @@ class ToolkitAdmin extends Toolkit
      * @param bool $bitShowPath
      * @return string
      */
-    public function formInputCheckboxArrayObjectList($strName, $strTitle, array $availableItems, array $arrSelectedItems, $bitReadonly = false, $bitShowPath = true)
+    public function formInputCheckboxArrayObjectList($strName, $strTitle, array $availableItems, array $arrSelectedItems, $bitReadonly = false, $bitShowPath = true, \Closure $objShowPath = null)
     {
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
@@ -1074,15 +1074,21 @@ class ToolkitAdmin extends Toolkit
 
             $strPath = "";
             if ($bitShowPath) {
-                $arrPath = $objObject->getPathArray();
-                // remove module and prozroot id
-                array_shift($arrPath);
-                array_shift($arrPath);
-                // remove current systemid
-                array_pop($arrPath);
-                $arrPath = array_map(function($strSystemId){
-                    return Objectfactory::getInstance()->getObject($strSystemId)->getStrDisplayName();
-                }, $arrPath);
+                if ($objShowPath instanceof \Closure) {
+                    $arrPath = $objShowPath($objObject);
+                } else {
+                    $arrPath = $objObject->getPathArray();
+                    // remove module
+                    array_shift($arrPath);
+                    // remove current systemid
+                    array_pop($arrPath);
+                    // remove empty entries
+                    $arrPath = array_filter($arrPath);
+
+                    $arrPath = array_map(function($strSystemId){
+                        return Objectfactory::getInstance()->getObject($strSystemId)->getStrDisplayName();
+                    }, $arrPath);
+                }
                 $strPath = implode(" &gt; ", $arrPath);
             }
 
