@@ -1030,7 +1030,7 @@ KAJONA.admin.loader.loadFile([
     var chartData = d3.time.days(yearAgo, now).map(function (dateElement) {
         var count = 0;
         if (data.hasOwnProperty(moment(dateElement).format("YYYYMMDD"))) {
-            count = data.hasOwnProperty(moment(dateElement).format("YYYYMMDD"));
+            count = data[moment(dateElement).format("YYYYMMDD")];
         }
         return {
             date: dateElement,
@@ -1077,8 +1077,10 @@ HTML;
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrData, "kajona-data-table-ignore-floatthread");
 
         $arrDates = array_keys($arrResult);
-        $strLeftDate = array_pop($arrDates);
-        $strRightDate = array_pop($arrDates);
+        $objLeftDate = new Date(array_pop($arrDates));
+        $strLeftDate = $objLeftDate->setEndOfDay()->getLongTimestamp();
+        $objRightDate = new Date(array_pop($arrDates));
+        $strRightDate = $objRightDate->setEndOfDay()->getLongTimestamp();
 
         $strReturn .= <<<HTML
 <script type="text/javascript">
