@@ -27,6 +27,7 @@ use Kajona\System\System\ModelInterface;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\Session;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemJSTreeConfig;
 use Kajona\System\System\SystemModule;
@@ -382,7 +383,7 @@ class ToolkitAdmin extends Toolkit
 
         //value is a systemid
         if (validateSystemid($strValue)) {
-            $objUser = new UserUser($strValue);
+            $objUser = Objectfactory::getInstance()->getObject($strValue);
             $strUserName = $objUser->getStrDisplayName();
             $strUserId = $strValue;
         }
@@ -1044,6 +1045,72 @@ class ToolkitAdmin extends Toolkit
     }
 
     /**
+     * Creates a list of checkboxes based on an object array
+     *
+     * @param string $strName
+     * @param string $strTitle
+     * @param array $availableItems
+     * @param array $arrSelectedItems
+     * @param bool $bitReadonly
+     * @param bool $bitShowPath
+     * @return string
+     */
+    public function formInputCheckboxArrayObjectList($strName, $strTitle, array $availableItems, array $arrSelectedItems, $bitReadonly = false, $bitShowPath = true, \Closure $objShowPath = null)
+    {
+        $arrTemplate = array();
+        $arrTemplate["name"] = $strName;
+        $arrTemplate["title"] = $strTitle;
+
+        //Render list
+        $intCount = count($availableItems);
+        $objArraySectionIterator = new ArraySectionIterator($intCount);
+        $objArraySectionIterator->setPageNumber(1);
+        $objArraySectionIterator->setArraySection($availableItems);
+
+        $strList = $this->listHeader();
+        foreach($objArraySectionIterator as $objObject) {
+            /** @var $objObject Model */
+            $bitSelected = in_array($objObject->getStrSystemid(), $arrSelectedItems);
+
+            $strPath = "";
+            if ($bitShowPath) {
+                if ($objShowPath instanceof \Closure) {
+                    $arrPath = $objShowPath($objObject);
+                } else {
+                    $arrPath = $objObject->getPathArray();
+                    // remove module
+                    array_shift($arrPath);
+                    // remove current systemid
+                    array_pop($arrPath);
+                    // remove empty entries
+                    $arrPath = array_filter($arrPath);
+
+                    $arrPath = array_map(function($strSystemId){
+                        return Objectfactory::getInstance()->getObject($strSystemId)->getStrDisplayName();
+                    }, $arrPath);
+                }
+                $strPath = implode(" &gt; ", $arrPath);
+            }
+
+            $arrSubTemplate = array(
+                "icon" => AdminskinHelper::getAdminImage($objObject->getStrIcon()),
+                "title" => $objObject->getStrDisplayName(),
+                "path" => $strPath,
+                "name" => $strName,
+                "systemid" => $objObject->getStrSystemId(),
+                "checked" => $bitSelected ? "checked=\"checked\"" : "",
+                "readonly" => $bitReadonly ? "disabled" : "",
+            );
+
+            $strList .= $this->objTemplate->fillTemplateFile($arrSubTemplate, "/elements.tpl", "input_checkboxarrayobjectlist_row", true);
+        }
+        $strList .= $this->listFooter();
+
+        $arrTemplate["elements"] = $strList;
+        return $this->objTemplate->fillTemplateFile($arrTemplate, "/elements.tpl", "input_checkboxarrayobjectlist", true);
+    }
+
+    /**
      * Creates the header needed to open a form-element
      *
      * @param string $strAction
@@ -1370,7 +1437,7 @@ class ToolkitAdmin extends Toolkit
         $strEntries = "";
 
         foreach ($arrActions as $objOneAction) {
-            $strEntries .= $this->objTemplate->fillTemplateFile(
+            $strEntries .= $this->listButton($this->objTemplate->fillTemplateFile(
                 array(
                     "title"      => $objOneAction->getStrTitle(),
                     "icon"       => $objOneAction->getStrIcon(),
@@ -1379,7 +1446,7 @@ class ToolkitAdmin extends Toolkit
                     "onclick"    => $objOneAction->getStrOnClickHandler()
                 ),
                 "/elements.tpl", "batchactions_entry"
-            );
+            ));
         }
 
         return $this->objTemplate->fillTemplateFile(array("entries" => $strEntries), "/elements.tpl", "batchactions_wrapper");

@@ -436,7 +436,7 @@ KAJONA.admin.switchLanguage = function(strLanguageToLoad) {
 };
 
 /**
- * little helper function for the system right matrix
+ * little helper function for the system permissions matrix
  */
 KAJONA.admin.permissions = {
     checkRightMatrix : function () {
@@ -474,12 +474,12 @@ KAJONA.admin.permissions = {
     toggleMode : null,
     toggleEmtpyRows : function (strVisibleName, strHiddenName, parentSelector) {
 
+        var $rowToggleLink = $('#rowToggleLink');
+        KAJONA.admin.permissions.toggleMode = $rowToggleLink.hasClass("rowsVisible")  ? "hide" : "show";
+
         $(parentSelector).each(function() {
 
             if($(this).find("input:checked").length == 0 && $(this).find("th").length == 0) {
-                if(KAJONA.admin.permissions.toggleMode == null) {
-                    KAJONA.admin.permissions.toggleMode = $(this).hasClass("hidden") ? "show" : "hide";
-                }
 
                 if(KAJONA.admin.permissions.toggleMode == "show") {
                     $(this).removeClass("hidden");
@@ -488,17 +488,19 @@ KAJONA.admin.permissions = {
                     $(this).addClass("hidden");
                 }
             }
+            else if(KAJONA.admin.permissions.toggleMode == "show") {
+                $(this).removeClass("hidden");
+            }
         });
 
-        KAJONA.admin.permissions.toggleMode = null;
 
-        if($('#rowToggleLink').hasClass("rowsVisible")) {
-            $('#rowToggleLink').html(strVisibleName);
-            $('#rowToggleLink').removeClass("rowsVisible");
+        if($rowToggleLink.hasClass("rowsVisible")) {
+            $rowToggleLink.html(strVisibleName);
+            $rowToggleLink.removeClass("rowsVisible");
         }
         else {
-            $('#rowToggleLink').html(strHiddenName);
-            $('#rowToggleLink').addClass("rowsVisible")
+            $rowToggleLink.html(strHiddenName);
+            $rowToggleLink.addClass("rowsVisible")
         }
     },
 
@@ -524,6 +526,47 @@ KAJONA.admin.permissions = {
         }).done(function(data) {
             $("#responseContainer").removeClass("loadingContainer").html(data.message);
         });
+
+
+        return false;
+    },
+
+    /**
+     * Filters the rows of the permission matrix based on the value of the input element
+     * @param evt
+     * @returns {boolean}
+     */
+    filterMatrix : function(evt) {
+
+        // If it's the propertychange event, make sure it's the value that changed.
+        if (window.event && event.type == "propertychange" && event.propertyName != "value")
+            return false;
+
+
+        var strFilter = $('#filter').val().toLowerCase();
+        if(strFilter.length < 3 && strFilter.length > 0)
+            return false;
+
+        // Clear any previously set timer before setting a fresh one, default delay are 500ms
+        window.clearTimeout($(this).data("timeout"));
+        $(this).data("timeout", setTimeout(function () {
+            // Do your thing here
+            var strFilter = $('#filter').val().toLowerCase();
+
+
+            $('#rightsForm table tr').each(function() {
+                var $tr = $(this);
+
+                if(strFilter.length > 0 && $tr.find("td:first-child").text().toLowerCase().indexOf(strFilter) === -1) {
+                   $tr.addClass("hidden")
+                }
+                else {
+                   $tr.removeClass("hidden");
+                }
+
+            });
+
+        }, 500));
 
 
         return false;

@@ -24,7 +24,7 @@ class DatabaseMultiInsertTest extends Testbase
 
         $objDB = Carrier::getInstance()->getObjDB();
 
-        echo "current driver: " . Carrier::getInstance()->getObjConfig()->getConfig("dbdriver") . "\n";
+        //echo "current driver: " . Carrier::getInstance()->getObjConfig()->getConfig("dbdriver") . "\n";
 
 
         $arrFields = array();

@@ -100,7 +100,6 @@ $lang["required_user_existing"]          = "Användarnamn finns redan";
 $lang["required_username"]               = "Användarnamn";
 $lang["user"]                            = "Användare";
 $lang["user_accept"]                     = "Välj användare";
-$lang["user_active"]                     = "Ändra status (är aktiverad)";
 $lang["user_browser"]                    = "Sök användare";
 $lang["user_browser_show"]               = "Visa användare";
 $lang["user_erfolg"]                     = "Sparande av användare har lyckats";
@@ -109,7 +108,6 @@ $lang["user_fehler_mail"]                = "Ange e-mail adress <a href=\"javascr
 $lang["user_fehler_name"]                = "Ange användaranamn <a href=\"javascript:history.back(-1)\">tillbaka</a>";
 $lang["user_fehler_namedoppelt"]         = "Användarnamn finns redan, vänligen använd ett annat namn <a href=\"javascript:history.back(-1)\">tillbaka</a>";
 $lang["user_fehler_pass"]                = "Lösenord är olika <a href=\"javascript:history.back(-1)\">tillbaka</a>";
-$lang["user_inactive"]                   = "Ändra status (är inaktiverad)";
 $lang["user_language"]                   = "Admin språk";
 $lang["user_lastlogin"]                  = "Senaste inloggning";
 $lang["user_list_parent"]                = "Visa grupper";

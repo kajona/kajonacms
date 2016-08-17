@@ -7,10 +7,12 @@ use Kajona\System\System\CoreEventdispatcher;
 use Kajona\System\System\GenericeventListenerInterface;
 use Kajona\System\System\Model;
 use Kajona\System\System\ModelInterface;
+use Kajona\System\System\Objectfactory;
 use Kajona\System\System\OrmAssignmentArray;
 use Kajona\System\System\OrmBase;
 use Kajona\System\System\OrmDeletedhandlingEnum;
 use Kajona\System\System\OrmSchemamanager;
+use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemEventidentifier;
 use Kajona\System\System\SystemModule;
 
@@ -271,6 +273,48 @@ class OrmObjectassignmentsTest extends TestbaseObject
         $objTestobject->deleteObjectFromDatabase();
 
     }
+
+
+
+    public function testSavingOfNewlyAssignedObjectsOnUpdate()
+    {
+
+        $objDB = Carrier::getInstance()->getObjDB();
+
+        $objNewAspect = new SystemAspect();
+        $objNewAspect->setStrName("aspect-new");
+
+        /** @var OrmObjectlistTestclass $objTestobject */
+        $objTestobject = new OrmObjectlistTestclass();
+        $arrAspects = array($this->getObject("aspect1"), $this->getObject("aspect2"), $objNewAspect);
+
+
+        $objTestobject->setArrObject1($arrAspects);
+        $objTestobject->updateObjectToDb(SystemModule::getModuleByName("system")->getSystemid());
+        
+        //we need a valid systemid now
+        /** @var SystemAspect $objOneObject */
+        foreach($objTestobject->getArrObject1() as $objOneObject) {
+            $this->assertTrue(validateSystemid($objOneObject->getSystemid()));
+        }
+
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
+        $this->assertEquals(3, $arrRow["COUNT(*)"]);
+
+        //reload the object
+        $objTestobject = Objectfactory::getInstance()->getObject($objTestobject->getStrSystemid(), true);
+
+        $this->assertEquals(3, count($objTestobject->getArrObject1()));
+        /** @var SystemAspect $objOneObject */
+        foreach($objTestobject->getArrObject1() as $objOneObject) {
+            $this->assertTrue(in_array($objOneObject->getStrName(), array("aspect 1", "aspect 2", "aspect-new")));
+        }
+
+        $objNewAspect->deleteObjectFromDatabase();
+        $objTestobject->deleteObjectFromDatabase();
+
+    }
+
 
 
     public function testObjectassignmentsLazyLoad()

@@ -1144,8 +1144,7 @@ final class ChangelogContainer
      */
     public function getStrUsername()
     {
-        $objUser = new UserUser($this->getStrUserId());
-        return $objUser->getStrDisplayName();
+        return Objectfactory::getInstance()->getObject($this->getStrUserId())->getStrDisplayName();
     }
 
     /**

@@ -148,7 +148,7 @@ class DatabaseTest extends Testbase
 
     private function createTable()
     {
-        echo "current driver: " . Carrier::getInstance()->getObjConfig()->getConfig("dbdriver") . "\n";
+        //echo "current driver: " . Carrier::getInstance()->getObjConfig()->getConfig("dbdriver") . "\n";
 
         $objDB = Carrier::getInstance()->getObjDB();
 

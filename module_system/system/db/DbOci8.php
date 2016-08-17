@@ -168,6 +168,53 @@ class DbOci8 extends DbBase
         return $bitResult;
     }
 
+
+    /**
+     * @inheritDoc
+     */
+    public function insertOrUpdate($strTable, $arrColumns, $arrValues, $arrPrimaryColumns)
+    {
+
+        //return parent::insertOrUpdate($strTable, $arrColumns, $arrValues, $arrPrimaryColumns);
+
+        $arrPlaceholder = array();
+        $arrMappedColumns = array();
+        $arrKeyValuePairs = array();
+
+
+        $arrParams = array();
+        $arrPrimaryCompares = array();
+
+        foreach ($arrColumns as $intKey => $strOneCol) {
+            $arrPlaceholder[] = "?";
+            $arrMappedColumns[] = $this->encloseColumnName($strOneCol);
+
+            if(in_array($strOneCol, $arrPrimaryColumns)) {
+                $arrPrimaryCompares[] = $strOneCol ." = ? ";
+                $arrParams[] = $arrValues[$intKey];
+            }
+        }
+
+        $arrParams = array_merge($arrParams, $arrValues);
+
+
+
+        foreach ($arrColumns as $intKey => $strOneCol) {
+            if(!in_array($strOneCol, $arrPrimaryColumns)) {
+                $arrKeyValuePairs[] = $this->encloseColumnName($strOneCol)." = ?";
+                $arrParams[] = $arrValues[$intKey];
+            }
+        }
+
+
+        $strQuery = "MERGE INTO ".$this->encloseTableName(_dbprefix_.$strTable)." using dual on (".implode(" AND ", $arrPrimaryCompares).") 
+                       WHEN NOT MATCHED THEN INSERT (".implode(", ", $arrMappedColumns).") values (".implode(", ", $arrPlaceholder).")
+                       WHEN MATCHED then update set ".implode(", ", $arrKeyValuePairs)."";
+                         
+        return $this->_pQuery($strQuery, $arrParams);
+    }
+
+
     /**
      * This method is used to retrieve an array of resultsets from the database using
      * a prepared statement
@@ -493,7 +540,6 @@ class DbOci8 extends DbBase
     public function getDbInfo()
     {
         $arrReturn = array();
-        $arrReturn["dbdriver"] = "oci8-oracle-extension";
         $arrReturn["dbserver"] = oci_server_version($this->linkDB);
         $arrReturn["dbclient"] = function_exists("oci_client_version") ? oci_client_version() : "";
         return $arrReturn;

@@ -562,7 +562,8 @@ class Rights
                 $arrGroupIds = $this->objSession->getGroupIdsAsArray();
             }
             else {
-                $objUser = new UserUser($strUserid);
+                /** @var UserUser $objUser */
+                $objUser = Objectfactory::getInstance()->getObject($strUserid);
                 $arrGroupIds = $objUser->getArrGroupIds();
             }
         }

@@ -11,7 +11,6 @@ namespace Kajona\System\System;
 
 use Kajona\System\System\Db\DbDriverInterface;
 
-
 /**
  * This class handles all traffic from and to the database and takes care of a correct tx-handling
  * CHANGE WITH CARE!
@@ -27,7 +26,6 @@ use Kajona\System\System\Db\DbDriverInterface;
  */
 class Database
 {
-    private $objConfig = null; //Config-Objekt
     private $arrQueryCache = array(); //Array to cache queries
     private $arrTablesCache = array();
     private $intNumber = 0; //Number of queries send to database
@@ -70,10 +68,9 @@ class Database
      */
     private function __construct()
     {
-        $this->objConfig = Config::getInstance();
 
         //Load the defined db-driver
-        $strDriver = $this->objConfig->getConfig("dbdriver");
+        $strDriver = Config::getInstance()->getConfig("dbdriver");
         if ($strDriver != "%%defaultdriver%%") {
 
             //build a class-name & include the driver
@@ -81,13 +78,11 @@ class Database
             $objDriver = Classloader::getInstance()->getInstanceFromFilename($strPath);
             if ($objDriver !== null) {
                 $this->objDbDriver = $objDriver;
-            }
-            else {
+            } else {
                 throw new Exception("db-driver Db".ucfirst($strDriver)." could not be loaded", Exception::$level_FATALERROR);
             }
 
-        }
-        else {
+        } else {
             //Do not throw any exception here, otherwise an endless loop will exit with an overloaded stack frame
             //throw new Exception("No db-driver defined!", Exception::$level_FATALERROR);
         }
@@ -139,11 +134,11 @@ class Database
             try {
                 Logger::getInstance(Logger::DBLOG)->addLogRow("creating database-connection using driver ".get_class($this->objDbDriver), Logger::$levelInfo);
                 $this->objDbDriver->dbconnect(
-                    $this->objConfig->getConfig("dbhost"),
-                    $this->objConfig->getConfig("dbusername"),
-                    $this->objConfig->getConfig("dbpassword"),
-                    $this->objConfig->getConfig("dbname"),
-                    $this->objConfig->getConfig("dbport")
+                    Config::getInstance()->getConfig("dbhost"),
+                    Config::getInstance()->getConfig("dbusername"),
+                    Config::getInstance()->getConfig("dbpassword"),
+                    Config::getInstance()->getConfig("dbname"),
+                    Config::getInstance()->getConfig("dbport")
                 );
             }
             catch (Exception $objException) {
@@ -177,6 +172,31 @@ class Database
 
         foreach (array_chunk($arrValueSets, $intSetsPerInsert) as $arrSingleValueSet) {
             $bitReturn = $bitReturn && $this->objDbDriver->triggerMultiInsert(_dbprefix_.$strTable, $arrColumns, $arrSingleValueSet, $this);
+        }
+
+        return $bitReturn;
+    }
+
+
+    /**
+     * Fires an insert or update of a single record. it's up to the database (driver)
+     * to detect whether a row is already present or not.
+     * Please note: since some dbrms fire a delete && insert, make sure to pass ALL columns and values,
+     * otherwise data might be lost. And: params are sent to the datebase unescaped.
+     *
+     * @param $strTable
+     * @param $arrColumns
+     * @param $arrValues
+     *
+     * @param $arrPrimaryColumns
+     *
+     * @return bool
+     */
+    public function insertOrUpdate($strTable, $arrColumns, $arrValues, $arrPrimaryColumns)
+    {
+        $bitReturn = $this->objDbDriver->insertOrUpdate($strTable, $arrColumns, $arrValues, $arrPrimaryColumns);
+        if (!$bitReturn) {
+            $this->getError("", array());
         }
 
         return $bitReturn;
@@ -280,8 +300,7 @@ class Database
         $arrTemp = $this->getPArray($strQuery, $arrParams, $intNr, $intNr, $bitCache);
         if (count($arrTemp) > 0) {
             return $arrTemp[$intNr];
-        }
-        else {
+        } else {
             return array();
         }
     }
@@ -355,8 +374,7 @@ class Database
         if ($this->objDbDriver != null) {
             if ($intStart !== null && $intEnd !== null && $intStart !== false && $intEnd !== false) {
                 $arrReturn = $this->objDbDriver->getPArraySection($strQuery, $this->dbsafeParams($arrParams), $intStart, $intEnd);
-            }
-            else {
+            } else {
                 $arrReturn = $this->objDbDriver->getPArray($strQuery, $this->dbsafeParams($arrParams));
             }
 
@@ -460,7 +478,7 @@ class Database
         //send a warning to the logger
         Logger::getInstance(Logger::DBLOG)->addLogRow($strErrorCode, Logger::$levelWarning);
 
-        if ($this->objConfig->getDebug("debuglevel") > 0) {
+        if (Config::getInstance()->getDebug("debuglevel") > 0) {
             throw new Exception($strErrorCode, Exception::$level_ERROR);
         }
 
@@ -508,16 +526,14 @@ class Database
                 //so, this is the last remaining tx. Commit or rollback?
                 if (!$this->bitCurrentTxIsDirty) {
                     $this->objDbDriver->transactionCommit();
-                }
-                else {
+                } else {
                     $this->objDbDriver->transactionRollback();
                     $this->bitCurrentTxIsDirty = false;
                 }
 
                 //decrement counter
                 $this->intNumberOfOpenTransactions--;
-            }
-            else {
+            } else {
                 $this->intNumberOfOpenTransactions--;
             }
 
@@ -543,8 +559,7 @@ class Database
                 $this->bitCurrentTxIsDirty = false;
                 //decrement counter
                 $this->intNumberOfOpenTransactions--;
-            }
-            else {
+            } else {
                 //mark the current tx session a dirty
                 $this->bitCurrentTxIsDirty = true;
                 //decrement the number of open tx
@@ -573,8 +588,7 @@ class Database
 
             if ($bitAll && isset($this->arrTablesCache["all"])) {
                 return $this->arrTablesCache["all"];
-            }
-            elseif (isset($this->arrTablesCache["filtered"])) {
+            } elseif (isset($this->arrTablesCache["filtered"])) {
                 return $this->arrTablesCache["filtered"];
             }
 
@@ -589,19 +603,16 @@ class Database
                     if ($intPos !== false && $intPos == 0) {
                         if ($bitAll) {
                             $arrReturn[] = $arrTable;
-                        }
-                        else {
+                        } else {
                             $arrReturn[] = $arrTable["name"];
                         }
                     }
                 }
-            }
-            else {
+            } else {
                 foreach ($arrTemp as $arrTable) {
                     if ($bitAll) {
                         $arrReturn[] = $arrTable;
-                    }
-                    else {
+                    } else {
                         $arrReturn[] = $arrTable["name"];
                     }
                 }
@@ -609,8 +620,7 @@ class Database
 
             if ($bitAll) {
                 $this->arrTablesCache["all"] = $arrReturn;
-            }
-            else {
+            } else {
                 $this->arrTablesCache["filtered"] = $arrReturn;
             }
         }
@@ -795,8 +805,7 @@ class Database
                     $arrTablesFinal[] = $strOneTable;
                 }
             }
-        }
-        else {
+        } else {
             $arrTablesFinal = $arrTables;
         }
 
@@ -814,8 +823,7 @@ class Database
         }
         if ($bitDump) {
             Logger::getInstance(Logger::DBLOG)->addLogRow("DB-Dump ".basename($strTargetFilename)." created", Logger::$levelInfo);
-        }
-        else {
+        } else {
             Logger::getInstance(Logger::DBLOG)->addLogRow("Error creating ".basename($strTargetFilename), Logger::$levelError);
         }
         return $bitDump;
@@ -843,8 +851,7 @@ class Database
             try {
                 if ($objGzip->decompressFile(_projectpath_."/dbdumps/".$strFilename)) {
                     $strFilename = substr($strFilename, 0, strlen($strFilename) - 3);
-                }
-                else {
+                } else {
                     Logger::getInstance(Logger::DBLOG)->addLogRow("Failed to decompress (gzip) the file ".basename($strFilename)."", Logger::$levelWarning);
                     return false;
                 }
@@ -863,8 +870,7 @@ class Database
         }
         if ($bitImport) {
             Logger::getInstance(Logger::DBLOG)->addLogRow("DB-DUMP ".$strFilename." was restored", Logger::$levelWarning);
-        }
-        else {
+        } else {
             Logger::getInstance(Logger::DBLOG)->addLogRow("Error restoring DB-DUMP ".$strFilename, Logger::$levelError);
         }
         return $bitImport;
@@ -972,8 +978,7 @@ class Database
         foreach ($arrParams as $intKey => &$strParam) {
             if (isset($arrEscapes[$intKey])) {
                 $strParam = $this->dbsafeString($strParam, $arrEscapes[$intKey], false);
-            }
-            else {
+            } else {
                 $strParam = $this->dbsafeString($strParam, true, false);
             }
         }
@@ -1100,8 +1105,7 @@ class Database
         $strPath = Resourceloader::getInstance()->getPathForFile("/system/db/Db".ucfirst($strDriver).".php");
         if ($strPath != null) {
             $objDbDriver = Classloader::getInstance()->getInstanceFromFilename($strPath);
-        }
-        else {
+        } else {
             return false;
         }
 
@@ -1143,7 +1147,7 @@ class Database
     /**
      * Helper to replace all param-placeholder with the matching value, only to be used
      * to render a debuggable-statement.
-     * 
+     *
      * @param $strQuery
      * @param $arrParams
      *
@@ -1151,13 +1155,13 @@ class Database
      */
     public function prettifyQuery($strQuery, $arrParams)
     {
-        foreach($arrParams as $strOneParam) {
+        foreach ($arrParams as $strOneParam) {
 
             if (!is_numeric($strOneParam)) {
                 $strOneParam = "'{$strOneParam}'";
             }
 
-            $intPos = uniStrpos($strQuery, '?');
+            $intPos = StringUtil::indexOf($strQuery, '?');
             if ($intPos !== false) {
                 $strQuery = substr_replace($strQuery, $strOneParam, $intPos, 1);
             }
@@ -1172,6 +1176,7 @@ class Database
      * @param string $strQuery
      * @param int $intStart
      * @param int $intEnd
+     *
      * @return string
      */
     public function appendLimitExpression($strQuery, $intStart, $intEnd)

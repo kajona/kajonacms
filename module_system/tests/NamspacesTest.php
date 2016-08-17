@@ -61,17 +61,35 @@ class NamspacesTest extends \PHPUnit_Framework_TestCase
             $arrMatches = array();
             //remove char until first \
             // $strClassName =  Kajona\Mediamanager\Admin\Elements\ElementDownloadsAdmin --> Mediamanager\Admin\Elements\ElementDownloadsAdmin
-            preg_match('/(.*?\\\\)(.*)/', $strClassName, $arrMatches);
-            $strClassNameTemp = StringUtil::toLowerCase($arrMatches[2]);
+
+            $strStrippedClassname = StringUtil::substring($strClassName, StringUtil::indexOf($strClassName, "\\")+1);
+            $strClassNameTemp = StringUtil::toLowerCase($strStrippedClassname);
 
             //Get string between C:\\....module_<relevant_string>.php
             // --> C:/Dev/projects/agpV4//core/module_mediamanager/admin/elements/ElementDownloadsAdmin.php --> mediamanager/admin/elements/ElementDownloadsAdmin
             preg_match('/(.*?module_)(.*)(.php)/', $strFileName, $arrMatches);
+
             $strFileNameTemp = StringUtil::toLowerCase($arrMatches[2]);
             $strFileNameTemp = StringUtil::replace("/", "\\", $strFileNameTemp);
 
             //now compare e.g. "Mediamanager\Admin\Elements\ElementDownloadsAdmin" with "mediamanager/admin/elements/ElementDownloadsAdmin"
             $this->assertEquals($strClassNameTemp, $strFileNameTemp);
+
+
+
+            //test the module name vs the namespace module name
+            $strClassNamespaceModule = StringUtil::substring($strStrippedClassname, 0, StringUtil::indexOf($strStrippedClassname, "\\"));
+            //special handling of underscores in namespaces: Aaaa_Bbbb, in filesytem aaaa_bbbb
+            $arrExp = explode("_", $strClassNamespaceModule);
+            $arrNew = array();
+            foreach ($arrExp as $str) {
+                $arrNew[] = lcfirst($str);
+            }
+            $strClassNamespaceModule = implode("_", $arrNew);
+
+            $strFilesystemModuleName = StringUtil::substring($strFileName, StringUtil::indexOf($strFileName, "module_")+7);
+            $strFilesystemModuleName = StringUtil::substring($strFilesystemModuleName, 0, StringUtil::indexOf($strFilesystemModuleName, "/"));
+            $this->assertEquals(lcfirst($strClassNamespaceModule), $strFilesystemModuleName, $strStrippedClassname);
         }
 
 
@@ -82,4 +100,7 @@ class NamspacesTest extends \PHPUnit_Framework_TestCase
 
 
     }
+
+
+
 }

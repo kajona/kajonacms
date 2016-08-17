@@ -453,7 +453,7 @@ class SystemAdminXml extends AdminController implements XmlAdminInterface
 
             $strUsername = "";
             if ($objOneSession->getStrUserid() != "") {
-                $objUser = new UserUser($objOneSession->getStrUserid());
+                $objUser = Objectfactory::getInstance()->getObject($objOneSession->getStrUserid());
                 $strUsername = $objUser->getStrUsername();
             }
 

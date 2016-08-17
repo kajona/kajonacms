@@ -139,6 +139,7 @@
         <exec dir="${basedir}${buildPath}/composerbuild" executable="${path.composer}" failonerror="on" >
             <arg line=" install"/>
             <arg line=" --no-dev"/>
+            <arg line=" --quiet"/>
         </exec>
     </target>
 
@@ -368,6 +369,11 @@
         <exec executable="php" dir="${basedir}${tempPath}/core"  failonerror="on" >
             <arg line="-f generate_phar.php removesource=true"/>
         </exec>
+
+        <delete includeemptydirs="true">
+            <fileset dir="${basedir}${tempPath}" includes="**/core/generate_phar.php"/>
+        </delete>
+
     </target>
 
     <!-- deprecated -->
@@ -474,6 +480,7 @@
             <fileset dir="${basedir}${tempPath}" includes="**/*.odt"/>
             <fileset dir="${basedir}${tempPath}" includes="**/core*/*/tests/**"/>
             <fileset dir="${basedir}${tempPath}" includes="**/setupproject.php"/>
+            <fileset dir="${basedir}${tempPath}" includes="**/V4toV5Migration.php"/>
             <fileset dir="${basedir}${tempPath}" includes="**/.git"/>
             <fileset dir="${basedir}${tempPath}" includes="**/core/_buildfiles/jstests/selenium/**"/>
         </delete>

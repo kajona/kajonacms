@@ -19,6 +19,8 @@ class BuildHelper {
         echo "   configFile: ".$this->strConfigFile."\n";
         echo "   onlySetup: ".($this->bitOnlyProjectsetup ? "true" : "false")."\n";
         echo "\n\n";
+        echo "  PHP Version: ".PHP_VERSION."\n";
+        echo "\n\n";
 
 
 
@@ -73,7 +75,6 @@ class BuildHelper {
         echo "starting up system-kernel...\n";
         echo "including ".__DIR__."/".$this->strProjectPath."/core/module_system/bootstrap.php...\n";
         include __DIR__."/".$this->strProjectPath."/core/module_system/bootstrap.php";
-        echo "creating instance of \\Kajona\\System\\System\\Carrier...\n";
         $objCarrier = \Kajona\System\System\Carrier::getInstance();
 
         echo "dropping old tables...\n";
@@ -81,7 +82,6 @@ class BuildHelper {
         $arrTables = $objDB->getTables();
 
         foreach($arrTables as $strOneTable) {
-            echo " ... drop table ".$strOneTable."\n";
             $objDB->_pQuery("DROP TABLE ".$strOneTable, array());
         }
 

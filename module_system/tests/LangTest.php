@@ -48,7 +48,7 @@ class LangTest extends Testbase
         }
         $intEnd = microtime(true);
 
-        echo "uniStrReplace: " . ($intEnd - $intStart) . " sec\n";
+        //echo "uniStrReplace: " . ($intEnd - $intStart) . " sec\n";
 
 
         $intStart = microtime(true);
@@ -60,7 +60,7 @@ class LangTest extends Testbase
         }
         $intEnd = microtime(true);
 
-        echo "array based uniStrReplace: " . ($intEnd - $intStart) . " sec\n";
+        //echo "array based uniStrReplace: " . ($intEnd - $intStart) . " sec\n";
 
 
         $intStart = microtime(true);
@@ -72,7 +72,7 @@ class LangTest extends Testbase
         }
         $intEnd = microtime(true);
 
-        echo "preg_replace based : " . ($intEnd - $intStart) . " sec\n";
+        //echo "preg_replace based : " . ($intEnd - $intStart) . " sec\n";
 
 
         $intStart = microtime(true);
@@ -82,7 +82,7 @@ class LangTest extends Testbase
         }
         $intEnd = microtime(true);
 
-        echo "current implementation : " . ($intEnd - $intStart) . " sec\n";
+        //echo "current implementation : " . ($intEnd - $intStart) . " sec\n";
 
     }
 }

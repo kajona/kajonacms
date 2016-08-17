@@ -16,12 +16,12 @@ use Kajona\Pages\Admin\ElementAdmin;
 /**
  * Class representing the admin-part of the news element
  *
- * @package module_news
  * @author sidler@mulchprod.de
  *
  * @targetTable element_news.content_id
  */
-class ElementNewsAdmin extends ElementAdmin implements AdminElementInterface {
+class ElementNewsAdmin extends ElementAdmin implements AdminElementInterface
+{
 
     /**
      * @var string
@@ -50,9 +50,9 @@ class ElementNewsAdmin extends ElementAdmin implements AdminElementInterface {
      *
      * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
      * @fieldLabel news_view
-     * @fieldDDValues [0 => news_view_list],[1 => news_view_detail]
+     * @fieldDDValues [0 => news_view_list],[1 => news_view_auto]
      */
-    private $intView;
+    private $intView = 1;
 
     /**
      * @var string
@@ -102,13 +102,14 @@ class ElementNewsAdmin extends ElementAdmin implements AdminElementInterface {
     private $intAmount;
 
 
-    public function getAdminForm() {
+    public function getAdminForm()
+    {
         $objForm = parent::getAdminForm();
 
         $arrRawCats = NewsCategory::getObjectListFiltered();
         $arrCats = array();
         $arrCats[0] = $this->getLang("commons_all_categories");
-        foreach($arrRawCats as $objOneCat) {
+        foreach ($arrRawCats as $objOneCat) {
             $arrCats[$objOneCat->getSystemid()] = $objOneCat->getStrTitle();
         }
 
@@ -118,109 +119,117 @@ class ElementNewsAdmin extends ElementAdmin implements AdminElementInterface {
     }
 
 
-
-
     /**
      * @param string $strTemplate
      */
-    public function setStrTemplate($strTemplate) {
+    public function setStrTemplate($strTemplate)
+    {
         $this->strTemplate = $strTemplate;
     }
 
     /**
      * @return string
      */
-    public function getStrTemplate() {
+    public function getStrTemplate()
+    {
         return $this->strTemplate;
     }
 
     /**
      * @param string $strDetailspage
      */
-    public function setStrDetailspage($strDetailspage) {
+    public function setStrDetailspage($strDetailspage)
+    {
         $this->strDetailspage = $strDetailspage;
     }
 
     /**
      * @return string
      */
-    public function getStrDetailspage() {
+    public function getStrDetailspage()
+    {
         return $this->strDetailspage;
     }
 
     /**
      * @param string $strCategory
      */
-    public function setStrCategory($strCategory) {
+    public function setStrCategory($strCategory)
+    {
         $this->strCategory = $strCategory;
     }
 
     /**
      * @return string
      */
-    public function getStrCategory() {
+    public function getStrCategory()
+    {
         return $this->strCategory;
     }
 
     /**
      * @param string $intView
      */
-    public function setIntView($intView) {
+    public function setIntView($intView)
+    {
         $this->intView = $intView;
     }
 
     /**
      * @return string
      */
-    public function getIntView() {
+    public function getIntView()
+    {
         return $this->intView;
     }
 
     /**
      * @param string $intOrder
      */
-    public function setIntOrder($intOrder) {
+    public function setIntOrder($intOrder)
+    {
         $this->intOrder = $intOrder;
     }
 
     /**
      * @return string
      */
-    public function getIntOrder() {
+    public function getIntOrder()
+    {
         return $this->intOrder;
     }
 
     /**
      * @param string $intListMode
      */
-    public function setIntListMode($intListMode) {
+    public function setIntListMode($intListMode)
+    {
         $this->intListMode = $intListMode;
     }
 
     /**
      * @return string
      */
-    public function getIntListMode() {
+    public function getIntListMode()
+    {
         return $this->intListMode;
     }
 
     /**
      * @param string $intAmount
      */
-    public function setIntAmount($intAmount) {
+    public function setIntAmount($intAmount)
+    {
         $this->intAmount = $intAmount;
     }
 
     /**
      * @return string
      */
-    public function getIntAmount() {
+    public function getIntAmount()
+    {
         return $this->intAmount;
     }
-
-
-
-
 
 
 }

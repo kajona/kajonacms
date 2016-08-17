@@ -50,6 +50,7 @@ class Classloader
         "/admin/reports/",
         "/admin/systemtasks/",
         "/admin/widgets/",
+        "/admin/formgenerators/", // contains all form generator classes (extends Kajona\System\Admin\AdminFormgenerator)
         "/admin/",
         "/portal/elements/",
         "/portal/forms/",
@@ -62,6 +63,8 @@ class Classloader
         "/system/workflows/",
         "/system/messageproviders/",
         "/system/scriptlets/",
+        "/system/models/", // contains all model classes (extends Kajona\System\System\Root / ModelInterface)
+        "/system/filters/", // contains form filter classes (extends Kajona\System\System\FilterBase)
         "/system/",
         "/installer/",
         "/event/",
@@ -358,9 +361,11 @@ class Classloader
      *
      * @param $strFilename
      *
+     * @param bool $bitAddToClassmap Disables the writing to the classmap
+     *
      * @return null|string
      */
-    public function getClassnameFromFilename($strFilename)
+    public function getClassnameFromFilename($strFilename, $bitAddToClassmap = true)
     {
         // if empty we cant resolve a class name
         if (empty($strFilename) || uniSubstr($strFilename, -4) != '.php') {
@@ -394,12 +399,13 @@ class Classloader
             else {
                 //ugly fallback for ioncube encoded files, could be upgrade to an improved regex
                 //TODO: move this name-based detection to the general approach, replacing the content parsing
-                if(strpos($strSource, "ioncube") !== false) {
+                if(strpos($strSource, "ioncube") !== false|| strpos($strSource, "sg_load") !== false) {
                     if($strFile === "functions") {
                         return null;
                     }
 
-                    $strParsedFilename = str_replace("\\", "/", uniSubstr($strFilename, 0, -4));
+                    $strParsedFilename = str_replace(array("\\", ".phar"), array("/", ""), uniSubstr($strFilename, 0, -4));
+
 
                     $strClassname = "Kajona\\";
                     if(strpos($strParsedFilename, "core_") !== false) {
@@ -445,7 +451,7 @@ class Classloader
                 }
             }
         }
-        if($arrMap !== false) {
+        if($arrMap !== false && $bitAddToClassmap) {
             BootstrapCache::getInstance()->addCacheRow(BootstrapCache::CACHE_CLASSES, $strClassname, $strFilename);
         }
         return $strClassname;
@@ -464,9 +470,17 @@ class Classloader
      */
     public function getInstanceFromFilename($strFilename, $strBaseclass = null, $strImplementsInterface = null, $arrConstructorParams = null, $bitInject = false)
     {
-        $strResolvedClassname = $this->getClassnameFromFilename($strFilename);
+        $strResolvedClassname = $this->getClassnameFromFilename($strFilename, false);
 
         if ($strResolvedClassname != null) {
+
+            //see if the class was overwritten/index at a different location - then replace the passed filename
+            $strPathFromCache = BootstrapCache::getInstance()->getCacheRow(BootstrapCache::CACHE_CLASSES, $strResolvedClassname);
+            if($strPathFromCache !== false && $strPathFromCache != $strFilename) {
+                $strFilename = $strPathFromCache;
+            }
+
+
             // if the class does not exist we simply include the filename and hope that the class is defined there. This
             // is the case where the filename is not equal to the class name i.e. installer_sc_zzlanguages.php
             if (!class_exists($strResolvedClassname, false)) {

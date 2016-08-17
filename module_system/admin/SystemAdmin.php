@@ -609,7 +609,7 @@ JS;
             }
 
             $strActions = $this->objToolkit->listButton(Link::getLinkAdmin($this->getArrModule("modul"), "lockedRecords", "&unlockid=" . $objOneRecord->getSystemid(), $this->getLang("action_unlock_record"), $this->getLang("action_unlock_record"), "icon_lockerOpen"));
-            $objLockUser = new UserUser($objOneRecord->getLockManager()->getLockId());
+            $objLockUser = Objectfactory::getInstance()->getObject($objOneRecord->getLockManager()->getLockId());
 
             $strReturn .= $this->objToolkit->genericAdminList(
                 $objOneRecord->getSystemid(),
@@ -782,7 +782,7 @@ JS;
             $arrRowData = array();
             $strUsername = "";
             if ($objOneSession->getStrUserid() != "") {
-                $objUser = new UserUser($objOneSession->getStrUserid());
+                $objUser = Objectfactory::getInstance()->getObject($objOneSession->getStrUserid());
                 $strUsername = $objUser->getStrUsername();
             }
             $arrRowData[0] = AdminskinHelper::getAdminImage("icon_user");
@@ -1429,7 +1429,7 @@ HTML;
         }
 
         $this->setArrModuleEntry("template", "/folderview.tpl");
-        $objUser = new UserUser($this->objSession->getUserID());
+        $objUser = $this->objSession->getUser();
 
         //mail or internal message?
         $objMailValidator = new EmailValidator();
@@ -1444,7 +1444,7 @@ HTML;
         }
 
         if ($objForm->getField("mail_cc")->getStrValue() != "") {
-            $objUser = new UserUser($objForm->getField("mail_cc")->getStrValue());
+            $objUser = Objectfactory::getInstance()->getObject($objForm->getField("mail_cc")->getStrValue());
             $objEmail->addCc($objUser->getStrEmail());
         }
 

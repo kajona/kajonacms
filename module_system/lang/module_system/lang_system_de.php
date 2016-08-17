@@ -271,6 +271,7 @@ $lang["titel_erben"]                     = "Rechte erben";
 $lang["permissions_toggle_visible"]                     = "Nicht-konfigurierte Zeilen einblenden";
 $lang["permissions_toggle_hidden"]                     = "Nicht-konfigurierte Zeilen ausblenden";
 $lang["permissions_success"]                     = "Die Berechtigungen wurden erfolgreich gespeichert.";
+$lang["permissons_filter"]                     = "Filter-Text";
 $lang["titel_leer"]                      = "<em>Kein Titel hinterlegt</em>";
 $lang["titel_root"]                      = "Rechte-Root-Satz";
 $lang["titleTime"]                       = "Uhr";
@@ -296,6 +297,7 @@ $lang["systemtask_permissions_groupid"]     = "Relevante Gruppe";
 $lang["systemtask_permissions_finished"]     = "Ausführung abgeschlossen";
 $lang["systemtask_permissions_name"]     = "Rechte rekursiv setzen";
 $lang["generic_changelog_no_systemid"]  = "Diese Aktion kann nur mit einer gültigen Systemid aufgerufen werden. Bitte eine entsprechende Systemid angeben.";
+$lang["generic_record_locked"]  = "Dieser Datensatz wurde von dem Benutzer '{0}' gesperrt und kann daher nicht bearbeitet werden.";
 
 $lang["cache"]  = "Cache";
 $lang["cache_apc"]  = "APC";

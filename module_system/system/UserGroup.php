@@ -22,12 +22,25 @@ use Kajona\System\System\Usersources\UsersourcesGroupInterface;
  * @module user
  * @moduleId _user_modul_id_
  *
- * @blockFromAutosave
+ * @targetTable user_group.group_id
  */
 class UserGroup extends Model implements ModelInterface, AdminListableInterface
 {
 
+    /**
+     * @var string
+     * @tableColumn user_group.group_subsystem
+     * @tableColumnDatatype char254
+     * @tableColumnIndex
+     */
     private $strSubsystem = "kajona";
+
+    /**
+     * @var string
+     * @tableColumn user_group.group_name
+     * @tableColumnDatatype char254
+     * @tableColumnIndex
+     */
     private $strName = "";
 
     /**
@@ -84,86 +97,19 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface
     }
 
 
-    public function rightView()
-    {
-        return SystemModule::getModuleByName("user")->rightView();
-    }
-
-    public function rightEdit()
-    {
-        return SystemModule::getModuleByName("user")->rightEdit();
-    }
-
-    public function rightDelete()
-    {
-        return SystemModule::getModuleByName("user")->rightDelete();
-    }
-
-
     /**
-     * Initialises the current object, if a systemid was given
+     * @inheritDoc
      */
-    protected function initObjectInternal()
+    protected function onInsertToDb()
     {
-        $strQuery = "SELECT * FROM "._dbprefix_."user_group WHERE group_id = ?";
-        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
-
-        if (count($arrRow) > 0) {
-            $this->setStrName($arrRow["group_name"]);
-            $this->setStrSubsystem($arrRow["group_subsystem"]);
-        }
-    }
-
-    /**
-     * Updates the current object to the database
-     *
-     * @param bool $strPrevId
-     *
-     * @return bool
-     */
-    public function updateObjectToDb($strPrevId = false)
-    {
-        //mode-splitting
-        if ($this->getSystemid() == "") {
-            Logger::getInstance(Logger::USERSOURCES)->addLogRow("saved new group subsystem ".$this->getStrSubsystem()." / ".$this->getStrSystemid(), Logger::$levelInfo);
-            $strGrId = generateSystemid();
-            $this->setSystemid($strGrId);
-            $strQuery = "INSERT INTO "._dbprefix_."user_group
-                          (group_id, group_subsystem, group_name) VALUES
-                          (?, ?, ?)";
-
-
-            $bitReturn = $this->objDB->_pQuery($strQuery, array($strGrId, $this->getStrSubsystem(), $this->getStrName()));
-
-            //create the new instance on the remote-system
-            $objSources = new UserSourcefactory();
-            $objProvider = $objSources->getUsersource($this->getStrSubsystem());
-            $objTargetGroup = $objProvider->getNewGroup();
-            $objTargetGroup->updateObjectToDb();
-            $objTargetGroup->setNewRecordId($this->getSystemid());
-            $this->objDB->flushQueryCache();
-
-            return $bitReturn;
-        }
-        else {
-            Logger::getInstance(Logger::USERSOURCES)->addLogRow("updated group ".$this->getStrName(), Logger::$levelInfo);
-            $strQuery = "UPDATE "._dbprefix_."user_group
-                            SET group_subsystem=?,
-                                group_name=?
-                            WHERE group_id=?";
-            return $this->objDB->_pQuery($strQuery, array($this->getStrSubsystem(), $this->getStrName(), $this->getSystemid()));
-        }
-    }
-
-    /**
-     * Called whenever a update-request was fired.
-     * Use this method to synchronize yourselves with the database.
-     * Use only updates, inserts are not required to be implemented.
-     *
-     * @return bool
-     */
-    protected function updateStateToDb()
-    {
+        Logger::getInstance(Logger::USERSOURCES)->addLogRow("saved new group subsystem ".$this->getStrSubsystem()." / ".$this->getStrSystemid(), Logger::$levelInfo);
+        //create the new instance on the remote-system
+        $objSources = new UserSourcefactory();
+        $objProvider = $objSources->getUsersource($this->getStrSubsystem());
+        $objTargetGroup = $objProvider->getNewGroup();
+        $objTargetGroup->updateObjectToDb();
+        $objTargetGroup->setNewRecordId($this->getSystemid());
+        $this->objDB->flushQueryCache();
         return true;
     }
 
@@ -171,6 +117,7 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface
     /**
      * Returns all groups from database
      *
+     * @param FilterBase $objFilter
      * @param string $strFilter
      * @param bool|int $intStart
      * @param bool|int $intEnd
@@ -180,46 +127,29 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface
      */
     public static function getObjectListFiltered(FilterBase $objFilter = null, $strFilter = "", $intStart = null, $intEnd = null)
     {
-        $strQuery = "SELECT group_id
-                       FROM "._dbprefix_."user_group
-                    ".($strFilter != "" ? " WHERE group_name LIKE ? " : "")."
-                   ORDER BY group_name";
-
-        $arrFilter = array();
-        if ($strFilter != "") {
-            $arrFilter[] = "%".$strFilter."%";
+        $objOrm = new OrmObjectlist();
+        if($strFilter != "") {
+            $objOrm->addWhereRestriction(new OrmPropertyCondition("strName", OrmComparatorEnum::Like(), "%".$strFilter."%"));
         }
-
-        $arrIds = Carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrFilter, $intStart, $intEnd);
-        $arrReturn = array();
-        foreach ($arrIds as $arrOneId) {
-            $arrReturn[] = new UserGroup($arrOneId["group_id"]);
-        }
-
-        return $arrReturn;
+        return $objOrm->getObjectList(UserGroup::class, "", $intStart, $intEnd);
     }
 
 
     /**
      * Fetches the number of groups available
      *
+     * @param FilterBase $objFilter
      * @param string $strFilter
      *
      * @return int
      */
-    public static function getObjectCountFiltered(FilterBase $objFilter = null, $strFilter = "", $intStart = null, $intEnd = null)
+    public static function getObjectCountFiltered(FilterBase $objFilter = null, $strFilter = "")
     {
-        $strQuery = "SELECT COUNT(*)
-                       FROM "._dbprefix_."user_group
-               ".($strFilter != "" ? " WHERE group_name LIKE ? " : "");
-
-        $arrFilter = array();
-        if ($strFilter != "") {
-            $arrFilter[] = "%".$strFilter."%";
+        $objOrm = new OrmObjectlist();
+        if($strFilter != "") {
+            $objOrm->addWhereRestriction(new OrmPropertyCondition("strName", OrmComparatorEnum::Like(), "%".$strFilter."%"));
         }
-
-        $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrFilter);
-        return $arrRow["COUNT(*)"];
+        return $objOrm->getObjectCount(UserGroup::class);
     }
 
 
@@ -234,13 +164,6 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface
         return $this->objSourceGroup->getNumberOfMembers();
     }
 
-
-    public function deleteObject()
-    {
-        return $this->deleteObjectFromDatabase();
-    }
-
-
     /**
      * Deletes the given group
      *
@@ -249,14 +172,9 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface
     public function deleteObjectFromDatabase()
     {
         Logger::getInstance(Logger::USERSOURCES)->addLogRow("deleted group with id ".$this->getSystemid()." (".$this->getStrName().")", Logger::$levelWarning);
-
         //Delete related group
         $this->getObjSourceGroup()->deleteGroup();
-
-        $strQuery = "DELETE FROM "._dbprefix_."user_group WHERE group_id=?";
-        $bitReturn = $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
-        CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_RECORDDELETED, array($this->getSystemid(), get_class($this)));
-        return $bitReturn;
+        return parent::deleteObjectFromDatabase();
     }
 
     /**
@@ -284,7 +202,6 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface
     }
 
 
-    // --- GETTERS / SETTERS --------------------------------------------------------------------------------
     public function getStrSubsystem()
     {
         return $this->strSubsystem;
