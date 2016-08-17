@@ -93,18 +93,18 @@ class UserSourcefactory
      *
      * @param string $strName
      *
-     * @return UserUser or null
+     * @return UserUser|null
      */
     public function getUserByUsername($strName)
     {
 
         //validate if a group with the given name is available
 
-        $strQuery = "SELECT user_id FROM "._dbprefix_."user where user_username = ? AND (user_deleted = 0 OR user_deleted IS NULL)";
+        $strQuery = "SELECT user_id FROM "._dbprefix_."user, "._dbprefix_."system where user_id = system_id AND user_username = ? AND (system_deleted = 0 OR system_deleted IS NULL)";
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
 
         if (isset($arrRow["user_id"]) && validateSystemid($arrRow["user_id"])) {
-            return new UserUser($arrRow["user_id"]);
+            return Objectfactory::getInstance()->getObject($arrRow["user_id"]);
         }
 
         //since some login-provides may trigger additional searches, query them now
@@ -112,7 +112,7 @@ class UserSourcefactory
             $objUser = $this->getUsersource($strOneSubsystem)->getUserByUsername($strName);
             //convert the user to a real one
             if ($objUser != null) {
-                return new UserUser($objUser->getSystemid());
+                return Objectfactory::getInstance()->getObject($objUser->getSystemid());
             }
         }
 
@@ -126,7 +126,7 @@ class UserSourcefactory
      *
      * @param string $strParam
      *
-     * @return UserUser
+     * @return UserUser[]
      */
     public function getUserlistByUserquery($strParam)
     {
@@ -134,13 +134,13 @@ class UserSourcefactory
         $strDbPrefix = _dbprefix_;
         //validate if a group with the given name is available
         $strQuery = "SELECT user_tbl.user_id, user_tbl.user_subsystem
-                      FROM {$strDbPrefix}user AS user_tbl
+                      FROM {$strDbPrefix}system, {$strDbPrefix}user AS user_tbl
                       LEFT JOIN {$strDbPrefix}user_kajona AS user_kajona ON user_tbl.user_id = user_kajona.user_id
                       WHERE
                           (user_tbl.user_username LIKE ? OR user_kajona.user_forename LIKE ? OR user_kajona.user_name LIKE ?)
-
-                          AND (user_tbl.user_deleted = 0 OR user_tbl.user_deleted IS NULL)
-                          AND user_active = 1
+                          AND user_tbl.user_id = system_id
+                          AND (system_deleted = 0 OR system_deleted IS NULL)
+                          AND system_status = 1
                       ORDER BY user_tbl.user_username, user_tbl.user_subsystem ASC";
 
         $arrParams = array("%".$strParam."%", "%".$strParam."%", "%".$strParam."%");
@@ -151,7 +151,7 @@ class UserSourcefactory
         $arrReturn = array();
         foreach ($arrRows as $arrOneRow) {
             if (in_array($arrOneRow["user_subsystem"], $this->arrSubsystemsAvailable)) {
-                $arrReturn[] = new UserUser($arrOneRow["user_id"]);
+                $arrReturn[] = Objectfactory::getInstance()->getObject($arrOneRow["user_id"]);
             }
         }
 
@@ -221,7 +221,7 @@ class UserSourcefactory
      */
     public function getSourceUser(UserUser $objLeightweightUser)
     {
-        if ($objLeightweightUser->getIntDeleted() == 1) {
+        if ($objLeightweightUser->getIntRecordDeleted() == 1) {
             throw new Exception("User was deleted, source user no longer available", Exception::$level_ERROR);
         }
 

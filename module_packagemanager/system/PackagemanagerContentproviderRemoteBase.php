@@ -89,7 +89,7 @@ abstract class PackagemanagerContentproviderRemoteBase implements Packagemanager
     public function renderPackageList()
     {
 
-        $objUser = new UserUser(Session::getInstance()->getUserID());
+        $objUser = Session::getInstance()->getUser();
         $intStart = ($this->getPageNumber() - 1) * $objUser->getIntItemsPerPage();
         $intEnd = $intStart + $objUser->getIntItemsPerPage() - 1;
 

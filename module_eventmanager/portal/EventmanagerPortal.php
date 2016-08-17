@@ -277,7 +277,7 @@ class EventmanagerPortal extends PortalController implements PortalInterface
         $objMapper->addPlaceholder("formaction", Link::getLinkPortalHref($this->getPagename(), "", "saveRegisterForEvent", "", $this->getSystemid(), "", $objEvent->getStrTitle()));
 
         if ($bitIsLoggedin) {
-            $objUser = new UserUser($this->objSession->getUserID());
+            $objUser = $this->objSession->getUser();
             $objMapper->addPlaceholder("username", $objUser->getStrUsername());
         }
 
