@@ -227,10 +227,11 @@ class Mail
             //Sender
             if ($this->strSender == "") {
                 //try to load the current users' mail adress
-                if (validateSystemid(Carrier::getInstance()->getObjSession()->getUserID())) {
-                    $objUser = new UserUser(Carrier::getInstance()->getObjSession()->getUserID());
-                    if (checkEmailaddress($objUser->getStrEmail())) {
-                        $this->strSender = $objUser->getStrEmail();
+                /** @var UserUser $objSenderUser */
+                $objSenderUser = Carrier::getInstance()->getObjSession()->getUser();
+                if ($objSenderUser !== null) {
+                    if (checkEmailaddress($objSenderUser->getStrEmail())) {
+                        $this->strSender = $objSenderUser->getStrEmail();
                     }
                 }
 

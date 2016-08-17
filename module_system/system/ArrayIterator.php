@@ -34,10 +34,9 @@ class ArrayIterator implements IteratorInterface, Iterator
      */
     public function __construct($arrElements)
     {
+        $objUser = Session::getInstance()->getUser();
 
-        $objUser = new UserUser(Session::getInstance()->getUserID());
-
-        $this->intElementsPerPage = $objUser->getIntItemsPerPage();
+        $this->intElementsPerPage = $objUser != null ? $objUser->getIntItemsPerPage() : SystemSetting::getConfigValue("_admin_nr_of_rows_");
         $this->setArrElements($arrElements);
     }
 

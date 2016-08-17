@@ -457,7 +457,7 @@ JS;
 
         $objMessageHandler = new MessagingMessagehandler();
         $objMessage->setObjMessageProvider(new MessageproviderPersonalmessage());
-        $objMessageHandler->sendMessageObject($objMessage, new UserUser($objMessage->getStrUser()));
+        $objMessageHandler->sendMessageObject($objMessage, Objectfactory::getInstance()->getObject($objMessage->getStrUser()));
 
 
         return $this->objToolkit->warningBox($this->getLang("message_sent_success")).
@@ -506,7 +506,7 @@ JS;
                 $objMessage->updateObjectToDb();
             }
 
-            $objSender = new UserUser($objMessage->getStrSenderId());
+            $objSender = Objectfactory::getInstance()->getObject($objMessage->getStrSenderId());
 
             $strReference = "";
             if (validateSystemid($objMessage->getStrMessageRefId())) {

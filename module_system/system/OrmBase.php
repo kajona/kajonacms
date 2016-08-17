@@ -19,6 +19,13 @@ abstract class OrmBase
 {
 
     /**
+     * An array of blocked / reserved sql keywords not be used when creating table aliases
+     * @var array
+     */
+    private $arrBlockedTableAlias = array('user');
+
+
+    /**
      * Static flag to change the handling of deleted objects globally, so for every following
      * ORM operation
      *
@@ -30,7 +37,8 @@ abstract class OrmBase
      * Flag to change the handling of deleted objects locally, so only for the current instance of the ORM
      * mapper.
      *
-     * @var OrmDeletedhandlingEnum
+     * @var int
+     * @see OrmDeletedhandlingEnum
      */
     private $objHandleLogicalDeleted = null;
 
@@ -64,7 +72,7 @@ abstract class OrmBase
             $arrColumns = Database::getInstance()->getColumnsOfTable(_dbprefix_."system");
             self::$bitLogcialDeleteAvailable = count(array_filter($arrColumns, function ($arrOneTable) {
                     return $arrOneTable["columnName"] == "system_deleted";
-                })) > 0;
+            })) > 0;
         }
     }
 
@@ -141,7 +149,11 @@ abstract class OrmBase
         foreach ($arrTargetTables as $strOneTable) {
             $arrOneTable = explode(".", $strOneTable);
             $strWhere .= "AND system_id=".$arrOneTable[1]." ";
-            $arrTables[] = Carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_.$arrOneTable[0])." AS ".Carrier::getInstance()->getObjDB()->encloseTableName($arrOneTable[0])."";
+            if(in_array($arrOneTable[0], $this->arrBlockedTableAlias)) {
+                $arrTables[] = Carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_.$arrOneTable[0])." ";
+            } else {
+                $arrTables[] = Carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_.$arrOneTable[0])." AS ".Carrier::getInstance()->getObjDB()->encloseTableName($arrOneTable[0])."";
+            }
         }
 
         //build the query

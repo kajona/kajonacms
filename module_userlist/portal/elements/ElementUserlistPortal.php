@@ -142,7 +142,7 @@ class ElementUserlistPortal extends ElementPortal implements PortalElementInterf
         if ($this->arrElementData["int1"] == "1") {
             foreach ($arrUser as /** @var UserUser */
                      $objOneUser) {
-                if ($objOneUser->getIntActive() == "1") {
+                if ($objOneUser->getIntRecordStatus() == "1") {
                     $arrUserFinal[] = $objOneUser;
                 }
             }
@@ -150,7 +150,7 @@ class ElementUserlistPortal extends ElementPortal implements PortalElementInterf
         elseif ($this->arrElementData["int1"] == "2") {
             foreach ($arrUser as /** @var UserUser */
                      $objOneUser) {
-                if ($objOneUser->getIntActive() == "0") {
+                if ($objOneUser->getIntRecordStatus() == "0") {
                     $arrUserFinal[] = $objOneUser;
                 }
             }

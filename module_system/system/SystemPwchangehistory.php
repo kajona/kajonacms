@@ -2,15 +2,12 @@
 /*"******************************************************************************************************
 *   (c) 2007-2016 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                                    *
 ********************************************************************************************************/
 
 namespace Kajona\System\System;
 
 
 /**
- * @package module_system
  * @author christoph.kappestein@gmail.com
  *
  * @targetTable user_pwchangehistory.id
@@ -52,7 +49,7 @@ class SystemPwchangehistory extends Model implements ModelInterface, AdminListab
     }
 
     /**
-     * @param mixed $strUser
+     * @param $strTargetUser
      */
     public function setStrTargetUser($strTargetUser)
     {
@@ -93,8 +90,11 @@ class SystemPwchangehistory extends Model implements ModelInterface, AdminListab
 
     public function getStrDisplayName()
     {
-        $objUser = new UserUser($this->getStrOwner());
-        return $objUser->getStrDisplayName() . " (" . dateToString($this->getStrChangeDate()) . ")";
+        $objUser = Objectfactory::getInstance()->getObject($this->getStrOwner());
+        if($objUser !== null) {
+            return $objUser->getStrDisplayName() . " (" . dateToString($this->getStrChangeDate()) . ")";
+        }
+        return "";
     }
 
     public function getStrIcon()
