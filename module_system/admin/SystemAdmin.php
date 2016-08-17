@@ -979,6 +979,12 @@ JS;
         return $strReturn;
     }
 
+    /**
+     * Provides an option to compare the current record with a state from a different time
+     *
+     * @since 5.1
+     * @return string
+     */
     protected function actionChangelogDiff()
     {
         $strSystemId = $this->getSystemid();

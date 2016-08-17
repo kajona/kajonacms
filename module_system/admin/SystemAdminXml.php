@@ -527,6 +527,13 @@ class SystemAdminXml extends AdminController implements XmlAdminInterface
         return json_encode($strReturn);
     }
 
+    /**
+     * Returns the properties of an object for a specific date json encoded
+     *
+     * @return string
+     * @permissions view
+     * @throws Exception
+     */
     protected function actionChangelogPropertiesForDate()
     {
         ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
