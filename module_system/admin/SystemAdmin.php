@@ -1057,11 +1057,24 @@ HTML;
         $arrProps = $objReflection->getPropertiesWithAnnotation(SystemChangelog::ANNOTATION_PROPERTY_VERSIONABLE);
         $arrData = array();
 
+        $arrModule = $objReflection->getAnnotationValuesFromClass("@module");
+        $strModule = is_array($arrModule) ? current($arrModule) : $arrModule;
+
         foreach ($arrProps as $strPropertyName => $strValue) {
             $strGetter = $objReflection->getGetter($strPropertyName);
             if (!empty($strGetter)) {
+                $strPropertyLabel = $objObject->getVersionPropertyName($strPropertyName);
+
+                // if we have no customized property we try to read the fieldname from the @fieldLabel annotation
+                if (in_array(substr($strPropertyLabel, 0, 3), array("str", "int", "float", "bit", "long"))) {
+                    $strLabel = $objReflection->getAnnotationValueForProperty($strPropertyLabel, AdminFormgenerator::STR_LABEL_ANNOTATION);
+                    if (!empty($strLabel)) {
+                        $strPropertyLabel = $this->getLang($strLabel, $strModule);
+                    }
+                }
+
                 $arrRow = array();
-                $arrRow['0 border-right'] = $objObject->getVersionPropertyName($strPropertyName);
+                $arrRow['0 border-right'] = $strPropertyLabel;
                 $arrRow['1 border-right'] = "<div id='property_" . $strPropertyName . "_left' class='changelog_property changelog_property_left' data-name='" . $strPropertyName . "'></div>";
                 $arrRow[] = "<div id='property_" . $strPropertyName . "_right' class='changelog_property changelog_property_right' data-name='" . $strPropertyName . "'></div>";
                 $arrData[] = $arrRow;
