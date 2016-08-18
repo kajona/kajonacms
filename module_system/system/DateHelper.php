@@ -731,6 +731,38 @@ class DateHelper
         return $objNewDate;
     }
 
+    /**
+     * Adds the Period to the date object and returns a new date object
+     *
+     * @param DatePeriodEnum $objPeriod
+     * @param Date $objDate
+     * @return Date
+     */
+    public function addPeriodToDate(DatePeriodEnum $objPeriod, Date $objDate)
+    {
+        $strRelativeString = "";
+
+        if($objPeriod->equals(DatePeriodEnum::YEAR())) {
+            $strRelativeString = "+1 year";
+        }
+        elseif($objPeriod->equals(DatePeriodEnum::HALFYEAR())) {
+            $strRelativeString = "+6 month";
+        }
+        elseif($objPeriod->equals(DatePeriodEnum::QUARTER())) {
+            $strRelativeString = "+3 month";
+        }
+        elseif($objPeriod->equals(DatePeriodEnum::MONTH())) {
+            $strRelativeString = "+1 month";
+        }
+        elseif($objPeriod->equals(DatePeriodEnum::WEEK())) {
+            $strRelativeString = "+1 week";
+        }
+
+        $objNewDate = self::calcDateRelativeFormatString($objDate, $strRelativeString);
+
+        return $objNewDate;
+    }
+
 
 }
 
