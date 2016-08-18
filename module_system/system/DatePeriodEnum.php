@@ -51,7 +51,8 @@ class DatePeriodEnum extends EnumBase
      * @param $intFrequency
      * @return DatePeriodEnum|null
      */
-    public static function convertFrequencyIntToEnum($intFrequency) {
+    public static function convertFrequencyIntToEnum($intFrequency)
+    {
         switch ($intFrequency) {
             case self::$INT_FREQUENCY_YEAR:
                 return DatePeriodEnum::YEAR();
