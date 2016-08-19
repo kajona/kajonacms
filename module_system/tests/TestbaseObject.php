@@ -95,7 +95,9 @@ abstract class TestbaseObject extends Testbase
         foreach (array_reverse($this->arrStructure, true) as $objOneModel) {
             $strSystemId = $objOneModel->getStrSystemid();
             $objOneModel = Objectfactory::getInstance()->getObject($strSystemId);
-            $objOneModel->deleteObjectFromDatabase();
+            if($objOneModel !== null) {
+                $objOneModel->deleteObjectFromDatabase();
+            }
         }
     }
 
