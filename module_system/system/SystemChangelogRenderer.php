@@ -211,7 +211,7 @@ class SystemChangelogRenderer
                 return $objField->getValueAsText();
                 */
 
-                return self::renderDate($strValue);
+                return SystemChangelogHelper::getStrValueForDate($strValue);
                 break;
 
             case FormentryDropdown::class:
@@ -223,7 +223,11 @@ class SystemChangelogRenderer
                 return $objField->getValueAsText();
                 */
 
-                return self::renderDropdown($strValue, $arrDDValues);
+                if (array_key_exists($strValue, $arrDDValues)) {
+                    return $arrDDValues[$strValue];
+                } else {
+                    return $strValue;
+                }
                 break;
 
             case FormentryObjectlist::class:
@@ -238,11 +242,11 @@ class SystemChangelogRenderer
                 return $objField->getValueAsText();
                 */
 
-                return self::renderSystemIds($strValue);
+                return SystemChangelogHelper::getStrValueForObjects($strValue);
                 break;
 
             default:
-                return self::renderText($strValue);
+                return $strValue;
         }
     }
 
@@ -275,87 +279,5 @@ class SystemChangelogRenderer
         }
 
         return self::$arrRenderer[$strClass]->getVersionValue($strProperty, $strValue);
-    }
-
-    /**
-     * @param mixed $objValue
-     * @return string
-     */
-    private static function renderDate($objValue)
-    {
-        if ($objValue instanceof Date) {
-            $objDate = $objValue;
-        } else {
-            if (empty($objValue)) {
-                return "";
-            }
-
-            $objDate = new Date($objValue);
-        }
-
-        return dateToString($objDate, false);
-    }
-
-    /**
-     * @param mixed $objValue
-     * @param string $strSeperator
-     * @return string
-     */
-    private static function renderSystemIds($objValue, $strSeperator = ", ")
-    {
-        $arrSystemIds = array();
-
-        if (!is_array($objValue)) {
-            if (validateSystemid($objValue)) {
-                $arrSystemIds = array($objValue);
-            } elseif (strpos($objValue, ",") !== false) {
-                $arrSystemIds = array_filter(explode(",", $objValue), function ($strSystemId) {
-                    return validateSystemid($strSystemId);
-                });
-            }
-        } elseif (is_array($objValue)) {
-            $arrSystemIds = array_filter(array_map(function($objValue){
-                if (is_string($objValue)) {
-                    return validateSystemid($objValue) ? $objValue : null;
-                } elseif ($objValue instanceof Model) {
-                    return $objValue->getSystemid();
-                } else {
-                    return null;
-                }
-            }, $objValue));
-        }
-
-        $arrNames = array();
-        foreach ($arrSystemIds as $strSystemId) {
-            $objObject = Objectfactory::getInstance()->getObject($strSystemId);
-            if ($objObject instanceof ModelInterface) {
-                $arrNames[] = $objObject->getStrDisplayName();
-            }
-        }
-
-        return implode($strSeperator, $arrNames);
-    }
-
-    /**
-     * @param mixed $objValue
-     * @param array $arrDDValues
-     * @return mixed
-     */
-    private static function renderDropdown($objValue, array $arrDDValues)
-    {
-        if (array_key_exists($objValue, $arrDDValues)) {
-            return $arrDDValues[$objValue];
-        }
-
-        return $objValue;
-    }
-
-    /**
-     * @param mixed $objValue
-     * @return string
-     */
-    private static function renderText($objValue)
-    {
-        return $objValue;
     }
 }

@@ -20,12 +20,10 @@ namespace Kajona\System\System;
  */
 class SystemChangelogHelper
 {
-
     /**
      * Gets a string representation for a given user id
      *
      * @param $strUserId
-     *
      * @return string
      */
     public static function getStrValueForUser($strUserId)
@@ -40,40 +38,61 @@ class SystemChangelogHelper
     /**
      * Gets a string representation for a given object id.
      * If the given param $strObjectIds contains a comma separated value of system id's, all display name of the objects
-     * will be returned.
+     * will be returned. Does also work with  an array of objects or system ids
      *
-     * @param $strObjectIds
-     *
+     * @param string|array $strObjectIds
      * @return string
      */
     public static function getStrValueForObjects($strObjectIds)
     {
-        $arrReturn = array();
-        if ($strObjectIds != "") {
-            $arrIds = explode(",", $strObjectIds);
-            foreach ($arrIds as $strId) {
-                $objObject = Objectfactory::getInstance()->getObject($strId);
-                if ($objObject != null) {
-                    $arrReturn[] = $objObject->getStrDisplayName();
+        $arrSystemIds = array();
+
+        if (is_string($strObjectIds)) {
+            $arrSystemIds = array_filter(explode(",", $strObjectIds), function ($strSystemId) {
+                return validateSystemid($strSystemId);
+            });
+        } elseif (is_array($strObjectIds)) {
+            $arrSystemIds = array_filter(array_map(function($objValue){
+                if (is_string($objValue)) {
+                    return validateSystemid($objValue) ? $objValue : null;
+                } elseif ($objValue instanceof Model) {
+                    return $objValue->getSystemid();
+                } else {
+                    return null;
                 }
+            }, $strObjectIds));
+        }
+
+        $arrNames = array();
+        foreach ($arrSystemIds as $strSystemId) {
+            $objObject = Objectfactory::getInstance()->getObject($strSystemId);
+            if ($objObject instanceof ModelInterface) {
+                $arrNames[] = $objObject->getStrDisplayName();
             }
         }
-        return implode(",", $arrReturn);
+
+        return implode(", ", $arrNames);
     }
 
     /**
      * Gets the string representation of a date
      *
-     * @param $strDate
-     *
+     * @param string|Date $strDate
      * @return string
      */
     public static function getStrValueForDate($strDate)
     {
-        if ($strDate == "" || $strDate == "0") {
-            return "";
+        if ($strDate instanceof Date) {
+            $objDate = $strDate;
+        } else {
+            // empty includes "", 0, 0.0, "0", null, false and array()
+            if (empty($strDate)) {
+                return "";
+            }
+
+            $objDate = new Date($strDate);
         }
-        $objDate = new Date($strDate);
+
         return dateToString($objDate, false);
     }
 
