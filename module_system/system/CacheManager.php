@@ -306,5 +306,18 @@ class CacheManager
             self::TYPE_PHPFILE => "PHP-File",
         );
     }
+
+    /**
+     * Returns all available cache namespaces
+     *
+     * @return array
+     */
+    public static function getAvailableNamespace()
+    {
+        return array(
+            self::NS_GLOBAL => "Global",
+            self::NS_BOOTSTRAP => "Bootstrap",
+        );
+    }
 }
 
