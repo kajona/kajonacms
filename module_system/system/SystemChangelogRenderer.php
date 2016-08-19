@@ -10,21 +10,23 @@ namespace Kajona\System\System;
 
 use AGP\Prozessverwaltung\Admin\Formentries\FormentryOe;
 use AGP\Prozessverwaltung\Admin\Formentries\FormentryProzess;
-use AGP\Reportconfigurator\Admin\ReportconfiguratorRendererBase;
-use AGP\Reportconfigurator\System\ReportconfiguratorField;
 use Kajona\System\Admin\AdminFormgenerator;
-use Kajona\System\Admin\Formentries\FormentryBase;
 use Kajona\System\Admin\Formentries\FormentryDate;
 use Kajona\System\Admin\Formentries\FormentryDatetime;
 use Kajona\System\Admin\Formentries\FormentryDropdown;
 use Kajona\System\Admin\Formentries\FormentryObjectlist;
 
 /**
- * SystemChangelogRenderer
+ * Class which provides a default render implementation for the VersionableInterface. The implementation looks at the
+ * property and tries to find the best way to render a value depending on the available annotations
+ *
+ * <code>
+ * SystemChangelogRenderer::renderPropertyName();
+ * SystemChangelogRenderer::renderValue();
+ * </code>
  *
  * @package module_system
  * @author christoph.kappestein@artemeon.de
- *
  * @module system
  * @moduleId _system_modul_id_
  */
@@ -59,9 +61,15 @@ class SystemChangelogRenderer
         $this->strModule = is_array($arrModule) ? current($arrModule) : $arrModule;
     }
 
+    /**
+     * We try to get the fitting property name through a form lang property
+     *
+     * @param string $strProperty
+     * @return string
+     */
     public function getVersionPropertyName($strProperty)
     {
-        if (!in_array(substr($strProperty, 0, 3), array("str", "int", "float", "bit", "long"))) {
+        if (!in_array(substr($strProperty, 0, 3), array("str", "int", "flo", "bit", "lon"))) {
             // in this case we have probably already a translated property
             return $strProperty;
         }
@@ -77,6 +85,13 @@ class SystemChangelogRenderer
         return $strProperty;
     }
 
+    /**
+     * Renders the value depending on the field type annotation
+     *
+     * @param string $strProperty
+     * @param mixed $strValue
+     * @return string
+     */
     public function getVersionValue($strProperty, $strValue)
     {
         $strType = $this->objReflection->getAnnotationValueForProperty($strProperty, AdminFormgenerator::STR_TYPE_ANNOTATION);
@@ -94,6 +109,12 @@ class SystemChangelogRenderer
         return $strValue;
     }
 
+    /**
+     * @param string $strType
+     * @param string $strValue
+     * @param array $arrDDValues
+     * @return string
+     */
     private function renderData($strType, $strValue, $arrDDValues)
     {
         switch ($strType) {
@@ -122,7 +143,12 @@ class SystemChangelogRenderer
                 return FormentryRenderer::renderText($strValue);
         }
     }
-    
+
+    /**
+     * @param Model $objObject
+     * @param string $strProperty
+     * @return string
+     */
     public static function renderPropertyName(Model $objObject, $strProperty)
     {
         $strClass = get_class($objObject);
@@ -133,6 +159,12 @@ class SystemChangelogRenderer
         return self::$arrRenderer[$strClass]->getVersionPropertyName($strProperty);
     }
 
+    /**
+     * @param Model $objObject
+     * @param string $strProperty
+     * @param string $strValue
+     * @return string
+     */
     public static function renderValue(Model $objObject, $strProperty, $strValue)
     {
         $strClass = get_class($objObject);
