@@ -139,7 +139,25 @@ class SystemChangelogRenderer
                 return $this->objLang->getLang("titel_erben", "system");
 
             case "intRecordStatus":
-                return $this->objLang->getLang("systemtask_systemstatus_status", "system");
+                return $this->objLang->getLang("commons_record_status", "system");
+
+            case "intRecordDeleted":
+                return $this->objLang->getLang("commons_record_deleted", "system");
+
+            case "objStartDate":
+                return $this->objLang->getLang("commons_record_startdate", "system");
+
+            case "objEndDate":
+                return $this->objLang->getLang("commons_record_enddate", "system");
+
+            case "objSpecialDate":
+                return $this->objLang->getLang("commons_record_specialdate", "system");
+
+            case "strPrevId":
+                return $this->objLang->getLang("commons_record_prev", "system");
+
+            case "strOwner":
+                return $this->objLang->getLang("commons_record_owner", "system");
 
             default:
                 return $strProperty;
@@ -160,7 +178,14 @@ class SystemChangelogRenderer
             case "rightDelete":
             case "rightRight1":
             case "rightChangelog":
+            case "strPrevId":
+            case "strOwner":
                 return FormentryObjectlist::class;
+
+            case "objStartDate":
+            case "objEndDate":
+            case "objSpecialDate":
+                return FormentryDate::class;
 
             default:
                 return null;
