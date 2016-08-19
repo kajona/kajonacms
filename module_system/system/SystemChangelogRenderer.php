@@ -69,17 +69,14 @@ class SystemChangelogRenderer
      */
     public function getVersionPropertyName($strProperty)
     {
-        if (!in_array(substr($strProperty, 0, 3), array("str", "int", "flo", "bit", "lon"))) {
-            // in this case we have probably already a translated property
-            return $strProperty;
-        }
-
         $strLabel = $this->objReflection->getAnnotationValueForProperty($strProperty, AdminFormgenerator::STR_LABEL_ANNOTATION);
         if (!empty($strLabel)) {
             $strPropertyName = $this->objLang->getLang($strLabel, $this->strModule);
             if (!empty($strPropertyName)) {
                 return $strPropertyName;
             }
+        } else {
+            return $this->getFallbackName($strProperty);
         }
 
         return $strProperty;
@@ -95,6 +92,10 @@ class SystemChangelogRenderer
     public function getVersionValue($strProperty, $strValue)
     {
         $strType = $this->objReflection->getAnnotationValueForProperty($strProperty, AdminFormgenerator::STR_TYPE_ANNOTATION);
+        if (empty($strType)) {
+            $strType = $this->getFallbackType($strProperty);
+        }
+
         if (!empty($strType)) {
             $strDDValues = $this->objReflection->getAnnotationValueForProperty($strProperty, FormentryDropdown::STR_DDVALUES_ANNOTATION);
             if (!empty($strDDValues)) {
@@ -107,6 +108,63 @@ class SystemChangelogRenderer
         }
 
         return $strValue;
+    }
+
+    /**
+     * Returns a fallback name for known system properties
+     *
+     * @param string $strProperty
+     * @return string
+     */
+    private function getFallbackName($strProperty)
+    {
+        $arrRights = $this->objLang->getLang("permissions_root_header", "system");
+        switch ($strProperty) {
+            case "rightView":
+                return $arrRights[0];
+
+            case "rightEdit":
+                return $arrRights[1];
+
+            case "rightDelete":
+                return $arrRights[2];
+
+            case "rightRight1":
+                return $arrRights[3];
+
+            case "rightChangelog":
+                return $arrRights[9];
+
+            case "rightInherit":
+                return $this->objLang->getLang("titel_erben", "system");
+
+            case "intRecordStatus":
+                return $this->objLang->getLang("systemtask_systemstatus_status", "system");
+
+            default:
+                return $strProperty;
+        }
+    }
+
+    /**
+     * Returns a fallback type for known system properties
+     *
+     * @param string $strProperty
+     * @return string
+     */
+    private function getFallbackType($strProperty)
+    {
+        switch ($strProperty) {
+            case "rightView":
+            case "rightEdit":
+            case "rightDelete":
+            case "rightRight1":
+            case "rightChangelog":
+                return FormentryObjectlist::class;
+
+            default:
+                return null;
+        }
     }
 
     /**
