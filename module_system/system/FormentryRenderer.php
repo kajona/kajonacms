@@ -38,7 +38,7 @@ class FormentryRenderer
      * @param string $strSeperator
      * @return string
      */
-    public static function renderSystemIds($objValue = null, $strSeperator = ", ")
+    public static function renderSystemIds($objValue, $strSeperator = ", ")
     {
         $arrSystemIds = array();
 
