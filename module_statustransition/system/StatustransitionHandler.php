@@ -81,6 +81,9 @@ abstract class StatustransitionHandler
                         $objTransition->executeTransitionActions($intOldStatus, $intNewStatus, $objObject);
                     }
                 }
+                else {
+                    return false;
+                }
             }
             Database::getInstance()->transactionCommit();
         } catch (Exception $e) {
