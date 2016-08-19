@@ -231,11 +231,9 @@ class CacheManager
         if ($intType & self::TYPE_APC) {
             if (function_exists("apcu_cache_info") && @apcu_cache_info() !== false) {
                 $arrDriver[] = new ApcuCache();
-            }
-            elseif (function_exists("apc_cache_info") && @apc_cache_info() !== false) {
+            } elseif (function_exists("apc_cache_info") && @apc_cache_info() !== false) {
                 $arrDriver[] = new ApcCache();
-            }
-            elseif (!($intType & self::TYPE_ARRAY)) {
+            } elseif (!($intType & self::TYPE_ARRAY)) {
                 // in case we have no APC use a simple array cache but only if we have not already added a array cache
                 $arrDriver[] = new ArrayCache();
             }
@@ -248,8 +246,7 @@ class CacheManager
         if ($intType & self::TYPE_FILESYSTEM) {
             try {
                 $arrDriver[] = new FilesystemCache(_realpath_."project/temp/cache", ".cache");
-            }
-            catch(\InvalidArgumentException $objEx) {
+            } catch (\InvalidArgumentException $objEx) {
                 $arrDriver[] = new ArrayCache();
             }
         }
@@ -257,8 +254,7 @@ class CacheManager
         if ($intType & self::TYPE_PHPFILE) {
             try {
                 $arrDriver[] = new PhpFileCache(_realpath_."project/temp/cache", ".cache.php");
-            }
-            catch(\InvalidArgumentException $objEx) {
+            } catch (\InvalidArgumentException $objEx) {
                 $arrDriver[] = new ArrayCache();
             }
         }
@@ -285,7 +281,7 @@ class CacheManager
      */
     public static function getInstance()
     {
-        if(self::$objInstance == null) {
+        if (self::$objInstance == null) {
             self::$objInstance = new self();
         }
 
