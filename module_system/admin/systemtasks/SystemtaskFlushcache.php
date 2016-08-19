@@ -62,8 +62,9 @@ class SystemtaskFlushcache extends SystemtaskBase implements AdminSystemtaskInte
         $objCachebuster->updateObjectToDb();
 
         $intType = (int) $this->getParam("cacheSource");
+        $strNamespace = (int) $this->getParam("cacheNamespace");
         if ($intType > 0) {
-            CacheManager::getInstance()->flushCache($intType);
+            CacheManager::getInstance()->flushCache($intType, $strNamespace);
 
             return $this->objToolkit->getTextRow($this->getLang("systemtask_flushcache_success"));
         }
@@ -77,15 +78,23 @@ class SystemtaskFlushcache extends SystemtaskBase implements AdminSystemtaskInte
     public function getAdminForm()
     {
         $strReturn = "";
-        //show dropdown to select cache-source
+
+        // show dropdown to select cache-source
         $arrSources = CacheManager::getAvailableDriver();
         $arrOptions = array();
         $arrOptions[CacheManager::TYPE_APC | CacheManager::TYPE_FILESYSTEM | CacheManager::TYPE_DATABASE | CacheManager::TYPE_PHPFILE] = $this->getLang("systemtask_flushcache_all");
         foreach($arrSources as $intValue => $strLabel) {
             $arrOptions[$intValue] = $strLabel;
         }
-
         $strReturn .= $this->objToolkit->formInputDropdown("cacheSource", $arrOptions, $this->getLang("systemtask_cacheSource_source"));
+
+        // show dropdown to select cache-namespace
+        $arrNamespaces = CacheManager::getAvailableNamespace();
+        $arrOptions = array();
+        foreach($arrNamespaces as $strValue => $strLabel) {
+            $arrOptions[$strValue] = $strLabel;
+        }
+        $strReturn .= $this->objToolkit->formInputDropdown("cacheNamespace", $arrOptions, $this->getLang("systemtask_cacheSource_namespace"), CacheManager::NS_GLOBAL);
 
         return $strReturn;
     }
