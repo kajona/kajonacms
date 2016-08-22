@@ -982,6 +982,7 @@ JS;
     /**
      * Provides an option to compare the current record with a state from a different time
      *
+     * @permissions changelog
      * @since 5.1
      * @return string
      */
@@ -990,19 +991,18 @@ JS;
         $strSystemId = $this->getSystemid();
         /** @var VersionableInterface $objObject */
         $objObject = Objectfactory::getInstance()->getObject($strSystemId);
-        $arrDates = SystemChangelog::getDatesForSystemid($strSystemId);
+
+        $objNow = new Date();
+        $objNow->setEndOfDay();
+        $objYearAgo = new Date();
+        $objYearAgo->setPreviousYear()->setEndOfDay();
+
+        $arrDates = SystemChangelog::getDatesForSystemid($strSystemId, $objYearAgo, $objNow);
 
         $arrResult = array();
-        $arrChart = array();
         foreach ($arrDates as $arrDate) {
             $objDate = new Date($arrDate["change_date"]);
-            $strDate = substr($objDate->getLongTimestamp(), 0, 8);
             $arrResult[$objDate->getLongTimestamp()] = date("d.m.Y", $objDate->getTimeInOldStyle());
-            if (isset($arrChart[$strDate])) {
-                $arrChart[$strDate]++;
-            } else {
-                $arrChart[$strDate] = 1;
-            }
         }
         $arrResult = array_unique($arrResult);
 
@@ -1011,9 +1011,12 @@ JS;
             Link::getLinkAdmin($this->getArrModule("modul"), "genericChangelog", "&systemid=" . $objObject->getStrSystemid() . "&folderview=1", AdminskinHelper::getAdminImage("icon_history") . " " . $this->getLang("commons_edit_history"), "", "", false),
         ));
 
-        $strReturn .= "<div id='changelogTimeline' style='text-align:center;'></div>";
+        $strReturn .= <<<HTML
+            <div style="width:20px;height:110px;" class="pull-left"><a href="#" onclick="KAJONA.admin.changelog.loadPrevYear();return false;" style="display:block;height:110px;padding-top:45px;text-align:center;background-color:#e7e7e7;"><i class="kj-icon fa fa-arrow-left"></i></a></div>
+            <div style="width:20px;height:110px;" class="pull-right"><a href="#" onclick="KAJONA.admin.changelog.loadNextYear();return false;" style="display:block;height:110px;padding-top:45px;text-align:center;background-color:#e7e7e7;"><i class="kj-icon fa fa-arrow-right"></i></a></div>
+            <div id='changelogTimeline' style='text-align:center;'></div>
+HTML;
 
-        $strChartData = json_encode($arrChart);
         $strReturn .= <<<HTML
 <script type="text/javascript">
 KAJONA.admin.loader.loadFile([
@@ -1023,32 +1026,11 @@ KAJONA.admin.loader.loadFile([
     '/core/module_system/admin/scripts/d3/d3.min.js', 
     '/core/module_system/admin/scripts/d3/calendar-heatmap.js', 
     '/core/module_system/admin/scripts/d3/calendar-heatmap.css'], function() {
-    
-    var data = {$strChartData};
-    var now = moment().endOf('day').toDate();
-    var yearAgo = moment().startOf('day').subtract(1, 'year').toDate();
-    var chartData = d3.time.days(yearAgo, now).map(function (dateElement) {
-        var count = 0;
-        if (data.hasOwnProperty(moment(dateElement).format("YYYYMMDD"))) {
-            count = data[moment(dateElement).format("YYYYMMDD")];
-        }
-        return {
-            date: dateElement,
-            count: count
-        };
-    });
 
-    var heatmap = calendarHeatmap()
-        .data(chartData)
-        .selector('#changelogTimeline')
-        .tooltipEnabled(false)
-        .legendEnabled(false)
-        .colorRange(['#eeeeee', '#6cb121'])
-        .onClick(function (data) {
-            var date = moment(data.date).format("YYYYMMDD235959");
-            KAJONA.admin.changelog.loadDate("{$strSystemId}", date, "right", KAJONA.admin.changelog.compareTable);
-        });
-    heatmap();  // render the chart
+    KAJONA.admin.changelog.systemId = "{$strSystemId}";
+    KAJONA.admin.changelog.now = moment().endOf('day').toDate();
+    KAJONA.admin.changelog.yearAgo = moment().startOf('day').subtract(1, 'year').toDate();
+    KAJONA.admin.changelog.loadChartData();
 });
 </script>
 HTML;

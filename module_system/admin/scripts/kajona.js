@@ -1511,6 +1511,10 @@ KAJONA.admin.changelog.compareTable = function () {
     }
 };
 
+KAJONA.admin.changelog.systemId = null;
+KAJONA.admin.changelog.now = null;
+KAJONA.admin.changelog.yearAgo = null;
+
 /**
  * Returns an object containing all version properties from either the left or right table
  *
@@ -1546,6 +1550,49 @@ KAJONA.admin.changelog.loadDate = function (strSystemId, strDate, strType, objCa
         if (typeof objCallback === "function") {
             objCallback.apply();
         }
+    });
+};
+
+KAJONA.admin.changelog.loadNextYear = function () {
+    KAJONA.admin.changelog.now = moment(KAJONA.admin.changelog.now).add(1, 'years').toDate();
+    KAJONA.admin.changelog.yearAgo = moment(KAJONA.admin.changelog.yearAgo).add(1, 'years').toDate();
+    KAJONA.admin.changelog.loadChartData();
+};
+
+KAJONA.admin.changelog.loadPrevYear = function () {
+    KAJONA.admin.changelog.now = moment(KAJONA.admin.changelog.now).subtract(1, 'years').toDate();
+    KAJONA.admin.changelog.yearAgo = moment(KAJONA.admin.changelog.yearAgo).subtract(1, 'years').toDate();
+    KAJONA.admin.changelog.loadChartData();
+};
+
+KAJONA.admin.changelog.loadChartData = function () {
+    var now = moment(KAJONA.admin.changelog.now).format("YYYYMMDD235959");
+    var yearAgo = moment(KAJONA.admin.changelog.yearAgo).format("YYYYMMDD235959");
+
+    KAJONA.admin.ajax.genericAjaxCall("system", "changelogChartData", "&systemid=" + KAJONA.admin.changelog.systemId + "&now=" + now + "&yearAgo=" + yearAgo, function(data, status, jqXHR) {
+        data = JSON.parse(data);
+        var chartData = d3.time.days(KAJONA.admin.changelog.yearAgo, KAJONA.admin.changelog.now).map(function (dateElement) {
+            var count = 0;
+            if (data.hasOwnProperty(moment(dateElement).format("YYYYMMDD"))) {
+                count = data[moment(dateElement).format("YYYYMMDD")];
+            }
+            return {
+                date: dateElement,
+                count: count
+            };
+        });
+
+        var heatmap = calendarHeatmap()
+            .data(chartData)
+            .selector('#changelogTimeline')
+            .tooltipEnabled(false)
+            .legendEnabled(false)
+            .colorRange(['#eeeeee', '#6cb121'])
+            .onClick(function (data) {
+                var date = moment(data.date).format("YYYYMMDD235959");
+                KAJONA.admin.changelog.loadDate(KAJONA.admin.changelog.systemId, date, "right", KAJONA.admin.changelog.compareTable);
+            });
+        heatmap(KAJONA.admin.changelog.now, KAJONA.admin.changelog.yearAgo);  // render the chart
     });
 };
 

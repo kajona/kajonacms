@@ -886,15 +886,17 @@ class SystemChangelog
      * @param Date $objDateTo
      * @return array
      */
-    public static function getDatesForSystemid($strSystemid)
+    public static function getDatesForSystemid($strSystemid, Date $objDateFrom, Date $objDateTo)
     {
         $strQuery = "SELECT change_date,
                             COUNT(change_id) AS cnt
                        FROM "._dbprefix_.self::getTableForClass(Objectfactory::getInstance()->getClassNameForId($strSystemid))."
                       WHERE change_systemid = ?
+                        AND change_date >= ?
+                        AND change_date <= ?
                    GROUP BY change_date
                    ORDER BY change_date ASC ";
-        return Carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid));
+        return Carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid, $objDateFrom->getLongTimestamp(), $objDateTo->getLongTimestamp()));
     }
 
     /**

@@ -12,8 +12,6 @@ function calendarHeatmap() {
     var SQUARE_LENGTH = 11;
     var SQUARE_PADDING = 2;
     var MONTH_LABEL_PADDING = 6;
-    var now = moment().endOf('day').toDate();
-    var yearAgo = moment().startOf('day').subtract(1, 'year').toDate();
     var data = [];
     var colorRange = ['#D8E6E7', '#218380'];
     var tooltipEnabled = true;
@@ -64,7 +62,10 @@ function calendarHeatmap() {
         return chart;
     };
 
-    function chart() {
+    function chart(nowDate, yearAgoDate) {
+
+        var now = nowDate || moment().endOf('day').toDate();
+        var yearAgo = yearAgoDate || moment().startOf('day').subtract(1, 'year').toDate();
 
         d3.select(chart.selector()).selectAll('svg.calendar-heatmap').remove(); // remove the existing chart, if it exists
 

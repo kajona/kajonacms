@@ -531,7 +531,7 @@ class SystemAdminXml extends AdminController implements XmlAdminInterface
      * Returns the properties of an object for a specific date json encoded
      *
      * @return string
-     * @permissions view
+     * @permissions changelog
      * @throws Exception
      */
     protected function actionChangelogPropertiesForDate()
@@ -565,4 +565,38 @@ class SystemAdminXml extends AdminController implements XmlAdminInterface
             throw new Exception("Invalid object type", Exception::$level_ERROR);
         }
     }
+
+    /**
+     * @permissions changelog
+     * @since 5.1
+     * @return string
+     */
+    protected function actionChangelogChartData()
+    {
+        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
+
+        $objNow = new Date($this->getParam("now"));
+        $objYearAgo = new Date($this->getParam("yearAgo"));
+        $strSystemId = $this->getSystemid();
+
+        /** @var VersionableInterface $objObject */
+        $objObject = Objectfactory::getInstance()->getObject($strSystemId);
+        $arrDates = SystemChangelog::getDatesForSystemid($strSystemId, $objYearAgo, $objNow);
+
+        $arrResult = array();
+        $arrChart = array();
+        foreach ($arrDates as $arrDate) {
+            $objDate = new Date($arrDate["change_date"]);
+            $strDate = substr($objDate->getLongTimestamp(), 0, 8);
+            $arrResult[$objDate->getLongTimestamp()] = date("d.m.Y", $objDate->getTimeInOldStyle());
+            if (isset($arrChart[$strDate])) {
+                $arrChart[$strDate]++;
+            } else {
+                $arrChart[$strDate] = 1;
+            }
+        }
+
+        return json_encode($arrChart);
+    }
+
 }
