@@ -1498,15 +1498,18 @@ KAJONA.admin.changelog = {};
  * Method to compare and highlite changes of two version properties table
  */
 KAJONA.admin.changelog.compareTable = function () {
-    var propsLeft = KAJONA.admin.changelog.getTableProperties("left");
-    var propsRight = KAJONA.admin.changelog.getTableProperties("right");
+    var strType = KAJONA.admin.changelog.selectedColumn;
+    var propsLeft = KAJONA.admin.changelog.getTableProperties(strType);
+    var propsRight = KAJONA.admin.changelog.getTableProperties(KAJONA.admin.changelog.getInverseColumn(strType));
     for (var key in propsLeft) {
-        if (propsLeft[key] != "" || propsRight[key] != "") {
-            if (propsLeft[key] != propsRight[key]) {
-                $('#property_' + key + '_left').parent().parent().css('background-color', '#CEC');
+        if (propsLeft[key] !== "" || propsRight[key] !== "") {
+            if (propsLeft[key] !== propsRight[key]) {
+                $('#property_' + key + '_' + strType).parent().parent().css('background-color', '#CEC');
             } else {
-                $('#property_' + key + '_left').parent().parent().css('background-color', '');
+                $('#property_' + key + '_' + strType).parent().parent().css('background-color', '');
             }
+        } else {
+            $('#property_' + key + '_' + strType).parent().parent().css('background-color', '');
         }
     }
 };
@@ -1523,8 +1526,18 @@ KAJONA.admin.changelog.selectedColumn = null;
  */
 KAJONA.admin.changelog.selectColumn = function(strType){
     $('#date_' + strType).css("background-color", "#ccc");
-    $('#date_' + (strType == "left" ? "right" : "left")).css("background-color", "");
+    $('#date_' + KAJONA.admin.changelog.getInverseColumn(strType)).css("background-color", "");
     KAJONA.admin.changelog.selectedColumn = strType;
+};
+
+/**
+ * Returns the opposite column of the provided type
+ *
+ * @param strType
+ * @returns {string}
+ */
+KAJONA.admin.changelog.getInverseColumn = function(strType){
+    return strType == "left" ? "right" : "left";
 };
 
 /**
@@ -1536,7 +1549,7 @@ KAJONA.admin.changelog.selectColumn = function(strType){
 KAJONA.admin.changelog.getTableProperties = function (type) {
     var props = {};
     $('.changelog_property_' + type).each(function(){
-        props[$(this).data('name')] = $(this).html();
+        props[$(this).data('name')] = "" + $(this).html();
     });
     return props;
 };

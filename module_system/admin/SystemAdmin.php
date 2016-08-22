@@ -1017,12 +1017,10 @@ JS;
         ));
 
         $strReturn .= <<<HTML
-            <div class="chart-navigation pull-left"><a href="#" onclick="KAJONA.admin.changelog.loadPrevYear();return false;"><i class="kj-icon fa fa-arrow-left"></i></a></div>
-            <div class="chart-navigation pull-right"><a href="#" onclick="KAJONA.admin.changelog.loadNextYear();return false;"><i class="kj-icon fa fa-arrow-right"></i></a></div>
-            <div id='changelogTimeline' style='text-align:center;'></div>
-HTML;
+<div class="chart-navigation pull-left"><a href="#" onclick="KAJONA.admin.changelog.loadPrevYear();return false;"><i class="kj-icon fa fa-arrow-left"></i></a></div>
+<div class="chart-navigation pull-right"><a href="#" onclick="KAJONA.admin.changelog.loadNextYear();return false;"><i class="kj-icon fa fa-arrow-right"></i></a></div>
+<div id='changelogTimeline' style='text-align:center;'></div>
 
-        $strReturn .= <<<HTML
 <script type="text/javascript">
 KAJONA.admin.loader.loadFile([
     '/core/module_system/admin/scripts/moment/moment.min.js', 
