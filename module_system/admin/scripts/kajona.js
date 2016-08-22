@@ -1606,7 +1606,7 @@ KAJONA.admin.changelog.loadChartData = function () {
         var heatmap = calendarHeatmap()
             .data(chartData)
             .selector('#changelogTimeline')
-            .tooltipEnabled(false)
+            .tooltipEnabled(true)
             .legendEnabled(false)
             .colorRange(['#eeeeee', '#6cb121'])
             .onClick(function (data) {
