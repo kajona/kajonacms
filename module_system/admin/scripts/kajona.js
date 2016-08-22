@@ -1582,6 +1582,8 @@ KAJONA.admin.changelog.loadDate = function (strSystemId, strDate, strType, objCa
  * Loads the chart for the next year
  */
 KAJONA.admin.changelog.loadNextYear = function () {
+    $('#changelogTimeline').fadeOut();
+
     KAJONA.admin.changelog.now = moment(KAJONA.admin.changelog.now).add(1, 'years').toDate();
     KAJONA.admin.changelog.yearAgo = moment(KAJONA.admin.changelog.yearAgo).add(1, 'years').toDate();
     KAJONA.admin.changelog.loadChartData();
@@ -1591,6 +1593,8 @@ KAJONA.admin.changelog.loadNextYear = function () {
  * Loads the chart for the previous year
  */
 KAJONA.admin.changelog.loadPrevYear = function () {
+    $('#changelogTimeline').fadeOut();
+
     KAJONA.admin.changelog.now = moment(KAJONA.admin.changelog.now).subtract(1, 'years').toDate();
     KAJONA.admin.changelog.yearAgo = moment(KAJONA.admin.changelog.yearAgo).subtract(1, 'years').toDate();
     KAJONA.admin.changelog.loadChartData();
@@ -1627,6 +1631,8 @@ KAJONA.admin.changelog.loadChartData = function () {
                 KAJONA.admin.changelog.loadDate(KAJONA.admin.changelog.systemId, date, KAJONA.admin.changelog.selectedColumn, KAJONA.admin.changelog.compareTable);
             });
         heatmap(KAJONA.admin.changelog.now, KAJONA.admin.changelog.yearAgo);  // render the chart
+
+        $('#changelogTimeline').fadeIn();
     });
 };
 

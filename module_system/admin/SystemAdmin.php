@@ -1044,6 +1044,7 @@ KAJONA.admin.loader.loadFile([
 .chart-navigation {
     width:20px;
     height:110px;
+    margin-bottom:38px;
 }
 
 .chart-navigation a {
