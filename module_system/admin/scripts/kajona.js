@@ -1514,6 +1514,13 @@ KAJONA.admin.changelog.compareTable = function () {
 KAJONA.admin.changelog.systemId = null;
 KAJONA.admin.changelog.now = null;
 KAJONA.admin.changelog.yearAgo = null;
+KAJONA.admin.changelog.selectedColumn = null;
+
+KAJONA.admin.changelog.selectColumn = function(strType){
+    $('#date_' + strType).css("background-color", "#aaa");
+    $('#date_' + (strType == "left" ? "right" : "left")).css("background-color", "");
+    KAJONA.admin.changelog.selectedColumn = strType;
+};
 
 /**
  * Returns an object containing all version properties from either the left or right table
@@ -1543,7 +1550,7 @@ KAJONA.admin.changelog.loadDate = function (strSystemId, strDate, strType, objCa
     KAJONA.admin.ajax.genericAjaxCall("system", "changelogPropertiesForDate", "&systemid="+strSystemId+"&date="+strDate, function(data, status, jqXHR) {
         data = JSON.parse(data);
         var props = data.properties;
-        $('#date_' + strType).html(data.date);
+        $('#date_' + strType).html("<a href='#' onclick='KAJONA.admin.changelog.selectColumn(\"" + strType + "\");return false;' style='display:block;'>" + data.date + "</a>");
         for (var prop in props) {
             $('#property_' + prop + '_' + strType).html(props[prop]);
         }
@@ -1590,7 +1597,7 @@ KAJONA.admin.changelog.loadChartData = function () {
             .colorRange(['#eeeeee', '#6cb121'])
             .onClick(function (data) {
                 var date = moment(data.date).format("YYYYMMDD235959");
-                KAJONA.admin.changelog.loadDate(KAJONA.admin.changelog.systemId, date, "right", KAJONA.admin.changelog.compareTable);
+                KAJONA.admin.changelog.loadDate(KAJONA.admin.changelog.systemId, date, KAJONA.admin.changelog.selectedColumn, KAJONA.admin.changelog.compareTable);
             });
         heatmap(KAJONA.admin.changelog.now, KAJONA.admin.changelog.yearAgo);  // render the chart
     });

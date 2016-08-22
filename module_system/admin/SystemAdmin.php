@@ -1006,6 +1006,12 @@ JS;
         }
         $arrResult = array_unique($arrResult);
 
+        $arrDates = array_keys($arrResult);
+        $objLeftDate = new Date(array_pop($arrDates));
+        $strLeftDate = $objLeftDate->setEndOfDay()->getLongTimestamp();
+        $objRightDate = new Date(array_pop($arrDates));
+        $strRightDate = $objRightDate->setEndOfDay()->getLongTimestamp();
+
         $strReturn = "";
         $strReturn .= $this->objToolkit->getContentToolbar(array(
             Link::getLinkAdmin($this->getArrModule("modul"), "genericChangelog", "&systemid=" . $objObject->getStrSystemid() . "&folderview=1", AdminskinHelper::getAdminImage("icon_history") . " " . $this->getLang("commons_edit_history"), "", "", false),
@@ -1030,7 +1036,13 @@ KAJONA.admin.loader.loadFile([
     KAJONA.admin.changelog.systemId = "{$strSystemId}";
     KAJONA.admin.changelog.now = moment().endOf('day').toDate();
     KAJONA.admin.changelog.yearAgo = moment().startOf('day').subtract(1, 'year').toDate();
+    KAJONA.admin.changelog.selectColumn("right");
     KAJONA.admin.changelog.loadChartData();
+        
+    KAJONA.admin.changelog.loadDate("{$strSystemId}", "{$strLeftDate}", "left", function(){
+        KAJONA.admin.changelog.loadDate("{$strSystemId}", "{$strRightDate}", "right", KAJONA.admin.changelog.compareTable);
+    });
+    
 });
 </script>
 HTML;
@@ -1059,20 +1071,6 @@ HTML;
         );
 
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrData, "kajona-data-table-ignore-floatthread");
-
-        $arrDates = array_keys($arrResult);
-        $objLeftDate = new Date(array_pop($arrDates));
-        $strLeftDate = $objLeftDate->setEndOfDay()->getLongTimestamp();
-        $objRightDate = new Date(array_pop($arrDates));
-        $strRightDate = $objRightDate->setEndOfDay()->getLongTimestamp();
-
-        $strReturn .= <<<HTML
-<script type="text/javascript">
-KAJONA.admin.changelog.loadDate("{$strSystemId}", "{$strLeftDate}", "left", function(){
-    KAJONA.admin.changelog.loadDate("{$strSystemId}", "{$strRightDate}", "right", KAJONA.admin.changelog.compareTable);
-});
-</script>
-HTML;
 
         return $strReturn;
     }
