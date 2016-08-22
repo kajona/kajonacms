@@ -1018,8 +1018,8 @@ JS;
         ));
 
         $strReturn .= <<<HTML
-            <div style="width:20px;height:110px;" class="pull-left"><a href="#" onclick="KAJONA.admin.changelog.loadPrevYear();return false;" style="display:block;height:110px;padding-top:45px;text-align:center;background-color:#e7e7e7;"><i class="kj-icon fa fa-arrow-left"></i></a></div>
-            <div style="width:20px;height:110px;" class="pull-right"><a href="#" onclick="KAJONA.admin.changelog.loadNextYear();return false;" style="display:block;height:110px;padding-top:45px;text-align:center;background-color:#e7e7e7;"><i class="kj-icon fa fa-arrow-right"></i></a></div>
+            <div class="chart-navigation pull-left"><a href="#" onclick="KAJONA.admin.changelog.loadPrevYear();return false;"><i class="kj-icon fa fa-arrow-left"></i></a></div>
+            <div class="chart-navigation pull-right"><a href="#" onclick="KAJONA.admin.changelog.loadNextYear();return false;"><i class="kj-icon fa fa-arrow-right"></i></a></div>
             <div id='changelogTimeline' style='text-align:center;'></div>
 HTML;
 
@@ -1043,6 +1043,24 @@ KAJONA.admin.loader.loadFile([
     
 });
 </script>
+<style type="text/css">
+.chart-navigation {
+    width:20px;
+    height:110px;
+}
+
+.chart-navigation a {
+    display:block;
+    height:110px;
+    padding-top:45px;
+    text-align:center;
+    background-color:#f9f9f9;
+}
+
+.chart-navigation a:hover {
+    background-color:#e7e7e7;
+}
+</style>
 HTML;
 
         $objReflection = new Reflection($objObject);

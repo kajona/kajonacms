@@ -1522,7 +1522,7 @@ KAJONA.admin.changelog.selectedColumn = null;
  * @param {string} strType
  */
 KAJONA.admin.changelog.selectColumn = function(strType){
-    $('#date_' + strType).css("background-color", "#aaa");
+    $('#date_' + strType).css("background-color", "#ccc");
     $('#date_' + (strType == "left" ? "right" : "left")).css("background-color", "");
     KAJONA.admin.changelog.selectedColumn = strType;
 };
