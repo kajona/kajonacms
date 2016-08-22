@@ -1059,6 +1059,10 @@ KAJONA.admin.loader.loadFile([
 .chart-navigation a:hover {
     background-color:#e7e7e7;
 }
+
+.day-cell {
+    cursor: pointer;
+}
 </style>
 HTML;
 
