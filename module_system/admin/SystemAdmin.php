@@ -999,9 +999,9 @@ JS;
             $strDate = substr($objDate->getLongTimestamp(), 0, 8);
             $arrResult[$objDate->getLongTimestamp()] = date("d.m.Y", $objDate->getTimeInOldStyle());
             if (isset($arrChart[$strDate])) {
-                $arrChart[$strDate]+= $arrDate["cnt"];
+                $arrChart[$strDate]++;
             } else {
-                $arrChart[$strDate] = $arrDate["cnt"];
+                $arrChart[$strDate] = 1;
             }
         }
         $arrResult = array_unique($arrResult);
