@@ -68,6 +68,7 @@ function calendarHeatmap() {
         var yearAgo = yearAgoDate || moment().startOf('day').subtract(1, 'year').toDate();
 
         d3.select(chart.selector()).selectAll('svg.calendar-heatmap').remove(); // remove the existing chart, if it exists
+        d3.select('body').selectAll('div.day-cell-tooltip').remove(); // remove existing tooltips
 
         var dateRange = d3.time.days(yearAgo, now); // generates an array of date objects within the specified range
         var monthRange = d3.time.months(moment(yearAgo).startOf('month').toDate(), now); // it ignores the first month if the 1st date is after the start of the month
