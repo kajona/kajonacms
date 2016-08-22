@@ -193,6 +193,8 @@ class SystemChangelogRenderer
     }
 
     /**
+     * Returns a fitting string representation of the data depending on the provided type
+     *
      * @param string $strType
      * @param string $strValue
      * @param array $arrDDValues
@@ -200,6 +202,10 @@ class SystemChangelogRenderer
      */
     private function renderData($strType, $strValue, $arrDDValues)
     {
+        if (empty($strType) && validateSystemid($strValue)) {
+            $strType = FormentryObjectlist::class;
+        }
+
         switch ($strType) {
             case FormentryDate::class:
             case FormentryDatetime::class:
@@ -232,6 +238,8 @@ class SystemChangelogRenderer
     }
 
     /**
+     * Tries to find a fitting property name based on the annotations of the provided model
+     *
      * @param Model $objObject
      * @param string $strProperty
      * @return string
@@ -247,6 +255,8 @@ class SystemChangelogRenderer
     }
 
     /**
+     * Tries to find a fitting string representation of the data based on the annotations of the provided model
+     *
      * @param Model $objObject
      * @param string $strProperty
      * @param string $strValue
