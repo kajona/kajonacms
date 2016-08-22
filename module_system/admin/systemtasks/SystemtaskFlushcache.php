@@ -9,9 +9,9 @@
 
 namespace Kajona\System\Admin\Systemtasks;
 
+use Kajona\System\System\CacheManager;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\SystemSetting;
-use Kajona\System\System\CacheManager;
 
 /**
  * Flushes the entries from the systemwide cache
@@ -83,7 +83,7 @@ class SystemtaskFlushcache extends SystemtaskBase implements AdminSystemtaskInte
         $arrSources = CacheManager::getAvailableDriver();
         $arrOptions = array();
         $arrOptions[CacheManager::TYPE_APC | CacheManager::TYPE_FILESYSTEM | CacheManager::TYPE_DATABASE | CacheManager::TYPE_PHPFILE] = $this->getLang("systemtask_flushcache_all");
-        foreach($arrSources as $intValue => $strLabel) {
+        foreach ($arrSources as $intValue => $strLabel) {
             $arrOptions[$intValue] = $strLabel;
         }
         $strReturn .= $this->objToolkit->formInputDropdown("cacheSource", $arrOptions, $this->getLang("systemtask_cacheSource_source"));
@@ -91,7 +91,7 @@ class SystemtaskFlushcache extends SystemtaskBase implements AdminSystemtaskInte
         // show dropdown to select cache-namespace
         $arrNamespaces = CacheManager::getAvailableNamespace();
         $arrOptions = array();
-        foreach($arrNamespaces as $strValue => $strLabel) {
+        foreach ($arrNamespaces as $strValue => $strLabel) {
             $arrOptions[$strValue] = $strLabel;
         }
         $strReturn .= $this->objToolkit->formInputDropdown("cacheNamespace", $arrOptions, $this->getLang("systemtask_cacheSource_namespace"), CacheManager::NS_GLOBAL);
