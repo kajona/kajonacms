@@ -205,24 +205,11 @@ class SystemChangelogRenderer
             case FormentryDatetime::class:
             case "date":
             case "datetime":
-                /*
-                $objField = new FormentryDate("", null);
-                $objField->setStrValue($strValue);
-                return $objField->getValueAsText();
-                */
-
                 return SystemChangelogHelper::getStrValueForDate($strValue);
                 break;
 
             case FormentryDropdown::class:
             case "dropdown":
-                /*
-                $objField = new FormentryDropdown("", null);
-                $objField->setArrKeyValues($arrDDValues);
-                $objField->setStrValue($strValue);
-                return $objField->getValueAsText();
-                */
-
                 if (array_key_exists($strValue, $arrDDValues)) {
                     return $arrDDValues[$strValue];
                 } else {
@@ -236,12 +223,6 @@ class SystemChangelogRenderer
             case "objectlist":
             case "prozess":
             case "oe":
-                /*
-                $objField = new FormentryObjectlist("", null);
-                $objField->setStrValue(explode(",", $strValue));
-                return $objField->getValueAsText();
-                */
-
                 return SystemChangelogHelper::getStrValueForObjects($strValue);
                 break;
 
