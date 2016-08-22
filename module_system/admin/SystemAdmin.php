@@ -1026,8 +1026,6 @@ HTML;
         $strReturn .= <<<HTML
 <script type="text/javascript">
 KAJONA.admin.loader.loadFile([
-    '/core/module_system/admin/scripts/kajona.js', 
-    '/core/module_system/admin/scripts/moment/moment.min.js', 
     '/core/module_system/admin/scripts/moment/moment.min.js', 
     '/core/module_system/admin/scripts/d3/d3.min.js', 
     '/core/module_system/admin/scripts/d3/calendar-heatmap.js', 
