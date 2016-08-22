@@ -1002,14 +1002,13 @@ JS;
         $arrResult = array();
         foreach ($arrDates as $arrDate) {
             $objDate = new Date($arrDate["change_date"]);
-            $arrResult[$objDate->getLongTimestamp()] = date("d.m.Y", $objDate->getTimeInOldStyle());
+            $arrResult[substr($objDate->getLongTimestamp(), 0, 8)] = $objDate->getLongTimestamp();
         }
-        $arrResult = array_unique($arrResult);
+        krsort($arrResult);
 
-        $arrDates = array_keys($arrResult);
-        $objLeftDate = new Date(array_pop($arrDates));
+        $objLeftDate = new Date(array_pop($arrResult));
         $strLeftDate = $objLeftDate->setEndOfDay()->getLongTimestamp();
-        $objRightDate = new Date(array_pop($arrDates));
+        $objRightDate = new Date(array_pop($arrResult));
         $strRightDate = $objRightDate->setEndOfDay()->getLongTimestamp();
 
         $strReturn = "";
