@@ -1516,6 +1516,11 @@ KAJONA.admin.changelog.now = null;
 KAJONA.admin.changelog.yearAgo = null;
 KAJONA.admin.changelog.selectedColumn = null;
 
+/**
+ * Selects the column which should change if a user clicks on the chart
+ *
+ * @param {string} strType
+ */
 KAJONA.admin.changelog.selectColumn = function(strType){
     $('#date_' + strType).css("background-color", "#aaa");
     $('#date_' + (strType == "left" ? "right" : "left")).css("background-color", "");
@@ -1560,18 +1565,27 @@ KAJONA.admin.changelog.loadDate = function (strSystemId, strDate, strType, objCa
     });
 };
 
+/**
+ * Loads the chart for the next year
+ */
 KAJONA.admin.changelog.loadNextYear = function () {
     KAJONA.admin.changelog.now = moment(KAJONA.admin.changelog.now).add(1, 'years').toDate();
     KAJONA.admin.changelog.yearAgo = moment(KAJONA.admin.changelog.yearAgo).add(1, 'years').toDate();
     KAJONA.admin.changelog.loadChartData();
 };
 
+/**
+ * Loads the chart for the previous year
+ */
 KAJONA.admin.changelog.loadPrevYear = function () {
     KAJONA.admin.changelog.now = moment(KAJONA.admin.changelog.now).subtract(1, 'years').toDate();
     KAJONA.admin.changelog.yearAgo = moment(KAJONA.admin.changelog.yearAgo).subtract(1, 'years').toDate();
     KAJONA.admin.changelog.loadChartData();
 };
 
+/**
+ * Loads the chart
+ */
 KAJONA.admin.changelog.loadChartData = function () {
     var now = moment(KAJONA.admin.changelog.now).format("YYYYMMDD235959");
     var yearAgo = moment(KAJONA.admin.changelog.yearAgo).format("YYYYMMDD235959");
