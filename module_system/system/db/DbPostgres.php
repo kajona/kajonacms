@@ -454,7 +454,7 @@ class DbPostgres extends DbBase
             $strCommand = "PGPASSWORD=\"".$this->strPass."\" ";
         }
 
-        $strCommand .= $this->strDumpBin." --clean -h".$this->strHost." -U".$this->strUsername." -p".$this->intPort." ".$strTables." ".$this->strDbName." > \"".$strFilename."\"";
+        $strCommand .= $this->strDumpBin." --clean --no-owner -h".$this->strHost." -U".$this->strUsername." -p".$this->intPort." ".$strTables." ".$this->strDbName." > \"".$strFilename."\"";
         //Now do a systemfork
         $intTemp = "";
         $strResult = system($strCommand, $intTemp);
