@@ -560,7 +560,15 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "5.0" || $arrModule["module_version"] == "5.0.1") {
-            $strReturn .= $this->update_50_51();
+            $strReturn .= "Updating 5.0 to 5.1...\n";
+            $this->updateModuleVersion("", "5.1");
+            $this->objDB->flushQueryCache();
+        }
+
+
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.1") {
+            $strReturn .= $this->update_51_511();
         }
 
         return $strReturn."\n\n";
@@ -671,8 +679,8 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         return $strReturn;
     }
 
-    private function update_50_51() {
-        $strReturn = "Updating 5.0 to 5.1...\n";
+    private function update_51_511() {
+        $strReturn = "Updating 5.1 to 5.1.1...\n";
 
 
 
@@ -745,7 +753,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $this->objDB->changeColumn("session", "session_lasturl", "session_lasturl", DbDatatypes::STR_TYPE_TEXT);
 
         $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1");
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1.1");
         return $strReturn;
     }
     
