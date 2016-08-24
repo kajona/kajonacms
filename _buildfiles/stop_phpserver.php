@@ -20,22 +20,24 @@ function stopProcess($name)
             echo 'Try to kill process ' . $pid . "\n";
             if (DIRECTORY_SEPARATOR === '\\') {
                 // check whether pid exists
-                $output = "";
+                $output = array();
                 exec(sprintf('tasklist /FI "PID eq %d"', $pid), $output, $exitCode);
+                $content = implode("\n", $output);
 
-                if (strpos($output, $pid) !== false) {
+                if (strpos($content, $pid) !== false) {
                     // if the pid exists try to kill it
-                    $output = "";
+                    $output = array();
                     exec(sprintf('taskkill /F /T /PID %d', $pid), $output, $exitCode);
                 }
             } else {
                 // check whether pid exists
-                $output = "";
+                $output = array();
                 exec(sprintf('ps -p %d', $pid), $output, $exitCode);
+                $content = implode("\n", $output);
 
-                if (strpos($output, $pid) !== false) {
+                if (strpos($content, $pid) !== false) {
                     // if the pid exists try to kill it
-                    $output = "";
+                    $output = array();
                     exec(sprintf('kill -9 %d', $pid), $output, $exitCode);
                 }
             }
