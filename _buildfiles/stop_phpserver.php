@@ -19,9 +19,25 @@ function stopProcess($name)
             // now we kill the process
             echo 'Try to kill process ' . $pid . "\n";
             if (DIRECTORY_SEPARATOR === '\\') {
-                exec(sprintf('taskkill /F /T /PID %d', $pid), $output, $exitCode);
+                // check whether pid exists
+                $output = "";
+                exec(sprintf('tasklist /FI "PID eq %d"', $pid), $output, $exitCode);
+
+                if (strpos($output, $pid) !== false) {
+                    // if the pid exists try to kill it
+                    $output = "";
+                    exec(sprintf('taskkill /F /T /PID %d', $pid), $output, $exitCode);
+                }
             } else {
-                exec(sprintf('kill -9 %d', $pid), $output, $exitCode);
+                // check whether pid exists
+                $output = "";
+                exec(sprintf('ps -p %d', $pid), $output, $exitCode);
+
+                if (strpos($output, $pid) !== false) {
+                    // if the pid exists try to kill it
+                    $output = "";
+                    exec(sprintf('kill -9 %d', $pid), $output, $exitCode);
+                }
             }
             //delete the file after kill
             unlink($file);
