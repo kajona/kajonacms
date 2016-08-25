@@ -122,7 +122,6 @@ class DateRange
      */
     public static function transformToOldFormat(array $arrRanges)
     {
-        $strDateFormat = Carrier::getInstance()->getObjLang()->getLang("dateStyleLong", "system");
         $arrResult = array(
             'start_dates' => array(),
             'end_dates' => array(),
@@ -131,8 +130,8 @@ class DateRange
         foreach ($arrRanges as $arrRange) {
             list($objStartDate, $objEndDate) = $arrRange;
 
-            $arrResult['start_dates'][] = date($strDateFormat, $objStartDate->getTimeInOldStyle());
-            $arrResult['end_dates'][] = date($strDateFormat, $objEndDate->getTimeInOldStyle());
+            $arrResult['start_dates'][] = dateToString($objStartDate);
+            $arrResult['end_dates'][] = dateToString($objEndDate);
         }
 
         return $arrResult;
