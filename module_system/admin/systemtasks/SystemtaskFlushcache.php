@@ -20,8 +20,6 @@ use Kajona\System\System\SystemSetting;
  */
 class SystemtaskFlushcache extends SystemtaskBase implements AdminSystemtaskInterface
 {
-
-
     /**
      * @inheritdoc
      */
@@ -61,8 +59,8 @@ class SystemtaskFlushcache extends SystemtaskBase implements AdminSystemtaskInte
         $objCachebuster->setStrValue((int)$objCachebuster->getStrValue() + 1);
         $objCachebuster->updateObjectToDb();
 
-        $intType = (int) $this->getParam("cacheSource");
-        $strNamespace = (int) $this->getParam("cacheNamespace");
+        $intType = (int) $this->getParam("cache_source");
+        $strNamespace = (int) $this->getParam("cache_namespace");
         if ($intType > 0) {
             CacheManager::getInstance()->flushCache($intType, $strNamespace);
 
@@ -86,7 +84,7 @@ class SystemtaskFlushcache extends SystemtaskBase implements AdminSystemtaskInte
         foreach ($arrSources as $intValue => $strLabel) {
             $arrOptions[$intValue] = $strLabel;
         }
-        $strReturn .= $this->objToolkit->formInputDropdown("cacheSource", $arrOptions, $this->getLang("systemtask_cacheSource_source"), current(array_keys($arrOptions)));
+        $strReturn .= $this->objToolkit->formInputDropdown("cache_source", $arrOptions, $this->getLang("systemtask_cacheSource_source"), current(array_keys($arrOptions)));
 
         // show dropdown to select cache-namespace
         $arrNamespaces = CacheManager::getAvailableNamespace();
@@ -94,7 +92,7 @@ class SystemtaskFlushcache extends SystemtaskBase implements AdminSystemtaskInte
         foreach ($arrNamespaces as $strValue => $strLabel) {
             $arrOptions[$strValue] = $strLabel;
         }
-        $strReturn .= $this->objToolkit->formInputDropdown("cacheNamespace", $arrOptions, $this->getLang("systemtask_cacheSource_namespace"), CacheManager::NS_GLOBAL);
+        $strReturn .= $this->objToolkit->formInputDropdown("cache_namespace", $arrOptions, $this->getLang("systemtask_cacheSource_namespace"), CacheManager::NS_GLOBAL);
 
         return $strReturn;
     }
@@ -104,6 +102,10 @@ class SystemtaskFlushcache extends SystemtaskBase implements AdminSystemtaskInte
      */
     public function getSubmitParams()
     {
-        return "&cacheSource=".$this->getParam("cacheSource");
+        $arrParams = array(
+            "cache_source" => $this->getParam("cache_source"),
+            "cache_namespace" => $this->getParam("cache_namespace"),
+        );
+        return "&" . http_build_query($arrParams, "", "&");
     }
 }
