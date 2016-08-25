@@ -243,6 +243,7 @@ interface DbDriverInterface
     /**
      * returns an array of key value pairs with infos about the current database
      * The array returned should have tho following structure:
+     *  property name => value
      *
      * @return array
      */

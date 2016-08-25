@@ -510,6 +510,10 @@ class DbPostgres extends DbBase
             $intPos = uniStrpos($strQuery, "?");
             $strQuery = substr($strQuery, 0, $intPos)."$".$intCount++.substr($strQuery, $intPos + 1);
         }
+
+
+        $strQuery = StringUtil::replace(" LIKE ", " ILIKE ", $strQuery, true, true);
+
         return $strQuery;
     }
 
@@ -519,7 +523,7 @@ class DbPostgres extends DbBase
      *
      * @param string $strQuery
      *
-     * @return resource
+     * @return resource|bool
      * @since 3.4
      */
     private function getPreparedStatementName($strQuery)
