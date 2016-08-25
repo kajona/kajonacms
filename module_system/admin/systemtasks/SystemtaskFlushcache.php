@@ -86,7 +86,7 @@ class SystemtaskFlushcache extends SystemtaskBase implements AdminSystemtaskInte
         foreach ($arrSources as $intValue => $strLabel) {
             $arrOptions[$intValue] = $strLabel;
         }
-        $strReturn .= $this->objToolkit->formInputDropdown("cacheSource", $arrOptions, $this->getLang("systemtask_cacheSource_source"));
+        $strReturn .= $this->objToolkit->formInputDropdown("cacheSource", $arrOptions, $this->getLang("systemtask_cacheSource_source"), current(array_keys($arrOptions)));
 
         // show dropdown to select cache-namespace
         $arrNamespaces = CacheManager::getAvailableNamespace();
