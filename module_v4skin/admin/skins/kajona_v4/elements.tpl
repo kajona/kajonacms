@@ -1925,6 +1925,7 @@ It containes a list of aspects and provides the possibility to switch the differ
             '/core/module_system/admin/scripts/d3/calendar-heatmap.js',
             '/core/module_system/admin/scripts/d3/calendar-heatmap.css'], function() {
 
+            KAJONA.admin.changelog.lang = %%strLang%%;
             KAJONA.admin.changelog.systemId = "%%strSystemId%%";
             KAJONA.admin.changelog.now = moment().endOf('day').toDate();
             KAJONA.admin.changelog.yearAgo = moment().startOf('day').subtract(1, 'year').toDate();

@@ -306,6 +306,12 @@ $lang["systemtask_permissions_name"]     = "Set permissions recursively";
 $lang["generic_changelog_no_systemid"]  = "Calling this action is only possible with a valid systemid. Please enter the systemid to be investigated.";
 $lang["generic_record_locked"]  = "This record cannot be edited because it was locked by the user '{0}'.";
 
+$lang["changelog_months"]            = array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
+$lang["changelog_days"]              = array('S', 'M', 'T', 'W', 'T', 'F', 'S');
+$lang["changelog_tooltipUnit"]       = "change";
+$lang["changelog_tooltipUnitPlural"] = "changes";
+$lang["changelog_tooltipHtml"]       = "<span><strong>%count% %unit%</strong> on %date%</span>";
+
 $lang["cache"]  = "Cache";
 $lang["cache_apc"]  = "APC";
 $lang["cache_filesystem"]  = "Filesystem";

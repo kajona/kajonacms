@@ -1020,6 +1020,13 @@ JS;
             "strSystemId" => $strSystemId,
             "strLeftDate" => $strLeftDate,
             "strRightDate" => $strRightDate,
+            "strLang" => json_encode(array(
+                "months" => $this->getLang("changelog_months"),
+                "days" => $this->getLang("changelog_days"),
+                "tooltipUnit" => $this->getLang("changelog_tooltipUnit"),
+                "tooltipUnitPlural" => $this->getLang("changelog_tooltipUnitPlural"),
+                "tooltipHtml" => $this->getLang("changelog_tooltipHtml"),
+            )),
         );
 
         $strReturn .= $this->objTemplate->fillTemplateFile($arrTemplate, "/elements.tpl", "changelog_heatmap");

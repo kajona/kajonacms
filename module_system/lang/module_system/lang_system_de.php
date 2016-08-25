@@ -299,6 +299,12 @@ $lang["systemtask_permissions_name"]     = "Rechte rekursiv setzen";
 $lang["generic_changelog_no_systemid"]  = "Diese Aktion kann nur mit einer gültigen Systemid aufgerufen werden. Bitte eine entsprechende Systemid angeben.";
 $lang["generic_record_locked"]  = "Dieser Datensatz wurde von dem Benutzer '{0}' gesperrt und kann daher nicht bearbeitet werden.";
 
+$lang["changelog_months"]            = array('Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez');
+$lang["changelog_days"]              = array('S', 'M', 'D', 'M', 'D', 'F', 'S');
+$lang["changelog_tooltipUnit"]       = "Änderung";
+$lang["changelog_tooltipUnitPlural"] = "Änderungen";
+$lang["changelog_tooltipHtml"]       = "<span><strong>%count% %unit%</strong> am %date%</span>";
+
 $lang["cache"]  = "Cache";
 $lang["cache_apc"]  = "APC";
 $lang["cache_filesystem"]  = "Filesystem";
