@@ -3,11 +3,12 @@
 
 function calendarHeatmap() {
     // defaults
-    var width = 700;
+    var width = 750;
     var height = 110;
+    var padding = 32;
     var legendWidth = 150;
-    var months = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'];
-    var days = ['S', 'M', 'D', 'M', 'D', 'F', 'S'];
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    var days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
     var selector = 'body';
     var SQUARE_LENGTH = 11;
     var SQUARE_PADDING = 2;
@@ -15,8 +16,12 @@ function calendarHeatmap() {
     var data = [];
     var colorRange = ['#D8E6E7', '#218380'];
     var tooltipEnabled = true;
-    var tooltipUnit = 'Änderung';
+    var tooltipHtml = '<span><strong>%count% %unit%</strong> on %date%</span>';
+    var tooltipUnit = 'contribution';
+    var tooltipUnitPlural = 'contributions';
+    var tooltipDateFormat = 'ddd, MMM Do YYYY';
     var legendEnabled = true;
+    var toggleDays = true;
     var onClick = null;
 
     // setters and getters
@@ -38,9 +43,45 @@ function calendarHeatmap() {
         return chart;
     };
 
+    chart.width = function (value) {
+        if (!arguments.length) { return width; }
+        width = value;
+        return chart;
+    };
+
+    chart.height = function (value) {
+        if (!arguments.length) { return height; }
+        height = value;
+        return chart;
+    };
+
+    chart.padding = function (value) {
+        if (!arguments.length) { return padding; }
+        padding = value;
+        return chart;
+    };
+
+    chart.months = function (value) {
+        if (!arguments.length) { return months; }
+        months = value;
+        return chart;
+    };
+
+    chart.days = function (value) {
+        if (!arguments.length) { return days; }
+        days = value;
+        return chart;
+    };
+
     chart.tooltipEnabled = function (value) {
         if (!arguments.length) { return tooltipEnabled; }
         tooltipEnabled = value;
+        return chart;
+    };
+
+    chart.tooltipHtml = function (value) {
+        if (!arguments.length) { return tooltipHtml; }
+        tooltipHtml = value;
         return chart;
     };
 
@@ -50,9 +91,27 @@ function calendarHeatmap() {
         return chart;
     };
 
+    chart.tooltipUnitPlural = function (value) {
+        if (!arguments.length) { return tooltipUnitPlural; }
+        tooltipUnitPlural = value;
+        return chart;
+    };
+
+    chart.tooltipDateFormat = function (value) {
+        if (!arguments.length) { return tooltipDateFormat; }
+        tooltipDateFormat = value;
+        return chart;
+    };
+
     chart.legendEnabled = function (value) {
         if (!arguments.length) { return legendEnabled; }
         legendEnabled = value;
+        return chart;
+    };
+
+    chart.toggleDays = function (value) {
+        if (!arguments.length) { return toggleDays; }
+        toggleDays = value;
         return chart;
     };
 
@@ -63,7 +122,6 @@ function calendarHeatmap() {
     };
 
     function chart(nowDate, yearAgoDate) {
-
         var now = nowDate || moment().endOf('day').toDate();
         var yearAgo = yearAgoDate || moment().startOf('day').subtract(1, 'year').toDate();
 
@@ -91,7 +149,7 @@ function calendarHeatmap() {
                 .attr('width', width)
                 .attr('class', 'calendar-heatmap')
                 .attr('height', height)
-                .style('padding', '16px');
+                .style('padding', padding + 'px');
 
             dayRects = svg.selectAll('.day-cell')
                 .data(dateRange);  //  array of days for the last yr
@@ -117,7 +175,7 @@ function calendarHeatmap() {
 
             if (chart.tooltipEnabled()) {
                 dayRects.on('mouseover', function (d, i) {
-                    tooltip = d3.select('body')
+                    tooltip = d3.select(chart.selector())
                         .append('div')
                         .attr('class', 'day-cell-tooltip')
                         .html(tooltipHTMLForDate(d))
@@ -176,24 +234,42 @@ function calendarHeatmap() {
                             matchIndex++;
                         }
                     }
+                    if (matchIndex == 0) {
+                        return SQUARE_LENGTH * 4 * -1;
+                    }
                     return matchIndex * (SQUARE_LENGTH + SQUARE_PADDING);
                 })
                 .attr('y', 0);  // fix these to the top
 
             days.forEach(function (day, index) {
-                svg.append('text')
-                    .attr('class', 'day-initial')
-                    .attr('transform', 'translate(-8,' + (SQUARE_LENGTH + SQUARE_PADDING) * (index + 1) + ')')
-                    .style('text-anchor', 'middle')
-                    .attr('dy', '1')
-                    .text(day);
+                if (toggleDays) {
+                    if (index % 2) {
+                        svg.append('text')
+                            .attr('class', 'day-initial')
+                            .attr('transform', 'translate(-8,' + (SQUARE_LENGTH + SQUARE_PADDING) * (index + 1) + ')')
+                            .style('text-anchor', 'middle')
+                            .attr('dy', '2')
+                            .text(day);
+                    }
+                } else {
+                    svg.append('text')
+                        .attr('class', 'day-initial')
+                        .attr('transform', 'translate(-8,' + (SQUARE_LENGTH + SQUARE_PADDING) * (index + 1) + ')')
+                        .style('text-anchor', 'middle')
+                        .attr('dy', '1')
+                        .text(day);
+                }
             });
         }
 
         function tooltipHTMLForDate(d) {
-            var dateStr = moment(d).format('DD.MM.YYYY');
+            var dateStr = moment(d).format(tooltipDateFormat);
             var count = countForDate(d);
-            return '<span><strong>' + (count ? count : 'Keine') + ' ' + tooltipUnit + (count === 1 ? '' : 'en') + '</strong> am ' + dateStr + '</span>';
+            var html = tooltipHtml;
+            html = html.replace(/\%count\%/g, count);
+            html = html.replace(/\%unit\%/g, count === 1 ? tooltipUnit : tooltipUnitPlural);
+            html = html.replace(/\%date\%/g, dateStr);
+            return html;
         }
 
         function countForDate(d) {

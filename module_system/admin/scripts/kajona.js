@@ -1623,8 +1623,17 @@ KAJONA.admin.changelog.loadChartData = function () {
         var heatmap = calendarHeatmap()
             .data(chartData)
             .selector('#changelogTimeline')
+            .months(['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'])
+            .days(['S', 'M', 'D', 'M', 'D', 'F', 'S'])
+            .width(700)
+            .padding(16)
             .tooltipEnabled(true)
+            .tooltipUnit("Änderung")
+            .tooltipUnitPlural("Änderungen")
+            .tooltipDateFormat("DD.MM.YYYY")
+            .tooltipHtml("<span><strong>%count% %unit%</strong> am %date%</span>")
             .legendEnabled(false)
+            .toggleDays(false)
             .colorRange(['#eeeeee', '#6cb121'])
             .onClick(function (data) {
                 var date = moment(data.date).format("YYYYMMDD235959");
