@@ -253,6 +253,22 @@ KAJONA.util.formatNumber = function(floatValue, intDecimalLength, intLengthWhole
     return (strDelimiterDecimal ? num.replace('.', strDelimiterDecimal) : num).replace(new RegExp(re, 'g'), '$&' + (strDelimiterSections || ','));
 };
 
+/**
+ * Formats a kajona date format to a specific javascript format string
+ *
+ * @param {string} format
+ * @param {string} type
+ */
+KAJONA.util.formatDate = function(format, type) {
+    if (type == 'bootstrap-datepicker') {
+        return format.replace('d', 'dd').replace('m', 'mm').replace('Y', 'yyyy');
+    } else if (type == 'momentjs') {
+        return format.replace('d', 'DD').replace('m', 'MM').replace('Y', 'YYYY');
+    } else {
+        return format;
+    }
+};
+
 /*
  * -------------------------------------------------------------------------
  * Admin-specific functions

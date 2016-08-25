@@ -1020,6 +1020,7 @@ JS;
             "strSystemId" => $strSystemId,
             "strLeftDate" => $strLeftDate,
             "strRightDate" => $strRightDate,
+            "strDateFormat" => $this->getLang("dateStyleShort"),
             "strLang" => json_encode(array(
                 "months" => $this->getLang("toolsetCalendarMonthShort"),
                 "days" => $this->getLang("toolsetCalendarWeekdayShort"),
