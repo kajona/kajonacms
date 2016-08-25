@@ -1022,7 +1022,7 @@ JS;
             "strRightDate" => $strRightDate,
         );
 
-        $strReturn .= $this->objTemplate->fillTemplateFile($arrTemplate, _realpath_ . "/core/module_system/templates/default/tpl/changelog_heatmap.tpl", "", true);
+        $strReturn .= $this->objTemplate->fillTemplateFile($arrTemplate, "/elements.tpl", "changelog_heatmap");
 
         $objReflection = new Reflection($objObject);
         $arrProps = $objReflection->getPropertiesWithAnnotation(SystemChangelog::ANNOTATION_PROPERTY_VERSIONABLE);
