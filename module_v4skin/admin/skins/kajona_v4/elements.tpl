@@ -1938,27 +1938,4 @@ It containes a list of aspects and provides the possibility to switch the differ
 
         });
     </script>
-    <style type="text/css">
-        .chart-navigation {
-            width:20px;
-            height:110px;
-            margin-bottom:38px;
-        }
-
-        .chart-navigation a {
-            display:block;
-            height:110px;
-            padding-top:45px;
-            text-align:center;
-            background-color:#f9f9f9;
-        }
-
-        .chart-navigation a:hover {
-            background-color:#e7e7e7;
-        }
-
-        .day-cell {
-            cursor: pointer;
-        }
-    </style>
 </changelog_heatmap>
