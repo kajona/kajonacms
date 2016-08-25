@@ -285,6 +285,8 @@ $lang["titleTime"]                       = "Time of day";
 $lang["treeviewtoggle"]                  = "Show / hide tree";
 $lang["toolsetCalendarMonth"]            = "\"January\", \"February\", \"March\", \"April\", \"May\", \"June\", \"July\", \"August\", \"September\", \"October\", \"November\", \"December\"";
 $lang["toolsetCalendarWeekday"]          = "\"Su\", \"Mu\", \"Tu\", \"We\", \"Th\", \"Fr\", \"Sa\"";
+$lang["toolsetCalendarMonthShort"]       = array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
+$lang["toolsetCalendarWeekdayShort"]     = array('S', 'M', 'T', 'W', 'T', 'F', 'S');
 $lang["update_available"]                = "Please update!";
 $lang["update_invalidXML"]               = "The servers response was erroneous. Please try again.";
 $lang["update_module_localversion"]      = "This installation";
@@ -306,8 +308,6 @@ $lang["systemtask_permissions_name"]     = "Set permissions recursively";
 $lang["generic_changelog_no_systemid"]  = "Calling this action is only possible with a valid systemid. Please enter the systemid to be investigated.";
 $lang["generic_record_locked"]  = "This record cannot be edited because it was locked by the user '{0}'.";
 
-$lang["changelog_months"]            = array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
-$lang["changelog_days"]              = array('S', 'M', 'T', 'W', 'T', 'F', 'S');
 $lang["changelog_tooltipUnit"]       = "change";
 $lang["changelog_tooltipUnitPlural"] = "changes";
 $lang["changelog_tooltipHtml"]       = "<span><strong>%count% %unit%</strong> on %date%</span>";

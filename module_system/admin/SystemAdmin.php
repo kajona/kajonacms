@@ -1021,8 +1021,8 @@ JS;
             "strLeftDate" => $strLeftDate,
             "strRightDate" => $strRightDate,
             "strLang" => json_encode(array(
-                "months" => $this->getLang("changelog_months"),
-                "days" => $this->getLang("changelog_days"),
+                "months" => $this->getLang("toolsetCalendarMonthShort"),
+                "days" => $this->getLang("toolsetCalendarWeekdayShort"),
                 "tooltipUnit" => $this->getLang("changelog_tooltipUnit"),
                 "tooltipUnitPlural" => $this->getLang("changelog_tooltipUnitPlural"),
                 "tooltipHtml" => $this->getLang("changelog_tooltipHtml"),

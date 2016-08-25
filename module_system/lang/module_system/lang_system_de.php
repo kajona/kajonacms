@@ -277,6 +277,8 @@ $lang["titel_root"]                      = "Rechte-Root-Satz";
 $lang["titleTime"]                       = "Uhr";
 $lang["toolsetCalendarMonth"]            = "\"Januar\", \"Februar\", \"März\", \"April\", \"Mai\", \"Juni\", \"Juli\", \"August\", \"September\", \"Oktober\", \"November\", \"Dezember\"";
 $lang["toolsetCalendarWeekday"]          = "\"So\", \"Mo\", \"Di\", \"Mi\", \"Do\", \"Fr\", \"Sa\"";
+$lang["toolsetCalendarMonthShort"]       = array('Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez');
+$lang["toolsetCalendarWeekdayShort"]     = array('S', 'M', 'D', 'M', 'D', 'F', 'S');
 $lang["treeviewtoggle"]                  = "Baum anzeigen / ausblenden";
 $lang["update_available"]                = "Bitte updaten!";
 $lang["update_invalidXML"]               = "Die Antwort vom Server war leider nicht korrekt. Bitte versuchen Sie die letzte Aktion erneut.";
@@ -299,8 +301,6 @@ $lang["systemtask_permissions_name"]     = "Rechte rekursiv setzen";
 $lang["generic_changelog_no_systemid"]  = "Diese Aktion kann nur mit einer gültigen Systemid aufgerufen werden. Bitte eine entsprechende Systemid angeben.";
 $lang["generic_record_locked"]  = "Dieser Datensatz wurde von dem Benutzer '{0}' gesperrt und kann daher nicht bearbeitet werden.";
 
-$lang["changelog_months"]            = array('Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez');
-$lang["changelog_days"]              = array('S', 'M', 'D', 'M', 'D', 'F', 'S');
 $lang["changelog_tooltipUnit"]       = "Änderung";
 $lang["changelog_tooltipUnitPlural"] = "Änderungen";
 $lang["changelog_tooltipHtml"]       = "<span><strong>%count% %unit%</strong> am %date%</span>";
