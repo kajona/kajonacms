@@ -747,7 +747,7 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
                         arrSecondFiles = [];
                     KAJONA.admin.loader.loadFile(arrSecondFiles, function() {
                         $('#%%calendarId%%').datepicker({
-                            format: KAJONA.util.formatDate('%%dateFormat%%', "bootstrap-datepicker"),
+                            format: KAJONA.util.transformDateFormat('%%dateFormat%%', "bootstrap-datepicker"),
                             weekStart: 1,
                             autoclose: true,
                             language: '%%calendarLang%%',
@@ -794,7 +794,7 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
             KAJONA.admin.loader.loadFile(["/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-datepicker.js"], function() {
                 KAJONA.admin.loader.loadFile(["/core/module_v4skin/admin/skins/kajona_v4/js/locales/bootstrap-datepicker.%%calendarLang%%.js"], function() {
                     $('#%%calendarId%%').datepicker({
-                        format: KAJONA.util.formatDate('%%dateFormat%%', "bootstrap-datepicker"),
+                        format: KAJONA.util.transformDateFormat('%%dateFormat%%', "bootstrap-datepicker"),
                         weekStart: 1,
                         autoclose: true,
                         language: '%%calendarLang%%',
@@ -1923,7 +1923,7 @@ It containes a list of aspects and provides the possibility to switch the differ
 
             KAJONA.admin.changelog.lang = %%strLang%%;
             KAJONA.admin.changelog.systemId = "%%strSystemId%%";
-            KAJONA.admin.changelog.format = KAJONA.util.formatDate('%%strDateFormat%%', "momentjs");
+            KAJONA.admin.changelog.format = KAJONA.util.transformDateFormat('%%strDateFormat%%', "momentjs");
             KAJONA.admin.changelog.now = moment().endOf('day').toDate();
             KAJONA.admin.changelog.yearAgo = moment().startOf('day').subtract(1, 'year').toDate();
             KAJONA.admin.changelog.selectColumn("right");

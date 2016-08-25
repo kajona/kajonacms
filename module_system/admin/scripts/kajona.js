@@ -259,7 +259,7 @@ KAJONA.util.formatNumber = function(floatValue, intDecimalLength, intLengthWhole
  * @param {string} format
  * @param {string} type
  */
-KAJONA.util.formatDate = function(format, type) {
+KAJONA.util.transformDateFormat = function(format, type) {
     if (type == 'bootstrap-datepicker') {
         return format.replace('d', 'dd').replace('m', 'mm').replace('Y', 'yyyy');
     } else if (type == 'momentjs') {
