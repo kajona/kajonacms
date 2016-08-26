@@ -276,7 +276,6 @@ class JsonapiAdmin extends AdminEvensimpler implements AdminInterface
             throw new AuthenticationException("You are not allowed to create new records", Exception::$level_ERROR);
         }
 
-        // insert data
         $objAdminForm = AdminFormgeneratorFactory::createByModel($objObject);
 
         // validate
@@ -289,6 +288,7 @@ class JsonapiAdmin extends AdminEvensimpler implements AdminInterface
 
         $objAdminForm->updateSourceObject();
 
+        // create object
         $objObject->updateObjectToDb();
 
         return array(
@@ -315,7 +315,6 @@ class JsonapiAdmin extends AdminEvensimpler implements AdminInterface
             throw new AuthenticationException("You are not allowed to update records", Exception::$level_ERROR);
         }
 
-        // insert data
         $objAdminForm = AdminFormgeneratorFactory::createByModel($objObject);
 
         // validate
@@ -328,6 +327,7 @@ class JsonapiAdmin extends AdminEvensimpler implements AdminInterface
 
         $objAdminForm->updateSourceObject();
 
+        // update object
         $objObject->updateObjectToDb();
 
         return array(
@@ -353,6 +353,7 @@ class JsonapiAdmin extends AdminEvensimpler implements AdminInterface
             throw new AuthenticationException("You are not allowed to delete records", Exception::$level_ERROR);
         }
 
+        // delete object
         $objObject->deleteObject();
 
         return array(
