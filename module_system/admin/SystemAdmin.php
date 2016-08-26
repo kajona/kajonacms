@@ -968,7 +968,7 @@ JS;
             $arrToolbar[] = Link::getLinkAdmin($this->getArrModule("modul"), "genericChangelogExportExcel", "&systemid=" . $strSystemid, AdminskinHelper::getAdminImage("icon_excel") . " " . $this->getLang("change_export_excel"), "", "", false);
         }
 
-        $arrToolbar[] = Link::getLinkAdmin($this->getArrModule("modul"), "changelogDiff", "&systemid=" . $strSystemid . "&folderview=1", AdminskinHelper::getAdminImage("icon_sync") . " " . $this->getLang("change_diff"), "", "", false);
+        $arrToolbar[] = Link::getLinkAdmin($this->getArrModule("modul"), "changelogDiff", "&systemid=" . $strSystemid . "&folderview=1", AdminskinHelper::getAdminImage("icon_aspect") . " " . $this->getLang("change_diff"), "", "", false);
 
         $strReturn .= $this->objToolkit->getContentToolbar($arrToolbar);
 
