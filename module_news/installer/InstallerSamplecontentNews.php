@@ -91,8 +91,7 @@ class InstallerSamplecontentNews implements SamplecontentInstallerInterface
             $objNews->setStrTitle("Erfolgreich installiert");
             $objNews->setStrText("Eine weitere Installation von Kajona V3 war erfolgreich. Für weitere Infomationen zu Kajona besuchen Sie www.kajona.de.");
             $objNews->setStrIntro("Kajona wurde erfolgreich installiert...");
-        }
-        else {
+        } else {
             $objNews->setStrTitle("Installation successful");
             $objNews->setStrText("Another installation of Kajona was successful. For further information, support or proposals, please visit our website: www.kajona.de");
             $objNews->setStrIntro("Kajona installed successfully...");
@@ -181,8 +180,7 @@ class InstallerSamplecontentNews implements SamplecontentInstallerInterface
 
         if ($this->strContentLanguage == "de") {
             $objNewsFeed->setStrDesc("Dies ist ein Kajona demo news feed");
-        }
-        else {
+        } else {
             $objNewsFeed->setStrDesc("This is a Kajona demo news feed");
         }
 

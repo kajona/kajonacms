@@ -37,7 +37,6 @@ use Kajona\System\System\TemplateMapper;
  */
 class NewsPortal extends PortalController implements PortalInterface
 {
-
     /**
      * Constructor
      *
@@ -52,8 +51,7 @@ class NewsPortal extends PortalController implements PortalInterface
         if (isset($this->arrElementData["news_view"]) && $this->arrElementData["news_view"] != "0" &&
             ($strAction == "newsDetail" || (validateSystemid($this->getSystemid()) && Objectfactory::getInstance()->getObject($this->getSystemid()) instanceof NewsNews))) {
             $this->setAction("newsDetail");
-        }
-        else {
+        } else {
             $this->setAction("newsList");
         }
     }
@@ -80,8 +78,7 @@ class NewsPortal extends PortalController implements PortalInterface
         //Load news using the correct filter
         if ($this->getParam("filterid") != "") {
             $strFilterId = $this->getParam("filterid");
-        }
-        else {
+        } else {
             $strFilterId = $this->arrElementData["news_category"];
         }
 
@@ -169,8 +166,7 @@ class NewsPortal extends PortalController implements PortalInterface
                 if ($objOneNews->getStrImage() != "") {
                     $objMapper->addPlaceholder("news_image", urlencode($objOneNews->getStrImage()));
                     $strOneNews = $objMapper->writeToTemplate("/module_news/".$this->arrElementData["news_template"], "news_list_image");
-                }
-                else {
+                } else {
                     $strOneNews = $objMapper->writeToTemplate("/module_news/".$this->arrElementData["news_template"], "news_list");
                 }
 
@@ -256,8 +252,7 @@ class NewsPortal extends PortalController implements PortalInterface
             if ($objNews->getStrImage() != "") {
                 $objMapper->addPlaceholder("news_image", urlencode($objNews->getStrImage()));
                 $strReturn .= $objMapper->writeToTemplate("/module_news/".$this->arrElementData["news_template"], "news_detail_image");
-            }
-            else {
+            } else {
                 $strReturn .= $objMapper->writeToTemplate("/module_news/".$this->arrElementData["news_template"], "news_detail");
             }
 
@@ -272,8 +267,7 @@ class NewsPortal extends PortalController implements PortalInterface
 
             //set the name of the current news to the page-title via class_pages
             PagesPortalController::registerAdditionalTitle($objNews->getStrTitle());
-        }
-        else {
+        } else {
             $strReturn = $this->getLang("commons_error_permissions");
         }
         return $strReturn;
@@ -327,8 +321,7 @@ class NewsPortal extends PortalController implements PortalInterface
 
                 $arrReturn["nrOfComments"] = count($arrComments);
                 $arrReturn["commentList"] = $strListCode;
-            }
-            else {
+            } else {
                 return null;
             }
 
