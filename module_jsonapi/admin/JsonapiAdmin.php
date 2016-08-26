@@ -38,7 +38,7 @@ use Kajona\System\System\SystemModule;
 class JsonapiAdmin extends AdminEvensimpler implements AdminInterface
 {
     /**
-     * Handles the incomming request. Catches all exceptions so that we return
+     * Handles the incoming request. Catches all exceptions so that we return
      * a clean json response with a fitting status code if an error occured
      *
      * @xml
