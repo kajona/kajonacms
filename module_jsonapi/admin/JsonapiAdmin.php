@@ -100,7 +100,7 @@ class JsonapiAdmin extends AdminEvensimpler implements AdminInterface
     protected function actionGet()
     {
         // if we have no systemId we return a list else only a specific entry
-        $objObject = $this->getCurrentObject();
+        $objObject = $this->getCurrentObject($this->getSystemid());
 
         if (!validateSystemid($this->getSystemid())) {
             if ($this->getParam("form")) {
@@ -433,13 +433,7 @@ class JsonapiAdmin extends AdminEvensimpler implements AdminInterface
      */
     protected function getCurrentObject($strSystemId = null)
     {
-        $strClassName = $this->getParam('class');
-
-        if (empty($strClassName) || !class_exists($strClassName)) {
-            throw new InvalidRequestException('Invalid class name', Exception::$level_ERROR);
-        }
-
-        if ($strSystemId !== null) {
+        if (!empty($strSystemId)) {
             if (!validateSystemid($strSystemId)) {
                 throw new InvalidRequestException('Invalid system id', Exception::$level_ERROR);
             }
@@ -450,6 +444,12 @@ class JsonapiAdmin extends AdminEvensimpler implements AdminInterface
                 throw new InvalidRequestException('Object not exisiting', Exception::$level_ERROR);
             }
         } else {
+            $strClassName = $this->getParam('class');
+
+            if (empty($strClassName) || !class_exists($strClassName)) {
+                throw new InvalidRequestException('Invalid class name', Exception::$level_ERROR);
+            }
+
             $objObject = new $strClassName();
         }
 
