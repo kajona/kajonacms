@@ -8,7 +8,6 @@ namespace Kajona\Jsonapi\Admin;
 
 use Kajona\Jsonapi\System\InvalidRequestException;
 use Kajona\Jsonapi\System\ObjectSerializer;
-use Kajona\System\Admin\AdminController;
 use Kajona\System\Admin\AdminEvensimpler;
 use Kajona\System\Admin\AdminFormgenerator;
 use Kajona\System\Admin\AdminFormgeneratorFactory;
@@ -46,7 +45,6 @@ class JsonapiAdmin extends AdminEvensimpler implements AdminInterface
      */
     protected function actionDispatch()
     {
-
         ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
 
         try {
@@ -110,9 +108,9 @@ class JsonapiAdmin extends AdminEvensimpler implements AdminInterface
                 return $this->getAdminJsonForm($objAdminForm);
             } else {
                 // pagination
-                $intStartIndex = (int) $this->getParam('startIndex');
+                $intStartIndex = (int)$this->getParam('startIndex');
                 $intStartIndex = $intStartIndex <= 0 ? 0 : $intStartIndex;
-                $intCount = (int) $this->getParam('count');
+                $intCount = (int)$this->getParam('count');
                 $intCount = $intCount <= 0 ? 8 : $intCount;
 
                 $strPrevId = $this->getParam("previd") ?: "";
@@ -144,8 +142,8 @@ class JsonapiAdmin extends AdminEvensimpler implements AdminInterface
                 return array(
                     'totalCount' => $intTotalCount,
                     'startIndex' => $intStartIndex,
-                    'filter' => $arrFilter,
-                    'entries' => $arrResult,
+                    'filter'     => $arrFilter,
+                    'entries'    => $arrResult,
                 );
             }
         } else {
@@ -174,7 +172,7 @@ class JsonapiAdmin extends AdminEvensimpler implements AdminInterface
                 $strTargetUri = "";
             }
 
-            $intButtonConfig = (int) $this->getParam("button_config") ?: 2;
+            $intButtonConfig = (int)$this->getParam("button_config") ?: 2;
 
             return array(
                 "form" => $objAdminForm->renderForm($strTargetUri, $intButtonConfig),
@@ -185,21 +183,36 @@ class JsonapiAdmin extends AdminEvensimpler implements AdminInterface
 
             foreach ($arrFields as $objField) {
                 $arrResult[] = array(
-                    "_class" => get_class($objField),
+                    "_class"    => get_class($objField),
                     "entryName" => $objField->getStrEntryName(),
-                    "label" => $objField->getStrLabel(),
-                    "hint" => $objField->getStrHint(),
-                    "readonly" => $objField->getBitReadonly(),
-                    "value" => $objField->getStrValue(),
+                    "label"     => $objField->getStrLabel(),
+                    "hint"      => $objField->getStrHint(),
+                    "readonly"  => $objField->getBitReadonly(),
+                    "value"     => $objField->getStrValue(),
                     "mandatory" => $objField->getBitMandatory(),
                 );
             }
 
             return array(
-                "name" => $objAdminForm->getStrFormname(),
+                "name"   => $objAdminForm->getStrFormname(),
                 "fields" => $arrResult,
             );
         }
+    }
+
+    /**
+     * Returns a JSON representation of the filter object form
+     *
+     * @param FilterBase $objFilter
+     * @return array
+     */
+    protected function getAdminJsonFilterForm(FilterBase $objFilter)
+    {
+        $objFilterForm = new AdminFormgeneratorFilter($objFilter->getFilterId(), $objFilter);
+        $objFilterForm->generateFieldsFromObject();
+        $objFilterForm->updateSourceObject();
+
+        return $this->getAdminJsonForm($objFilterForm);
     }
 
     /**
@@ -211,12 +224,9 @@ class JsonapiAdmin extends AdminEvensimpler implements AdminInterface
      */
     protected function getFilterForModel(Root $objObject)
     {
-        // @TODO since we have no clean way to get the fitting filter for a model we simply try to guess through the
-        // name. Maybe we should add an annotation to the model which declares the default filter
+        $strObjectFilterClass = $this->getObjectFilterClassName($objObject);
 
-        $strObjectFilterClass = $this->getObjectFilterClass($objObject);
-
-        if (class_exists($strObjectFilterClass)) {
+        if (!empty($strObjectFilterClass) && class_exists($strObjectFilterClass)) {
             $objFilter = new $strObjectFilterClass();
             if ($objFilter instanceof FilterBase) {
                 $objFilter->updateFilterPropertiesFromParams();
@@ -228,16 +238,13 @@ class JsonapiAdmin extends AdminEvensimpler implements AdminInterface
         return null;
     }
 
-    protected function getAdminJsonFilterForm($objFilter)
-    {
-        $objFilterForm = new AdminFormgeneratorFilter($objFilter->getFilterId(), $objFilter);
-        $objFilterForm->generateFieldsFromObject();
-        $objFilterForm->updateSourceObject();
-
-        return $this->getAdminJsonForm($objFilterForm);
-    }
-
-    private function getObjectFilterClass(Root $objObject)
+    /**
+     * Since we have no clean way to get the fitting filter for a model we use the object_type parameter
+     *
+     * @param Root $objObject
+     * @return string|null
+     */
+    protected function getObjectFilterClassName(Root $objObject)
     {
         $strCurObjectTypeName = $this->getParam("object_type");
         $objAdminController = SystemModule::getModuleByName($objObject->getArrModule("module"))->getAdminInstanceOfConcreteModule($objObject->getStrSystemid());
@@ -365,23 +372,24 @@ class JsonapiAdmin extends AdminEvensimpler implements AdminInterface
     protected function serializeObject(Root $objModel)
     {
         $objSerializer = new ObjectSerializer($objModel);
-        $objAdminController = SystemModule::getModuleByName($objModel->getArrModule("module"))->getAdminInstanceOfConcreteModule($objModel->getStrSystemid());
 
+        /*
+        $objAdminController = SystemModule::getModuleByName($objModel->getArrModule("module"))->getAdminInstanceOfConcreteModule($objModel->getStrSystemid());
         if ($objAdminController instanceof AdminSimple) {
             $arrActions = $objAdminController->getActionIcons($objModel);
         } else {
             $arrActions = [];
         }
+        */
 
         return array_merge(
             array(
-                '_id' => $objModel->getSystemid(),
-                '_class' => get_class($objModel),
-                '_icon' => is_array($objModel->getStrIcon()) ? current($objModel->getStrIcon()) : $objModel->getStrIcon(),
-                '_displayName' => $objModel->getStrDisplayName(),
-                '_additionalInfo' => $objModel->getStrAdditionalInfo(),
+                '_id'              => $objModel->getSystemid(),
+                '_class'           => get_class($objModel),
+                '_icon'            => is_array($objModel->getStrIcon()) ? current($objModel->getStrIcon()) : $objModel->getStrIcon(),
+                '_displayName'     => $objModel->getStrDisplayName(),
+                '_additionalInfo'  => $objModel->getStrAdditionalInfo(),
                 '_longDescription' => $objModel->getStrLongDescription(),
-                '_actions' => $arrActions,
             ),
             $objSerializer->getArrMapping()
         );
@@ -400,7 +408,7 @@ class JsonapiAdmin extends AdminEvensimpler implements AdminInterface
             $arrBody = json_decode($strRawBody, true);
             $strLastError = json_last_error();
 
-            if ($strLastError == JSON_ERROR_NONE) {
+            if ($strLastError == JSON_ERROR_NONE && is_array($arrBody)) {
                 // set the request data as params so that we can use updateSourceObject to inject the data into the
                 // object. Note this may overwrites GET params which have the same name
                 foreach ($arrBody as $strKey => $strValue) {
