@@ -36,7 +36,7 @@ class NewsEventProvider implements EventProviderInterface
 
         $arrResult = array();
         $arrNews = NewsNews::getObjectListFiltered(null, "", null, null, $objStartDate, $objEndDate);
-        foreach($arrNews as $objOneNews) {
+        foreach ($arrNews as $objOneNews) {
             if ($objOneNews->rightView()) {
                 $objEvent = new EventEntry();
                 $objEvent->setStrIcon($objOneNews->getStrIcon());

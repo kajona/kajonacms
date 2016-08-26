@@ -26,29 +26,29 @@ use Kajona\System\System\Rssfeed;
  * @module news
  * @moduleId _news_module_id_
  */
-class NewsPortalXml extends PortalController implements XmlPortalInterface {
-
+class NewsPortalXml extends PortalController implements XmlPortalInterface
+{
     /**
      * This method loads all data to needed for a newsfeed
      *
      * @return string
      */
-    protected function actionNewsFeed() {
+    protected function actionNewsFeed()
+    {
         $strReturn = "";
 
         //if no sysid was given, try to load from feedname
         $objNewsfeed = null;
-        if($this->getParam("feedTitle") != "") {
+        if ($this->getParam("feedTitle") != "") {
             $objNewsfeed = NewsFeed::getFeedByUrlName($this->getParam("feedTitle"));
         }
 
-        if($objNewsfeed != null) {
+        if ($objNewsfeed != null) {
 
             //and load all news belonging to the selected category
-            if($objNewsfeed->getStrCat() != "0") {
+            if ($objNewsfeed->getStrCat() != "0") {
                 $arrNews = NewsFeed::getNewsList($objNewsfeed->getStrCat(), $objNewsfeed->getIntAmount());
-            }
-            else {
+            } else {
                 $arrNews = NewsFeed::getNewsList("", $objNewsfeed->getIntAmount());
             }
 
@@ -56,8 +56,7 @@ class NewsPortalXml extends PortalController implements XmlPortalInterface {
 
             //and count the request
             $objNewsfeed->incrementNewsCounter();
-        }
-        else {
+        } else {
             $strReturn .= $this->createNewsfeedXML("", "", "", "", array());
         }
 
@@ -76,18 +75,19 @@ class NewsPortalXml extends PortalController implements XmlPortalInterface {
      *
      * @return string
      */
-    private function createNewsfeedXML($strTitle, $strLink, $strDesc, $strPage, $arrNews) {
-
+    private function createNewsfeedXML($strTitle, $strLink, $strDesc, $strPage, $arrNews)
+    {
         $objFeed = new Rssfeed();
         $objFeed->setStrTitle($strTitle);
         $objFeed->setStrLink($strLink);
         $objFeed->setStrDesc($strDesc);
 
-        foreach($arrNews as $objOneNews) {
-            if($objOneNews->rightView()) {
+        foreach ($arrNews as $objOneNews) {
+            if ($objOneNews->rightView()) {
                 $objDate = $objOneNews->getObjStartDate();
-                if($objDate == null)
+                if ($objDate == null) {
                     $objDate = new \Kajona\System\System\Date();
+                }
 
                 $objFeed->addElement(
                     $objOneNews->getStrTitle(),

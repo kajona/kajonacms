@@ -26,8 +26,8 @@ use Kajona\System\System\SearchResultobjectInterface;
  * @module news
  * @moduleId _news_module_id_
  */
-class NewsCategory extends Model implements ModelInterface, AdminListableInterface, SearchResultobjectInterface {
-
+class NewsCategory extends Model implements ModelInterface, AdminListableInterface, SearchResultobjectInterface
+{
     /**
      * @var string
      * @tableColumn news_category.news_cat_title
@@ -49,7 +49,8 @@ class NewsCategory extends Model implements ModelInterface, AdminListableInterfa
      * @see getLinkAdminHref()
      * @return mixed
      */
-    public function getSearchAdminLinkForObject() {
+    public function getSearchAdminLinkForObject()
+    {
         return Link::getLinkAdminHref("news", "listNewsAndCategories", "&filterid=".$this->getSystemid());
     }
 
@@ -62,7 +63,8 @@ class NewsCategory extends Model implements ModelInterface, AdminListableInterfa
      * @return string the name of the icon, not yet wrapped by getImageAdmin(). Alternatively, you may return an array containing
      *         [the image name, the alt-title]
      */
-    public function getStrIcon() {
+    public function getStrIcon()
+    {
         return "icon_dot";
     }
 
@@ -71,7 +73,8 @@ class NewsCategory extends Model implements ModelInterface, AdminListableInterfa
      *
      * @return string
      */
-    public function getStrAdditionalInfo() {
+    public function getStrAdditionalInfo()
+    {
         return "";
     }
 
@@ -80,7 +83,8 @@ class NewsCategory extends Model implements ModelInterface, AdminListableInterfa
      *
      * @return string
      */
-    public function getStrLongDescription() {
+    public function getStrLongDescription()
+    {
         return "";
     }
 
@@ -89,7 +93,8 @@ class NewsCategory extends Model implements ModelInterface, AdminListableInterfa
      *
      * @return string
      */
-    public function getStrDisplayName() {
+    public function getStrDisplayName()
+    {
         return $this->getStrTitle();
     }
 
@@ -101,13 +106,14 @@ class NewsCategory extends Model implements ModelInterface, AdminListableInterfa
      * @return NewsCategory[]
      * @static
      */
-    public static function getNewsMember($strSystemid) {
+    public static function getNewsMember($strSystemid)
+    {
         $strQuery = "SELECT newsmem_category as system_id
-                       FROM " . _dbprefix_."news_member
+                       FROM "._dbprefix_."news_member
 	                   WHERE newsmem_news = ? ";
         $arrIds = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid));
         $arrReturn = array();
-        foreach($arrIds as $arrOneId) {
+        foreach ($arrIds as $arrOneId) {
             $arrReturn[] = new NewsCategory($arrOneId["system_id"]);
         }
 
@@ -115,11 +121,13 @@ class NewsCategory extends Model implements ModelInterface, AdminListableInterfa
     }
 
 
-    public function getStrTitle() {
+    public function getStrTitle()
+    {
         return $this->strTitle;
     }
 
-    public function setStrTitle($strTitle) {
+    public function setStrTitle($strTitle)
+    {
         $this->strTitle = $strTitle;
     }
 

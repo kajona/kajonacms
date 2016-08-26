@@ -31,8 +31,8 @@ use Kajona\System\System\SystemSetting;
  *
  * @formGenerator Kajona\News\Admin\NewsFeedFormgenerator
  */
-class NewsFeed extends Model implements ModelInterface, AdminListableInterface {
-
+class NewsFeed extends Model implements ModelInterface, AdminListableInterface
+{
     /**
      * @var string
      * @tableColumn news_feed.news_feed_title
@@ -119,7 +119,8 @@ class NewsFeed extends Model implements ModelInterface, AdminListableInterface {
      * @return string the name of the icon, not yet wrapped by getImageAdmin(). Alternatively, you may return an array containing
      *         [the image name, the alt-title]
      */
-    public function getStrIcon() {
+    public function getStrIcon()
+    {
         return "icon_rss";
     }
 
@@ -128,8 +129,9 @@ class NewsFeed extends Model implements ModelInterface, AdminListableInterface {
      *
      * @return string
      */
-    public function getStrAdditionalInfo() {
-        return $this->getIntHits() . " " . $this->getLang("commons_hits_header", "news");
+    public function getStrAdditionalInfo()
+    {
+        return $this->getIntHits()." ".$this->getLang("commons_hits_header", "news");
     }
 
     /**
@@ -137,12 +139,12 @@ class NewsFeed extends Model implements ModelInterface, AdminListableInterface {
      *
      * @return string
      */
-    public function getStrLongDescription() {
-        if(SystemSetting::getConfigValue("_system_mod_rewrite_") == "true") {
-            return _webpath_ . "/" . $this->getStrUrlTitle() . ".rss";
-        }
-        else {
-            return _webpath_ . "/xml.php?module=news&action=newsFeed&feedTitle=" . $this->getStrUrlTitle();
+    public function getStrLongDescription()
+    {
+        if (SystemSetting::getConfigValue("_system_mod_rewrite_") == "true") {
+            return _webpath_."/".$this->getStrUrlTitle().".rss";
+        } else {
+            return _webpath_."/xml.php?module=news&action=newsFeed&feedTitle=".$this->getStrUrlTitle();
         }
     }
 
@@ -151,7 +153,8 @@ class NewsFeed extends Model implements ModelInterface, AdminListableInterface {
      *
      * @return string
      */
-    public function getStrDisplayName() {
+    public function getStrDisplayName()
+    {
         return $this->getStrTitle();
     }
 
@@ -163,7 +166,8 @@ class NewsFeed extends Model implements ModelInterface, AdminListableInterface {
      * @return NewsFeed
      * @static
      */
-    public static function getFeedByUrlName($strFeedTitle) {
+    public static function getFeedByUrlName($strFeedTitle)
+    {
         $objORM = new OrmObjectlist();
         $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND news_feed_urltitle = ? ", array($strFeedTitle)));
         return $objORM->getSingleObject(get_called_class());
@@ -175,8 +179,9 @@ class NewsFeed extends Model implements ModelInterface, AdminListableInterface {
      *
      * @return bool
      */
-    public function incrementNewsCounter() {
-        $strQuery = "UPDATE " . _dbprefix_ . "news_feed SET news_feed_hits = news_feed_hits+1 WHERE news_feed_id = ?";
+    public function incrementNewsCounter()
+    {
+        $strQuery = "UPDATE "._dbprefix_."news_feed SET news_feed_hits = news_feed_hits+1 WHERE news_feed_id = ?";
         return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
     }
 
@@ -190,17 +195,18 @@ class NewsFeed extends Model implements ModelInterface, AdminListableInterface {
      * @return mixed
      * @static
      */
-    public static function getNewsList($strFilter = "", $intAmount = 0) {
+    public static function getNewsList($strFilter = "", $intAmount = 0)
+    {
         $objORM = new OrmObjectlist();
         $intNow = \Kajona\System\System\Date::getCurrentTimestamp();
         $arrParams = array($intNow, $intNow, $intNow);
-        if($strFilter != "") {
+        if ($strFilter != "") {
             $strQuery = "SELECT *
-							FROM  " . _dbprefix_ . "news,
-							      " . _dbprefix_ . "news_member,
-							      " . _dbprefix_ . "system_right,
-							      " . _dbprefix_ . "system
-					    LEFT JOIN " . _dbprefix_ . "system_date
+							FROM  "._dbprefix_."news,
+							      "._dbprefix_."news_member,
+							      "._dbprefix_."system_right,
+							      "._dbprefix_."system
+					    LEFT JOIN "._dbprefix_."system_date
 					           ON system_id = system_date_id
 							WHERE system_id = news_id
 							  AND news_id = newsmem_news
@@ -213,13 +219,12 @@ class NewsFeed extends Model implements ModelInterface, AdminListableInterface {
 							  ".$objORM->getDeletedWhereRestriction()."
 							ORDER BY system_date_start DESC";
             $arrParams[] = $strFilter;
-        }
-        else {
+        } else {
             $strQuery = "SELECT *
-							FROM " . _dbprefix_ . "news,
-							      " . _dbprefix_ . "system_right,
-							      " . _dbprefix_ . "system
-						LEFT JOIN " . _dbprefix_ . "system_date
+							FROM "._dbprefix_."news,
+							      "._dbprefix_."system_right,
+							      "._dbprefix_."system
+						LEFT JOIN "._dbprefix_."system_date
 					           ON system_id = system_date_id
 							WHERE system_id = news_id
 							  AND system_status = 1
@@ -233,7 +238,7 @@ class NewsFeed extends Model implements ModelInterface, AdminListableInterface {
 
         $intStart = null;
         $intEnd = null;
-        if($intAmount > 0) {
+        if ($intAmount > 0) {
             $intStart = 0;
             $intEnd = $intAmount - 1;
         }
@@ -241,75 +246,90 @@ class NewsFeed extends Model implements ModelInterface, AdminListableInterface {
         $arrIds = Carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
         OrmRowcache::addArrayOfInitRows($arrIds);
         $arrReturn = array();
-        foreach($arrIds as $arrOneId) {
+        foreach ($arrIds as $arrOneId) {
             $arrReturn[] = Objectfactory::getInstance()->getObject($arrOneId["system_id"]);
         }
 
         return $arrReturn;
     }
 
-    public function getStrTitle() {
+    public function getStrTitle()
+    {
         return $this->strTitle;
     }
 
-    public function getStrUrlTitle() {
+    public function getStrUrlTitle()
+    {
         return $this->strUrlTitle;
     }
 
-    public function getStrLink() {
+    public function getStrLink()
+    {
         return $this->strLink;
     }
 
-    public function getStrDesc() {
+    public function getStrDesc()
+    {
         return $this->strDesc;
     }
 
-    public function getStrPage() {
+    public function getStrPage()
+    {
         return $this->strPage;
     }
 
-    public function getStrCat() {
+    public function getStrCat()
+    {
         return $this->strCat;
     }
 
-    public function getIntHits() {
+    public function getIntHits()
+    {
         return $this->intHits;
     }
 
-    public function setStrTitle($strTitle) {
+    public function setStrTitle($strTitle)
+    {
         $this->strTitle = $strTitle;
     }
 
-    public function setStrUrlTitle($strUrlTitle) {
+    public function setStrUrlTitle($strUrlTitle)
+    {
         $this->strUrlTitle = $strUrlTitle;
     }
 
-    public function setStrLink($strLink) {
+    public function setStrLink($strLink)
+    {
         $this->strLink = $strLink;
     }
 
-    public function setStrDesc($strDesc) {
+    public function setStrDesc($strDesc)
+    {
         $this->strDesc = $strDesc;
     }
 
-    public function setStrPage($strPage) {
+    public function setStrPage($strPage)
+    {
         $this->strPage = $strPage;
     }
 
-    public function setStrCat($strCat) {
+    public function setStrCat($strCat)
+    {
         $this->strCat = $strCat;
     }
 
-    public function setIntHits($intHits) {
+    public function setIntHits($intHits)
+    {
         $this->intHits = $intHits;
     }
 
-    public function getIntAmount() {
+    public function getIntAmount()
+    {
         return $this->intAmount;
     }
 
-    public function setIntAmount($intAmount) {
+    public function setIntAmount($intAmount)
+    {
         $this->intAmount = $intAmount;
     }
-
 }
