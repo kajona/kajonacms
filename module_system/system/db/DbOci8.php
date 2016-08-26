@@ -259,7 +259,7 @@ class DbOci8 extends DbBase
             return false;
         }
 
-        while ($arrRow = oci_fetch_array($objStatement, OCI_BOTH + OCI_RETURN_NULLS)) {
+        while ($arrRow = oci_fetch_array($objStatement, OCI_ASSOC + OCI_RETURN_NULLS + OCI_RETURN_LOBS)) {
             $arrRow = $this->parseResultRow($arrRow);
             $arrReturn[$intCounter++] = $arrRow;
         }
@@ -668,12 +668,6 @@ class DbOci8 extends DbBase
             $arrRow["COUNT(*)"] = $arrRow["count(*)"];
         }
 
-        foreach ($arrRow as $intKey => $mixedValue) {
-            if (is_object($mixedValue)) {
-                $arrRow[$intKey] = $mixedValue->load();
-                $mixedValue->free();
-            }
-        }
         return $arrRow;
     }
 
