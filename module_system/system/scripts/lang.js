@@ -29,6 +29,7 @@ KAJONA.util.cacheManager = {
      * @return {String}
      */
     get: function(strKey){
+        strKey = KAJONA_WEBPATH+"/"+strKey;
         if (localStorage) {
             return localStorage.getItem(strKey);
         }
@@ -45,6 +46,7 @@ KAJONA.util.cacheManager = {
      * @param {String} strValue
      */
     set: function(strKey, strValue){
+        strKey = KAJONA_WEBPATH+"/"+strKey;
         if (localStorage) {
             localStorage.setItem(strKey, strValue);
             return;
