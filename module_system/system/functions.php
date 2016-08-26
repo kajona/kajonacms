@@ -474,6 +474,7 @@ function bytesToString($intBytes, $bitPhpIni = false)
  * @param bool $bitLong
  *
  * @return string
+ * @deprecated
  */
 function timeToString($intTime, $bitLong = true)
 {

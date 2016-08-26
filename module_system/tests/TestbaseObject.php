@@ -4,8 +4,8 @@ namespace Kajona\System\Tests;
 
 use DOMDocument;
 use DOMElement;
-use Kajona\System\System\Database;
 use Kajona\System\System\Model;
+use Kajona\System\System\Objectfactory;
 use Kajona\System\System\UserUser;
 use RuntimeException;
 
@@ -94,13 +94,9 @@ abstract class TestbaseObject extends Testbase
         /** @var Model $objOneModel */
         foreach (array_reverse($this->arrStructure, true) as $objOneModel) {
             $strSystemId = $objOneModel->getStrSystemid();
-            $objOneModel->deleteObjectFromDatabase();
-
-            //if it is a user also delete the user from the database completeley
-            if ($objOneModel instanceof UserUser) {
-                $strQuery = "DELETE FROM " . _dbprefix_ . "user WHERE user_id=?";
-                //call other models that may be interested
-                $bitDelete = Database::getInstance()->_pQuery($strQuery, array($strSystemId));
+            $objOneModel = Objectfactory::getInstance()->getObject($strSystemId);
+            if($objOneModel !== null) {
+                $objOneModel->deleteObjectFromDatabase();
             }
         }
     }
@@ -172,7 +168,7 @@ abstract class TestbaseObject extends Testbase
             throw new RuntimeException('No class name given for object "' . $strName . '" (' . $objElement->getNodePath() . ')');
         }
 
-        if ($strClassName == "Kajona\\System\\System\\UserUser") {
+        if ($strClassName == UserUser::class) {
             $objObject = $this->createFixtureUser($objElement, $objParent, $strClassName, $arrParameters, $strName);
         } else {
             $objObject = $this->createFixtureObject($objElement, $objParent, $strClassName, $arrParameters, $strName);

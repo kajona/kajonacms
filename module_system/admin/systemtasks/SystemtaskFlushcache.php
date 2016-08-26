@@ -9,9 +9,9 @@
 
 namespace Kajona\System\Admin\Systemtasks;
 
+use Kajona\System\System\CacheManager;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\SystemSetting;
-use Kajona\System\System\CacheManager;
 
 /**
  * Flushes the entries from the systemwide cache
@@ -20,8 +20,6 @@ use Kajona\System\System\CacheManager;
  */
 class SystemtaskFlushcache extends SystemtaskBase implements AdminSystemtaskInterface
 {
-
-
     /**
      * @inheritdoc
      */
@@ -61,9 +59,10 @@ class SystemtaskFlushcache extends SystemtaskBase implements AdminSystemtaskInte
         $objCachebuster->setStrValue((int)$objCachebuster->getStrValue() + 1);
         $objCachebuster->updateObjectToDb();
 
-        $intType = (int) $this->getParam("cacheSource");
+        $intType = (int) $this->getParam("cache_source");
+        $strNamespace = (int) $this->getParam("cache_namespace");
         if ($intType > 0) {
-            CacheManager::getInstance()->flushCache($intType);
+            CacheManager::getInstance()->flushCache($intType, $strNamespace);
 
             return $this->objToolkit->getTextRow($this->getLang("systemtask_flushcache_success"));
         }
@@ -77,15 +76,23 @@ class SystemtaskFlushcache extends SystemtaskBase implements AdminSystemtaskInte
     public function getAdminForm()
     {
         $strReturn = "";
-        //show dropdown to select cache-source
+
+        // show dropdown to select cache-source
         $arrSources = CacheManager::getAvailableDriver();
         $arrOptions = array();
         $arrOptions[CacheManager::TYPE_APC | CacheManager::TYPE_FILESYSTEM | CacheManager::TYPE_DATABASE | CacheManager::TYPE_PHPFILE] = $this->getLang("systemtask_flushcache_all");
-        foreach($arrSources as $intValue => $strLabel) {
+        foreach ($arrSources as $intValue => $strLabel) {
             $arrOptions[$intValue] = $strLabel;
         }
+        $strReturn .= $this->objToolkit->formInputDropdown("cache_source", $arrOptions, $this->getLang("systemtask_cacheSource_source"), current(array_keys($arrOptions)));
 
-        $strReturn .= $this->objToolkit->formInputDropdown("cacheSource", $arrOptions, $this->getLang("systemtask_cacheSource_source"));
+        // show dropdown to select cache-namespace
+        $arrNamespaces = CacheManager::getAvailableNamespace();
+        $arrOptions = array();
+        foreach ($arrNamespaces as $strValue => $strLabel) {
+            $arrOptions[$strValue] = $strLabel;
+        }
+        $strReturn .= $this->objToolkit->formInputDropdown("cache_namespace", $arrOptions, $this->getLang("systemtask_cacheSource_namespace"), CacheManager::NS_GLOBAL);
 
         return $strReturn;
     }
@@ -95,6 +102,10 @@ class SystemtaskFlushcache extends SystemtaskBase implements AdminSystemtaskInte
      */
     public function getSubmitParams()
     {
-        return "&cacheSource=".$this->getParam("cacheSource");
+        $arrParams = array(
+            "cache_source" => $this->getParam("cache_source"),
+            "cache_namespace" => $this->getParam("cache_namespace"),
+        );
+        return "&" . http_build_query($arrParams, "", "&");
     }
 }

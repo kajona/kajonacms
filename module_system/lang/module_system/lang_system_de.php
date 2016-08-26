@@ -198,6 +198,7 @@ $lang["systeminfo_php_urlfopen"]         = "Allow url fopen";
 $lang["systeminfo_webserver_modules"]    = "Geladene Module";
 $lang["systeminfo_webserver_version"]    = "Webserver";
 $lang["systemtask_cacheSource_source"]   = "Cache-Arten";
+$lang["systemtask_cacheSource_namespace"] = "Cache-Namespace";
 $lang["systemtask_cancel_execution"]     = "Ausführung beenden";
 $lang["systemtask_close_dialog"]         = "OK";
 $lang["systemtask_compresspicuploads_done"] = "Die Bildverkleinerung und -komprimierung wurde abgeschlossen.";

@@ -101,7 +101,7 @@
     <target name="buildSqliteFull" depends="
 		    								init,
 					    					buildProject, installProjectSqlite,
-					    					lint,phpunit,jasmine,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox,phpcb,
+					    					lint,phpunit,jasmine,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox,
 					    					buildAllInOneZip, buildFullZip" />
 
     <target name="buildMysql" depends="
@@ -560,7 +560,7 @@
 
     <target name="phploc" description="Measure project size using PHPLOC">
         <exec executable="${path.phploc}">
-            <arg line=" --exclude ${basedir}${projectPath}/core/module_ezcchart/vendor --exclude ${basedir}${projectPath}/core/module_pchart/vendor --exclude ${basedir}${projectPath}/core/module_pdf/vendor --exclude ${basedir}${projectPath}/core/module_phpexcel/vendor --exclude ${basedir}${projectPath}/core/module_qrcode/vendor --exclude ${basedir}${projectPath}/core/module_system/vendor   "/>
+            <arg line=" --exclude= */vendor/* --exclude ${basedir}${projectPath}/core/module_ezcchart/vendor --exclude ${basedir}${projectPath}/core/module_pchart/vendor --exclude ${basedir}${projectPath}/core/module_pdf/vendor --exclude ${basedir}${projectPath}/core/module_phpexcel/vendor --exclude ${basedir}${projectPath}/core/module_qrcode/vendor --exclude ${basedir}${projectPath}/core/module_system/vendor   "/>
             <arg value="--log-csv" />
             <arg value="${basedir}${buildPath}/logs/phploc.csv" />
             <arg path="${basedir}${projectPath}" />
@@ -572,7 +572,7 @@
             <arg value="--jdepend-xml=${basedir}${buildPath}/logs/jdepend.xml" />
             <arg value="--jdepend-chart=${basedir}${buildPath}/pdepend/dependencies.svg" />
             <arg value="--overview-pyramid=${basedir}${buildPath}/pdepend/overview-pyramid.svg" />
-            <arg value="--ignore=${basedir}${projectPath}/core/module_ezcchart/vendor/,${basedir}${projectPath}/core/module_pchart/vendor,${basedir}${projectPath}/core/module_pdf/vendor,${basedir}${projectPath}/core/module_phpexcel/vendor,${basedir}${projectPath}/core/module_qrcode/vendor,${basedir}${projectPath}/core/module_system/vendor "/>
+            <arg value="--ignore=*/vendor/*,${basedir}${projectPath}/core/module_ezcchart/vendor/,${basedir}${projectPath}/core/module_pchart/vendor,${basedir}${projectPath}/core/module_pdf/vendor,${basedir}${projectPath}/core/module_phpexcel/vendor,${basedir}${projectPath}/core/module_qrcode/vendor,${basedir}${projectPath}/core/module_system/vendor "/>
             <arg path="${basedir}${projectPath}" />
         </exec>
     </target>
@@ -603,7 +603,7 @@
 
     <target name="phpcpd" description="Find duplicate code using PHPCPD">
         <exec executable="${path.phpcpd}">
-            <arg line=" --exclude core/module_ezcchart/system/ezcomponents --exclude core/module_pchart/system/pchart --exclude tcpdf --exclude core/module_phpexcel/system/phpexcel --exclude core/module_qrcode/system/phpqrcode   "/>
+            <arg line=" --exclude= */vendor/* --exclude core/module_ezcchart/system/ezcomponents --exclude core/module_pchart/system/pchart --exclude tcpdf --exclude core/module_phpexcel/system/phpexcel --exclude core/module_qrcode/system/phpqrcode   "/>
             <arg value="--log-pmd" />
             <arg value="${basedir}${buildPath}/logs/pmd-cpd.xml" />
             <arg path="${basedir}${projectPath}" />

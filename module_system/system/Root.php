@@ -517,7 +517,7 @@ abstract class Root
         $this->objDB->transactionBegin();
 
         //validate, if there are subrecords, so child nodes to be deleted
-        $arrChilds = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."system where system_prev_id = ?", array($this->getSystemid()));
+        $arrChilds = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."system where system_prev_id = ? ORDER BY system_sort DESC", array($this->getSystemid()));
         foreach ($arrChilds as $arrOneChild) {
             if (validateSystemid($arrOneChild["system_id"])) {
                 $objInstance = Objectfactory::getInstance()->getObject($arrOneChild["system_id"]);
@@ -575,7 +575,7 @@ abstract class Root
         $this->objDB->transactionBegin();
 
         //validate, if there are subrecords, so child nodes to be deleted
-        $arrChilds = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."system where system_prev_id = ?", array($this->getSystemid()));
+        $arrChilds = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."system where system_prev_id = ? ORDER BY system_sort DESC", array($this->getSystemid()));
         foreach ($arrChilds as $arrOneChild) {
             if (validateSystemid($arrOneChild["system_id"])) {
                 $objInstance = Objectfactory::getInstance()->getObject($arrOneChild["system_id"]);

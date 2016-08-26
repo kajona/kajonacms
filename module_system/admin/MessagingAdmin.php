@@ -521,7 +521,7 @@ JS;
                 array($this->getLang("message_subject"), $objMessage->getStrTitle()),
                 array($this->getLang("message_date"), dateToString($objMessage->getObjDate())),
                 array($this->getLang("message_type"), $objMessage->getObjMessageProvider()->getStrName()),
-                array($this->getLang("message_sender"), $objSender->getStrDisplayName()),
+                array($this->getLang("message_sender"), $objSender != null ? $objSender->getStrDisplayName() : ""),
                 array($this->getLang("message_reference"), $strReference)
             );
 
