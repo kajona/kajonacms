@@ -70,6 +70,7 @@ class AdminskinImageresolver implements AdminskinImageresolverInterface {
         "icon_arrowDown"                   => "<i class='kj-icon fa fa-arrow-circle-down'></i>",
         "icon_arrowUp"                     => "<i class='kj-icon fa fa-arrow-circle-up'></i>",
         "icon_aspect"                      => "<i class='kj-icon fa fa-columns'></i>",
+        "icon_balance"                      => "<i class='kj-icon fa fa-balance-scale'></i>",
         "icon_binary"                      => "<i class='kj-icon fa fa-file'></i>",
         "icon_blank"                       => "<i class='kj-icon fa fa-file-o'></i>",
         "icon_book"                        => "<i class='kj-icon fa fa-book'></i>",

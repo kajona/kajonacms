@@ -15,7 +15,9 @@ use Kajona\System\System\ArraySectionIterator;
 use Kajona\System\System\Database;
 use Kajona\System\System\GraphFactory;
 use Kajona\System\System\Lang;
+use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Session;
+use Kajona\System\System\SystemSetting;
 use Kajona\System\System\UserUser;
 
 /**
@@ -121,9 +123,10 @@ class StatsReportSearchqueries implements AdminStatsreportsInterface
 
         $intI = 0;
         $arrLogs = array();
-        $objUser = new UserUser(Session::getInstance()->getUserID());
+        $objUser = Session::getInstance()->getUser();
+        $intItemsPerPage = $objUser != null ? $objUser->getIntItemsPerPage() : SystemSetting::getConfigValue("_admin_nr_of_rows_");
         foreach ($objArraySectionIterator as $intKey => $arrOneLog) {
-            if ($intI++ >= $objUser->getIntItemsPerPage()) {
+            if ($intI++ >= $intItemsPerPage) {
                 break;
             }
 
@@ -194,7 +197,6 @@ class StatsReportSearchqueries implements AdminStatsreportsInterface
      */
     private function getTopQueries($intStart = false, $intEnd = false)
     {
-        $objUser = new UserUser(Session::getInstance()->getUserID());
         $strQuery = "SELECT search_log_query, COUNT(*) as hits
 					  FROM "._dbprefix_."search_log
 					  WHERE search_log_date > ?
@@ -206,7 +208,9 @@ class StatsReportSearchqueries implements AdminStatsreportsInterface
             $arrReturn = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), $intStart, $intEnd);
         }
         else {
-            $arrReturn = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), 0, $objUser->getIntItemsPerPage() - 1);
+            $objUser = Session::getInstance()->getUser();
+            $intItemsPerPage = $objUser != null ? $objUser->getIntItemsPerPage() : SystemSetting::getConfigValue("_admin_nr_of_rows_");
+            $arrReturn = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), 0, $intItemsPerPage - 1);
         }
 
         return $arrReturn;

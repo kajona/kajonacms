@@ -326,8 +326,8 @@ class Resourceloader
         $arrModules = Classloader::getInstance()->getArrModules();
 
         // add project folders
-        foreach ($arrModules as $strCorePath => $strSingleModule) {
-            $strPath = "project" . substr($strCorePath, strpos($strCorePath, "/"));
+        foreach ($arrModules as $strSingleModule) {
+            $strPath = "project" . "/".$strSingleModule;
             if (is_dir(_realpath_.$strPath.$strFolder)) {
                 $arrModules[$strPath] = $strSingleModule;
             }

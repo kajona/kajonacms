@@ -135,46 +135,16 @@ class InstallerSamplecontentNews implements SamplecontentInstallerInterface
                 $objAdminInstance->setIntListMode(0);
                 $objAdminInstance->setIntOrder(0);
                 $objAdminInstance->setIntAmount(10);
-                $objAdminInstance->setStrDetailspage("newsdetails");
+                $objAdminInstance->setStrDetailspage("news");
                 $objAdminInstance->setStrTemplate("demo_teaserlist.tpl");
                 $objAdminInstance->updateForeignElement();
             }
         }
-        $strReturn .= "Creating news-detail\n";
+
 
         $objHelper = new SamplecontentContentHelper();
 
-        $objPage = $objHelper->createPage("newsdetails", "News", $strSystemFolderId);
-        $strReturn .= "ID of new page: ".$objPage->getSystemid()."\n";
-
-        $objBlocks = $objHelper->createBlocksElement("Headline", $objPage);
-        $objBlock = $objHelper->createBlockElement("Headline", $objBlocks);
-
-        $strReturn .= "Adding headline-element to new page\n";
-        $objHeadline = $objHelper->createPageElement("headline_plaintext", $objBlock);
-        /** @var ElementPlaintextAdmin $objHeadlineAdmin */
-        $objHeadlineAdmin = $objHeadline->getConcreteAdminInstance();
-        $objHeadlineAdmin->setStrText("News");
-        $objHeadlineAdmin->updateForeignElement();
-
-
-        $objBlocks = $objHelper->createBlocksElement("Special Content", $objPage);
-        $objBlock = $objHelper->createBlockElement("News", $objBlocks);
-
-        $objElement = $objHelper->createPageElement("news_news", $objBlock);
-        /** @var ElementNewsAdmin $objAdminInstance */
-        $objAdminInstance = $objElement->getConcreteAdminInstance();
-        $objAdminInstance->setStrCategory($strCategoryID);
-        $objAdminInstance->setIntView(1);
-        $objAdminInstance->setIntListMode(0);
-        $objAdminInstance->setIntOrder(0);
-        $objAdminInstance->setIntAmount(20);
-        $objAdminInstance->setStrDetailspage("index");
-        $objAdminInstance->setStrTemplate("demo.tpl");
-        $objAdminInstance->updateForeignElement();
-
-
-        $strReturn .= "Creating news-list-pge\n";
+        $strReturn .= "Creating news-list-page\n";
         $objPage = $objHelper->createPage("news", "News", PagesPage::getPageByName("samplepages")->getSystemid());
         $strReturn .= "ID of new page: ".$objPage->getSystemid()."\n";
 
@@ -196,11 +166,9 @@ class InstallerSamplecontentNews implements SamplecontentInstallerInterface
         /** @var ElementNewsAdmin $objAdminInstance */
         $objAdminInstance = $objElement->getConcreteAdminInstance();
         $objAdminInstance->setStrCategory($strCategoryID);
-        $objAdminInstance->setIntView(0);
         $objAdminInstance->setIntListMode(0);
         $objAdminInstance->setIntOrder(0);
         $objAdminInstance->setIntAmount(20);
-        $objAdminInstance->setStrDetailspage("newsdetails");
         $objAdminInstance->setStrTemplate("demo.tpl");
         $objAdminInstance->updateForeignElement();
 
@@ -209,7 +177,7 @@ class InstallerSamplecontentNews implements SamplecontentInstallerInterface
         $objNewsFeed = new NewsFeed();
         $objNewsFeed->setStrTitle("kajona news");
         $objNewsFeed->setStrUrlTitle("kajona_news");
-        $objNewsFeed->setStrLink("http://www.kajona.de");
+        $objNewsFeed->setStrLink("https://www.kajona.de");
 
         if ($this->strContentLanguage == "de") {
             $objNewsFeed->setStrDesc("Dies ist ein Kajona demo news feed");
@@ -218,7 +186,7 @@ class InstallerSamplecontentNews implements SamplecontentInstallerInterface
             $objNewsFeed->setStrDesc("This is a Kajona demo news feed");
         }
 
-        $objNewsFeed->setStrPage("newsdetails");
+        $objNewsFeed->setStrPage("news");
         $objNewsFeed->setStrCat("0");
         $objNewsFeed->setIntAmount(25);
         $objNewsFeed->updateObjectToDb();

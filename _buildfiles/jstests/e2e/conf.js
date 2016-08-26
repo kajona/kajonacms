@@ -10,6 +10,12 @@ exports.config = {
         '../../temp/kajona/core*/module_*/tests/selenium/*-spec.js',
         '../../temp/kajona/files/extract/module_*/tests/selenium/*-spec.js'
     ],
+    capabilities: {
+        browserName: 'chrome',
+        chromeOptions: {
+            args: ['--no-sandbox']
+        }
+    },
     jasmineNodeOpts: {
         defaultTimeoutInterval: 300000 // 5 minutes
     },

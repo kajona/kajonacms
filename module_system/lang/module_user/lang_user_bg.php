@@ -94,16 +94,13 @@ $lang["required_passwort2"]              = "Потвърждение за пар
 $lang["required_user_existing"]          = "Потребителското име вече съществува";
 $lang["required_username"]               = "Потребителско име";
 $lang["user"]                            = "Потребител";
-$lang["user_active"]                     = "Промени статус (активен)";
 $lang["user_admin"]                      = "Административно вписване";
-$lang["user_aktiv"]                      = "Активен";
 $lang["user_erfolg"]                     = "Потребителят запазен успешно";
 $lang["user_fehler"]                     = "Възникна грешка при запазването на потребителя";
 $lang["user_fehler_mail"]                = "Моля попълнете валиден електронен адрес <a href=\"javascript:history.back(-1)\">върни се</a>";
 $lang["user_fehler_name"]                = "Моля въведете потребителско име <a href=\"javascript:history.back(-1)\">върни се/a>";
 $lang["user_fehler_namedoppelt"]         = "Потребителското име вече съществува, моля изберете друго потребителско име <a href=\"javascript:history.back(-1)\">върни се</a>";
 $lang["user_fehler_pass"]                = "Въведените пароли не съвпадат <a href=\"javascript:history.back(-1)\">върни се</a>";
-$lang["user_inactive"]                   = "Промени статус (не активен)";
 $lang["user_language"]                   = "Език на администрацията";
 $lang["user_lastlogin"]                  = " Последно вписване:  ";
 $lang["user_liste"]                      = "Всички потребители";

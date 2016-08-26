@@ -304,7 +304,7 @@ data list footer. at the bottom of the datatable
     </table>
     <script type="text/javascript">
         KAJONA.admin.loader.loadFile("/core/module_v4skin/admin/skins/kajona_v4/js/jquery.floatThead.min.js", function() {
-            $('table.kajona-data-table').floatThead({
+            $('table.kajona-data-table:not(.kajona-data-table-ignore-floatthread)').floatThead({
                 scrollingTop: $("body.dialogBody").size() > 0 ? 0 : 70,
                 useAbsolutePositioning: true
             });
@@ -1045,6 +1045,50 @@ A list of checkbox or radio input elements
         <label><input type="%%type%%" name="%%name%%" value="%%value%%" %%checked%% %%readonly%% /> %%title%%</label>
     </div>
 </input_checkboxarray_checkbox>
+
+A list of checkbox for object elements
+<input_checkboxarrayobjectlist>
+    <div class="form-group">
+        <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
+
+        <div class="col-sm-6 inputText">
+            <div id="%%name%%" class="inputContainer %%class%%">
+                %%elements%%
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label"></label>
+        <div class="col-sm-6">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="checkAll_%%name%%" id="checkAll_%%name%%" %%readonly%%>
+                    [lang,commons_select_all,system]
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <script type='text/javascript'>
+        $("input:checkbox[name='checkAll_%%name%%']").on('change', function() {
+            var checkBoxes = $("input:checkbox[name^='%%name%%']");
+            checkBoxes.prop('checked', $("input:checkbox[name='checkAll_%%name%%']").prop('checked'));
+        });
+    </script>
+</input_checkboxarrayobjectlist>
+
+<input_checkboxarrayobjectlist_row>
+    <tbody class="%%cssaddon%%">
+        <tr data-systemid="%%systemid%%">
+            <td class="listcheckbox"><input type="checkbox" name="%%name%%[%%systemid%%]" data-systemid="%%systemid%%" %%checked%% %%readonly%%></td>
+            <td class="listimage">%%icon%%</td>
+            <td class="title">
+                <div class="small" style="color:#aaa">%%path%%</div>
+                %%title%%
+            </td>
+        </tr>
+    </tbody>
+</input_checkboxarrayobjectlist_row>
 
 ---------------------------------------------------------------------------------------------------------
 -- MISC ELEMENTS ----------------------------------------------------------------------------------------

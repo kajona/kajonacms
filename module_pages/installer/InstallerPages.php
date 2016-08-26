@@ -44,7 +44,7 @@ class InstallerPages extends InstallerBase implements InstallerInterface {
 		$arrFields["pageproperties_description"]= array("char254", true);
 		$arrFields["pageproperties_template"] 	= array("char254", true);
 		$arrFields["pageproperties_seostring"] 	= array("char254", true);
-		$arrFields["pageproperties_language"] 	= array("char20", true);
+		$arrFields["pageproperties_language"] 	= array("char20", false);
 		$arrFields["pageproperties_alias"] 	    = array("char254", true);
         $arrFields["pageproperties_path"] 	    = array("char254", true);
         $arrFields["pageproperties_target"] 	= array("char254", true);
@@ -285,6 +285,16 @@ class InstallerPages extends InstallerBase implements InstallerInterface {
             $this->updateModuleVersion("", "5.0.1");
             foreach(array("row", "paragraph", "image", "imagesrc", "gallery", "galleryRandom", "downloads", "blocks", "block", "date", "plaintext", "richtext", "link") as $strOneElement) {
                 $this->updateElementVersion($strOneElement, "5.0.1");
+            }
+        }
+        
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.0.1") {
+            $strReturn = "Updating to 5.1...\n";
+
+            $this->updateModuleVersion("", "5.1");
+            foreach(array("row", "paragraph", "image", "imagesrc", "gallery", "galleryRandom", "downloads", "blocks", "block", "date", "plaintext", "richtext", "link") as $strOneElement) {
+                $this->updateElementVersion($strOneElement, "5.1");
             }
         }
 

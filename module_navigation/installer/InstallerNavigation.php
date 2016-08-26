@@ -161,6 +161,14 @@ class InstallerNavigation extends InstallerBase implements InstallerRemovableInt
             $this->updateElementVersion("navigation", "5.0");
         }
 
+
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.0") {
+            $strReturn = "Updating to 5.1...\n";
+            $this->updateModuleVersion("navigation", "5.1");
+            $this->updateElementVersion("navigation", "5.1");
+        }
+
         return $strReturn."\n\n";
 	}
     

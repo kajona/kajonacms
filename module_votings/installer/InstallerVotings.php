@@ -186,6 +186,16 @@ class InstallerVotings extends InstallerBase implements InstallerRemovableInterf
             $this->objDB->flushQueryCache();
         }
 
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.0") {
+            $strReturn .= "Updating to 5.1...\n";
+            $strReturn .= "Updating module-versions...\n";
+            $this->updateModuleVersion("votings", "5.1");
+            $strReturn .= "Updating element-versions...\n";
+            $this->updateElementVersion("votings", "5.1");
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn."\n\n";
 	}
     

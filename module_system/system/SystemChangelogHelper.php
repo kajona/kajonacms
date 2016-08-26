@@ -31,8 +31,7 @@ class SystemChangelogHelper
     public static function getStrValueForUser($strUserId)
     {
         if (validateSystemid($strUserId)) {
-            $objResp = new UserUser($strUserId);
-            return $objResp->getStrDisplayName();
+            return Objectfactory::getInstance()->getObject($strUserId)->getStrDisplayName();
         }
 
         return "";

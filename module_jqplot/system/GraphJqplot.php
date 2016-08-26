@@ -276,10 +276,11 @@ class GraphJqplot implements GraphInterface
      * @param array $arrValues - an array with simple values or an array of data points (GraphDatapoint).
      *                           The advantage of a data points are that action handlers can be defined for each data point which will be executed when clicking on the data point in the chart.
      * @param string $strLegend
+     * @param bool $bitWriteValues Enables the rendering of values on top of the graphs
      *
      * @throws Exception
      */
-    public function addStackedBarChartSet($arrValues, $strLegend)
+    public function addStackedBarChartSet($arrValues, $strLegend, $bitWriteValues = true)
     {
         $arrDataPoints = GraphCommons::convertArrValuesToDataPointArray($arrValues);
 
@@ -293,6 +294,7 @@ class GraphJqplot implements GraphInterface
         $objSeriesData = new GraphJqplotSeriesdata(GraphJqplotCharttype::STACKEDBAR, count($this->arrSeriesData), $this->arrOptions);
         $objSeriesData->setArrDataPoints($arrDataPoints);
         $objSeriesData->setStrSeriesLabel($strLegend);
+        $objSeriesData->setBitWriteValues($bitWriteValues);
 
         $this->arrOptions["axes"]["xaxis"]["renderer"] = "$.jqplot.CategoryAxisRenderer";
 

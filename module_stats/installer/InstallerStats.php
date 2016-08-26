@@ -166,6 +166,11 @@ class InstallerStats extends InstallerBase implements InstallerRemovableInterfac
             $strReturn .= "Updating to 5.0...\n";
             $this->updateModuleVersion("stats", "5.0");
         }
+        $arrModul = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if ($arrModul["module_version"] == "5.0") {
+            $strReturn .= "Updating to 5.1...\n";
+            $this->updateModuleVersion("stats", "5.1");
+        }
 
         $strReturn .= $this->extractBrowscap();
         return $strReturn."\n\n";

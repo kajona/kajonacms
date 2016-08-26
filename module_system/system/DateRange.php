@@ -64,6 +64,57 @@ class DateRange
     }
 
     /**
+     * Returns only complete weeks, months and years. The method modifies the start and end date borders to match
+     * a complete period. Also the start date is set to 00:00:00 and the end date to 23:59:59. For example:
+     *
+     * 06.07         07.07         ...           15.07         16.07
+     * |-------------|-------------|-------------|-------------|
+     *        | <----------------------------------> |
+     *        06.07 12:00                            15.07 08:00
+     *
+     * In this case we get the following array
+     *
+     * array(
+     *   array(new Date("2016-07-04 00:00:00"), new Date("2016-07-10 23:59:59"))
+     *   array(new Date("2016-07-11 00:00:00"), new Date("2016-07-17 23:59:59"))
+     * )
+     *
+     * @param Date $objStartDate
+     * @param Date $objEndDate
+     * @param DatePeriodEnum $objInterval
+     * @return array
+     */
+    public static function getDateRangeComplete(Date $objStartDate, Date $objEndDate, DatePeriodEnum $objInterval)
+    {
+        $objTmpStartDate = clone $objStartDate;
+        $objTmpEndDate = clone $objEndDate;
+
+        if ($objInterval->equals(DatePeriodEnum::WEEK())) {
+            $objTmpStartDate->setBeginningOfDay();
+            $intCurrentWeek = date('W', $objTmpStartDate->getTimeInOldStyle());
+            while ($intCurrentWeek == date('W', $objTmpStartDate->getTimeInOldStyle())) {
+                $objTmpStartDate->setPreviousDay();
+            }
+            $objTmpStartDate->setNextDay();
+
+            $objTmpEndDate->setEndOfDay();
+            $intCurrentWeek = date('W', $objTmpEndDate->getTimeInOldStyle());
+            while ($intCurrentWeek == date('W', $objTmpEndDate->getTimeInOldStyle())) {
+                $objTmpEndDate->setNextDay();
+            }
+            $objTmpEndDate->setPreviousDay();
+        } elseif ($objInterval->equals(DatePeriodEnum::MONTH())) {
+            $objTmpStartDate->setBeginningOfDay()->setIntDay(1);
+            $objTmpEndDate->setEndOfDay()->setIntDay(1)->setNextMonth()->setPreviousDay();
+        } elseif ($objInterval->equals(DatePeriodEnum::YEAR())) {
+            $objTmpStartDate->setBeginningOfDay()->setIntDay(1)->setIntMonth(1);
+            $objTmpEndDate->setEndOfDay()->setIntDay(1)->setIntMonth(1)->setNextYear()->setPreviousDay();
+        }
+
+        return self::getDateRange($objTmpStartDate, $objTmpEndDate, $objInterval);
+    }
+
+    /**
      * Transforms the result of the getDateRange format to another format
      *
      * @param array $arrRanges
@@ -71,7 +122,6 @@ class DateRange
      */
     public static function transformToOldFormat(array $arrRanges)
     {
-        $strDateFormat = Carrier::getInstance()->getObjLang()->getLang("dateStyleLong", "system");
         $arrResult = array(
             'start_dates' => array(),
             'end_dates' => array(),
@@ -80,8 +130,8 @@ class DateRange
         foreach ($arrRanges as $arrRange) {
             list($objStartDate, $objEndDate) = $arrRange;
 
-            $arrResult['start_dates'][] = date($strDateFormat, $objStartDate->getTimeInOldStyle());
-            $arrResult['end_dates'][] = date($strDateFormat, $objEndDate->getTimeInOldStyle());
+            $arrResult['start_dates'][] = dateToString($objStartDate);
+            $arrResult['end_dates'][] = dateToString($objEndDate);
         }
 
         return $arrResult;

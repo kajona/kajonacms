@@ -175,7 +175,6 @@ class UsersourcesGroupLdap extends \Kajona\System\System\Model implements \Kajon
                 $objUser = new UserUser();
                 $objUser->setStrUsername($arrUserDetails["username"]);
                 $objUser->setStrSubsystem("ldap");
-                $objUser->setIntActive(1);
                 $objUser->setIntAdmin(1);
                 $objUser->updateObjectToDb();
 

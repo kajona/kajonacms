@@ -13,7 +13,7 @@ class DatabaseTxTest extends Testbase
 
         $objDB = Carrier::getInstance()->getObjDB();
 
-        echo "current driver: " . Carrier::getInstance()->getObjConfig()->getConfig("dbdriver") . "\n";
+        //echo "current driver: " . Carrier::getInstance()->getObjConfig()->getConfig("dbdriver") . "\n";
         
         $arrFields = array();
         $arrFields["temp_id"] = array("char20", false);

@@ -5,12 +5,12 @@
         >
     <title>portalupload</title>
     <description>Provides a way to allow users to upload their own files into the mediamanager via the portal, so without accessing the backend.</description>
-    <version>5.0</version>
+    <version>5.1</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="pages" version="5.0" />
-        <module name="mediamanager" version="5.0" />
+        <module name="pages" version="5.1" />
+        <module name="mediamanager" version="5.1" />
     </requiredModules>
 </package>

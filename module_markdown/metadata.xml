@@ -5,11 +5,11 @@
         >
     <title>markdown</title>
     <description>Parse external markdown files and render them locally.</description>
-    <version>5.0</version>
+    <version>5.1</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="pages" version="5.0" />
+        <module name="pages" version="5.1" />
     </requiredModules>
 </package>

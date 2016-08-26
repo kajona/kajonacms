@@ -104,10 +104,6 @@ body {
 
     &.dialogBody {
         padding: 0;
-
-        #content {
-            padding: 0 15px 0 0;
-        }
     }
 
 
@@ -960,6 +956,12 @@ footer {
         .form-opener {
             vertical-align: top;
             padding: 7px 0 0 0;
+
+
+            @media (max-width: @screen-sm-min) {
+                padding: 7px 15px 0 15px;
+
+            }
         }
 
     }
@@ -1282,6 +1284,10 @@ footer {
             vertical-align: middle;
         }
 
+        td.nowrap {
+            white-space: nowrap;
+        }
+
 
         &.bulkedit {
             label {
@@ -1512,6 +1518,7 @@ table.form-control {
 
     tbody tr td, tbody tr th {
         vertical-align: middle;
+        padding: 4px;
     }
 
     .progress {

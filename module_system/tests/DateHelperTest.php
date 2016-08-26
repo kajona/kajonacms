@@ -451,5 +451,48 @@ class DateHelperTest extends Testbase
     }
 
 
+    public function testAddPeriodToDate() {
+        $objHelper = new DateHelper();
+
+        $arrDates = array();
+        $arrDates[] = array("period" => DatePeriodEnum::YEAR(), "basedate" => 20150101000001, "expecteddate" => 20160101000001);
+        $arrDates[] = array("period" => DatePeriodEnum::YEAR(), "basedate" => 20151001000001, "expecteddate" => 20161001000001);
+
+        $arrDates[] = array("period" => DatePeriodEnum::HALFYEAR(), "basedate" => 20150401000001, "expecteddate" => 20151001000001);
+        $arrDates[] = array("period" => DatePeriodEnum::HALFYEAR(), "basedate" => 20150601000001, "expecteddate" => 20151201000001);
+        $arrDates[] = array("period" => DatePeriodEnum::HALFYEAR(), "basedate" => 20150701000001, "expecteddate" => 20160101000001);
+        $arrDates[] = array("period" => DatePeriodEnum::HALFYEAR(), "basedate" => 20151001000001, "expecteddate" => 20160401000001);
+
+        $arrDates[] = array("period" => DatePeriodEnum::QUARTER(), "basedate" => 20150101000001, "expecteddate" => 20150401000001);//jan
+        $arrDates[] = array("period" => DatePeriodEnum::QUARTER(), "basedate" => 20150201000001, "expecteddate" => 20150501000001);//feb
+        $arrDates[] = array("period" => DatePeriodEnum::QUARTER(), "basedate" => 20150301000001, "expecteddate" => 20150601000001);//march
+        $arrDates[] = array("period" => DatePeriodEnum::QUARTER(), "basedate" => 20150401000001, "expecteddate" => 20150701000001);//apr
+        $arrDates[] = array("period" => DatePeriodEnum::QUARTER(), "basedate" => 20150501000001, "expecteddate" => 20150801000001);//may
+        $arrDates[] = array("period" => DatePeriodEnum::QUARTER(), "basedate" => 20150601000001, "expecteddate" => 20150901000001);//jun
+        $arrDates[] = array("period" => DatePeriodEnum::QUARTER(), "basedate" => 20150701000001, "expecteddate" => 20151001000001);//jul
+        $arrDates[] = array("period" => DatePeriodEnum::QUARTER(), "basedate" => 20150801000001, "expecteddate" => 20151101000001);//aug
+        $arrDates[] = array("period" => DatePeriodEnum::QUARTER(), "basedate" => 20150901000001, "expecteddate" => 20151201000001);//sep
+        $arrDates[] = array("period" => DatePeriodEnum::QUARTER(), "basedate" => 20151001000001, "expecteddate" => 20160101000001);//oct
+        $arrDates[] = array("period" => DatePeriodEnum::QUARTER(), "basedate" => 20151101000001, "expecteddate" => 20160201000001);//nov
+        $arrDates[] = array("period" => DatePeriodEnum::QUARTER(), "basedate" => 20151201000001, "expecteddate" => 20160301000001);//dec
+
+        $arrDates[] = array("period" => DatePeriodEnum::MONTH(), "basedate" => 20150201000001, "expecteddate" => 20150301000001);
+        $arrDates[] = array("period" => DatePeriodEnum::MONTH(), "basedate" => 20151201000001, "expecteddate" => 20160101000001);
+        $arrDates[] = array("period" => DatePeriodEnum::MONTH(), "basedate" => 20151223000001, "expecteddate" => 20160123000001);
+
+        $arrDates[] = array("period" => DatePeriodEnum::WEEK(), "basedate" => 20150202000001, "expecteddate" => 20150209000001);//mon
+        $arrDates[] = array("period" => DatePeriodEnum::WEEK(), "basedate" => 20150203000001, "expecteddate" => 20150210000001);//tue
+        $arrDates[] = array("period" => DatePeriodEnum::WEEK(), "basedate" => 20150204000001, "expecteddate" => 20150211000001);//wed
+        $arrDates[] = array("period" => DatePeriodEnum::WEEK(), "basedate" => 20150205000001, "expecteddate" => 20150212000001);//thu
+        $arrDates[] = array("period" => DatePeriodEnum::WEEK(), "basedate" => 20150206000001, "expecteddate" => 20150213000001);//fri
+        $arrDates[] = array("period" => DatePeriodEnum::WEEK(), "basedate" => 20150207000001, "expecteddate" => 20150214000001);//sat
+        $arrDates[] = array("period" => DatePeriodEnum::WEEK(), "basedate" => 20150208000001, "expecteddate" => 20150215000001);//sun
+
+        foreach ($arrDates as $arrDate) {
+            $objDate = new Date($arrDate["basedate"]);
+            $objCalcDate = $objHelper->addPeriodToDate($arrDate["period"], $objDate);
+            $this->assertEquals($arrDate["expecteddate"], $objCalcDate->getLongTimestamp(), $arrDate["period"] . " " . $arrDate["basedate"] . " " . $arrDate["expecteddate"]);
+        }
+    }
 }
 

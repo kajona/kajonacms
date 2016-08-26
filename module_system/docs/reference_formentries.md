@@ -8,6 +8,7 @@ Reference: Formentries
 | button	                 | 4.3        | A simple button element |
 | checkbox	                 | 4.0        | Simple checkbox element |
 | checkboxarray	             | 4.8        | Renders a list of objects as an array of checkboxes, e.g. assignments |
+| checkboxarrayobjectlist    | 5.1        | Renders a standard table containing a checkbox and the display name of the object |
 | date                       | 4.1        | Date-Input with date-picker |
 | datetime                   | 4.1        | Like Date but with two inputs to set a time (HH:MM), too |
 | divider                    | 4.0        | Graphical element to separate form-entries from each other |

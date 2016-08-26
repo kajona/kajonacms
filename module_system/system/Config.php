@@ -129,7 +129,7 @@ class Config
         }
 
         // project config
-        $strFile = __DIR__."/../../../project/system/config/config.php";
+        $strFile = _realpath_."project/module_system/system/config/config.php";
         if (is_file($strFile)) {
             include $strFile;
         }

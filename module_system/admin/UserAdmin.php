@@ -155,25 +155,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
         return $strReturn;
     }
 
-    /**
-     * @param Model $objListEntry
-     * @param string $strAltActive tooltip text for the icon if record is active
-     * @param string $strAltInactive tooltip text for the icon if record is inactive
-     *
-     * @return string
-     */
-    protected function renderStatusAction(Model $objListEntry, $strAltActive = "", $strAltInactive = "")
-    {
-        if ($objListEntry instanceof UserUser && $objListEntry->rightEdit()) {
-            if ($objListEntry->getIntActive() == 1) {
-                return $this->objToolkit->listButton(Link::getLinkAdmin("user", "setUserStatus", "&systemid=".$objListEntry->getSystemid()."&pv=".$this->getParam("pv"), "", $this->getLang("user_active"), "icon_enabled"));
-            }
-            else {
-                return $this->objToolkit->listButton(Link::getLinkAdmin("user", "setUserStatus", "&systemid=".$objListEntry->getSystemid()."&pv=".$this->getParam("pv"), "", $this->getLang("user_inactive"), "icon_disabled"));
-            }
-        }
-        return "";
-    }
+
 
     /**
      * @param ModelInterface $objListEntry
@@ -280,7 +262,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
 
         if ($objListEntry instanceof UserUser
             && $objListEntry->getObjSourceUser()->isEditable()
-            && $objListEntry->getIntActive() == 1
+            && $objListEntry->getIntRecordStatus() == 1
             && $objListEntry->getObjSourceUser()->isPasswordResettable()
             && $objListEntry->rightEdit()
             && $objValidator->validate($objListEntry->getStrEmail())
@@ -288,11 +270,11 @@ class UserAdmin extends AdminSimple implements AdminInterface
             $arrReturn[] = $this->objToolkit->listButton(Link::getLinkAdmin("user", "sendPassword", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("user_password_resend"), "icon_mailNew"));
         }
 
-        if ($objListEntry instanceof UserUser && $objListEntry->getIntActive() == 1) {
+        if ($objListEntry instanceof UserUser && $objListEntry->getIntRecordStatus() == 1) {
             $arrReturn[] = $this->objToolkit->listButton(Link::getLinkAdminDialog("messaging", "new", "&messaging_user_id=".$objListEntry->getSystemid(), "", $this->getLang("user_send_message"), "icon_mail", $this->getLang("user_send_message")));
         }
 
-        if ($objListEntry instanceof UserUser && $objListEntry->getIntActive() == 1 && Carrier::getInstance()->getObjSession()->isSuperAdmin()) {
+        if ($objListEntry instanceof UserUser && $objListEntry->getIntRecordStatus() == 1 && Carrier::getInstance()->getObjSession()->isSuperAdmin()) {
             $arrReturn[] = $this->objToolkit->listButton(Link::getLinkAdmin("user", "switchToUser", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("user_switch_to"), "icon_userswitch"));
         }
 
@@ -335,7 +317,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
     protected function actionSendPassword()
     {
         $strReturn = "";
-        $objUser = new UserUser($this->getSystemid());
+        $objUser = Objectfactory::getInstance()->getObject($this->getSystemid());
 
         $strReturn .= $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "sendPasswordFinal"));
         $strReturn .= $this->objToolkit->getTextRow($this->getLang("user_resend_password_hint"));
@@ -366,7 +348,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
     protected function actionSendPasswordFinal()
     {
         $strReturn = "";
-        $objUser = new UserUser($this->getSystemid());
+        $objUser = Objectfactory::getInstance()->getObject($this->getSystemid());
 
         //add a one-time token and reset the password
         $strToken = generateSystemid();
@@ -400,33 +382,6 @@ class UserAdmin extends AdminSimple implements AdminInterface
         return $strReturn;
     }
 
-    /**
-     * Negates the status of an existing user
-     *
-     * @throws Exception
-     * @return string "" in case of success
-     * @permissions edit
-     */
-    protected function actionSetUserStatus()
-    {
-        $strReturn = "";
-        $objUser = new UserUser($this->getSystemid());
-        if ($objUser->getIntActive() == 1) {
-            $objUser->setIntActive(0);
-        }
-        else {
-            $objUser->setIntActive(1);
-        }
-
-        if ($objUser->updateObjectToDb()) {
-            $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "list", "&pv=".$this->getParam("pv")));
-        }
-        else {
-            throw new Exception("Error updating user ".$this->getSystemid(), Exception::$level_ERROR);
-        }
-
-        return $strReturn;
-    }
 
     /**
      * @return string
@@ -526,7 +481,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
             }
 
             //get user and userForm
-            $objUser = new UserUser($this->getSystemid());
+            $objUser = Objectfactory::getInstance()->getObject($this->getSystemid());
             $objSourceUser = $objUsersources->getSourceUser($objUser);
 
             if ($objForm == null) {
@@ -562,10 +517,6 @@ class UserAdmin extends AdminSimple implements AdminInterface
 
                 if ($objForm->getField("user_portal") != null) {
                     $objForm->getField("user_portal")->setStrValue($objUser->getIntPortal());
-                }
-
-                if ($objForm->getField("user_active") != null) {
-                    $objForm->getField("user_active")->setStrValue($objUser->getIntActive());
                 }
             }
 
@@ -648,7 +599,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
             $objForm->addField(new FormentryHidden("user", "inherit_permissions_id"))
                 ->setStrValue($strInheritPermissionsId);
 
-            $objInheritUser = new UserUser($strInheritPermissionsId);
+            $objInheritUser = Objectfactory::getInstance()->getObject($strInheritPermissionsId);
             $objForm->addField(new FormentryPlaintext("inherit_hint"))
                 ->setStrValue($this->objToolkit->warningBox($this->getLang("user_copy_info", "", array($objInheritUser->getStrDisplayName())), "alert-info"));
 
@@ -680,7 +631,6 @@ class UserAdmin extends AdminSimple implements AdminInterface
         if (!$bitSelfedit) {
             $objForm->addField(new FormentryCheckbox("user", "adminlogin"))->setStrLabel($this->getLang("user_admin"));
             $objForm->addField(new FormentryCheckbox("user", "portal"))->setStrLabel($this->getLang("user_portal"));
-            $objForm->addField(new FormentryCheckbox("user", "active"))->setStrLabel($this->getLang("user_aktiv"));
         }
 
         if (count($objUser->getGroupIdsForUser()) == 0 && empty($strInheritPermissionsId)) {
@@ -724,7 +674,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
                 }
             }
 
-            $objUser = new UserUser($this->getSystemid());
+            $objUser = Objectfactory::getInstance()->getObject($this->getSystemid());
             $objSourceUser = $objUsersources->getSourceUser($objUser);
             $objForm = $this->getUserForm($objSourceUser, $bitSelfedit, "edit");
         }
@@ -745,7 +695,6 @@ class UserAdmin extends AdminSimple implements AdminInterface
             $objUser->setStrSubsystem($this->getParam("usersource"));
 
             $objUser->setStrUsername($this->getParam("user_username"));
-            $objUser->setIntActive(($this->getParam("user_active") != "" && $this->getParam("user_active") == "checked") ? 1 : 0);
             $objUser->setIntAdmin(($this->getParam("user_adminlogin") != "" && $this->getParam("user_adminlogin") == "checked") ? 1 : 0);
             $objUser->setIntPortal(($this->getParam("user_portal") != "" && $this->getParam("user_portal") == "checked") ? 1 : 0);
 
@@ -753,11 +702,11 @@ class UserAdmin extends AdminSimple implements AdminInterface
         elseif ($this->getParam("mode") == "edit") {
 
             //create a new user and pass all relevant data
-            $objUser = new UserUser($this->getSystemid());
+            /** @var UserUser $objUser */
+            $objUser = Objectfactory::getInstance()->getObject($this->getSystemid());
 
             if (!$bitSelfedit) {
                 $objUser->setStrUsername($this->getParam("user_username"));
-                $objUser->setIntActive(($this->getParam("user_active") != "" && $this->getParam("user_active") == "checked") ? 1 : 0);
                 $objUser->setIntAdmin(($this->getParam("user_adminlogin") != "" && $this->getParam("user_adminlogin") == "checked") ? 1 : 0);
                 $objUser->setIntPortal(($this->getParam("user_portal") != "" && $this->getParam("user_portal") == "checked") ? 1 : 0);
             }
@@ -778,7 +727,8 @@ class UserAdmin extends AdminSimple implements AdminInterface
         if ($this->getParam("mode") == "new") {
             $strInheritUserId = $this->getParam("user_inherit_permissions_id");
             if (!empty($strInheritUserId)) {
-                $objInheritUser = new UserUser($strInheritUserId);
+                /** @var UserUser $objInheritUser */
+                $objInheritUser = Objectfactory::getInstance()->getObject($strInheritUserId);
                 $arrGroupIds = $objInheritUser->getArrGroupIds();
 
                 foreach ($arrGroupIds as $strGroupId) {
@@ -1082,7 +1032,8 @@ class UserAdmin extends AdminSimple implements AdminInterface
 
             $strReturn .= $this->objToolkit->listHeader();
             foreach ($objIterator as $strSingleMemberId) {
-                $objSingleMember = new UserUser($strSingleMemberId);
+                /** @var UserUser $objSingleMember */
+                $objSingleMember = Objectfactory::getInstance()->getObject($strSingleMemberId);
 
                 $strAction = "";
                 if ($objUsersources->getUsersource($objGroup->getStrSubsystem())->getMembersEditable() && $bitRenderEdit) {
@@ -1118,8 +1069,8 @@ class UserAdmin extends AdminSimple implements AdminInterface
             return $this->actionGroupMember($objForm);
         }
 
-
-        $objUser = new UserUser($objForm->getField("addusertogroup_user")->getStrValue());
+        /** @var UserUser $objUser */
+        $objUser = Objectfactory::getInstance()->getObject($objForm->getField("addusertogroup_user")->getStrValue());
         $objSourceGroup = $objGroup->getObjSourceGroup();
 
         $objSourceGroup->addMember($objUser->getObjSourceUser());
@@ -1155,7 +1106,8 @@ class UserAdmin extends AdminSimple implements AdminInterface
             return $this->getLang("commons_error_permissions");
         }
 
-        $objUser = new UserUser($this->getParam("userid"));
+        /** @var UserUser $objUser */
+        $objUser = Objectfactory::getInstance()->getObject($this->getParam("userid"));
         if ($objGroup->getObjSourceGroup()->removeMember($objUser->getObjSourceUser())) {
             $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "groupMember", "systemid=".$this->getParam("groupid")));
         }
@@ -1205,7 +1157,8 @@ class UserAdmin extends AdminSimple implements AdminInterface
         //open the form
         $strReturn .= $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "saveMembership"));
         //Create a list of checkboxes
-        $objUser = new UserUser($this->getSystemid());
+        /** @var UserUser $objUser */
+        $objUser = Objectfactory::getInstance()->getObject($this->getSystemid());
 
         $strReturn .= $this->objToolkit->formHeadline($this->getLang("user_memberships")."\"".$objUser->getStrUsername()."\"");
 
@@ -1260,7 +1213,8 @@ HTML;
      */
     protected function actionBrowseMemberships()
     {
-        $objUser = new UserUser($this->getSystemid());
+        /** @var UserUser $objUser */
+        $objUser = Objectfactory::getInstance()->getObject($this->getSystemid());
         $strReturn = $this->objToolkit->listHeader();
         foreach ($objUser->getObjSourceUser()->getGroupIdsForUser() as $strOneId) {
             $objGroup = new UserGroup($strOneId);
@@ -1447,7 +1401,7 @@ HTML;
             }
 
             $strAction = "";
-            if (!$bitRenderAcceptLink || $objOneIterable->getIntActive() == 0 || ($this->getParam("filter") == "current" && $objOneIterable->getSystemid() == $this->objSession->getUserID())) {
+            if (!$bitRenderAcceptLink || $objOneIterable->getIntRecordStatus() == 0 || ($this->getParam("filter") == "current" && $objOneIterable->getSystemid() == $this->objSession->getUserID())) {
                 $strAction .= $this->objToolkit->listButton(getImageAdmin("icon_acceptDisabled"));
             } else {
                 $strAction .= $this->objToolkit->listButton(

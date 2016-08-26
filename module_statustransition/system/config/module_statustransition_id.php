@@ -4,17 +4,7 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Statustransition\System\Config;
 
-/**
- * @deprecated
- * @see module_system/bootstrap.php
- *
- *
- * This files remains for backwards compatibility only!
- * All contents moved to module_system/bootstrap.php
- */
-
-include_once "module_system/bootstrap.php";
-
-
+define("_statustransition_module_id_", 1470996506);
 

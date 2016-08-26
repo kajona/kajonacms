@@ -12,6 +12,12 @@
         </testsuite>
     </testsuites>
 
+    <filter>
+        <blacklist>
+            <directory suffix=".php">buildproject/*/*/vendor</directory>
+        </blacklist>
+    </filter>
+
     <logging>
         <log type="coverage-html" target="build/coverage" title="Kajona V4 Head"
              charset="UTF-8" yui="true" highlight="true"

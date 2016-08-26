@@ -11,6 +11,7 @@ use Kajona\System\System\Database;
 use Kajona\System\System\DbDatatypes;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Logger;
+use Kajona\System\System\StringUtil;
 
 
 /**
@@ -37,6 +38,12 @@ class DbOci8 extends DbBase
     private $bitTxOpen = false;
 
     private $objErrorStmt = null;
+
+    /**
+     * Flag whether the sring comparison method (case sensitive / insensitive) should be reset back to default after the current query
+     * @var bool
+     */
+    private $bitResetOrder = false;
 
     /**
      * This method makes sure to connect to the database properly
@@ -161,9 +168,59 @@ class DbOci8 extends DbBase
             $bitAddon = OCI_NO_AUTO_COMMIT;
         }
         $bitResult = @oci_execute($objStatement, $bitAddon);
+
+        $this->intAffectedRows = @oci_num_rows($objStatement);
+
         @oci_free_statement($objStatement);
         return $bitResult;
     }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function insertOrUpdate($strTable, $arrColumns, $arrValues, $arrPrimaryColumns)
+    {
+
+        //return parent::insertOrUpdate($strTable, $arrColumns, $arrValues, $arrPrimaryColumns);
+
+        $arrPlaceholder = array();
+        $arrMappedColumns = array();
+        $arrKeyValuePairs = array();
+
+
+        $arrParams = array();
+        $arrPrimaryCompares = array();
+
+        foreach ($arrColumns as $intKey => $strOneCol) {
+            $arrPlaceholder[] = "?";
+            $arrMappedColumns[] = $this->encloseColumnName($strOneCol);
+
+            if(in_array($strOneCol, $arrPrimaryColumns)) {
+                $arrPrimaryCompares[] = $strOneCol ." = ? ";
+                $arrParams[] = $arrValues[$intKey];
+            }
+        }
+
+        $arrParams = array_merge($arrParams, $arrValues);
+
+
+
+        foreach ($arrColumns as $intKey => $strOneCol) {
+            if(!in_array($strOneCol, $arrPrimaryColumns)) {
+                $arrKeyValuePairs[] = $this->encloseColumnName($strOneCol)." = ?";
+                $arrParams[] = $arrValues[$intKey];
+            }
+        }
+
+
+        $strQuery = "MERGE INTO ".$this->encloseTableName(_dbprefix_.$strTable)." using dual on (".implode(" AND ", $arrPrimaryCompares).") 
+                       WHEN NOT MATCHED THEN INSERT (".implode(", ", $arrMappedColumns).") values (".implode(", ", $arrPlaceholder).")
+                       WHEN MATCHED then update set ".implode(", ", $arrKeyValuePairs)."";
+                         
+        return $this->_pQuery($strQuery, $arrParams);
+    }
+
 
     /**
      * This method is used to retrieve an array of resultsets from the database using
@@ -207,6 +264,12 @@ class DbOci8 extends DbBase
             $arrReturn[$intCounter++] = $arrRow;
         }
         @oci_free_statement($objStatement);
+
+        if($this->bitResetOrder) {
+            $this->setCaseSensitiveSort();
+            $this->bitResetOrder = false;
+        }
+
         return $arrReturn;
     }
 
@@ -490,9 +553,10 @@ class DbOci8 extends DbBase
     public function getDbInfo()
     {
         $arrReturn = array();
-        $arrReturn["dbdriver"] = "oci8-oracle-extension";
         $arrReturn["dbserver"] = oci_server_version($this->linkDB);
         $arrReturn["dbclient"] = function_exists("oci_client_version") ? oci_client_version() : "";
+        $arrReturn["nls_sort"] = $this->getPArray("select sys_context ('userenv', 'nls_sort') val1 from sys.dual", array())[0]["val1"];
+        $arrReturn["nls_comp"] = $this->getPArray("select sys_context ('userenv', 'nls_comp') val1 from sys.dual", array())[0]["val1"];
         return $arrReturn;
     }
 
@@ -561,6 +625,12 @@ class DbOci8 extends DbBase
             $intPos = uniStrpos($strQuery, "?");
             $strQuery = substr($strQuery, 0, $intPos).":".$intCount++.substr($strQuery, $intPos + 1);
         }
+
+        if(StringUtil::indexOf($strQuery, " like ", false) !== false) {
+            $this->setCaseInsensitiveSort();
+            $this->bitResetOrder = true;
+        }
+
         return $strQuery;
     }
 
@@ -633,6 +703,24 @@ class DbOci8 extends DbBase
                      WHERE ROWNUM <= " . $intEnd . "
                 )
                 WHERE rnum >= " . $intStart;
+    }
+
+    /**
+     * Sets the sorting and comparison of strings to case insensitive
+     */
+    private function setCaseInsensitiveSort()
+    {
+        $this->_pQuery("alter session set nls_sort=binary_ci", array());
+        $this->_pQuery("alter session set nls_comp=LINGUISTIC", array());
+    }
+
+    /**
+     * Sets the sorting and comparison of strings to case sensitive
+     */
+    private function setCaseSensitiveSort()
+    {
+        $this->_pQuery("alter session set nls_sort=binary", array());
+        $this->_pQuery("alter session set nls_comp=ANSI", array());
     }
 }
 

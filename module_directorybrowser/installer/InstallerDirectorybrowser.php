@@ -72,6 +72,11 @@ class InstallerDirectorybrowser extends InstallerBase implements InstallerRemova
             $strReturn .= "Updating 2.1 to 5.0...\n";
             $this->updateElementAndModule("5.0");
         }
+        
+        if ($arrModule["module_version"] == "5.0") {
+            $strReturn .= "Updating to 5.1...\n";
+            $this->updateElementAndModule("5.1");
+        }
 
         return $strReturn."\n\n";
     }

@@ -4,8 +4,8 @@ namespace Kajona\System\Tests;
 
 use DOMDocument;
 use DOMElement;
-use Kajona\System\System\Database;
 use Kajona\System\System\Model;
+use Kajona\System\System\Objectfactory;
 use Kajona\System\System\UserUser;
 use RuntimeException;
 
@@ -94,13 +94,9 @@ abstract class TestbaseObject extends Testbase
         /** @var Model $objOneModel */
         foreach (array_reverse($this->arrStructure, true) as $objOneModel) {
             $strSystemId = $objOneModel->getStrSystemid();
-            $objOneModel->deleteObjectFromDatabase();
-
-            //if it is a user also delete the user from the database completeley
-            if ($objOneModel instanceof UserUser) {
-                $strQuery = "DELETE FROM " . _dbprefix_ . "user WHERE user_id=?";
-                //call other models that may be interested
-                $bitDelete = Database::getInstance()->_pQuery($strQuery, array($strSystemId));
+            $objOneModel = Objectfactory::getInstance()->getObject($strSystemId);
+            if($objOneModel !== null) {
+                $objOneModel->deleteObjectFromDatabase();
             }
         }
     }
@@ -172,7 +168,7 @@ abstract class TestbaseObject extends Testbase
             throw new RuntimeException('No class name given for object "' . $strName . '" (' . $objElement->getNodePath() . ')');
         }
 
-        if ($strClassName == "Kajona\\System\\System\\UserUser") {
+        if ($strClassName == UserUser::class) {
             $objObject = $this->createFixtureUser($objElement, $objParent, $strClassName, $arrParameters, $strName);
         } else {
             $objObject = $this->createFixtureObject($objElement, $objParent, $strClassName, $arrParameters, $strName);
@@ -231,7 +227,8 @@ abstract class TestbaseObject extends Testbase
                         throw new RuntimeException('Object "' . $strName . '" refers to an non existing object (' . $objElement->getNodePath() . ')');
                     }
                 }
-            } elseif (substr($strValue, 0, 4) == 'ref:') {
+            }
+            elseif (substr($strValue, 0, 4) == 'ref:') {
                 $strRef = trim(substr($strValue, 4));
                 $objRef = $this->getObject($strRef);
                 if ($objRef instanceof Model) {
@@ -239,6 +236,10 @@ abstract class TestbaseObject extends Testbase
                 } else {
                     throw new RuntimeException('Object "' . $strName . '" refers to an non existing object (' . $objElement->getNodePath() . ')');
                 }
+            }
+            elseif (substr($strValue, 0, 13) == 'dataprovider:') {
+                $strFunction = trim(substr($strValue, 13));
+                $arrParameters[$strKey] = call_user_func($strFunction);
             }
         }
 
@@ -262,7 +263,6 @@ abstract class TestbaseObject extends Testbase
         $strUserName = $arrParameters["strUsername"];
 
         $objUser = new UserUser();
-        $objUser->setIntActive(1);
         $objUser->setIntAdmin(1);
         $objUser->setStrUsername($strUserName);
         $objUser->updateObjectToDb();

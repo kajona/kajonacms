@@ -84,7 +84,7 @@ class FormentryCheckboxarray extends FormentryBase implements FormentryPrintable
                 }
 
                 //POST vals
-                elseif($strSingleValue == "checked") {
+                elseif($strSingleValue == "checked" || $strSingleValue == "on") {//on = from generic list
                     $arrTargetValues[] = $strKey;
                 }
             }
@@ -120,7 +120,12 @@ class FormentryCheckboxarray extends FormentryBase implements FormentryPrintable
     public function getValueAsText() {
         $arrNew = array();
         foreach($this->getStrValue() as $strOneId) {
-            $arrNew = Objectfactory::getInstance()->getObject($strOneId)->getStrDisplayName();
+            if(validateSystemid($strOneId)) {
+                $arrNew[] = Objectfactory::getInstance()->getObject($strOneId)->getStrDisplayName();
+            }
+            else {
+                $arrNew[] = $this->arrKeyValues[$strOneId];
+            }
         }
         return implode("<br />", $arrNew);
     }

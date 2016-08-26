@@ -148,29 +148,14 @@ class ArraySectionIterator extends ArrayIterator
     /**
      * Returns the elements placed on the given page
      *
-     * @param int $intPageNumber
+     * @param int $intPageNumber please note! this params is ignored
      *
      * @return array
      */
     public function getElementsOnPage($intPageNumber)
     {
-        $arrReturn = array();
-        //calc elements to return
-        $intStart = ($this->intPageNumber * $this->intElementsPerPage) - $this->intElementsPerPage;
-        $intEnd = $this->intElementsPerPage + $intStart - 1;
-        if ($intEnd > $this->getNumberOfElements()) {
-            $intEnd = $this->getNumberOfElements() - 1;
-        }
-
-        for ($intI = $intStart; $intI <= $intEnd; $intI++) {
-            if (!$this->setCursorPosition($intI)) {
-                break;
-            }
-            if (isset($this->arrElements[$this->intArrCursor])) {
-                $arrReturn[] = $this->arrElements[$this->intArrCursor];
-            }
-        }
-        return $arrReturn;
+        $this->intPageNumber = $intPageNumber;
+        return parent::getElementsOnPage($this->intPageNumber);
     }
 
 }

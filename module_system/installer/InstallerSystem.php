@@ -16,12 +16,17 @@ use Kajona\System\System\Filesystem;
 use Kajona\System\System\InstallerBase;
 use Kajona\System\System\InstallerInterface;
 use Kajona\System\System\LanguagesLanguage;
+use Kajona\System\System\MessagingConfig;
+use Kajona\System\System\MessagingMessage;
 use Kajona\System\System\OrmBase;
 use Kajona\System\System\OrmSchemamanager;
 use Kajona\System\System\Resourceloader;
+use Kajona\System\System\Rights;
 use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemChangelog;
+use Kajona\System\System\SystemCommon;
 use Kajona\System\System\SystemModule;
+use Kajona\System\System\SystemPwchangehistory;
 use Kajona\System\System\SystemSetting;
 use Kajona\System\System\UserGroup;
 use Kajona\System\System\UserUser;
@@ -91,7 +96,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
         // Modul table ----------------------------------------------------------------------------------
         $strReturn .= "Installing table system_module...\n";
-        $objManager->createTable("Kajona\\System\\System\\SystemModule");
+        $objManager->createTable(SystemModule::class);
 
 
         // Date table -----------------------------------------------------------------------------------
@@ -122,25 +127,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
         // User table -----------------------------------------------------------------------------------
         $strReturn .= "Installing table user...\n";
-
-        $arrFields = array();
-        $arrFields["user_id"] = array("char20", false);
-        $arrFields["user_username"] = array("char254", true);
-        $arrFields["user_subsystem"] = array("char254", true);
-        $arrFields["user_logins"] = array("int", true);
-        $arrFields["user_lastlogin"] = array("int", true);
-        $arrFields["user_active"] = array("int", true);
-        $arrFields["user_admin"] = array("int", true);
-        $arrFields["user_portal"] = array("int", true);
-        $arrFields["user_deleted"] = array("int", true);
-        $arrFields["user_admin_skin"] = array("char254", true);
-        $arrFields["user_admin_language"] = array("char254", true);
-        $arrFields["user_admin_module"] = array("char254", true);
-        $arrFields["user_authcode"] = array("char20", true);
-        $arrFields["user_items_per_page"] = array("int", true);
-
-        if(!$this->objDB->createTable("user", $arrFields, array("user_id"), array("user_username", "user_subsystem", "user_active", "user_deleted")))
-            $strReturn .= "An error occurred! ...\n";
+        $objManager->createTable(UserUser::class);
 
         // User table kajona subsystem  -----------------------------------------------------------------
         $strReturn .= "Installing table user_kajona...\n";
@@ -164,15 +151,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
         // User group table -----------------------------------------------------------------------------
         $strReturn .= "Installing table user_group...\n";
-
-        $arrFields = array();
-        $arrFields["group_id"] = array("char20", false);
-        $arrFields["group_name"] = array("char254", true);
-        $arrFields["group_subsystem"] = array("char254", true);
-
-        if(!$this->objDB->createTable("user_group", $arrFields, array("group_id"), array("group_name", "group_subsystem")))
-            $strReturn .= "An error occurred! ...\n";
-
+        $objManager->createTable(UserGroup::class);
 
         $strReturn .= "Installing table user_group_kajona...\n";
 
@@ -222,7 +201,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $arrFields["session_releasetime"] = array("int", true);
         $arrFields["session_loginstatus"] = array("char254", true);
         $arrFields["session_loginprovider"] = array("char20", true);
-        $arrFields["session_lasturl"] = array("char500", true);
+        $arrFields["session_lasturl"] = array("text", true);
 
         if(!$this->objDB->createTable("session", $arrFields, array("session_id"), array("session_phpid", "session_releasetime", "session_userid")))
             $strReturn .= "An error occurred! ...\n";
@@ -245,20 +224,20 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
         //languages -------------------------------------------------------------------------------------
         $strReturn .= "Installing table languages...\n";
-        $objManager->createTable("Kajona\\System\\System\\LanguagesLanguage");
+        $objManager->createTable(LanguagesLanguage::class);
 
         $strReturn .= "Installing table languages_languageset...\n";
         $arrFields = array();
         $arrFields["languageset_id"] = array("char20", false);
         $arrFields["languageset_language"] = array("char20", true);
-        $arrFields["languageset_systemid"] = array("char20", true);
+        $arrFields["languageset_systemid"] = array("char20", false);
 
         if(!$this->objDB->createTable("languages_languageset", $arrFields, array("languageset_id", "languageset_systemid")))
             $strReturn .= "An error occurred! ...\n";
 
         //aspects --------------------------------------------------------------------------------------
         $strReturn .= "Installing table aspects...\n";
-        $objManager->createTable("Kajona\\System\\System\\SystemAspect");
+        $objManager->createTable(SystemAspect::class);
 
         //changelog -------------------------------------------------------------------------------------
         $strReturn .= "Installing table changelog...\n";
@@ -266,12 +245,12 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
         //messages
         $strReturn .= "Installing table messages...\n";
-        $objManager->createTable("Kajona\\System\\System\\MessagingMessage");
-        $objManager->createTable("Kajona\\System\\System\\MessagingConfig");
+        $objManager->createTable(MessagingMessage::class);
+        $objManager->createTable(MessagingConfig::class);
 
         // password change history
         $strReturn .= "Installing password reset history...\n";
-        $objManager->createTable("Kajona\\System\\System\\SystemPwchangehistory");
+        $objManager->createTable(SystemPwchangehistory::class);
 
         //Now we have to register module by module
 
@@ -360,7 +339,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         //Send the query to the db
         $this->objDB->_pQuery(
             $strQuery,
-            array(0, 0, _system_modul_id_, Date::getCurrentTimestamp(), time(), 1, 1, "Kajona\\System\\System\\SystemCommon")
+            array(0, 0, _system_modul_id_, Date::getCurrentTimestamp(), time(), 1, 1, SystemCommon::class)
         );
 
 
@@ -425,7 +404,6 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
         $objUser = new UserUser();
         $objUser->setStrUsername($strUsername);
-        $objUser->setIntActive(1);
         $objUser->setIntAdmin(1);
         $objUser->setStrAdminlanguage($strAdminLanguage);
         $objUser->updateObjectToDb();
@@ -456,7 +434,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
         $strReturn .= "Trying to copy the *.root files to top-level...\n";
         $arrFiles = array(
-            "index.php", "image.php", "xml.php", ".htaccess", "v3_v4_postupdate.php"
+            "index.php", "image.php", "xml.php", ".htaccess"
         );
         foreach($arrFiles as $strOneFile) {
             if(!file_exists(_realpath_.$strOneFile) && is_file(Resourceloader::getInstance()->getAbsolutePathForModule("module_system")."/".$strOneFile.".root")) {
@@ -579,6 +557,19 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         if($arrModule["module_version"] == "4.7.6") {
             $strReturn .= $this->update_476_50();
         }
+        
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.0" || $arrModule["module_version"] == "5.0.1") {
+            $strReturn .= "Updating 5.0 to 5.1...\n";
+            $this->updateModuleVersion("", "5.1");
+            $this->objDB->flushQueryCache();
+        }
+
+
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.1") {
+            $strReturn .= $this->update_51_511();
+        }
 
         return $strReturn."\n\n";
     }
@@ -685,6 +676,84 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $this->registerConstant("_system_mod_rewrite_admin_only_", "false", SystemSetting::$int_TYPE_BOOL, _system_modul_id_);
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.0");
+        return $strReturn;
+    }
+
+    private function update_51_511() {
+        $strReturn = "Updating 5.1 to 5.1.1...\n";
+
+
+
+        $strReturn .= "Updating users and groups\n";
+        $arrRightsRow = Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_));
+
+        foreach($this->objDB->getPArray("SELECT * FROM "._dbprefix_."user", array()) as $arrOneRow) {
+            //fire two inserts
+            $this->objDB->_pQuery(
+                "INSERT INTO "._dbprefix_."system (system_id, system_prev_id, system_module_nr, system_sort, system_status, system_class, system_deleted) VALUES (?, ?, ?, -1, ?, ?, ?)",
+                array(
+                    $arrOneRow["user_id"],
+                    SystemModule::getModuleIdByNr(_user_modul_id_),
+                    _user_modul_id_,
+                    $arrOneRow["user_active"],
+                    UserUser::class,
+                    $arrOneRow["user_deleted"]
+                )
+            );
+
+            $this->objDB->_pQuery(
+                "INSERT INTO "._dbprefix_."system_right (right_id, right_inherit, right_view, right_edit, right_delete, right_right, right_right1, right_right2, right_right3, right_right4, right_right5, right_changelog) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                array(
+                    $arrOneRow["user_id"],
+                    1,
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_VIEW]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_EDIT]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_DELETE]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_RIGHT]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_RIGHT1]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_RIGHT2]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_RIGHT3]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_RIGHT4]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_RIGHT5]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_CHANGELOG])
+                )
+            );
+        }
+
+        foreach($this->objDB->getPArray("SELECT * FROM "._dbprefix_."user_group", array()) as $arrOneRow) {
+            //fire two inserts
+            $this->objDB->_pQuery(
+                "INSERT INTO "._dbprefix_."system (system_id, system_prev_id, system_module_nr, system_sort, system_status, system_class, system_deleted) VALUES (?, ?, ?, -1, ?, ?, ?)",
+                array($arrOneRow["group_id"], SystemModule::getModuleIdByNr(_user_modul_id_), _user_modul_id_, 1, UserGroup::class, 0)
+            );
+
+            $this->objDB->_pQuery(
+                "INSERT INTO "._dbprefix_."system_right (right_id, right_inherit, right_view, right_edit, right_delete, right_right, right_right1, right_right2, right_right3, right_right4, right_right5, right_changelog) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                array(
+                    $arrOneRow["group_id"],
+                    1,
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_VIEW]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_EDIT]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_DELETE]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_RIGHT]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_RIGHT1]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_RIGHT2]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_RIGHT3]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_RIGHT4]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_RIGHT5]),
+                    implode(",", $arrRightsRow[Rights::$STR_RIGHT_CHANGELOG])
+                )
+            );
+        }
+
+        $this->objDB->removeColumn("user", "user_active");
+        $this->objDB->removeColumn("user", "user_deleted");
+
+        // alter session last url column
+        $this->objDB->changeColumn("session", "session_lasturl", "session_lasturl", DbDatatypes::STR_TYPE_TEXT);
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1.1");
         return $strReturn;
     }
     

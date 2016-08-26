@@ -8,9 +8,8 @@ namespace Kajona\System\System;
 
 
 /**
- * General information regarding the current timezone environment
+ * General information regarding the current database environment
  *
- * @package module_system
  * @author sidler@mulchprod.de
  * @since 4.5
  */
@@ -37,48 +36,17 @@ class SysteminfoDb implements SysteminfoInterface
         $arrReturn = array();
 
         $arrTables = Carrier::getInstance()->getObjDB()->getTables(true);
-        $intSizeData = 0;
-        $intSizeIndex = 0;
+        $arrReturn[] = array($objLang->getLang("datenbanktreiber", "system"), Config::getInstance()->getConfig("dbdriver"));
+        $arrReturn[] = array($objLang->getLang("datenbankserver", "system"),  Config::getInstance()->getConfig("dbhost"));
+        $arrReturn[] = array($objLang->getLang("db", "system"),  Config::getInstance()->getConfig("dbname"));
+        $arrReturn[] = array($objLang->getLang("anzahltabellen", "system"), count($arrTables));
 
-        switch (Config::getInstance()->getConfig("dbdriver")) {
-            case "mysqli":
-            case "mysql":
-                foreach ($arrTables as $arrTable) {
-                    if (isset($arrTable["Data_length"])) {
-                        $intSizeData += $arrTable["Data_length"];
-                    }
-                    if (isset($arrTable["Index_length"])) {
-                        $intSizeIndex += $arrTable["Index_length"];
-                    }
-                }
-                $arrInfo = Carrier::getInstance()->getObjDB()->getDbInfo();
-                $arrReturn[] = array($objLang->getLang("datenbanktreiber", "system"), $arrInfo["dbdriver"]);
-                $arrReturn[] = array($objLang->getLang("datenbankserver", "system"), $arrInfo["dbserver"]);
-                $arrReturn[] = array($objLang->getLang("datenbankclient", "system"), $arrInfo["dbclient"]);
-                $arrReturn[] = array($objLang->getLang("datenbankverbindung", "system"), $arrInfo["dbconnection"]);
-                $arrReturn[] = array($objLang->getLang("anzahltabellen", "system"), count($arrTables));
-                $arrReturn[] = array($objLang->getLang("groessegesamt", "system"), bytesToString($intSizeData + $intSizeIndex));
-                $arrReturn[] = array($objLang->getLang("groessedaten", "system"), bytesToString($intSizeData));
-                break;
-
-            case "postgres":
-                $arrInfo = Carrier::getInstance()->getObjDB()->getDbInfo();
-                $arrReturn[] = array($objLang->getLang("datenbanktreiber", "system"), $arrInfo["dbdriver"]);
-                $arrReturn[] = array($objLang->getLang("datenbankserver", "system"), $arrInfo["dbserver"]);
-                $arrReturn[] = array($objLang->getLang("datenbankclient", "system"), $arrInfo["dbclient"]);
-                $arrReturn[] = array($objLang->getLang("datenbankverbindung", "system"), $arrInfo["dbconnection"]);
-                $arrReturn[] = array($objLang->getLang("anzahltabellen", "system"), count($arrTables));
-                $arrReturn[] = array($objLang->getLang("groessegesamt", "system"), bytesToString($intSizeData + $intSizeIndex));
-                $arrReturn[] = array($objLang->getLang("groessedaten", "system"), bytesToString($intSizeData));
-                break;
-
-            default:
-                $arrInfo = Carrier::getInstance()->getObjDB()->getDbInfo();
-                $arrReturn[] = array($objLang->getLang("datenbanktreiber", "system"), $arrInfo["dbdriver"]);
-                $arrReturn[] = array($objLang->getLang("datenbankserver", "system"), $arrInfo["dbserver"]);
-                $arrReturn[] = array($objLang->getLang("anzahltabellen", "system"), count($arrTables));
-                break;
+        $arrInfo = Carrier::getInstance()->getObjDB()->getDbInfo();
+        foreach($arrInfo as $strKey => $strValue) {
+            $arrReturn[] = array($strKey, $strValue);
         }
+
+
         return $arrReturn;
     }
 

@@ -30,14 +30,13 @@ class ArrayIterator implements IteratorInterface, Iterator
      *
      * @param $arrElements
      *
-     * @return \ArrayIterator
+     * @return ArrayIterator
      */
     public function __construct($arrElements)
     {
+        $objUser = Session::getInstance()->getUser();
 
-        $objUser = new UserUser(Session::getInstance()->getUserID());
-
-        $this->intElementsPerPage = $objUser->getIntItemsPerPage();
+        $this->intElementsPerPage = $objUser != null ? $objUser->getIntItemsPerPage() : SystemSetting::getConfigValue("_admin_nr_of_rows_");
         $this->setArrElements($arrElements);
     }
 
@@ -52,9 +51,7 @@ class ArrayIterator implements IteratorInterface, Iterator
 
         //Loop over elements to create numeric indices
         if (count($arrElements) > 0) {
-            foreach ($arrElements as $objOneElement) {
-                $this->arrElements[] = $objOneElement;
-            }
+            $this->arrElements = array_values($arrElements);
         }
     }
 

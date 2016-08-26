@@ -57,11 +57,7 @@ class SearchIndexwriter {
      */
     private static function isIndexAvailable() {
         if(self::$isIndexAvailable === null) {
-            $objSearch = SystemModule::getModuleByName("search");
-            if($objSearch != null && version_compare($objSearch->getStrVersion(), "4.4", ">="))
-                self::$isIndexAvailable = true;
-            else
-                self::$isIndexAvailable = false;
+            self::$isIndexAvailable = SystemModule::getModuleByName("search") != null;
         }
 
         return self::$isIndexAvailable;

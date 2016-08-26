@@ -1,5 +1,11 @@
 Module Packagemanager
 
+V5.0.3 --------------------------------------------------------------------------------------------------
+BUG: packagemanager | PackagemanagerAdmin.php -> the lowerized realpath is replaced with the real path before passing it to copy operations, otherwise the source-files are not found in case of strict filesystems (case-sensitive)
+
+V5.0.2 --------------------------------------------------------------------------------------------------
+BUG: packagemanager | PackagemanagerMetadata.php -> reading a downloaded phars' metadata no longer registers a phars alias (what could lead to conflicts)
+
 V5.0.1 --------------------------------------------------------------------------------------------------
 BUG: packagemanager | PackagemanagerPackagemanagerTemplate.php -> copying a template-pack to the new location could fail on some phar-environments
 

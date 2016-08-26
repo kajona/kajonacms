@@ -18,6 +18,7 @@ use Kajona\System\System\Exception;
 use Kajona\System\System\Lang;
 use Kajona\System\System\Model;
 use Kajona\System\System\ModelInterface;
+use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Reflection;
 use Kajona\System\System\ReflectionEnum;
 use Kajona\System\System\Resourceloader;
@@ -270,6 +271,7 @@ class AdminFormgenerator
     public function renderForm($strTargetURI, $intButtonConfig = 2)
     {
         $strReturn = "";
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
 
         /*add a hidden systemid-field*/
         if ($this->objSourceobject != null && $this->objSourceobject instanceof Model) {
@@ -285,13 +287,33 @@ class AdminFormgenerator
             $this->addField($objField);
         }
 
+        // we add a info field if the user can not access the record
+        if ($this->shouldAcquireLock() && !$this->objSourceobject->getLockManager()->isAccessibleForCurrentUser()) {
+            $objUser = new UserUser($this->objSourceobject->getLockManager()->getLockId());
+            $strMessage = Lang::getInstance()->getLang("generic_record_locked", "system", array($objUser->getStrDisplayName()));
+
+            // add info box field
+            $objField = new FormentryPlaintext($this->strFormname);
+            $objField->setStrValue($objToolkit->warningBox($strMessage, "alert-info"));
+            $this->addField($objField, "lock_info");
+            $this->setFieldToPosition("lock_info", 1);
+
+            // set all fields to readonly
+            $arrFields = $this->getArrFields();
+            foreach ($arrFields as $objField) {
+                $objField->setBitReadonly(true);
+            }
+
+            // we overwrite the button config to 0 so that no button is displayed
+            $this->intButtonConfig = 0;
+        }
+
         /*generate form name*/
         $strGeneratedFormname = $this->strFormname;
         if ($strGeneratedFormname == null) {
             $strGeneratedFormname = "form" . generateSystemid();
         }
-        
-        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
+
         if ($strTargetURI !== null) {
             $strReturn .= $objToolkit->formHeader($strTargetURI, $strGeneratedFormname, $this->strFormEncoding, $this->strOnSubmit, $this->strMethod);
         }
@@ -378,8 +400,30 @@ class AdminFormgenerator
         }
 
         //lock the record to avoid multiple edit-sessions - if in edit mode
-        if ($this->objSourceobject != null && method_exists($this->objSourceobject, "getLockManager")) {
+        if ($this->shouldAcquireLock()) {
+            if ($this->objSourceobject->getLockManager()->isAccessibleForCurrentUser()) {
+                $this->objSourceobject->getLockManager()->lockRecord();
 
+                //register a new unlock-handler
+                // KAJONA.admin.ajax.genericAjaxCall('system', 'unlockRecord', '".$this->objSourceobject->getSystemid()."');
+                $strReturn .= "<script type='text/javascript'>
+                        $(window).on('unload', function() { $.ajax({url: KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=unlockRecord&systemid=" . $this->objSourceobject->getSystemid() . "', async:false}) ; });
+//                        $('#{$strGeneratedFormname}').on('submit', function() { $(window).off('unload'); return true;});
+                    </script>";
+            }
+        }
+
+        return $strReturn;
+    }
+
+    /**
+     * Returns whether we want to acquire a lock for the source object
+     *
+     * @return boolean
+     */
+    private function shouldAcquireLock()
+    {
+        if ($this->objSourceobject != null && method_exists($this->objSourceobject, "getLockManager")) {
             $bitSkip = false;
             if ($this->getField("mode") != null && $this->getField("mode")->getStrValue() == "new") {
                 $bitSkip = true;
@@ -390,24 +434,11 @@ class AdminFormgenerator
             }
 
             if (!$bitSkip) {
-                if ($this->objSourceobject->getLockManager()->isAccessibleForCurrentUser()) {
-                    $this->objSourceobject->getLockManager()->lockRecord();
-
-                    //register a new unlock-handler
-                    // KAJONA.admin.ajax.genericAjaxCall('system', 'unlockRecord', '".$this->objSourceobject->getSystemid()."');
-                    $strReturn .= "<script type='text/javascript'>
-                        $(window).on('unload', function() { $.ajax({url: KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=unlockRecord&systemid=" . $this->objSourceobject->getSystemid() . "', async:false}) ; });
-//                        $('#{$strGeneratedFormname}').on('submit', function() { $(window).off('unload'); return true;});
-                    </script>";
-                } else {
-                    $objUser = new UserUser($this->objSourceobject->getLockManager()->getLockId());
-                    throw new Exception("Current record is already locked by user '" . $objUser->getStrDisplayName() . "'.\nCannot be locked for the current user", Exception::$level_ERROR);
-                }
+                return true;
             }
         }
 
-
-        return $strReturn;
+        return false;
     }
 
     /**

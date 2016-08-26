@@ -67,8 +67,8 @@ class ElementPortalregistrationPortal extends ElementPortal implements PortalEle
             $objUser = new UserUser($this->getParam("systemid"));
 
             if ($objUser->getStrEmail() != "") {
-                if ($objUser->getIntActive() == 0 && $objUser->getIntLogins() == 0 && $objUser->getStrAuthcode() == $this->getParam("authcode") && $objUser->getStrAuthcode() != "") {
-                    $objUser->setIntActive(1);
+                if ($objUser->getIntRecordStatus() == 0 && $objUser->getIntLogins() == 0 && $objUser->getStrAuthcode() == $this->getParam("authcode") && $objUser->getStrAuthcode() != "") {
+                    $objUser->setIntRecordStatus(1);
                     $objUser->setStrAuthcode("");
                     if ($objUser->updateObjectToDb()) {
                         $strReturn .= $this->getLang("pr_completionSuccess");
@@ -154,7 +154,7 @@ class ElementPortalregistrationPortal extends ElementPortal implements PortalEle
             //create new user, inactive
             $objUser = new UserUser();
             $objUser->setStrUsername($this->getParam("username"));
-            $objUser->setIntActive(0);
+            $objUser->setIntRecordStatus(0);
             $objUser->setIntAdmin(0);
             $objUser->setIntPortal(1);
             $objUser->setStrSubsystem("kajona");
