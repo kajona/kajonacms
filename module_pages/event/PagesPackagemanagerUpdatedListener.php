@@ -7,6 +7,7 @@
 namespace Kajona\Pages\Event;
 
 use Kajona\Packagemanager\System\PackagemanagerEventidentifier;
+use Kajona\Packagemanager\System\PackagemanagerManager;
 use Kajona\Packagemanager\System\PackagemanagerPackagemanagerModule;
 use Kajona\Packagemanager\System\PackagemanagerPackagemanagerPharmodule;
 use Kajona\Packagemanager\System\PackagemanagerPackagemanagerTemplate;
@@ -39,49 +40,51 @@ class PagesPackagemanagerUpdatedListener implements GenericeventListenerInterfac
      */
     public function handleEvent($strEventName, array $arrArguments)
     {
-        //unwrap arguments
-        list($objHandler) = $arrArguments;
 
-        if ($objHandler instanceof PackagemanagerPackagemanagerModule) {
+        //loop all installed modules, otherwise some modules may get lost
+        $objPackagesManager = new PackagemanagerManager();
 
-            $objFilesystem = new Filesystem();
-            Logger::getInstance(Logger::PAGES)->addLogRow("updating default template from /".$objHandler->getObjMetadata()->getStrPath(), Logger::$levelInfo);
-            if (is_dir(_realpath_.$objHandler->getObjMetadata()->getStrPath()."/templates/default/js")) {
-                $objFilesystem->folderCopyRecursive($objHandler->getObjMetadata()->getStrPath()."/templates/default/js", "/templates/default/js", true);
-            }
+        foreach($objPackagesManager->getAvailablePackages() as $objOneMetadata) {
+            $objHandler = $objPackagesManager->getPackageManagerForPath($objOneMetadata->getStrPath());
 
-            if (is_dir(_realpath_.$objHandler->getObjMetadata()->getStrPath()."/templates/default/css")) {
-                $objFilesystem->folderCopyRecursive($objHandler->getObjMetadata()->getStrPath()."/templates/default/css", "/templates/default/css", true);
-            }
+            if ($objHandler instanceof PackagemanagerPackagemanagerModule) {
 
-            if (is_dir(_realpath_.$objHandler->getObjMetadata()->getStrPath()."/templates/default/pics")) {
-                $objFilesystem->folderCopyRecursive($objHandler->getObjMetadata()->getStrPath()."/templates/default/pics", "/templates/default/pics", true);
-            }
-
-
-
-        } elseif ($objHandler instanceof PackagemanagerPackagemanagerPharmodule) {
-
-            //read the module and extract
-            $objPharModule = new PharModule($objHandler->getObjMetadata()->getStrPath());
-            $objFilesystem = new Filesystem();
-            foreach ($objPharModule->getContentMap() as $strKey => $strFullPath) {
-
-                foreach (array("js", "css", "pics") as $strOneSubfolder) {
-
-                    $intStrPos = StringUtil::indexOf($strFullPath, "templates/default/{$strOneSubfolder}", false);
-                    if ($intStrPos !== false) {
-                        $strTargetPath = _realpath_."templates/default/{$strOneSubfolder}/".StringUtil::substring($strFullPath, $intStrPos + StringUtil::length("templates/default/{$strOneSubfolder}"));
-                        $objFilesystem->folderCreate(dirname($strTargetPath), true, true);
-                        //copy
-                        copy($strFullPath, $strTargetPath);
-                    }
-
+                $objFilesystem = new Filesystem();
+                Logger::getInstance(Logger::PAGES)->addLogRow("updating default template from /".$objHandler->getObjMetadata()->getStrPath(), Logger::$levelInfo);
+                if (is_dir(_realpath_.$objHandler->getObjMetadata()->getStrPath()."/templates/default/js")) {
+                    $objFilesystem->folderCopyRecursive($objHandler->getObjMetadata()->getStrPath()."/templates/default/js", "/templates/default/js", true);
                 }
+
+                if (is_dir(_realpath_.$objHandler->getObjMetadata()->getStrPath()."/templates/default/css")) {
+                    $objFilesystem->folderCopyRecursive($objHandler->getObjMetadata()->getStrPath()."/templates/default/css", "/templates/default/css", true);
+                }
+
+                if (is_dir(_realpath_.$objHandler->getObjMetadata()->getStrPath()."/templates/default/pics")) {
+                    $objFilesystem->folderCopyRecursive($objHandler->getObjMetadata()->getStrPath()."/templates/default/pics", "/templates/default/pics", true);
+                }
+
+            } elseif ($objHandler instanceof PackagemanagerPackagemanagerPharmodule) {
+
+                //read the module and extract
+                $objPharModule = new PharModule($objHandler->getObjMetadata()->getStrPath());
+                $objFilesystem = new Filesystem();
+                foreach ($objPharModule->getContentMap() as $strKey => $strFullPath) {
+
+                    foreach (array("js", "css", "pics") as $strOneSubfolder) {
+
+                        $intStrPos = StringUtil::indexOf($strFullPath, "templates/default/{$strOneSubfolder}", false);
+                        if ($intStrPos !== false) {
+                            $strTargetPath = _realpath_."templates/default/{$strOneSubfolder}/".StringUtil::substring($strFullPath, $intStrPos + StringUtil::length("templates/default/{$strOneSubfolder}"));
+                            $objFilesystem->folderCreate(dirname($strTargetPath), true, true);
+                            //copy
+                            copy($strFullPath, $strTargetPath);
+                        }
+
+                    }
+                }
+
             }
-
         }
-
 
         return true;
     }

@@ -784,7 +784,7 @@ class Installer
             if ($objOneMetadata->getStrTitle() == $_POST["module"]) {
                 $objHandler = $objManager->getPackageManagerForPath($objOneMetadata->getStrPath());
 
-                if ($objOneMetadata->getBitProvidesInstaller() && $objHandler->isInstallable()) {
+                if ($objHandler->isInstallable()) {
                     $objHandler->installOrUpdate();
                     return json_encode(array("module" => $_POST["module"], "status" => "success"));
                 }

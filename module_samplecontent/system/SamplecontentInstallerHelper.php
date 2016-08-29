@@ -125,6 +125,7 @@ class SamplecontentInstallerHelper
         }
 
 
+
         return $strReturn;
     }
 
