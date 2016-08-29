@@ -77,11 +77,7 @@ class class_project_setup {
         self::checkDir("/files/extract");
         self::makeWritable("/files/extract");
 
-        self::checkDir("/templates/default");
-        self::checkDir("/templates/default/js");
-        self::checkDir("/templates/default/css");
-        self::checkDir("/templates/default/tpl");
-        self::checkDir("/templates/default/pics");
+        self::checkDir("/templates");
 
         self::createLangProjectEntry();
         self::createDefaultTemplateEntry();

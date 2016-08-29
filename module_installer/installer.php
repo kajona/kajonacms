@@ -47,7 +47,7 @@ class Installer
     private $strForwardLink = "";
     private $strBackwardLink = "";
 
-    private $strVersion = "V 5.0";
+    private $strVersion = "V 5.1";
 
     /**
      * Instance of template-engine
@@ -193,7 +193,7 @@ class Installer
             "/files/images",
             "/files/public",
             "/files/downloads",
-            "/templates/default"
+            "/templates"
         );
         $arrFilesAndFolders = array_merge($arrFilesAndFolders, array_map(function ($strValue) {
             return "/".$strValue;

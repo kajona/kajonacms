@@ -8,6 +8,7 @@
 
 namespace Kajona\Packagemanager\System;
 
+use Kajona\System\System\CoreEventdispatcher;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Filesystem;
 use Kajona\System\System\Logger;
@@ -127,6 +128,7 @@ class PackagemanagerPackagemanagerTemplate implements PackagemanagerPackagemanag
      */
     public function installOrUpdate()
     {
+        CoreEventdispatcher::getInstance()->notifyGenericListeners(PackagemanagerEventidentifier::EVENT_PACKAGEMANAGER_PACKAGEUPDATED, array($this));
         return "";
     }
 
@@ -194,17 +196,6 @@ class PackagemanagerPackagemanagerTemplate implements PackagemanagerPackagemanag
         }
 
         return "/templates/".$strTarget;
-    }
-
-    /**
-     * This method is called during the installation of a package.
-     * Depending on the current manager, the default-template may be updated.
-     *
-     * @return bool
-     */
-    public function updateDefaultTemplate()
-    {
-        return true;
     }
 
     /**
