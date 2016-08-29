@@ -10,7 +10,6 @@ use Kajona\Packagemanager\System\PackagemanagerEventidentifier;
 use Kajona\Packagemanager\System\PackagemanagerManager;
 use Kajona\Packagemanager\System\PackagemanagerPackagemanagerModule;
 use Kajona\Packagemanager\System\PackagemanagerPackagemanagerPharmodule;
-use Kajona\Packagemanager\System\PackagemanagerPackagemanagerTemplate;
 use Kajona\System\System\CoreEventdispatcher;
 use Kajona\System\System\Filesystem;
 use Kajona\System\System\GenericeventListenerInterface;
