@@ -9,6 +9,8 @@ namespace Kajona\Statustransition\System;
 
 use Kajona\System\System\Exception;
 use Kajona\System\System\Model;
+use Kajona\System\System\RequestEntrypointEnum;
+use Kajona\System\System\ResponseObject;
 
 /**
  * The status transition represents a transition from status A to B. If this happens the provided actions and conditions
@@ -78,7 +80,11 @@ class StatustransitionTransition
      */
     public function bitCheckTransitionRight(Model $objModel)
     {
-        return $this->getObjRightCallback() === null || call_user_func_array($this->getObjRightCallback(), array($objModel)) === true;
+        if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::INSTALLER())) {
+            return true;
+        } else {
+            return $this->getObjRightCallback() === null || call_user_func_array($this->getObjRightCallback(), array($objModel)) === true;
+        }
     }
 
     /**
