@@ -9,15 +9,15 @@
 
 namespace Kajona\System\Admin;
 
-use Kajona\Pages\System\PagesElement;
-use Kajona\Pages\System\PagesPageelement;
 use Kajona\System\System\AbstractController;
 use Kajona\System\System\AdminskinHelper;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Classloader;
 use Kajona\System\System\Exception;
 use Kajona\System\System\History;
+use Kajona\System\System\HttpResponsetypes;
 use Kajona\System\System\HttpStatuscodes;
+use Kajona\System\System\LanguagesLanguage;
 use Kajona\System\System\Link;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Reflection;
@@ -25,9 +25,9 @@ use Kajona\System\System\Resourceloader;
 use Kajona\System\System\ResponseObject;
 use Kajona\System\System\Rights;
 use Kajona\System\System\SystemAspect;
-use Kajona\System\System\SystemCommon;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\SystemSetting;
+use Kajona\System\Xml;
 use ReflectionClass;
 
 /**
@@ -285,35 +285,9 @@ abstract class AdminController extends AbstractController
     protected function getQuickHelp()
     {
         $strReturn = "";
-        $strText = "";
-        $strTextname = "";
 
-        //Text for the current action available?
-        //different loading when editing page-elements
-        if ($this->getParam("module") == "pages_content" && ($this->getParam("action") == "edit" || $this->getParam("action") == "new")) {
-            $objElement = null;
-            if ($this->getParam("action") == "edit") {
-                $objElement = new PagesPageelement($this->getSystemid());
-            }
-            elseif ($this->getParam("action") == "new") {
-                $strPlaceholderElement = $this->getParam("element");
-                $objElement = PagesElement::getElement($strPlaceholderElement);
-            }
-
-            //and finally create the object
-            $strFilename = $this->objResourceLoader->getPathForFile("/admin/elements/".$objElement->getStrClassAdmin());
-            $objElement = $this->objClassLoader->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin");
-
-            //and finally create the object
-            if ($objElement != null) {
-                $strTextname = $this->objLang->stringToPlaceholder("quickhelp_".$objElement->getArrModule("name"));
-                $strText = $this->objLang->getLang($strTextname, $objElement->getArrModule("modul"));
-            }
-        }
-        else {
-            $strTextname = $this->objLang->stringToPlaceholder("quickhelp_".$this->getAction());
-            $strText = $this->getLang($strTextname);
-        }
+        $strTextname = $this->objLang->stringToPlaceholder("quickhelp_".$this->getAction());
+        $strText = $this->getLang($strTextname);
 
         if ($strText != "!".$strTextname."!") {
             //Text found, embed the quickhelp into the current skin
@@ -498,7 +472,9 @@ abstract class AdminController extends AbstractController
 
             if ($this instanceof LoginAdminXml) {
                 ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
-                throw new Exception("you are not authorized/authenticated to call this action", Exception::$level_FATALERROR);
+                ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_XML);
+                Xml::setBitSuppressXmlHeader(true);
+                return Exception::renderException(new Exception("you are not authorized/authenticated to call this action", Exception::$level_FATALERROR));
             }
 
             $this->strOutput = $this->objToolkit->warningBox("called method ".$strMethodName." not existing for class ".$objReflection->getName());
@@ -534,11 +510,12 @@ abstract class AdminController extends AbstractController
      * Loads the language to edit content
      *
      * @return string
+     * @deprecated use LanguagesLanguage directly
      */
     public function getLanguageToWorkOn()
     {
-        $objSystemCommon = new SystemCommon();
-        return $objSystemCommon->getStrAdminLanguageToWorkOn();
+        $objLanguage = new LanguagesLanguage();
+        return $objLanguage->getAdminLanguage();
     }
 
 }
