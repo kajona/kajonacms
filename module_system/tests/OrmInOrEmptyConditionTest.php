@@ -75,12 +75,24 @@ class OrmInOrEmptyConditionTest extends Testbase
         $objRestriction = new OrmInOrEmptyCondition("foo", array("1", 2, 3, 4, OrmInOrEmptyCondition::NULL_OR_EMPTY));
         $this->assertEquals("((foo IN (?,?,?,?)) OR (foo IS NULL) OR (foo = ''))", $objRestriction->getStrWhere());
 
+        $objRestriction = new OrmInOrEmptyCondition("foo", array("0", OrmInOrEmptyCondition::NULL));
+        $this->assertEquals("((foo IN (?)) OR (foo IS NULL))", $objRestriction->getStrWhere());
+
+        $objRestriction = new OrmInOrEmptyCondition("foo", array(0, OrmInOrEmptyCondition::NULL));
+        $this->assertEquals("((foo IN (?)) OR (foo IS NULL))", $objRestriction->getStrWhere());
+
         $objRestriction = new OrmInOrEmptyCondition("foo", array("1", 2, 3, 4, OrmInOrEmptyCondition::NULL));
         $this->assertEquals("((foo IN (?,?,?,?)) OR (foo IS NULL))", $objRestriction->getStrWhere());
     }
 
     public function testIntParamsAutoHandling()
     {
+        $objRestriction = new OrmInOrEmptyCondition("foo", array(0, OrmInOrEmptyCondition::NULL_OR_EMPTY));
+        $this->assertEquals("((foo IN (?)) OR (foo IS NULL))", $objRestriction->getStrWhere());
+
+        $objRestriction = new OrmInOrEmptyCondition("foo", array("0", OrmInOrEmptyCondition::NULL_OR_EMPTY));
+        $this->assertEquals("((foo IN (?)) OR (foo IS NULL) OR (foo = ''))", $objRestriction->getStrWhere());
+
         $objRestriction = new OrmInOrEmptyCondition("foo", array("1", 2, 3, 4, OrmInOrEmptyCondition::NULL_OR_EMPTY));
         $this->assertEquals("((foo IN (?,?,?,?)) OR (foo IS NULL) OR (foo = ''))", $objRestriction->getStrWhere());
 
