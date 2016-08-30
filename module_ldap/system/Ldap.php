@@ -130,7 +130,7 @@ class Ldap
             $strUsername = $this->arrConfig["ldap_common_name"] . "=" . $strUsername . "," . $strContext;
         }
 
-        $bitBind = @ldap_bind($this->objCx, utf8_decode($strUsername), $strPassword);
+        $bitBind = @ldap_bind($this->objCx, $strUsername, $strPassword);
         $this->internalBind();
 
         return $bitBind;
@@ -187,7 +187,7 @@ class Ldap
                 if (!empty($arrValues)) {
                     foreach ($arrValues as $strKey => $strSingleValue) {
                         if ($strKey !== "count") {
-                            $arrReturn[] = utf8_encode($strSingleValue);
+                            $arrReturn[] = $strSingleValue;
                         }
                     }
                 }
@@ -244,7 +244,7 @@ class Ldap
         //search the group itself
         $strQuery = $this->arrConfig["ldap_group_isUserMemberOf"];
         //double encode backslashes
-        $strUserDN = uniStrReplace("\\,", "\\\\,", utf8_decode($strUserDN));
+        $strUserDN = uniStrReplace("\\,", "\\\\,", $strUserDN);
         $strQuery = uniStrReplace("?", $strUserDN, $strQuery);
         $objResult = @ldap_search($this->objCx, $strGroupDN, $strQuery);
 
@@ -312,7 +312,7 @@ class Ldap
         $arrReturn = false;
 
         //search the group itself
-        $objResult = @ldap_search($this->objCx, utf8_decode($strUsername), $this->arrConfig["ldap_user_filter"]);
+        $objResult = @ldap_search($this->objCx, $strUsername, $this->arrConfig["ldap_user_filter"]);
 
         if ($objResult !== false) {
             $arrReturn = array();
@@ -336,7 +336,7 @@ class Ldap
             }
         } else {
             Logger::getInstance(Logger::USERSOURCES)->addLogRow(
-                "loading of user failed: " . ldap_errno($this->objCx) . " # " . ldap_error($this->objCx) . " \n Username: " . utf8_decode($strUsername) . " Userfilter: " . $this->arrConfig["ldap_user_filter"],
+                "loading of user failed: " . ldap_errno($this->objCx) . " # " . ldap_error($this->objCx) . " \n Username: " . $strUsername . " Userfilter: " . $this->arrConfig["ldap_user_filter"],
                 Logger::$levelError
             );
             throw new Exception("loading of user failed: " . ldap_errno($this->objCx) . " # " . ldap_error($this->objCx), Exception::$level_FATALERROR);
@@ -359,7 +359,7 @@ class Ldap
         $arrReturn = false;
 
         $strUserFilter = $this->arrConfig["ldap_user_search_filter"];
-        $strUserFilter = uniStrReplace("?", utf8_decode($strUsername), $strUserFilter);
+        $strUserFilter = uniStrReplace("?", $strUsername, $strUserFilter);
 
 
         //search the group itself
@@ -411,7 +411,7 @@ class Ldap
 
         $arrValues = @ldap_get_values($this->objCx, $arrResult, $strKey);
         if ($arrValues["count"] > 0) {
-            $strReturn = utf8_encode($arrValues[0]);
+            $strReturn = $arrValues[0]; //no more utf-encode required since ldap v3 is utf-8 ready :)
         }
 
         return $strReturn;
