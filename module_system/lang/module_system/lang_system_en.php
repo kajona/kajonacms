@@ -312,6 +312,7 @@ $lang["generic_record_locked"]  = "This record cannot be edited because it was l
 $lang["changelog_tooltipUnit"]       = "change";
 $lang["changelog_tooltipUnitPlural"] = "changes";
 $lang["changelog_tooltipHtml"]       = "<span><strong>%count% %unit%</strong> on %date%</span>";
+$lang["changelog_tooltipColumn"]     = "Click on the calendar heatmap to load a record for a specific date.";
 
 $lang["cache"]  = "Cache";
 $lang["cache_apc"]  = "APC";

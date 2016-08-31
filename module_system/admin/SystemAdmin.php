@@ -1027,6 +1027,7 @@ JS;
                 "tooltipUnit" => $this->getLang("changelog_tooltipUnit"),
                 "tooltipUnitPlural" => $this->getLang("changelog_tooltipUnitPlural"),
                 "tooltipHtml" => $this->getLang("changelog_tooltipHtml"),
+                "tooltipColumn" => $this->getLang("changelog_tooltipColumn"),
             )),
         );
 

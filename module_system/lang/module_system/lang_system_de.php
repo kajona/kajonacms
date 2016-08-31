@@ -305,6 +305,7 @@ $lang["generic_record_locked"]  = "Dieser Datensatz wurde von dem Benutzer '{0}'
 $lang["changelog_tooltipUnit"]       = "Änderung";
 $lang["changelog_tooltipUnitPlural"] = "Änderungen";
 $lang["changelog_tooltipHtml"]       = "<span><strong>%count% %unit%</strong> am %date%</span>";
+$lang["changelog_tooltipColumn"]     = "Über die Kalender-Heatmap können Sie per Klick den Datensatz für ein bestimmtes Datum nachladen.";
 
 $lang["cache"]  = "Cache";
 $lang["cache_apc"]  = "APC";

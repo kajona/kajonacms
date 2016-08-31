@@ -1589,6 +1589,18 @@ KAJONA.admin.changelog.loadDate = function (strSystemId, strDate, strType, objCa
         for (var prop in props) {
             $('#property_' + prop + '_' + strType).html(props[prop]);
         }
+
+        $('#date_' + strType + ' a').qtip({
+            content: KAJONA.admin.changelog.lang.tooltipColumn,
+            position: {
+                at: 'top center',
+                my: 'bottom center'
+            },
+            style: {
+                classes: 'qtip-bootstrap'
+            }
+        });
+
         if (typeof objCallback === "function") {
             objCallback.apply();
         }
