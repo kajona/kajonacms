@@ -19,8 +19,8 @@ use Kajona\System\System\Validators\ObjectvalidatorBase;
  * @author stefan.meyer1@yahoo.de
  * @since 4.6
  */
-class NewsNewsObjectvalidator extends ObjectvalidatorBase {
-
+class NewsNewsObjectvalidator extends ObjectvalidatorBase
+{
     /**
      * Validates a news start/end/archive date for a correct logical order.
      *
@@ -28,11 +28,12 @@ class NewsNewsObjectvalidator extends ObjectvalidatorBase {
      * @param \Kajona\System\System\Model $objObject - the model object to the given form
      * @return bool
      */
-    public function validateObject(\Kajona\System\System\Model $objObject) {
+    public function validateObject(\Kajona\System\System\Model $objObject)
+    {
         $objLang = Carrier::getInstance()->getObjLang();
         $strModuleName = $objObject->getArrModule("modul");
 
-        if($objObject instanceof NewsNews) {
+        if ($objObject instanceof NewsNews) {
 
             //validate: $objStartDate < $objSpecialDate < $objEndDate
             $objStartDate = $objObject->getObjStartDate();
@@ -43,26 +44,24 @@ class NewsNewsObjectvalidator extends ObjectvalidatorBase {
             $strLabelEndDate = $objLang->getLang("form_".$objObject->getArrModule("modul")."_dateend", $strModuleName);
             $strLabelSpecialDate = $objLang->getLang("form_".$objObject->getArrModule("modul")."_datespecial", $strModuleName);
 
-
-
-            if($objStartDate!= null && $objEndDate != null) {
-                if(ObjectvalidatorHelper::compareDates($objStartDate, $objEndDate) === 1) {
+            if ($objStartDate != null && $objEndDate != null) {
+                if (ObjectvalidatorHelper::compareDates($objStartDate, $objEndDate) === 1) {
                     $this->addValidationError("startdate", $objLang->getLang("commons_object_validator_datecompare_validationmessage_before", $strModuleName, array($strLabelStartDate, $strLabelEndDate)));
                 }
             }
-            if($objSpecialDate!= null && $objEndDate != null) {
-                if(ObjectvalidatorHelper::compareDates($objSpecialDate, $objEndDate) === 1) {
+            if ($objSpecialDate != null && $objEndDate != null) {
+                if (ObjectvalidatorHelper::compareDates($objSpecialDate, $objEndDate) === 1) {
                     $this->addValidationError("startdate", $objLang->getLang("commons_object_validator_datecompare_validationmessage_before", $strModuleName, array($strLabelSpecialDate, $strLabelEndDate)));
                 }
             }
-            if($objStartDate!= null && $objSpecialDate != null) {
-                if(ObjectvalidatorHelper::compareDates($objStartDate, $objSpecialDate) === 1) {
+            if ($objStartDate != null && $objSpecialDate != null) {
+                if (ObjectvalidatorHelper::compareDates($objStartDate, $objSpecialDate) === 1) {
                     $this->addValidationError("startdate", $objLang->getLang("commons_object_validator_datecompare_validationmessage_before", $strModuleName, array($strLabelStartDate, $strLabelSpecialDate)));
                 }
             }
-        }
-        else
+        } else {
             return false;
+        }
 
         return count($this->getArrValidationMessages()) == 0;
     }

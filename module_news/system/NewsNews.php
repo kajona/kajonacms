@@ -39,8 +39,8 @@ use Kajona\System\System\VersionableInterface;
  * @objectValidator Kajona\News\System\Validators\NewsNewsObjectvalidator
  * @formGenerator Kajona\News\Admin\NewsNewsFormgenerator
  */
-class NewsNews extends Model implements ModelInterface, AdminListableInterface, VersionableInterface, SearchPortalobjectInterface {
-
+class NewsNews extends Model implements ModelInterface, AdminListableInterface, VersionableInterface, SearchPortalobjectInterface
+{
     /**
      * @var string
      * @tableColumn news.news_title
@@ -175,6 +175,7 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
 
     /**
      * For rendering only
+     *
      * @var int
      * @templateExport
      * @templateMapper datetime
@@ -183,6 +184,7 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
 
     /**
      * For rendering only
+     *
      * @var int
      * @templateExport
      * @templateMapper datetime
@@ -191,6 +193,7 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
 
     /**
      * For rendering only
+     *
      * @var int
      * @templateExport
      * @templateMapper datetime
@@ -214,7 +217,8 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      * @return string the name of the icon, not yet wrapped by getImageAdmin(). Alternatively, you may return an array containing
      *         [the image name, the alt-title]
      */
-    public function getStrIcon() {
+    public function getStrIcon()
+    {
         return "icon_news";
     }
 
@@ -223,8 +227,9 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      *
      * @return string
      */
-    public function getStrAdditionalInfo() {
-        return $this->getIntHits() . " " . $this->getLang("commons_hits_header", "news");
+    public function getStrAdditionalInfo()
+    {
+        return $this->getIntHits()." ".$this->getLang("commons_hits_header", "news");
     }
 
     /**
@@ -232,7 +237,8 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      *
      * @return string
      */
-    public function getStrLongDescription() {
+    public function getStrLongDescription()
+    {
         $strConfigValue = SystemSetting::getConfigValue("_news_news_datetime_");
         return "S: " . dateToString($this->getObjStartDate(), $strConfigValue == "true")
             . ($this->getObjEndDate() != null ? " E: " . dateToString($this->getObjEndDate(), $strConfigValue == "true") : "")
@@ -244,7 +250,8 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      *
      * @return string
      */
-    public function getStrDisplayName() {
+    public function getStrDisplayName()
+    {
         return $this->getStrTitle();
     }
 
@@ -268,7 +275,7 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
         $arrParams = array();
 
         $strWhere = "";
-        if($objStartDate != null && $objEndDate != null) {
+        if ($objStartDate != null && $objEndDate != null) {
             $strWhere = "AND (system_date_start >= ? and system_date_start < ?) ";
             $arrParams[] = $objStartDate->getLongTimestamp();
             $arrParams[] = $objEndDate->getLongTimestamp();
@@ -277,39 +284,38 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
         $objOrm = new OrmObjectlist();
         $strWhere .= $objOrm->getDeletedWhereRestriction();
 
-        if($strFilter != "") {
+        if ($strFilter != "") {
             $strQuery = "SELECT *
-							FROM " . _dbprefix_ . "news,
-							      " ._dbprefix_."system_right,
-							      " . _dbprefix_ . "news_member,
-							      " . _dbprefix_ . "system
-						LEFT JOIN " . _dbprefix_ . "system_date
+							FROM "._dbprefix_."news,
+							      "._dbprefix_."system_right,
+							      "._dbprefix_."news_member,
+							      "._dbprefix_."system
+						LEFT JOIN "._dbprefix_."system_date
 						       ON system_id = system_date_id
 							WHERE system_id = news_id
 							  AND news_id = newsmem_news
 							  AND system_id = right_id
-							  " . $strWhere . "
+							  ".$strWhere."
 							  AND newsmem_category = ?
 							ORDER BY system_date_start DESC";
             $arrParams[] = $strFilter;
-        }
-        else {
+        } else {
             $strQuery = "SELECT *
-							FROM " . _dbprefix_ . "news,
-							      " ._dbprefix_."system_right,
-							      " . _dbprefix_ . "system
-					    LEFT JOIN " . _dbprefix_ . "system_date
+							FROM "._dbprefix_."news,
+							      "._dbprefix_."system_right,
+							      "._dbprefix_."system
+					    LEFT JOIN "._dbprefix_."system_date
 						       ON system_id = system_date_id
 							WHERE system_id = news_id
 							  AND system_id = right_id
-							  " . $strWhere . "
+							  ".$strWhere."
 							ORDER BY system_date_start DESC";
         }
 
         $arrIds = Carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
         OrmRowcache::addArrayOfInitRows($arrIds);
         $arrReturn = array();
-        foreach($arrIds as $arrOneId) {
+        foreach ($arrIds as $arrOneId) {
             $arrReturn[] = Objectfactory::getInstance()->getObject($arrOneId["system_id"]);
         }
 
@@ -330,7 +336,7 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
         $arrParams = array();
 
         $strWhere = "";
-        if($objStartDate != null && $objEndDate != null) {
+        if ($objStartDate != null && $objEndDate != null) {
             $strWhere = "AND (system_date_start >= ? and system_date_start < ?) ";
             $arrParams[] = $objStartDate->getLongTimestamp();
             $arrParams[] = $objEndDate->getLongTimestamp();
@@ -339,31 +345,30 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
         $objOrm = new OrmObjectlist();
         $strWhere .= $objOrm->getDeletedWhereRestriction();
 
-        if($strFilter != "") {
+        if ($strFilter != "") {
             $strQuery = "SELECT COUNT(*)
-							FROM " . _dbprefix_ . "news,
-							      " ._dbprefix_."system_right,
-							      " . _dbprefix_ . "news_member,
-							      " . _dbprefix_ . "system
-						LEFT JOIN " . _dbprefix_ . "system_date
+							FROM "._dbprefix_."news,
+							      "._dbprefix_."system_right,
+							      "._dbprefix_."news_member,
+							      "._dbprefix_."system
+						LEFT JOIN "._dbprefix_."system_date
 						       ON system_id = system_date_id
 							WHERE system_id = news_id
 							  AND news_id = newsmem_news
 							  AND system_id = right_id
-							  " . $strWhere . "
+							  ".$strWhere."
 							  AND newsmem_category = ?";
             $arrParams[] = $strFilter;
-        }
-        else {
+        } else {
             $strQuery = "SELECT COUNT(*)
-							FROM " . _dbprefix_ . "news,
-							      " ._dbprefix_."system_right,
-							      " . _dbprefix_ . "system
-					    LEFT JOIN " . _dbprefix_ . "system_date
+							FROM "._dbprefix_."news,
+							      "._dbprefix_."system_right,
+							      "._dbprefix_."system
+					    LEFT JOIN "._dbprefix_."system_date
 						       ON system_id = system_date_id
 							WHERE system_id = news_id
 							  AND system_id = right_id
-							  " . $strWhere;
+							  ".$strWhere;
         }
 
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
@@ -380,7 +385,8 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      * @return int
      * @static
      */
-    public static function getNewsCountPortal($intMode, $strCat = 0) {
+    public static function getNewsCountPortal($intMode, $strCat = 0)
+    {
         return count(self::loadListNewsPortal($intMode, $strCat));
     }
 
@@ -396,19 +402,18 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      * @return NewsNews[]
      * @static
      */
-    public static function loadListNewsPortal($intMode, $strCat = 0, $intOrder = 0, $intStart = null, $intEnd = null) {
+    public static function loadListNewsPortal($intMode, $strCat = 0, $intOrder = 0, $intStart = null, $intEnd = null)
+    {
         $arrParams = array();
         $longNow = \Kajona\System\System\Date::getCurrentTimestamp();
         //Get Timeintervall
-        if($intMode == "0") {
+        if ($intMode == "0") {
             //Regular news
             $strTime = "AND (system_date_special IS NULL OR (system_date_special > ? OR system_date_special = 0))";
-        }
-        elseif($intMode == "1") {
+        } elseif ($intMode == "1") {
             //Archivnews
             $strTime = "AND (system_date_special < ? AND system_date_special IS NOT NULL AND system_date_special != 0)";
-        }
-        else {
+        } else {
             $strTime = "";
         }
 
@@ -416,20 +421,19 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
         $strWhere = $objOrm->getDeletedWhereRestriction();
 
         //check if news should be ordered de- or ascending
-        if($intOrder == 0) {
+        if ($intOrder == 0) {
             $strOrder = "DESC";
-        }
-        else {
+        } else {
             $strOrder = "ASC";
         }
 
-        if($strCat != "0") {
+        if ($strCat != "0") {
             $strQuery = "SELECT *
-                            FROM " . _dbprefix_ . "news,
-                                 " . _dbprefix_ . "news_member,
-                                 " . _dbprefix_ . "system_right,
-                                 " . _dbprefix_ . "system
-                       LEFT JOIN " . _dbprefix_ . "system_date
+                            FROM "._dbprefix_."news,
+                                 "._dbprefix_."news_member,
+                                 "._dbprefix_."system_right,
+                                 "._dbprefix_."system
+                       LEFT JOIN "._dbprefix_."system_date
                               ON system_id = system_date_id
                             WHERE system_id = news_id
                               AND news_id = newsmem_news
@@ -437,34 +441,33 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
                               AND newsmem_category = ?
                               AND system_status = 1
                               AND (system_date_start IS NULL or(system_date_start < ? OR system_date_start = 0))
-                                " . $strTime.$strWhere . "
+                                ".$strTime.$strWhere."
                               AND (system_date_end IS NULL or (system_date_end > ? OR system_date_end = 0))
-                            ORDER BY system_date_start " . $strOrder.", system_create_date DESC";
+                            ORDER BY system_date_start ".$strOrder.", system_create_date DESC";
             $arrParams[] = $strCat;
             $arrParams[] = $longNow;
-            if($strTime != "") {
+            if ($strTime != "") {
                 $arrParams[] = $longNow;
             }
             $arrParams[] = $longNow;
 
-        }
-        else {
+        } else {
             $strQuery = "SELECT *
-                            FROM " . _dbprefix_ . "news,
-                                 " . _dbprefix_ . "system_right,
-                                 " . _dbprefix_ . "system
-                        LEFT JOIN " . _dbprefix_ . "system_date
+                            FROM "._dbprefix_."news,
+                                 "._dbprefix_."system_right,
+                                 "._dbprefix_."system
+                        LEFT JOIN "._dbprefix_."system_date
                                ON system_id = system_date_id
                             WHERE system_id = news_id
                               AND system_id = right_id
                               AND system_status = 1
                               AND (system_date_start IS NULL or(system_date_start < ? OR system_date_start = 0))
-                                " . $strTime.$strWhere . "
+                                ".$strTime.$strWhere."
                               AND (system_date_end IS NULL or (system_date_end > ? OR system_date_end = 0))
-                            ORDER BY system_date_start " . $strOrder.", system_create_date DESC";
+                            ORDER BY system_date_start ".$strOrder.", system_create_date DESC";
 
             $arrParams[] = $longNow;
-            if($strTime != "") {
+            if ($strTime != "") {
                 $arrParams[] = $longNow;
             }
             $arrParams[] = $longNow;
@@ -473,7 +476,7 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
         $arrIds = Carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
         OrmRowcache::addArrayOfInitRows($arrIds);
         $arrReturn = array();
-        foreach($arrIds as $arrOneId) {
+        foreach ($arrIds as $arrOneId) {
             $arrReturn[] = Objectfactory::getInstance()->getObject($arrOneId["system_id"]);
         }
 
@@ -485,8 +488,9 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      *
      * @return bool
      */
-    public function increaseHits() {
-        $strQuery = "UPDATE " . _dbprefix_ . "news SET news_hits = ? WHERE news_id= ? ";
+    public function increaseHits()
+    {
+        $strQuery = "UPDATE "._dbprefix_."news SET news_hits = ? WHERE news_id= ? ";
         return $this->objDB->_pQuery($strQuery, array($this->getIntHits() + 1, $this->getSystemid()));
     }
 
@@ -497,7 +501,8 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      *
      * @return string the human readable name
      */
-    public function getVersionActionName($strAction) {
+    public function getVersionActionName($strAction)
+    {
         return $strAction;
     }
 
@@ -506,7 +511,8 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      *
      * @return string the human readable name
      */
-    public function getVersionRecordName() {
+    public function getVersionRecordName()
+    {
         return "news";
     }
 
@@ -517,7 +523,8 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      *
      * @return string the human readable name
      */
-    public function getVersionPropertyName($strProperty) {
+    public function getVersionPropertyName($strProperty)
+    {
         return $strProperty;
     }
 
@@ -530,11 +537,11 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      *
      * @return string
      */
-    public function renderVersionValue($strProperty, $strValue) {
-        if(($strProperty == "objDateStart" || $strProperty == "objDateEnd" || $strProperty == "objDateSpecial") && $strValue > 0)
+    public function renderVersionValue($strProperty, $strValue)
+    {
+        if (($strProperty == "objDateStart" || $strProperty == "objDateEnd" || $strProperty == "objDateSpecial") && $strValue > 0) {
             return dateToString(new \Kajona\System\System\Date($strValue), false);
-
-        else if($strProperty == "assignedCategories" && validateSystemid($strValue)) {
+        } else if ($strProperty == "assignedCategories" && validateSystemid($strValue)) {
             $objCategory = new NewsCategory($strValue);
             return $objCategory->getStrTitle();
         }
@@ -557,7 +564,8 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      * @see getLinkPortalHref()
      * @return mixed
      */
-    public function updateSearchResult(SearchResult $objResult) {
+    public function updateSearchResult(SearchResult $objResult)
+    {
         $objORM = new OrmObjectlist();
         $strQuery = "SELECT system_id
                        FROM "._dbprefix_."element_news,
@@ -581,10 +589,10 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
         $arrRows = $this->objDB->getPArray($strQuery, array($this->getSystemid(), $objResult->getObjSearch()->getStrPortalLangFilter()));
 
         $arrReturn = array();
-        foreach($arrRows as $arrOneElement) {
+        foreach ($arrRows as $arrOneElement) {
 
             $objCur = Objectfactory::getInstance()->getObject($arrOneElement["system_id"]);
-            while($objCur != null && !$objCur instanceof PagesPage && !$objCur instanceof SystemModule) {
+            while ($objCur != null && !$objCur instanceof PagesPage && !$objCur instanceof SystemModule) {
                 $objCur = Objectfactory::getInstance()->getObject($objCur->getStrPrevId());
             }
 
@@ -609,10 +617,11 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      *
      * @return mixed
      */
-    public function getContentLang() {
+    public function getContentLang()
+    {
         //see if the entry is assigned to a language
         $objSet = LanguagesLanguageset::getLanguagesetForSystemid($this->getSystemid());
-        if($objSet != null && $objSet->getLanguageidForSystemid($this->getSystemid()) !== null) {
+        if ($objSet != null && $objSet->getLanguageidForSystemid($this->getSystemid()) !== null) {
             $objLang = new LanguagesLanguage($objSet->getLanguageidForSystemid($this->getSystemid()));
             return $objLang->getStrName();
         }
@@ -627,7 +636,8 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      * @see getLinkAdminHref()
      * @return mixed
      */
-    public function getSearchAdminLinkForObject() {
+    public function getSearchAdminLinkForObject()
+    {
         return "";
     }
 
@@ -635,35 +645,40 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
     /**
      * @return string
      */
-    public function getStrTitle() {
+    public function getStrTitle()
+    {
         return $this->strTitle;
     }
 
     /**
      * @return string
      */
-    public function getStrIntro() {
+    public function getStrIntro()
+    {
         return $this->strIntro;
     }
 
     /**
      * @return string
      */
-    public function getStrText() {
+    public function getStrText()
+    {
         return $this->strText;
     }
 
     /**
      * @return string
      */
-    public function getStrImage() {
+    public function getStrImage()
+    {
         return $this->strImage;
     }
 
     /**
      * @return int
      */
-    public function getIntHits() {
+    public function getIntHits()
+    {
         return $this->intHits;
     }
 
@@ -672,22 +687,27 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      * @param \Kajona\System\System\Date $objEndDate
      * @return void
      */
-    public function setObjDateEnd($objEndDate) {
-        if($objEndDate == "")
+    public function setObjDateEnd($objEndDate)
+    {
+        if ($objEndDate == "") {
             $objEndDate = null;
+        }
         $this->setObjEndDate($objEndDate);
     }
 
     /**
      * @return \Kajona\System\System\Date
      */
-    public function getObjDateEnd() {
+    public function getObjDateEnd()
+    {
         return $this->getObjEndDate();
     }
+
     /**
      * @return \Kajona\System\System\Date
      */
-    public function getObjDateTimeEnd() {
+    public function getObjDateTimeEnd()
+    {
         return $this->getObjEndDate();
     }
 
@@ -695,22 +715,27 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      * @param \Kajona\System\System\Date $objDateSpecial
      * @return void
      */
-    public function setObjDateSpecial($objDateSpecial) {
-        if($objDateSpecial == "")
+    public function setObjDateSpecial($objDateSpecial)
+    {
+        if ($objDateSpecial == "") {
             $objDateSpecial = null;
+        }
         $this->setObjSpecialDate($objDateSpecial);
     }
 
     /**
      * @return \Kajona\System\System\Date
      */
-    public function getObjDateSpecial() {
+    public function getObjDateSpecial()
+    {
         return $this->getObjSpecialDate();
     }
+
     /**
      * @return \Kajona\System\System\Date
      */
-    public function getObjDateTimeSpecial() {
+    public function getObjDateTimeSpecial()
+    {
         return $this->getObjSpecialDate();
     }
 
@@ -718,29 +743,35 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      * @param \Kajona\System\System\Date $objStartDate
      * @return void
      */
-    public function setObjDateStart($objStartDate) {
-        if($objStartDate == "")
+    public function setObjDateStart($objStartDate)
+    {
+        if ($objStartDate == "") {
             $objStartDate = null;
+        }
         $this->setObjStartDate($objStartDate);
     }
 
     /**
      * @return \Kajona\System\System\Date
      */
-    public function getObjDateStart() {
+    public function getObjDateStart()
+    {
         return $this->getObjStartDate();
     }
+
     /**
      * @return \Kajona\System\System\Date
      */
-    public function getObjDateTimeStart() {
+    public function getObjDateTimeStart()
+    {
         return $this->getObjStartDate();
     }
 
     /**
      * @return string[]|null
      */
-    public function getArrCats() {
+    public function getArrCats()
+    {
         return $this->arrCats;
     }
 
@@ -748,7 +779,8 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      * @param string $strTitle
      * @return void
      */
-    public function setStrTitle($strTitle) {
+    public function setStrTitle($strTitle)
+    {
         $this->strTitle = $strTitle;
     }
 
@@ -756,7 +788,8 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      * @param string $strIntro
      * @return void
      */
-    public function setStrIntro($strIntro) {
+    public function setStrIntro($strIntro)
+    {
         $this->strIntro = $strIntro;
     }
 
@@ -764,7 +797,8 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      * @param string $strText
      * @return void
      */
-    public function setStrText($strText) {
+    public function setStrText($strText)
+    {
         $this->strText = $strText;
     }
 
@@ -772,7 +806,8 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      * @param string $strImage
      * @return void
      */
-    public function setStrImage($strImage) {
+    public function setStrImage($strImage)
+    {
         $this->strImage = $strImage;
     }
 
@@ -780,7 +815,8 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      * @param int $intHits
      * @return void
      */
-    public function setIntHits($intHits) {
+    public function setIntHits($intHits)
+    {
         $this->intHits = $intHits;
     }
 
@@ -788,7 +824,8 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      * @param string[] $arrCats
      * @return void
      */
-    public function setArrCats($arrCats) {
+    public function setArrCats($arrCats)
+    {
         $this->arrCats = $arrCats;
     }
 
@@ -796,14 +833,16 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      * @param int $intRedirectEnabled
      * @return void
      */
-    public function setIntRedirectEnabled($intRedirectEnabled) {
+    public function setIntRedirectEnabled($intRedirectEnabled)
+    {
         $this->intRedirectEnabled = $intRedirectEnabled;
     }
 
     /**
      * @return int
      */
-    public function getIntRedirectEnabled() {
+    public function getIntRedirectEnabled()
+    {
         return $this->intRedirectEnabled;
     }
 
@@ -811,15 +850,16 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      * @param string $strRedirectPage
      * @return void
      */
-    public function setStrRedirectPage($strRedirectPage) {
+    public function setStrRedirectPage($strRedirectPage)
+    {
         $this->strRedirectPage = $strRedirectPage;
     }
 
     /**
      * @return string
      */
-    public function getStrRedirectPage() {
+    public function getStrRedirectPage()
+    {
         return $this->strRedirectPage;
     }
-
 }

@@ -138,7 +138,7 @@ class DbPostgres extends DbBase
             return false;
         }
 
-        while ($arrRow = @pg_fetch_array($resultSet)) {
+        while ($arrRow = @pg_fetch_array($resultSet, null, PGSQL_ASSOC)) {
             //conversions to remain compatible:
             //   count --> COUNT(*)
             if (isset($arrRow["count"])) {

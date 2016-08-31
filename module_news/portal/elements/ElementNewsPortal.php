@@ -23,19 +23,21 @@ use Kajona\System\System\SystemModule;
  * @author sidler@mulchprod.de
  * @targetTable element_news.content_id
  */
-class ElementNewsPortal extends ElementPortal implements PortalElementInterface {
-
+class ElementNewsPortal extends ElementPortal implements PortalElementInterface
+{
     /**
      * Redefined in order to register cache busters
      *
      * @param PagesPageelement $objElementData
      */
-    public function __construct($objElementData) {
+    public function __construct($objElementData)
+    {
         parent::__construct($objElementData);
 
         //we support ratings, so add cache-busters
-        if(SystemModule::getModuleByName("rating") !== null)
+        if (SystemModule::getModuleByName("rating") !== null) {
             $this->setStrCacheAddon(getCookie(RatingRate::RATING_COOKIE));
+        }
     }
 
 
@@ -44,11 +46,12 @@ class ElementNewsPortal extends ElementPortal implements PortalElementInterface 
      *
      * @return string
      */
-    public function loadData() {
+    public function loadData()
+    {
         $strReturn = "";
         //Load the data
         $objNewsModule = SystemModule::getModuleByName("news");
-        if($objNewsModule != null) {
+        if ($objNewsModule != null) {
             $objNews = $objNewsModule->getPortalInstanceOfConcreteModule($this->arrElementData);
             $strReturn = $objNews->action();
         }
@@ -63,9 +66,10 @@ class ElementNewsPortal extends ElementPortal implements PortalElementInterface 
      *
      * @return boolean
      */
-    public function onLoadFromCache() {
+    public function onLoadFromCache()
+    {
         //update the news shown, if in details mode
-        if($this->getParam("action") == "newsDetail") {
+        if ($this->getParam("action") == "newsDetail") {
             $objNews = new NewsNews($this->getParam("systemid"));
             $objNews->increaseHits();
         }

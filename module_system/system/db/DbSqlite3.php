@@ -384,7 +384,7 @@ class DbSqlite3 extends DbBase
             return false;
         }
 
-        while ($arrTemp = $objResult->fetchArray()) {
+        while ($arrTemp = $objResult->fetchArray(SQLITE3_ASSOC)) {
             $arrResult[] = $arrTemp;
         }
 

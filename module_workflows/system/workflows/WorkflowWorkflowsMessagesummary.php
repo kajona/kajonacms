@@ -28,6 +28,9 @@ class WorkflowWorkflowsMessagesummary implements WorkflowsHandlerInterface
     private $intIntervalDays = 1;
     private $intSendTime = 8;
 
+    /** @var int The number of messages rendered with the message body */
+    private $intBodysRendered = 5;
+
     /**
      * @var WorkflowsWorkflow
      */
@@ -40,7 +43,8 @@ class WorkflowWorkflowsMessagesummary implements WorkflowsHandlerInterface
     {
         return array(
             Carrier::getInstance()->getObjLang()->getLang("workflow_messagesummary_val1", "workflows"),
-            Carrier::getInstance()->getObjLang()->getLang("workflow_messagesummary_val2", "workflows")
+            Carrier::getInstance()->getObjLang()->getLang("workflow_messagesummary_val2", "workflows"),
+            Carrier::getInstance()->getObjLang()->getLang("workflow_messagesummary_val3", "workflows")
         );
     }
 
@@ -57,6 +61,10 @@ class WorkflowWorkflowsMessagesummary implements WorkflowsHandlerInterface
             $this->intSendTime = $strVal2;
         }
 
+        if ($strVal3 != "" && is_numeric($strVal3)) {
+            $this->intBodysRendered = $strVal3;
+        }
+
     }
 
     /**
@@ -64,7 +72,7 @@ class WorkflowWorkflowsMessagesummary implements WorkflowsHandlerInterface
      */
     public function getDefaultValues()
     {
-        return array(1, 8); // by default the summary is sent at 8 o' clock every day
+        return array(1, 8, 5); // by default the summary is sent at 8 o' clock every day
     }
 
     /**
@@ -144,13 +152,18 @@ class WorkflowWorkflowsMessagesummary implements WorkflowsHandlerInterface
 
             $strBody .= $objLang->getLang("message_messagesummary_body_indicator", "workflows", array(++$intI, count($arrMessages)))."\n";
 
-            $strBody .= $objLang->getLang("message_subject", "messaging").": ".$objOneMessage->getStrTitle()."\n";
+            if($objOneMessage->getStrTitle() != "") {
+                $strBody .= $objLang->getLang("message_subject", "messaging").": ".$objOneMessage->getStrTitle()."\n";
+            }
+
             $strBody .= $objLang->getLang("message_link", "messaging").": ".Link::getLinkAdminHref("messaging", "view", "&systemid=".$objOneMessage->getSystemid(), false)."\n";
-            $strBody .= $objLang->getLang("message_body", "messaging").":\n".$objOneMessage->getStrBody()."\n";
+
+            if($intI <= $this->intBodysRendered) {
+                $strBody .= $objLang->getLang("message_body", "messaging").":\n".$objOneMessage->getStrBody()."\n";
+            }
 
             $strBody .= "\n";
             $strBody .= "-------------------------------------------\n";
-            $strBody .= "\n";
         }
 
         $strSubject = $objLang->getLang("message_messagesummary_subject", "workflows", array(count($arrMessages)));

@@ -26,29 +26,30 @@ use Kajona\System\System\SystemSetting;
  * @package module_news
  * @author sidler@mulchprod.de
  * @since 4.8
- * 
+ *
  * @module news
  * @moduleId _news_module_id_
  */
-class NewsNewsFormgenerator extends AdminFormgenerator  {
+class NewsNewsFormgenerator extends AdminFormgenerator
+{
     /**
      * @inheritDoc
      */
-    public function generateFieldsFromObject() {
+    public function generateFieldsFromObject()
+    {
         parent::generateFieldsFromObject();
 
-
         $objNews = $this->getObjSourceobject();
-        if($objNews->getSystemid() != SystemModule::getModuleByName("news")->getSystemid()) {
+        if ($objNews->getSystemid() != SystemModule::getModuleByName("news")->getSystemid()) {
             //search the languages maintained
             $objLanguageManager = LanguagesLanguageset::getLanguagesetForSystemid($objNews->getSystemid());
-            if($objLanguageManager != null) {
+            if ($objLanguageManager != null) {
 
                 $arrMaintained = $objLanguageManager->getArrLanguageSet();
                 $arrDD = array();
-                foreach($arrMaintained as $strLanguageId => $strSystemid) {
+                foreach ($arrMaintained as $strLanguageId => $strSystemid) {
                     $objLanguage = new LanguagesLanguage($strLanguageId);
-                    $arrDD[$strSystemid] = $this->getLang("lang_" . $objLanguage->getStrName(), "languages");
+                    $arrDD[$strSystemid] = $this->getLang("lang_".$objLanguage->getStrName(), "languages");
                 }
 
                 LanguagesAdmin::enableLanguageSwitch();
@@ -61,23 +62,19 @@ class NewsNewsFormgenerator extends AdminFormgenerator  {
         }
 
         $arrCats = NewsCategory::getObjectListFiltered();
-        if(count($arrCats) > 0) {
+        if (count($arrCats) > 0) {
             $arrKeyValues = array();
             /** @var NewsCategory $objOneCat */
-            foreach($arrCats as $objOneCat) {
+            foreach ($arrCats as $objOneCat) {
                 $arrKeyValues[$objOneCat->getSystemid()] = $objOneCat->getStrDisplayName();
             }
             $this->getField("cats")->setStrLabel($this->getLang("commons_categories"))->setArrKeyValues($arrKeyValues);
         }
 
-        if(SystemSetting::getConfigValue("_news_news_datetime_") == "true") {
+        if (SystemSetting::getConfigValue("_news_news_datetime_") == "true") {
             $this->addField(new FormentryDatetime($this->getStrFormname(), "objDateStart", $objNews), "datestart")->setBitMandatory(true)->setStrLabel($this->getLang("form_news_datestart"));
             $this->addField(new FormentryDatetime($this->getStrFormname(), "objDateEnd", $objNews), "dateend")->setStrLabel($this->getLang("form_news_dateend"));
             $this->addField(new FormentryDatetime($this->getStrFormname(), "objDateSpecial", $objNews), "datespecial")->setStrLabel($this->getLang("form_news_datespecial"));
         }
-
     }
-
-
 }
-

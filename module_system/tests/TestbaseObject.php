@@ -95,7 +95,7 @@ abstract class TestbaseObject extends Testbase
         foreach (array_reverse($this->arrStructure, true) as $objOneModel) {
             $strSystemId = $objOneModel->getStrSystemid();
             $objOneModel = Objectfactory::getInstance()->getObject($strSystemId);
-            if($objOneModel !== null) {
+            if ($objOneModel !== null) {
                 $objOneModel->deleteObjectFromDatabase();
             }
         }
@@ -227,8 +227,7 @@ abstract class TestbaseObject extends Testbase
                         throw new RuntimeException('Object "' . $strName . '" refers to an non existing object (' . $objElement->getNodePath() . ')');
                     }
                 }
-            }
-            elseif (substr($strValue, 0, 4) == 'ref:') {
+            } elseif (substr($strValue, 0, 4) == 'ref:') {
                 $strRef = trim(substr($strValue, 4));
                 $objRef = $this->getObject($strRef);
                 if ($objRef instanceof Model) {
@@ -236,8 +235,7 @@ abstract class TestbaseObject extends Testbase
                 } else {
                     throw new RuntimeException('Object "' . $strName . '" refers to an non existing object (' . $objElement->getNodePath() . ')');
                 }
-            }
-            elseif (substr($strValue, 0, 13) == 'dataprovider:') {
+            } elseif (substr($strValue, 0, 13) == 'dataprovider:') {
                 $strFunction = trim(substr($strValue, 13));
                 $arrParameters[$strKey] = call_user_func($strFunction);
             }
