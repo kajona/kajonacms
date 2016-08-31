@@ -80,7 +80,7 @@ class StatustransitionTransition
      */
     public function bitCheckTransitionRight(Model $objModel)
     {
-        if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::INSTALLER())) {
+        if (ResponseObject::getInstance()->getObjEntrypoint() !== null && ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::INSTALLER())) {
             return true;
         } else {
             return $this->getObjRightCallback() === null || call_user_func_array($this->getObjRightCallback(), array($objModel)) === true;
