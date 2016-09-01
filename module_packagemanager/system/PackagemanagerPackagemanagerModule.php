@@ -11,6 +11,7 @@ namespace Kajona\Packagemanager\System;
 use Kajona\System\System\CacheManager;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Classloader;
+use Kajona\System\System\CoreEventdispatcher;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Filesystem;
 use Kajona\System\System\InstallerInterface;
@@ -115,6 +116,11 @@ class PackagemanagerPackagemanagerModule implements PackagemanagerPackagemanager
     {
         $strReturn = "";
 
+        if(!$this->getObjMetadata()->getBitProvidesInstaller()) {
+            CoreEventdispatcher::getInstance()->notifyGenericListeners(PackagemanagerEventidentifier::EVENT_PACKAGEMANAGER_PACKAGEUPDATED, array($this));
+            return "";
+        }
+
         if (uniStrpos($this->getObjMetadata()->getStrPath(), "core") === false) {
             throw new Exception("Current module not located in a core directory.", Exception::$level_ERROR);
         }
@@ -137,37 +143,14 @@ class PackagemanagerPackagemanagerModule implements PackagemanagerPackagemanager
             Logger::getInstance(Logger::PACKAGEMANAGEMENT)->addLogRow("triggering updateOrInstall() on installer ".get_class($objInstance).", all requirements given", Logger::$levelInfo);
             //trigger update or install
             $strReturn .= $objInstance->installOrUpdate();
-            $this->updateDefaultTemplate();
         }
 
         /** @var CacheManager $objCache */
         $objCache = Carrier::getInstance()->getContainer()->offsetGet(\Kajona\System\System\ServiceProvider::STR_CACHE_MANAGER);
         $objCache->flushCache();
+        CoreEventdispatcher::getInstance()->notifyGenericListeners(PackagemanagerEventidentifier::EVENT_PACKAGEMANAGER_PACKAGEUPDATED, array($this));
 
         return $strReturn;
-    }
-
-
-    /**
-     * @return bool
-     */
-    public function updateDefaultTemplate()
-    {
-        $objFilesystem = new Filesystem();
-        Logger::getInstance(Logger::PACKAGEMANAGEMENT)->addLogRow("updating default template from /".$this->objMetadata->getStrPath(), Logger::$levelInfo);
-        if (is_dir(_realpath_.$this->objMetadata->getStrPath()."/templates/default/js")) {
-            $objFilesystem->folderCopyRecursive($this->objMetadata->getStrPath()."/templates/default/js", "/templates/default/js", true);
-        }
-
-        if (is_dir(_realpath_.$this->objMetadata->getStrPath()."/templates/default/css")) {
-            $objFilesystem->folderCopyRecursive($this->objMetadata->getStrPath()."/templates/default/css", "/templates/default/css", true);
-        }
-
-        if (is_dir(_realpath_.$this->objMetadata->getStrPath()."/templates/default/pics")) {
-            $objFilesystem->folderCopyRecursive($this->objMetadata->getStrPath()."/templates/default/pics", "/templates/default/pics", true);
-        }
-
-        return true;
     }
 
     /**

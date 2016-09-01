@@ -70,6 +70,7 @@ class class_project_setup {
         self::checkDir("/files/cache");
         self::makeWritable("/files/cache");
         self::checkDir("/files/downloads");
+        self::makeWritable("/files/downloads");
         self::checkDir("/files/images");
         self::makeWritable("/files/images");
         self::checkDir("/files/public");
@@ -77,11 +78,7 @@ class class_project_setup {
         self::checkDir("/files/extract");
         self::makeWritable("/files/extract");
 
-        self::checkDir("/templates/default");
-        self::checkDir("/templates/default/js");
-        self::checkDir("/templates/default/css");
-        self::checkDir("/templates/default/tpl");
-        self::checkDir("/templates/default/pics");
+        self::checkDir("/templates");
 
         self::createLangProjectEntry();
         self::createDefaultTemplateEntry();
@@ -99,31 +96,14 @@ class class_project_setup {
                     copy(self::$strRealPath."/".$strSingleModule."/".$strSingleEntry, self::$strRealPath."/".substr($strSingleEntry, 0, -5));
                 }
             }
-        }
-
-
-        echo "\n<b>Kajona V5 template setup.</b>\nCreates the default-template-pack required to render pages.\n";
-        echo "Files already existing are NOT overwritten.\n";
-
-
-        foreach($arrModules as $strSingleModule) {
-            if(is_dir(self::$strRealPath."/".$strSingleModule."/templates")) {
-                //TODO: check against excluded modules
-
-                $arrEntries = scandir(self::$strRealPath."/".$strSingleModule."/templates");
-                foreach($arrEntries as $strOneFolder) {
-                    if($strOneFolder != "." && $strOneFolder != ".." && is_dir(self::$strRealPath."/".$strSingleModule."/templates/".$strOneFolder)) {
-                        if($strOneFolder == "default")
-                            self::copyFolder(self::$strRealPath."/".$strSingleModule."/templates", self::$strRealPath."/templates", array(".tpl"));
-                        else
-                            self::copyFolder(self::$strRealPath."/".$strSingleModule."/templates", self::$strRealPath."/templates");
-                    }
-                }
-            }
 
             if(is_dir(self::$strRealPath."/".$strSingleModule."/files"))
                 self::copyFolder(self::$strRealPath."/".$strSingleModule."/files", self::$strRealPath."/files");
         }
+
+
+
+
 
 
         echo "\n<b>Kajona V5 htaccess setup</b>\n";
@@ -179,7 +159,7 @@ TXT;
 
 Kajona V5 default template-pack.
 
-This template is based on plain vanilla Bootrap V4.
+The template default is based on plain vanilla Bootstrap V4.
 
 Please don't change anything within this folder, updates may break your changes
 and overwrite them without further warning.
@@ -206,7 +186,7 @@ Have fun!
 
 
 TXT;
-        file_put_contents(self::$strRealPath."/templates/default/readme.txt", $strContent);
+        file_put_contents(self::$strRealPath."/templates/readme.txt", $strContent);
     }
 
 

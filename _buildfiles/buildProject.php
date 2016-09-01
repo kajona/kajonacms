@@ -113,22 +113,20 @@ class BuildHelper {
             /** @var \Kajona\Packagemanager\System\PackagemanagerMetadata $objOneMetadata */
             foreach($arrPackagesToInstall as $intKey => $objOneMetadata) {
 
+                $objHandler = $objManager->getPackageManagerForPath($objOneMetadata->getStrPath());
                 if(!$objOneMetadata->getBitProvidesInstaller()) {
-                    //echo "skipping ".$objOneMetadata->getStrTitle().", no installer provided...\n";
+                    $objHandler->installOrUpdate();
                     unset($arrPackagesToInstall[$intKey]);
                     continue;
                 }
 
-                $objHandler = $objManager->getPackageManagerForPath($objOneMetadata->getStrPath());
 
                 if(!$objHandler->isInstallable()) {
-                    //echo "skipping ".$objOneMetadata->getStrTitle()." due to unresolved requirements\n";
                     continue;
                 }
 
                 echo dateToString(new \Kajona\System\System\Date())." Installing ".$objOneMetadata->getStrTitle()."...\n";
                 $objHandler->installOrUpdate();
-//                echo $objHandler->installOrUpdate();
 
                 unset($arrPackagesToInstall[$intKey]);
             }
@@ -140,7 +138,6 @@ class BuildHelper {
             if(!$objOneInstaller->isInstalled()) {
                 echo dateToString(new \Kajona\System\System\Date())." Installing ".get_class($objOneInstaller)."...\n";
                 $objOneInstaller->install();
-//                echo $objOneInstaller->install();
             }
         }
 
