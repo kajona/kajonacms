@@ -19,13 +19,7 @@
     <exclude-pattern>*browscap.cache*</exclude-pattern>
     <exclude-pattern>*Browscap.php*</exclude-pattern>
 
-    <rule ref="PSR2">
-        <!-- Exclude that there must be one space after the control structure keyword -->
-        <exclude name="Squiz.ControlStructures.ControlSignature"/>
-
-        <!-- Exclude that the class name must be in CamelCase -->
-        <exclude name="Squiz.Classes.ValidClassName"/>
-    </rule>
+    <rule ref="PSR2" />
 
     <rule ref="Generic.Files.LineLength">
         <properties>
