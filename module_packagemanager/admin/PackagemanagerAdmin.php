@@ -506,22 +506,14 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
                 $objHandler = $objManager->getPackageManagerForPath($strFile);
             }
 
-            if ($objHandler->getObjMetadata()->getBitProvidesInstaller()) {
-                $strLog .= $objHandler->installOrUpdate();
-            }
-
-            $strLog .= "Updating default template pack...\n";
-            $objHandler->updateDefaultTemplate();
-
+            $strLog .= $objHandler->installOrUpdate();
 
             $strOnSubmit = 'window.parent.parent.location.reload();';
             if ($strLog !== "") {
                 $strReturn .= $this->objToolkit->formHeadline($this->getLang("package_install_success"));
                 $strReturn .= $this->objToolkit->getPreformatted(array($strLog));
 
-                $strReturn .= $this->objToolkit->formHeader(
-                    Link::getLinkAdminHref($this->getArrModule("modul"), "list"), "", "", "javascript:".$strOnSubmit
-                );
+                $strReturn .= $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "list"), "", "", "javascript:".$strOnSubmit);
                 $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_ok"));
                 $strReturn .= $this->objToolkit->formClose();
             }
@@ -766,7 +758,7 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
 
 
     /**
-     * @param ModelInterface|Root $objListEntry
+     * @param ModelInterface|Model $objListEntry
      *
      * @return string
      */
