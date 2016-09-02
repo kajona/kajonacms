@@ -105,4 +105,11 @@ class AdminFormgeneratorFactory {
         return get_class($objInstance) . $objInstance->getSystemid();
     }
 
+    /**
+     * Clears the form cache
+     */
+    public static function clearCache() {
+        self::$arrForms = array();
+    }
+
 }
