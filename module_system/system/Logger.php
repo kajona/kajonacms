@@ -26,6 +26,7 @@ final class Logger
     const QUERIES = "dbqueries.log";
     const EVENTS = "events.log";
     const PACKAGEMANAGEMENT = "packagemanagement.log";
+    const PAGES = "pages.log";
     const REMOTELOADER = "remoteloader.log";
     const ADMINTASKS = "admintasks.log";
 

@@ -11,6 +11,7 @@ namespace Kajona\Packagemanager\System;
 use Kajona\System\System\CacheManager;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Classloader;
+use Kajona\System\System\CoreEventdispatcher;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Filesystem;
 use Kajona\System\System\InstallerBase;
@@ -109,6 +110,11 @@ class PackagemanagerPackagemanagerPharmodule extends PackagemanagerPackagemanage
     {
         $strReturn = "";
 
+        if(!$this->getObjMetadata()->getBitProvidesInstaller()) {
+            CoreEventdispatcher::getInstance()->notifyGenericListeners(PackagemanagerEventidentifier::EVENT_PACKAGEMANAGER_PACKAGEUPDATED, array($this));
+            return "";
+        }
+
         if (uniStrpos($this->getObjMetadata()->getStrPath(), "core") === false) {
             throw new Exception("Current module not located in a core directory.", Exception::$level_ERROR);
         }
@@ -127,7 +133,6 @@ class PackagemanagerPackagemanagerPharmodule extends PackagemanagerPackagemanage
                 continue;
             }
 
-            //skip element installers at first run
             Logger::getInstance(Logger::PACKAGEMANAGEMENT)->addLogRow("triggering updateOrInstall() on installer ".get_class($objInstance).", all requirements given", Logger::$levelInfo);
             //trigger update or install
             $strReturn .= $objInstance->installOrUpdate();
@@ -136,37 +141,10 @@ class PackagemanagerPackagemanagerPharmodule extends PackagemanagerPackagemanage
         /** @var CacheManager $objCache */
         $objCache = Carrier::getInstance()->getContainer()->offsetGet(\Kajona\System\System\ServiceProvider::STR_CACHE_MANAGER);
         $objCache->flushCache();
-        $this->updateDefaultTemplate();
+
+        CoreEventdispatcher::getInstance()->notifyGenericListeners(PackagemanagerEventidentifier::EVENT_PACKAGEMANAGER_PACKAGEUPDATED, array($this));
 
         return $strReturn;
-    }
-
-
-    /**
-     * @return bool
-     */
-    public function updateDefaultTemplate()
-    {
-
-        //read the module and extract
-        $objPharModule = new PharModule($this->objMetadata->getStrPath());
-        $objFilesystem = new Filesystem();
-        foreach ($objPharModule->getContentMap() as $strKey => $strFullPath) {
-
-            foreach (array("js", "css", "pics") as $strOneSubfolder) {
-
-                $intStrPos = StringUtil::indexOf($strFullPath, "templates/default/{$strOneSubfolder}", false);
-                if ($intStrPos !== false) {
-                    $strTargetPath = _realpath_."templates/default/{$strOneSubfolder}/".StringUtil::substring($strFullPath, $intStrPos + StringUtil::length("templates/default/{$strOneSubfolder}"));
-                    $objFilesystem->folderCreate(dirname($strTargetPath), true, true);
-                    //copy
-                    copy($strFullPath, $strTargetPath);
-                }
-
-            }
-        }
-
-        return true;
     }
 
 

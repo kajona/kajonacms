@@ -43,7 +43,7 @@ abstract class FilterBase
     private $bitFilterUpdated = false;
 
     /**
-     * @var null
+     * @var string
      */
     private $strFilterId = null;
 
@@ -58,10 +58,12 @@ abstract class FilterBase
     /**
      * FilterBase constructor.
      *
-     * @param bool $bitFilterUpdated
+     * @param string $strFilterId
      */
-    public function __construct()
+    public function __construct($strFilterId = null)
     {
+        $this->strFilterId = $strFilterId;
+
         $this->initFilter();
     }
 
@@ -92,7 +94,7 @@ abstract class FilterBase
      */
     final public function getFilterId()
     {
-        if($this->strFilterId === null) {
+        if ($this->strFilterId === null) {
             $objClass = new ReflectionClass(get_called_class());
             $this->strFilterId = StringUtil::toLowerCase($objClass->getShortName());
         }

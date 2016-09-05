@@ -253,6 +253,22 @@ KAJONA.util.formatNumber = function(floatValue, intDecimalLength, intLengthWhole
     return (strDelimiterDecimal ? num.replace('.', strDelimiterDecimal) : num).replace(new RegExp(re, 'g'), '$&' + (strDelimiterSections || ','));
 };
 
+/**
+ * Formats a kajona date format to a specific javascript format string
+ *
+ * @param {string} format
+ * @param {string} type
+ */
+KAJONA.util.transformDateFormat = function(format, type) {
+    if (type == 'bootstrap-datepicker') {
+        return format.replace('d', 'dd').replace('m', 'mm').replace('Y', 'yyyy');
+    } else if (type == 'momentjs') {
+        return format.replace('d', 'DD').replace('m', 'MM').replace('Y', 'YYYY');
+    } else {
+        return format;
+    }
+};
+
 /*
  * -------------------------------------------------------------------------
  * Admin-specific functions
@@ -1491,3 +1507,170 @@ KAJONA.admin.forms.getObjField = function (objField) {
         return $(objField);
     }
 };
+
+KAJONA.admin.changelog = {};
+
+/**
+ * Method to compare and highlite changes of two version properties table
+ */
+KAJONA.admin.changelog.compareTable = function () {
+    var strType = KAJONA.admin.changelog.selectedColumn;
+    var propsLeft = KAJONA.admin.changelog.getTableProperties(strType);
+    var propsRight = KAJONA.admin.changelog.getTableProperties(KAJONA.admin.changelog.getInverseColumn(strType));
+    for (var key in propsLeft) {
+        if (propsLeft[key] !== "" || propsRight[key] !== "") {
+            if (propsLeft[key] !== propsRight[key]) {
+                $('#property_' + key + '_' + strType).parent().parent().css('background-color', '#CEC');
+            } else {
+                $('#property_' + key + '_' + strType).parent().parent().css('background-color', '');
+            }
+        } else {
+            $('#property_' + key + '_' + strType).parent().parent().css('background-color', '');
+        }
+    }
+};
+
+KAJONA.admin.changelog.systemId = null;
+KAJONA.admin.changelog.now = null;
+KAJONA.admin.changelog.yearAgo = null;
+KAJONA.admin.changelog.selectedColumn = null;
+KAJONA.admin.changelog.lang = {};
+
+/**
+ * Selects the column which should change if a user clicks on the chart
+ *
+ * @param {string} strType
+ */
+KAJONA.admin.changelog.selectColumn = function(strType){
+    $('#date_' + strType).css("background-color", "#ccc");
+    $('#date_' + KAJONA.admin.changelog.getInverseColumn(strType)).css("background-color", "");
+    KAJONA.admin.changelog.selectedColumn = strType;
+};
+
+/**
+ * Returns the opposite column of the provided type
+ *
+ * @param strType
+ * @returns {string}
+ */
+KAJONA.admin.changelog.getInverseColumn = function(strType){
+    return strType == "left" ? "right" : "left";
+};
+
+/**
+ * Returns an object containing all version properties from either the left or right table
+ *
+ * @param {string} type
+ * @returns {object}
+ */
+KAJONA.admin.changelog.getTableProperties = function (type) {
+    var props = {};
+    $('.changelog_property_' + type).each(function(){
+        props[$(this).data('name')] = "" + $(this).html();
+    });
+    return props;
+};
+
+/**
+ * Loads the version properties for a specific date and inserts the values either in the left or right table
+ *
+ * @param {string} strSystemId
+ * @param {string} strDate
+ * @param {string} strType
+ * @param {function} objCallback
+ */
+KAJONA.admin.changelog.loadDate = function (strSystemId, strDate, strType, objCallback) {
+    $('#date_' + strType).html("");
+    $('.changelog_property_' + strType).html("");
+    KAJONA.admin.ajax.genericAjaxCall("system", "changelogPropertiesForDate", "&systemid="+strSystemId+"&date="+strDate, function(data, status, jqXHR) {
+        data = JSON.parse(data);
+        var props = data.properties;
+        $('#date_' + strType).html("<a href='#' onclick='KAJONA.admin.changelog.selectColumn(\"" + strType + "\");return false;' style='display:block;'>" + data.date + "</a>");
+        for (var prop in props) {
+            $('#property_' + prop + '_' + strType).html(props[prop]);
+        }
+
+        $('#date_' + strType + ' a').qtip({
+            content: KAJONA.admin.changelog.lang.tooltipColumn,
+            position: {
+                at: 'top center',
+                my: 'bottom center'
+            },
+            style: {
+                classes: 'qtip-bootstrap'
+            }
+        });
+
+        if (typeof objCallback === "function") {
+            objCallback.apply();
+        }
+    });
+};
+
+/**
+ * Loads the chart for the next year
+ */
+KAJONA.admin.changelog.loadNextYear = function () {
+    $('#changelogTimeline').fadeOut();
+
+    KAJONA.admin.changelog.now = moment(KAJONA.admin.changelog.now).add(1, 'years').toDate();
+    KAJONA.admin.changelog.yearAgo = moment(KAJONA.admin.changelog.yearAgo).add(1, 'years').toDate();
+    KAJONA.admin.changelog.loadChartData();
+};
+
+/**
+ * Loads the chart for the previous year
+ */
+KAJONA.admin.changelog.loadPrevYear = function () {
+    $('#changelogTimeline').fadeOut();
+
+    KAJONA.admin.changelog.now = moment(KAJONA.admin.changelog.now).subtract(1, 'years').toDate();
+    KAJONA.admin.changelog.yearAgo = moment(KAJONA.admin.changelog.yearAgo).subtract(1, 'years').toDate();
+    KAJONA.admin.changelog.loadChartData();
+};
+
+/**
+ * Loads the chart
+ */
+KAJONA.admin.changelog.loadChartData = function () {
+    var now = moment(KAJONA.admin.changelog.now).format("YYYYMMDD235959");
+    var yearAgo = moment(KAJONA.admin.changelog.yearAgo).format("YYYYMMDD235959");
+
+    KAJONA.admin.ajax.genericAjaxCall("system", "changelogChartData", "&systemid=" + KAJONA.admin.changelog.systemId + "&now=" + now + "&yearAgo=" + yearAgo, function(data, status, jqXHR) {
+        data = JSON.parse(data);
+        var chartData = d3.time.days(KAJONA.admin.changelog.yearAgo, KAJONA.admin.changelog.now).map(function (dateElement) {
+            var count = 0;
+            if (data.hasOwnProperty(moment(dateElement).format("YYYYMMDD"))) {
+                count = data[moment(dateElement).format("YYYYMMDD")];
+            }
+            return {
+                date: dateElement,
+                count: count
+            };
+        });
+
+        var heatmap = calendarHeatmap()
+            .data(chartData)
+            .selector('#changelogTimeline')
+            .months(KAJONA.admin.changelog.lang.months)
+            .days(KAJONA.admin.changelog.lang.days)
+            .width(700)
+            .padding(16)
+            .tooltipEnabled(true)
+            .tooltipUnit(KAJONA.admin.changelog.lang.tooltipUnit)
+            .tooltipUnitPlural(KAJONA.admin.changelog.lang.tooltipUnitPlural)
+            .tooltipDateFormat("DD.MM.YYYY")
+            .tooltipHtml(KAJONA.admin.changelog.lang.tooltipHtml)
+            .legendEnabled(false)
+            .toggleDays(false)
+            .colorRange(['#eeeeee', '#6cb121'])
+            .onClick(function (data) {
+                var date = moment(data.date).format("YYYYMMDD235959");
+                KAJONA.admin.changelog.loadDate(KAJONA.admin.changelog.systemId, date, KAJONA.admin.changelog.selectedColumn, KAJONA.admin.changelog.compareTable);
+            });
+        heatmap(KAJONA.admin.changelog.now, KAJONA.admin.changelog.yearAgo);  // render the chart
+
+        $('#changelogTimeline').fadeIn();
+    });
+};
+

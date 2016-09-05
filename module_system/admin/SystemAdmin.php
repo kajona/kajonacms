@@ -33,6 +33,7 @@ use Kajona\System\System\Objectfactory;
 use Kajona\System\System\OrmBase;
 use Kajona\System\System\OrmDeletedhandlingEnum;
 use Kajona\System\System\Pluginmanager;
+use Kajona\System\System\Reflection;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemChangelog;
@@ -962,15 +963,100 @@ JS;
         }
 
         $objManager = new PackagemanagerManager();
+        $arrToolbar = array();
         if ($objManager->getPackage("phpexcel") != null) {
-            $strReturn .= $this->objToolkit->getContentToolbar(array(
-                Link::getLinkAdmin($this->getArrModule("modul"), "genericChangelogExportExcel", "&systemid=" . $strSystemid, AdminskinHelper::getAdminImage("icon_excel") . " " . $this->getLang("change_export_excel"), "", "", false)
-            ));
+            $arrToolbar[] = Link::getLinkAdmin($this->getArrModule("modul"), "genericChangelogExportExcel", "&systemid=" . $strSystemid, AdminskinHelper::getAdminImage("icon_excel") . " " . $this->getLang("change_export_excel"), "", "", false);
         }
+
+        $arrToolbar[] = Link::getLinkAdmin($this->getArrModule("modul"), "changelogDiff", "&systemid=" . $strSystemid . "&folderview=1", AdminskinHelper::getAdminImage("icon_aspect") . " " . $this->getLang("change_diff"), "", "", false);
+
+        $strReturn .= $this->objToolkit->getContentToolbar($arrToolbar);
 
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrData);
 
         $strReturn .= $this->objToolkit->getPageview($objArraySectionIterator, $strSourceModule, $strSourceAction, "&systemid=" . $strSystemid . "&bitBlockFolderview=" . $this->getParam("bitBlockFolderview"));
+
+        return $strReturn;
+    }
+
+    /**
+     * Provides an option to compare the current record with a state from a different time
+     *
+     * @permissions changelog
+     * @since 5.1
+     * @return string
+     */
+    protected function actionChangelogDiff()
+    {
+        $strSystemId = $this->getSystemid();
+        /** @var VersionableInterface $objObject */
+        $objObject = Objectfactory::getInstance()->getObject($strSystemId);
+
+        $objNow = new Date();
+        $objNow->setEndOfDay();
+        $objYearAgo = new Date();
+        $objYearAgo->setPreviousYear()->setEndOfDay();
+
+        $arrDates = SystemChangelog::getDatesForSystemid($strSystemId, $objYearAgo, $objNow);
+
+        $arrResult = array();
+        foreach ($arrDates as $arrDate) {
+            $objDate = new Date($arrDate["change_date"]);
+            $arrResult[substr($objDate->getLongTimestamp(), 0, 8)] = $objDate->getLongTimestamp();
+        }
+        krsort($arrResult);
+
+        $objLeftDate = new Date(array_pop($arrResult));
+        $strLeftDate = $objLeftDate->setEndOfDay()->getLongTimestamp();
+        $objRightDate = new Date(array_pop($arrResult));
+        $strRightDate = $objRightDate->setEndOfDay()->getLongTimestamp();
+
+        $strReturn = "";
+        $strReturn .= $this->objToolkit->getContentToolbar(array(
+            Link::getLinkAdmin($this->getArrModule("modul"), "genericChangelog", "&systemid=" . $objObject->getStrSystemid() . "&folderview=1", AdminskinHelper::getAdminImage("icon_history") . " " . $this->getLang("commons_edit_history"), "", "", false),
+        ));
+
+        $arrTemplate = array(
+            "strSystemId" => $strSystemId,
+            "strLeftDate" => $strLeftDate,
+            "strRightDate" => $strRightDate,
+            "strDateFormat" => $this->getLang("dateStyleShort"),
+            "strLang" => json_encode(array(
+                "months" => $this->getLang("toolsetCalendarMonthShort"),
+                "days" => $this->getLang("toolsetCalendarWeekdayShort"),
+                "tooltipUnit" => $this->getLang("changelog_tooltipUnit"),
+                "tooltipUnitPlural" => $this->getLang("changelog_tooltipUnitPlural"),
+                "tooltipHtml" => $this->getLang("changelog_tooltipHtml"),
+                "tooltipColumn" => $this->getLang("changelog_tooltipColumn"),
+            )),
+        );
+
+        $strReturn .= $this->objTemplate->fillTemplateFile($arrTemplate, "/elements.tpl", "changelog_heatmap");
+
+        $objReflection = new Reflection($objObject);
+        $arrProps = $objReflection->getPropertiesWithAnnotation(SystemChangelog::ANNOTATION_PROPERTY_VERSIONABLE);
+        $arrData = array();
+
+        foreach ($arrProps as $strPropertyName => $strValue) {
+            $strGetter = $objReflection->getGetter($strPropertyName);
+            if (!empty($strGetter)) {
+                $strPropertyLabel = $objObject->getVersionPropertyName($strPropertyName);
+
+                $arrRow = array();
+                $arrRow['0 border-right'] = $strPropertyLabel;
+                $arrRow['1 border-right'] = "<div id='property_" . $strPropertyName . "_left' class='changelog_property changelog_property_left' data-name='" . $strPropertyName . "'></div>";
+                $arrRow[] = "<div id='property_" . $strPropertyName . "_right' class='changelog_property changelog_property_right' data-name='" . $strPropertyName . "'></div>";
+                $arrData[] = $arrRow;
+            }
+        }
+
+        $arrHeader = array(
+            '0 border-right' => $this->getLang("change_property"),
+            '1 border-right" style="width:30%;"' => "<div id='date_left'></div>",
+            '2" style="width:30%;"' => "<div id='date_right'></div>",
+        );
+
+        $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrData, "kajona-data-table-ignore-floatthread");
 
         return $strReturn;
     }

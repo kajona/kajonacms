@@ -104,5 +104,4 @@ class AdminFormgeneratorFactory {
     public static function getKeyByModel(ModelInterface $objInstance) {
         return get_class($objInstance) . $objInstance->getSystemid();
     }
-
 }
