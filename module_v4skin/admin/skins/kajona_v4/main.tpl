@@ -19,14 +19,7 @@
     %%head%%
     <script type="text/javascript">var searchExtendText = '[lang,search_details,search]';</script>
     <script type="text/javascript">
-        var require = {
-            baseUrl: "/agp-core/",
-            shim : {
-                "bootstrap" : { "deps": ["jquery"] },
-                "jqueryui" : { "deps": ["jquery"] }
-            },
-            paths: %%requirejs_map%%
-        };
+        var require = %%requirejs_conf%%;
     </script>
     <script data-main="core/module_system/admin/scripts/app" src="_webpath_/[webpath,module_system]/admin/scripts/requirejs/require.js"></script>
 
