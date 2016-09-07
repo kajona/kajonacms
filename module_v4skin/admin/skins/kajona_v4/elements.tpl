@@ -1618,8 +1618,8 @@ The language switch surrounds the buttons
 <dashboard_wrapper>
     <div class="row dashBoard">%%entries%%</div>
     <script type="text/javascript">
-        KAJONA.admin.loader.loadFile('/core/module_dashboard/admin/scripts/dashboard.js', function() {
-            KAJONA.admin.dashboard.init();
+        require(['dashboard'], function(dashboard){
+            dashboard.init();
         });
     </script>
 </dashboard_wrapper>
