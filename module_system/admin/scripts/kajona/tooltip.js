@@ -1,6 +1,6 @@
 
 //common tooltips
-define(['jquery', 'qtip', 'tags'], function (jq, qtip, tags) {
+define(['jquery', 'qtip', 'tags'], function ($, qtip, tags) {
     return {
         initTooltip : function() {
             $('*[rel=tooltip][title!=""]').qtip({
