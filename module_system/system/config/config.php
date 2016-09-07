@@ -93,6 +93,8 @@
 
     $config['bootstrapcache_moduleids']      = true;                   //Caches all module id constants
 
+    $config['bootstrapcache_requirejs']      = true;                   //Caches the requirejs config
+
 
 //--debugging -------------------------------------------------------------------------------------------
 
