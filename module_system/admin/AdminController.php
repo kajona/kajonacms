@@ -231,8 +231,11 @@ abstract class AdminController extends AbstractController
                 return $strFile == "provides.json";
             });
 
+            $basePath = $_SERVER['PHP_SELF'];
+            $basePath = str_replace("/index.php", "/", $basePath);
+            $basePath = str_replace("/xml.php", "/", $basePath);
             $arrRequireConf = array(
-                "baseUrl" => "/agp-core/", // @TODO determine base url
+                "baseUrl" => $basePath,
                 "paths" => array(),
                 "shim" => array(),
             );
