@@ -1596,10 +1596,11 @@ class ToolkitAdmin extends Toolkit
         //output texts and image paths only once
         if (Carrier::getInstance()->getObjSession()->getSession("statusButton", Session::$intScopeRequest) === false) {
             $strJavascript .= "<script type=\"text/javascript\">
-                KAJONA.admin.ajax.setSystemStatusMessages.strActiveIcon = '".addslashes(AdminskinHelper::getAdminImage("icon_enabled", $strAltActive))."';
-                KAJONA.admin.ajax.setSystemStatusMessages.strInActiveIcon = '".addslashes(AdminskinHelper::getAdminImage("icon_disabled", $strAltInactive))."';
-
-            </script>";
+require(['ajax'], function(ajax){
+    ajax.setSystemStatusMessages.strActiveIcon = '".addslashes(AdminskinHelper::getAdminImage("icon_enabled", $strAltActive))."';
+    ajax.setSystemStatusMessages.strInActiveIcon = '".addslashes(AdminskinHelper::getAdminImage("icon_disabled", $strAltInactive))."';
+});
+</script>";
             Carrier::getInstance()->getObjSession()->setSession("statusButton", "true", Session::$intScopeRequest);
         }
 

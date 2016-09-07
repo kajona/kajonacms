@@ -273,11 +273,13 @@ Currently, there are two modes: with and without a description.
     </div>
 </div>
 <script type="text/javascript">
-    $("#kj_cb_batchActionSwitch").on('click', function() { KAJONA.admin.lists.toggleAllFields(); KAJONA.admin.lists.updateToolbar(); });
-    KAJONA.admin.lists.strConfirm = '[lang,commons_batchaction_confirm,pages]';
-    KAJONA.admin.lists.strDialogTitle = '[lang,commons_batchaction_title,pages]';
-    KAJONA.admin.lists.strDialogStart = '[lang,commons_start,pages]';
-    KAJONA.admin.lists.updateToolbar();
+    require(["jquery", "lists"], function($, lists) {
+        $("#kj_cb_batchActionSwitch").on('click', function() { lists.toggleAllFields(); lists.updateToolbar(); });
+        lists.strConfirm = '[lang,commons_batchaction_confirm,pages]';
+        lists.strDialogTitle = '[lang,commons_batchaction_title,pages]';
+        lists.strDialogStart = '[lang,commons_start,pages]';
+        lists.updateToolbar();
+    });
 </script>
 </batchactions_wrapper>
 
