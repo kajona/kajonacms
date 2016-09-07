@@ -8,9 +8,13 @@
     "qtip": "qtip2/jquery.qtip.min",
 
     "ajax": "kajona/ajax",
+    "cacheManager": "kajona/cacheManager",
     "changelog": "kajona/changelog",
     "desktopNotification": "kajona/desktopNotification",
     "forms": "kajona/forms",
+    "lang": "kajona/lang",
+    "lists": "kajona/lists",
+    "loader": "kajona/loader",
     "messaging": "kajona/messaging",
     "statusDisplay": "kajona/statusDisplay",
     "toc": "kajona/toc",
