@@ -45,7 +45,49 @@ define(['jquery', 'bootstrap', 'jqueryui', 'workingIndicator', 'tooltip', 'statu
 
     };
 
-    var kajonaScroll = null;
+    var msg = {
+
+        bitFirstLoad : true,
+
+        properties: null,
+
+        pollMessages : function() {
+            var me = this;
+            messaging.getRecentMessages(function (objResponse) {
+                var $userNotificationsCount = $('#userNotificationsCount');
+                var oldCount = $userNotificationsCount.text();
+                $userNotificationsCount.text(objResponse.messageCount);
+                if (objResponse.messageCount > 0) {
+                    $userNotificationsCount.show();
+                    if (oldCount != objResponse.messageCount) {
+                        var strTitle = document.title.replace("(" + oldCount + ")", "");
+                        document.title = "(" + objResponse.messageCount + ") " + strTitle;
+
+                        //if (!KAJONA.v4skin.messaging.bitFirstLoad && oldCount < objResponse.messageCount) {
+                        //    KAJONA.util.desktopNotification.showMessage(KAJONA.v4skin.properties.messaging.notification_title, KAJONA.v4skin.properties.messaging.notification_body, function () {
+                        //        document.location.href = KAJONA_WEBPATH+'/index.php?admin=1&module=messaging';
+                        //    });
+                        //}
+                    }
+
+                } else {
+                    $userNotificationsCount.hide();
+                }
+
+                $('#messagingShortlist').empty();
+                $.each(objResponse.messages, function (index, item) {
+                    if (item.unread == 0)
+                        $('#messagingShortlist').append("<li><a href='" + item.details + "'><i class='fa fa-envelope'></i> <b>" + item.title + "</b></a></li>");
+                    else
+                        $('#messagingShortlist').append("<li><a href='" + item.details + "'><i class='fa fa-envelope'></i> " + item.title + "</a></li>");
+                });
+                $('#messagingShortlist').append("<li class='divider'></li><li><a href='"+KAJONA_WEBPATH+"/index.php?admin=1&module=messaging'><i class='fa fa-envelope'></i> " + msg.properties.show_all + "</a></li>");
+
+                window.setTimeout(msg.pollMessages, 20000);
+                messaging.bitFirstLoad = false;
+            });
+        }
+    };
 
     $.widget('custom.catcomplete', $.ui.autocomplete, {
         _renderMenu: function(ul, items) {
@@ -217,49 +259,7 @@ define(['jquery', 'bootstrap', 'jqueryui', 'workingIndicator', 'tooltip', 'statu
             }
         },
 
-        messaging : {
-
-            bitFirstLoad : true,
-
-            properties: null,
-
-            pollMessages : function() {
-                var me = this;
-                messaging.getRecentMessages(function (objResponse) {
-                    var $userNotificationsCount = $('#userNotificationsCount');
-                    var oldCount = $userNotificationsCount.text();
-                    $userNotificationsCount.text(objResponse.messageCount);
-                    if (objResponse.messageCount > 0) {
-                        $userNotificationsCount.show();
-                        if (oldCount != objResponse.messageCount) {
-                            var strTitle = document.title.replace("(" + oldCount + ")", "");
-                            document.title = "(" + objResponse.messageCount + ") " + strTitle;
-
-                            //if (!KAJONA.v4skin.messaging.bitFirstLoad && oldCount < objResponse.messageCount) {
-                            //    KAJONA.util.desktopNotification.showMessage(KAJONA.v4skin.properties.messaging.notification_title, KAJONA.v4skin.properties.messaging.notification_body, function () {
-                            //        document.location.href = KAJONA_WEBPATH+'/index.php?admin=1&module=messaging';
-                            //    });
-                            //}
-                        }
-
-                    } else {
-                        $userNotificationsCount.hide();
-                    }
-
-                    $('#messagingShortlist').empty();
-                    $.each(objResponse.messages, function (index, item) {
-                        if (item.unread == 0)
-                            $('#messagingShortlist').append("<li><a href='" + item.details + "'><i class='fa fa-envelope'></i> <b>" + item.title + "</b></a></li>");
-                        else
-                            $('#messagingShortlist').append("<li><a href='" + item.details + "'><i class='fa fa-envelope'></i> " + item.title + "</a></li>");
-                    });
-                    $('#messagingShortlist').append("<li class='divider'></li><li><a href='"+KAJONA_WEBPATH+"/index.php?admin=1&module=messaging'><i class='fa fa-envelope'></i> " + me.properties.show_all + "</a></li>");
-
-                    window.setTimeout("KAJONA.v4skin.messaging.pollMessages()", 20000);
-                    messaging.bitFirstLoad = false;
-                });
-            }
-        },
+        messaging: msg,
 
         breadcrumb: breadcrumb,
 
@@ -270,7 +270,7 @@ define(['jquery', 'bootstrap', 'jqueryui', 'workingIndicator', 'tooltip', 'statu
                     $.each($.parseJSON(data), function(index, item) {
                         $('#tagsSubemenu').append("<li><a href='"+item.url+"'><i class='fa fa-tag'></i> "+item.name+"</a></li>");
                     });
-                    $('#tagsSubemenu').append("<li class='divider'></li><li><a href='"+KAJONA_WEBPATH+"/index.php?admin=1&module=tags'><i class='fa fa-tag'></i> "+me.properties.tags.show_all+"</a></li>")
+                    $('#tagsSubemenu').append("<li class='divider'></li><li><a href='"+KAJONA_WEBPATH+"/index.php?admin=1&module=tags'><i class='fa fa-tag'></i> "+msg.properties.show_all+"</a></li>")
                 }
             });
         },
