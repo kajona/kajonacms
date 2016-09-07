@@ -1,19 +1,26 @@
 {
-  "jquery": "jquery/jquery.min",
-  "jqueryui": "jqueryui/jquery-ui.custom.min",
-  "d3": "d3/d3.min",
-  "jstree": "jstree3/dist/jstree.min",
-  "moment": "moment/moment.min",
-  "qtip": "qtip2/jquery.qtip.min",
+  "paths": {
+    "jquery": "jquery/jquery.min",
+    "jqueryui": "jqueryui/jquery-ui.custom.min",
+    "d3": "d3/d3.min",
+    "jstree": "jstree3/dist/jstree.min",
+    "moment": "moment/moment.min",
+    "qtip": "qtip2/jquery.qtip.min",
 
-  "ajax": "kajona/ajax",
-  "changelog": "kajona/changelog",
-  "desktopNotification": "kajona/desktopNotification",
-  "forms": "kajona/forms",
-  "messaging": "kajona/messaging",
-  "statusDisplay": "kajona/statusDisplay",
-  "toc": "kajona/toc",
-  "tooltip": "kajona/tooltip",
-  "util": "kajona/util",
-  "workingIndicator": "kajona/workingIndicator"
+    "ajax": "kajona/ajax",
+    "changelog": "kajona/changelog",
+    "desktopNotification": "kajona/desktopNotification",
+    "forms": "kajona/forms",
+    "messaging": "kajona/messaging",
+    "statusDisplay": "kajona/statusDisplay",
+    "toc": "kajona/toc",
+    "tooltip": "kajona/tooltip",
+    "util": "kajona/util",
+    "workingIndicator": "kajona/workingIndicator"
+  },
+  "shim": {
+    "jqueryui" : {
+      "deps": ["jquery"]
+    }
+  }
 }
