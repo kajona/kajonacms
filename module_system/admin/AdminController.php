@@ -224,6 +224,24 @@ abstract class AdminController extends AbstractController
         $this->arrOutput["head"] = "<script type=\"text/javascript\">KAJONA_DEBUG = ".$this->objConfig->getDebug("debuglevel")."; KAJONA_WEBPATH = '"._webpath_."'; KAJONA_BROWSER_CACHEBUSTER = ".SystemSetting::getConfigValue("_system_browser_cachebuster_")."; KAJONA_LANGUAGE = '".Carrier::getInstance()->getObjLang()->getStrTextLanguage()."';</script>";
         $this->arrOutput["head"] .= "<script type=\"text/javascript\">KAJONA_PHARMAP = ".json_encode(array_values(Classloader::getInstance()->getArrPharModules())).";</script>";
 
+        $arrFolders = Resourceloader::getInstance()->getFolderContent("/admin/scripts", array(".json"), false, function($strFile){
+            return $strFile == "provides.json";
+        });
+
+        $arrJsMap = array();
+        foreach ($arrFolders as $strFile => $strFileName) {
+            $strBasePath = substr($strFile, strlen(_realpath_));
+            $strBasePath = substr($strBasePath, 0, strlen("provides.json") * -1);
+            $arrProvidesJs = json_decode(file_get_contents($strFile), true);
+            foreach ($arrProvidesJs as $strUniqueName => $strPath) {
+                $arrJsMap[$strUniqueName] = $strBasePath . $strPath;
+            }
+        }
+
+        // @TODO we could cache the js map
+
+        $this->arrOutput["requirejs_map"] = json_encode($arrJsMap);
+
         //see if there are any hooks to be called
         $this->onRenderOutput($this->arrOutput);
 

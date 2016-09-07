@@ -1,0 +1,11 @@
+{
+  "bootstrap": "bootstrap/bootstrap.min",
+  "bootstrap-datepicker": "bootstrap/bootstrap-datepicker",
+  "bootstrap-switch": "bootstrap/bootstrap-switch.min",
+  "html5": "html5/html5",
+  "jquery-floatThread": "jquery/jquery.floatThead.min",
+  "jquery-touchPunch": "jquery/jquery.ui.touch-punch.min",
+
+  "dialog": "kajona/dialog",
+  "v4skin": "kajona/v4skin"
+}

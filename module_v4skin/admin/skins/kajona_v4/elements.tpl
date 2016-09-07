@@ -1210,30 +1210,31 @@ Part to display the login status, user is logged in
     </ul>
 </div>
 <script type="text/javascript">
+    require(['jquery', 'v4skin'], function($, v4skin){
+        if(%%renderMessages%%) {
+            $(function() {
+                v4skin.messaging.properties = {
+                    notification_title : '[lang,messaging_notification_title,messaging]',
+                    notification_body : '[lang,messaging_notification_body,messaging]',
+                    show_all : '[lang,action_show_all,messaging]'
+                };
+                v4skin.messaging.pollMessages()
+            });
+        }
+        else {
+            $('#messagingShortlist').closest("li").hide();
+        }
 
-    if(%%renderMessages%%) {
-        $(function() {
-            KAJONA.v4skin.properties.messaging = {
-                notification_title : '[lang,messaging_notification_title,messaging]',
-                notification_body : '[lang,messaging_notification_body,messaging]',
-                show_all : '[lang,action_show_all,messaging]'
-            };
-            KAJONA.v4skin.messaging.pollMessages()
-        });
-    }
-    else {
-        $('#messagingShortlist').closest("li").hide();
-    }
-
-    if(%%renderTags%%) {
-        $(function() {
-            KAJONA.v4skin.properties.tags.show_all = '[lang,action_show_all,tags]';
-            KAJONA.v4skin.initTagMenu();
-        });
-    }
-    else {
-        $('#tagsSubemenu').closest("li").hide();
-    }
+        if(%%renderTags%%) {
+            $(function() {
+                v4skin.properties.tags.show_all = '[lang,action_show_all,tags]';
+                v4skin.initTagMenu();
+            });
+        }
+        else {
+            $('#tagsSubemenu').closest("li").hide();
+        }
+    });
 </script>
 </logout_form>
 
@@ -1523,8 +1524,8 @@ The language switch surrounds the buttons
 -- QUICK HELP -------------------------------------------------------------------------------------------
 
 <quickhelp>
-    <script>
-        $(function () {
+    <script type="text/javascript">
+        require(['jquery', 'bootstrap'], function() {
             $('#quickhelp').popover({
                 title: '%%title%%',
                 content: '%%text%%',
@@ -1799,8 +1800,10 @@ It containes a list of aspects and provides the possibility to switch the differ
         </ul>
     </div>
     <script type="text/javascript">
-        $('.dropdown-menu .dropdown-submenu a').click(function (e) {
-            e.stopPropagation();
+        require(['jquery'], function($) {
+            $('.dropdown-menu .dropdown-submenu a').click(function (e) {
+                e.stopPropagation();
+            });
         });
     </script>
 </contextmenu_wrapper>

@@ -15,11 +15,19 @@
     <script src="_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/less/less.min.js"></script>
     <!-- KAJONA_BUILD_LESS_END -->
 
-    <script src="_webpath_/[webpath,module_system]/admin/scripts/jquery/jquery.min.js?_system_browser_cachebuster_"></script>
-    <script src="_webpath_/[webpath,module_system]/admin/scripts/jqueryui/jquery-ui.custom.min.js?_system_browser_cachebuster_"></script>
     %%head%%
-    <script src="_webpath_/[webpath,module_system]/system/scripts/loader.js?_system_browser_cachebuster_"></script>
-    <script src="_webpath_/[webpath,module_system]/admin/scripts/kajona.js?_system_browser_cachebuster_"></script>
+    <script type="text/javascript">var searchExtendText = '[lang,search_details,search]';</script>
+    <script type="text/javascript">
+        var require = {
+            baseUrl: "/agp-core/",
+            shim : {
+                "bootstrap" : { "deps": ["jquery"] },
+                "jqueryui" : { "deps": ["jquery"] }
+            },
+            paths: %%requirejs_map%%
+        };
+    </script>
+    <script data-main="core/module_system/admin/scripts/app" src="_webpath_/[webpath,module_system]/admin/scripts/requirejs/require.js"></script>
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -186,23 +194,6 @@
         </div>
     </div>
 </div>
-
-
-<script src="_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/js/jquery.ui.touch-punch.min.js?_system_browser_cachebuster_"></script>
-<script src="_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/js/bootstrap.min.js?_system_browser_cachebuster_"></script>
-
-<script type="text/javascript">var searchExtendText = '[lang,search_details,search]';</script>
-<script src="_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/js/v4skin.js?_system_browser_cachebuster_"></script>
-
-<script type="text/javascript">
-    KAJONA.admin.loader.loadFile("_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/js/kajona_dialog.js", function() {
-        KAJONA.admin.folderview.dialog = new KAJONA.admin.ModalDialog('folderviewDialog', 0);
-        jsDialog_0 = new KAJONA.admin.ModalDialog('jsDialog_0', 0);
-        jsDialog_1 = new KAJONA.admin.ModalDialog('jsDialog_1', 1);
-        jsDialog_2 = new KAJONA.admin.ModalDialog('jsDialog_2', 2);
-        jsDialog_3 = new KAJONA.admin.ModalDialog('jsDialog_3', 3);
-    }, true);
-</script>
 
 <div id="jsStatusBox" class="" style="display: none; position: absolute;"><div class="jsStatusBoxHeader">Status-Info</div><div id="jsStatusBoxContent" class="jsStatusBoxContent"></div></div>
 
