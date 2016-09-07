@@ -4,7 +4,7 @@
  * match the given selector. The text of the element gets used as link in the navigation. Sets also the fitting id to
  * each element.
  */
-define(['jquery'], function ($) {
+define(['jquery', 'util'], function ($, util) {
 
     return {
         render: function(selector){
@@ -28,7 +28,7 @@ define(['jquery'], function ($) {
                     var id = $(this).text().replace(/(?!\w)[\x00-\xC0]/g, "-");
                     var newId = id;
                     var intI = 0;
-                    while(KAJONA.util.inArray(newId, arrIdMap)) {
+                    while(util.inArray(newId, arrIdMap)) {
                         newId = id+"_"+(intI++);
                     }
 

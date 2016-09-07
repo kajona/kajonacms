@@ -1,6 +1,6 @@
 
 //common tooltips
-define(['jquery', 'qtip'], function (jq, qtip) {
+define(['jquery', 'qtip', 'tags'], function (jq, qtip, tags) {
     return {
         initTooltip : function() {
             $('*[rel=tooltip][title!=""]').qtip({
@@ -26,9 +26,7 @@ define(['jquery', 'qtip'], function (jq, qtip) {
                     },
                     events: {
                         render: function(event, api) {
-                            KAJONA.admin.loader.loadFile('/core/module_tags/admin/scripts/tags.js', function() {
-                                KAJONA.admin.tags.loadTagTooltipContent($(api.elements.content).find('div').data('systemid'), "", $(api.elements.content).find('div').attr('id'));
-                            })
+                            tags.loadTagTooltipContent($(api.elements.content).find('div').data('systemid'), "", $(api.elements.content).find('div').attr('id'));
                         }
                     }
                 });

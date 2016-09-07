@@ -71,6 +71,7 @@ define(['jquery', 'statusDisplay', 'workingIndicator', 'tooltip'], function ($, 
         },
 
         setSystemStatus : function(strSystemIdToSet, bitReload) {
+            var me = this;
             var objCallback = function(data, status, jqXHR) {
                 if(status == 'success') {
                     statusDisplay.displayXMLMessage(data);
@@ -88,10 +89,10 @@ define(['jquery', 'statusDisplay', 'workingIndicator', 'tooltip'], function ($, 
                         }
 
                         if (newStatus == 0) {
-                            link.html(KAJONA.admin.ajax.setSystemStatusMessages.strInActiveIcon);
+                            link.html(me.setSystemStatusMessages.strInActiveIcon);
                             adminListRow.addClass('disabled');
                         } else {
-                            link.html(KAJONA.admin.ajax.setSystemStatusMessages.strActiveIcon);
+                            link.html(me.setSystemStatusMessages.strActiveIcon);
                             adminListRow.removeClass('disabled');
                         }
 
