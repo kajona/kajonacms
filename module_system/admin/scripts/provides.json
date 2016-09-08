@@ -2,6 +2,8 @@
   "paths": {
     "jquery": "jquery/jquery.min",
     "jqueryui": "jqueryui/jquery-ui.custom.min",
+    "jquerycaret": "jquerytag/jquery.caret.min",
+    "jquerytageditor": "jquerytag/jquery.tag-editor.min",
     "d3": "d3/d3.min",
     "jstree": "jstree3/dist/jstree.min",
     "moment": "moment/moment.min",
@@ -19,11 +21,21 @@
     "statusDisplay": "kajona/statusDisplay",
     "toc": "kajona/toc",
     "tooltip": "kajona/tooltip",
+    "tree": "kajona/tree",
     "util": "kajona/util",
     "workingIndicator": "kajona/workingIndicator"
   },
   "shim": {
     "jqueryui" : {
+      "deps": ["jquery"]
+    },
+    "jquerycaret" : {
+      "deps": ["jquery"]
+    },
+    "jquerytageditor" : {
+      "deps": ["jquery", "jquerycaret"]
+    },
+    "jstree" : {
       "deps": ["jquery"]
     }
   }

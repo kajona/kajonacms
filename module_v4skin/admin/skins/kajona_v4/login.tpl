@@ -20,6 +20,7 @@
     <script type="text/javascript">
         var require = %%requirejs_conf%%;
     </script>
+    <script data-main="core/module_system/admin/scripts/app" src="_webpath_/[webpath,module_system]/admin/scripts/requirejs/require.js"></script>
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -56,8 +57,5 @@
     document.getElementById('name').focus();
 </script>
 
-<script src="_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/js/jquery.ui.touch-punch.min.js?_system_browser_cachebuster_"></script>
-<script src="_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/js/bootstrap.min.js?_system_browser_cachebuster_"></script>
-<script src="_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/js/v4skin.js?_system_browser_cachebuster_"></script>
 </body>
 </html>

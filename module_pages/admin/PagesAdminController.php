@@ -841,10 +841,12 @@ class PagesAdminController extends AdminSimple implements AdminInterface
 
         //ticket #931: no hierarchical drag n drop for folders
         $strJS = <<<JS
-            $(function() {
-                $("table.admintable i.fa-folder-o").closest("tr").find("td.treedrag i").remove();
-                $("table.admintable i.fa-folder-o").closest("tr").find("td.treedrag").css("cursor", "auto");
-                $("table.admintable i.fa-folder-o").closest("tr").find("td.treedrag").removeClass("jstree-draggable");
+            require(["jquery"], function($){
+                $(function() {
+                    $("table.admintable i.fa-folder-o").closest("tr").find("td.treedrag i").remove();
+                    $("table.admintable i.fa-folder-o").closest("tr").find("td.treedrag").css("cursor", "auto");
+                    $("table.admintable i.fa-folder-o").closest("tr").find("td.treedrag").removeClass("jstree-draggable");
+                });
             });
 JS;
 

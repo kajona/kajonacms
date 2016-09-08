@@ -2376,7 +2376,9 @@ HTML;
     {
         $strReturn = "
             <script type=\"text/javascript\">
-                KAJONA.util.setBrowserFocus(\"".$strElementId."\");
+                require([\"util\"], function(util){
+                    util.setBrowserFocus(\"".$strElementId."\");
+                });
             </script>";
         return $strReturn;
     }

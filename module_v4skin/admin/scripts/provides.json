@@ -2,6 +2,8 @@
   "paths": {
     "bootstrap": "bootstrap/bootstrap.min",
     "bootstrap-datepicker": "bootstrap/bootstrap-datepicker",
+    "bootstrap-datepicker-de": "bootstrap/locales/bootstrap-datepicker.de",
+    "bootstrap-datepicker-en": "bootstrap/locales/bootstrap-datepicker.en",
     "bootstrap-switch": "bootstrap/bootstrap-switch.min",
     "html5": "html5/html5",
     "jquery-floatThread": "jquery/jquery.floatThead.min",
@@ -19,6 +21,18 @@
     },
     "jquery-touchPunch" : {
       "deps": ["jqueryui"]
+    },
+    "bootstrap-switch" : {
+      "deps": ["bootstrap"]
+    },
+    "bootstrap-datepicker" : {
+      "deps": ["bootstrap"]
+    },
+    "bootstrap-datepicker-de" : {
+      "deps": ["bootstrap-datepicker"]
+    },
+    "bootstrap-datepicker-en" : {
+      "deps": ["bootstrap-datepicker"]
     }
   }
 }

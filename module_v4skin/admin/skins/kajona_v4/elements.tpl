@@ -23,32 +23,34 @@ templates!
     </ul>
 </div>
 <script type="text/javascript">
-$(function() {
-    $('.grid > ul.sortable').sortable( {
-        items: 'li[data-systemid!=""]',
-        handle: 'div.thumbnail',
-        cursor: 'move',
-        start: function(event, ui) {
-            oldPos = ui.item.index()
-        },
-        stop: function(event, ui) {
-            if(oldPos != ui.item.index()) {
+require(["jquery", "ajax", "util"], function($, ajax, util) {
+    $(function() {
+        $('.grid > ul.sortable').sortable( {
+            items: 'li[data-systemid!=""]',
+            handle: 'div.thumbnail',
+            cursor: 'move',
+            start: function(event, ui) {
+                oldPos = ui.item.index()
+            },
+            stop: function(event, ui) {
+                if(oldPos != ui.item.index()) {
 
-                //calc the page-offset
-                var intCurPage = $(this).parent(".grid").attr("data-kajona-pagenum");
-                var intElementsPerPage = $(this).parent(".grid").attr("data-kajona-elementsperpage");
+                    //calc the page-offset
+                    var intCurPage = $(this).parent(".grid").attr("data-kajona-pagenum");
+                    var intElementsPerPage = $(this).parent(".grid").attr("data-kajona-elementsperpage");
 
-                var intPagingOffset = 0;
-                if(intCurPage > 1 && intElementsPerPage > 0)
-                    intPagingOffset = (intCurPage*intElementsPerPage)-intElementsPerPage;
+                    var intPagingOffset = 0;
+                    if(intCurPage > 1 && intElementsPerPage > 0)
+                        intPagingOffset = (intCurPage*intElementsPerPage)-intElementsPerPage;
 
-                KAJONA.admin.ajax.setAbsolutePosition(ui.item.data('systemid'), ui.item.index()+1+intPagingOffset);
-            }
-            oldPos = 0;
-        },
-        delay: KAJONA.util.isTouchDevice() ? 500 : 0
+                    ajax.setAbsolutePosition(ui.item.data('systemid'), ui.item.index()+1+intPagingOffset);
+                }
+                oldPos = 0;
+            },
+            delay: util.isTouchDevice() ? 500 : 0
+        });
+        $('.grid > ul.sortable > li[data-systemid!=""] > div.thumbnail ').css("cursor", "move");
     });
-    $('.grid > ul.sortable > li[data-systemid!=""] > div.thumbnail ').css("cursor", "move");
 });
 </script>
 </grid_footer>
@@ -83,6 +85,7 @@ background using the ajaxHelper.
 Loads the script-helper and adds the table to the drag-n-dropable tables getting parsed later
 <dragable_list_header>
 <script type="text/javascript">
+require(["jquery", "jqueryui", "ajax", "statusDisplay", "tooltip", "util"], function($, jqueryui, ajax, statusDisplay, tooltip, util) {
     $(function() {
 
         var bitMoveToTree = false;
@@ -100,12 +103,12 @@ Loads the script-helper and adds the table to the drag-n-dropable tables getting
                 var intElementsPerPage = $("#%%listid%%").attr("data-kajona-elementsperpage");
 
                 if(intCurPage > 1) {
-                    KAJONA.admin.ajax.setAbsolutePosition(ui.item.find('tr').data('systemid'), (intElementsPerPage*(intCurPage-1)), null, function(data, status, jqXHR) {
+                    ajax.setAbsolutePosition(ui.item.find('tr').data('systemid'), (intElementsPerPage*(intCurPage-1)), null, function(data, status, jqXHR) {
                         if(status == 'success') {
                             location.reload();
                         }
                         else {
-                            KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b>")
+                            statusDisplay.messageError("<b>Request failed!</b>")
                         }
                     }, '%%targetModule%%');
                 }
@@ -126,12 +129,12 @@ Loads the script-helper and adds the table to the drag-n-dropable tables getting
                 var intOnPage = $('#%%listid%% tbody:has(tr[data-systemid!=""])').length + 1;
 
                 if(intOnPage == intElementsPerPage) {
-                    KAJONA.admin.ajax.setAbsolutePosition(ui.item.find('tr').data('systemid'), (intElementsPerPage*intCurPage+1), null, function(data, status, jqXHR) {
+                    ajax.setAbsolutePosition(ui.item.find('tr').data('systemid'), (intElementsPerPage*intCurPage+1), null, function(data, status, jqXHR) {
                         if(status == 'success') {
                             location.reload();
                         }
                         else {
-                            KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b>")
+                            statusDisplay.messageError("<b>Request failed!</b>")
                         }
                     }, '%%targetModule%%');
                 }
@@ -178,25 +181,26 @@ Loads the script-helper and adds the table to the drag-n-dropable tables getting
                     if(intCurPage > 1 && intElementsPerPage > 0)
                         intPagingOffset = (intCurPage*intElementsPerPage)-intElementsPerPage;
 
-                    KAJONA.admin.ajax.setAbsolutePosition(ui.item.find('tr').data('systemid'), ui.item.index()+intOffset+intPagingOffset, null, null, '%%targetModule%%');
+                    ajax.setAbsolutePosition(ui.item.find('tr').data('systemid'), ui.item.index()+intOffset+intPagingOffset, null, null, '%%targetModule%%');
                 }
                 oldPos = 0;
                 $('div.divPageTarget').css("display", "none");
             },
-            delay: KAJONA.util.isTouchDevice() ? 500 : 0
+            delay: util.isTouchDevice() ? 500 : 0
         });
 
         $('#%%listid%% > tbody:has(tr[data-systemid!=""][data-deleted=""]) > tr').each(function(index) {
             $(this).find("td.listsorthandle").css('cursor', 'move').append("<i class='fa fa-arrows-v'></i>");
-            KAJONA.admin.tooltip.addTooltip($(this).find("td.listsorthandle"), "[lang,commons_sort_vertical,system]");
+            tooltip.addTooltip($(this).find("td.listsorthandle"), "[lang,commons_sort_vertical,system]");
 
             if(bitMoveToTree) {
                 $(this).find("td.treedrag").css('cursor', 'move')
-                        .addClass("jstree-listdraggable").append("<i class='fa fa-arrows-h' data-systemid='"+$(this).data("systemid")+"'></i>");
-                KAJONA.admin.tooltip.addTooltip($(this).find("td.treedrag"), "[lang,commons_sort_totree,system]");
+                    .addClass("jstree-listdraggable").append("<i class='fa fa-arrows-h' data-systemid='"+$(this).data("systemid")+"'></i>");
+                tooltip.addTooltip($(this).find("td.treedrag"), "[lang,commons_sort_totree,system]");
             }
         });
     });
+});
 </script>
 <style>.group_move_placeholder { display: table-row; } </style>
 
@@ -305,7 +309,7 @@ data list footer. at the bottom of the datatable
 <datalist_footer>
     </table>
     <script type="text/javascript">
-        KAJONA.admin.loader.loadFile("/core/module_v4skin/admin/skins/kajona_v4/js/jquery.floatThead.min.js", function() {
+        require(["jquery-floatThread"], function() {
             $('table.kajona-data-table:not(.kajona-data-table-ignore-floatthread)').floatThead({
                 scrollingTop: $("body.dialogBody").size() > 0 ? 0 : 70,
                 useAbsolutePositioning: true
@@ -365,7 +369,15 @@ To avoid side-effects, no line-break in this case -> not needed by default, but 
 
 <form_start>
 <form name="%%name%%" id="%%name%%" method="%%method%%" action="%%action%%" enctype="%%enctype%%" onsubmit="%%onsubmit%%" class="form-horizontal">
-    <script type="text/javascript">$(function() { KAJONA.admin.forms.initForm('%%name%%');  KAJONA.admin.forms.changeLabel = '[lang,commons_form_entry_changed,system]';   KAJONA.admin.forms.changeConfirmation = '[lang,commons_form_entry_changed_conf,system]'; } );</script>
+    <script type="text/javascript">
+        require(["forms"], function(forms) {
+            $(function() {
+                forms.initForm('%%name%%');
+                forms.changeLabel = '[lang,commons_form_entry_changed,system]';
+                forms.changeConfirmation = '[lang,commons_form_entry_changed_conf,system]';
+            });
+        });
+    </script>
 </form_start>
 
 <form_close>
@@ -476,7 +488,7 @@ Checkbox
 Toggle_On_Off (using bootstrap-switch.org)
 <input_on_off_switch>
     <script type="text/javascript">
-        KAJONA.admin.loader.loadFile("/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-switch.min.js", function() {
+        require(["bootstrap-switch"], function(){
             window.setTimeout(function() {
                 var divId = '%%name%%';
                 divId = '#' + divId.replace( /(:|\.|\[|\])/g, "\\$1" );
@@ -743,25 +755,19 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
                 <input id="%%calendarId%%" name="%%calendarId%%" class="form-control %%class%%" size="16" type="text" value="%%valuePlain%%" %%readonly%%>
             </div>
             <script>
-                KAJONA.admin.loader.loadFile(["/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-datepicker.js"], function() {
-                    var arrSecondFiles = ["/core/module_v4skin/admin/skins/kajona_v4/js/locales/bootstrap-datepicker.%%calendarLang%%.js"];
-                    if('%%calendarLang%%' == 'en')
-                        arrSecondFiles = [];
-                    KAJONA.admin.loader.loadFile(arrSecondFiles, function() {
-                        $('#%%calendarId%%').datepicker({
-                            format: KAJONA.util.transformDateFormat('%%dateFormat%%', "bootstrap-datepicker"),
-                            weekStart: 1,
-                            autoclose: true,
-                            language: '%%calendarLang%%',
-                            todayHighlight: true
-                        });
-
-                        if($('#%%calendarId%%').is(':focus')) {
-                            $('#%%calendarId%%').blur();
-                            $('#%%calendarId%%').focus();
-                        }
-
+                require(["bootstrap-datepicker-%%calendarLang%%", "util"], function(datepicker, util){
+                    $('#%%calendarId%%').datepicker({
+                        format: util.transformDateFormat('%%dateFormat%%', "bootstrap-datepicker"),
+                        weekStart: 1,
+                        autoclose: true,
+                        language: '%%calendarLang%%',
+                        todayHighlight: true
                     });
+
+                    if($('#%%calendarId%%').is(':focus')) {
+                        $('#%%calendarId%%').blur();
+                        $('#%%calendarId%%').focus();
+                    }
                 });
             </script>
         </div>
@@ -793,22 +799,19 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
         <div class="col-sm-1">
         </div>
         <script>
-            KAJONA.admin.loader.loadFile(["/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-datepicker.js"], function() {
-                KAJONA.admin.loader.loadFile(["/core/module_v4skin/admin/skins/kajona_v4/js/locales/bootstrap-datepicker.%%calendarLang%%.js"], function() {
-                    $('#%%calendarId%%').datepicker({
-                        format: KAJONA.util.transformDateFormat('%%dateFormat%%', "bootstrap-datepicker"),
-                        weekStart: 1,
-                        autoclose: true,
-                        language: '%%calendarLang%%',
-                        todayHighlight: true
-                    });
-
-                    if($('#%%calendarId%%').is(':focus')) {
-                        $('#%%calendarId%%').blur();
-                        $('#%%calendarId%%').focus();
-                    }
-
+            require(["bootstrap-datepicker-%%calendarLang%%", "util"], function(datepicker, util){
+                $('#%%calendarId%%').datepicker({
+                    format: util.transformDateFormat('%%dateFormat%%', "bootstrap-datepicker"),
+                    weekStart: 1,
+                    autoclose: true,
+                    language: '%%calendarLang%%',
+                    todayHighlight: true
                 });
+
+                if($('#%%calendarId%%').is(':focus')) {
+                    $('#%%calendarId%%').blur();
+                    $('#%%calendarId%%').focus();
+                }
             });
         </script>
     </div>
@@ -860,14 +863,11 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
         </div>
     </div>
     <script type="text/javascript">
-        KAJONA.admin.loader.loadFile(["/core/module_system/admin/scripts/jquerytag/jquery.caret.min.js"], function(){
-            KAJONA.admin.loader.loadFile("/core/module_system/admin/scripts/jquerytag/jquery.tag-editor.min.js", function(){
-                $("#%%name%%").tagEditor({
-                    initialTags: %%values%%,
-                    forceLowercase: false,
-                    onChange: %%onChange%%
-                });
-            });
+        require(["jquerytageditor"], function(){
+            $("#%%name%%").tagEditor({
+                initialTags: %%values%%,
+                forceLowercase: false,
+                onChange: %%onChange%%
         });
     </script>
 </input_tageditor>
@@ -882,67 +882,66 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
         </div>
     </div>
     <script type="text/javascript">
-        KAJONA.admin.loader.loadFile(["/core/module_system/admin/scripts/jquerytag/jquery.caret.min.js"], function(){
-            KAJONA.admin.loader.loadFile("/core/module_system/admin/scripts/jquerytag/jquery.tag-editor.min.js", function(){
-                var objConfig = new KAJONA.v4skin.defaultAutoComplete();
+        require(["jquery", "jquerytageditor", "v4skin"], function($, tagEditor, v4skin){
+            var objConfig = new v4skin.defaultAutoComplete();
 
-                objConfig.search = function(event, ui) {
-                    if (event.target.value.length < 2) {
-                        event.stopPropagation();
-                        return false;
+            objConfig.search = function(event, ui) {
+                if (event.target.value.length < 2) {
+                    event.stopPropagation();
+                    return false;
+                }
+                $(this).closest('ul.tag-editor').parent().find('.loading-feedback').html('<i class="fa fa-spinner fa-spin"></i>');
+            };
+            objConfig.response = function(event, ui) {
+                $(this).closest('ul.tag-editor').parent().find('.loading-feedback').html('');
+            };
+            objConfig.select = function(event, ui) {
+                var found = false;
+                $("#%%name%%-list").find('input').each(function(){
+                    if ($(this).val() == ui.item.systemid) {
+                        found = true;
                     }
-                    $(this).closest('ul.tag-editor').parent().find('.loading-feedback').html('<i class="fa fa-spinner fa-spin"></i>');
+                });
+                if (!found) {
+                    $("#%%name%%-list").append('<input type="hidden" name="%%name%%_id[]" value="' + ui.item.systemid + '" data-title="' + ui.item.title + '" />');
+                }
+            };
+            objConfig.create = function(event, ui) {
+                $(this).data('ui-autocomplete')._renderItem = function(ul, item){
+                    return $('<li></li>')
+                        .data('ui-autocomplete-item', item)
+                        .append('<a class=\'ui-autocomplete-item\'>' + item.icon + item.title + '</a>')
+                        .appendTo(ul);
                 };
-                objConfig.response = function(event, ui) {
-                    $(this).closest('ul.tag-editor').parent().find('.loading-feedback').html('');
-                };
-                objConfig.select = function(event, ui) {
-                    var found = false;
-                    $("#%%name%%-list").find('input').each(function(){
-                        if ($(this).val() == ui.item.systemid) {
-                            found = true;
-                        }
-                    });
-                    if (!found) {
-                        $("#%%name%%-list").append('<input type="hidden" name="%%name%%_id[]" value="' + ui.item.systemid + '" data-title="' + ui.item.title + '" />');
-                    }
-                };
-                objConfig.create = function(event, ui) {
-                    $(this).data('ui-autocomplete')._renderItem = function(ul, item){
-                        return $('<li></li>')
-                                .data('ui-autocomplete-item', item)
-                                .append('<a class=\'ui-autocomplete-item\'>' + item.icon + item.title + '</a>')
-                                .appendTo(ul);
-                    };
-                };
+            };
 
-                objConfig.source = function(request, response) {
-                    $.ajax({
-                        url: '%%source%%',
-                        type: 'POST',
-                        dataType: 'json',
-                        data: {
-                            filter: request.term
-                        },
-                        success: function(resp) {
-                            if (resp) {
-                                // replace commas
-                                for (var i = 0; i < resp.length; i++) {
-                                    resp[i].title = resp[i].title.replace(/\,/g, '');
-                                    resp[i].value = resp[i].value.replace(/\,/g, '');
-                                }
+            objConfig.source = function(request, response) {
+                $.ajax({
+                    url: '%%source%%',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        filter: request.term
+                    },
+                    success: function(resp) {
+                        if (resp) {
+                            // replace commas
+                            for (var i = 0; i < resp.length; i++) {
+                                resp[i].title = resp[i].title.replace(/\,/g, '');
+                                resp[i].value = resp[i].value.replace(/\,/g, '');
                             }
-                            response.call(this, resp);
                         }
-                    });
-                };
+                        response.call(this, resp);
+                    }
+                });
+            };
 
-                var $objInput = $("#%%name%%");
-                $objInput.tagEditor({
-                            initialTags: %%values%%,
-                        forceLowercase: false,
-                        autocomplete: objConfig,
-                        beforeTagSave: function(field, editor, tags, tag, val){
+            var $objInput = $("#%%name%%");
+            $objInput.tagEditor({
+                initialTags: %%values%%,
+                forceLowercase: false,
+                autocomplete: objConfig,
+                beforeTagSave: function(field, editor, tags, tag, val){
                     var found = false;
                     $("#%%name%%-list").find('input').each(function(){
                         if ($(this).data('title') == val) {
@@ -961,12 +960,11 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
                     });
                 }
             });
-                $objInput.parent().find('ul.tag-editor').after("<span class='form-control-feedback loading-feedback' style='right: 15px;'><i class='fa fa-keyboard-o'></i></span>");
+            $objInput.parent().find('ul.tag-editor').after("<span class='form-control-feedback loading-feedback' style='right: 15px;'><i class='fa fa-keyboard-o'></i></span>");
 
-                if($objInput.hasClass('mandatoryFormElement')) {
-                    $objInput.parent().find('ul.tag-editor').addClass('mandatoryFormElement');
-                }
-            });
+            if($objInput.hasClass('mandatoryFormElement')) {
+                $objInput.parent().find('ul.tag-editor').addClass('mandatoryFormElement');
+            }
         });
     </script>
 </input_objecttags>
@@ -1068,9 +1066,11 @@ A list of checkbox for object elements
     </div>
 
     <script type='text/javascript'>
-        $("input:checkbox[name='checkAll_%%name%%']").on('change', function() {
-            var checkBoxes = $("input:checkbox[name^='%%name%%']");
-            checkBoxes.prop('checked', $("input:checkbox[name='checkAll_%%name%%']").prop('checked'));
+        require(["jquery"], function($) {
+            $("input:checkbox[name='checkAll_%%name%%']").on('change', function() {
+                var checkBoxes = $("input:checkbox[name^='%%name%%']");
+                checkBoxes.prop('checked', $("input:checkbox[name='checkAll_%%name%%']").prop('checked'));
+            });
         });
     </script>
 </input_checkboxarrayobjectlist>
@@ -1117,23 +1117,25 @@ A fieldset to structure logical sections
     <iframe src="%%iframesrc%%" id="%%iframeid%%" class="seamless" width="100%" height="100%" frameborder="0" seamless ></iframe>
 
     <script type='text/javascript'>
-        $(document).ready(function(){
-            var frame = $('iframe#%%iframeid%%');
-            frame.load(function() {
-                $('.tab-content.fullHeight iframe').each(function() {
+        require(["jquery"], function($) {
+            $(document).ready(function(){
+                var frame = $('iframe#%%iframeid%%');
+                frame.load(function() {
+                    $('.tab-content.fullHeight iframe').each(function() {
 
-                    var frame = document.getElementById('%%iframeid%%');
-                    innerDoc = (frame.contentDocument) ?
-                        frame.contentDocument : frame.contentWindow.document;
+                        var frame = document.getElementById('%%iframeid%%');
+                        innerDoc = (frame.contentDocument) ?
+                            frame.contentDocument : frame.contentWindow.document;
 
-                    var intHeight = (innerDoc.body.scrollHeight + 10);
+                        var intHeight = (innerDoc.body.scrollHeight + 10);
 
-                    if($(this).height() < intHeight) {
-                        $(this).height(intHeight);
-                    }
+                        if($(this).height() < intHeight) {
+                            $(this).height(intHeight);
+                        }
+                    });
                 });
-            });
 
+            });
         });
     </script>
 </iframe_container>
@@ -1176,9 +1178,11 @@ Needed Elements: %%error%%, %%form%%
 	if (navigator.cookieEnabled == false) {
 	    document.getElementById("loginError").innerHTML = "%%loginCookiesInfo%%";
 	}
-    if($('#loginError > p').html() == "")
-        $('#loginError').remove();
-
+    require(["jquery"], function($) {
+        if ($('#loginError > p').html() == "") {
+            $('#loginError').remove();
+        }
+    });
 </script>
 <noscript><div class="alert alert-danger">%%loginJsInfo%%</div></noscript>
 </login_form>
@@ -1311,7 +1315,7 @@ The following sections specify the layout of the rights-mgmt
         %%rows%%
     </table>
     <script type="text/javascript">
-        KAJONA.admin.loader.loadFile("/core/module_v4skin/admin/skins/kajona_v4/js/jquery.floatThead.min.js", function() {
+        require(["jquery-floatThread"], function() {
             $('table.kajona-data-table').floatThead({
                 scrollingTop: $("body.dialogBody").size() > 0 ? 0 : 70,
                 useAbsolutePositioning: true
@@ -1632,16 +1636,13 @@ The language switch surrounds the buttons
 <tree>
     <div id="%%treeId%%" class="treeDiv"></div>
     <script type="text/javascript">
-        KAJONA.admin.loader.loadFile([
-            "/core/module_system/admin/scripts/jstree3/dist/jstree.min.js",
-            "/core/module_system/admin/scripts/jstree3/dist/themes/default/style.min.css",
-            "/core/module_system/admin/scripts/jstree3/kajonatree.js",
-            "/core/module_system/system/scripts/lang.js"
-        ], function() {
+        require(["tree", "loader"], function(tree, loader){
 
-            KAJONA.kajonatree.toggleInitial('%%treeId%%');
+            loader.loadCss("/core/module_system/admin/scripts/jstree3/dist/themes/default/style.min.css");
 
-            var jsTree = new KAJONA.kajonatree.jstree();
+            tree.toggleInitial('%%treeId%%');
+
+            var jsTree = new tree.jstree();
             jsTree.loadNodeDataUrl = "%%loadNodeDataUrl%%";
             jsTree.rootNodeSystemid = '%%rootNodeSystemid%%';
             jsTree.treeConfig = %%treeConfig%%;
@@ -1674,20 +1675,28 @@ otherwise the JavaScript will fail!
     <div id="tagsLoading_%%targetSystemid%%" class="loadingContainer"></div>
     <div id="tagsWrapper_%%targetSystemid%%"></div>
     <script type="text/javascript">
-        KAJONA.admin.loader.loadFile('/core/module_tags/admin/scripts/tags.js', function() {
-            KAJONA.admin.tags.reloadTagList('%%targetSystemid%%', '%%attribute%%');
+        require(["tags"], function($) {
+            tags.reloadTagList('%%targetSystemid%%', '%%attribute%%');
         });
     </script>
 </tags_wrapper>
 
 <tags_tag>
     <span class="label label-default">%%tagname%%</span>
-    <script type="text/javascript">KAJONA.admin.tooltip.addTooltip('#icon_%%strTagId%%');</script>
+    <script type="text/javascript">
+        require(["tooltip"], function(tooltip) {
+            tooltip.addTooltip('#icon_%%strTagId%%');
+        });
+    </script>
 </tags_tag>
 
 <tags_tag_delete>
     <span class="label label-default taglabel">%%tagname%% <a href="javascript:KAJONA.admin.tags.removeTag('%%strTagId%%', '%%strTargetSystemid%%', '%%strAttribute%%');"> %%strDelete%%</a> %%strFavorite%%</span>
-    <script type="text/javascript">KAJONA.admin.tooltip.addTooltip($(".taglabel [rel='tooltip']"));</script>
+    <script type="text/javascript">
+        require(["tooltip"], function(tooltip) {
+            tooltip.addTooltip($(".taglabel [rel='tooltip']"));
+        });
+    </script>
 </tags_tag_delete>
 
 
