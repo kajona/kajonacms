@@ -216,7 +216,7 @@ class SystemChangelogRenderer
 
             case FormentryDropdown::class:
             case "dropdown":
-                if (array_key_exists($strValue, $arrDDValues)) {
+                if (!empty($arrDDValues) && array_key_exists($strValue, $arrDDValues)) {
                     return $arrDDValues[$strValue];
                 } else {
                     return $strValue;
