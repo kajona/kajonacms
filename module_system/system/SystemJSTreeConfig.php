@@ -63,7 +63,7 @@ class SystemJSTreeConfig
     /**
      * @var null (@see contextmenu plugin from jstree)
      */
-    private $strContextMenuItemFunction = "function(o, cb){ return KAJONA.kajonatree.contextmenu.createDefaultContextMenu(o, cb);}";
+    private $strContextMenuItemFunction = "function(o, cb){ return tree.contextmenu.createDefaultContextMenu(o, cb);}";
 
     /**
      * SystemJSTreeConfig constructor.
