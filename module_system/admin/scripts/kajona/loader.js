@@ -8,15 +8,17 @@ define([], function () {
     return {
 
         loadCss: function(url){
-            var link = document.createElement("link");
-            link.type = "text/css";
-            link.rel = "stylesheet";
-            link.href = KAJONA_WEBPATH + url;
-            document.getElementsByTagName("head")[0].appendChild(link);
+            var absUrl = KAJONA_WEBPATH + url;
+
+            // check whether css was already loaded
+            if (!$("link[href='" + absUrl + "']").length) {
+                return;
+            }
+
+            // append to head
+            $('<link href="' + absUrl + '" type="text/css" rel="stylesheet">').appendTo("head");
         }
 
     };
 });
-
-
 
