@@ -15,7 +15,7 @@ use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
-use Kajona\Samplecontent\System\SamplecontentContentHelper;
+use Kajona\Pages\System\SamplecontentContentHelper;
 use Kajona\System\System\Database;
 use Kajona\System\System\SamplecontentInstallerInterface;
 

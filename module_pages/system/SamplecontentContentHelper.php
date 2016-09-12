@@ -5,13 +5,10 @@
 ********************************************************************************************************/
 
 
-namespace Kajona\Samplecontent\System;
+namespace Kajona\Pages\System;
 
 
 
-use Kajona\Pages\System\PagesElement;
-use Kajona\Pages\System\PagesPage;
-use Kajona\Pages\System\PagesPageelement;
 use Kajona\System\System\Exception;
 
 class SamplecontentContentHelper

@@ -10,9 +10,8 @@ namespace Kajona\Faqs\Installer;
 use Kajona\Faqs\Admin\Elements\ElementFaqsAdmin;
 use Kajona\Faqs\System\FaqsFaq;
 use Kajona\Pages\Admin\Elements\ElementPlaintextAdmin;
-use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
-use Kajona\Samplecontent\System\SamplecontentContentHelper;
+use Kajona\Pages\System\SamplecontentContentHelper;
 use Kajona\System\System\SamplecontentInstallerInterface;
 
 /**
