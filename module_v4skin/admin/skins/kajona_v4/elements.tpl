@@ -1063,6 +1063,9 @@ A list of checkbox for object elements
                 </label>
             </div>
         </div>
+        <div class="col-sm-2 form-opener">
+            %%addLink%%
+        </div>
     </div>
 
     <script type='text/javascript'>
