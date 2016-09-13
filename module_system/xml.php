@@ -66,6 +66,13 @@ class Xml
         $this->objResponse->setStrStatusCode(HttpStatuscodes::SC_OK);
         $this->objResponse->setObjEntrypoint(RequestEntrypointEnum::XML());
 
+        //only allowed with a module definition. if not given skip, so that there's no exception thrown
+        if(empty($strModule)) {
+            ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_BADREQUEST);
+            $this->objResponse->setStrContent("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<error>module missing</error>");
+            return;
+        }
+
         $this->objBuilder = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_OBJECT_BUILDER);
 
         $objDispatcher = new RequestDispatcher($this->objResponse, $this->objBuilder);

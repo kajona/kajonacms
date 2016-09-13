@@ -5,7 +5,7 @@
 ********************************************************************************************************/
 
 
-namespace Kajona\Samplecontent\System;
+namespace Kajona\Installer\System;
 
 
 use Kajona\Packagemanager\System\PackagemanagerMetadata;

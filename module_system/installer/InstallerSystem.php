@@ -30,6 +30,7 @@ use Kajona\System\System\SystemPwchangehistory;
 use Kajona\System\System\SystemSetting;
 use Kajona\System\System\UserGroup;
 use Kajona\System\System\UserUser;
+use PHPCodeBrowser\File;
 
 /**
  * Installer for the system-module
@@ -571,6 +572,11 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
             $strReturn .= $this->update_51_511();
         }
 
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.1.1") {
+            $strReturn .= $this->update_511_512();
+        }
+
         return $strReturn."\n\n";
     }
 
@@ -680,7 +686,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
     }
 
     private function update_51_511() {
-        $strReturn = "Updating 5.1 to 5.1.1...\n";
+        $strReturn = "Updating 5.1.1 to 5.1.2...\n";
 
 
 
@@ -756,6 +762,23 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1.1");
         return $strReturn;
     }
-    
-    
+
+    private function update_511_512()
+    {
+        $strReturn = "Updating 5.1.1 to 5.1.2...\n";
+
+        $strReturn .= "Removing legacy samplecontent module...\n";
+
+        $objFilesystem = new Filesystem();
+        if(is_file(_realpath_."core/module_samplecontent.phar")) {
+            $objFilesystem->fileDelete("/core/module_samplecontent.phar");
+        }
+        elseif(is_dir(_realpath_."core/module_samplecontent")) {
+            $objFilesystem->folderDeleteRecursive("/core/module_samplecontent");
+        }
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1.2");
+        return $strReturn;
+    }
 }

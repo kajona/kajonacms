@@ -10,7 +10,7 @@ namespace Kajona\Installer;
 
 use Kajona\Packagemanager\System\PackagemanagerManager;
 use Kajona\Packagemanager\System\PackagemanagerMetadata;
-use Kajona\Samplecontent\System\SamplecontentInstallerHelper;
+use Kajona\Installer\System\SamplecontentInstallerHelper;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Classloader;
 use Kajona\System\System\Cookie;
