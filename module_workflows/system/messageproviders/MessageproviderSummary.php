@@ -7,6 +7,7 @@
 namespace Kajona\Workflows\System\Messageproviders;
 
 use Kajona\System\System\Carrier;
+use Kajona\System\System\Messageproviders\MessageproviderExtendedInterface;
 use Kajona\System\System\Messageproviders\MessageproviderInterface;
 
 
@@ -18,7 +19,7 @@ use Kajona\System\System\Messageproviders\MessageproviderInterface;
  * @package module_workflows
  * @since 4.5
  */
-class MessageproviderSummary implements MessageproviderInterface
+class MessageproviderSummary implements MessageproviderExtendedInterface
 {
 
 
