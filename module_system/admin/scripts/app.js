@@ -2,12 +2,12 @@
 require([
     'jquery', 'jqueryui', 'jquery-touchPunch',
     'bootstrap', 'v4skin',
-    'loader', 'dialog', 'util', 'desktopNotification', 'folderview', 'tooltip', 'permissions', 'statusDisplay', 'systemTask',
-    'ajax', 'forms', 'lists', 'dashboardCalendar', 'messaging', 'workingIndicator', 'changelog'], function (
+    'loader', 'dialog', 'util', 'desktopNotification', 'folderview', 'tooltip', 'statusDisplay',
+    'ajax', 'forms', 'lists', 'messaging', 'workingIndicator'], function (
         jquery, jqueryui, touch,
         bootstrap, v4skin,
-        loader, Dialog, util, desktopNotification, folderview, tooltip, permissions, statusDisplay, systemTask,
-        ajax, forms, lists, dashboardCalendar, messaging, workingIndicator, changelog) {
+        loader, Dialog, util, desktopNotification, folderview, tooltip, statusDisplay,
+        ajax, forms, lists, messaging, workingIndicator) {
 
     // BC layer
     if (typeof KAJONA == "undefined") {
@@ -40,17 +40,17 @@ require([
     KAJONA.admin.switchLanguage = function(strLanguageToLoad) {
         util.switchLanguage(strLanguageToLoad);
     };
-    KAJONA.admin.permissions = permissions;
+    //KAJONA.admin.permissions = permissions;
     KAJONA.admin.statusDisplay = statusDisplay;
-    KAJONA.admin.systemtask = systemTask;
+    //KAJONA.admin.systemtask = systemTask;
     KAJONA.admin.ajax = ajax;
     KAJONA.admin.forms = forms;
     KAJONA.admin.lists = lists;
-    KAJONA.admin.dashboardCalendar = dashboardCalendar;
+    //KAJONA.admin.dashboardCalendar = dashboardCalendar;
     KAJONA.admin.messaging = messaging;
     KAJONA.admin.renderTocNavigation = messaging.render;
     KAJONA.admin.WorkingIndicator = workingIndicator;
-    KAJONA.admin.changelog = changelog;
+    //KAJONA.admin.changelog = changelog;
 
     // BC layer now we can fire the jquery document ready events
     $.holdReady(false);
