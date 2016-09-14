@@ -1638,7 +1638,7 @@ The language switch surrounds the buttons
     <script type="text/javascript">
         require(["tree", "loader"], function(tree, loader){
 
-            loader.loadCss("/core/module_system/admin/scripts/jstree3/dist/themes/default/style.min.css");
+            loader.loadFile(["/core/module_system/admin/scripts/jstree3/dist/themes/default/style.min.css"]);
 
             tree.toggleInitial('%%treeId%%');
 

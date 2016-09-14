@@ -17,11 +17,15 @@
     <!-- KAJONA_BUILD_LESS_END -->
 
     %%head%%
+    <script src="_webpath_/[webpath,module_system]/admin/scripts/jquery/jquery.min.js?_system_browser_cachebuster_"></script>
     <script type="text/javascript">var searchExtendText = '[lang,search_details,search]';</script>
     <script type="text/javascript">
         var require = %%requirejs_conf%%;
+
+        // BC layer so that we fire document ready events only after requirejs has loaded all js files
+        $.holdReady(true);
     </script>
-    <script data-main="core/module_system/admin/scripts/app" src="_webpath_/[webpath,module_system]/admin/scripts/requirejs/require.js"></script>
+    <script data-main="core/module_system/admin/scripts/app" src="_webpath_/[webpath,module_system]/admin/scripts/requirejs/require.js?_system_browser_cachebuster_"></script>
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>

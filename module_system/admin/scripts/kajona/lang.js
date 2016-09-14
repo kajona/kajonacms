@@ -42,7 +42,7 @@ define(['jquery', 'ajax', 'cacheManager'], function ($, ajax, cacheManager) {
                         $(this).html(strText);
                     };
 
-                    this.queue.push({
+                    lang.queue.push({
                         text: arrValues[1],
                         module: arrValues[0],
                         params: arrParams,
@@ -64,14 +64,14 @@ define(['jquery', 'ajax', 'cacheManager'], function ($, ajax, cacheManager) {
      * @param {function} onReady
      */
     lang.fetchProperties = function(onReady){
-        if (this.queue.length == 0) {
+        if (lang.queue.length == 0) {
             if (onReady) {
                 onReady.apply(this);
             }
             return;
         }
 
-        var arrData = this.queue[0];
+        var arrData = lang.queue[0];
         var strKey = arrData.module + '_' + KAJONA_LANGUAGE + '_' + KAJONA_BROWSER_CACHEBUSTER;
         var objCache = cacheManager.get(strKey);
 
@@ -86,14 +86,14 @@ define(['jquery', 'ajax', 'cacheManager'], function ($, ajax, cacheManager) {
         }
 
         if (strResp) {
-            arrData = this.queue.shift();
+            arrData = lang.queue.shift();
 
-            strResp = this.replacePropertyParams(strResp, arrData.params);
+            strResp = lang.replacePropertyParams(strResp, arrData.params);
             if (typeof arrData.callback === "function") {
                 arrData.callback.apply(arrData.scope ? arrData.scope : this, [strResp, arrData.module, arrData.text]);
             }
 
-            this.fetchProperties(onReady);
+            lang.fetchProperties(onReady);
             return;
         }
 

@@ -1,6 +1,6 @@
 
 //common tooltips
-define(['jquery', 'qtip', 'tags'], function ($, qtip, tags) {
+define(['jquery', 'qtip'], function ($, qtip) {
     return {
         initTooltip : function() {
             $('*[rel=tooltip][title!=""]').qtip({
@@ -26,7 +26,8 @@ define(['jquery', 'qtip', 'tags'], function ($, qtip, tags) {
                     },
                     events: {
                         render: function(event, api) {
-                            tags.loadTagTooltipContent($(api.elements.content).find('div').data('systemid'), "", $(api.elements.content).find('div').attr('id'));
+                            // TODO problem if we load tags as dependency we get a circular reference
+                            //tags.loadTagTooltipContent($(api.elements.content).find('div').data('systemid'), "", $(api.elements.content).find('div').attr('id'));
                         }
                     }
                 });
