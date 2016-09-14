@@ -1052,6 +1052,9 @@ A list of checkbox for object elements
                 %%elements%%
             </div>
         </div>
+        <div class="col-sm-2 form-opener">
+            %%addLink%%
+        </div>
     </div>
     <div class="form-group">
         <label class="col-sm-3 control-label"></label>
@@ -1062,9 +1065,6 @@ A list of checkbox for object elements
                     [lang,commons_select_all,system]
                 </label>
             </div>
-        </div>
-        <div class="col-sm-2 form-opener">
-            %%addLink%%
         </div>
     </div>
 
