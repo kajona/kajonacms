@@ -9,10 +9,9 @@ namespace Kajona\Postacomment\Installer;
 
 use Kajona\Pages\Admin\Elements\ElementPlaintextAdmin;
 use Kajona\Pages\Admin\Elements\ElementRichtextAdmin;
-use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
+use Kajona\Pages\System\SamplecontentContentHelper;
 use Kajona\Postacomment\Admin\Elements\ElementPostacommentAdmin;
-use Kajona\Samplecontent\System\SamplecontentContentHelper;
 use Kajona\System\System\Database;
 use Kajona\System\System\SamplecontentInstallerInterface;
 

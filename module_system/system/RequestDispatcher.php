@@ -10,6 +10,7 @@
 namespace Kajona\System\System;
 
 use Kajona\System\Admin\LoginAdmin;
+use Kajona\System\Admin\LoginAdminXml;
 
 
 /**
@@ -115,26 +116,14 @@ class RequestDispatcher
             //header itself given?
             if (!issetServer($strHeaderName)) {
                 //reload to https
-                if (_xmlLoader_ === true) {
-                    ResponseObject::getInstance()->setStrRedirectUrl(uniStrReplace("http:", "https:", _xmlpath_)."?".getServer("QUERY_STRING"));
-                }
-                else {
-                    ResponseObject::getInstance()->setStrRedirectUrl(uniStrReplace("http:", "https:", _indexpath_)."?".getServer("QUERY_STRING"));
-                }
-
+                ResponseObject::getInstance()->setStrRedirectUrl(uniStrReplace("http:", "https:", _xmlLoader_ === true ? _xmlpath_ : _indexpath_)."?".getServer("QUERY_STRING"));
                 ResponseObject::getInstance()->sendHeaders();
                 die("Reloading using https...");
             }
             //value of header correct?
             elseif ($strHeaderValue != "" && $strHeaderValue != strtolower(getServer($strHeaderName))) {
                 //reload to https
-                if (_xmlLoader_ === true) {
-                    ResponseObject::getInstance()->setStrRedirectUrl(uniStrReplace("http:", "https:", _xmlpath_)."?".getServer("QUERY_STRING"));
-                }
-                else {
-                    ResponseObject::getInstance()->setStrRedirectUrl(uniStrReplace("http:", "https:", _indexpath_)."?".getServer("QUERY_STRING"));
-                }
-
+                ResponseObject::getInstance()->setStrRedirectUrl(uniStrReplace("http:", "https:", _xmlLoader_ === true ? _xmlpath_ : _indexpath_)."?".getServer("QUERY_STRING"));
                 ResponseObject::getInstance()->sendHeaders();
                 die("Reloading using https...");
             }
@@ -225,7 +214,7 @@ class RequestDispatcher
 
         if ($bitLogin) {
             if (_xmlLoader_) {
-                $objLogin = $this->objBuilder->factory("Kajona\\System\\Admin\\LoginAdminXml");
+                $objLogin = $this->objBuilder->factory(LoginAdminXml::class);
                 $strReturn = $objLogin->action($strAction);
             }
             else {
@@ -235,7 +224,7 @@ class RequestDispatcher
                     return "";
                 }
 
-                $objLogin = $this->objBuilder->factory("Kajona\\System\\Admin\\LoginAdmin");
+                $objLogin = $this->objBuilder->factory(LoginAdmin::class);
                 $objLogin->action($strAction);
                 $strReturn = $objLogin->getModuleOutput();
             }
