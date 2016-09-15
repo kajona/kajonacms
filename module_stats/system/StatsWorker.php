@@ -7,6 +7,8 @@
 
 namespace Kajona\Stats\System;
 
+use Kajona\System\System\Database;
+
 
 /**
  * Model for a stats-worker
@@ -17,25 +19,17 @@ namespace Kajona\Stats\System;
  * @module stats
  * @moduleId _stats_modul_id_
  *
- * @blockFromAutosave
  */
-class StatsWorker extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface
+class StatsWorker
 {
 
     /**
-     * Returns the name to be used when rendering the current object, e.g. in admin-lists.
-     *
-     * @return string
+     * @var Database
+     * @inject system_db
      */
-    public function getStrDisplayName()
-    {
-        return "";
-    }
+    private $objDB;
 
-    public function updateObjectToDb($strPrevId = false)
-    {
-        return true;
-    }
+
 
 
     /**
