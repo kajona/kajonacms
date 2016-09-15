@@ -1077,7 +1077,7 @@ A list of checkbox for object elements
 </input_checkboxarrayobjectlist>
 
 <input_checkboxarrayobjectlist_row>
-    <tbody class="%%cssaddon%%">
+    <tbody>
         <tr data-systemid="%%systemid%%">
             <td class="listcheckbox"><input type="checkbox" name="%%name%%[%%systemid%%]" data-systemid="%%systemid%%" %%checked%% %%readonly%%></td>
             <td class="listimage">%%icon%%</td>
