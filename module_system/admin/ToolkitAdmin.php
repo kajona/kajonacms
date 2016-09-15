@@ -333,8 +333,9 @@ class ToolkitAdmin extends Toolkit
 
         $arrTemplate["ajaxScript"] = "
 	        <script type=\"text/javascript\">
+	            require(['jquery', 'v4skin'], function($, v4skin){
                     $(function() {
-                        var objConfig = new KAJONA.v4skin.defaultAutoComplete();
+                        var objConfig = new v4skin.defaultAutoComplete();
                         objConfig.source = function(request, response) {
                             $.ajax({
                                 url: '".getLinkAdminXml("pages", "getPagesByFilter")."',
@@ -347,8 +348,9 @@ class ToolkitAdmin extends Toolkit
                             });
                         };
 
-                        KAJONA.admin.".$strJsVarName." = $('#".uniStrReplace(array("[", "]"), array("\\\[", "\\\]"), $strName)."').autocomplete(objConfig);
+                        $('#".uniStrReplace(array("[", "]"), array("\\\[", "\\\]"), $strName)."').autocomplete(objConfig);
                     });
+	            });
 	        </script>
         ";
 
@@ -418,9 +420,10 @@ class ToolkitAdmin extends Toolkit
         $strName = uniStrReplace(array("[", "]"), array("\\\[", "\\\]"), $strName);
         $arrTemplate["ajaxScript"] = "
 	        <script type=\"text/javascript\">
+	            require(['jquery', 'v4skin'], function(){
                     $(function() {
 
-                        var objConfig = new KAJONA.v4skin.defaultAutoComplete();
+                        var objConfig = new v4skin.defaultAutoComplete();
                         objConfig.source = function(request, response) {
                             $.ajax({
                                 url: '".getLinkAdminXml("user", "getUserByFilter")."',
@@ -445,6 +448,7 @@ class ToolkitAdmin extends Toolkit
                                 .appendTo( ul );
                         } ;
                     });
+                });
 	        </script>
         ";
 
@@ -478,7 +482,7 @@ class ToolkitAdmin extends Toolkit
                 $strRemoveLink = "";
                 if (!$bitReadOnly) {
                     $strDelete = Carrier::getInstance()->getObjLang()->getLang("commons_remove_assignment", "system");
-                    $strRemoveLink = Link::getLinkAdminDialog(null, "", "", $strDelete, $strDelete, "icon_delete", $strDelete, true, false, "KAJONA.v4skin.removeObjectListItem(this);return false;");
+                    $strRemoveLink = Link::getLinkAdminDialog(null, "", "", $strDelete, $strDelete, "icon_delete", $strDelete, true, false, "require('v4skin').removeObjectListItem(this);return false;");
                 }
 
                 $strIcon = is_array($objObject->getStrIcon()) ? $objObject->getStrIcon()[0] : $objObject->getStrIcon();
@@ -566,9 +570,9 @@ class ToolkitAdmin extends Toolkit
                 false,
                 " (function() {
              if(document.getElementById('".$strName."').value != '') {
-                 KAJONA.admin.folderview.dialog.setContentIFrame('".urldecode(getLinkAdminHref("mediamanager", "imageDetails", "file='+document.getElementById('".$strName."').value+'"))."');
-                 KAJONA.admin.folderview.dialog.setTitle('".$strTitle."');
-                 KAJONA.admin.folderview.dialog.init();
+                 require('folderview').dialog.setContentIFrame('".urldecode(getLinkAdminHref("mediamanager", "imageDetails", "file='+document.getElementById('".$strName."').value+'"))."');
+                 require('folderview').dialog.setTitle('".$strTitle."');
+                 require('folderview').dialog.init();
              }
              return false; })(); return false;"
             );
@@ -1605,7 +1609,7 @@ require(['ajax'], function(ajax){
         }
 
         $strButton = getLinkAdminManual(
-            "href=\"javascript:KAJONA.admin.ajax.setSystemStatus('".$objRecord->getSystemid()."', ".($bitReload ? "true" : "false").");\"",
+            "href=\"javascript:require('ajax').setSystemStatus('".$objRecord->getSystemid()."', ".($bitReload ? "true" : "false").");\"",
             $strLinkContent,
             "",
             "",
@@ -1688,7 +1692,7 @@ require(['ajax'], function(ajax){
         $arrTemplate["content"] = $strContent;
         $arrTemplate["display"] = ($bitVisible ? "folderVisible" : "folderHidden");
         $arrReturn[0] = $this->objTemplate->fillTemplateFile($arrTemplate, "/elements.tpl", "layout_folder");
-        $arrReturn[1] = "<a href=\"javascript:KAJONA.util.fold('".$strID."', ".($strCallbackVisible != "" ? $strCallbackVisible : "null").", ".($strCallbackInvisible != "" ? $strCallbackInvisible : "null").");\">".$strLinkText."</a>";
+        $arrReturn[1] = "<a href=\"javascript:require('util').fold('".$strID."', ".($strCallbackVisible != "" ? $strCallbackVisible : "null").", ".($strCallbackInvisible != "" ? $strCallbackInvisible : "null").");\">".$strLinkText."</a>";
         return $arrReturn;
     }
 
@@ -1795,15 +1799,17 @@ JS;
         if ($bitRemoteContent) {
             $strHtml.= <<<HTML
 <script type="text/javascript">
-$('#{$strMainTabId} > li > a[data-href!=""]').on('click', function(e){
-    KAJONA.admin.forms.loadTab($(e.target).data('target').substr(1), $(e.target).data('href'));
-});
-
-$(document).ready(function(){
-    var el = $('#{$strMainTabId} > li.active > a[data-href!=""]');
-    if (el.length > 0) {
-        KAJONA.admin.forms.loadTab(el.data('target').substr(1), el.data('href'));
-    }
+require(['jquery', 'forms'], function($, forms){
+    $('#{$strMainTabId} > li > a[data-href!=""]').on('click', function(e){
+        forms.loadTab($(e.target).data('target').substr(1), $(e.target).data('href'));
+    });
+    
+    $(document).ready(function(){
+        var el = $('#{$strMainTabId} > li.active > a[data-href!=""]');
+        if (el.length > 0) {
+            forms.loadTab(el.data('target').substr(1), el.data('href'));
+        }
+    });
 });
 </script>
 HTML;
@@ -2051,14 +2057,19 @@ HTML;
             }
 
             if (count($arrFields) > 0) {
-
-                $strRendercode .= "<script type=\"text/javascript\">$(document).ready(function () {
-                        KAJONA.admin.forms.renderMandatoryFields([";
-
+                $arrRequiredFields = array();
                 foreach ($arrFields as $strName => $strType) {
-                    $strRendercode .= "[ '".$strName."', '".$strType."' ], ";
+                    $arrRequiredFields[] = array($strName, $strType);
                 }
-                $strRendercode .= " [] ]); });</script>";
+                $strRequiredFields = json_encode($arrRequiredFields);
+
+                $strRendercode .= "<script type=\"text/javascript\">
+                    require(['jquery', 'forms'], function($, forms){
+                        $(document).ready(function(){
+                            forms.renderMandatoryFields($strRequiredFields);
+                        });
+                    });
+                </script>";
             }
         }
 
@@ -2487,16 +2498,18 @@ HTML;
         $strFavorite = "";
         if ($objTag->rightRight1()) {
 
-            $strJs = "<script type='text/javascript'>KAJONA.admin.loader.loadFile('".Resourceloader::getInstance()->getCorePathForModule("module_tags")."/module_tags/admin/scripts/tags.js', function() {
-                    KAJONA.admin.tags.createFavoriteEnabledIcon = '".addslashes(AdminskinHelper::getAdminImage("icon_favorite", Carrier::getInstance()->getObjLang()->getLang("tag_favorite_remove", "tags")))."';
-                    KAJONA.admin.tags.createFavoriteDisabledIcon = '".addslashes(AdminskinHelper::getAdminImage("icon_favoriteDisabled", Carrier::getInstance()->getObjLang()->getLang("tag_favorite_add", "tags")))."';
-                });</script>";
+            $strJs = "<script type='text/javascript'>
+            require(['tags'], function(tags){
+                tags.createFavoriteEnabledIcon = '".addslashes(AdminskinHelper::getAdminImage("icon_favorite", Carrier::getInstance()->getObjLang()->getLang("tag_favorite_remove", "tags")))."';
+                tags.createFavoriteDisabledIcon = '".addslashes(AdminskinHelper::getAdminImage("icon_favoriteDisabled", Carrier::getInstance()->getObjLang()->getLang("tag_favorite_add", "tags")))."';
+            });
+            </script>";
 
             $strImage = TagsFavorite::getAllFavoritesForUserAndTag(Carrier::getInstance()->getObjSession()->getUserID(), $objTag->getSystemid()) != null ?
                 AdminskinHelper::getAdminImage("icon_favorite", Carrier::getInstance()->getObjLang()->getLang("tag_favorite_remove", "tags")) :
                 AdminskinHelper::getAdminImage("icon_favoriteDisabled", Carrier::getInstance()->getObjLang()->getLang("tag_favorite_add", "tags"));
 
-            $strFavorite = $strJs."<a href=\"#\" onclick=\"KAJONA.admin.tags.createFavorite('".$objTag->getSystemid()."', this); return false;\">".$strImage."</a>";
+            $strFavorite = $strJs."<a href=\"#\" onclick=\"require('tags').createFavorite('".$objTag->getSystemid()."', this); return false;\">".$strImage."</a>";
         }
 
         $arrTemplate = array();
@@ -2528,39 +2541,43 @@ HTML;
 
         $arrTemplate["ajaxScript"] = "
 	        <script type=\"text/javascript\">
-                    $(function() {
-                        function split( val ) {
-                            return val.split( /,\s*/ );
-                        }
+            require(['jquery', 'v4skin'], function($, v4skin){
+                $(function() {
+                    function split( val ) {
+                        return val.split( /,\s*/ );
+                    }
 
-                        function extractLast( term ) {
-                            return split( term ).pop();
-                        }
+                    function extractLast( term ) {
+                        return split( term ).pop();
+                    }
 
-                        var objConfig = new KAJONA.v4skin.defaultAutoComplete();
-                        objConfig.source = function(request, response) {
-                            $.ajax({
-                                url: '".getLinkAdminXml("tags", "getTagsByFilter")."',
-                                type: 'POST',
-                                dataType: 'json',
-                                data: {
-                                    filter:  extractLast( request.term )
-                                },
-                                success: response
-                            });
-                        };
+                    var objConfig = new v4skin.defaultAutoComplete();
+                    objConfig.source = function(request, response) {
+                        $.ajax({
+                            url: '".getLinkAdminXml("tags", "getTagsByFilter")."',
+                            type: 'POST',
+                            dataType: 'json',
+                            data: {
+                                filter:  extractLast( request.term )
+                            },
+                            success: response
+                        });
+                    };
 
-                        objConfig.select = function( event, ui ) {
-                            var terms = split( this.value );
-                            terms.pop();
-                            terms.push( ui.item.value );
-                            terms.push( '' );
-                            this.value = terms.join( ', ' );
-                            return false;
-                        };
+                    objConfig.select = function( event, ui ) {
+                        var terms = split( this.value );
+                        terms.pop();
+                        terms.push( ui.item.value );
+                        terms.push( '' );
+                        this.value = terms.join( ', ' );
+                        return false;
+                    };
 
-                        KAJONA.admin.".$strName." = $('#".uniStrReplace(array("[", "]"), array("\\\[", "\\\]"), $strName)."').autocomplete(objConfig);
-                    });
+                    $('#".uniStrReplace(array("[", "]"), array("\\\[", "\\\]"), $strName)."').autocomplete(objConfig);
+                });
+            
+            });
+
 	        </script>
         ";
 

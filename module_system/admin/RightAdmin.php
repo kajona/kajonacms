@@ -202,7 +202,7 @@ class RightAdmin extends AdminController implements AdminInterface {
             $arrTemplate["desc"] = $this->getLang("desc");
             $strReturn .= $this->objTemplate->fillTemplateFile($arrTemplate, "/elements.tpl", "rights_form_header");
             //Followed by the form
-            $strReturn .= $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "saverights"), "rightsForm", "", "KAJONA.admin.permissions.submitForm(); return false;");
+            $strReturn .= $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "saverights"), "rightsForm", "", "require('permissions').submitForm(); return false;");
             $strReturn .= $this->objToolkit->formInputText("filter", $this->getLang("permissons_filter"));
             $strReturn .= $this->objTemplate->fillTemplateFile($arrTemplateTotal, "/elements.tpl", "rights_form_form");
             $strReturn .= $this->objToolkit->formInputHidden("systemid", $strSystemID);
@@ -236,17 +236,19 @@ class RightAdmin extends AdminController implements AdminInterface {
             $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
             $strReturn .= $this->objToolkit->formClose();
             $strReturn .= "<script type=\"text/javascript\">
-                KAJONA.admin.permissions.checkRightMatrix();
-                KAJONA.admin.permissions.toggleEmtpyRows('".$this->getLang("permissions_toggle_visible")."', '".$this->getLang("permissions_toggle_hidden")."', '#rightsForm tr');
-                $('#filter').bind('input propertychange', KAJONA.admin.permissions.filterMatrix);
-                
-                $(document).ready(function() {
-                  $(window).keydown(function(event){
-                    if(event.keyCode == 13) {
-                      event.preventDefault();
-                      return false;
-                    }
-                  });
+                require(['jquery', 'permissions'], function($, permissions){
+                    permissions.checkRightMatrix();
+                    permissions.toggleEmtpyRows('".$this->getLang("permissions_toggle_visible")."', '".$this->getLang("permissions_toggle_hidden")."', '#rightsForm tr');
+                    $('#filter').bind('input propertychange', permissions.filterMatrix);
+
+                    $(document).ready(function() {
+                        $(window).keydown(function(event){
+                            if (event.keyCode == 13) {
+                                event.preventDefault();
+                                return false;
+                            }
+                        });
+                    });
                 });
                 </script>";
         }

@@ -4,7 +4,7 @@
  */
 define(["jquery"], function($){
 
-    return {
+    var perms = {
         checkRightMatrix : function () {
             // mode 1: inheritance
             if (document.getElementById('inherit').checked) {
@@ -41,20 +41,20 @@ define(["jquery"], function($){
         toggleEmtpyRows : function (strVisibleName, strHiddenName, parentSelector) {
 
             var $rowToggleLink = $('#rowToggleLink');
-            KAJONA.admin.permissions.toggleMode = $rowToggleLink.hasClass("rowsVisible")  ? "hide" : "show";
+            perms.toggleMode = $rowToggleLink.hasClass("rowsVisible")  ? "hide" : "show";
 
             $(parentSelector).each(function() {
 
                 if($(this).find("input:checked").length == 0 && $(this).find("th").length == 0) {
 
-                    if(KAJONA.admin.permissions.toggleMode == "show") {
+                    if(perms.toggleMode == "show") {
                         $(this).removeClass("hidden");
                     }
                     else {
                         $(this).addClass("hidden");
                     }
                 }
-                else if(KAJONA.admin.permissions.toggleMode == "show") {
+                else if(perms.toggleMode == "show") {
                     $(this).removeClass("hidden");
                 }
             });
@@ -138,5 +138,7 @@ define(["jquery"], function($){
             return false;
         }
     };
+
+    return perms;
 
 });

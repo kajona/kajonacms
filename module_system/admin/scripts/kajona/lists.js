@@ -111,7 +111,7 @@ define(['jquery', 'lang'], function ($, lang) {
                     type: 'POST',
                     url: strUrl,
                     success: function(resp) {
-                        this.triggerSingleAction();
+                        me.triggerSingleAction();
                         if (me.bitRenderInfo) {
                             var data = JSON.parse(resp);
                             if (data && data.message) {

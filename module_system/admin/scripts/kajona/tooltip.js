@@ -1,8 +1,10 @@
 
 //common tooltips
-define(['jquery', 'qtip'], function ($, qtip) {
+define(['jquery', 'qtip', 'loader'], function ($, qtip, loader) {
     return {
         initTooltip : function() {
+            loader.loadFile(['/core/module_system/admin/scripts/qtip2/jquery.qtip.min.css']);
+
             $('*[rel=tooltip][title!=""]').qtip({
                 position: {
                     viewport: $(window)

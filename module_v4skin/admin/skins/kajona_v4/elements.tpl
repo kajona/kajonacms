@@ -225,7 +225,7 @@ It is responsible for rendering the different admin-lists.
 Currently, there are two modes: with and without a description.
 
 <generallist_checkbox>
-    <input type="checkbox" name="kj_cb_%%systemid%%" id="kj_cb_%%systemid%%" onchange="KAJONA.admin.lists.updateToolbar();">
+    <input type="checkbox" name="kj_cb_%%systemid%%" id="kj_cb_%%systemid%%" onchange="require('lists').updateToolbar();">
 </generallist_checkbox>
 
 <generallist>
@@ -1255,8 +1255,10 @@ Shown, wherever the attention of the user is needed
 Renders a toc navigation
 <toc_navigation>
     <script type="text/javascript">
-        $(document).ready(function(){
-            KAJONA.admin.renderTocNavigation("%%selector%%");
+        require(['jquery', 'toc'], function($, toc) {
+            $(document).ready(function(){
+                toc.render("%%selector%%");
+            });
         });
     </script>
 </toc_navigation>
@@ -1289,7 +1291,7 @@ The following sections specify the layout of the rights-mgmt
 <rights_form_header>
     <div>
         %%desc%% %%record%% <br />
-        <a href="javascript:KAJONA.admin.permissions.toggleEmtpyRows('[lang,permissions_toggle_visible,system]', '[lang,permissions_toggle_hidden,system]', '#rightsForm tr');" id="rowToggleLink" class="rowsVisible">[lang,permissions_toggle_visible,system]</a><br /><br />
+        <a href="javascript:require('permissions').toggleEmtpyRows('[lang,permissions_toggle_visible,system]', '[lang,permissions_toggle_hidden,system]', '#rightsForm tr');" id="rowToggleLink" class="rowsVisible">[lang,permissions_toggle_visible,system]</a><br /><br />
     </div>
     <div id="responseContainer">
     </div>
@@ -1348,7 +1350,7 @@ The following sections specify the layout of the rights-mgmt
     <div class="col-sm-6">
         <div class="checkbox">
             <label>
-                    <input name="%%name%%" type="checkbox" id="%%name%%" value="1" onclick="this.blur();" onchange="KAJONA.admin.permissions.checkRightMatrix();" %%checked%% />
+                    <input name="%%name%%" type="checkbox" id="%%name%%" value="1" onclick="this.blur();" onchange="require('permissions').checkRightMatrix();" %%checked%% />
                 %%title%%
             </label>
         </div>
@@ -1675,7 +1677,7 @@ otherwise the JavaScript will fail!
     <div id="tagsLoading_%%targetSystemid%%" class="loadingContainer"></div>
     <div id="tagsWrapper_%%targetSystemid%%"></div>
     <script type="text/javascript">
-        require(["tags"], function($) {
+        require(["tags"], function(tags) {
             tags.reloadTagList('%%targetSystemid%%', '%%attribute%%');
         });
     </script>
@@ -1691,7 +1693,7 @@ otherwise the JavaScript will fail!
 </tags_tag>
 
 <tags_tag_delete>
-    <span class="label label-default taglabel">%%tagname%% <a href="javascript:KAJONA.admin.tags.removeTag('%%strTagId%%', '%%strTargetSystemid%%', '%%strAttribute%%');"> %%strDelete%%</a> %%strFavorite%%</span>
+    <span class="label label-default taglabel">%%tagname%% <a href="javascript:require('tags').removeTag('%%strTagId%%', '%%strTargetSystemid%%', '%%strAttribute%%');"> %%strDelete%%</a> %%strFavorite%%</span>
     <script type="text/javascript">
         require(["tooltip"], function(tooltip) {
             tooltip.addTooltip($(".taglabel [rel='tooltip']"));
@@ -1797,7 +1799,7 @@ It containes a list of aspects and provides the possibility to switch the differ
 </calendar_entry>
 
 <calendar_event>
-    <div class="%%class%%" id="event_%%systemid%%" onmouseover="KAJONA.admin.dashboardCalendar.eventMouseOver('%%highlightid%%')" onmouseout="KAJONA.admin.dashboardCalendar.eventMouseOut('%%highlightid%%')">
+    <div class="%%class%%" id="event_%%systemid%%" onmouseover="require('dashboardCalendar').eventMouseOver('%%highlightid%%')" onmouseout="require('dashboardCalendar').eventMouseOut('%%highlightid%%')">
         %%content%%
     </div>
 </calendar_event>
@@ -1942,29 +1944,25 @@ It containes a list of aspects and provides the possibility to switch the differ
 </sitemap_divider_entry>
 
 <changelog_heatmap>
-    <div class="chart-navigation pull-left"><a href="#" onclick="KAJONA.admin.changelog.loadPrevYear();return false;"><i class="kj-icon fa fa-arrow-left"></i></a></div>
-    <div class="chart-navigation pull-right"><a href="#" onclick="KAJONA.admin.changelog.loadNextYear();return false;"><i class="kj-icon fa fa-arrow-right"></i></a></div>
+    <div class="chart-navigation pull-left"><a href="#" onclick="require('changelog').loadPrevYear();return false;"><i class="kj-icon fa fa-arrow-left"></i></a></div>
+    <div class="chart-navigation pull-right"><a href="#" onclick="require('changelog').loadNextYear();return false;"><i class="kj-icon fa fa-arrow-right"></i></a></div>
     <div id='changelogTimeline' style='text-align:center;'></div>
 
     <script type="text/javascript">
-        KAJONA.admin.loader.loadFile([
-            '/core/module_system/admin/scripts/moment/moment.min.js',
-            '/core/module_system/admin/scripts/d3/d3.min.js',
-            '/core/module_system/admin/scripts/d3/calendar-heatmap.js',
-            '/core/module_system/admin/scripts/d3/calendar-heatmap.css'], function() {
+        require(['changelog', 'moment', 'loader', 'util'], function(changelog, moment, loader, util){
+            loader.loadFile(['/core/module_system/admin/scripts/d3/calendar-heatmap.css']);
 
-            KAJONA.admin.changelog.lang = %%strLang%%;
-            KAJONA.admin.changelog.systemId = "%%strSystemId%%";
-            KAJONA.admin.changelog.format = KAJONA.util.transformDateFormat('%%strDateFormat%%', "momentjs");
-            KAJONA.admin.changelog.now = moment().endOf('day').toDate();
-            KAJONA.admin.changelog.yearAgo = moment().startOf('day').subtract(1, 'year').toDate();
-            KAJONA.admin.changelog.selectColumn("right");
-            KAJONA.admin.changelog.loadChartData();
+            changelog.lang = %%strLang%%;
+            changelog.systemId = "%%strSystemId%%";
+            changelog.format = util.transformDateFormat('%%strDateFormat%%', "momentjs");
+            changelog.now = moment().endOf('day').toDate();
+            changelog.yearAgo = moment().startOf('day').subtract(1, 'year').toDate();
+            changelog.selectColumn("right");
+            changelog.loadChartData();
 
-            KAJONA.admin.changelog.loadDate("%%strSystemId%%", "%%strLeftDate%%", "left", function(){
-                KAJONA.admin.changelog.loadDate("%%strSystemId%%", "%%strRightDate%%", "right", KAJONA.admin.changelog.compareTable);
+            changelog.loadDate("%%strSystemId%%", "%%strLeftDate%%", "left", function(){
+                changelog.loadDate("%%strSystemId%%", "%%strRightDate%%", "right", changelog.compareTable);
             });
-
         });
     </script>
 </changelog_heatmap>
