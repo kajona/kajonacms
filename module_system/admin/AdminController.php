@@ -247,7 +247,7 @@ abstract class AdminController extends AbstractController
                 if (isset($arrProvidesJs["paths"]) && is_array($arrProvidesJs["paths"])) {
                     foreach ($arrProvidesJs["paths"] as $strUniqueName => $strPath) {
                         if (strpos($strBasePath, ".phar") !== false) {
-                            $strBasePath = str_replace("kajona/core/", "files/extract/", $strBasePath);
+                            $strBasePath = str_replace("core/", "files/extract/", substr($strBasePath, 7));
                             $strBasePath = str_replace(".phar", "", $strBasePath);
                         }
 
