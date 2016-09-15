@@ -36,7 +36,7 @@ require([
     jsDialog_2 = new Dialog('jsDialog_2', 2);
     jsDialog_3 = new Dialog('jsDialog_3', 3);
 
-    //KAJONA.admin.tooltip = tooltip;
+    KAJONA.admin.tooltip = tooltip;
     KAJONA.admin.switchLanguage = function(strLanguageToLoad) {
         util.switchLanguage(strLanguageToLoad);
     };
