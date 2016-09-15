@@ -149,46 +149,44 @@ class DashboardAdmin extends AdminController implements AdminInterface
         $strReturn .= "<div id='".$strContainerId."' class='calendar'></div>";
         $strReturn .= "<script type=\"text/javascript\">";
         $strReturn .= <<<JS
-            KAJONA.admin.loader.loadFile(['/core/module_dashboard/admin/scripts/fullcalendar/fullcalendar.min.css',
-                '/core/module_dashboard/admin/scripts/fullcalendar/lib/moment.min.js'], function(){
-                KAJONA.admin.loader.loadFile(['/core/module_dashboard/admin/scripts/fullcalendar/fullcalendar.min.js'], function(){
-                    var loadCalendar = function(){
-                        $('#{$strContainerId}').fullCalendar({
-                            header: {
-                                left: 'prev,next',
-                                center: 'title',
-                                right: ''
-                            },
-                            editable: false,
-                            theme: false,
-                            lang: '{$strLang}',
-                            eventLimit: true,
-                            events: '{$strEventCallback}',
-                            eventRender: function(event, el){
-                                KAJONA.admin.tooltip.addTooltip(el, event.tooltip);
-                                if (event.icon) {
-                                    el.find("span.fc-title").prepend(event.icon);
-                                }
-                            },
-                            loading: function(isLoading){
-                                if (isLoading) {
-                                    KAJONA.admin.WorkingIndicator.getInstance().start();
-                                } else {
-                                    KAJONA.admin.WorkingIndicator.getInstance().stop();
-                                }
-                            }
-                        });
-                        $('.fc-button-group').removeClass().addClass('btn-group');
-                        $('.fc-button').removeClass().addClass('btn btn-default');
-                    };
-
-                    if ('{$strLang}' != 'en') {
-                        KAJONA.admin.loader.loadFile(['/core/module_dashboard/admin/scripts/fullcalendar/lang/{$strLang}.js'], loadCalendar);
-                    } else {
-                        loadCalendar();
+        require(["jquery", "moment", "fullcalendar", "dashboard", "tooltip", "workingIndicator", "loader"], function($, moment, fullcalendar, dashboard, tooltip, workingIndicator, loader){
+            loader.loadFile(['/core/module_dashboard/admin/scripts/fullcalendar/fullcalendar.min.css']);
+            var loadCalendar = function(){
+                $('#{$strContainerId}').fullCalendar({
+                    header: {
+                        left: 'prev,next',
+                        center: 'title',
+                        right: ''
+                    },
+                    editable: false,
+                    theme: false,
+                    lang: '{$strLang}',
+                    eventLimit: true,
+                    events: '{$strEventCallback}',
+                    eventRender: function(event, el){
+                        tooltip.addTooltip(el, event.tooltip);
+                        if (event.icon) {
+                            el.find("span.fc-title").prepend(event.icon);
+                        }
+                    },
+                    loading: function(isLoading){
+                        if (isLoading) {
+                            workingIndicator.start();
+                        } else {
+                            workingIndicator.stop();
+                        }
                     }
                 });
-            });
+                $('.fc-button-group').removeClass().addClass('btn-group');
+                $('.fc-button').removeClass().addClass('btn btn-default');
+            };
+
+            if ('{$strLang}' != 'en') {
+                loader.loadFile(['/core/module_dashboard/admin/scripts/fullcalendar/lang/{$strLang}.js'], loadCalendar);
+            } else {
+                loadCalendar();
+            }
+        });
 JS;
         $strReturn .= "</script>";
 
@@ -212,8 +210,8 @@ JS;
         $strContent .= "<div id='todo-table'></div>";
         $strContent .= "<script type=\"text/javascript\">";
         $strContent .= <<<JS
-            KAJONA.admin.loader.loadFile(['/core/module_dashboard/admin/scripts/dashboard.js'], function(){
-                KAJONA.admin.dashboard.todo.loadCategory('{$strCategory}', '');
+            require(["dashboard"], function(dashboard){
+                dashboard.todo.loadCategory('{$strCategory}', '');
             });
 JS;
 

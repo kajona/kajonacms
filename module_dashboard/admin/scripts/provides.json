@@ -1,5 +1,7 @@
 {
   "paths": {
-    "dashboard": "dashboard"
+    "fullcalendar": "fullcalendar/fullcalendar.min",
+
+    "dashboard": "kajona/dashboard"
   }
 }
