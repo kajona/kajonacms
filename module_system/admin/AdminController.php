@@ -224,7 +224,27 @@ abstract class AdminController extends AbstractController
         $this->arrOutput["webpathTitle"] = urldecode(str_replace(array("http://", "https://"), array("", ""), _webpath_));
         $this->arrOutput["head"] = "<script type=\"text/javascript\">KAJONA_DEBUG = ".$this->objConfig->getDebug("debuglevel")."; KAJONA_WEBPATH = '"._webpath_."'; KAJONA_BROWSER_CACHEBUSTER = ".SystemSetting::getConfigValue("_system_browser_cachebuster_")."; KAJONA_LANGUAGE = '".Carrier::getInstance()->getObjLang()->getStrTextLanguage()."';</script>";
         $this->arrOutput["head"] .= "<script type=\"text/javascript\">KAJONA_PHARMAP = ".json_encode(array_values(Classloader::getInstance()->getArrPharModules())).";</script>";
+        $this->arrOutput["requirejs_conf"] = $this->generateRequireJsConfig();
 
+        //see if there are any hooks to be called
+        $this->onRenderOutput($this->arrOutput);
+
+        //Loading the desired Template
+        //if requested the pe, load different template
+        $strTemplate = AdminskinHelper::getPathForSkin($this->objSession->getAdminSkin()).$this->getArrModule("template");
+        if ($this->getParam("peClose") == 1 || $this->getParam("pe") == 1) {
+            $strTemplate = "/folderview.tpl";
+        }
+        return $this->objTemplate->fillTemplateFile($this->arrOutput, $strTemplate);
+    }
+
+    /**
+     * Method which generates the global requirejs config
+     *
+     * @return string
+     */
+    private function generateRequireJsConfig()
+    {
         $arrRequireConf = BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_REQUIREJS);
         if (empty($arrRequireConf)) {
             $arrFolders = Resourceloader::getInstance()->getFolderContent("/admin/scripts", array(".json"), false, function($strFile){
@@ -265,18 +285,7 @@ abstract class AdminController extends AbstractController
             BootstrapCache::getInstance()->updateCache(BootstrapCache::CACHE_REQUIREJS, $arrRequireConf);
         }
 
-        $this->arrOutput["requirejs_conf"] = json_encode($arrRequireConf);
-
-        //see if there are any hooks to be called
-        $this->onRenderOutput($this->arrOutput);
-
-        //Loading the desired Template
-        //if requested the pe, load different template
-        $strTemplate = AdminskinHelper::getPathForSkin($this->objSession->getAdminSkin()).$this->getArrModule("template");
-        if ($this->getParam("peClose") == 1 || $this->getParam("pe") == 1) {
-            $strTemplate = "/folderview.tpl";
-        }
-        return $this->objTemplate->fillTemplateFile($this->arrOutput, $strTemplate);
+        return json_encode($arrRequireConf);
     }
 
     /**
