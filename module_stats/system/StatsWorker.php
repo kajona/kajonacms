@@ -7,9 +7,8 @@
 
 namespace Kajona\Stats\System;
 
-use Kajona\System\System\Carrier;
 use Kajona\System\System\Database;
-
+use Kajona\System\System\Session;
 
 /**
  * Model for a stats-worker
@@ -30,7 +29,11 @@ class StatsWorker
      */
     private $objDB;
 
-
+    /**
+     * @var Session
+     * @inject system_session
+     */
+    private $objSession;
 
 
     /**
@@ -96,7 +99,7 @@ class StatsWorker
     public function createStatsEntry($strIp, $intDate, $strPage, $strReferer, $strBrowser, $strLanguage = "", $strSession = "")
     {
         if ($strSession == "") {
-            $strSession = Carrier::getInstance()->getObjSession()->getSessionId();
+            $strSession = $this->objSession->getSessionId();
         }
         $strQuery = "INSERT INTO "._dbprefix_."stats_data
 		            (stats_id, stats_ip, stats_date, stats_page, stats_referer, stats_browser, stats_session, stats_language) VALUES
