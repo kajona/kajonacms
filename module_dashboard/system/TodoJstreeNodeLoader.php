@@ -61,7 +61,7 @@ class TodoJstreeNodeLoader implements InterfaceJStreeNodeLoader
                 );
                 $objNode->addAAttrAttr(
                     "onclick",
-                    "KAJONA.admin.dashboard.todo.loadCategory($strJsonKey,'')"
+                    "require('dashboard').todo.loadCategory($strJsonKey,'')"
                 );
                 $objNode->addStateAttr(
                     SystemJSTreeNode::STR_NODE_STATE_OPENED,
@@ -84,7 +84,7 @@ class TodoJstreeNodeLoader implements InterfaceJStreeNodeLoader
             );
             $objNode->addAAttrAttr(
                 "onclick",
-                "KAJONA.admin.dashboard.todo.loadCategory($strKeysJson,'')"
+                "require('dashboard').todo.loadCategory($strKeysJson,'')"
             );
             $objNode->addStateAttr(
                 SystemJSTreeNode::STR_NODE_STATE_OPENED,
@@ -113,7 +113,7 @@ class TodoJstreeNodeLoader implements InterfaceJStreeNodeLoader
         );
         $objNode->addAAttrAttr(
             "onclick",
-            "KAJONA.admin.dashboard.todo.loadCategory('','')"
+            "require('dashboard').todo.loadCategory('','')"
         );
 
         return $objNode;

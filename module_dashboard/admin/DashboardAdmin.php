@@ -225,7 +225,7 @@ JS;
     {
         // create the form
         $objFormgenerator = new AdminFormgenerator("listfilter", null);
-        $objFormgenerator->setStrOnSubmit("KAJONA.admin.dashboard.todo.formSearch();return false");
+        $objFormgenerator->setStrOnSubmit("require('dashboard').todo.formSearch();return false");
 
         $objFormgenerator->addField(new FormentryText("listfilter", "search"))
             ->setStrLabel($this->getLang("filter_search"));
