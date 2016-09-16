@@ -96,13 +96,24 @@ class UserLog
     /**
      * Returns the number of logins written to the log
      *
+     * @param Date $objStartDate
+     * @param Date $objEndDate
+     *
      * @return int
      */
-    public function getLoginLogsCount()
+    public function getLoginLogsCount(Date $objStartDate = null, Date $objEndDate = null)
     {
         $strQuery = "SELECT COUNT(*)
 						FROM "._dbprefix_."user_log as log";
-        $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
+
+        $arrParams = array();
+        if ($objStartDate !== null && $objEndDate !== null) {
+            $strQuery .= " AND user_log_date >= ? AND user_log_date <= ?";
+            $arrParams[] = $objStartDate->getLongTimestamp();
+            $arrParams[] = $objEndDate->getLongTimestamp();
+        }
+
+        $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
 
         return $arrRow["COUNT(*)"];
     }
