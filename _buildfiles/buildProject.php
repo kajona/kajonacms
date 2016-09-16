@@ -134,7 +134,7 @@ class BuildHelper {
 
 
         echo "Installing samplecontent...\n\n";
-        foreach(\Kajona\Samplecontent\System\SamplecontentInstallerHelper::getSamplecontentInstallers() as $objOneInstaller) {
+        foreach(\Kajona\Installer\System\SamplecontentInstallerHelper::getSamplecontentInstallers() as $objOneInstaller) {
             if(!$objOneInstaller->isInstalled()) {
                 echo dateToString(new \Kajona\System\System\Date())." Installing ".get_class($objOneInstaller)."...\n";
                 $objOneInstaller->install();
