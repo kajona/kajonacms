@@ -108,7 +108,7 @@ class UserLog
 
         $arrParams = array();
         if ($objStartDate !== null && $objEndDate !== null) {
-            $strQuery .= " AND user_log_date >= ? AND user_log_date <= ?";
+            $strQuery .= " WHERE user_log_date >= ? AND user_log_date <= ?";
             $arrParams[] = $objStartDate->getLongTimestamp();
             $arrParams[] = $objEndDate->getLongTimestamp();
         }
