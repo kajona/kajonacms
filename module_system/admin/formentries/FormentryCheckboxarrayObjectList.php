@@ -21,6 +21,7 @@ class FormentryCheckboxarrayObjectList extends FormentryCheckboxarray
 {
     protected $bitShowPath = true;
     protected $bitPathCallback;
+    protected $strAddLink;
 
     public function __construct($strFormName, $strSourceProperty, $objSourceObject = null)
     {
@@ -49,6 +50,16 @@ class FormentryCheckboxarrayObjectList extends FormentryCheckboxarray
         return $this->bitPathCallback;
     }
 
+    public function setStrAddLink($strAddLink)
+    {
+        $this->strAddLink = $strAddLink;
+    }
+
+    public function getStrAddLink()
+    {
+        return $this->strAddLink;
+    }
+
     public function renderField()
     {
         $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
@@ -57,7 +68,7 @@ class FormentryCheckboxarrayObjectList extends FormentryCheckboxarray
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
         }
 
-        $strReturn .= $objToolkit->formInputCheckboxArrayObjectList($this->getStrEntryName(), $this->getStrLabel(), $this->getAvailableItems(), $this->getSelectedItems(), $this->getBitReadonly(), $this->getBitShowPath(), $this->getBitPathCallback());
+        $strReturn .= $objToolkit->formInputCheckboxArrayObjectList($this->getStrEntryName(), $this->getStrLabel(), $this->getAvailableItems(), $this->getSelectedItems(), $this->getBitReadonly(), $this->getBitShowPath(), $this->getBitPathCallback(), $this->getStrAddLink());
 
         return $strReturn;
 
