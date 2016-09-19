@@ -1044,11 +1044,11 @@ A list of checkbox or radio input elements
 
 A list of checkbox for object elements
 <input_checkboxarrayobjectlist>
-    <div class="form-group">
+    <div class="form-group form-checkboxarraylist">
         <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
 
         <div class="col-sm-6 inputText">
-            <div id="%%name%%" class="inputContainer %%class%%">
+            <div id="%%name%%" class="inputContainer">
                 %%elements%%
             </div>
         </div>
