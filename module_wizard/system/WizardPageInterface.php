@@ -29,6 +29,8 @@ interface WizardPageInterface
     public function getButtonConfig();
 
     /**
+     * Returns an empty new instance of the model behind the admin form
+     *
      * @return Root
      */
     public function newObjectInstance();

@@ -7,13 +7,13 @@
 
 namespace Kajona\Statustransition\System;
 
-use Kajona\System\Admin\AdminFormgeneratorFactory;
 use Kajona\System\Admin\AdminModelserializer;
 use Kajona\System\Admin\Formentries\FormentryHidden;
 use Kajona\System\Admin\ToolkitAdmin;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Database;
 use Kajona\System\System\Exception;
+use Kajona\System\System\Root;
 use Kajona\System\System\Session;
 
 /**
@@ -91,9 +91,10 @@ class WizardManager
         /** @var WizardPageInterface $objPage */
         $objPage = $this->arrPages[$strStep];
 
-        $strObject = Session::getInstance()->getSession(self::SESSION_NAMESPACE.$strStep);
+        $strSessionKey = $this->getSessionKey($objPage);
+        $strObject = Session::getInstance()->getSession($strSessionKey);
         if (!empty($strObject)) {
-            $objInstance = AdminModelserializer::unserialize($strObject);
+            $objInstance = AdminModelserializer::unserialize($strObject, AdminModelserializer::STR_ANNOTATION_SERIALIZABLE);
         } else {
             $objInstance = $objPage->newObjectInstance();
         }
@@ -123,8 +124,8 @@ class WizardManager
                 $objPage->onSave($objInstance, $objForm);
 
                 // save in session
-                $arrData = AdminModelserializer::serialize($objForm->getObjSourceobject());
-                $this->objSession->setSession(self::SESSION_NAMESPACE.$strStep, $arrData);
+                $arrData = AdminModelserializer::serialize($objInstance, AdminModelserializer::STR_ANNOTATION_SERIALIZABLE);
+                $this->objSession->setSession($strSessionKey, $arrData);
 
                 // if we are at the last step we call each page to persist the entries
                 if ($strStep == $this->getLastStep()) {
@@ -238,18 +239,20 @@ class WizardManager
     protected function persistSessionObjects()
     {
         $arrObjects = array();
+        $arrValues = array();
         foreach ($this->arrPages as $strPageStep => $objPage) {
-            $strObject = $this->objSession->getSession(self::SESSION_NAMESPACE.$strPageStep);
+            $strObject = $this->objSession->getSession($this->getSessionKey($objPage));
             if (!empty($strObject)) {
-                $objInstance = AdminModelserializer::unserialize($strObject);
-                if (is_object($objInstance)) {
-                    $arrObjects[get_class($objPage)] = $objInstance;
+                $objInstance = AdminModelserializer::unserialize($strObject, AdminModelserializer::STR_ANNOTATION_SERIALIZABLE);
+                if ($objInstance instanceof Root) {
+                    $arrObjects[$strPageStep] = $objInstance;
+                    $arrValues[get_class($objPage)] = $objInstance;
                 }
             }
         }
 
         foreach ($arrObjects as $strPageStep => $objInstance) {
-            $this->arrPages[$strPageStep]->persistObject($objInstance, $arrObjects);
+            $this->arrPages[$strPageStep]->onPersist($objInstance, $arrValues);
         }
     }
 
@@ -259,7 +262,7 @@ class WizardManager
     protected function deleteSessionObjects()
     {
         foreach ($this->arrPages as $strPageStep => $objPage) {
-            $this->objSession->sessionUnset(self::SESSION_NAMESPACE.$strPageStep);
+            $this->objSession->sessionUnset($this->getSessionKey($objPage));
         }
     }
 
@@ -276,5 +279,13 @@ class WizardManager
             $arrSteps[$strPageStep] = '<a>'.$objPage->getTitle().'</a>';
         }
         return $this->objToolkit->getContentToolbar($arrSteps, $strStep);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getSessionKey(WizardPageInterface $objPage)
+    {
+        return self::SESSION_NAMESPACE . substr(md5(get_class($objPage->newObjectInstance())), 0, 8);
     }
 }

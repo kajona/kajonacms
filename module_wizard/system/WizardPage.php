@@ -11,7 +11,6 @@ use Kajona\System\Admin\AdminFormgenerator;
 use Kajona\System\Admin\AdminFormgeneratorFactory;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Lang;
-use Kajona\System\System\Model;
 use Kajona\System\System\Root;
 
 /**
