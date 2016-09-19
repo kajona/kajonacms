@@ -78,6 +78,7 @@ class DbOci8 extends DbBase
 
         if ($this->linkDB !== false) {
             @oci_set_client_info($this->linkDB, "Kajona CMS");
+            $this->_pQuery("ALTER SESSION SET NLS_NUMERIC_CHARACTERS = '.,'", array());
             return true;
         }
         else {
@@ -168,6 +169,11 @@ class DbOci8 extends DbBase
             $bitAddon = OCI_NO_AUTO_COMMIT;
         }
         $bitResult = @oci_execute($objStatement, $bitAddon);
+
+        if (!$bitResult) {
+            $this->objErrorStmt = $objStatement;
+            return false;
+        }
 
         $this->intAffectedRows = @oci_num_rows($objStatement);
 
@@ -626,7 +632,7 @@ class DbOci8 extends DbBase
             $strQuery = substr($strQuery, 0, $intPos).":".$intCount++.substr($strQuery, $intPos + 1);
         }
 
-        if(StringUtil::indexOf($strQuery, " like ", false) !== false) {
+        if (StringUtil::indexOf($strQuery, " like ", false) !== false) {
             $this->setCaseInsensitiveSort();
             $this->bitResetOrder = true;
         }
