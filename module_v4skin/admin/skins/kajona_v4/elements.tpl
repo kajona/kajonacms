@@ -1082,7 +1082,7 @@ A list of checkbox for object elements
             <td class="listcheckbox"><input type="checkbox" name="%%name%%[%%systemid%%]" data-systemid="%%systemid%%" %%checked%% %%readonly%%></td>
             <td class="listimage">%%icon%%</td>
             <td class="title">
-                <div class="small" style="color:#aaa">%%path%%</div>
+                <div class="small text-muted">%%path%%</div>
                 %%title%%
             </td>
         </tr>
