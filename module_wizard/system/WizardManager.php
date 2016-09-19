@@ -98,7 +98,7 @@ class WizardManager
             $objInstance = $objPage->newObjectInstance();
         }
 
-        $objForm = AdminFormgeneratorFactory::createByModel($objInstance);
+        $objForm = $objPage->getAdminForm($objInstance);
         $strForm = "";
 
         if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST") {
@@ -118,6 +118,9 @@ class WizardManager
             } else {
                 // update source object
                 $objForm->updateSourceObject();
+
+                // call page on save
+                $objPage->onSave($objInstance, $objForm);
 
                 // save in session
                 $arrData = AdminModelserializer::serialize($objForm->getObjSourceobject());
@@ -240,7 +243,7 @@ class WizardManager
             if (!empty($strObject)) {
                 $objInstance = AdminModelserializer::unserialize($strObject);
                 if (is_object($objInstance)) {
-                    $arrObjects[$strPageStep] = $objInstance;
+                    $arrObjects[get_class($objPage)] = $objInstance;
                 }
             }
         }

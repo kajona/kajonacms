@@ -7,6 +7,9 @@
 
 namespace Kajona\Statustransition\System;
 
+use Kajona\System\Admin\AdminFormgenerator;
+use Kajona\System\System\Root;
+
 /**
  * WizardPage
  *
@@ -26,14 +29,35 @@ interface WizardPageInterface
     public function getButtonConfig();
 
     /**
-     * @param object $objInstance
-     * @param array $arrObjects
-     * @return void
-     */
-    public function persistObject($objInstance, array $arrObjects);
-
-    /**
-     * @return object
+     * @return Root
      */
     public function newObjectInstance();
+
+    /**
+     * @param Root $objModel
+     * @return \Kajona\System\Admin\AdminFormgenerator
+     */
+    public function getAdminForm(Root $objModel);
+
+    /**
+     * Called on each page if the user clicks the continue button and the form validation of the form returned by
+     * getAdminForm was successful. At this stage the model contains all data from the submitted form but was not
+     * persisted in the session
+     *
+     * @param Root $objModel
+     * @param AdminFormgenerator $objForm
+     * @return mixed
+     */
+    public function onSave(Root $objModel, AdminFormgenerator $objForm);
+
+    /**
+     * This method is called for each page after the last step of the wizard was successful completed. It contains the
+     * model for the current step and an array containing all objects from the wizard. The key is the class name of the
+     * page
+     * 
+     * @param Root $objModel
+     * @param Root[] $arrObjects
+     * @return void
+     */
+    public function onPersist(Root $objModel, array $arrObjects);
 }
