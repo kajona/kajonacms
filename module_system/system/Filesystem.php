@@ -619,8 +619,9 @@ class Filesystem
      *
      * @param $strSourceFile
      * @param bool $bitDeleteOnStream if set to true, the file is deleted as soon as streaming finished
+     * @param string $strContentType
      */
-    public function streamFile($strSourceFile, $bitDeleteOnStream = false)
+    public function streamFile($strSourceFile, $bitDeleteOnStream = false, $strContentType = null)
     {
         $strSourceFile = $this->prependRealpath($strSourceFile);
 
@@ -629,13 +630,22 @@ class Filesystem
         //Check the current browsertype
         if (StringUtil::indexOf($strBrowser, "IE") !== false) {
             //Internet Explorer
-            ResponseObject::getInstance()->addHeader("Content-type: application/x-ms-download");
-            ResponseObject::getInstance()->addHeader("Content-type: x-type/subtype\n");
-            ResponseObject::getInstance()->addHeader("Content-type: application/force-download");
+            if ($strContentType === null) {
+                ResponseObject::getInstance()->addHeader("Content-type: application/x-ms-download");
+                ResponseObject::getInstance()->addHeader("Content-type: x-type/subtype\n");
+                ResponseObject::getInstance()->addHeader("Content-type: application/force-download");
+            } else {
+                ResponseObject::getInstance()->addHeader("Content-type: " . $strContentType);
+            }
             ResponseObject::getInstance()->addHeader("Content-Disposition: attachment; filename=".preg_replace('/\./', '%2e', saveUrlEncode(trim(basename($strSourceFile))), substr_count(basename($strSourceFile), '.') - 1));
         } else {
             //Good: another browser vendor
-            ResponseObject::getInstance()->addHeader("Content-Type: application/octet-stream");
+            if ($strContentType === null) {
+                ResponseObject::getInstance()->addHeader("Content-Type: application/octet-stream");
+            } else {
+                ResponseObject::getInstance()->addHeader("Content-type: " . $strContentType);
+            }
+
             ResponseObject::getInstance()->addHeader("Content-Disposition: attachment; filename=".saveUrlEncode(trim(basename($strSourceFile))));
         }
         //Common headers
