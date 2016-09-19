@@ -12,6 +12,7 @@ namespace Kajona\Stats\Admin\Systemtasks;
 use Kajona\Stats\System\StatsWorker;
 use Kajona\System\Admin\Systemtasks\AdminSystemtaskInterface;
 use Kajona\System\Admin\Systemtasks\SystemtaskBase;
+use Kajona\System\System\Carrier;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Remoteloader;
 use Kajona\System\System\SystemModule;
@@ -73,7 +74,8 @@ class SystemtaskStatsIp2c extends SystemtaskBase implements AdminSystemtaskInter
 
         $strReturn = "";
 
-        $objWorker = new StatsWorker();
+        /** @var StatsWorker $objWorker */
+        $objWorker = Carrier::getInstance()->getContainer()->offsetGet("system_object_builder")->factory(StatsWorker::class);
 
         //determin the number of ips to lookup
         $arrIpToLookup = $objWorker->getArrayOfIp2cLookups();

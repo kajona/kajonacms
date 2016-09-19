@@ -12,6 +12,7 @@ namespace Kajona\Stats\Admin\Systemtasks;
 use Kajona\Stats\System\StatsWorker;
 use Kajona\System\Admin\Systemtasks\AdminSystemtaskInterface;
 use Kajona\System\Admin\Systemtasks\SystemtaskBase;
+use Kajona\System\System\Carrier;
 use Kajona\System\System\SystemModule;
 
 
@@ -68,7 +69,8 @@ class SystemtaskStatsHostnamelookupreset extends SystemtaskBase implements Admin
         }
 
         $strReturn = "";
-        $objWorker = new StatsWorker("");
+        /** @var StatsWorker $objWorker */
+        $objWorker = Carrier::getInstance()->getContainer()->offsetGet("system_object_builder")->factory(StatsWorker::class);
         $objWorker->hostnameLookupResetHostnames();
 
         $strReturn .= $this->objToolkit->getTextRow($this->getLang("worker_lookupReset_end"));

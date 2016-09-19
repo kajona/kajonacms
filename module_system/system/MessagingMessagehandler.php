@@ -94,7 +94,7 @@ class MessagingMessagehandler
         foreach ($arrRecipients as $objOneUser) {
 
             //skip inactive users
-            if ($objOneUser->getIntRecordStatus() != 1) {
+            if ($objOneUser == null || $objOneUser->getIntRecordStatus() != 1) {
                 continue;
             }
 
