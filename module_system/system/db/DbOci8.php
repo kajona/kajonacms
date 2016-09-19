@@ -41,6 +41,7 @@ class DbOci8 extends DbBase
 
     /**
      * Flag whether the sring comparison method (case sensitive / insensitive) should be reset back to default after the current query
+     *
      * @var bool
      */
     private $bitResetOrder = false;
@@ -80,8 +81,7 @@ class DbOci8 extends DbBase
             @oci_set_client_info($this->linkDB, "Kajona CMS");
             $this->_pQuery("ALTER SESSION SET NLS_NUMERIC_CHARACTERS = '.,'", array());
             return true;
-        }
-        else {
+        } else {
             throw new Exception("Error connecting to database", Exception::$level_FATALERROR);
         }
     }
@@ -202,8 +202,8 @@ class DbOci8 extends DbBase
             $arrPlaceholder[] = "?";
             $arrMappedColumns[] = $this->encloseColumnName($strOneCol);
 
-            if(in_array($strOneCol, $arrPrimaryColumns)) {
-                $arrPrimaryCompares[] = $strOneCol ." = ? ";
+            if (in_array($strOneCol, $arrPrimaryColumns)) {
+                $arrPrimaryCompares[] = $strOneCol." = ? ";
                 $arrParams[] = $arrValues[$intKey];
             }
         }
@@ -211,9 +211,8 @@ class DbOci8 extends DbBase
         $arrParams = array_merge($arrParams, $arrValues);
 
 
-
         foreach ($arrColumns as $intKey => $strOneCol) {
-            if(!in_array($strOneCol, $arrPrimaryColumns)) {
+            if (!in_array($strOneCol, $arrPrimaryColumns)) {
                 $arrKeyValuePairs[] = $this->encloseColumnName($strOneCol)." = ?";
                 $arrParams[] = $arrValues[$intKey];
             }
@@ -223,7 +222,7 @@ class DbOci8 extends DbBase
         $strQuery = "MERGE INTO ".$this->encloseTableName(_dbprefix_.$strTable)." using dual on (".implode(" AND ", $arrPrimaryCompares).") 
                        WHEN NOT MATCHED THEN INSERT (".implode(", ", $arrMappedColumns).") values (".implode(", ", $arrPlaceholder).")
                        WHEN MATCHED then update set ".implode(", ", $arrKeyValuePairs)."";
-                         
+
         return $this->_pQuery($strQuery, $arrParams);
     }
 
@@ -271,7 +270,7 @@ class DbOci8 extends DbBase
         }
         @oci_free_statement($objStatement);
 
-        if($this->bitResetOrder) {
+        if ($this->bitResetOrder) {
             $this->setCaseSensitiveSort();
             $this->bitResetOrder = false;
         }
@@ -360,35 +359,25 @@ class DbOci8 extends DbBase
 
         if ($strType == DbDatatypes::STR_TYPE_INT) {
             $strReturn .= " NUMBER(19,0) ";
-        }
-        elseif ($strType == DbDatatypes::STR_TYPE_LONG) {
+        } elseif ($strType == DbDatatypes::STR_TYPE_LONG) {
             $strReturn .= " NUMBER(19, 0) ";
-        }
-        elseif ($strType == DbDatatypes::STR_TYPE_DOUBLE) {
+        } elseif ($strType == DbDatatypes::STR_TYPE_DOUBLE) {
             $strReturn .= " FLOAT (24) ";
-        }
-        elseif ($strType == DbDatatypes::STR_TYPE_CHAR10) {
+        } elseif ($strType == DbDatatypes::STR_TYPE_CHAR10) {
             $strReturn .= " VARCHAR2( 10 ) ";
-        }
-        elseif ($strType == DbDatatypes::STR_TYPE_CHAR20) {
+        } elseif ($strType == DbDatatypes::STR_TYPE_CHAR20) {
             $strReturn .= " VARCHAR2( 20 ) ";
-        }
-        elseif ($strType == DbDatatypes::STR_TYPE_CHAR100) {
+        } elseif ($strType == DbDatatypes::STR_TYPE_CHAR100) {
             $strReturn .= " VARCHAR2( 100 ) ";
-        }
-        elseif ($strType == DbDatatypes::STR_TYPE_CHAR254) {
+        } elseif ($strType == DbDatatypes::STR_TYPE_CHAR254) {
             $strReturn .= " VARCHAR2( 280 ) ";
-        }
-        elseif ($strType == DbDatatypes::STR_TYPE_CHAR500) {
+        } elseif ($strType == DbDatatypes::STR_TYPE_CHAR500) {
             $strReturn .= " VARCHAR2( 500 ) ";
-        }
-        elseif ($strType == DbDatatypes::STR_TYPE_TEXT) {
+        } elseif ($strType == DbDatatypes::STR_TYPE_TEXT) {
             $strReturn .= " VARCHAR2( 4000 ) ";
-        }
-        elseif ($strType == DbDatatypes::STR_TYPE_LONGTEXT) {
+        } elseif ($strType == DbDatatypes::STR_TYPE_LONGTEXT) {
             $strReturn .= " CLOB ";
-        }
-        else {
+        } else {
             $strReturn .= " VARCHAR( 254 ) ";
         }
 
@@ -427,7 +416,7 @@ class DbOci8 extends DbBase
         $strQuery = "ALTER TABLE ".($this->encloseTableName($strTable))." ADD ".($this->encloseColumnName($strColumn)." ".$this->getDatatype($strDatatype));
 
         if ($strDefault !== null) {
-            $strQuery .= " DEFAULT " . $strDefault;
+            $strQuery .= " DEFAULT ".$strDefault;
         }
 
         if ($bitNull !== null) {
@@ -492,8 +481,7 @@ class DbOci8 extends DbBase
             //nullable?
             if ($arrColumnSettings[1] === true) {
                 $strQuery .= " NULL ";
-            }
-            else {
+            } else {
                 $strQuery .= " NOT NULL ";
             }
 
@@ -699,10 +687,10 @@ class DbOci8 extends DbBase
 
         return "SELECT * FROM (
                      SELECT a.*, ROWNUM rnum FROM
-                        ( " . $strQuery . ") a
-                     WHERE ROWNUM <= " . $intEnd . "
+                        ( ".$strQuery.") a
+                     WHERE ROWNUM <= ".$intEnd."
                 )
-                WHERE rnum >= " . $intStart;
+                WHERE rnum >= ".$intStart;
     }
 
     /**
