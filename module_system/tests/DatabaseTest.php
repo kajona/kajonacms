@@ -44,6 +44,27 @@ class DatabaseTest extends Testbase
         $this->assertTrue(in_array(_dbprefix_ . "temp_autotest_new", Carrier::getInstance()->getObjDB()->getTables()));
     }
 
+
+    public function testFloatHandling()
+    {
+        $objDb = Carrier::getInstance()->getObjDB();
+        $this->tearDown();
+        $this->createTable();
+
+        $strQuery = "INSERT INTO " . _dbprefix_ . "temp_autotest (temp_id, temp_double) VALUES (?,?)";
+        $objDb->_pQuery($strQuery, array("id1", 16.8));
+        $objDb->_pQuery($strQuery, array("id2", 1000.8));
+
+        $arrRow = $objDb->getPRow("SELECT * FROM " . _dbprefix_ . "temp_autotest where temp_id = ?", array("id1"));
+        $this->assertEquals($arrRow["temp_double"], 16.8);
+        $this->assertEquals($arrRow["temp_double"], "16.8");
+
+        $arrRow = $objDb->getPRow("SELECT * FROM " . _dbprefix_ . "temp_autotest where temp_id = ?", array("id2"));
+        $this->assertEquals($arrRow["temp_double"], 1000.8);
+        $this->assertEquals($arrRow["temp_double"], "1000.8");
+    }
+
+
     public function testChangeColumn()
     {
         $objDb = Carrier::getInstance()->getObjDB();
