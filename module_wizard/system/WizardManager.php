@@ -5,7 +5,7 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
-namespace Kajona\Statustransition\System;
+namespace Kajona\Wizard\System;
 
 use Kajona\System\Admin\AdminModelserializer;
 use Kajona\System\Admin\Formentries\FormentryHidden;
