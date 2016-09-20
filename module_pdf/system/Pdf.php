@@ -342,6 +342,11 @@ class Pdf {
         else {
             $this->objPdf->Image(_realpath_.$strImage, $intX, $intY, $intWidth, $intHeight);
         }
+
+        if($intHeight != 0) {
+            $this->objPdf->SetY($this->objPdf->GetY() + $intHeight);
+        }
+
     }
 
 

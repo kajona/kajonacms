@@ -593,7 +593,7 @@ final class Session
      */
     public function getUsername()
     {
-        if ($this->isLoggedin() && $this->getObjInternalSession() != null) {
+        if ($this->isLoggedin() && $this->getObjInternalSession() != null && $this->getUser() != null) {
             $strUsername = $this->getUser()->getStrUsername();
         }
         else {

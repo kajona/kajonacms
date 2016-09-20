@@ -46,14 +46,14 @@ class StatsProcessinglistener implements GenericeventListenerInterface
         $objEntrypoint = $arrArguments[0];
 
         if ($objEntrypoint->equals(RequestEntrypointEnum::INDEX()) && Carrier::getInstance()->getParam("admin") == "") {
-
             //process stats request
             $objStats = SystemModule::getModuleByName("stats");
             if ($objStats != null) {
                 //Collect Data
                 $objLanguage = new LanguagesLanguage();
-                $objStats = new StatsWorker();
-                $objStats->createStatsEntry(
+                /** @var StatsWorker $objWorker */
+                $objWorker = Carrier::getInstance()->getContainer()->offsetGet("system_object_builder")->factory(StatsWorker::class);
+                $objWorker->createStatsEntry(
                     getServer("REMOTE_ADDR"), time(), Carrier::getInstance()->getParam("page"), rtrim(getServer("HTTP_REFERER"), "/"), getServer("HTTP_USER_AGENT"), $objLanguage->getPortalLanguage()
                 );
 

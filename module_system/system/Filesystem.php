@@ -34,7 +34,7 @@ class Filesystem
         if (StringUtil::indexOf(StringUtil::replace("\\", "/", $strPath), _realpath_, false) === false) {
             $strPath = _realpath_.$strPath;
             //double-check duplicate slashes
-            if(StringUtil::indexOf($strPath, _realpath_."/") !== false) {
+            if (StringUtil::indexOf($strPath, _realpath_."/") !== false) {
                 $strPath = StringUtil::replace(_realpath_."/", _realpath_, $strPath);
             }
         }
@@ -95,16 +95,14 @@ class Filesystem
                 //Wanted Type?
                 if (count($arrSuffix) == 0) {
                     $arrReturn[$strFolder."/".$strFilename] = $strFilename;
-                }
-                else {
+                } else {
                     //check, if suffix is in allowed list
-                    $strFileSuffix = uniSubstr($strFilename, uniStrrpos($strFilename, "."));
+                    $strFileSuffix = StringUtil::substring($strFilename, StringUtil::lastIndexOf($strFilename, "."));
                     if (in_array($strFileSuffix, $arrSuffix)) {
                         $arrReturn[$strFolder."/".$strFilename] = $strFilename;
                     }
                 }
-            }
-            elseif (is_dir($strFolder."/".$strFilename) && $bitRecursive) {
+            } elseif (is_dir($strFolder."/".$strFilename) && $bitRecursive) {
                 $this->getFilelistHelper($strFolder."/".$strFilename, $arrSuffix, $bitRecursive, $arrReturn);
             }
         }
@@ -157,11 +155,9 @@ class Filesystem
                             //Types given?
                             if (count($arrTypes) != 0) {
                                 if (in_array($arrTemp["filetype"], $arrTypes)) {
-
                                     $arrReturn["files"][$arrReturn["nrFiles"]++] = $arrTemp;
                                 }
-                            }
-                            else {
+                            } else {
                                 $arrReturn["files"][$arrReturn["nrFiles"]++] = $arrTemp;
                             }
                         }
@@ -196,14 +192,13 @@ class Filesystem
             $arrReturn["filename"] = basename($strFile);
 
             //Type
-            $intTemp = uniStrrpos($strFile, ".");
+            $intTemp = StringUtil::lastIndexOf($strFile, ".");
             if ($intTemp !== false) {
-                $arrReturn["filetype"] = uniSubstr($strFile, $intTemp);
-            }
-            else {
+                $arrReturn["filetype"] = StringUtil::substring($strFile, $intTemp);
+            } else {
                 $arrReturn["filetype"] = $strFile;
             }
-            $arrReturn["filetype"] = uniStrtolower($arrReturn["filetype"]);
+            $arrReturn["filetype"] = StringUtil::toLowerCase($arrReturn["filetype"]);
             //Size
             $arrReturn["filesize"] = filesize($strFile);
             //creatipn
@@ -261,8 +256,7 @@ class Filesystem
         if (is_file($strSource)) {
             //bitForce: overwrite existing file
             if (!is_file($strTarget) || $bitForce) {
-
-                if(!is_dir(dirname($strTarget))) {
+                if (!is_dir(dirname($strTarget))) {
                     $this->folderCreate(dirname($strTarget), true);
                 }
 
@@ -358,14 +352,12 @@ class Filesystem
             }
 
             if (is_file($strSourceDir."/".$strOneEntry) && ($bitOverwrite || !is_file($strTargetDir."/".$strOneEntry))) {
-
                 if (!is_dir($strTargetDir)) {
                     mkdir($strTargetDir, 0777, true);
                 }
 
                 copy($strSourceDir."/".$strOneEntry, $strTargetDir."/".$strOneEntry);
-            }
-            elseif (is_dir($strSourceDir."/".$strOneEntry)) {
+            } elseif (is_dir($strSourceDir."/".$strOneEntry)) {
                 if (!is_dir($strTargetDir."/".$strOneEntry)) {
                     mkdir($strTargetDir."/".$strOneEntry, 0777, true);
                 }
@@ -394,7 +386,7 @@ class Filesystem
         if (!is_dir($strFolder)) {
             $bitReturn = @mkdir($strFolder, 0777, $bitRecursive);
 
-            if(!$bitReturn && $bitThrowExceptionOnError) {
+            if (!$bitReturn && $bitThrowExceptionOnError) {
                 throw new Exception("Error creating folder ".$strFolder.", maybe the target is not writable?", Exception::$level_ERROR);
             }
         }
@@ -449,8 +441,7 @@ class Filesystem
                 //set correct rights
                 @chmod($strTarget, 0777);
                 $bitReturn = true;
-            }
-            else {
+            } else {
                 @unlink($strTempfile);
             }
         }
@@ -471,8 +462,7 @@ class Filesystem
         $this->objFilePointer = @fopen($strFilename, $strMode);
         if ($this->objFilePointer) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -628,8 +618,10 @@ class Filesystem
      * Make sure to die() the process afterwards, this is not done by this method!
      *
      * @param $strSourceFile
+     * @param bool $bitDeleteOnStream if set to true, the file is deleted as soon as streaming finished
+     * @param string $strContentType
      */
-    public function streamFile($strSourceFile)
+    public function streamFile($strSourceFile, $bitDeleteOnStream = false, $strContentType = null)
     {
         $strSourceFile = $this->prependRealpath($strSourceFile);
 
@@ -638,19 +630,22 @@ class Filesystem
         //Check the current browsertype
         if (StringUtil::indexOf($strBrowser, "IE") !== false) {
             //Internet Explorer
-            ResponseObject::getInstance()->addHeader("Content-type: application/x-ms-download");
-            ResponseObject::getInstance()->addHeader("Content-type: x-type/subtype\n");
-            ResponseObject::getInstance()->addHeader("Content-type: application/force-download");
-            ResponseObject::getInstance()->addHeader(
-                "Content-Disposition: attachment; filename=".preg_replace(
-                    '/\./', '%2e',
-                    saveUrlEncode(trim(basename($strSourceFile))), substr_count(basename($strSourceFile), '.') - 1
-                )
-            );
-        }
-        else {
+            if ($strContentType === null) {
+                ResponseObject::getInstance()->addHeader("Content-type: application/x-ms-download");
+                ResponseObject::getInstance()->addHeader("Content-type: x-type/subtype\n");
+                ResponseObject::getInstance()->addHeader("Content-type: application/force-download");
+            } else {
+                ResponseObject::getInstance()->addHeader("Content-type: " . $strContentType);
+            }
+            ResponseObject::getInstance()->addHeader("Content-Disposition: attachment; filename=".preg_replace('/\./', '%2e', saveUrlEncode(trim(basename($strSourceFile))), substr_count(basename($strSourceFile), '.') - 1));
+        } else {
             //Good: another browser vendor
-            ResponseObject::getInstance()->addHeader("Content-Type: application/octet-stream");
+            if ($strContentType === null) {
+                ResponseObject::getInstance()->addHeader("Content-Type: application/octet-stream");
+            } else {
+                ResponseObject::getInstance()->addHeader("Content-type: " . $strContentType);
+            }
+
             ResponseObject::getInstance()->addHeader("Content-Disposition: attachment; filename=".saveUrlEncode(trim(basename($strSourceFile))));
         }
         //Common headers
@@ -672,6 +667,9 @@ class Filesystem
         @fclose($ptrFile);
         ob_flush();
         flush();
+
+        if ($bitDeleteOnStream) {
+            $this->fileDelete($strSourceFile);
+        }
     }
 }
-
