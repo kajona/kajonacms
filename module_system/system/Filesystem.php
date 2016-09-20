@@ -668,7 +668,7 @@ class Filesystem
         ob_flush();
         flush();
 
-        if ($bitDeleteOnStream) {
+        if ($bitDeleteOnStream && StringUtil::indexOf($strSourceFile, _realpath_."project/temp") === 0) {
             $this->fileDelete($strSourceFile);
         }
     }
