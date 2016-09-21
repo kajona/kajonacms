@@ -45,8 +45,6 @@ class RequestDispatcher
      * Standard constructor
      *
      * @param ResponseObject $objResponse
-     *
-     * @return RequestDispatcher
      */
     public function __construct(ResponseObject $objResponse, \Kajona\System\System\ObjectBuilder $objBuilder)
     {
@@ -64,7 +62,6 @@ class RequestDispatcher
      * @param string $strAction
      * @param string $strLanguageParam
      *
-     * @return string
      */
     public function processRequest($bitAdmin, $strModule, $strAction, $strLanguageParam)
     {
@@ -83,7 +80,6 @@ class RequestDispatcher
 
         $strReturn = $this->cleanupOutput($strReturn);
         $strReturn = $this->getDebugInfo($strReturn);
-        $this->sendConditionalGetHeaders($strReturn);
 
         $this->objResponse->setStrContent($strReturn);
 
@@ -332,32 +328,6 @@ class RequestDispatcher
         $objScriptlet = new ScriptletHelper();
         return $objScriptlet->processString($strContent, $intContext);
     }
-
-
-    /**
-     * Sends conditional get headers and tries to match sent ones.
-     *
-     * @param string $strContent
-     *
-     * @return void
-     */
-    private function sendConditionalGetHeaders($strContent)
-    {
-
-        //check headers, maybe execution could be terminated right here
-        //yes, this doesn't save us from generating the page, but the traffic towards the client can be reduced
-        if (checkConditionalGetHeaders(md5($_SERVER["REQUEST_URI"].$this->objSession->getSessionId().$strContent))) {
-            ResponseObject::getInstance()->sendHeaders();
-            flush();
-            die();
-        }
-
-        //send headers if not an ie
-        if (strpos(getServer("HTTP_USER_AGENT"), "IE") === false) {
-            setConditionalGetHeaders(md5($_SERVER["REQUEST_URI"].$this->objSession->getSessionId().$strContent));
-        }
-    }
-
 
     /**
      * Generates debugging-infos, but only in non-xml mode
