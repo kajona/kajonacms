@@ -7,7 +7,7 @@ news and news category form into a wizard:
 ```php
 <?php
 
-$objWizardManager = new \Kajona\Statustransition\System\WizardManager(
+$objWizardManager = new \Kajona\Wizard\System\WizardManager(
     \Kajona\System\System\Database::getInstance(),
     $this->objSession,
     $this->objToolkit
@@ -15,7 +15,7 @@ $objWizardManager = new \Kajona\Statustransition\System\WizardManager(
 
 $objWizardManager->addPage(
     "news",
-    new \Kajona\Statustransition\System\WizardPage(
+    new \Kajona\Wizard\System\WizardPage(
         \Kajona\News\System\NewsNews::class,
         \Kajona\System\Admin\AdminFormgenerator::BIT_BUTTON_CONTINUE,
         "News"
@@ -24,7 +24,7 @@ $objWizardManager->addPage(
 
 $objWizardManager->addPage(
     "category",
-    new \Kajona\Statustransition\System\WizardPage(
+    new \Kajona\Wizard\System\WizardPage(
         \Kajona\News\System\NewsCategory::class,
         \Kajona\System\Admin\AdminFormgenerator::BIT_BUTTON_CONTINUE | \Kajona\System\Admin\AdminFormgenerator::BIT_BUTTON_BACK,
         "Category"
