@@ -63,7 +63,6 @@ class Index {
 
         $this->objResponse = ResponseObject::getInstance();
         $this->objResponse->setStrResponseType(HttpResponsetypes::STR_TYPE_HTML);
-        $this->objResponse->setStrStatusCode(HttpStatuscodes::SC_OK);
         $this->objResponse->setObjEntrypoint(RequestEntrypointEnum::INDEX());
 
         $this->objBuilder = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_OBJECT_BUILDER);
