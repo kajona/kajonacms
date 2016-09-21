@@ -420,9 +420,8 @@ class ToolkitAdmin extends Toolkit
         $strName = uniStrReplace(array("[", "]"), array("\\\[", "\\\]"), $strName);
         $arrTemplate["ajaxScript"] = "
 	        <script type=\"text/javascript\">
-	            require(['jquery', 'v4skin'], function(){
+	            require(['jquery', 'v4skin'], function($, v4skin){
                     $(function() {
-
                         var objConfig = new v4skin.defaultAutoComplete();
                         objConfig.source = function(request, response) {
                             $.ajax({
