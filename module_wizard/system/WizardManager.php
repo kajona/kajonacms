@@ -138,9 +138,9 @@ class WizardManager
                         $this->objDatabase->transactionCommit();
 
                         $objOnComplete();
-                    } catch (Exception $e) {
+                    } catch (Exception $objE) {
                         $this->objDatabase->transactionRollback();
-                        throw $e;
+                        throw $objE;
                     }
                 } else {
                     // redirect to next step
