@@ -84,6 +84,54 @@ class PagesContentAdmin extends AdminSimple implements AdminInterface
     }
 
 
+    /**
+     * Tries to generate a quick-help button.
+     * Tests for exisiting help texts
+     *
+     * @return string
+     */
+    protected function getQuickHelp()
+    {
+        $strReturn = "";
+        $strText = "";
+        $strTextname = "";
+
+        //Text for the current action available?
+        //different loading when editing page-elements
+        if ($this->getParam("module") == "pages_content" && ($this->getParam("action") == "edit" || $this->getParam("action") == "new")) {
+            $objElement = null;
+            if ($this->getParam("action") == "edit") {
+                $objElement = new PagesPageelement($this->getSystemid());
+            }
+            elseif ($this->getParam("action") == "new") {
+                $strPlaceholderElement = $this->getParam("element");
+                $objElement = PagesElement::getElement($strPlaceholderElement);
+            }
+
+            //and finally create the object
+            $strFilename = $this->objResourceLoader->getPathForFile("/admin/elements/".$objElement->getStrClassAdmin());
+            $objElement = $this->objClassLoader->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin");
+
+            //and finally create the object
+            if ($objElement != null) {
+                $strTextname = $this->objLang->stringToPlaceholder("quickhelp_".$objElement->getArrModule("name"));
+                $strText = $this->objLang->getLang($strTextname, $objElement->getArrModule("modul"));
+            }
+        }
+        else {
+            $strTextname = $this->objLang->stringToPlaceholder("quickhelp_".$this->getAction());
+            $strText = $this->getLang($strTextname);
+        }
+
+        if ($strText != "!".$strTextname."!") {
+            //Text found, embed the quickhelp into the current skin
+            $strReturn .= $this->objToolkit->getQuickhelp($strText);
+        }
+
+        return $strReturn;
+    }
+
+
     private function getPageInfoBox(PagesPage $objPage)
     {
         $strReturn = "";

@@ -16,7 +16,7 @@ use Kajona\Pages\Admin\Elements\ElementPlaintextAdmin;
 use Kajona\Pages\Admin\Elements\ElementRichtextAdmin;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
-use Kajona\Samplecontent\System\SamplecontentContentHelper;
+use Kajona\Pages\System\SamplecontentContentHelper;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Database;
 use Kajona\System\System\SamplecontentInstallerInterface;
@@ -118,7 +118,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
         $objRichtextAdmin = $objRichtext->getConcreteAdminInstance();
 
         if ($this->strContentLanguage == "de") {
-            $objRichtextAdmin->setStrText("Diese Installation von Kajona war erfolgreich. .<br />
+            $objRichtextAdmin->setStrText("Diese Installation von Kajona war erfolgreich.<br />
                                 Nehmen Sie sich die Zeit und betrachten Sie die einzelnen Seiten, die mit Beispielinhalten befüllt wurde. Sie gelangen jederzeit auf diese
                                 Seite durch den Link &quot;Home&quot; zurück.<br/>
                                 Um die Inhalte der Webseite zu verändern sollten Sie sich als erstes am Administrationsbereich <a href='_webpath_/admin'>anmelden</a>.
@@ -156,7 +156,7 @@ class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface
         $objRichtextAdmin = $objRichtext->getConcreteAdminInstance();
 
         if ($this->strContentLanguage == "de") {
-            $objRichtextAdmin->setStrText("Inhalte werden in Kajona in Form von Blöcken organisiert. Dieser Block 'Two Columns Header and Text' beinahltet zwei spalten, dies ist die linke Inhaltsspalte.
+            $objRichtextAdmin->setStrText("Inhalte werden in Kajona in Form von Blöcken organisiert. Dieser Block 'Two Columns Header and Text' beinahltet zwei Spalten, dies ist die linke Inhaltsspalte.
                                 Sobald Sie sich am System <a href='_webpath_/admin'>angemeldet</a> haben und das Portal erneut aufrufen, wird der Portal-Editor angezeigt. <br />
                                 Nutzen Sie Drag n Drop um den gesamten Block zu verschieben.");
 

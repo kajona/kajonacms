@@ -22,7 +22,6 @@ use Kajona\Pages\Admin\ElementAdmin;
  */
 class ElementNewsAdmin extends ElementAdmin implements AdminElementInterface
 {
-
     /**
      * @var string
      * @tableColumn element_news.news_category
@@ -230,6 +229,4 @@ class ElementNewsAdmin extends ElementAdmin implements AdminElementInterface
     {
         return $this->intAmount;
     }
-
-
 }

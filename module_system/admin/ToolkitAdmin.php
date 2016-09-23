@@ -1055,7 +1055,7 @@ class ToolkitAdmin extends Toolkit
      * @param bool $bitShowPath
      * @return string
      */
-    public function formInputCheckboxArrayObjectList($strName, $strTitle, array $availableItems, array $arrSelectedItems, $bitReadonly = false, $bitShowPath = true, \Closure $objShowPath = null)
+    public function formInputCheckboxArrayObjectList($strName, $strTitle, array $availableItems, array $arrSelectedItems, $bitReadonly = false, $bitShowPath = true, \Closure $objShowPath = null, $strAddLink = null)
     {
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
@@ -1107,6 +1107,8 @@ class ToolkitAdmin extends Toolkit
         $strList .= $this->listFooter();
 
         $arrTemplate["elements"] = $strList;
+        $arrTemplate["addLink"] = $strAddLink;
+
         return $this->objTemplate->fillTemplateFile($arrTemplate, "/elements.tpl", "input_checkboxarrayobjectlist", true);
     }
 

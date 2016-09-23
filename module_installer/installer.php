@@ -10,7 +10,7 @@ namespace Kajona\Installer;
 
 use Kajona\Packagemanager\System\PackagemanagerManager;
 use Kajona\Packagemanager\System\PackagemanagerMetadata;
-use Kajona\Samplecontent\System\SamplecontentInstallerHelper;
+use Kajona\Installer\System\SamplecontentInstallerHelper;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Classloader;
 use Kajona\System\System\Cookie;
@@ -47,7 +47,7 @@ class Installer
     private $strForwardLink = "";
     private $strBackwardLink = "";
 
-    private $strVersion = "V 5.0";
+    private $strVersion = "V 5.1";
 
     /**
      * Instance of template-engine
@@ -193,7 +193,7 @@ class Installer
             "/files/images",
             "/files/public",
             "/files/downloads",
-            "/templates/default"
+            "/templates"
         );
         $arrFilesAndFolders = array_merge($arrFilesAndFolders, array_map(function ($strValue) {
             return "/".$strValue;
@@ -784,7 +784,7 @@ class Installer
             if ($objOneMetadata->getStrTitle() == $_POST["module"]) {
                 $objHandler = $objManager->getPackageManagerForPath($objOneMetadata->getStrPath());
 
-                if ($objOneMetadata->getBitProvidesInstaller() && $objHandler->isInstallable()) {
+                if ($objHandler->isInstallable()) {
                     $objHandler->installOrUpdate();
                     return json_encode(array("module" => $_POST["module"], "status" => "success"));
                 }

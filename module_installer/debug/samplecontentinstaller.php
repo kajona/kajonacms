@@ -5,9 +5,9 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
-namespace Kajona\Samplecontent\Debug;
+namespace Kajona\Installer\Debug;
 
-use Kajona\Samplecontent\System\SamplecontentInstallerHelper;
+use Kajona\Installer\System\SamplecontentInstallerHelper;
 
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";

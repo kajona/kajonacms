@@ -218,7 +218,7 @@ class MessagingMessage extends Model implements ModelInterface, AdminListableInt
 
     /**
      * @param FilterBase|null $objFilter
-     * @param string $strPrevid
+     * @param string $strUserid
      * @param null $intStart
      * @param null $intEnd
      *
@@ -232,8 +232,6 @@ class MessagingMessage extends Model implements ModelInterface, AdminListableInt
 
         $objOrm = new OrmObjectlist();
         $objOrm->addWhereRestriction(new OrmObjectlistPropertyRestriction("strUser", OrmComparatorEnum::Equal(), $strUserid));
-        $objOrm->addOrderBy(new OrmObjectlistOrderby("message_read ASC"));
-        $objOrm->addOrderBy(new OrmObjectlistOrderby("system_create_date DESC"));
         return $objOrm->getObjectList(__CLASS__, "", $intStart, $intEnd);
     }
 
@@ -252,8 +250,6 @@ class MessagingMessage extends Model implements ModelInterface, AdminListableInt
     {
         $objOrm = new OrmObjectlist();
         $objOrm->addWhereRestriction(new OrmObjectlistPropertyRestriction("strInternalIdentifier", OrmComparatorEnum::Equal(), $strIdentifier));
-        $objOrm->addOrderBy(new OrmObjectlistOrderby("message_read ASC"));
-        $objOrm->addOrderBy(new OrmObjectlistOrderby("system_create_date DESC"));
         return $objOrm->getObjectList(__CLASS__, $intStart, $intEnd);
     }
 

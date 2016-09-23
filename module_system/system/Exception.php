@@ -159,24 +159,7 @@ class Exception extends \Exception
 
         //fatal errors are displayed in every case
         if ($this->intDebuglevel >= 1 || $this->intErrorlevel == Exception::$level_FATALERROR) {
-            if (_xmlLoader_ === true) {
-                $strErrormessage = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-                $strErrormessage .= "<error>".xmlSafeString($this->getMessage())."</error>";
-            }
-            else {
-                $strErrormessage = "<html><head></head><body><div style=\"border: 1px solid red; padding: 5px; margin: 20px; font-family: arial,verdana,sans-serif; font-size: 12px;  \">\n";
-                $strErrormessage .= "<div style=\"background-color: #cccccc; color: #000000; font-weight: bold; \">An error occurred:</div>\n";
-                $strErrormessage .= "<pre>".(htmlspecialchars($this->getMessage(), ENT_QUOTES, "UTF-8", false))."</pre><br />";
-
-                if ($this->intErrorlevel == Exception::$level_FATALERROR || Session::getInstance()->isSuperAdmin()) {
-                    $strErrormessage .= "<pre>Stacktrace:\n".(htmlspecialchars($this->getTraceAsString(), ENT_QUOTES, "UTF-8", false))."</pre><br />";
-                }
-
-                $strErrormessage .= "Please contact the system admin";
-                $strErrormessage .= "</div></body></html>";
-
-            }
-            print $strErrormessage;
+            print self::renderException($this);
 
             //Execution has to be stopped here!
             if (ResponseObject::getInstance()->getStrStatusCode() == "" || ResponseObject::getInstance()->getStrStatusCode() == HttpStatuscodes::SC_OK) {
@@ -191,6 +174,34 @@ class Exception extends \Exception
         }
 
 
+    }
+
+    /**
+     * Renders the passed exception, either using the xml channes or using the web channel
+     * @param Exception $objException
+     *
+     * @return string
+     */
+    public static function renderException(Exception $objException)
+    {
+        if (_xmlLoader_ === true) {
+            $strErrormessage = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+            $strErrormessage .= "<error>".xmlSafeString($objException->getMessage())."</error>";
+        }
+        else {
+            $strErrormessage = "<html><head></head><body><div style=\"border: 1px solid red; padding: 5px; margin: 20px; font-family: arial,verdana,sans-serif; font-size: 12px;  \">\n";
+            $strErrormessage .= "<div style=\"background-color: #cccccc; color: #000000; font-weight: bold; \">An error occurred:</div>\n";
+            $strErrormessage .= "<pre>".(htmlspecialchars($objException->getMessage(), ENT_QUOTES, "UTF-8", false))."</pre><br />";
+
+            if ($objException->intErrorlevel == Exception::$level_FATALERROR || Session::getInstance()->isSuperAdmin()) {
+                $strErrormessage .= "<pre>Stacktrace:\n".(htmlspecialchars($objException->getTraceAsString(), ENT_QUOTES, "UTF-8", false))."</pre><br />";
+            }
+
+            $strErrormessage .= "Please contact the system admin";
+            $strErrormessage .= "</div></body></html>";
+        }
+
+        return $strErrormessage;
     }
 
 

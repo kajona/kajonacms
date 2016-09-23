@@ -33,13 +33,13 @@ class OrmInOrEmptyCondition extends OrmInCondition
     {
         parent::__construct($strColumnName, $arrParams, $strInCondition);
 
-        $intIndex = array_search(self::NULL_OR_EMPTY, $this->arrParams);
+        $intIndex = array_search(self::NULL_OR_EMPTY, $this->arrParams, true);
         if($intIndex !== false) {
             $this->bitIncludeNullOrEmptyValues = true;
             unset($this->arrParams[$intIndex]);
         }
 
-        $intIndex = array_search(self::NULL, $this->arrParams);
+        $intIndex = array_search(self::NULL, $this->arrParams, true);
         if($intIndex !== false) {
             $this->bitIncludeNullValues = true;
             unset($this->arrParams[$intIndex]);
@@ -77,7 +77,7 @@ class OrmInOrEmptyCondition extends OrmInCondition
             if($strWhere != "") {
                 $strWhere = "({$strWhere}) OR ";
             }
-            return "({$strWhere}$this->strColumnName IS NULL)";
+            return "({$strWhere}($this->strColumnName IS NULL))";
         }
 
         return $strWhere;

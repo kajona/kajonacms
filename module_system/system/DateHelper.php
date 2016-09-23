@@ -122,11 +122,9 @@ class DateHelper
 
         if ($intDaysAfterMarch == 29) {
             $intTargetDay = 28;
-        }
-        elseif ($intDaysAfterMarch == 28 && ($intYear % 17) >= 11) {
+        } elseif ($intDaysAfterMarch == 28 && ($intYear % 17) >= 11) {
             $intTargetDay = 27;
-        }
-        else {
+        } else {
             $intTargetDay = $intDaysAfterMarch;
         }
 
@@ -357,41 +355,32 @@ class DateHelper
 
         if ($objPeriod->equals(DatePeriodEnum::YEAR())) {
             $strRelativeString = "-1 year first day of january";
-        }
-        elseif ($objPeriod->equals(DatePeriodEnum::HALFYEAR())) {
+        } elseif ($objPeriod->equals(DatePeriodEnum::HALFYEAR())) {
             $intMonth = $objDate->getIntMonth();
 
             if ($intMonth < 7) {
                 $strRelativeString = "-1 year first day of july";
-            }
-            else {
+            } else {
                 $strRelativeString = "first day of january";
             }
-        }
-        elseif ($objPeriod->equals(DatePeriodEnum::QUARTER())) {
+        } elseif ($objPeriod->equals(DatePeriodEnum::QUARTER())) {
             $intMonth = $objDate->getIntMonth();
 
             if ($intMonth < 4) {
                 $strRelativeString = "-1 year first day of october";
-            }
-            elseif ($intMonth > 3 && $intMonth < 7) {
+            } elseif ($intMonth > 3 && $intMonth < 7) {
                 $strRelativeString = "first day of january";
-            }
-            elseif ($intMonth > 6 && $intMonth < 10) {
+            } elseif ($intMonth > 6 && $intMonth < 10) {
                 $strRelativeString = "first day of april";
-            }
-            elseif ($intMonth > 9) {
+            } elseif ($intMonth > 9) {
                 $strRelativeString = "first day of july";
             }
-        }
-        elseif ($objPeriod->equals(DatePeriodEnum::MONTH())) {
+        } elseif ($objPeriod->equals(DatePeriodEnum::MONTH())) {
             $strRelativeString = "first day of last month";
-        }
-        elseif ($objPeriod->equals(DatePeriodEnum::WEEK())) {
+        } elseif ($objPeriod->equals(DatePeriodEnum::WEEK())) {
             if ($objDate->getIntDayOfWeek() == 1) {
                 $strRelativeString = "-1 week";
-            }
-            else {
+            } else {
                 $strRelativeString = "-1 week last monday";
             }
         }
@@ -421,41 +410,32 @@ class DateHelper
 
         if ($objPeriod->equals(DatePeriodEnum::YEAR())) {
             $strRelativeString = "-1 year last day of december";
-        }
-        elseif ($objPeriod->equals(DatePeriodEnum::HALFYEAR())) {
+        } elseif ($objPeriod->equals(DatePeriodEnum::HALFYEAR())) {
             $intMonth = $objDate->getIntMonth();
 
             if ($intMonth < 7) {
                 $strRelativeString = "-1 year last day of december";
-            }
-            else {
+            } else {
                 $strRelativeString = "last day of june";
             }
-        }
-        elseif ($objPeriod->equals(DatePeriodEnum::QUARTER())) {
+        } elseif ($objPeriod->equals(DatePeriodEnum::QUARTER())) {
             $intMonth = $objDate->getIntMonth();
 
             if ($intMonth < 4) {
                 $strRelativeString = "-1 year last day of december";
-            }
-            elseif ($intMonth > 3 && $intMonth < 7) {
+            } elseif ($intMonth > 3 && $intMonth < 7) {
                 $strRelativeString = "last day of march";
-            }
-            elseif ($intMonth > 6 && $intMonth < 10) {
+            } elseif ($intMonth > 6 && $intMonth < 10) {
                 $strRelativeString = "last day of june";
-            }
-            elseif ($intMonth > 9) {
+            } elseif ($intMonth > 9) {
                 $strRelativeString = "last day of september";
             }
-        }
-        elseif ($objPeriod->equals(DatePeriodEnum::MONTH())) {
+        } elseif ($objPeriod->equals(DatePeriodEnum::MONTH())) {
             $strRelativeString = "last day of last month";
-        }
-        elseif ($objPeriod->equals(DatePeriodEnum::WEEK())) {
+        } elseif ($objPeriod->equals(DatePeriodEnum::WEEK())) {
             if ($objDate->getIntDayOfWeek() == 0) {
                 $strRelativeString = "-1 week";
-            }
-            else {
+            } else {
                 $strRelativeString = "-1 week next sunday";
             }
         }
@@ -484,41 +464,32 @@ class DateHelper
 
         if ($objPeriod->equals(DatePeriodEnum::YEAR())) {
             $strRelativeString = "+1 year first day of january";
-        }
-        elseif ($objPeriod->equals(DatePeriodEnum::HALFYEAR())) {
+        } elseif ($objPeriod->equals(DatePeriodEnum::HALFYEAR())) {
             $intMonth = $objDate->getIntMonth();
 
             if ($intMonth < 7) {
                 $strRelativeString = "first day of july";
-            }
-            else {
+            } else {
                 $strRelativeString = "+1 year first day of january";
             }
-        }
-        elseif ($objPeriod->equals(DatePeriodEnum::QUARTER())) {
+        } elseif ($objPeriod->equals(DatePeriodEnum::QUARTER())) {
             $intMonth = $objDate->getIntMonth();
 
             if ($intMonth < 4) {
                 $strRelativeString = "first day of april";
-            }
-            elseif ($intMonth > 3 && $intMonth < 7) {
+            } elseif ($intMonth > 3 && $intMonth < 7) {
                 $strRelativeString = "first day of july";
-            }
-            elseif ($intMonth > 6 && $intMonth < 10) {
+            } elseif ($intMonth > 6 && $intMonth < 10) {
                 $strRelativeString = "first day of october";
-            }
-            elseif ($intMonth > 9) {
+            } elseif ($intMonth > 9) {
                 $strRelativeString = "+1 year first day of january";
             }
-        }
-        elseif ($objPeriod->equals(DatePeriodEnum::MONTH())) {
+        } elseif ($objPeriod->equals(DatePeriodEnum::MONTH())) {
             $strRelativeString = "first day of next month";
-        }
-        elseif ($objPeriod->equals(DatePeriodEnum::WEEK())) {
+        } elseif ($objPeriod->equals(DatePeriodEnum::WEEK())) {
             if ($objDate->getIntDayOfWeek() == 1) {
                 $strRelativeString = "+1 week";
-            }
-            else {
+            } else {
                 $strRelativeString = "next monday";
             }
         }
@@ -547,41 +518,32 @@ class DateHelper
 
         if ($objPeriod->equals(DatePeriodEnum::YEAR())) {
             $strRelativeString = "+1 year last day of december";
-        }
-        elseif ($objPeriod->equals(DatePeriodEnum::HALFYEAR())) {
+        } elseif ($objPeriod->equals(DatePeriodEnum::HALFYEAR())) {
             $intMonth = $objDate->getIntMonth();
 
             if ($intMonth < 7) {
                 $strRelativeString = "last day of december";
-            }
-            else {
+            } else {
                 $strRelativeString = "+1 year last day of june";
             }
-        }
-        elseif ($objPeriod->equals(DatePeriodEnum::QUARTER())) {
+        } elseif ($objPeriod->equals(DatePeriodEnum::QUARTER())) {
             $intMonth = $objDate->getIntMonth();
 
             if ($intMonth < 4) {
                 $strRelativeString = "last day of june";
-            }
-            elseif ($intMonth > 3 && $intMonth < 7) {
+            } elseif ($intMonth > 3 && $intMonth < 7) {
                 $strRelativeString = "last day of september";
-            }
-            elseif ($intMonth > 6 && $intMonth < 10) {
+            } elseif ($intMonth > 6 && $intMonth < 10) {
                 $strRelativeString = "last day of december";
-            }
-            elseif ($intMonth > 9) {
+            } elseif ($intMonth > 9) {
                 $strRelativeString = "+1 year last day of march";
             }
-        }
-        elseif ($objPeriod->equals(DatePeriodEnum::MONTH())) {
+        } elseif ($objPeriod->equals(DatePeriodEnum::MONTH())) {
             $strRelativeString = "last day of next month";
-        }
-        elseif ($objPeriod->equals(DatePeriodEnum::WEEK())) {
+        } elseif ($objPeriod->equals(DatePeriodEnum::WEEK())) {
             if ($objDate->getIntDayOfWeek() == 0) {
                 $strRelativeString = "+1 week";
-            }
-            else {
+            } else {
                 $strRelativeString = "+1 week next sunday";
             }
         }
@@ -610,37 +572,29 @@ class DateHelper
 
         if ($objPeriod->equals(DatePeriodEnum::YEAR())) {
             $strRelativeString = "first day of january";
-        }
-        elseif ($objPeriod->equals(DatePeriodEnum::HALFYEAR())) {
+        } elseif ($objPeriod->equals(DatePeriodEnum::HALFYEAR())) {
             $intMonth = $objDate->getIntMonth();
 
             if ($intMonth < 7) {
                 $strRelativeString = "first day of january";
-            }
-            else {
+            } else {
                 $strRelativeString = "first day of july";
             }
-        }
-        elseif ($objPeriod->equals(DatePeriodEnum::QUARTER())) {
+        } elseif ($objPeriod->equals(DatePeriodEnum::QUARTER())) {
             $intMonth = $objDate->getIntMonth();
 
             if ($intMonth < 4) {
                 $strRelativeString = "first day of january";
-            }
-            elseif ($intMonth > 3 && $intMonth < 7) {
+            } elseif ($intMonth > 3 && $intMonth < 7) {
                 $strRelativeString = "first day of april";
-            }
-            elseif ($intMonth > 6 && $intMonth < 10) {
+            } elseif ($intMonth > 6 && $intMonth < 10) {
                 $strRelativeString = "first day of july";
-            }
-            elseif ($intMonth > 9) {
+            } elseif ($intMonth > 9) {
                 $strRelativeString = "first day of october";
             }
-        }
-        elseif ($objPeriod->equals(DatePeriodEnum::MONTH())) {
+        } elseif ($objPeriod->equals(DatePeriodEnum::MONTH())) {
             $strRelativeString = "first day of this month";
-        }
-        elseif ($objPeriod->equals(DatePeriodEnum::WEEK())) {
+        } elseif ($objPeriod->equals(DatePeriodEnum::WEEK())) {
 
             $strRelativeString = "monday this week";
 
@@ -649,8 +603,7 @@ class DateHelper
                 //php 7.0.0 - 7.0.7
                 if (version_compare(PHP_VERSION, "7", ">=") && version_compare(PHP_VERSION, "7.0.8", "<")) {
                     $strRelativeString = "monday last week";
-                }
-                //php < 5.6.23
+                } //php < 5.6.23
                 else {
                     if (version_compare(PHP_VERSION, "5.6.23", "<")) {
                         $strRelativeString = "monday last week";
@@ -685,41 +638,32 @@ class DateHelper
 
         if ($objPeriod->equals(DatePeriodEnum::YEAR())) {
             $strRelativeString = "last day of december";
-        }
-        elseif ($objPeriod->equals(DatePeriodEnum::HALFYEAR())) {
+        } elseif ($objPeriod->equals(DatePeriodEnum::HALFYEAR())) {
             $intMonth = $objDate->getIntMonth();
 
             if ($intMonth < 7) {
                 $strRelativeString = "last day of june";
-            }
-            else {
+            } else {
                 $strRelativeString = "last day of december";
             }
-        }
-        elseif ($objPeriod->equals(DatePeriodEnum::QUARTER())) {
+        } elseif ($objPeriod->equals(DatePeriodEnum::QUARTER())) {
             $intMonth = $objDate->getIntMonth();
 
             if ($intMonth < 4) {
                 $strRelativeString = "last day of march";
-            }
-            elseif ($intMonth > 3 && $intMonth < 7) {
+            } elseif ($intMonth > 3 && $intMonth < 7) {
                 $strRelativeString = "last day of june";
-            }
-            elseif ($intMonth > 6 && $intMonth < 10) {
+            } elseif ($intMonth > 6 && $intMonth < 10) {
                 $strRelativeString = "last day of september";
-            }
-            elseif ($intMonth > 9) {
+            } elseif ($intMonth > 9) {
                 $strRelativeString = "last day of december";
             }
-        }
-        elseif ($objPeriod->equals(DatePeriodEnum::MONTH())) {
+        } elseif ($objPeriod->equals(DatePeriodEnum::MONTH())) {
             $strRelativeString = "last day of this month";
-        }
-        elseif ($objPeriod->equals(DatePeriodEnum::WEEK())) {
+        } elseif ($objPeriod->equals(DatePeriodEnum::WEEK())) {
             if ($objDate->getIntDayOfWeek() == 0) {
                 $strRelativeString = "now";
-            }
-            else {
+            } else {
                 //check if correct?
                 $strRelativeString = "sunday this week";
             }
@@ -746,17 +690,13 @@ class DateHelper
 
         if ($objPeriod->equals(DatePeriodEnum::YEAR())) {
             $strRelativeString = "+1 year";
-        }
-        elseif ($objPeriod->equals(DatePeriodEnum::HALFYEAR())) {
+        } elseif ($objPeriod->equals(DatePeriodEnum::HALFYEAR())) {
             $strRelativeString = "+6 month";
-        }
-        elseif ($objPeriod->equals(DatePeriodEnum::QUARTER())) {
+        } elseif ($objPeriod->equals(DatePeriodEnum::QUARTER())) {
             $strRelativeString = "+3 month";
-        }
-        elseif ($objPeriod->equals(DatePeriodEnum::MONTH())) {
+        } elseif ($objPeriod->equals(DatePeriodEnum::MONTH())) {
             $strRelativeString = "+1 month";
-        }
-        elseif ($objPeriod->equals(DatePeriodEnum::WEEK())) {
+        } elseif ($objPeriod->equals(DatePeriodEnum::WEEK())) {
             $strRelativeString = "+1 week";
         }
 

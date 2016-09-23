@@ -5,7 +5,7 @@
 ********************************************************************************************************/
 
 
-namespace Kajona\Samplecontent\System;
+namespace Kajona\Installer\System;
 
 
 use Kajona\Packagemanager\System\PackagemanagerMetadata;
@@ -123,6 +123,7 @@ class SamplecontentInstallerHelper
                 $strReturn .= "<b>Copying the favicon.ico.root to top level failed!!!</b>";
             }
         }
+
 
 
         return $strReturn;

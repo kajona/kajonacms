@@ -11,8 +11,8 @@ namespace Kajona\News\Admin;
 
 use Kajona\News\System\NewsCategory;
 use Kajona\News\System\NewsCategoryFilter;
-use Kajona\News\System\NewsNewsFilter;
 use Kajona\News\System\NewsNews;
+use Kajona\News\System\NewsNewsFilter;
 use Kajona\System\Admin\AdminEvensimpler;
 use Kajona\System\Admin\AdminFormgeneratorFilter;
 use Kajona\System\Admin\AdminInterface;
@@ -50,7 +50,6 @@ use Kajona\System\System\Objectfactory;
  */
 class NewsAdmin extends AdminEvensimpler implements AdminInterface
 {
-
     const STR_CAT_LIST = "STR_CAT_LIST";
     const STR_NEWS_LIST = "STR_NEWS_LIST";
 
@@ -141,8 +140,7 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
     {
         if ($strListIdentifier == NewsAdmin::STR_CAT_LIST) {
             return $this->objToolkit->listButton(Link::getLinkAdmin($this->getArrModule("modul"), "newCategory", "", $this->getLang("commons_create_category"), $this->getLang("commons_create_category"), "icon_new"));
-        }
-        elseif ($strListIdentifier == NewsAdmin::STR_NEWS_LIST) {
+        } elseif ($strListIdentifier == NewsAdmin::STR_NEWS_LIST) {
             return $this->objToolkit->listButton(Link::getLinkAdmin($this->getArrModule("modul"), "newNews", "", $this->getLang("action_new_news"), $this->getLang("action_new_news"), "icon_new"));
         }
 
@@ -166,7 +164,7 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
         /** @var  NewsCategoryFilter $objFilter */
         $objFilter = NewsCategoryFilter::getOrCreateFromSession();
         $strFilterForm = $this->renderFilter($objFilter);
-        if($strFilterForm === AdminFormgeneratorFilter::STR_FILTER_REDIRECT) {
+        if ($strFilterForm === AdminFormgeneratorFilter::STR_FILTER_REDIRECT) {
             return "";
         }
 
@@ -184,7 +182,7 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
         /** @var  NewsNewsFilter $objFilter */
         $objFilter = NewsNewsFilter::getOrCreateFromSession();
         $strFilterForm = $this->renderFilter($objFilter);
-        if($strFilterForm === AdminFormgeneratorFilter::STR_FILTER_REDIRECT) {
+        if ($strFilterForm === AdminFormgeneratorFilter::STR_FILTER_REDIRECT) {
             return "";
         }
         $strReturn .= $strFilterForm;
@@ -226,8 +224,7 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
                 $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
                 $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
                 $strReturn .= $this->objToolkit->formClose();
-            }
-            else {
+            } else {
 
                 $objLanguage = new LanguagesLanguage($objLanguageset->getLanguageidForSystemid($this->getSystemid()));
 
@@ -250,8 +247,7 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
                         $strNewsName = $objNews->getStrTitle();
                         $strActions .= $this->objToolkit->listButton(Link::getLinkAdmin($this->getArrModule("modul"), "removeFromLanguageset", "&systemid=".$objNews->getSystemid(), "", $this->getLang("languageset_remove"), "icon_delete"));
                         $strReturn .= $this->objToolkit->genericAdminList($objOneLanguage->getSystemid(), $this->getLang("lang_".$objOneLanguage->getStrName(), "languages").": ".$strNewsName, getImageAdmin("icon_language"), $strActions);
-                    }
-                    else {
+                    } else {
                         $intNrOfUnassigned++;
                         $strReturn .= $this->objToolkit->genericAdminList(
                             $objOneLanguage->getSystemid(),
@@ -295,8 +291,7 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
                     $strReturn .= $this->objToolkit->formClose();
                 }
             }
-        }
-        else {
+        } else {
             $strReturn .= $this->getLang("commons_error_permissions");
         }
 
@@ -385,8 +380,7 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
                 }
             }
             $strReturn .= "</categories>\n";
-        }
-        else {
+        } else {
             $strReturn = "<error>".$this->getLang("commons_error_permissions")."</error>";
         }
 
@@ -423,8 +417,7 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
                 }
             }
             $strReturn .= "</newslist>\n";
-        }
-        else {
+        } else {
             $strReturn = "<error>".$this->getLang("commons_error_permissions")."</error>";
         }
 
@@ -472,8 +465,7 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
             $strReturn .= "   <enddate>".xmlSafeString($objNews->getObjEndDate() != null ? $objNews->getObjEndDate()->getTimeInOldStyle() : "")."</enddate>";
             $strReturn .= "   <archivedate>".xmlSafeString($objNews->getObjDateSpecial() != null ? $objNews->getObjDateSpecial()->getTimeInOldStyle() : "")."</archivedate>";
             $strReturn .= " </news>\n";
-        }
-        else {
+        } else {
             $strReturn = "<error>".$this->getLang("commons_error_permissions")."</error>";
         }
 
@@ -520,13 +512,11 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
             $objNews->setArrCats($arrCats);
             if ($objNews->updateObjectToDb()) {
                 $strReturn = "<success></success>";
-            }
-            else {
+            } else {
                 $strReturn = "<error></error>";
             }
 
-        }
-        else {
+        } else {
             $strReturn = "<error>".$this->getLang("commons_error_permissions")."</error>";
         }
 

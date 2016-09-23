@@ -746,10 +746,8 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
                     if('%%calendarLang%%' == 'en')
                         arrSecondFiles = [];
                     KAJONA.admin.loader.loadFile(arrSecondFiles, function() {
-                        var format = '%%dateFormat%%';
-                        format = format.replace('d', 'dd').replace('m', 'mm').replace('Y', 'yyyy');
                         $('#%%calendarId%%').datepicker({
-                            format: format,
+                            format: KAJONA.util.transformDateFormat('%%dateFormat%%', "bootstrap-datepicker"),
                             weekStart: 1,
                             autoclose: true,
                             language: '%%calendarLang%%',
@@ -795,10 +793,8 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
         <script>
             KAJONA.admin.loader.loadFile(["/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-datepicker.js"], function() {
                 KAJONA.admin.loader.loadFile(["/core/module_v4skin/admin/skins/kajona_v4/js/locales/bootstrap-datepicker.%%calendarLang%%.js"], function() {
-                    var format = '%%dateFormat%%';
-                    format = format.replace('d', 'dd').replace('m', 'mm').replace('Y', 'yyyy');
                     $('#%%calendarId%%').datepicker({
-                        format: format,
+                        format: KAJONA.util.transformDateFormat('%%dateFormat%%', "bootstrap-datepicker"),
                         weekStart: 1,
                         autoclose: true,
                         language: '%%calendarLang%%',
@@ -1048,13 +1044,16 @@ A list of checkbox or radio input elements
 
 A list of checkbox for object elements
 <input_checkboxarrayobjectlist>
-    <div class="form-group">
+    <div class="form-group form-checkboxarraylist">
         <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
 
         <div class="col-sm-6 inputText">
-            <div id="%%name%%" class="inputContainer %%class%%">
+            <div id="%%name%%" class="inputContainer">
                 %%elements%%
             </div>
+        </div>
+        <div class="col-sm-2 form-opener">
+            %%addLink%%
         </div>
     </div>
     <div class="form-group">
@@ -1078,12 +1077,12 @@ A list of checkbox for object elements
 </input_checkboxarrayobjectlist>
 
 <input_checkboxarrayobjectlist_row>
-    <tbody class="%%cssaddon%%">
+    <tbody>
         <tr data-systemid="%%systemid%%">
             <td class="listcheckbox"><input type="checkbox" name="%%name%%[%%systemid%%]" data-systemid="%%systemid%%" %%checked%% %%readonly%%></td>
             <td class="listimage">%%icon%%</td>
             <td class="title">
-                <div class="small" style="color:#aaa">%%path%%</div>
+                <div class="small text-muted">%%path%%</div>
                 %%title%%
             </td>
         </tr>
@@ -1931,4 +1930,30 @@ It containes a list of aspects and provides the possibility to switch the differ
 <li class="divider"></li>
 </sitemap_divider_entry>
 
+<changelog_heatmap>
+    <div class="chart-navigation pull-left"><a href="#" onclick="KAJONA.admin.changelog.loadPrevYear();return false;"><i class="kj-icon fa fa-arrow-left"></i></a></div>
+    <div class="chart-navigation pull-right"><a href="#" onclick="KAJONA.admin.changelog.loadNextYear();return false;"><i class="kj-icon fa fa-arrow-right"></i></a></div>
+    <div id='changelogTimeline' style='text-align:center;'></div>
 
+    <script type="text/javascript">
+        KAJONA.admin.loader.loadFile([
+            '/core/module_system/admin/scripts/moment/moment.min.js',
+            '/core/module_system/admin/scripts/d3/d3.min.js',
+            '/core/module_system/admin/scripts/d3/calendar-heatmap.js',
+            '/core/module_system/admin/scripts/d3/calendar-heatmap.css'], function() {
+
+            KAJONA.admin.changelog.lang = %%strLang%%;
+            KAJONA.admin.changelog.systemId = "%%strSystemId%%";
+            KAJONA.admin.changelog.format = KAJONA.util.transformDateFormat('%%strDateFormat%%', "momentjs");
+            KAJONA.admin.changelog.now = moment().endOf('day').toDate();
+            KAJONA.admin.changelog.yearAgo = moment().startOf('day').subtract(1, 'year').toDate();
+            KAJONA.admin.changelog.selectColumn("right");
+            KAJONA.admin.changelog.loadChartData();
+
+            KAJONA.admin.changelog.loadDate("%%strSystemId%%", "%%strLeftDate%%", "left", function(){
+                KAJONA.admin.changelog.loadDate("%%strSystemId%%", "%%strRightDate%%", "right", KAJONA.admin.changelog.compareTable);
+            });
+
+        });
+    </script>
+</changelog_heatmap>

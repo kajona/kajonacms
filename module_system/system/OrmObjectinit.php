@@ -75,6 +75,12 @@ class OrmObjectinit extends OrmBase
 
                 $strSetter = $objReflection->getSetter($strPropertyName);
                 if ($strSetter !== null) {
+
+                    //some properties may be set converted, e.g. a date object
+                    $strVar = $objReflection->getAnnotationValueForProperty($strPropertyName, "@var");
+                    if(StringUtil::indexOf($strVar, "Date") !== false && $arrRow[$strColumn] > 0) {
+                        $arrRow[$strColumn] = new Date($arrRow[$strColumn]);
+                    }
                     $this->getObjObject()->{$strSetter}($arrRow[$strColumn]);
                 }
             }

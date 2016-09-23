@@ -111,7 +111,6 @@ Description</th>
 			<td>Thrown whenever a record is updated to the database.<br/> The param $bitRecordCreated indicates
 			if a record was created(true) of if is only being updated(false)</td>
 		</tr>
-		
 		<tr>
 			<td rowspan="3" style="border-top: 1px solid #ccc;border-right: 1px solid #ccc; vertical-align: top;">core.system.objectassignmentsupdated</td>
 			<td style="border-top: 1px solid #ccc;">Since</td>
@@ -131,9 +130,7 @@ string $strProperty<br /><br />return bool</td>
 as assignments are added or removed from an object.
 The event gets a list of all three relevant items: assignments added, assignments removed, assignments remaining.
 The relevant object and the name of the changed property are passed, too.<br />Return a valid bool value, otherwise the transaction will be rolled back!</td>
-		</tr>
-		
-		
+		</tr>	
 		<tr>
 			<td rowspan="3" style="border-top: 1px solid #ccc; border-right: 1px solid #ccc;vertical-align: top;">core.system.recordcopied</td>
 			<td style="border-top: 1px solid #ccc;">Since</td>
@@ -164,9 +161,6 @@ The relevant object and the name of the changed property are passed, too.<br />R
 			<td>Description</td>
 			<td>Called whenever a record was copied. Event will be fired AFTER child objects were copied. Useful to perform additional actions, e.g. update / duplicate foreign assignments.</td>
 		</tr>
-		
-		
-		
 		<tr>
         			<td rowspan="3" style="border-top: 1px solid #ccc; border-right: 1px solid #ccc;vertical-align: top;">core.system.permissionschanged</td>
         			<td style="border-top: 1px solid #ccc;">Since</td>
@@ -182,11 +176,6 @@ The relevant object and the name of the changed property are passed, too.<br />R
         			<td>Invoked if the permissions of a record have been changed.
                             Triggered only by the "root" node of the change cascade.</td>
         		</tr>	
-		
-		
-		
-		
-		
 		<tr>
 			<td rowspan="3" style="border-top: 1px solid #ccc; border-right: 1px solid #ccc;vertical-align: top;">core.system.previdchanged</td>
 			<td style="border-top: 1px solid #ccc;">Since</td>
@@ -203,7 +192,6 @@ The relevant object and the name of the changed property are passed, too.<br />R
 			<td>Invoked every time a records status was changed.
                 Please note that the event is only triggered on changes, not during a records creation.</td>
 		</tr>		
-		
 		<tr>
 			<td rowspan="3" style="border-top: 1px solid #ccc; border-right: 1px solid #ccc;vertical-align: top;">core.system.statuschanged</td>
 			<td style="border-top: 1px solid #ccc;">Since</td>
@@ -220,10 +208,6 @@ The relevant object and the name of the changed property are passed, too.<br />R
 			<td>Description</td>
 			<td>Thrown if a records parent-id changed, e.g. if a record is moved within a hierarchical tree.</td>
 		</tr>
-		
-		
-		
-		
 		<tr>
 			<td rowspan="3" style="border-top: 1px solid #ccc; border-right: 1px solid #ccc;vertical-align: top;">core.system.recorddeleted</td>
 			<td style="border-top: 1px solid #ccc;">Since</td>
@@ -238,9 +222,6 @@ The relevant object and the name of the changed property are passed, too.<br />R
 			<td>Description</td>
 			<td>Thrown as soon as record is deleted from the database. Listen to those events if you want to trigger additional cleanups or delete linked contents.<br />Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.</td>
 		</tr>
-		
-		
-		
 		<tr>
 			<td rowspan="3" style="border-top: 1px solid #ccc; border-right: 1px solid #ccc;vertical-align: top;">core.system.recorddeleted.logically</td>
 			<td style="border-top: 1px solid #ccc;">Since</td>
@@ -255,10 +236,6 @@ The relevant object and the name of the changed property are passed, too.<br />R
 			<td>Description</td>
 			<td>Thrown as soon as record is deleted logically, so set inactive. The reocord is NOT removed from the database. Listen to those events if you want to trigger additional cleanups or delete linked contents.<br />Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.</td>
 		</tr>
-		
-		
-		
-		
 		<tr>
         			<td rowspan="3" style="border-top: 1px solid #ccc; border-right: 1px solid #ccc;vertical-align: top;">core.system.recordrestored.logically</td>
         			<td style="border-top: 1px solid #ccc;">Since</td>
@@ -274,10 +251,6 @@ The relevant object and the name of the changed property are passed, too.<br />R
         			<td>Description</td>
         			<td>Called whenever a records is restored from the database.<br />The event is fired after the record was restored but before the transaction will be committed.<br />Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.</td>
         		</tr>
-		
-		
-		
-		
 		<tr>
 			<td rowspan="3" style="border-top: 1px solid #ccc; border-right: 1px solid #ccc;vertical-align: top;">core.system.userfirstlogin</td>
 			<td style="border-top: 1px solid #ccc;">Since</td>
@@ -337,8 +310,18 @@ The relevant object and the name of the changed property are passed, too.<br />R
 			<td>Thrown as soon as an object is indexed by the search. Listen to this event if you want to add additional keywords to the objects' search index entry.</td>
 		</tr>
 		<tr>
-			<td>&nbsp;</td>
-			<td colspan="2">&nbsp;</td>
+			<td rowspan="3" style="border-top: 1px solid #ccc; border-right: 1px solid #ccc;vertical-align: top;">core.packagemanager.packageupdated</td>
+			<td style="border-top: 1px solid #ccc;">Since</td>
+			<td style="border-top: 1px solid #ccc;">5.1</td>
 		</tr>
+		<tr>
+			<td>Arguments</td>
+			<td>@param \Kajona\Packagemanager\System\PackagemanagerPackagemanagerInterface $objManager the installed / updated package</td>
+		</tr>
+		<tr>
+			<td>Description</td>
+			<td>Event thrown as soon as a package was either installed or updated.</td>
+		</tr>
+
 	</tbody>
 </table>

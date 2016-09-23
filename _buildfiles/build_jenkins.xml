@@ -94,7 +94,7 @@
     <target name="buildSqliteFast" depends="
 		    								init,
 					    					buildProject, installProjectSqlite,
-					    					lint,phploc,phpunitFast,jasmine,
+					    					lint,phpunitFast,jasmine,
 					    					buildAllInOneZip" />
 
 

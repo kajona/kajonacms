@@ -27,23 +27,24 @@ use Kajona\System\System\SystemSetting;
  * @package module_news
  * @moduleId _news_module_id_
  */
-class InstallerNews extends InstallerBase implements InstallerRemovableInterface {
-
-    public function install() {
-		$strReturn = "";
+class InstallerNews extends InstallerBase implements InstallerRemovableInterface
+{
+    public function install()
+    {
+        $strReturn = "";
         $objManager = new OrmSchemamanager();
 
-		$strReturn .= "Installing table news_category...\n";
+        $strReturn .= "Installing table news_category...\n";
         $objManager->createTable("Kajona\\News\\System\\NewsCategory");
 
-		$strReturn .= "Installing table news...\n";
+        $strReturn .= "Installing table news...\n";
         $objManager->createTable("Kajona\\News\\System\\NewsNews");
 
-		$strReturn .= "Installing table news_feed...\n";
+        $strReturn .= "Installing table news_feed...\n";
         $objManager->createTable("Kajona\\News\\System\\NewsFeed");
 
-		//register the module
-		$this->registerModule(
+        //register the module
+        $this->registerModule(
             "news",
             _news_module_id_,
             "NewsPortal.php",
@@ -60,7 +61,7 @@ class InstallerNews extends InstallerBase implements InstallerRemovableInterface
         //Register the element
         $strReturn .= "Registering news-element...\n";
         //check, if not already existing
-        if(PagesElement::getElement("news") == null) {
+        if (PagesElement::getElement("news") == null) {
             $objElement = new PagesElement();
             $objElement->setStrName("news");
             $objElement->setStrClassAdmin("ElementNewsAdmin.php");
@@ -70,13 +71,12 @@ class InstallerNews extends InstallerBase implements InstallerRemovableInterface
             $objElement->setStrVersion($this->objMetadata->getStrVersion());
             $objElement->updateObjectToDb();
             $strReturn .= "Element registered...\n";
-        }
-        else {
+        } else {
             $strReturn .= "Element already installed!...\n";
         }
 
         $strReturn .= "Setting aspect assignments...\n";
-        if(SystemAspect::getAspectByName("content") != null) {
+        if (SystemAspect::getAspectByName("content") != null) {
             $objModule = SystemModule::getModuleByName($this->objMetadata->getStrTitle());
             $objModule->setStrAspect(SystemAspect::getAspectByName("content")->getSystemid());
             $objModule->updateObjectToDb();
@@ -85,9 +85,9 @@ class InstallerNews extends InstallerBase implements InstallerRemovableInterface
         $strReturn .= "Registering config settings...\n";
         $this->registerConstant("_news_news_datetime_", "false", SystemSetting::$int_TYPE_BOOL, _news_module_id_);
 
-		return $strReturn;
+        return $strReturn;
 
-	}
+    }
 
     /**
      * Validates whether the current module/element is removable or not.
@@ -96,7 +96,8 @@ class InstallerNews extends InstallerBase implements InstallerRemovableInterface
      *
      * @return bool
      */
-    public function isRemovable() {
+    public function isRemovable()
+    {
         return true;
     }
 
@@ -108,41 +109,41 @@ class InstallerNews extends InstallerBase implements InstallerRemovableInterface
      *
      * @return bool
      */
-    public function remove(&$strReturn) {
+    public function remove(&$strReturn)
+    {
 
         //delete the page-element
         $objElement = PagesElement::getElement("news");
-        if($objElement != null) {
+        if ($objElement != null) {
             $strReturn .= "Deleting page-element 'news'...\n";
             $objElement->deleteObjectFromDatabase();
-        }
-        else {
+        } else {
             $strReturn .= "Error finding page-element 'news', aborting.\n";
             return false;
         }
 
         /** @var NewsFeed $objOneObject */
-        foreach(NewsFeed::getObjectListFiltered() as $objOneObject) {
+        foreach (NewsFeed::getObjectListFiltered() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
-            if(!$objOneObject->deleteObjectFromDatabase()) {
+            if (!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";
                 return false;
             }
         }
 
         /** @var NewsCategory $objOneObject */
-        foreach(NewsCategory::getObjectListFiltered() as $objOneObject) {
+        foreach (NewsCategory::getObjectListFiltered() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
-            if(!$objOneObject->deleteObjectFromDatabase()) {
+            if (!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";
                 return false;
             }
         }
 
         /** @var NewsNews $objOneObject */
-        foreach(NewsNews::getObjectListFiltered() as $objOneObject) {
+        foreach (NewsNews::getObjectListFiltered() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
-            if(!$objOneObject->deleteObjectFromDatabase()) {
+            if (!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";
                 return false;
             }
@@ -151,15 +152,15 @@ class InstallerNews extends InstallerBase implements InstallerRemovableInterface
         //delete the module-node
         $strReturn .= "Deleting the module-registration...\n";
         $objModule = SystemModule::getModuleByName($this->objMetadata->getStrTitle(), true);
-        if(!$objModule->deleteObjectFromDatabase()) {
+        if (!$objModule->deleteObjectFromDatabase()) {
             $strReturn .= "Error deleting module, aborting.\n";
             return false;
         }
 
         //delete the tables
-        foreach(array("news_category", "news", "news_member", "news_feed", "element_news") as $strOneTable) {
+        foreach (array("news_category", "news", "news_member", "news_feed", "element_news") as $strOneTable) {
             $strReturn .= "Dropping table ".$strOneTable."...\n";
-            if(!$this->objDB->_pQuery("DROP TABLE ".$this->objDB->encloseTableName(_dbprefix_.$strOneTable)."", array())) {
+            if (!$this->objDB->_pQuery("DROP TABLE ".$this->objDB->encloseTableName(_dbprefix_.$strOneTable)."", array())) {
                 $strReturn .= "Error deleting table, aborting.\n";
                 return false;
             }
@@ -170,50 +171,52 @@ class InstallerNews extends InstallerBase implements InstallerRemovableInterface
     }
 
 
-    public function update() {
-	    $strReturn = "";
+    public function update()
+    {
+        $strReturn = "";
         //check installed version and to which version we can update
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.6") {
+        if ($arrModule["module_version"] == "4.6") {
             $strReturn .= "Updating to 4.7...\n";
             $this->updateModuleVersion("news", "4.7");
             $this->updateElementVersion("news", "4.7");
         }
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.7" || $arrModule["module_version"] == "4.7.1" || $arrModule["module_version"] == "4.7.2") {
+        if ($arrModule["module_version"] == "4.7" || $arrModule["module_version"] == "4.7.1" || $arrModule["module_version"] == "4.7.2") {
             $strReturn .= $this->update_47_475();
         }
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.7.5") {
+        if ($arrModule["module_version"] == "4.7.5") {
             $strReturn .= "Updating to 5.0...\n";
             $this->updateModuleVersion("news", "5.0");
             $this->updateElementVersion("news", "5.0");
         }
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "5.0") {
+        if ($arrModule["module_version"] == "5.0") {
             $strReturn .= "Updating to 5.0.1...\n";
             $this->updateModuleVersion("news", "5.0.1");
             $this->updateElementVersion("news", "5.0.1");
         }
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "5.0.1") {
+        if ($arrModule["module_version"] == "5.0.1") {
             $strReturn .= "Updating to 5.1...\n";
             $this->updateModuleVersion("news", "5.1");
             $this->updateElementVersion("news", "5.1");
         }
-        
-        return $strReturn."\n\n";
-	}
-    
 
-    private function update_47_475() {
+        return $strReturn."\n\n";
+    }
+
+
+    private function update_47_475()
+    {
         $strReturn = "Updating 4.7 to 4.7.5...\n";
 
         $strReturn .= "Changing assignment table...\n";

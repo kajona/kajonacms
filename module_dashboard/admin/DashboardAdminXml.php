@@ -151,7 +151,7 @@ class DashboardAdminXml extends AdminController implements XmlAdminInterface
                 "tooltip"   => $objEvent->getStrDisplayName(),
                 "icon"      => $strIcon,
                 "allDay"    => true,
-                "url"       => $objEvent->getStrHref(),
+                "url"       => htmlspecialchars_decode($objEvent->getStrHref()),
                 "className" => array($objEvent->getStrCategory(), "calendar-event"),
             );
 

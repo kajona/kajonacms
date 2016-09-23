@@ -24,6 +24,8 @@ use Kajona\System\System\Reflection;
  */
 class AdminModelserializer {
 
+    const STR_ANNOTATION_SERIALIZABLE = "@serializable";
+
     const CLASS_KEY = "strRecordClass";
 
     /**
