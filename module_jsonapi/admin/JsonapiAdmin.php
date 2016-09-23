@@ -50,9 +50,7 @@ class JsonapiAdmin extends AdminEvensimpler implements AdminInterface
         try {
             ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_OK);
 
-            $strRequestMethod = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
-            $strRequestMethod = strtolower($strRequestMethod);
-
+            $strRequestMethod = $this->getRequestMethod();
             if (in_array($strRequestMethod, array('get', 'post', 'put', 'delete'))) {
                 $arrResponse = $this->action($strRequestMethod);
             } else {
@@ -276,10 +274,15 @@ class JsonapiAdmin extends AdminEvensimpler implements AdminInterface
             throw new AuthenticationException("You are not allowed to create new records", Exception::$level_ERROR);
         }
 
+        // read the request body and set the fitting params so that the normal form validation works
+        $this->readRequestBody();
+
         $objAdminForm = AdminFormgeneratorFactory::createByModel($objObject);
 
         // validate
         if (!$objAdminForm->validateForm()) {
+            ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_BADREQUEST);
+
             return array(
                 'success' => false,
                 'errors'  => $objAdminForm->getValidationErrors(),
@@ -315,10 +318,15 @@ class JsonapiAdmin extends AdminEvensimpler implements AdminInterface
             throw new AuthenticationException("You are not allowed to update records", Exception::$level_ERROR);
         }
 
+        // read the request body and set the fitting params so that the normal form validation works
+        $this->readRequestBody();
+
         $objAdminForm = AdminFormgeneratorFactory::createByModel($objObject);
 
         // validate
         if (!$objAdminForm->validateForm()) {
+            ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_BADREQUEST);
+
             return array(
                 'success' => false,
                 'errors'  => $objAdminForm->getValidationErrors(),
@@ -404,7 +412,7 @@ class JsonapiAdmin extends AdminEvensimpler implements AdminInterface
      */
     protected function readRequestBody()
     {
-        $strRawBody = file_get_contents('php://input');
+        $strRawBody = $this->getRawInput();
         if (!empty($strRawBody)) {
             $arrBody = json_decode($strRawBody, true);
             $strLastError = json_last_error();
@@ -421,6 +429,29 @@ class JsonapiAdmin extends AdminEvensimpler implements AdminInterface
         } else {
             return null;
         }
+    }
+
+    /**
+     * Returns the raw request input in case of POST and PUT requests
+     *
+     * @return string
+     */
+    protected function getRawInput()
+    {
+        return file_get_contents('php://input');
+    }
+
+    /**
+     * Returns the lowercased request method
+     *
+     * @return string
+     */
+    protected function getRequestMethod()
+    {
+        $strRequestMethod = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
+        $strRequestMethod = strtolower($strRequestMethod);
+
+        return $strRequestMethod;
     }
 
     /**
