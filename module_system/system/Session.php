@@ -24,6 +24,10 @@ final class Session
     private $arrRequestArray;
 
     public static $intScopeSession = 1;
+    /**
+     * @var int
+     * @deprecated use static fields instead
+     */
     public static $intScopeRequest = 2;
 
     private static $objSession = null;
@@ -130,8 +134,7 @@ final class Session
         if ($intSessionScope == Session::$intScopeRequest) {
             $this->arrRequestArray[$strKey] = $strValue;
             return true;
-        }
-        else {
+        } else {
             if ($this->bitClosed) {
                 throw new Exception("attempt to write to session after calling sessionClose()", Exception::$level_FATALERROR);
             }
@@ -140,8 +143,7 @@ final class Session
             //yes, it is wanted to have only one =. The condition checks the assignment.
             if ($_SESSION[$this->strKey][$strKey] = $strValue) {
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         }
@@ -191,17 +193,14 @@ final class Session
         if ($intScope == Session::$intScopeRequest) {
             if (!isset($this->arrRequestArray[$strKey])) {
                 return false;
-            }
-            else {
+            } else {
                 return $this->arrRequestArray[$strKey];
             }
-        }
-        else {
+        } else {
             $this->sessionStart();
             if (!isset($_SESSION[$this->strKey][$strKey])) {
                 return false;
-            }
-            else {
+            } else {
                 return $_SESSION[$this->strKey][$strKey];
             }
         }
@@ -219,8 +218,7 @@ final class Session
         $this->sessionStart();
         if (isset($_SESSION[$this->strKey][$strKey])) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -249,8 +247,7 @@ final class Session
     {
         if ($this->getObjInternalSession() != null) {
             return $this->getObjInternalSession()->isLoggedIn();
-        }
-        else {
+        } else {
             return false;
         }
 
@@ -266,12 +263,10 @@ final class Session
         if ($this->isLoggedin()) {
             if ($this->getUser() != null && $this->getUser()->getIntAdmin() == 1) {
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -360,8 +355,7 @@ final class Session
                     return $strLang;
                 }
             }
-        }
-        else {
+        } else {
             //try to load a language the user requested
             $strUserLanguages = str_replace(";", ",", getServer("HTTP_ACCEPT_LANGUAGE"));
             if (uniStrlen($strUserLanguages) > 0) {
@@ -390,13 +384,11 @@ final class Session
         if ($this->isLoggedin()) {
             if ($this->getUser() != null && $this->getUser()->getIntPortal() == 1) {
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
 
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -411,12 +403,10 @@ final class Session
         if ($this->isLoggedin()) {
             if ($this->getUser() && $this->getUser()->getIntRecordStatus() == 1) {
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -544,8 +534,7 @@ final class Session
 
             //Login successful, quit
             $bitReturn = true;
-        }
-        else {
+        } else {
             //User is inactive
             $bitReturn = false;
         }
@@ -593,8 +582,7 @@ final class Session
     {
         if ($this->isLoggedin() && $this->getObjInternalSession() != null && $this->getUser() != null) {
             $strUsername = $this->getUser()->getStrUsername();
-        }
-        else {
+        } else {
             $strUsername = "Guest";
         }
         return $strUsername;
@@ -609,8 +597,7 @@ final class Session
     {
         if ($this->getObjInternalSession() != null && $this->isLoggedin()) {
             $strUserid = $this->getObjInternalSession()->getStrUserid();
-        }
-        else {
+        } else {
             $strUserid = "";
         }
         return $strUserid;
@@ -656,8 +643,7 @@ final class Session
     {
         if ($this->getObjInternalSession() != null) {
             $strGroupids = $this->getObjInternalSession()->getStrGroupids();
-        }
-        else {
+        } else {
             $strGroupids = SystemSetting::getConfigValue("_guests_group_id_");
         }
         return $strGroupids;
@@ -672,8 +658,7 @@ final class Session
     {
         if ($this->getObjInternalSession() != null) {
             $strGroupids = $this->getObjInternalSession()->getStrGroupids();
-        }
-        else {
+        } else {
             $strGroupids = SystemSetting::getConfigValue("_guests_group_id_");
         }
         return explode(",", $strGroupids);
@@ -698,8 +683,7 @@ final class Session
     {
         if ($this->getObjInternalSession() != null) {
             return $this->getObjInternalSession()->getSystemid();
-        }
-        else {
+        } else {
             return $this->getSessionId();
         }
     }
@@ -726,8 +710,7 @@ final class Session
             if ($this->objInternalSession != null && $this->objInternalSession->isSessionValid()) {
                 $this->objInternalSession->setIntReleasetime(time() + (int)SystemSetting::getConfigValue("_system_release_time_"));
                 $this->objInternalSession->setStrLasturl(getServer("QUERY_STRING"));
-            }
-            else {
+            } else {
                 $this->objInternalSession = null;
             }
 
