@@ -28,6 +28,7 @@ final class Session
 
     private static $objSession = null;
     private $bitLazyLoaded = false;
+    private $bitPhpSessionStarted = false;
 
     private $bitBlockDbUpdate = false;
 
@@ -56,7 +57,6 @@ final class Session
     {
         //Generating a session-key using a few characteristic values
         $this->strKey = md5(_realpath_.getServer("REMOTE_ADDR"));
-        $this->sessionStart();
         $this->arrRequestArray = array();
     }
 
@@ -76,25 +76,19 @@ final class Session
 
     /**
      * Starts a session
-     *
-     * @return bool
      */
     private function sessionStart()
     {
-        //New session needed or using the already started one?
-        if (!session_id()) {
-            if (@session_start()) {
-                $bitReturn = true;
-            }
-            else {
-                $bitReturn = false;
-            }
-        }
-        else {
-            $bitReturn = true;
+        if ($this->bitPhpSessionStarted || $this->bitClosed) {
+            return;
         }
 
-        return $bitReturn;
+        //New session needed or using the already started one?
+        if (!session_id()) {
+            @session_start();
+        }
+
+        $this->bitPhpSessionStarted = true;
     }
 
     /**
@@ -138,11 +132,11 @@ final class Session
             return true;
         }
         else {
-
             if ($this->bitClosed) {
                 throw new Exception("attempt to write to session after calling sessionClose()", Exception::$level_FATALERROR);
             }
 
+            $this->sessionStart();
             //yes, it is wanted to have only one =. The condition checks the assignment.
             if ($_SESSION[$this->strKey][$strKey] = $strValue) {
                 return true;
@@ -203,6 +197,7 @@ final class Session
             }
         }
         else {
+            $this->sessionStart();
             if (!isset($_SESSION[$this->strKey][$strKey])) {
                 return false;
             }
@@ -221,6 +216,7 @@ final class Session
      */
     public function sessionIsset($strKey)
     {
+        $this->sessionStart();
         if (isset($_SESSION[$this->strKey][$strKey])) {
             return true;
         }
@@ -238,6 +234,7 @@ final class Session
      */
     public function sessionUnset($strKey)
     {
+        $this->sessionStart();
         if ($this->sessionIsset($strKey)) {
             unset($_SESSION[$this->strKey][$strKey]);
         }
@@ -579,6 +576,7 @@ final class Session
         // Finally, destroy the session.
         @session_destroy();
         //start a new one
+        $this->bitPhpSessionStarted = false;
         $this->sessionStart();
         //and create a new sessid
         @session_regenerate_id();
