@@ -90,11 +90,6 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
     private $intStartDate = 0;
     private $intEndDate = 0;
 
-    private $strConfigVal1 = "";
-    private $strConfigVal2 = "";
-    private $strConfigVal3 = "";
-
-
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
      *
@@ -176,9 +171,6 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
             $this->setStrClassPortal($arrRow["element_class_portal"]);
             $this->setIntCachetime($arrRow["element_cachetime"]);
             $this->setIntRepeat($arrRow["element_repeat"]);
-            $this->setStrConfigVal1($arrRow["element_config1"]);
-            $this->setStrConfigVal2($arrRow["element_config2"]);
-            $this->setStrConfigVal3($arrRow["element_config3"]);
 
             if ($arrRow["system_date_start"] > 0) {
                 $this->intStartDate = $arrRow["system_date_start"];
@@ -942,58 +934,5 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
         $this->strLanguage = $strLanguage;
     }
 
-    /**
-     * @param int $intConfigVal1
-     *
-     * @return void
-     */
-    public function setStrConfigVal1($intConfigVal1)
-    {
-        $this->strConfigVal1 = $intConfigVal1;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStrConfigVal1()
-    {
-        return $this->strConfigVal1;
-    }
-
-    /**
-     * @param string $intConfigVal2
-     *
-     * @return void
-     */
-    public function setStrConfigVal2($intConfigVal2)
-    {
-        $this->strConfigVal2 = $intConfigVal2;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStrConfigVal2()
-    {
-        return $this->strConfigVal2;
-    }
-
-    /**
-     * @param string $intConfigVal3
-     *
-     * @return void
-     */
-    public function setStrConfigVal3($intConfigVal3)
-    {
-        $this->strConfigVal3 = $intConfigVal3;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStrConfigVal3()
-    {
-        return $this->strConfigVal3;
-    }
 
 }
