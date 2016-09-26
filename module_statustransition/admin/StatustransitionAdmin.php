@@ -22,9 +22,9 @@ use Kajona\System\System\Link;
  * @objectNewFlow Kajona\Statustransition\System\StatustransitionFlow
  * @objectEditFlow Kajona\Statustransition\System\StatustransitionFlow
  *
- * @objectListAssignment Kajona\Statustransition\System\StatustransitionAssignment
- * @objectNewAssignment Kajona\Statustransition\System\StatustransitionAssignment
- * @objectEditAssignment Kajona\Statustransition\System\StatustransitionAssignment
+ * @objectListAssignment Kajona\Statustransition\System\StatustransitionFlowAssignment
+ * @objectNewAssignment Kajona\Statustransition\System\StatustransitionFlowAssignment
+ * @objectEditAssignment Kajona\Statustransition\System\StatustransitionFlowAssignment
  *
  * @module statustransition
  * @moduleId _statustransition_module_id_

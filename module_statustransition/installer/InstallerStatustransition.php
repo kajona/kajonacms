@@ -9,11 +9,8 @@
 
 namespace Kajona\Statustransition\Installer;
 
-use Kajona\News\System\NewsCategory;
-use Kajona\News\System\NewsFeed;
-use Kajona\News\System\NewsNews;
-use Kajona\Pages\System\PagesElement;
 use Kajona\Statustransition\System\StatustransitionFlow;
+use Kajona\Statustransition\System\StatustransitionFlowAssignment;
 use Kajona\Statustransition\System\StatustransitionFlowStep;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\InstallerBase;
@@ -41,6 +38,9 @@ class InstallerStatustransition extends InstallerBase
 
         $strReturn .= "Installing table flow_step...\n";
         $objManager->createTable(StatustransitionFlowStep::class);
+
+        $strReturn .= "Installing table flow_assignment...\n";
+        $objManager->createTable(StatustransitionFlowAssignment::class);
 
         //register the module
         $this->registerModule(
