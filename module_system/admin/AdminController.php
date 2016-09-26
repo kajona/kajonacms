@@ -25,6 +25,7 @@ use Kajona\System\System\Reflection;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\ResponseObject;
 use Kajona\System\System\Rights;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\SystemSetting;
@@ -247,28 +248,28 @@ abstract class AdminController extends AbstractController
     {
         $arrRequireConf = BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_REQUIREJS);
         if (empty($arrRequireConf)) {
-            $arrFolders = Resourceloader::getInstance()->getFolderContent("/admin/scripts", array(".json"), false, function($strFile){
+            $arrFolders = Resourceloader::getInstance()->getFolderContent("/admin/scripts", array(".json"), false, function ($strFile) {
                 return $strFile == "provides.json";
             });
 
-            $basePath = $_SERVER['PHP_SELF'];
-            $basePath = str_replace("/index.php", "/", $basePath);
-            $basePath = str_replace("/xml.php", "/", $basePath);
+            $strBasePath = $_SERVER['PHP_SELF'];
+            $strBasePath = StringUtil::replace("/index.php", "/", $strBasePath);
+            $strBasePath = StringUtil::replace("/xml.php", "/", $strBasePath);
             $arrRequireConf = array(
-                "baseUrl" => $basePath,
+                "baseUrl" => $strBasePath,
                 "paths" => array(),
                 "shim" => array(),
             );
 
             foreach ($arrFolders as $strFile => $strFileName) {
-                $strBasePath = substr($strFile, strlen(_realpath_));
-                $strBasePath = substr($strBasePath, 0, strlen("provides.json") * -1);
+                $strBasePath = StringUtil::substring($strFile, strlen(_realpath_));
+                $strBasePath = StringUtil::substring($strBasePath, 0, strlen("provides.json") * -1);
                 $arrProvidesJs = json_decode(file_get_contents($strFile), true);
                 if (isset($arrProvidesJs["paths"]) && is_array($arrProvidesJs["paths"])) {
                     foreach ($arrProvidesJs["paths"] as $strUniqueName => $strPath) {
                         if (strpos($strBasePath, ".phar") !== false) {
-                            $strBasePath = str_replace("core/", "files/extract/", substr($strBasePath, 7));
-                            $strBasePath = str_replace(".phar", "", $strBasePath);
+                            $strBasePath = StringUtil::replace("core/", "files/extract/", substr($strBasePath, 7));
+                            $strBasePath = StringUtil::replace(".phar", "", $strBasePath);
                         }
 
                         $arrRequireConf["paths"][$strUniqueName] = $strBasePath . $strPath;
