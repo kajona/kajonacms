@@ -42,6 +42,18 @@ class InstallerStatustransition extends InstallerBase
         $strReturn .= "Installing table flow_step...\n";
         $objManager->createTable(StatustransitionFlowStep::class);
 
+        //register the module
+        $this->registerModule(
+            "statustransition",
+            _statustransition_module_id_,
+            "",
+            "StatustransitionAdmin.php",
+            $this->objMetadata->getStrVersion(),
+            true,
+            "",
+            "StatustransitionAdminXml.php"
+        );
+
         return $strReturn;
     }
 
