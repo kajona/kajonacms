@@ -247,11 +247,11 @@ class UserAdmin extends AdminSimple implements AdminInterface
         $arrReturn = array();
         if ($objListEntry instanceof UserUser && $objListEntry->rightEdit() && $objUsersources->getUsersource($objListEntry->getStrSubsystem())->getMembersEditable()) {
             $arrReturn[] = $this->objToolkit->listButton(
-                Link::getLinkAdminDialog("user", "editMemberships", "&systemid=".$objListEntry->getSystemid()."&folderview=1", "", $this->getLang("user_zugehoerigkeit"), "icon_group", $objListEntry->getStrUsername())
+                Link::getLinkAdminDialog("user", "editMemberships", "&systemid=".$objListEntry->getSystemid()."&folderview=1", "", $this->getLang("user_zugehoerigkeit"), "icon_group", $this->getLang("user_memberships")." ".$objListEntry->getStrUsername())
             );
         } elseif ($objListEntry instanceof UserUser && $objListEntry->rightEdit()) {
             $arrReturn[] = $this->objToolkit->listButton(
-                Link::getLinkAdminDialog("user", "browseMemberships", "&systemid=".$objListEntry->getSystemid()."&folderview=1", "", $this->getLang("user_zugehoerigkeit"), "icon_group", $objListEntry->getStrUsername())
+                Link::getLinkAdminDialog("user", "browseMemberships", "&systemid=".$objListEntry->getSystemid()."&folderview=1", "", $this->getLang("user_zugehoerigkeit"), "icon_group", $objListEntry->getStrUsername(), $this->getLang("user_memberships")." ".$objListEntry->getStrUsername())
             );
         }
 
@@ -980,16 +980,13 @@ class UserAdmin extends AdminSimple implements AdminInterface
     /**
      * Returns a list of users belonging to a specified group
      *
-     * @param AdminFormgenerator $objForm
-     *
      * @return string
      * @permissions edit
      */
-    protected function actionGroupMember(AdminFormgenerator $objForm = null)
+    protected function actionGroupMember()
     {
         $strReturn = "";
         if ($this->getSystemid() != "") {
-
             $objGroup = new UserGroup($this->getSystemid());
 
             //validate possible blocked groups
@@ -999,17 +996,6 @@ class UserAdmin extends AdminSimple implements AdminInterface
             $strReturn .= $this->objToolkit->formHeadline($this->getLang("group_memberlist")."\"".$objGroup->getStrName()."\"");
 
             $objUsersources = new UserSourcefactory();
-
-            if ($objUsersources->getUsersource($objGroup->getStrSubsystem())->getMembersEditable() && $bitRenderEdit) {
-                if ($objForm == null) {
-                    $objForm = $this->getGroupMemberForm($objGroup);
-                }
-
-                $arrFolder = $this->objToolkit->getLayoutFolder($objForm->renderForm(getLinkAdminHref($this->getArrModule("modul"), "addUserToGroup")), $this->getLang("group_add_user"));
-                $strReturn .= $this->objToolkit->getFieldset($arrFolder[1], $arrFolder[0]);
-
-            }
-
 
             $objIterator = new ArraySectionIterator($objSourceGroup->getNumberOfMembers());
             $objIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
@@ -1030,9 +1016,43 @@ class UserAdmin extends AdminSimple implements AdminInterface
                 }
                 $strReturn .= $this->objToolkit->genericAdminList($objSingleMember->getSystemid(), $objSingleMember->getStrDisplayName(), getImageAdmin("icon_user"), $strAction);
             }
+
+            if($objUsersources->getUsersource($objGroup->getStrSubsystem())->getMembersEditable() && $bitRenderEdit) {
+                $strNewAction = $this->objToolkit->listButton(Link::getLinkAdminDialog($this->getArrModule("modul"), "addUserToGroupForm", "&systemid=".$objGroup->getSystemid(), "", $this->getLang("group_add_user"), "icon_new", $this->getLang("group_add_user")));
+                $strReturn .= $this->objToolkit->genericAdminList("batchActionSwitch", "", "", $strNewAction);
+            }
             $strReturn .= $this->objToolkit->listFooter().$this->objToolkit->getPageview($objIterator, "user", "groupMember", "systemid=".$this->getSystemid());
         }
         return $strReturn;
+    }
+
+    /**
+     * Renders the form to add a user to an existing group
+     *
+     * @permissions edit
+     *
+     * @param AdminFormgenerator $objForm
+     *
+     * @return string
+     */
+    protected function actionAddUserToGroupForm(AdminFormgenerator $objForm = null)
+    {
+        $this->setArrModuleEntry("template", "/folderview.tpl");
+        $objGroup = new UserGroup($this->getSystemid());
+
+        //validate possible blocked groups
+        $bitRenderEdit = $this->isGroupEditable($objGroup);
+
+        $objUsersources = new UserSourcefactory();
+
+        if ($objUsersources->getUsersource($objGroup->getStrSubsystem())->getMembersEditable() && $bitRenderEdit) {
+            if ($objForm == null) {
+                $objForm = $this->getGroupMemberForm($objGroup);
+            }
+            return $objForm->renderForm(getLinkAdminHref($this->getArrModule("modul"), "addUserToGroup"));
+
+        }
+        return "";
     }
 
     /**
@@ -1051,7 +1071,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
 
         $objForm = $this->getGroupMemberForm($objGroup);
         if (!$objForm->validateForm()) {
-            return $this->actionGroupMember($objForm);
+            return $this->actionAddUserToGroupForm($objForm);
         }
 
         /** @var UserUser $objUser */
@@ -1059,7 +1079,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
         $objSourceGroup = $objGroup->getObjSourceGroup();
 
         $objSourceGroup->addMember($objUser->getObjSourceUser());
-        $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "groupMember", "&systemid=".$objGroup->getSystemid()));
+        $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "groupMember", "&systemid=".$objGroup->getSystemid())."&peClose=1&blockAction=1");
         return "";
     }
 
@@ -1142,8 +1162,6 @@ class UserAdmin extends AdminSimple implements AdminInterface
         //Create a list of checkboxes
         /** @var UserUser $objUser */
         $objUser = Objectfactory::getInstance()->getObject($this->getSystemid());
-
-        $strReturn .= $this->objToolkit->formHeadline($this->getLang("user_memberships")."\"".$objUser->getStrUsername()."\"");
 
         //Collect groups from the same source
         $objUsersources = new UserSourcefactory();
