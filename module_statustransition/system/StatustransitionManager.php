@@ -74,9 +74,30 @@ class StatustransitionManager
     protected function getFlowForObject(Model $objObject)
     {
         if ($objObject instanceof StatustransitionFlowChoiceInterface) {
-            return $objObject->getStatusTransitionFlow();
+            return $this->getConfiguredFlowByClassAndKey(get_class($objObject), $objObject->getStatusTransitionFlow());
         }
 
         return null;
+    }
+
+    /**
+     * @param string $strClass
+     * @param string $strKey
+     * @return StatustransitionFlow|null
+     */
+    protected function getConfiguredFlowByClassAndKey($strClass, $strKey)
+    {
+        $objFilter = new StatustransitionFlowAssignmentFilter();
+        $objFilter->setStrClass($strClass);
+        $objFilter->setStrKey($strKey);
+
+        $arrAssignments = StatustransitionFlowAssignment::getObjectListFiltered($objFilter);
+        $objAssignment = reset($arrAssignments);
+
+        if ($objAssignment instanceof StatustransitionFlowAssignment) {
+            return $objAssignment;
+        } else {
+            return null;
+        }
     }
 }

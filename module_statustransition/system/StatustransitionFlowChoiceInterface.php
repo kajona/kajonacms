@@ -20,9 +20,17 @@ use Kajona\System\System\Model;
 interface StatustransitionFlowChoiceInterface
 {
     /**
-     * Returns the fitting statustransition flow for this object
+     * Returns the fitting flow key for the current status of the object. This is a key from the getPossibleFlows method
+     * or null if no flow fits
      *
-     * @return StatustransitionFlow
+     * @return string
      */
     public function getStatusTransitionFlow();
+
+    /**
+     * Returns an array [key => description] which lists possible flows
+     *
+     * @return array
+     */
+    public function getPossibleFlows();
 }

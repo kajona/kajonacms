@@ -12,35 +12,58 @@ use Kajona\System\System\Exception;
 use Kajona\System\System\Model;
 
 /**
- * StatustransitionFlow
+ * StatustransitionFlowAssignmentFilter
  *
  * @author christoph.kappestein@artemeon.de
- * @targetTable flow.flow_id
+ * @targetTable flow_assign.assign_id
  * @module statustransition
  * @moduleId _statustransition_module_id_
  */
-class StatustransitionFlow extends Model
+class StatustransitionFlowAssignment extends Model
 {
     /**
      * @var string
-     * @tableColumn flow.flow_name
+     * @tableColumn flow_assign.assign_class
      * @tableColumnDatatype char20
      */
-    protected $strName;
+    protected $strClass;
+
+    /**
+     * @var string
+     * @tableColumn flow_assign.assign_key
+     * @tableColumnDatatype char20
+     */
+    protected $strKey;
 
     /**
      * @return string
      */
-    public function getStrName()
+    public function getStrClass()
     {
-        return $this->strName;
+        return $this->strClass;
     }
 
     /**
-     * @param string $strName
+     * @param string $strClass
      */
-    public function setStrName($strName)
+    public function setStrClass($strClass)
     {
-        $this->strName = $strName;
+        $this->strClass = $strClass;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrKey()
+    {
+        return $this->strKey;
+    }
+
+    /**
+     * @param string $strKey
+     */
+    public function setStrKey($strKey)
+    {
+        $this->strKey = $strKey;
     }
 }
