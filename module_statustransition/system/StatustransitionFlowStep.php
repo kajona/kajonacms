@@ -28,6 +28,7 @@ class StatustransitionFlowStep extends Model implements ModelInterface, AdminLis
      * @tableColumnDatatype char254
      * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldMandatory
+     * @listOrder ASC
      */
     protected $strName;
 
