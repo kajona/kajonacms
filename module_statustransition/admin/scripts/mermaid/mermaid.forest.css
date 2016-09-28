@@ -351,3 +351,12 @@ div.mermaidTooltip {
   pointer-events: none;
   z-index: 100;
 }
+
+
+
+
+.mermaid {
+  border:1px solid #999;
+  text-align: center;
+}
+

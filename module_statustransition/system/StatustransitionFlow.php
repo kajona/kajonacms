@@ -80,4 +80,9 @@ class StatustransitionFlow extends Model implements ModelInterface, AdminListabl
     {
         return StatustransitionFlowStep::getObjectListFiltered(null, $this->getStrSystemid());
     }
+
+    public function getInitialStatus()
+    {
+        return 0;
+    }
 }

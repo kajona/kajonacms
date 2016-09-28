@@ -44,8 +44,7 @@ trait StatustransitionControllerTrait
                     $objTargetWorkflowStatus = $objStatusTransitionHandler->getStatus($objTransition->getIntTargetStatus());
                     $arrMenu[] = array(
                         "name" => AdminskinHelper::getAdminImage($objTargetWorkflowStatus->getStrIcon()) . " " . $this->getLang($objTransition->getStrChoiceLabel()),
-                        "link" => Link::getLinkAdminHref("riskanalysis", "setStatus",
-                            "&systemid=" . $objListEntry->getStrSystemid() . "&".StatustransitionHandler::STR_PARAM_TRANSITIONKEY."=" . $strTransitionKey),
+                        "link" => Link::getLinkAdminHref($this->getArrModule("modul"), "setStatus", "&systemid=" . $objListEntry->getStrSystemid() . "&".StatustransitionHandler::STR_PARAM_TRANSITIONKEY."=" . $strTransitionKey),
                     );
                 }
 
@@ -101,10 +100,7 @@ trait StatustransitionControllerTrait
             $bitReturn = $objStatusTransitionHandler->handleStatusTransition($objObject->getIntRecordStatus(), $strTransitionKey, $objObject);
 
             if ($bitReturn) {
-                /*
-                $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "listRiskContainerAnalysis",
-                    "&systemid=" . $objObject->getStrPrevId()));
-                */
+                $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "list", "&systemid=" . $objObject->getStrPrevId()));
             }
         }
 

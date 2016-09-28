@@ -10,14 +10,20 @@
 namespace Kajona\Statustransition\Admin;
 
 use Kajona\Statustransition\System\StatustransitionFlow;
+use Kajona\Statustransition\System\StatustransitionFlowAssignment;
+use Kajona\Statustransition\System\StatustransitionFlowAssignmentFilter;
+use Kajona\Statustransition\System\StatustransitionFlowChoiceInterface;
 use Kajona\Statustransition\System\StatustransitionFlowStep;
 use Kajona\Statustransition\System\StatustransitionGraphWriter;
 use Kajona\System\Admin\AdminEvensimpler;
 use Kajona\System\Admin\AdminInterface;
 use Kajona\System\System\AdminskinHelper;
 use Kajona\System\System\ArraySectionIterator;
+use Kajona\System\System\Classloader;
+use Kajona\System\System\Database;
 use Kajona\System\System\Link;
 use Kajona\System\System\Model;
+use Kajona\System\System\Resourceloader;
 
 /**
  * Admin class to setup status transition flows
@@ -71,14 +77,21 @@ class StatustransitionAdmin extends AdminEvensimpler implements AdminInterface
         if ($strListIdentifier == "liststep") {
             return $this->objToolkit->listButton(
                 Link::getLinkAdmin(
-                    $this->getArrModule("modul"), "newStep", "&systemid=".$this->getParam("systemid"), $this->getLang("commons_list_new"), $this->getLang("commons_list_new"), "icon_new"
+                    $this->getArrModule("modul"), "newStep", "&systemid=".$this->getParam("systemid"),
+                    $this->getLang("commons_list_new"), $this->getLang("commons_list_new"), "icon_new"
                 )
             );
+        } elseif ($strListIdentifier == "listassignment") {
+            return "";
         } else {
             return $strAction;
         }
     }
 
+    /**
+     * @return string
+     * @permissions view
+     */
     public function actionListStep()
     {
         $this->setStrCurObjectTypeName('step');
@@ -91,7 +104,7 @@ class StatustransitionAdmin extends AdminEvensimpler implements AdminInterface
 
         $strHtml = "<div class='row'>";
         $strHtml .= "<div class='col-md-6'>" . $strList . "</div>";
-        $strHtml .= "<div class='col-md-6'><div id='flow-graph' class='mermaid'>" . $strGraph . "</div></div>";
+        $strHtml .= "<div class='col-md-6'><div id='flow-graph' class='mermaid' style='color:#fff;'>" . $strGraph . "</div></div>";
         $strHtml .= "</div>";
 
         $strHtml .= <<<HTML
@@ -105,6 +118,110 @@ class StatustransitionAdmin extends AdminEvensimpler implements AdminInterface
 HTML;
 
         return $strHtml;
+    }
+
+    /**
+     * @return string
+     * @permissions view
+     */
+    public function actionListAssignment()
+    {
+        $arrInstances = array_filter($this->objResourceLoader->getFolderContent("/system", array(".php"), false, null, function(&$strFile, $strPath){
+            $strFile = $this->objClassLoader->getInstanceFromFilename($strPath, null, StatustransitionFlowChoiceInterface::class);
+        }));
+
+        $arrFlows = StatustransitionFlow::getObjectListFiltered();
+        $arrSelect = array();
+        foreach ($arrFlows as $objFlow) {
+            $arrSelect[$objFlow->getStrSystemid()] = $objFlow->getStrDisplayName();
+        }
+
+        $strLink = Link::getLinkAdminHref("statustransition", "saveAssignment");
+        $strReturn = "";
+        $strReturn .= $this->objToolkit->formHeader($strLink);
+        $strReturn .= $this->objToolkit->listHeader();
+        foreach ($arrInstances as $objInstance) {
+            $strReturn .= $this->objToolkit->genericAdminList(
+                generateSystemid(),
+                get_class($objInstance),
+                AdminskinHelper::getAdminImage($objInstance->getStrIcon()),
+                ""
+            );
+
+            $arrFlows = $objInstance->getPossibleFlows();
+            foreach ($arrFlows as $strKey => $strTitle) {
+                // check whether we have a value
+                $objFilter = new StatustransitionFlowAssignmentFilter();
+                $objFilter->setStrClass(Database::getInstance()->escape(get_class($objInstance)));
+                $objFilter->setStrKey($strKey);
+                $arrAssignments = StatustransitionFlowAssignment::getObjectListFiltered($objFilter);
+                $strSelected = "";
+                if (!empty($arrAssignments)) {
+                    $strSelected = reset($arrAssignments)->getStrFlow();
+                }
+
+                $strId = md5(get_class($objInstance) . $strKey);
+                $strActions = $this->objToolkit->formInputDropdown($strId, $arrSelect, "", $strSelected);
+                $strReturn .= $this->objToolkit->genericAdminList(
+                    generateSystemid(),
+                    $strTitle,
+                    "",
+                    $strActions
+                );
+            }
+        }
+
+        $strReturn .= $this->objToolkit->listFooter();
+        $strReturn .= $this->objToolkit->formInputSubmit();
+        $strReturn .= $this->objToolkit->formClose();
+
+        return $strReturn;
+    }
+
+    /**
+     * @return string
+     * @permissions edit
+     */
+    public function actionSaveAssignment()
+    {
+        $arrInstances = array_filter($this->objResourceLoader->getFolderContent("/system", array(".php"), false, null, function(&$strFile, $strPath){
+            $strFile = $this->objClassLoader->getInstanceFromFilename($strPath, null, StatustransitionFlowChoiceInterface::class);
+        }));
+
+        $arrFlows = StatustransitionFlow::getObjectListFiltered();
+        $arrSelect = array();
+        foreach ($arrFlows as $objFlow) {
+            $arrSelect[$objFlow->getStrSystemid()] = $objFlow->getStrDisplayName();
+        }
+
+        foreach ($arrInstances as $objInstance) {
+            $arrFlows = $objInstance->getPossibleFlows();
+            foreach ($arrFlows as $strKey => $strTitle) {
+                $strId = md5(get_class($objInstance) . $strKey);
+                $strFlowId = $this->getParam($strId);
+
+                if (isset($arrSelect[$strFlowId])) {
+                    $objFilter = new StatustransitionFlowAssignmentFilter();
+                    $objFilter->setStrClass(get_class($objInstance));
+                    $objFilter->setStrKey($strKey);
+                    $arrAssignments = StatustransitionFlowAssignment::getObjectListFiltered($objFilter);
+                    if (!empty($arrAssignments)) {
+                        $objAssignment = reset($arrAssignments);
+                        $objAssignment->setStrFlow($strFlowId);
+                        $objAssignment->updateObjectToDb();
+                    } else {
+                        $objAssignment = new StatustransitionFlowAssignment();
+                        $objAssignment->setStrClass(get_class($objInstance));
+                        $objAssignment->setStrKey($strKey);
+                        $objAssignment->setStrFlow($strFlowId);
+                        $objAssignment->updateObjectToDb();
+                    }
+                }
+            }
+        }
+
+        $this->adminReload(Link::getLinkAdminHref("statustransition", "listAssignment"));
+        return "";
     }
 
     /**

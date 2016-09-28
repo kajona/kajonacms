@@ -10,6 +10,7 @@ namespace Kajona\Statustransition\System;
 use Kajona\System\System\Database;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Model;
+use Kajona\System\System\ModelInterface;
 
 /**
  * StatustransitionFlowAssignmentFilter
@@ -19,12 +20,12 @@ use Kajona\System\System\Model;
  * @module statustransition
  * @moduleId _statustransition_module_id_
  */
-class StatustransitionFlowAssignment extends Model
+class StatustransitionFlowAssignment extends Model implements ModelInterface
 {
     /**
      * @var string
      * @tableColumn flow_assign.assign_class
-     * @tableColumnDatatype char20
+     * @tableColumnDatatype char254
      */
     protected $strClass;
 
@@ -34,6 +35,13 @@ class StatustransitionFlowAssignment extends Model
      * @tableColumnDatatype char20
      */
     protected $strKey;
+
+    /**
+     * @var string
+     * @tableColumn flow_assign.assign_flow
+     * @tableColumnDatatype char20
+     */
+    protected $strFlow;
 
     /**
      * @return string
@@ -65,5 +73,29 @@ class StatustransitionFlowAssignment extends Model
     public function setStrKey($strKey)
     {
         $this->strKey = $strKey;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrFlow()
+    {
+        return $this->strFlow;
+    }
+
+    /**
+     * @param string $strFlow
+     */
+    public function setStrFlow($strFlow)
+    {
+        $this->strFlow = $strFlow;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrDisplayName()
+    {
+        return $this->strClass;
     }
 }

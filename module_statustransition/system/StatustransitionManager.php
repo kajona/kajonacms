@@ -10,6 +10,7 @@ namespace Kajona\Statustransition\System;
 use Kajona\System\System\Database;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Model;
+use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Session;
 
 /**
@@ -28,27 +29,27 @@ class StatustransitionManager
     {
         $objFlow = $this->getFlowForObject($objObject);
         if ($objFlow instanceof StatustransitionFlow) {
+            $arrSteps = $objFlow->getSteps();
             $objHandler = new StatustransitionDatabaseHandler();
 
-            $arrSteps = StatustransitionFlowStep::getObjectListFiltered(null, $objFlow->getSystemid());
-
-            foreach ($arrSteps as $objStep) {
-                $objStatus = $objHandler->addStatus(new StatustransitionStatus($objStep->getIntStatus(), $objStep->getStrName(), $objStep->getStrIcon()));
+            foreach ($arrSteps as $intKey => $objStep) {
+                $objStatus = $objHandler->addStatus(new StatustransitionStatus($intKey, $objStep->getStrName(), $objStep->getStrIcon()));
 
                 $arrTransitions = $objStep->getArrTransitions();
                 foreach ($arrTransitions as $objTransition) {
-                    /** @var StatustransitionFlowStepTransition $objTransition */
+                    /** @var StatustransitionFlowStep $objTransition */
                     $arrWorkflowActions = array();
                     $objRightCallback = function (Model $objModel) use ($objStep) {
+                        return true;
                         return $objModel->rightEdit() && strpos(Session::getInstance()->getGroupIdsAsString(), $objStep->getStrUserGroup()) !== false;
                     };
                     $arrPreConditions = array();
 
                     $objStatus->addTransition(
                         new StatustransitionTransition(
-                            $objTransition->getIntTargetStatus(),
-                            $objTransition->getStrTransitionKey(),
-                            $objTransition->getStrChoiceLabel(),
+                            $objTransition->getIntStatus(),
+                            $objTransition->getSystemid(),
+                            $objTransition->getStrName(),
                             $arrWorkflowActions,
                             $objRightCallback,
                             $arrPreConditions
@@ -86,14 +87,14 @@ class StatustransitionManager
     protected function getConfiguredFlowByClassAndKey($strClass, $strKey)
     {
         $objFilter = new StatustransitionFlowAssignmentFilter();
-        $objFilter->setStrClass($strClass);
+        $objFilter->setStrClass(Database::getInstance()->escape($strClass));
         $objFilter->setStrKey($strKey);
 
         $arrAssignments = StatustransitionFlowAssignment::getObjectListFiltered($objFilter);
         $objAssignment = reset($arrAssignments);
 
         if ($objAssignment instanceof StatustransitionFlowAssignment) {
-            return $objAssignment;
+            return Objectfactory::getInstance()->getObject($objAssignment->getStrFlow());
         } else {
             return null;
         }
