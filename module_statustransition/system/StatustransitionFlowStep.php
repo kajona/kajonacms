@@ -59,14 +59,6 @@ class StatustransitionFlowStep extends Model implements ModelInterface, AdminLis
     protected $arrTransitions;
 
     /**
-     * @param string $strFlow
-     */
-    public function setStrFlow($strFlow)
-    {
-        $this->strFlow = $strFlow;
-    }
-
-    /**
      * @return string
      */
     public function getStrName()
