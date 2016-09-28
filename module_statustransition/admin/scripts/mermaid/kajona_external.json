@@ -1,5 +1,5 @@
 {
-    "name" : "mermaid.min",
+    "name" : "mermaid",
     "version" : "0.5.1",
     "source" : ["http://knsv.github.io/mermaid/", "https://github.com/knsv/mermaid"],
     "license" : "MIT",

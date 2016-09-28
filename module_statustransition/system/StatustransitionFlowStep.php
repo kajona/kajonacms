@@ -7,9 +7,9 @@
 
 namespace Kajona\Statustransition\System;
 
-use Kajona\System\System\Database;
-use Kajona\System\System\Exception;
+use Kajona\System\System\AdminListableInterface;
 use Kajona\System\System\Model;
+use Kajona\System\System\ModelInterface;
 
 /**
  * StatustransitionFlowStep
@@ -18,20 +18,16 @@ use Kajona\System\System\Model;
  * @targetTable flow_step.step_id
  * @module statustransition
  * @moduleId _statustransition_module_id_
+ * @formGenerator Kajona\Statustransition\Admin\StatustransitionStepFormgenerator
  */
-class StatustransitionFlowStep extends Model
+class StatustransitionFlowStep extends Model implements ModelInterface, AdminListableInterface
 {
-    /**
-     * @var string
-     * @tableColumn flow_step.flow_id
-     * @tableColumnDatatype char20
-     */
-    protected $strFlow;
-
     /**
      * @var string
      * @tableColumn flow_step.step_name
      * @tableColumnDatatype char254
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
+     * @fieldMandatory
      */
     protected $strName;
 
@@ -39,6 +35,9 @@ class StatustransitionFlowStep extends Model
      * @var string
      * @tableColumn flow_step.step_icon
      * @tableColumnDatatype char20
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
+     * @fieldDDValues [icon_flag_black => flow_step_icon_0],[icon_flag_blue => flow_step_icon_1],[icon_flag_brown => flow_step_icon_2],[icon_flag_green => flow_step_icon_3],[icon_flag_grey => flow_step_icon_4],[icon_flag_orange => flow_step_icon_5],[icon_flag_purple => flow_step_icon_6],[icon_flag_red => flow_step_icon_7],[icon_flag_yellow => flow_step_icon_8]
+     * @fieldMandatory
      */
     protected $strIcon;
 
@@ -46,24 +45,17 @@ class StatustransitionFlowStep extends Model
      * @var string
      * @tableColumn flow_step.step_groupid
      * @tableColumnDatatype char20
-     */
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
+     * @fieldMandatory
+     **/
     protected $strUserGroup;
 
     /**
      * @var string
-     * @tableColumn flow_step.step_transitions
-     * @tableColumnDatatype text
-     * @blockEscaping
+     * @fieldType Kajona\System\Admin\Formentries\FormentryObjectlist
+     * @objectList flow_step_transition (source="step_id", target="transition_id")
      */
-    protected $strTransitions;
-
-    /**
-     * @return string
-     */
-    public function getStrFlow()
-    {
-        return $this->strFlow;
-    }
+    protected $arrTransitions;
 
     /**
      * @param string $strFlow
@@ -122,27 +114,19 @@ class StatustransitionFlowStep extends Model
     }
 
     /**
-     * @return string
-     */
-    public function getStrTransitions()
-    {
-        return $this->strTransitions;
-    }
-
-    /**
-     * @param string $strTransitions
-     */
-    public function setStrTransitions($strTransitions)
-    {
-        $this->strTransitions = $strTransitions;
-    }
-
-    /**
-     * @return StatustransitionFlowStepTransition[]
+     * @return StatustransitionFlowStep[]
      */
     public function getArrTransitions()
     {
-        return array();
+        return $this->arrTransitions;
+    }
+
+    /**
+     * @param string $arrTransitions
+     */
+    public function setArrTransitions($arrTransitions)
+    {
+        $this->arrTransitions = $arrTransitions;
     }
 
     /**
@@ -151,5 +135,23 @@ class StatustransitionFlowStep extends Model
     public function getIntStatus()
     {
         return 0;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrDisplayName()
+    {
+        return $this->strName;
+    }
+
+    public function getStrAdditionalInfo()
+    {
+        return "";
+    }
+
+    public function getStrLongDescription()
+    {
+        return "";
     }
 }

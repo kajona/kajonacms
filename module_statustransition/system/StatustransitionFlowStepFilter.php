@@ -13,32 +13,12 @@ use Kajona\System\System\FilterBase;
 use Kajona\System\System\Model;
 
 /**
- * StatustransitionFlowStep
+ * StatustransitionFlowStepFilter
  *
  * @author christoph.kappestein@artemeon.de
- */
+ * @module statustransition
+ * @moduleId _statustransition_module_id_
+ **/
 class StatustransitionFlowStepFilter extends FilterBase
 {
-    /**
-     * @var string
-     * @tableColumn flow_step.flow_id
-     * @tableColumnDatatype char20
-     */
-    protected $strFlow;
-
-    /**
-     * @return string
-     */
-    public function getStrFlow()
-    {
-        return $this->strFlow;
-    }
-
-    /**
-     * @param string $strFlow
-     */
-    public function setStrFlow($strFlow)
-    {
-        $this->strFlow = $strFlow;
-    }
 }

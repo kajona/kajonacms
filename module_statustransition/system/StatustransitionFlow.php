@@ -7,9 +7,11 @@
 
 namespace Kajona\Statustransition\System;
 
+use Kajona\System\System\AdminListableInterface;
 use Kajona\System\System\Database;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Model;
+use Kajona\System\System\ModelInterface;
 
 /**
  * StatustransitionFlow
@@ -18,13 +20,17 @@ use Kajona\System\System\Model;
  * @targetTable flow.flow_id
  * @module statustransition
  * @moduleId _statustransition_module_id_
+ * @formGenerator Kajona\Statustransition\Admin\StatustransitionFormgenerator
  */
-class StatustransitionFlow extends Model
+class StatustransitionFlow extends Model implements ModelInterface, AdminListableInterface
 {
     /**
      * @var string
      * @tableColumn flow.flow_name
      * @tableColumnDatatype char20
+     *
+     * @fieldType Kajona\System\Admin\Formentries\FormentryText
+     * @fieldMandatory
      */
     protected $strName;
 
@@ -42,5 +48,36 @@ class StatustransitionFlow extends Model
     public function setStrName($strName)
     {
         $this->strName = $strName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrDisplayName()
+    {
+        return $this->strName;
+    }
+
+    public function getStrIcon()
+    {
+        return "icon_play";
+    }
+
+    public function getStrAdditionalInfo()
+    {
+        return "";
+    }
+
+    public function getStrLongDescription()
+    {
+        return "";
+    }
+
+    /**
+     * @return StatustransitionFlow[]
+     */
+    public function getSteps()
+    {
+        return StatustransitionFlowStep::getObjectListFiltered(null, $this->getStrSystemid());
     }
 }

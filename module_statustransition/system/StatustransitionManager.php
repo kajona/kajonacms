@@ -30,9 +30,7 @@ class StatustransitionManager
         if ($objFlow instanceof StatustransitionFlow) {
             $objHandler = new StatustransitionDatabaseHandler();
 
-            $objFilter = new StatustransitionFlowStepFilter();
-            $objFilter->setStrFlow($objFlow->getSystemid());
-            $arrSteps = StatustransitionFlowStep::getObjectListFiltered($objFilter);
+            $arrSteps = StatustransitionFlowStep::getObjectListFiltered(null, $objFlow->getSystemid());
 
             foreach ($arrSteps as $objStep) {
                 $objStatus = $objHandler->addStatus(new StatustransitionStatus($objStep->getIntStatus(), $objStep->getStrName(), $objStep->getStrIcon()));

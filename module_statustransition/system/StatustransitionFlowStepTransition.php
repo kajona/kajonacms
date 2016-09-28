@@ -10,6 +10,7 @@ namespace Kajona\Statustransition\System;
 use Kajona\System\System\Database;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Model;
+use Kajona\System\System\Objectfactory;
 
 /**
  * StatustransitionFlowStepTransition
@@ -21,6 +22,11 @@ use Kajona\System\System\Model;
  */
 class StatustransitionFlowStepTransition extends Model
 {
+    /**
+     * @var string
+     */
+    protected $strStep;
+
     /**
      * @var string
      */
@@ -82,5 +88,13 @@ class StatustransitionFlowStepTransition extends Model
     public function setStrChoiceLabel($strChoiceLabel)
     {
         $this->strChoiceLabel = $strChoiceLabel;
+    }
+
+    /**
+     * @return StatustransitionFlowStep
+     */
+    public function getStep()
+    {
+        return Objectfactory::getInstance()->getObject($this->strStep);
     }
 }

@@ -6,5 +6,7 @@
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
-    <requiredModules />
+    <requiredModules>
+        <module name="system" version="5.1" />
+    </requiredModules>
 </package>
