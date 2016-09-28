@@ -7,10 +7,7 @@
 
 namespace Kajona\Statustransition\System;
 
-use Kajona\System\System\Database;
-use Kajona\System\System\Exception;
 use Kajona\System\System\FilterBase;
-use Kajona\System\System\Model;
 
 /**
  * StatustransitionFlowStepFilter

@@ -7,24 +7,9 @@
 
 namespace Kajona\Statustransition\Installer;
 
-use Kajona\News\Admin\Elements\ElementNewsAdmin;
-use Kajona\News\System\NewsCategory;
-use Kajona\News\System\NewsFeed;
-use Kajona\News\System\NewsNews;
-use Kajona\Pages\Admin\Elements\ElementPlaintextAdmin;
-use Kajona\Pages\System\PagesElement;
-use Kajona\Pages\System\PagesFolder;
-use Kajona\Pages\System\PagesPage;
-use Kajona\Pages\System\PagesPageelement;
-use Kajona\Pages\System\SamplecontentContentHelper;
 use Kajona\Statustransition\System\StatustransitionFlow;
 use Kajona\Statustransition\System\StatustransitionFlowStep;
-use Kajona\System\System\Carrier;
-use Kajona\System\System\Database;
-use Kajona\System\System\Rights;
 use Kajona\System\System\SamplecontentInstallerInterface;
-use Kajona\System\System\SystemModule;
-use Kajona\System\System\SystemSetting;
 use Kajona\System\System\UserGroup;
 
 /**

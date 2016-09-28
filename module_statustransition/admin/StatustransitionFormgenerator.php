@@ -9,16 +9,7 @@
 
 namespace Kajona\Statustransition\Admin;
 
-use Kajona\News\System\NewsCategory;
 use Kajona\System\Admin\AdminFormgenerator;
-use Kajona\System\Admin\Formentries\FormentryDatetime;
-use Kajona\System\Admin\LanguagesAdmin;
-use Kajona\System\System\Carrier;
-use Kajona\System\System\LanguagesLanguage;
-use Kajona\System\System\LanguagesLanguageset;
-use Kajona\System\System\Link;
-use Kajona\System\System\SystemModule;
-use Kajona\System\System\SystemSetting;
 
 /**
  * Formgenerator for a statustransition flow entry

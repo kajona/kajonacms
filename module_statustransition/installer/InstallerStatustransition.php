@@ -12,13 +12,9 @@ namespace Kajona\Statustransition\Installer;
 use Kajona\Statustransition\System\StatustransitionFlow;
 use Kajona\Statustransition\System\StatustransitionFlowAssignment;
 use Kajona\Statustransition\System\StatustransitionFlowStep;
-use Kajona\System\System\Carrier;
 use Kajona\System\System\InstallerBase;
-use Kajona\System\System\InstallerRemovableInterface;
 use Kajona\System\System\OrmSchemamanager;
-use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemModule;
-use Kajona\System\System\SystemSetting;
 
 /**
  * Class providing an install for the news module
