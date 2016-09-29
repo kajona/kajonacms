@@ -88,7 +88,7 @@ JSON;
 
     public function testPost()
     {
-        $arrUsers = UserUser::getAllUsersByName("Admins");
+        $arrUsers = UserUser::getAllUsersByName("admin");
         Session::getInstance()->loginUser($arrUsers[0]);
 
         Carrier::getInstance()->setParam("class", NewsNews::class);
@@ -116,7 +116,7 @@ JSON;
 
     public function testPostInvalidData()
     {
-        $arrUsers = UserUser::getAllUsersByName("Admins");
+        $arrUsers = UserUser::getAllUsersByName("admin");
         Session::getInstance()->loginUser($arrUsers[0]);
 
         Carrier::getInstance()->setParam("class", NewsNews::class);
