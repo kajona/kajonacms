@@ -35,20 +35,19 @@ class StatustransitionManager
                 $objStatus = $objHandler->addStatus(new StatustransitionStatus($intKey, $objStep->getStrName(), $objStep->getStrIcon()));
 
                 $arrTransitions = $objStep->getArrTransitions();
-                foreach ($arrTransitions as $objTransition) {
-                    /** @var StatustransitionFlowStep $objTransition */
+                foreach ($arrTransitions as $objTargetStatus) {
+                    /** @var StatustransitionFlowStep $objTargetStatus */
                     $arrWorkflowActions = array();
                     $objRightCallback = function (Model $objModel) use ($objStep) {
-                        return true;
                         return $objModel->rightEdit() && strpos(Session::getInstance()->getGroupIdsAsString(), $objStep->getStrUserGroup()) !== false;
                     };
                     $arrPreConditions = array();
 
                     $objStatus->addTransition(
                         new StatustransitionTransition(
-                            $objTransition->getIntStatus(),
-                            $objTransition->getSystemid(),
-                            $objTransition->getStrName(),
+                            $objTargetStatus->getIntStatus(),
+                            $objTargetStatus->getSystemid(),
+                            $objTargetStatus->getStrName(),
                             $arrWorkflowActions,
                             $objRightCallback,
                             $arrPreConditions

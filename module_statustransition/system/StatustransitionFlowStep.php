@@ -10,6 +10,7 @@ namespace Kajona\Statustransition\System;
 use Kajona\System\System\AdminListableInterface;
 use Kajona\System\System\Model;
 use Kajona\System\System\ModelInterface;
+use Kajona\System\System\Objectfactory;
 
 /**
  * StatustransitionFlowStep
@@ -127,6 +128,16 @@ class StatustransitionFlowStep extends Model implements ModelInterface, AdminLis
      */
     public function getIntStatus()
     {
+        /** @var StatustransitionFlow $objFlow */
+        $objFlow = Objectfactory::getInstance()->getObject($this->getPrevId());
+        $arrSteps = $objFlow->getSteps();
+
+        foreach ($arrSteps as $intKey => $objStep) {
+            if ($this->getStrSystemid() == $objStep->getStrSystemid()) {
+                return $intKey;
+            }
+        }
+
         return 0;
     }
 

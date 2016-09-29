@@ -43,12 +43,12 @@ trait StatustransitionControllerTrait
 
                     $objTargetWorkflowStatus = $objStatusTransitionHandler->getStatus($objTransition->getIntTargetStatus());
                     $arrMenu[] = array(
-                        "name" => AdminskinHelper::getAdminImage($objTargetWorkflowStatus->getStrIcon()) . " " . $this->getLang($objTransition->getStrChoiceLabel()),
+                        "name" => AdminskinHelper::getAdminImage($objTargetWorkflowStatus->getStrIcon()) . " " . $objTransition->getStrChoiceLabel(),
                         "link" => Link::getLinkAdminHref($this->getArrModule("modul"), "setStatus", "&systemid=" . $objListEntry->getStrSystemid() . "&".StatustransitionHandler::STR_PARAM_TRANSITIONKEY."=" . $strTransitionKey),
                     );
                 }
 
-                $strTitleCurrentStatus = $this->getLang($objStatus->getStrTitle());
+                $strTitleCurrentStatus = $objStatus->getStrTitle();
                 if ($objListEntry->rightEdit() && !empty($arrMenu)) {
                     $strMenu = $this->objToolkit->registerMenu(generateSystemid(), $arrMenu);
 

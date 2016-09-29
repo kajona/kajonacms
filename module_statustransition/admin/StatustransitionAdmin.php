@@ -147,7 +147,7 @@ class StatustransitionAdmin extends AdminEvensimpler implements AdminInterface
             mermaid.init(undefined, $("#flow-graph"));
         });
     });
-</script> 
+</script>
 HTML;
 
         return $strHtml;
