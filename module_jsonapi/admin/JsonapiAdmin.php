@@ -278,6 +278,7 @@ class JsonapiAdmin extends AdminEvensimpler implements AdminInterface
         $this->readRequestBody();
 
         $objAdminForm = AdminFormgeneratorFactory::createByModel($objObject);
+        $objAdminForm->readValues();
 
         // validate
         if (!$objAdminForm->validateForm()) {
@@ -322,6 +323,7 @@ class JsonapiAdmin extends AdminEvensimpler implements AdminInterface
         $this->readRequestBody();
 
         $objAdminForm = AdminFormgeneratorFactory::createByModel($objObject);
+        $objAdminForm->readValues();
 
         // validate
         if (!$objAdminForm->validateForm()) {
