@@ -56,7 +56,7 @@ KAJONA.admin.dashboard = {
                 forcePlaceholderSize: true,
                 cursor: 'move',
                 connectWith: '.adminwidgetColumn',
-                placeholder: 'dashboardPlaceholder',
+                placeholder: 'dndPlaceholder',
                 stop: function(event, ui) {
                     ui.item.removeClass("sortActive");
                     //search list for new pos
