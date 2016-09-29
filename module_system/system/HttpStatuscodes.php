@@ -13,6 +13,7 @@ namespace Kajona\System\System;
 /**
  * List of possible http-statuscodes. Can be returned to the client.
  *
+ * @todo if we require at leat php 7, the http/1.1 part should be replaced by $_SERVER['SERVER_PROTOCOL']
  * @package module_system
  */
 class HttpStatuscodes
