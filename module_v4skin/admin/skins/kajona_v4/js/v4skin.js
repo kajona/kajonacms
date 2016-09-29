@@ -82,7 +82,7 @@ $(function () {
     KAJONA.admin.tooltip.initTooltip();
 
     KAJONA.admin.statusDisplay.classOfMessageBox = "alert alert-info";
-    KAJONA.admin.statusDisplay.classOfErrorBox = "alert alert-error";
+    KAJONA.admin.statusDisplay.classOfErrorBox = "alert alert-danger";
 
     KAJONA.admin.scroll = null;
     $(window).scroll(function() {
