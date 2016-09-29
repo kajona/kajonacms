@@ -95,7 +95,8 @@ class FormentryBase
 
     /**
      * Updates the internal value either based on a request value or the value from
-     * the object
+     * the object. This method is only needed in case the request parameters have changed
+     * during the request and you need to update the form which may come from a cache
      */
     public final function readValue()
     {

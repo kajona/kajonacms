@@ -154,9 +154,9 @@ class AdminFormgenerator
 
     /**
      * Updates the internal value of each field. This can be used in case the form comes from a
-     * cache and the request parameters have changed
+     * cache and the request parameters have changed during the request
      */
-    public function readValues()
+    public final function readValues()
     {
         foreach ($this->arrFields as $objOneField) {
             $objOneField->readValue();
