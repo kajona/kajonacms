@@ -133,10 +133,10 @@ JSON;
     "success": false,
     "errors": {
         "news_title": [
-            "'Titel' ist leer"
+            "'Title' is empty"
         ],
         "news_datestart": [
-            "'Start date': The field must contain a date format 'm\/d\/Y'"
+            "'Start date' is empty"
         ]
     }
 }
