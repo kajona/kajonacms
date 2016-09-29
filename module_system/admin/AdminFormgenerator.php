@@ -153,6 +153,17 @@ class AdminFormgenerator
     }
 
     /**
+     * Updates the internal value of each field. This can be used in case the form comes from a
+     * cache and the request parameters have changed
+     */
+    public function readValues()
+    {
+        foreach ($this->arrFields as $objOneField) {
+            $objOneField->readValue();
+        }
+    }
+
+    /**
      * Returns an array of required fields.
      *
      * @return string[] where string[fielName] = type

@@ -94,6 +94,15 @@ class FormentryBase
     }
 
     /**
+     * Updates the internal value either based on a request value or the value from
+     * the object
+     */
+    public function readValue()
+    {
+        $this->updateValue();
+    }
+
+    /**
      * Queries the params-array or the source-object for the mapped value.
      * If found in the params-array, the value will be used, otherwise
      * the source-objects' getter is invoked.
