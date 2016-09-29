@@ -82,7 +82,7 @@ JSON;
 }
 JSON;
 
-        $this->assertEquals('HTTP/1.0 400 Bad Request', ResponseObject::getInstance()->getStrStatusCode());
+        $this->assertEquals('HTTP/1.0 400 Bad Request', ResponseObject::getInstance()->getStrStatusCode(), $strResult);
         $this->assertJsonStringEqualsJsonString($strExpect, $strResult, $strResult);
     }
 
@@ -110,7 +110,7 @@ JSON;
 
         Session::getInstance()->logout();
 
-        $this->assertEquals('HTTP/1.0 200 OK', ResponseObject::getInstance()->getStrStatusCode());
+        $this->assertEquals('HTTP/1.0 200 OK', ResponseObject::getInstance()->getStrStatusCode(), $strResult);
         $this->assertJsonStringEqualsJsonString($strExpect, $strResult, $strResult);
     }
 
@@ -122,7 +122,7 @@ JSON;
         Carrier::getInstance()->setParam("class", NewsNews::class);
 
         $arrData = array(
-            "title" => "foo"
+            "bar" => "foo"
         );
 
         $objAdmin = $this->getAdminMock("POST", $arrData);
@@ -136,7 +136,7 @@ JSON;
             "'Titel' ist leer"
         ],
         "news_datestart": [
-            "'Start-Datum' ist leer"
+            "'Start date': The field must contain a date format 'm\/d\/Y'"
         ]
     }
 }
@@ -144,7 +144,7 @@ JSON;
 
         Session::getInstance()->logout();
 
-        $this->assertEquals('HTTP/1.0 400 Bad Request', ResponseObject::getInstance()->getStrStatusCode());
+        $this->assertEquals('HTTP/1.0 400 Bad Request', ResponseObject::getInstance()->getStrStatusCode(), $strResult);
         $this->assertJsonStringEqualsJsonString($strExpect, $strResult, $strResult);
     }
 
