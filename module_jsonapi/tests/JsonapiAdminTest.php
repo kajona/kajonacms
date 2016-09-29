@@ -71,6 +71,8 @@ JSON;
     public function testGetNoClass()
     {
         Carrier::getInstance()->setParam("class", "");
+        Carrier::getInstance()->setParam("news_title", "");
+        Carrier::getInstance()->setParam("news_datestart", "");
 
         $objAdmin = $this->getAdminMock("GET");
 
@@ -92,6 +94,8 @@ JSON;
         Session::getInstance()->loginUser($arrUsers[0]);
 
         Carrier::getInstance()->setParam("class", NewsNews::class);
+        Carrier::getInstance()->setParam("news_title", "");
+        Carrier::getInstance()->setParam("news_datestart", "");
 
         $arrData = array(
             "news_title" => "lorem ipsum",
@@ -120,6 +124,8 @@ JSON;
         Session::getInstance()->loginUser($arrUsers[0]);
 
         Carrier::getInstance()->setParam("class", NewsNews::class);
+        Carrier::getInstance()->setParam("news_title", "");
+        Carrier::getInstance()->setParam("news_datestart", "");
 
         $arrData = array(
             "bar" => "foo"
