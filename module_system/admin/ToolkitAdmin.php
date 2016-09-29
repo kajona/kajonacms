@@ -1535,30 +1535,53 @@ class ToolkitAdmin extends Toolkit
         $strElementName = uniStrReplace(array('\''), array('\\\''), $strElementName);
         $strQuestion = uniStrReplace("%%element_name%%", htmlToString($strElementName, true), $strQuestion);
 
+
+        return $this->listConfirmationButton($strQuestion, $strLinkHref, "icon_delete", Carrier::getInstance()->getObjLang()->getLang("commons_delete", "system"), Carrier::getInstance()->getObjLang()->getLang("dialog_deleteHeader", "system"), Carrier::getInstance()->getObjLang()->getLang("dialog_deleteButton", "system"));
+    }
+
+    /**
+     * Renders a button triggering a confirmation dialog. Useful if the loading of the linked pages
+     * should be confirmed by the user
+     *
+     * @param $strText
+     * @param $strConfirmationLinkHref
+     * @param $strButton
+     * @param $strButtonTooltip
+     * @param string $strHeader
+     * @param string $strConfirmationButtonLabel
+     *
+     * @return string
+     *
+     */
+    public function listConfirmationButton($strText, $strConfirmationLinkHref, $strButton, $strButtonTooltip, $strHeader = "", $strConfirmationButtonLabel = "")
+    {
         //get the reload-url
         $objHistory = new History();
         $strParam = "";
-        if (uniStrpos($strLinkHref, "javascript:") === false) {
+        if (StringUtil::indexOf($strConfirmationLinkHref, "javascript:") === false) {
             $strParam = "reloadUrl=".urlencode($objHistory->getAdminHistory());
-            if (uniSubstr($strLinkHref, -4) == ".php" || uniSubstr($strLinkHref, -5) == ".html") {
+            if (StringUtil::substring($strConfirmationLinkHref, -4) == ".php" || StringUtil::substring($strConfirmationLinkHref, -5) == ".html") {
                 $strParam = "?".$strParam;
-            }
-            else {
+            } else {
                 $strParam = "&".$strParam;
             }
         }
 
+        if($strConfirmationButtonLabel == "") {
+            $strConfirmationButtonLabel = Carrier::getInstance()->getObjLang()->getLang("commons_ok", "system");
+        }
+
         //create the list-button and the js code to show the dialog
         $strButton = Link::getLinkAdminManual(
-            "href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('".Carrier::getInstance()->getObjLang()->getLang("dialog_deleteHeader", "system")."'); jsDialog_1.setContent('".$strQuestion."', '".Carrier::getInstance()->getObjLang()->getLang("dialog_deleteButton", "system")."',  '".$strLinkHref.$strParam."'); jsDialog_1.init(); return false;\"",
+            "href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('{$strHeader}'); jsDialog_1.setContent('{$strText}', '{$strConfirmationButtonLabel}',  '".$strConfirmationLinkHref.$strParam."'); jsDialog_1.init(); return false;\"",
             "",
-            Carrier::getInstance()->getObjLang()->getLang("commons_delete", "system"),
-            "icon_delete"
+            $strButtonTooltip,
+            $strButton
         );
 
         return $this->listButton($strButton);
     }
-
+    
     /**
      * Generates a button allowing to change the status of the record passed.
      * Therefore an ajax-method is called.
@@ -2875,7 +2898,7 @@ HTML;
 
         $arrTemplate = array();
         $arrTemplate["id"] = $strIdentifier;
-        $arrTemplate["entries"] = uniSubstr($strEntries, 0, -1);
+        $arrTemplate["entries"] = StringUtil::substring($strEntries, 0, -1);
         return $this->objTemplate->fillTemplateFile($arrTemplate, "/elements.tpl", "contextmenu_wrapper");
     }
 }

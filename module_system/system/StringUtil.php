@@ -307,4 +307,19 @@ class StringUtil
             return preg_match("/".$strPattern."/", $strString);
         }
     }
+
+    /**
+     * Encodes a string so it can be used in a html attribute as javascript string
+     *
+     * @param string $strString
+     * @return string
+     */
+    public static function jsSafeString($strString)
+    {
+        $strJson = json_encode((string) $strString);
+        $strJson = trim($strJson, '"');
+        $strJson = addcslashes($strJson, "'");
+
+        return htmlspecialchars($strJson, ENT_QUOTES | ENT_HTML401);
+    }
 }

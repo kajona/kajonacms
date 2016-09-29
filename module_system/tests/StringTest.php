@@ -114,6 +114,25 @@ class StringTest extends Testbase
         $this->assertEquals($intExpectedResult, $result);
     }
 
+    /**
+     * @dataProvider jsSafeStringProvider
+     */
+    public function testJsSafeString($strString, $strExpect)
+    {
+        $this->assertSame($strExpect, StringUtil::jsSafeString($strString));
+    }
+
+    public function jsSafeStringProvider()
+    {
+        return array(
+            array('foobar', 'foobar'),
+            array('foo<bar', 'foo&lt;bar'),
+            array('foo"bar', 'foo\&quot;bar'),
+            array('foo\'bar', 'foo\&#039;bar'),
+            array('foo' . "\n" . 'bar', 'foo\nbar'),
+        );
+    }
+
     public function startsWithProvider()
     {
         return array(

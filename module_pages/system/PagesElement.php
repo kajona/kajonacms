@@ -99,27 +99,6 @@ class PagesElement extends \Kajona\System\System\Model implements \Kajona\System
     private $strVersion = "";
 
     /**
-     * @var string
-     * @tableColumn element.element_config1
-     * @tableColumnDatatype char254
-     */
-    private $strConfigVal1 = "";
-
-    /**
-     * @var string
-     * @tableColumn element.element_config2
-     * @tableColumnDatatype char254
-     */
-    private $strConfigVal2 = "";
-
-    /**
-     * @var string
-     * @tableColumn element.element_config3
-     * @tableColumnDatatype char254
-     */
-    private $strConfigVal3 = "";
-
-    /**
      * @return bool
      */
     public function deleteObjectFromDatabase()
@@ -438,58 +417,5 @@ class PagesElement extends \Kajona\System\System\Model implements \Kajona\System
         $this->strVersion = $strVersion;
     }
 
-    /**
-     * @param string $strConfigVal1
-     *
-     * @return void
-     */
-    public function setStrConfigVal1($strConfigVal1)
-    {
-        $this->strConfigVal1 = $strConfigVal1;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStrConfigVal1()
-    {
-        return $this->strConfigVal1;
-    }
-
-    /**
-     * @param string $strConfigVal2
-     *
-     * @return void
-     */
-    public function setStrConfigVal2($strConfigVal2)
-    {
-        $this->strConfigVal2 = $strConfigVal2;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStrConfigVal2()
-    {
-        return $this->strConfigVal2;
-    }
-
-    /**
-     * @param string $strConfigVal3
-     *
-     * @return void
-     */
-    public function setStrConfigVal3($strConfigVal3)
-    {
-        $this->strConfigVal3 = $strConfigVal3;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStrConfigVal3()
-    {
-        return $this->strConfigVal3;
-    }
 
 }
