@@ -45,5 +45,9 @@ class StatustransitionStepFormgenerator extends AdminFormgenerator
             ""
         );
         $objField->setStrAddLink($strAddButton);
+
+        $this->getField("usergroup")
+            ->setBitGroups(true)
+            ->setBitUser(false);
     }
 }

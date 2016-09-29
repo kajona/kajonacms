@@ -353,10 +353,24 @@ div.mermaidTooltip {
 }
 
 
+/* custom */
+.node rect,
+.node circle,
+.node ellipse,
+.node polygon {
+  fill: #eee;
+  stroke: #999;
+  stroke-width: 2px;
+}
 
+.edgePath .path {
+  stroke: black;
+  stroke-width: 1.5px;
+}
 
 .mermaid {
   border:1px solid #999;
   text-align: center;
+  font-size:1.6em;
 }
 

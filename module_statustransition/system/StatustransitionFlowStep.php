@@ -47,7 +47,7 @@ class StatustransitionFlowStep extends Model implements ModelInterface, AdminLis
      * @var string
      * @tableColumn flow_step.step_groupid
      * @tableColumnDatatype char20
-     * @fieldType Kajona\System\Admin\Formentries\FormentryText
+     * @fieldType Kajona\System\Admin\Formentries\FormentryUser
      * @fieldMandatory
      **/
     protected $strUserGroup;
