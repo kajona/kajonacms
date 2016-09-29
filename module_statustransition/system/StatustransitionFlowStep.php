@@ -124,6 +124,9 @@ class StatustransitionFlowStep extends Model implements ModelInterface, AdminLis
     }
 
     /**
+     * Return the status int for this step. At the moment this is simply the 0-indexed position of the step in the flow
+     * This int is inserted as record status
+     *
      * @return int
      */
     public function getIntStatus()
