@@ -97,7 +97,7 @@ class FormentryBase
      * Updates the internal value either based on a request value or the value from
      * the object
      */
-    public function readValue()
+    public final function readValue()
     {
         $this->updateValue();
     }
