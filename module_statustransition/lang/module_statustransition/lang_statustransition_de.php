@@ -25,3 +25,5 @@ $lang["flow_step_icon_6"]        = "icon_flag_purple";
 $lang["flow_step_icon_7"]        = "icon_flag_red";
 $lang["flow_step_icon_8"]        = "icon_flag_yellow";
 
+$lang["delete_step_question"]        = "Möchten Sie den Schritt &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
+

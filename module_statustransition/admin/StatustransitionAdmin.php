@@ -67,6 +67,42 @@ class StatustransitionAdmin extends AdminEvensimpler implements AdminInterface
         return $arrActions;
     }
 
+    public function renderTagAction(Model $objListEntry)
+    {
+        if ($objListEntry instanceof StatustransitionFlowStep) {
+            return "";
+        }
+
+        return parent::renderTagAction($objListEntry);
+    }
+
+    public function renderPermissionsAction(Model $objListEntry)
+    {
+        if ($objListEntry instanceof StatustransitionFlowStep) {
+            return "";
+        }
+
+        return parent::renderPermissionsAction($objListEntry);
+    }
+
+    public function renderStatusAction(Model $objListEntry, $strAltActive = "", $strAltInactive = "")
+    {
+        if ($objListEntry instanceof StatustransitionFlowStep) {
+            return "";
+        }
+
+        return parent::renderStatusAction($objListEntry, $strAltActive, $strAltInactive);
+    }
+
+    public function renderCopyAction(Model $objListEntry)
+    {
+        if ($objListEntry instanceof StatustransitionFlowStep) {
+            return "";
+        }
+
+        return parent::renderCopyAction($objListEntry);
+    }
+
     public function getNewEntryAction($strListIdentifier, $bitDialog = false)
     {
         $strAction = parent::getNewEntryAction($strListIdentifier, $bitDialog);
