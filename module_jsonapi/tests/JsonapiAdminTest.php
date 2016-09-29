@@ -95,7 +95,7 @@ JSON;
 
         $arrData = array(
             "news_title" => "lorem ipsum",
-            "news_datestart" => date('d.m.Y'),
+            "news_datestart" => date('m/d/Y'),
         );
 
         $objAdmin = $this->getAdminMock("POST", $arrData);
