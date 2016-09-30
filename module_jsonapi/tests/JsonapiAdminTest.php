@@ -84,7 +84,7 @@ JSON;
 }
 JSON;
 
-        $this->assertEquals('HTTP/1.0 400 Bad Request', ResponseObject::getInstance()->getStrStatusCode(), $strResult);
+        $this->assertEquals('HTTP/1.1 400 Bad Request', ResponseObject::getInstance()->getStrStatusCode(), $strResult);
         $this->assertJsonStringEqualsJsonString($strExpect, $strResult, $strResult);
     }
 
@@ -114,7 +114,7 @@ JSON;
 
         Session::getInstance()->logout();
 
-        $this->assertEquals('HTTP/1.0 200 OK', ResponseObject::getInstance()->getStrStatusCode(), $strResult);
+        $this->assertEquals('HTTP/1.1 200 OK', ResponseObject::getInstance()->getStrStatusCode(), $strResult);
         $this->assertJsonStringEqualsJsonString($strExpect, $strResult, $strResult);
     }
 
@@ -150,7 +150,7 @@ JSON;
 
         Session::getInstance()->logout();
 
-        $this->assertEquals('HTTP/1.0 400 Bad Request', ResponseObject::getInstance()->getStrStatusCode(), $strResult);
+        $this->assertEquals('HTTP/1.1 400 Bad Request', ResponseObject::getInstance()->getStrStatusCode(), $strResult);
         $this->assertJsonStringEqualsJsonString($strExpect, $strResult, $strResult);
     }
 
