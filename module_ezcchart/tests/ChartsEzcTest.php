@@ -13,24 +13,24 @@ class ChartsEzcTest extends Testbase  {
         //--- system kernel -------------------------------------------------------------------------------------
 
 
-        echo "\t pie chart...\n";
+//        echo "\t pie chart...\n";
         $objGraph = new \Kajona\Ezcchart\System\GraphEzc();
         $objGraph->setStrGraphTitle("Test Pie Chart");
         $objGraph->createPieChart(array(2,6,7,3), array("val 1", "val 2", "val 3", "val 4"));
         $objGraph->saveGraph(_images_cachepath_."/graph4.png");
         $this->assertFileExists(_realpath_._images_cachepath_."/graph4.png");
-        echo $objGraph->renderGraph();
+        $objGraph->renderGraph();
 
-        echo "\t pie chart without legend...\n";
+//        echo "\t pie chart without legend...\n";
         $objGraph = new \Kajona\Ezcchart\System\GraphEzc();
         $objGraph->setStrGraphTitle("Test Pie Chart without legend");
         $objGraph->createPieChart(array(2,6,7,3), array("val 1", "val 2", "val 3", "val 4"));
         $objGraph->setBitRenderLegend(false);
         $objGraph->saveGraph(_images_cachepath_."/graph4_wl.png");
         $this->assertFileExists(_realpath_._images_cachepath_."/graph4_wl.png");
-        echo $objGraph->renderGraph();
+        $objGraph->renderGraph();
 
-        echo "\tbar chart...\n";
+//        echo "\tbar chart...\n";
         $objGraph = new \Kajona\Ezcchart\System\GraphEzc();
         $objGraph->setStrXAxisTitle("x-axis");
         $objGraph->setStrYAxisTitle("y-axis");
@@ -42,9 +42,9 @@ class ChartsEzcTest extends Testbase  {
 
         $objGraph->saveGraph(_images_cachepath_."/graph2.png");
         $this->assertFileExists(_realpath_._images_cachepath_."/graph2.png");
-        echo $objGraph->renderGraph();
+        $objGraph->renderGraph();
 
-        echo "\tstacked bar chart...\n";
+//        echo "\tstacked bar chart...\n";
         $objGraph = new \Kajona\Ezcchart\System\GraphEzc();
         $objGraph->setStrXAxisTitle("x-axis");
         $objGraph->setStrYAxisTitle("y-axis");
@@ -56,11 +56,11 @@ class ChartsEzcTest extends Testbase  {
 
         $objGraph->saveGraph(_images_cachepath_."/graph3.png");
         $this->assertFileExists(_realpath_._images_cachepath_."/graph3.png");
-        echo $objGraph->renderGraph();
+        $objGraph->renderGraph();
 
 
 
-        echo "\tbar chart variation...\n";
+//        echo "\tbar chart variation...\n";
         $objGraph = new \Kajona\Ezcchart\System\GraphEzc();
         $objGraph->setStrXAxisTitle("x-axis");
         $objGraph->setStrYAxisTitle("y-axis");
@@ -76,9 +76,9 @@ class ChartsEzcTest extends Testbase  {
 
         $objGraph->saveGraph(_images_cachepath_."/graph2b.png");
         $this->assertFileExists(_realpath_._images_cachepath_."/graph2b.png");
-        echo $objGraph->renderGraph();
+        $objGraph->renderGraph();
 
-        echo "\tline chart...\n";
+//        echo "\tline chart...\n";
         $objGraph = new \Kajona\Ezcchart\System\GraphEzc();
         $objGraph->setStrXAxisTitle("x-axis");
         $objGraph->setStrYAxisTitle("y-axis");
@@ -90,10 +90,10 @@ class ChartsEzcTest extends Testbase  {
 
         $objGraph->saveGraph(_images_cachepath_."/graph1.png");
         $this->assertFileExists(_realpath_._images_cachepath_."/graph1.png");
-        echo $objGraph->renderGraph();
+        $objGraph->renderGraph();
 
 
-        echo "\tcombined line / bar chart...\n";
+//        echo "\tcombined line / bar chart...\n";
         $objGraph = new \Kajona\Ezcchart\System\GraphEzc();
         $objGraph->setStrXAxisTitle("x-axis");
         $objGraph->setStrYAxisTitle("y-axis");
@@ -108,10 +108,10 @@ class ChartsEzcTest extends Testbase  {
 
         $objGraph->saveGraph(_images_cachepath_."/graph6.png");
         $this->assertFileExists(_realpath_._images_cachepath_."/graph6.png");
-        echo $objGraph->renderGraph();
+        $objGraph->renderGraph();
 
 
-        echo "\thorizontal bar chart...\n";
+//        echo "\thorizontal bar chart...\n";
         $objGraph = new \Kajona\Ezcchart\System\GraphEzc();
         $objGraph->setStrXAxisTitle("x-axis");
         $objGraph->setStrYAxisTitle("y-axis");
@@ -123,7 +123,7 @@ class ChartsEzcTest extends Testbase  {
         $objGraph->setIntXAxisAngle(45);
         $objGraph->saveGraph(_images_cachepath_."/graph7.png");
         $this->assertFileExists(_realpath_._images_cachepath_."/graph7.png");
-        echo $objGraph->renderGraph();
+        $objGraph->renderGraph();
     }
 
 
