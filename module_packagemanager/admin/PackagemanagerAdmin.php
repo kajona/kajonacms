@@ -158,10 +158,9 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
                 "<span id=\"updateWrapper".createFilename($objOneMetadata->getStrTitle(), true)."\">".AdminskinHelper::getAdminImage("loadingSmall", $this->getLang("package_searchupdate"))."</span>"
             );
             $strActions .= "<script type='text/javascript'>
-            $(function() {
-                KAJONA.admin.loader.loadFile('".Resourceloader::getInstance()->getCorePathForModule("module_packagemanager")."/module_packagemanager/scripts/packagemanager.js', function() {
-                    KAJONA.admin.packagemanager.addPackageToTest('".$objOneMetadata->getStrTitle()."', '".createFilename($objOneMetadata->getStrTitle(), true)."');
-                }); });
+                require(['packagemanager'], function(packagemanager) {
+                    packagemanager.addPackageToTest('".$objOneMetadata->getStrTitle()."', '".createFilename($objOneMetadata->getStrTitle(), true)."');
+                });
             </script>";
 
             $strReturn .= $this->objToolkit->simpleAdminList($objOneMetadata, $strActions);
@@ -177,16 +176,12 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
 
         $strReturn .= $this->objToolkit->listFooter();
 
-        $strCore = Resourceloader::getInstance()->getCorePathForModule("module_packagemanager");
         $strReturn .= "<script type='text/javascript'>
-            $(function() {
-                KAJONA.admin.loader.loadFile('{$strCore}/module_packagemanager/scripts/packagemanager.js', function() {
-
-                    $(window.setTimeout(function() {
-                        KAJONA.admin.packagemanager.triggerUpdateCheck();
-                    }, 1000));
+                require(['packagemanager'], function(packagemanager) {
+                    window.setTimeout(function() {
+                        packagemanager.triggerUpdateCheck();
+                    }, 1000);
                 });
-            });
             </script>";
 
         $strReturn .= $this->objToolkit->getPageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction());
