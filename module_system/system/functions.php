@@ -860,6 +860,7 @@ function xssSafeString($strText) {
  * Removes traversals like ../ from the passed string
  *
  * @param string $strFilename
+ * @todo move to class Filesystem
  *
  * @return string
  */
@@ -876,6 +877,7 @@ function removeDirectoryTraversals($strFilename)
  *
  * @param string $strName
  * @param bool $bitFolder
+ * @todo move to class Filesystem
  *
  * @return string
  */
@@ -967,6 +969,7 @@ function checkNumber($intNumber)
  * Validates, if the passed Param represents a valid folder in the filesystem
  *
  * @param string $strPath
+ * @todo move to Filesystem
  *
  * @return bool
  */
@@ -1219,43 +1222,6 @@ function uniStrReplace($mixedSearch, $mixedReplace, $strSubject, $bitUnicodesafe
 function uniStrTrim($strString, $intLength, $strAdd = "…")
 {
     return StringUtil::truncate($strString, $intLength, $strAdd);
-}
-
-/**
- * Sends headers to the client, to allow conditionalGets
- *
- * @param string $strChecksum Checksum of the content. Must be unique for one state.
- */
-function setConditionalGetHeaders($strChecksum)
-{
-    ResponseObject::getInstance()->addHeader("ETag: ".$strChecksum);
-    ResponseObject::getInstance()->addHeader("Cache-Control: max-age=86400, must-revalidate");
-
-}
-
-
-/**
- * Checks, if the browser sent the same checksum as provided. If so,
- * a http 304 is sent to the browser
- *
- * @param string $strChecksum
- *
- * @return bool
- */
-function checkConditionalGetHeaders($strChecksum)
-{
-    if (issetServer("HTTP_IF_NONE_MATCH")) {
-        if (getServer("HTTP_IF_NONE_MATCH") == $strChecksum) {
-            //strike. no further actions needed.
-            ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_NOT_MODIFIED);
-            ResponseObject::getInstance()->addHeader("ETag: ".$strChecksum);
-            ResponseObject::getInstance()->addHeader("Cache-Control: max-age=86400, must-revalidate");
-
-            return true;
-        }
-    }
-
-    return false;
 }
 
 /**
