@@ -16,8 +16,8 @@
 
     <link rel="stylesheet" href="_webpath_/[webpath,module_installer]/fonts/fontawesome/css/font-awesome.min.css">
 
-    <script src="_webpath_/[webpath,module_system]/admin/scripts/jquery/jquery.min.js"></script>
-    <script src="_webpath_/[webpath,module_system]/admin/scripts/jqueryui/jquery-ui.custom.min.js"></script>
+    <script src="_webpath_/[webpath,module_system]/scripts/jquery/jquery.min.js"></script>
+    <script src="_webpath_/[webpath,module_system]/scripts/jqueryui/jquery-ui.custom.min.js"></script>
 
 </head>
 

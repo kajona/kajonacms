@@ -248,7 +248,7 @@ abstract class AdminController extends AbstractController
     {
         $arrRequireConf = BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_REQUIREJS);
         if (empty($arrRequireConf)) {
-            $arrFolders = Resourceloader::getInstance()->getFolderContent("/admin/scripts", array(".json"), false, function ($strFile) {
+            $arrFolders = Resourceloader::getInstance()->getFolderContent("/scripts", array(".json"), false, function ($strFile) {
                 return $strFile == "provides.json";
             });
 

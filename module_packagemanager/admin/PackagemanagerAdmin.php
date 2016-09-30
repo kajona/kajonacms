@@ -159,7 +159,7 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
             );
             $strActions .= "<script type='text/javascript'>
             $(function() {
-                KAJONA.admin.loader.loadFile('".Resourceloader::getInstance()->getCorePathForModule("module_packagemanager")."/module_packagemanager/admin/scripts/packagemanager.js', function() {
+                KAJONA.admin.loader.loadFile('".Resourceloader::getInstance()->getCorePathForModule("module_packagemanager")."/module_packagemanager/scripts/packagemanager.js', function() {
                     KAJONA.admin.packagemanager.addPackageToTest('".$objOneMetadata->getStrTitle()."', '".createFilename($objOneMetadata->getStrTitle(), true)."');
                 }); });
             </script>";
@@ -180,7 +180,7 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
         $strCore = Resourceloader::getInstance()->getCorePathForModule("module_packagemanager");
         $strReturn .= "<script type='text/javascript'>
             $(function() {
-                KAJONA.admin.loader.loadFile('{$strCore}/module_packagemanager/admin/scripts/packagemanager.js', function() {
+                KAJONA.admin.loader.loadFile('{$strCore}/module_packagemanager/scripts/packagemanager.js', function() {
 
                     $(window.setTimeout(function() {
                         KAJONA.admin.packagemanager.triggerUpdateCheck();

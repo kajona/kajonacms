@@ -36,9 +36,7 @@ class JsFilesTest extends Testbase
 
 
         $arrFiles = array();
-        $arrFiles = array_merge($arrFiles, Resourceloader::getInstance()->getFolderContent("/admin/scripts", array(".js")));
-        $arrFiles = array_merge($arrFiles, Resourceloader::getInstance()->getFolderContent("/system/scripts", array(".js")));
-        $arrFiles = array_merge($arrFiles, Resourceloader::getInstance()->getFolderContent("/portal/scripts", array(".js")));
+        $arrFiles = array_merge($arrFiles, Resourceloader::getInstance()->getFolderContent("/scripts", array(".js")));
         return $arrFiles;
 
     }

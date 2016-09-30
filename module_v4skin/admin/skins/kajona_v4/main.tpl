@@ -7,8 +7,8 @@
     <meta name="robots" content="noindex, nofollow" />
     <meta name="generator" content="Kajona, www.kajona.de" />
 
-    <link rel="stylesheet" href="_webpath_/[webpath,module_system]/admin/scripts/jqueryui/css/smoothness/jquery-ui.custom.css?_system_browser_cachebuster_" type="text/css" />
-    <link rel="stylesheet" href="_webpath_/[webpath,module_system]/admin/scripts/qtip2/jquery.qtip.min.css?_system_browser_cachebuster_" type="text/css" />
+    <link rel="stylesheet" href="_webpath_/[webpath,module_system]/scripts/jqueryui/css/smoothness/jquery-ui.custom.css?_system_browser_cachebuster_" type="text/css" />
+    <link rel="stylesheet" href="_webpath_/[webpath,module_system]/scripts/qtip2/jquery.qtip.min.css?_system_browser_cachebuster_" type="text/css" />
 
     <!-- KAJONA_BUILD_LESS_START -->
     <link href="_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/less/bootstrap.less?_system_browser_cachebuster_" rel="stylesheet/less">
@@ -19,10 +19,10 @@
     %%head%%
 
     <!-- BC layer while moving to requirejs -->
-    <script src="_webpath_/[webpath,module_system]/admin/scripts/jquery/jquery.min.js?_system_browser_cachebuster_"></script>
-    <script src="_webpath_/[webpath,module_system]/admin/scripts/jqueryui/jquery-ui.custom.min.js?_system_browser_cachebuster_"></script>
-    <script src="_webpath_/[webpath,module_system]/system/scripts/loader.js?_system_browser_cachebuster_"></script>
-    <script src="_webpath_/[webpath,module_system]/admin/scripts/kajona.js?_system_browser_cachebuster_"></script>
+    <script src="_webpath_/[webpath,module_system]/scripts/jquery/jquery.min.js?_system_browser_cachebuster_"></script>
+    <script src="_webpath_/[webpath,module_system]/scripts/jqueryui/jquery-ui.custom.min.js?_system_browser_cachebuster_"></script>
+    <script src="_webpath_/[webpath,module_system]/scripts/loader.js?_system_browser_cachebuster_"></script>
+    <script src="_webpath_/[webpath,module_system]/scripts/kajona.js?_system_browser_cachebuster_"></script>
     <!-- BC layer -->
 
     <script type="text/javascript">var searchExtendText = '[lang,search_details,search]';</script>
@@ -32,7 +32,7 @@
         // BC layer so that we fire document ready events only after requirejs has loaded all js files
         $.holdReady(true);
     </script>
-    <script data-main="core/module_system/admin/scripts/app" src="_webpath_/[webpath,module_system]/admin/scripts/requirejs/require.js?_system_browser_cachebuster_"></script>
+    <script data-main="core/module_system/scripts/app" src="_webpath_/[webpath,module_system]/scripts/requirejs/require.js?_system_browser_cachebuster_"></script>
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>

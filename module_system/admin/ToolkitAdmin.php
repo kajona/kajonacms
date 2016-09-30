@@ -114,7 +114,7 @@ class ToolkitAdmin extends Toolkit
 
     /**
      * Returns a text-field using the cool WYSIWYG editor
-     * You can use the different toolbar sets defined in /admin/scripts/ckeditor/config.js
+     * You can use the different toolbar sets defined in /scripts/ckeditor/config.js
      *
      * @param string $strName
      * @param string $strTitle
@@ -148,13 +148,18 @@ class ToolkitAdmin extends Toolkit
 
         //check if a customized editor-config is available
         $strConfigFile = "'config_kajona_standard.js'";
-        if (is_file(_realpath_."project/module_system/admin/scripts/ckeditor/config_kajona_standard.js")) {
+        //BC
+        if (is_file(_realpath_."project/module_system/scripts/admin/ckeditor/config_kajona_standard.js")) {
             $strConfigFile = "KAJONA_WEBPATH+'/project/module_system/admin/scripts/ckeditor/config_kajona_standard.js'";
+        }
+
+        if (is_file(_realpath_."project/module_system/scripts/ckeditor/config_kajona_standard.js")) {
+            $strConfigFile = "KAJONA_WEBPATH+'/project/module_system/scripts/ckeditor/config_kajona_standard.js'";
         }
 
         //to add role-based editors, you could load a different toolbar or also a different CKEditor config file
         //the editor code
-        $strReturn .= " <script type=\"text/javascript\" src=\""._webpath_.Resourceloader::getInstance()->getWebPathForModule("module_system")."/admin/scripts/ckeditor/ckeditor.js\"></script>\n";
+        $strReturn .= " <script type=\"text/javascript\" src=\""._webpath_.Resourceloader::getInstance()->getWebPathForModule("module_system")."/scripts/ckeditor/ckeditor.js\"></script>\n";
         $strReturn .= " <script type=\"text/javascript\">\n";
         $strReturn .= "
             var ckeditorConfig = {

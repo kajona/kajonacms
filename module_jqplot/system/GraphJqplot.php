@@ -547,31 +547,31 @@ class GraphJqplot implements GraphInterface
         $strCoreDirectory = Resourceloader::getInstance()->getCorePathForModule("module_jqplot");
         $strReturn .= "<script type='text/javascript'>
                 KAJONA.admin.loader.loadFile([
-                '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/excanvas.js',
-                '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.js',
-                '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.css'], function() {
+                '{$strCoreDirectory}/module_jqplot/scripts/js/jqplot/excanvas.js',
+                '{$strCoreDirectory}/module_jqplot/scripts/js/jqplot/jquery.jqplot.js',
+                '{$strCoreDirectory}/module_jqplot/scripts/js/jqplot/jquery.jqplot.css'], function() {
                     KAJONA.admin.loader.loadFile([
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.logAxisRenderer.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.barRenderer.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.categoryAxisRenderer.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.canvasTextRenderer.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.canvasAxisTickRenderer.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.canvasAxisLabelRenderer.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.pointLabels.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.cursor.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.dateAxisRenderer.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.enhancedLegendRenderer.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.enhancedPieLegendRenderer.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.pieRenderer.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.highlighter.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.canvasOverlay.js',
+                        '{$strCoreDirectory}/module_jqplot/scripts/js/jqplot/plugins/jqplot.logAxisRenderer.js',
+                        '{$strCoreDirectory}/module_jqplot/scripts/js/jqplot/plugins/jqplot.barRenderer.js',
+                        '{$strCoreDirectory}/module_jqplot/scripts/js/jqplot/plugins/jqplot.categoryAxisRenderer.js',
+                        '{$strCoreDirectory}/module_jqplot/scripts/js/jqplot/plugins/jqplot.canvasTextRenderer.js',
+                        '{$strCoreDirectory}/module_jqplot/scripts/js/jqplot/plugins/jqplot.canvasAxisTickRenderer.js',
+                        '{$strCoreDirectory}/module_jqplot/scripts/js/jqplot/plugins/jqplot.canvasAxisLabelRenderer.js',
+                        '{$strCoreDirectory}/module_jqplot/scripts/js/jqplot/plugins/jqplot.pointLabels.js',
+                        '{$strCoreDirectory}/module_jqplot/scripts/js/jqplot/plugins/jqplot.cursor.js',
+                        '{$strCoreDirectory}/module_jqplot/scripts/js/jqplot/plugins/jqplot.dateAxisRenderer.js',
+                        '{$strCoreDirectory}/module_jqplot/scripts/js/jqplot/plugins/jqplot.enhancedLegendRenderer.js',
+                        '{$strCoreDirectory}/module_jqplot/scripts/js/jqplot/plugins/jqplot.enhancedPieLegendRenderer.js',
+                        '{$strCoreDirectory}/module_jqplot/scripts/js/jqplot/plugins/jqplot.pieRenderer.js',
+                        '{$strCoreDirectory}/module_jqplot/scripts/js/jqplot/plugins/jqplot.highlighter.js',
+                        '{$strCoreDirectory}/module_jqplot/scripts/js/jqplot/plugins/jqplot.canvasOverlay.js',
 
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom_helper.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom.css',
+                        '{$strCoreDirectory}/module_jqplot/scripts/js/custom/jquery.jqplot.custom_helper.js',
+                        '{$strCoreDirectory}/module_jqplot/scripts/js/custom/jquery.jqplot.custom.css',
 
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/filesaver/Blob.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/filesaver/canvas-toBlob.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/filesaver/FileSaver.js'
+                        '{$strCoreDirectory}/module_jqplot/scripts/js/filesaver/Blob.js',
+                        '{$strCoreDirectory}/module_jqplot/scripts/js/filesaver/canvas-toBlob.js',
+                        '{$strCoreDirectory}/module_jqplot/scripts/js/filesaver/FileSaver.js'
 
                     ], function() {
                         $.jqplot.sprintf.thousandsSeparator = '$strThousandsChar';

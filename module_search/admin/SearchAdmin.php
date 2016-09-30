@@ -195,7 +195,7 @@ class SearchAdmin extends AdminSimple implements AdminInterface
         $strReturn .= "
 
         <script type=\"text/javascript\">
-        KAJONA.admin.loader.loadFile('{$strCore}/module_search/admin/scripts/search.js', function() {
+        KAJONA.admin.loader.loadFile('{$strCore}/module_search/admin/search.js', function() {
             KAJONA.admin.search.triggerFullSearch();
         });
 

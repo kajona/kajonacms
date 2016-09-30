@@ -328,7 +328,7 @@ class MediamanagerAdmin extends AdminEvensimpler implements AdminInterface
 
             $strJsCode = <<<HTML
             <script type="text/javascript">
-                KAJONA.admin.loader.loadFile('{$strCore}/module_mediamanager/admin/scripts/mediamanager.js', function() {
+                KAJONA.admin.loader.loadFile('{$strCore}/module_mediamanager/scripts/mediamanager.js', function() {
                     KAJONA.admin.ajax.genericAjaxCall("mediamanager", "syncRepo", "{$this->getSystemid()}", function(data, status, jqXHR) {
                         if(status == 'success') {
                             if(data.indexOf("<repo>0</repo>") == -1) {
@@ -377,7 +377,7 @@ HTML;
         $strDialog = $this->objToolkit->formInputText("folderName", $this->getLang("commons_name"));
 
         $strReturn .= "<script type=\"text/javascript\">\n
-                        KAJONA.admin.loader.loadFile('".Resourceloader::getInstance()->getCorePathForModule("module_mediamanager")."/module_mediamanager/admin/scripts/mediamanager.js');
+                        KAJONA.admin.loader.loadFile('".Resourceloader::getInstance()->getCorePathForModule("module_mediamanager")."/module_mediamanager/scripts/mediamanager.js');
                         function init_fm_newfolder_dialog() {
                             jsDialog_1.setTitle('".$this->getLang("folder_new_dialogHeader")."');
                             jsDialog_1.setContent('".uniStrReplace(array("\r\n", "\n"), "", addslashes($strDialog))."',
@@ -542,9 +542,9 @@ HTML;
 
             $strJs = "<script type=\"text/javascript\">
                 KAJONA.admin.loader.loadFile([
-                    '".Resourceloader::getInstance()->getCorePathForModule("module_mediamanager")."/module_mediamanager/admin/scripts/mediamanager.js',
-                    '".Resourceloader::getInstance()->getCorePathForModule("module_mediamanager")."/module_mediamanager/admin/scripts/jcrop/jquery.Jcrop.js',
-                    '".Resourceloader::getInstance()->getCorePathForModule("module_mediamanager")."/module_mediamanager/admin/scripts/jcrop/css/jquery.Jcrop.min.css'
+                    '".Resourceloader::getInstance()->getCorePathForModule("module_mediamanager")."/module_mediamanager/scripts/mediamanager.js',
+                    '".Resourceloader::getInstance()->getCorePathForModule("module_mediamanager")."/module_mediamanager/scripts/jcrop/jquery.Jcrop.js',
+                    '".Resourceloader::getInstance()->getCorePathForModule("module_mediamanager")."/module_mediamanager/scripts/jcrop/css/jquery.Jcrop.min.css'
                 ]);
 
                 var fm_image_rawurl = '"._webpath_."/image.php?image=".urlencode($strFile)."&quality=80';
@@ -620,7 +620,7 @@ HTML;
      */
     protected function actionFolderContentFolderviewMode()
     {
-        $strReturn = "<script type='text/javascript'>KAJONA.admin.loader.loadFile('".Resourceloader::getInstance()->getCorePathForModule("module_mediamanager")."/module_mediamanager/admin/scripts/mediamanager.js');</script>";
+        $strReturn = "<script type='text/javascript'>KAJONA.admin.loader.loadFile('".Resourceloader::getInstance()->getCorePathForModule("module_mediamanager")."/module_mediamanager/scripts/mediamanager.js');</script>";
 
         //if set, save CKEditors CKEditorFuncNum parameter to read it again in KAJONA.admin.folderview.selectCallback()
         //so we don't have to pass through the param with all requests

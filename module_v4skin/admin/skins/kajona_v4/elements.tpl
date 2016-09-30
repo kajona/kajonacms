@@ -619,24 +619,24 @@ Upload-Field for multiple files with progress bar
 <script type="text/javascript">
 
     KAJONA.admin.loader.loadFile([
-        "/core/module_mediamanager/admin/scripts/jquery-fileupload/css/jquery.fileupload.css",
-        "/core/module_mediamanager/admin/scripts/jquery-fileupload/css/jquery.fileupload-ui.css",
-        "/core/module_mediamanager/admin/scripts/jquery-fileupload/js/load-image.min.js",
-        "/core/module_mediamanager/admin/scripts/jquery-fileupload/js/canvas-to-blob.min.js",
-        "/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.iframe-transport.js",
-        "/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload.js"
+        "/core/module_mediamanager/scripts/jquery-fileupload/css/jquery.fileupload.css",
+        "/core/module_mediamanager/scripts/jquery-fileupload/css/jquery.fileupload-ui.css",
+        "/core/module_mediamanager/scripts/jquery-fileupload/js/load-image.min.js",
+        "/core/module_mediamanager/scripts/jquery-fileupload/js/canvas-to-blob.min.js",
+        "/core/module_mediamanager/scripts/jquery-fileupload/js/jquery.iframe-transport.js",
+        "/core/module_mediamanager/scripts/jquery-fileupload/js/jquery.fileupload.js"
     ], function() {
         KAJONA.admin.loader.loadFile([
-            "/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload-process.js"
+            "/core/module_mediamanager/scripts/jquery-fileupload/js/jquery.fileupload-process.js"
         ], function() {
             KAJONA.admin.loader.loadFile([
-                "/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload-image.js",
-                "/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload-audio.js",
-                "/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload-video.js",
-                "/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload-validate.js"
+                "/core/module_mediamanager/scripts/jquery-fileupload/js/jquery.fileupload-image.js",
+                "/core/module_mediamanager/scripts/jquery-fileupload/js/jquery.fileupload-audio.js",
+                "/core/module_mediamanager/scripts/jquery-fileupload/js/jquery.fileupload-video.js",
+                "/core/module_mediamanager/scripts/jquery-fileupload/js/jquery.fileupload-validate.js"
             ], function() {
                 KAJONA.admin.loader.loadFile([
-                    "/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload-ui.js"
+                    "/core/module_mediamanager/scripts/jquery-fileupload/js/jquery.fileupload-ui.js"
                 ], function() {
 
                     var filesToUpload = 0;
@@ -1643,7 +1643,7 @@ The language switch surrounds the buttons
     <script type="text/javascript">
         require(["tree", "loader"], function(tree, loader){
 
-            loader.loadFile(["/core/module_system/admin/scripts/jstree3/dist/themes/default/style.min.css"]);
+            loader.loadFile(["/core/module_system/scripts/jstree3/dist/themes/default/style.min.css"]);
 
             tree.toggleInitial('%%treeId%%');
 
@@ -1953,7 +1953,7 @@ It containes a list of aspects and provides the possibility to switch the differ
 
     <script type="text/javascript">
         require(['changelog', 'moment', 'loader', 'util'], function(changelog, moment, loader, util){
-            loader.loadFile(['/core/module_system/admin/scripts/d3/calendar-heatmap.css']);
+            loader.loadFile(['/core/module_system/scripts/d3/calendar-heatmap.css']);
 
             changelog.lang = %%strLang%%;
             changelog.systemId = "%%strSystemId%%";

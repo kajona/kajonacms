@@ -72,7 +72,7 @@ class TagsAdmin extends AdminEvensimpler implements AdminInterface
 
             if ($objListEntry->rightRight1()) {
 
-                $strJs = "<script type='text/javascript'>KAJONA.admin.loader.loadFile('".Resourceloader::getInstance()->getCorePathForModule("module_tags")."/module_tags/admin/scripts/tags.js', function() {
+                $strJs = "<script type='text/javascript'>KAJONA.admin.loader.loadFile('".Resourceloader::getInstance()->getCorePathForModule("module_tags")."/module_tags/scripts/tags.js', function() {
                     KAJONA.admin.tags.createFavoriteEnabledIcon = '".addslashes(AdminskinHelper::getAdminImage("icon_favorite", $this->getLang("tag_favorite_remove")))."';
                     KAJONA.admin.tags.createFavoriteDisabledIcon = '".addslashes(AdminskinHelper::getAdminImage("icon_favoriteDisabled", $this->getLang("tag_favorite_add")))."';
                 });</script>";
