@@ -69,7 +69,7 @@ Naturally, webbased software comes with a bunch of statical resources such as ja
 
 But - of the path of the files change, how to load them? Whats the right place to load a js-file from, would it be:
 
-	/core/module_pages/scripts/pages/pages.js
+	/core/module_pages/scripts/kajona/pages.js
 	
 or
 
@@ -78,7 +78,7 @@ or
 For most cases, the matching path is resolved internally and automatically using the Kajona-Loader:
 
 	<script type="text/javascript">
-    KAJONA.admin.loader.loadFile('/core/module_pages/pages/scripts/pages.js', function() {
+    KAJONA.admin.loader.loadFile('/core/module_pages/kajona/scripts/pages.js', function() {
 	    KAJONA.admin.pages.initBlockSort();
     });
 	</script>

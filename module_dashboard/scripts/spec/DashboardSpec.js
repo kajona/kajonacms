@@ -1,7 +1,7 @@
 
 include('../../../core/module_system/scripts/loader.js');
 include('../../../core/module_system/scripts/kajona.js');
-include('../../../core/module_dashboard/scripts/dashboard.js');
+include('../../../core/module_dashboard/scripts/kajona/dashboard.js');
 
 describe("dashboard.js", function() {
 

@@ -1,7 +1,7 @@
 
 include('../../../core/module_system/scripts/loader.js');
 include('../../../core/module_system/scripts/kajona.js');
-include('../../../core/module_pages/scripts/pages/pages.js');
+include('../../../core/module_pages/scripts/kajona/pages.js');
 
 describe("pages.js", function() {
 
