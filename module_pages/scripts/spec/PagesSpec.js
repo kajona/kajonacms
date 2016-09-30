@@ -1,7 +1,7 @@
 
 include('../../../core/module_system/scripts/loader.js');
 include('../../../core/module_system/scripts/kajona.js');
-include('../../../core/module_pages/scripts/pages.js');
+include('../../../core/module_pages/scripts/pages/pages.js');
 
 describe("pages.js", function() {
 
@@ -9,7 +9,7 @@ describe("pages.js", function() {
     });
 
     it("test functions available", function() {
-        expect(typeof KAJONA.admin.pages.initBlockSort).toBe("function");
+        expect(typeof pages.initBlockSort).toBe("function");
     });
 
 });

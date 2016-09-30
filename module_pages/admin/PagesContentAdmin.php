@@ -302,14 +302,11 @@ class PagesContentAdmin extends AdminSimple implements AdminInterface
             $strReturn .= $strBlocks.$strElements;
         }
 
-        $strCore = Resourceloader::getInstance()->getCorePathForModule("module_pages");
-
         $strReturn .= <<<HTML
             <script type="text/javascript">
-                KAJONA.admin.loader.loadFile('{$strCore}/module_pages/scripts/pages.js', function() {
-                    KAJONA.admin.pages.initBlockSort();
-                });
-
+            require(['pages'], function (pages) {
+                pages.initBlockSort();
+            });
             </script>
 HTML;
 
