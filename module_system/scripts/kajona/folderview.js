@@ -24,10 +24,11 @@ define(["jquery"], function($){
          * @param {function} objCallback
          */
         selectCallback: function (arrTargetsValues, objCallback) {
+            // debugger;
             if (window.opener) {
-                window.opener.KAJONA.admin.folderview.fillFormFields(arrTargetsValues);
+                window.opener.require('folderview').fillFormFields(arrTargetsValues);
             } else if (parent) {
-                parent.KAJONA.admin.folderview.fillFormFields(arrTargetsValues);
+                parent.require('folderview').fillFormFields(arrTargetsValues);
             }
 
             if ($.isFunction(objCallback)) {
@@ -73,7 +74,7 @@ define(["jquery"], function($){
             if (window.opener) {
                 window.close();
             } else if (parent) {
-                var context = parent.KAJONA.admin.folderview;
+                var context = parent.require('folderview');
                 context.dialog.hide();
                 context.dialog.setContentRaw("");
             }

@@ -133,7 +133,7 @@ class AdminFormgenerator
         $this->strFormname = $strFormname;
         $this->objSourceobject = $objSourceobject;
 
-        $this->strOnSubmit = "$(this).on('submit', function() { return false; }); $(window).off('unload'); KAJONA.admin.forms.animateSubmit(this); return true;";
+        $this->strOnSubmit = "$(this).on('submit', function() { return false; }); $(window).off('unload'); require('forms').animateSubmit(this); return true;";
         $this->objLang = Lang::getInstance();
     }
 
@@ -416,10 +416,8 @@ class AdminFormgenerator
                 $this->objSourceobject->getLockManager()->lockRecord();
 
                 //register a new unlock-handler
-                // KAJONA.admin.ajax.genericAjaxCall('system', 'unlockRecord', '".$this->objSourceobject->getSystemid()."');
                 $strReturn .= "<script type='text/javascript'>
                         $(window).on('unload', function() { $.ajax({url: KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=unlockRecord&systemid=" . $this->objSourceobject->getSystemid() . "', async:false}) ; });
-//                        $('#{$strGeneratedFormname}').on('submit', function() { $(window).off('unload'); return true;});
                     </script>";
             }
         }

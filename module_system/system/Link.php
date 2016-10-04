@@ -301,12 +301,12 @@ class Link
 
         if ($strOnClick == "") {
             if ($intWidth !== null && $intHeight !== null) {
-                $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".Link::getLinkAdminHref($strModule, $strAction, $strParams)."'); KAJONA.admin.folderview.dialog.setTitle('".$strTitle."'); ".
-                    "KAJONA.admin.folderview.dialog.init('".$intWidth."', '".$intHeight."'); return false;";
+                $strOnClick = "require('folderview').dialog.setContentIFrame('".Link::getLinkAdminHref($strModule, $strAction, $strParams)."'); require('folderview').dialog.setTitle('".$strTitle."'); ".
+                    "require('folderview').dialog.init('".$intWidth."', '".$intHeight."'); return false;";
             }
             else {
-                $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".Link::getLinkAdminHref($strModule, $strAction, $strParams)."'); KAJONA.admin.folderview.dialog.setTitle('".$strTitle."'); ".
-                    "KAJONA.admin.folderview.dialog.init(); return false;";
+                $strOnClick = "require('folderview').dialog.setContentIFrame('".Link::getLinkAdminHref($strModule, $strAction, $strParams)."'); require('folderview').dialog.setTitle('".$strTitle."'); ".
+                    "require('folderview').dialog.init(); return false;";
             }
         }
 

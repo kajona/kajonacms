@@ -410,7 +410,7 @@ class NavigationAdmin extends AdminSimple implements AdminInterface {
         }
         else {
             $strAction = $this->objToolkit->listButton(
-                "<a href=\"#\" title=\"".$this->getLang("navigation_point_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$this->getParam("form_element")."', ''],['".$this->getParam("form_element")."_id', '".$this->getSystemid()."']]);\">".getImageAdmin("icon_accept")."</a>"
+                "<a href=\"#\" title=\"".$this->getLang("navigation_point_accept")."\" rel=\"tooltip\" onclick=\"require('folderview').selectCallback([['".$this->getParam("form_element")."', ''],['".$this->getParam("form_element")."_id', '".$this->getSystemid()."']]);\">".getImageAdmin("icon_accept")."</a>"
             );
             $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), ".", getImageAdmin("icon_treeLeaf"), $strAction);
         }
@@ -429,7 +429,7 @@ class NavigationAdmin extends AdminSimple implements AdminInterface {
                         )
                     );
                     $strAction .= $this->objToolkit->listButton(
-                        "<a href=\"#\" title=\"".$this->getLang("navigation_point_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$this->getParam("form_element")."', '".$objSinglePoint->getStrName()."'],['".$this->getParam("form_element")."_id', '".$objSinglePoint->getSystemid()."']]);\">".getImageAdmin("icon_accept")."</a>"
+                        "<a href=\"#\" title=\"".$this->getLang("navigation_point_accept")."\" rel=\"tooltip\" onclick=\"require('folderview').selectCallback([['".$this->getParam("form_element")."', '".$objSinglePoint->getStrName()."'],['".$this->getParam("form_element")."_id', '".$objSinglePoint->getSystemid()."']]);\">".getImageAdmin("icon_accept")."</a>"
                     );
                     $strReturn .= $this->objToolkit->simpleAdminList($objSinglePoint, $strAction);
                 }

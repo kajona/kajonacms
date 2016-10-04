@@ -299,7 +299,7 @@ class MediamanagerAdmin extends AdminEvensimpler implements AdminInterface
                 }
                 elseif ($objOneIterable->getIntType() == MediamanagerFile::$INT_TYPE_FILE) {
                     return $this->objToolkit->listButton(
-                        "<a href=\"#\" title=\"".$this->getLang("commons_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strTargetfield."', '".$objOneIterable->getStrFilename()."']]);\">".AdminskinHelper::getAdminImage("icon_accept")."</a>"
+                        "<a href=\"#\" title=\"".$this->getLang("commons_accept")."\" rel=\"tooltip\" onclick=\"require('folderview').selectCallback([['".$strTargetfield."', '".$objOneIterable->getStrFilename()."']]);\">".AdminskinHelper::getAdminImage("icon_accept")."</a>"
                     );
                 }
 
@@ -619,10 +619,10 @@ HTML;
     {
         $strReturn = "<script type='text/javascript'>require(['mediamanager']);</script>";
 
-        //if set, save CKEditors CKEditorFuncNum parameter to read it again in KAJONA.admin.folderview.selectCallback()
+        //if set, save CKEditors CKEditorFuncNum parameter to read it again in require('folderview').selectCallback()
         //so we don't have to pass through the param with all requests
         if ($this->getParam("CKEditorFuncNum") != "") {
-            $strReturn .= "<script type=\"text/javascript\">window.opener.KAJONA.admin.folderview.selectCallbackCKEditorFuncNum = ".(int)$this->getParam("CKEditorFuncNum").";</script>";
+            $strReturn .= "<script type=\"text/javascript\">window.opener.require('folderview').selectCallbackCKEditorFuncNum = ".(int)$this->getParam("CKEditorFuncNum").";</script>";
         }
 
         $strTargetfield = xssSafeString($this->getParam("form_element"));
@@ -712,7 +712,7 @@ HTML;
                 }
 
 
-                return "onclick=\"KAJONA.admin.folderview.selectCallback([['".$strTargetfield."', '".$strValue."']]);\"";
+                return "onclick=\"require('folderview').selectCallback([['".$strTargetfield."', '".$strValue."']]);\"";
             }
 
             return "";
@@ -783,7 +783,7 @@ HTML;
                     )
                 );
                 $strAction .= $this->objToolkit->listButton(
-                    "<a href=\"#\" title=\"".$this->getLang("commons_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strFormElement."', '".$strFolder."/".$strFolderCur."']]);\">"
+                    "<a href=\"#\" title=\"".$this->getLang("commons_accept")."\" rel=\"tooltip\" onclick=\"require('folderview').selectCallback([['".$strFormElement."', '".$strFolder."/".$strFolderCur."']]);\">"
                     .AdminskinHelper::getAdminImage("icon_accept")
                 );
                 $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $strFolderCur, AdminskinHelper::getAdminImage("icon_folderOpen"), $strAction);

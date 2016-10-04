@@ -1528,6 +1528,7 @@ A button for the active language
 The language switch surrounds the buttons
 <language_switch>
     <select id="languageChooser" onchange="%%onchangehandler%%">%%languagebuttons%%</select>
+    <script type="text/javascript">require(['switchLanguage']);</script>
 </language_switch>
 
 ---------------------------------------------------------------------------------------------------------

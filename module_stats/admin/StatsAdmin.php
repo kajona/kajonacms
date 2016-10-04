@@ -275,26 +275,26 @@ class StatsAdmin extends AdminController implements AdminInterface
     private function getInlineLoadingCode($objPlugin, $strPv = "")
     {
         $strReturn = "<script type=\"text/javascript\">
-                            $(document).ready(function() {
-                                  KAJONA.admin.ajax.genericAjaxCall(\"stats\", \"getReport\", \"&plugin=".$this->getActionForReport($objPlugin)."&pv=".$strPv."\", function(data, status, jqXHR) {
+                            require(['ajax', 'tooltip', 'statusDisplay', 'util'], function(ajax, tooltip, statusDisplay, util) {
+                                  ajax.genericAjaxCall(\"stats\", \"getReport\", \"&plugin=".$this->getActionForReport($objPlugin)."&pv=".$strPv."\", function(data, status, jqXHR) {
 
-                                    if(status == 'success')  {
-                                        var intStart = data.indexOf(\"[CDATA[\")+7;
-                                        document.getElementById(\"report_container\").innerHTML=data.substr(
-                                          intStart, data.indexOf(\"]]>\")-intStart
-                                        );
-                                        if(data.indexOf(\"[CDATA[\") < 0) {
-                                            var intStart = data.indexOf(\"<error>\")+7;
+                                        if(status == 'success')  {
+                                            var intStart = data.indexOf(\"[CDATA[\")+7;
                                             document.getElementById(\"report_container\").innerHTML=data.substr(
-                                              intStart, data.indexOf(\"</error>\")-intStart
+                                              intStart, data.indexOf(\"]]>\")-intStart
                                             );
+                                            if(data.indexOf(\"[CDATA[\") < 0) {
+                                                var intStart = data.indexOf(\"<error>\")+7;
+                                                document.getElementById(\"report_container\").innerHTML=data.substr(
+                                                  intStart, data.indexOf(\"</error>\")-intStart
+                                                );
+                                            }
+                                            //trigger embedded js-code
+                                            try { tooltip.initTooltip(); util.evalScript(data); } catch (objEx) { console.warn(objEx)};
                                         }
-                                        //trigger embedded js-code
-                                        try { KAJONA.admin.tooltip.initTooltip(); KAJONA.util.evalScript(data); } catch (objEx) { console.warn(objEx)};
-                                    }
-                                    else  {
-                                        KAJONA.admin.statusDisplay.messageError(\"<b>Request failed!</b><br />\" + data);
-                                    }
+                                        else  {
+                                            statusDisplay.messageError(\"<b>Request failed!</b><br />\" + data);
+                                        }
                                   })
                             });
                           </script>";

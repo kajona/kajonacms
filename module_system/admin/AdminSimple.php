@@ -582,7 +582,7 @@ abstract class AdminSimple extends AdminController
 
             //the tag list is more complex and wrapped by a js-logic to load the tags by ajax afterwards
             // @codingStandardsIgnoreStart
-            $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".Link::getLinkAdminHref("tags", "genericTagForm", "&systemid=".$objListEntry->getSystemid())."'); KAJONA.admin.folderview.dialog.setTitle('".$strDialogTitle."'); KAJONA.admin.folderview.dialog.init(); return false;";
+            $strOnClick = "require('folderview').dialog.setContentIFrame('".Link::getLinkAdminHref("tags", "genericTagForm", "&systemid=".$objListEntry->getSystemid())."'); require('folderview').dialog.setTitle('".$strDialogTitle."'); require('folderview').dialog.init(); return false;";
             $strLink = "<a href=\"#\" onclick=\"".$strOnClick."\" title=\"".$this->getLang("commons_edit_tags")."\" rel=\"tagtooltip\" data-systemid=\"".$objListEntry->getSystemid()."\">".AdminskinHelper::getAdminImage("icon_tag", $this->getLang("commons_edit_tags"), true)."</a>";
             // @codingStandardsIgnoreEnd
             return $this->objToolkit->listButton($strLink);

@@ -120,7 +120,7 @@ class DashboardAdmin extends AdminController implements AdminInterface
                 ($objDashboardWidget->rightDelete() ? $this->objToolkit->listDeleteButton(
                     $objDashboardWidget->getConcreteAdminwidget()->getWidgetName(),
                     $this->getLang("widgetDeleteQuestion"),
-                    "javascript:KAJONA.admin.dashboard.removeWidget(\'".$objDashboardWidget->getSystemid()."\');"
+                    "javascript:require(\'dashboard\').removeWidget(\'".$objDashboardWidget->getSystemid()."\');"
 //                    getLinkAdminHref($this->getArrModule("modul"), "deleteWidget", "&systemid=".$objDashboardWidget->getSystemid())
                 ) : ""),
                 $objDashboardWidget->getConcreteAdminwidget()->getLayoutSection()

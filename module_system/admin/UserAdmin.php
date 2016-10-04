@@ -1381,7 +1381,7 @@ HTML;
 
             if ($this->getParam("allowGroup") == "1") {
                 $strAction .= $this->objToolkit->listButton(
-                    "<a href=\"#\" title=\"".$this->getLang("group_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strFormElement."', '".addslashes($objOneIterable->getStrName())."'], ['".$strFormElement."_id', '".$objOneIterable->getSystemid()."']]);\">".getImageAdmin("icon_accept")
+                    "<a href=\"#\" title=\"".$this->getLang("group_accept")."\" rel=\"tooltip\" onclick=\"require('folderview').selectCallback([['".$strFormElement."', '".addslashes($objOneIterable->getStrName())."'], ['".$strFormElement."_id', '".$objOneIterable->getSystemid()."']]);\">".getImageAdmin("icon_accept")
                 );
             }
 
@@ -1405,7 +1405,7 @@ HTML;
                 $strAction .= $this->objToolkit->listButton(getImageAdmin("icon_acceptDisabled"));
             } else {
                 $strAction .= $this->objToolkit->listButton(
-                    "<a href=\"#\" title=\"".$this->getLang("user_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strFormElement."', '".addslashes($objOneIterable->getStrUsername())."'], ['".$strFormElement."_id', '".$objOneIterable->getSystemid()."']]);\">".getImageAdmin("icon_accept")
+                    "<a href=\"#\" title=\"".$this->getLang("user_accept")."\" rel=\"tooltip\" onclick=\"require('folderview').selectCallback([['".$strFormElement."', '".addslashes($objOneIterable->getStrUsername())."'], ['".$strFormElement."_id', '".$objOneIterable->getSystemid()."']]);\">".getImageAdmin("icon_accept")
                 );
             }
 

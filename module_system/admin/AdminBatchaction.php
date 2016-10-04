@@ -39,7 +39,7 @@ class AdminBatchaction {
 
     private function updateOnClick()
     {
-        $this->strOnClickHandler = "KAJONA.admin.lists.triggerAction('{$this->strTitle}', '{$this->strTargetUrl}', ".($this->getBitRenderInfo() ? "1" : "0").");";
+        $this->strOnClickHandler = "require('lists').triggerAction('{$this->strTitle}', '{$this->strTargetUrl}', ".($this->getBitRenderInfo() ? "1" : "0").");";
     }
 
     public function setStrIcon($strIcon) {
