@@ -618,26 +618,26 @@ Upload-Field for multiple files with progress bar
 
 <script type="text/javascript">
 
-    KAJONA.admin.loader.loadFile([
-        "/core/module_mediamanager/scripts/jquery-fileupload/css/jquery.fileupload.css",
-        "/core/module_mediamanager/scripts/jquery-fileupload/css/jquery.fileupload-ui.css",
-        "/core/module_mediamanager/scripts/jquery-fileupload/js/load-image.min.js",
-        "/core/module_mediamanager/scripts/jquery-fileupload/js/canvas-to-blob.min.js",
-        "/core/module_mediamanager/scripts/jquery-fileupload/js/jquery.iframe-transport.js",
-        "/core/module_mediamanager/scripts/jquery-fileupload/js/jquery.fileupload.js"
-    ], function() {
-        KAJONA.admin.loader.loadFile([
-            "/core/module_mediamanager/scripts/jquery-fileupload/js/jquery.fileupload-process.js"
-        ], function() {
-            KAJONA.admin.loader.loadFile([
-                "/core/module_mediamanager/scripts/jquery-fileupload/js/jquery.fileupload-image.js",
-                "/core/module_mediamanager/scripts/jquery-fileupload/js/jquery.fileupload-audio.js",
-                "/core/module_mediamanager/scripts/jquery-fileupload/js/jquery.fileupload-video.js",
-                "/core/module_mediamanager/scripts/jquery-fileupload/js/jquery.fileupload-validate.js"
-            ], function() {
-                KAJONA.admin.loader.loadFile([
-                    "/core/module_mediamanager/scripts/jquery-fileupload/js/jquery.fileupload-ui.js"
-                ], function() {
+
+
+    require(
+            [
+                'load-image',
+                'load-image-meta',
+                'load-image-exif',
+                'tmpl',
+                'canvas-to-blob',
+                'jquery.iframe-transport',
+                'jquery.fileupload-ui',
+                'jquery.fileupload-image',
+                'jquery.fileupload-audio',
+                'jquery.fileupload-video',
+                'jquery.fileupload-validate',
+                'jquery.fileupload-process',
+                'jquery.fileupload'
+            ],
+            function() {
+
 
                     var filesToUpload = 0;
                     $('#%%name%%').fileupload({
@@ -714,10 +714,9 @@ Upload-Field for multiple files with progress bar
                             $(this).find('.fileupload-progress').css('display', 'none');
                         }
                     });
-                });
-            });
-        });
-    });
+
+            }
+    );
 
 </script>
 

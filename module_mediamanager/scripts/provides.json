@@ -1,0 +1,21 @@
+{
+  "paths": {
+    "mediamanager": "kajona/mediamanager",
+
+
+    "jquery.iframe-transport": "jquery-fileupload/js/jquery.iframe-transport",
+    "jquery.fileupload-ui": "jquery-fileupload/js/jquery.fileupload-ui",
+    "tmpl": "jquery-fileupload/js/tmpl.min",
+    "load-image": "jquery-fileupload/js/load-image.all.min",
+    "load-image-exif": "jquery-fileupload/js/load-image-exif",
+    "load-image-meta": "jquery-fileupload/js/load-image-meta",
+    "canvas-to-blob": "jquery-fileupload/js/canvas-to-blob.min",
+    "jquery.fileupload-image": "jquery-fileupload/js/jquery.fileupload-image",
+    "jquery.fileupload-audio": "jquery-fileupload/js/jquery.fileupload-audio",
+    "jquery.fileupload-video": "jquery-fileupload/js/jquery.fileupload-video",
+    "jquery.fileupload-validate": "jquery-fileupload/js/jquery.fileupload-validate",
+    "jquery.fileupload-process": "jquery-fileupload/js/jquery.fileupload-process",
+    "jquery.fileupload": "jquery-fileupload/js/jquery.fileupload",
+    "jquery.ui.widget": "jquery-fileupload/js/jquery.ui.widget"
+  }
+}

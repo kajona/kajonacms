@@ -323,13 +323,10 @@ class MediamanagerAdmin extends AdminEvensimpler implements AdminInterface
 
         $strJsCode = "";
         if ($this->getParam("sync") == "true" && Objectfactory::getInstance()->getObject($this->getSystemid())->rightRight1()) {
-
-            $strCore = Resourceloader::getInstance()->getCorePathForModule("module_mediamanager");
-
             $strJsCode = <<<HTML
             <script type="text/javascript">
-                KAJONA.admin.loader.loadFile('{$strCore}/module_mediamanager/scripts/mediamanager.js', function() {
-                    KAJONA.admin.ajax.genericAjaxCall("mediamanager", "syncRepo", "{$this->getSystemid()}", function(data, status, jqXHR) {
+                require(['mediamanager', 'ajax', 'statusDisplay'], function(mediamanager, ajax) {
+                    ajax.genericAjaxCall("mediamanager", "syncRepo", "{$this->getSystemid()}", function(data, status, jqXHR) {
                         if(status == 'success') {
                             if(data.indexOf("<repo>0</repo>") == -1) {
                                 //show a dialog to reload the current page
@@ -337,7 +334,7 @@ class MediamanagerAdmin extends AdminEvensimpler implements AdminInterface
                             }
                         }
                         else {
-                            KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b>")
+                            statusDisplay.messageError("<b>Request failed!</b>")
                         }
                     })
                 });
@@ -376,14 +373,14 @@ HTML;
         //Build code for create-dialog
         $strDialog = $this->objToolkit->formInputText("folderName", $this->getLang("commons_name"));
 
-        $strReturn .= "<script type=\"text/javascript\">\n
-                        KAJONA.admin.loader.loadFile('".Resourceloader::getInstance()->getCorePathForModule("module_mediamanager")."/module_mediamanager/scripts/mediamanager.js');
+        $strReturn .= "<script type=\"text/javascript\">
+                        require(['mediamanager']);
                         function init_fm_newfolder_dialog() {
                             jsDialog_1.setTitle('".$this->getLang("folder_new_dialogHeader")."');
                             jsDialog_1.setContent('".uniStrReplace(array("\r\n", "\n"), "", addslashes($strDialog))."',
                                                   '".$this->getLang("commons_create_folder")."',
-                                                  'javascript:KAJONA.admin.mediamanager.createFolder(\'folderName\', \'".$this->getSystemid()."\'); jsDialog_1.hide();');
-                                    jsDialog_1.init(); }\n
+                                                  'javascript:require(\'mediamanager\').createFolder(\'folderName\', \'".$this->getSystemid()."\'); jsDialog_1.hide();');
+                                    jsDialog_1.init(); }
                       ";
 
         $strReturn .= "</script>";
@@ -512,27 +509,27 @@ HTML;
 
             $arrActions = array();
             $arrActions[] = $this->objToolkit->listButton(
-                Link::getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.showRealSize(); return false;\"", "", $this->getLang("showRealsize"), "icon_zoom_in")
+                Link::getLinkAdminManual("href=\"#\" onclick=\"require('mediamanager').imageEditor.showRealSize(); return false;\"", "", $this->getLang("showRealsize"), "icon_zoom_in")
             );
             $arrActions[] = $this->objToolkit->listButton(
                     Link::getLinkAdminManual(
-                        "href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.showPreview(); return false;\"",
+                        "href=\"#\" onclick=\"require('mediamanager').imageEditor.showPreview(); return false;\"",
                         "",
                         $this->getLang("showPreview"),
                         "icon_zoom_out"
                     )
                 )." ";
             $arrActions[] = $this->objToolkit->listButton(
-                Link::getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.rotate(90); return false;\"", "", $this->getLang("rotateImageLeft"), "icon_rotate_left")
+                Link::getLinkAdminManual("href=\"#\" onclick=\"require('mediamanager').imageEditor.rotate(90); return false;\"", "", $this->getLang("rotateImageLeft"), "icon_rotate_left")
             );
             $arrActions[] = $this->objToolkit->listButton(
-                    Link::getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.rotate(270); return false;\"", "", $this->getLang("rotateImageRight"), "icon_rotate_right")
+                    Link::getLinkAdminManual("href=\"#\" onclick=\"require('mediamanager').imageEditor.rotate(270); return false;\"", "", $this->getLang("rotateImageRight"), "icon_rotate_right")
                 )." ";
             $arrActions[] = $this->objToolkit->listButton(
-                Link::getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.showCropping(); return false;\"", "", $this->getLang("cropImage"), "icon_crop")
+                Link::getLinkAdminManual("href=\"#\" onclick=\"require('mediamanager').imageEditor.showCropping(); return false;\"", "", $this->getLang("cropImage"), "icon_crop")
             );
             $arrActions[] = $this->objToolkit->listButton(
-                    Link::getLinkAdminManual("href=\"#\" id=\"accept_icon\"  onclick=\"KAJONA.admin.mediamanager.imageEditor.saveCropping(); return false;\"", "", $this->getLang("cropImageAccept"), "icon_crop_acceptDisabled")
+                    Link::getLinkAdminManual("href=\"#\" id=\"accept_icon\"  onclick=\"require('mediamanager').imageEditor.saveCropping(); return false;\"", "", $this->getLang("cropImageAccept"), "icon_crop_acceptDisabled")
                 )." ";
 
 
@@ -541,11 +538,15 @@ HTML;
             $strReturn .= "<div class=\"imageContainer\"><div class=\"image\">".$strImage."</div></div>";
 
             $strJs = "<script type=\"text/javascript\">
-                KAJONA.admin.loader.loadFile([
-                    '".Resourceloader::getInstance()->getCorePathForModule("module_mediamanager")."/module_mediamanager/scripts/mediamanager.js',
-                    '".Resourceloader::getInstance()->getCorePathForModule("module_mediamanager")."/module_mediamanager/scripts/jcrop/jquery.Jcrop.js',
-                    '".Resourceloader::getInstance()->getCorePathForModule("module_mediamanager")."/module_mediamanager/scripts/jcrop/css/jquery.Jcrop.min.css'
-                ]);
+                require(['mediamanager', 'loader'], function (mediamanager, loader) {
+                    loader.loadFile([
+                        '".Resourceloader::getInstance()->getCorePathForModule("module_mediamanager")."/module_mediamanager/scripts/jcrop/jquery.Jcrop.js',
+                        '".Resourceloader::getInstance()->getCorePathForModule("module_mediamanager")."/module_mediamanager/scripts/jcrop/css/jquery.Jcrop.min.css'
+                    ]);
+                    
+                    mediamanager.strCropEnabled= '".addslashes(AdminskinHelper::getAdminImage("icon_crop_accept", $this->getLang("cropImageAccept")))."';
+                    mediamanager.strCropDisabled = '".addslashes(AdminskinHelper::getAdminImage("icon_crop_acceptDisabled", $this->getLang("cropImageAccept")))."';
+                });
 
                 var fm_image_rawurl = '"._webpath_."/image.php?image=".urlencode($strFile)."&quality=80';
                 var fm_image_scaledurl = '"._webpath_."/image.php?image=".urlencode($strFile)."&maxWidth=__width__&maxHeight=__height__';
@@ -558,9 +559,6 @@ HTML;
                 function init_fm_screenlock_dialog() { jsDialog_3.init(); }
                 function hide_fm_screenlock_dialog() { jsDialog_3.hide(); }
 
-
-                KAJONA.admin.strCropEnabled= '".addslashes(AdminskinHelper::getAdminImage("icon_crop_accept", $this->getLang("cropImageAccept")))."';
-                KAJONA.admin.strCropDisabled = '".addslashes(AdminskinHelper::getAdminImage("icon_crop_acceptDisabled", $this->getLang("cropImageAccept")))."';
 
                 </script>";
 
@@ -620,7 +618,7 @@ HTML;
      */
     protected function actionFolderContentFolderviewMode()
     {
-        $strReturn = "<script type='text/javascript'>KAJONA.admin.loader.loadFile('".Resourceloader::getInstance()->getCorePathForModule("module_mediamanager")."/module_mediamanager/scripts/mediamanager.js');</script>";
+        $strReturn = "<script type='text/javascript'>require(['mediamanager']);</script>";
 
         //if set, save CKEditors CKEditorFuncNum parameter to read it again in KAJONA.admin.folderview.selectCallback()
         //so we don't have to pass through the param with all requests
