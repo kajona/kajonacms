@@ -187,7 +187,7 @@ class SearchAdmin extends AdminSimple implements AdminInterface
         // Search Form
         $objForm = $this->getSearchAdminForm($objSearch);
 
-        $objForm->setStrOnSubmit('KAJONA.admin.search.triggerFullSearch(); return false;');
+        $objForm->setStrOnSubmit('require(\'search\').triggerFullSearch(); return false;');
         $strReturn .= $objForm->renderForm(Link::getLinkAdminHref($this->getArrModule("modul"), "search"), AdminFormgenerator::BIT_BUTTON_SUBMIT);
 
 
@@ -195,10 +195,9 @@ class SearchAdmin extends AdminSimple implements AdminInterface
         $strReturn .= "
 
         <script type=\"text/javascript\">
-        KAJONA.admin.loader.loadFile('{$strCore}/module_search/admin/search.js', function() {
-            KAJONA.admin.search.triggerFullSearch();
+        require(['search'], function(search) {
+            search.triggerFullSearch();
         });
-
 
         </script>";
         $strReturn .= "<div id=\"search_container\" ></div>";
