@@ -225,7 +225,8 @@ abstract class AdminController extends AbstractController
         $this->arrOutput["webpathTitle"] = urldecode(str_replace(array("http://", "https://"), array("", ""), _webpath_));
         $this->arrOutput["head"] = "<script type=\"text/javascript\">KAJONA_DEBUG = ".$this->objConfig->getDebug("debuglevel")."; KAJONA_WEBPATH = '"._webpath_."'; KAJONA_BROWSER_CACHEBUSTER = ".SystemSetting::getConfigValue("_system_browser_cachebuster_")."; KAJONA_LANGUAGE = '".Carrier::getInstance()->getObjLang()->getStrTextLanguage()."';</script>";
         $this->arrOutput["head"] .= "<script type=\"text/javascript\">KAJONA_PHARMAP = ".json_encode(array_values(Classloader::getInstance()->getArrPharModules())).";</script>";
-        $this->arrOutput["requirejs_conf"] = $this->generateRequireJsConfig();
+        $objAdminHelper = new AdminHelper();
+        $this->arrOutput["requirejs_conf"] = $objAdminHelper->generateRequireJsConfig();
 
         //see if there are any hooks to be called
         $this->onRenderOutput($this->arrOutput);
@@ -239,55 +240,7 @@ abstract class AdminController extends AbstractController
         return $this->objTemplate->fillTemplateFile($this->arrOutput, $strTemplate);
     }
 
-    /**
-     * Method which generates the global requirejs config
-     *
-     * @return string
-     */
-    private function generateRequireJsConfig()
-    {
-        $arrRequireConf = BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_REQUIREJS);
-        if (empty($arrRequireConf)) {
-            $arrFolders = Resourceloader::getInstance()->getFolderContent("/scripts", array(".json"), false, function ($strFile) {
-                return $strFile == "provides.json";
-            });
 
-            $strBasePath = $_SERVER['PHP_SELF'];
-            $strBasePath = StringUtil::replace("/index.php", "/", $strBasePath);
-            $strBasePath = StringUtil::replace("/xml.php", "/", $strBasePath);
-            $arrRequireConf = array(
-                "baseUrl" => $strBasePath,
-                "paths" => array(),
-                "shim" => array(),
-            );
-
-            foreach ($arrFolders as $strFile => $strFileName) {
-                $strBasePath = StringUtil::substring($strFile, strlen(_realpath_));
-                $strBasePath = StringUtil::substring($strBasePath, 0, strlen("provides.json") * -1);
-                $arrProvidesJs = json_decode(file_get_contents($strFile), true);
-                if (isset($arrProvidesJs["paths"]) && is_array($arrProvidesJs["paths"])) {
-                    foreach ($arrProvidesJs["paths"] as $strUniqueName => $strPath) {
-                        if (strpos($strBasePath, ".phar") !== false) {
-                            $strBasePath = StringUtil::replace("core/", "files/extract/", substr($strBasePath, 7));
-                            $strBasePath = StringUtil::replace(".phar", "", $strBasePath);
-                        }
-
-                        $arrRequireConf["paths"][$strUniqueName] = $strBasePath . $strPath;
-                    }
-                }
-
-                if (isset($arrProvidesJs["shim"]) && is_array($arrProvidesJs["shim"])) {
-                    foreach ($arrProvidesJs["shim"] as $strUniqueName => $strValue) {
-                        $arrRequireConf["shim"][$strUniqueName] = $strValue;
-                    }
-                }
-            }
-
-            BootstrapCache::getInstance()->updateCache(BootstrapCache::CACHE_REQUIREJS, $arrRequireConf);
-        }
-
-        return json_encode($arrRequireConf);
-    }
 
     /**
      * Hook-method to modify some parts of the rendered content right before rendered into the template.

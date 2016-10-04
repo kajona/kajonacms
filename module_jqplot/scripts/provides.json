@@ -1,0 +1,29 @@
+{
+  "paths": {
+    "jqlot.custom_helper": "kajona/jquery.jqplot.custom_helper",
+
+    "jqplot": "jqplot/jquery.jqplot",
+    "jqplot.logAxisRenderer": "jqplot/plugins/jqplot.logAxisRenderer",
+    "jqplot.barRenderer": "jqplot/plugins/jqplot.barRenderer",
+    "jqplot.categoryAxisRenderer": "jqplot/plugins/jqplot.categoryAxisRenderer",
+    "jqplot.canvasTextRenderer": "jqplot/plugins/jqplot.canvasTextRenderer",
+    "jqplot.canvasAxisTickRenderer": "jqplot/plugins/jqplot.canvasAxisTickRenderer",
+    "jqplot.canvasAxisLabelRenderer": "jqplot/plugins/jqplot.canvasAxisLabelRenderer",
+    "jqplot.pointLabels": "jqplot/plugins/jqplot.pointLabels",
+    "jqplot.cursor": "jqplot/plugins/jqplot.cursor",
+    "jqplot.dateAxisRenderer": "jqplot/plugins/jqplot.dateAxisRenderer",
+    "jqplot.enhancedLegendRenderer": "jqplot/plugins/jqplot.enhancedLegendRenderer",
+    "jqplot.enhancedPieLegendRenderer": "jqplot/plugins/jqplot.enhancedPieLegendRenderer",
+    "jqplot.pieRenderer": "jqplot/plugins/jqplot.pieRenderer",
+    "jqplot.highlighter": "jqplot/plugins/jqplot.highlighter",
+    "jqplot.canvasOverlay": "jqplot/plugins/jqplot.canvasOverlay",
+
+
+    "excanvas": "jqplot/excanvas",
+
+
+    "filesaver.blob": "filesaver/Blob",
+    "filesaver.c2b": "filesaver/canvas-toBlob",
+    "filesaver": "filesaver/FileSaver"
+  }
+}
