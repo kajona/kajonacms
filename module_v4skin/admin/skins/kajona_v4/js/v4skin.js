@@ -82,7 +82,7 @@ $(function () {
     KAJONA.admin.tooltip.initTooltip();
 
     KAJONA.admin.statusDisplay.classOfMessageBox = "alert alert-info";
-    KAJONA.admin.statusDisplay.classOfErrorBox = "alert alert-error";
+    KAJONA.admin.statusDisplay.classOfErrorBox = "alert alert-danger";
 
     KAJONA.admin.scroll = null;
     $(window).scroll(function() {
@@ -386,7 +386,7 @@ KAJONA.v4skin.setCheckboxArrayObjectListItems = function(strElementName, arrItem
             html+= '    <td class="listcheckbox"><input type="checkbox" name="' + formElementName + '" data-systemid="' + arrItems[i].strSystemId + '" checked></td>';
             html+= '    <td class="listimage">' + arrItems[i].strIcon + '</td>';
             html+= '    <td class="title">';
-            html+= '        <div class="small" style="color:#aaa">' + arrItems[i].strPath + '</div>';
+            html+= '        <div class="small text-muted">' + arrItems[i].strPath + '</div>';
             html+= '        ' + arrItems[i].strDisplayName;
             html+= '    </td>';
             html+= '</tr>';

@@ -32,8 +32,9 @@ Annotation         |Context    |Introduced in     |Description
 |@objectFilter[Name] class	|Class	|4.7	|Assigns an filter object (class) to for an object, see evensimpler-classes. Used to render a filter for list actions (e.g. actionList)form.
 |@objectValidator class	|Class	|4.6	|Name of a class implementing ObjectValidatorInterface. Used by the form-generator to validate a classes instance during edit-operations.
 |@permissions permission	|Action-Method	|4.0|Comma-separated list of permission required to execute the action (one / many of view, edit, delete, right, right1, right2, right3, right4, right5)
-|@sortManager class	|Class	|5.0| Name of the sort-manager to be used by the current model-class, instance of SortmanagerInterface 
-|@targetTable table.column	|Class	|4.0|	Defines the / a target-table of the or-mapper. Syntax table.primary--id-column. 
+|@serializable  | Property	|5.1| Indicates whether a property can be serialized through the \Kajona\System\Admin\AdminModelserializer class
+|@sortManager class	|Class	|5.0| Name of the sort-manager to be used by the current model-class, instance of SortmanagerInterface
+|@targetTable table.column	|Class	|4.0|	Defines the / a target-table of the or-mapper. Syntax table.primary--id-column.
 |@targetTableTxSafe yes/no	|Class	|4.6	|Indicates if the target-table should support transactions (dependes on the RDBMS, default is yes)
 |@tableColumn table.column	|Property	|4.0	|Sets the target-column of a property, used by the OR-mapper on loading / persisting the object.
 |@tableColumnDatatype type	|Property	|4.6|	Relevant when generating the CREATE TABLE ddl, sets the columns target type. See [https://github.com/kajona/kajonacms/blob/master/  module_system/system/ DbDatatypes.php ](https://github.com/kajona/kajonacms/blob/master/module_system/system/DbDatatypes.php) for a reference of values.

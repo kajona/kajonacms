@@ -23,7 +23,7 @@ class FileHashPerformanceTest extends Testbase
         $intRuns = 50;
 
 
-        echo "Calling by sha1_file\n";
+//        echo "Calling by sha1_file\n";
         $arrTestStartDate = gettimeofday();
 
         for ($intI = 0; $intI < $intRuns; $intI++) {
@@ -34,10 +34,10 @@ class FileHashPerformanceTest extends Testbase
         $intTimeUsedUserFunc = (($arrTimestampEnde['sec'] * 1000000 + $arrTimestampEnde['usec'])
                 - ($arrTestStartDate['sec'] * 1000000 + $arrTestStartDate['usec'])) / 1000000;
 
-        echo $intTimeUsedUserFunc . " sec\n";
+//        echo $intTimeUsedUserFunc . " sec\n";
 
 
-        echo "Calling by md5_file\n";
+//        echo "Calling by md5_file\n";
         $arrTestStartDate = gettimeofday();
 
         for ($intI = 0; $intI < $intRuns; $intI++) {
@@ -48,10 +48,10 @@ class FileHashPerformanceTest extends Testbase
         $intTimeUsedUserFunc = (($arrTimestampEnde['sec'] * 1000000 + $arrTimestampEnde['usec'])
                 - ($arrTestStartDate['sec'] * 1000000 + $arrTestStartDate['usec'])) / 1000000;
 
-        echo $intTimeUsedUserFunc . " sec\n";
+//        echo $intTimeUsedUserFunc . " sec\n";
 
 
-        echo "Calling by filemtime\n";
+//        echo "Calling by filemtime\n";
         $arrTestStartDate = gettimeofday();
 
         for ($intI = 0; $intI < $intRuns; $intI++) {
@@ -62,7 +62,7 @@ class FileHashPerformanceTest extends Testbase
         $intTimeUsedUserFunc = (($arrTimestampEnde['sec'] * 1000000 + $arrTimestampEnde['usec'])
                 - ($arrTestStartDate['sec'] * 1000000 + $arrTestStartDate['usec'])) / 1000000;
 
-        echo $intTimeUsedUserFunc . " sec\n";
+//        echo $intTimeUsedUserFunc . " sec\n";
 
 
     }

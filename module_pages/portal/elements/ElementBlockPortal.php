@@ -145,7 +145,7 @@ class ElementBlockPortal extends ElementPortal implements PortalElementInterface
             }
         }
 
-        return $intCachetime !== null ? $intCachetime : 0;
+        return $intCachetime;
     }
 
 

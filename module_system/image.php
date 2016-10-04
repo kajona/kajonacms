@@ -170,10 +170,11 @@ class Flyimage
     private function resizeImage()
     {
         //Load the image-dimensions
-        if (is_file(_realpath_.$this->strFilename) && (uniStrpos($this->strFilename, "/files") !== false || uniStrpos($this->strFilename, "/templates") !== false)) {
+        if (is_file(_realpath_.$this->strFilename) && (uniStrpos($this->strFilename, "files") !== false || uniStrpos($this->strFilename, "templates") !== false)) {
 
-            //check headers, maybe execution could be terminated right here
-            if (checkConditionalGetHeaders(md5(md5_file(_realpath_.$this->strFilename).$this->intMaxWidth.$this->intMaxHeight.$this->intFixedWidth.$this->intFixedHeight))) {
+            $strConditionalGetChecksum = md5(_realpath_.$this->strFilename.$this->intMaxWidth.$this->intMaxHeight.$this->intFixedWidth.$this->intFixedHeight);
+            //check headers, maybe execution could be terminated right here  - done f
+            if(ResponseObject::getInstance()->processConditionalGetHeaders($strConditionalGetChecksum)) {
                 ResponseObject::getInstance()->sendHeaders();
                 return;
             }
@@ -184,15 +185,7 @@ class Flyimage
             $objImage->addOperation(new ImageScale($this->intMaxWidth, $this->intMaxHeight));
 
             //send the headers for conditional gets
-            setConditionalGetHeaders(md5(md5_file(_realpath_.$this->strFilename).$this->intMaxWidth.$this->intMaxHeight.$this->intFixedWidth.$this->intFixedHeight));
-
-            //TODO: add expires header for browser caching (optional)
-            /*
-            $intCacheSeconds = 604800; //default: 1 week (60*60*24*7)
-            header("Expires: ".gmdate("D, d M Y H:i:s", time() + $intCacheSeconds)." GMT", true);
-            header("Cache-Control: public, max-age=".$intCacheSeconds, true);
-            header("Pragma: ", true);
-            */
+            ResponseObject::getInstance()->sendConditionalGetHeader($strConditionalGetChecksum);
 
             //and send it to the browser
             $objImage->setJpegQuality((int)$this->intQuality);

@@ -280,7 +280,7 @@ class InstallerPages extends InstallerBase implements InstallerInterface {
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "5.0") {
-            $strReturn = "Updating to 5.0.1...\n";
+            $strReturn .= "Updating to 5.0.1...\n";
 
             $this->updateModuleVersion("", "5.0.1");
             foreach(array("row", "paragraph", "image", "imagesrc", "gallery", "galleryRandom", "downloads", "blocks", "block", "date", "plaintext", "richtext", "link") as $strOneElement) {
@@ -290,17 +290,28 @@ class InstallerPages extends InstallerBase implements InstallerInterface {
         
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "5.0.1") {
-            $strReturn = "Updating to 5.1...\n";
-
-            $this->updateModuleVersion("", "5.1");
-            foreach(array("row", "paragraph", "image", "imagesrc", "gallery", "galleryRandom", "downloads", "blocks", "block", "date", "plaintext", "richtext", "link") as $strOneElement) {
-                $this->updateElementVersion($strOneElement, "5.1");
-            }
+            $strReturn .= $this->update_501_51();
         }
 
         return $strReturn."\n\n";
 	}
 
 
+    private function update_501_51()
+    {
+        $strReturn = "Updating to 5.1...\n";
+
+        $strReturn .= "Removing element config rows...\n";
+        $this->objDB->removeColumn("element", "element_config1");
+        $this->objDB->removeColumn("element", "element_config2");
+        $this->objDB->removeColumn("element", "element_config3");
+
+        $this->updateModuleVersion("", "5.1");
+        foreach(array("row", "paragraph", "image", "imagesrc", "gallery", "galleryRandom", "downloads", "blocks", "block", "date", "plaintext", "richtext", "link") as $strOneElement) {
+            $this->updateElementVersion($strOneElement, "5.1");
+        }
+
+        return $strReturn;
+	}
 
 }

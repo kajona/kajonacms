@@ -91,8 +91,10 @@ class ElementBlocksPortal extends ElementPortal implements PortalElementInterfac
 
         foreach($this->getBlockElements() as $objOneElement) {
             $intElCachetime = $objOneElement->getCachetimeInSeconds();
-            if($intDefault === null || $intElCachetime < $intDefault) {
-                $intDefault = (int)$objOneElement->getCachetimeInSeconds();
+            if($intElCachetime !== null) {
+                if ($intDefault === null || $intElCachetime < $intDefault) {
+                    $intDefault = (int)$objOneElement->getCachetimeInSeconds();
+                }
             }
 
             if($intDefault === 0) {
@@ -101,7 +103,7 @@ class ElementBlocksPortal extends ElementPortal implements PortalElementInterfac
         }
 
 
-        return $intDefault !== null ? $intDefault : 0;
+        return $intDefault;
     }
 
 

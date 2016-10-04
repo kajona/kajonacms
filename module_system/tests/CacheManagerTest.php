@@ -15,6 +15,23 @@ use Kajona\System\System\Exception;
  */
 class CacheManagerTest extends \PHPUnit_Framework_TestCase
 {
+    public function testContains()
+    {
+        $objCacheManager = new CacheManager();
+
+        $this->assertFalse($objCacheManager->containsValue("foo", CacheManager::TYPE_ARRAY));
+
+        $objCacheManager->addValue("foo", "bar", 180, CacheManager::TYPE_ARRAY);
+
+        $this->assertTrue($objCacheManager->containsValue("foo", CacheManager::TYPE_ARRAY));
+        $this->assertEquals("bar", $objCacheManager->getValue("foo", CacheManager::TYPE_ARRAY));
+
+        $objCacheManager->removeValue("foo", CacheManager::TYPE_ARRAY);
+
+        $this->assertFalse($objCacheManager->getValue("foo", CacheManager::TYPE_ARRAY));
+        $this->assertFalse($objCacheManager->containsValue("foo", CacheManager::TYPE_ARRAY));
+    }
+
     public function testCacheGetAddRemove()
     {
         $objCacheManager = new CacheManager();

@@ -125,6 +125,17 @@ class CacheManager
     }
 
     /**
+     * Validates if the cache provides a value without fetching the value itself
+     * @param string $strKey
+     * @param int $intType
+     * @return bool
+     */
+    public function containsValue($strKey, $intType = null, $strNamespace = self::NS_GLOBAL)
+    {
+        return $this->getCache($intType, $strNamespace)->contains($strKey);
+    }
+
+    /**
      * @param string $strKey
      * @param mixed $objValue
      * @param int $intTtl The lifetime in number of seconds for this cache entry.
