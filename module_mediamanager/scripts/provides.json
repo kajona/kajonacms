@@ -16,6 +16,8 @@
     "jquery.fileupload-validate": "jquery-fileupload/js/jquery.fileupload-validate",
     "jquery.fileupload-process": "jquery-fileupload/js/jquery.fileupload-process",
     "jquery.fileupload": "jquery-fileupload/js/jquery.fileupload",
-    "jquery.ui.widget": "jquery-fileupload/js/jquery.ui.widget"
+    "jquery.ui.widget": "jquery-fileupload/js/jquery.ui.widget",
+
+    "jcrop": "jcrop/jquery.Jcrop"
   }
 }

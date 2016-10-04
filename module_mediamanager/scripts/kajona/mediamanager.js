@@ -3,24 +3,24 @@
 //       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
 
 
-define(["jquery", "ajax", "statusDisplay"], function($, ajax, statusDisplay) {
+define(["jquery", "ajax", "statusDisplay", "jcrop"], function($, ajax, statusDisplay, jcrop) {
 
-    var mediamanger = {};
+    var mediamanager = {};
 
-    mediamanger.saveImageCropping = function (intX, intY, intWidth, intHeight, strFile, objCallback) {
+    mediamanager.saveImageCropping = function (intX, intY, intWidth, intHeight, strFile, objCallback) {
         var postBody = 'file=' + strFile + '&intX=' + intX + '&intY=' + intY
             + '&intWidth=' + intWidth + '&intHeight=' + intHeight + '';
         ajax.genericAjaxCall("mediamanager", "saveCropping", "&" + postBody, objCallback);
     };
 
 
-    mediamanger.saveImageRotating = function (intAngle, strFile, objCallback) {
+    mediamanager.saveImageRotating = function (intAngle, strFile, objCallback) {
         var postBody = 'file=' + strFile + '&angle=' + intAngle + '';
         ajax.genericAjaxCall("mediamanager", "rotate", "&" + postBody, objCallback);
     };
 
 
-    mediamanger.createFolder = function (strFmRepoId, strFolder) {
+    mediamanager.createFolder = function (strFmRepoId, strFolder) {
         ajax.genericAjaxCall("mediamanager", "createFolder", strFmRepoId + "&folder=" + strFolder, function (data, status, jqXHR) {
             if (status == 'success') {
                 //check if answer contains an error
@@ -43,7 +43,7 @@ define(["jquery", "ajax", "statusDisplay"], function($, ajax, statusDisplay) {
     };
 
 
-    mediamanger.createFolder = function (strInputId, strRepoId) {
+    mediamanager.createFolder = function (strInputId, strRepoId) {
         var strNewFoldername = document.getElementById(strInputId).value;
         if (strNewFoldername != "") {
             ajax.createFolder(strRepoId, strNewFoldername);
@@ -52,7 +52,7 @@ define(["jquery", "ajax", "statusDisplay"], function($, ajax, statusDisplay) {
     };
 
 
-    mediamanger.imageEditor = {
+    mediamanager.imageEditor = {
         cropArea: null,
         fm_cropObj: null,
         fm_image_isScaled: true,
@@ -151,7 +151,7 @@ define(["jquery", "ajax", "statusDisplay"], function($, ajax, statusDisplay) {
                 }
             };
 
-            mediamanger.saveImageCropping(this.cropArea.x, this.cropArea.y,
+            mediamanager.saveImageCropping(this.cropArea.x, this.cropArea.y,
                 this.cropArea.w, this.cropArea.h, fm_file, callback);
         },
 
@@ -195,12 +195,12 @@ define(["jquery", "ajax", "statusDisplay"], function($, ajax, statusDisplay) {
                 }
             };
 
-            mediamanger.saveImageRotating(intAngle, fm_file, callback);
+            mediamanager.saveImageRotating(intAngle, fm_file, callback);
         }
     };
 
 
-    return mediamanger;
+    return mediamanager;
 
 });
 

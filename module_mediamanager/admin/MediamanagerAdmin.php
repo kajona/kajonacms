@@ -540,7 +540,6 @@ HTML;
             $strJs = "<script type=\"text/javascript\">
                 require(['mediamanager', 'loader'], function (mediamanager, loader) {
                     loader.loadFile([
-                        '".Resourceloader::getInstance()->getCorePathForModule("module_mediamanager")."/module_mediamanager/scripts/jcrop/jquery.Jcrop.js',
                         '".Resourceloader::getInstance()->getCorePathForModule("module_mediamanager")."/module_mediamanager/scripts/jcrop/css/jquery.Jcrop.min.css'
                     ]);
                     
@@ -555,7 +554,7 @@ HTML;
                 var fm_image_isScaled = true;
                 var fm_file = '".$strFile."' ;
 
-                function init_fm_crop_save_warning_dialog() { jsDialog_1.setTitle('".$this->getLang("cropWarningDialogHeader")."'); jsDialog_1.setContent('".$this->getLang("cropWarningSaving")."', '".$this->getLang("cropWarningCrop")."', 'javascript:KAJONA.admin.mediamanager.imageEditor.saveCroppingToBackend()'); jsDialog_1.init(); }
+                function init_fm_crop_save_warning_dialog() { jsDialog_1.setTitle('".$this->getLang("cropWarningDialogHeader")."'); jsDialog_1.setContent('".$this->getLang("cropWarningSaving")."', '".$this->getLang("cropWarningCrop")."', 'javascript:require(\'mediamanager\').imageEditor.saveCroppingToBackend()'); jsDialog_1.init(); }
                 function init_fm_screenlock_dialog() { jsDialog_3.init(); }
                 function hide_fm_screenlock_dialog() { jsDialog_3.hide(); }
 
