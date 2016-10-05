@@ -530,12 +530,10 @@ class SystemAdmin extends AdminSimple implements AdminInterface
             } else {
                 $strTaskOutput .= "
                 <script type=\"text/javascript\">
-                $(function() {
-                   setTimeout(function() {
-                        KAJONA.admin.systemtask.executeTask('" . $objTask->getStrInternalTaskname() . "', '" . $objTask->getSubmitParams() . "');
-                        KAJONA.admin.systemtask.setName('" . $objLang->getLang("systemtask_runningtask", "system") . " " . $objTask->getStrTaskName() . "');
-                   }, 500);
-                 });
+                require(['systemTask'], function(systemtask) {
+                    systemtask.executeTask('" . $objTask->getStrInternalTaskname() . "', '" . $objTask->getSubmitParams() . "');
+                    systemtask.setName('" . $objLang->getLang("systemtask_runningtask", "system") . " " . $objTask->getStrTaskName() . "');
+                });
                 </script>";
             }
         } else {
@@ -545,11 +543,9 @@ class SystemAdmin extends AdminSimple implements AdminInterface
             } else {
                 $strLang = Carrier::getInstance()->getObjLang()->getLang("systemtask_runningtask", "system");
                 $strTaskJS = <<<JS
-                $(function() {
-                    setTimeout(function() {
-                        KAJONA.admin.systemtask.executeTask('{$objTask->getStrInternalTaskName()}', '');
-                        KAJONA.admin.systemtask.setName('{$strLang} {$objTask->getStrTaskName()}');
-                    }, 500);
+                require(['systemTask'], function(systemtask) {
+                    systemtask.executeTask('{$objTask->getStrInternalTaskName()}', '');
+                    systemtask.setName('{$strLang} {$objTask->getStrTaskName()}');
                 });
 JS;
                 $strTaskOutput .= "<script type='text/javascript'>" . $strTaskJS . "</script>";

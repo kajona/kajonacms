@@ -79,7 +79,6 @@ define(['jquery'], function ($) {
             statusBox.css('left', newX);
 
             //start fade-in handler
-
             this.fadeIn();
 
         },
@@ -87,7 +86,7 @@ define(['jquery'], function ($) {
         fadeIn : function () {
             var me = this;
             $("#"+this.idOfMessageBox).animate({opacity: 0.8}, 1000, function() {
-                window.setTimeout(me.startFadeOut, me.timeToFadeOut);
+                window.setTimeout(require('statusDisplay').startFadeOut(), me.timeToFadeOut);
             });
         },
 

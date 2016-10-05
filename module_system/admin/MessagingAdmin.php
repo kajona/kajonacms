@@ -97,7 +97,7 @@ class MessagingAdmin extends AdminEvensimpler implements AdminInterface
             var param2 = 'messageprovidertype='+messageProviderType; //messageprovide type
             var postBody = param1+'&'+param2;
 
-            KAJONA.admin.ajax.genericAjaxCall("messaging", "saveConfigAjax", "&"+postBody, KAJONA.admin.ajax.regularCallback);
+            require('ajax').genericAjaxCall("messaging", "saveConfigAjax", "&"+postBody, require('ajax').regularCallback);
 
             if(inputId.indexOf("_enabled") > 0 ) {
                 $("#"+inputId).closest("tr").find("div.checkbox input:not(.blockEnable)").slice(1).bootstrapSwitch("disabled", state);

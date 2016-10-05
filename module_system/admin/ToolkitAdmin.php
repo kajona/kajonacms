@@ -2093,10 +2093,8 @@ HTML;
                 $strRequiredFields = json_encode($arrRequiredFields);
 
                 $strRendercode .= "<script type=\"text/javascript\">
-                    require(['jquery', 'forms'], function($, forms){
-                        $(document).ready(function(){
-                            forms.renderMandatoryFields($strRequiredFields);
-                        });
+                    require(['forms'], function(forms){
+                        forms.renderMandatoryFields($strRequiredFields);
                     });
                 </script>";
             }
@@ -2108,8 +2106,10 @@ HTML;
         }
 
         $strRows = "";
-        $strRendercode .= "<script type=\"text/javascript\">$(document).ready(function () {
-            KAJONA.admin.forms.renderMissingMandatoryFields([";
+        $strRendercode .= "<script type=\"text/javascript\">
+
+         require(['forms'], function(forms) {
+            forms.renderMissingMandatoryFields([";
 
         foreach ($arrErrors as $strKey => $arrOneErrors) {
             foreach ($arrOneErrors as $strOneError) {

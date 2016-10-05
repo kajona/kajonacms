@@ -72,16 +72,17 @@ class TagsAdmin extends AdminEvensimpler implements AdminInterface
 
             if ($objListEntry->rightRight1()) {
 
-                $strJs = "<script type='text/javascript'>KAJONA.admin.loader.loadFile('".Resourceloader::getInstance()->getCorePathForModule("module_tags")."/module_tags/scripts/tags.js', function() {
-                    KAJONA.admin.tags.createFavoriteEnabledIcon = '".addslashes(AdminskinHelper::getAdminImage("icon_favorite", $this->getLang("tag_favorite_remove")))."';
-                    KAJONA.admin.tags.createFavoriteDisabledIcon = '".addslashes(AdminskinHelper::getAdminImage("icon_favoriteDisabled", $this->getLang("tag_favorite_add")))."';
+                $strJs = "<script type='text/javascript'>
+                require(['tags'], function(tags) {
+                    tags.createFavoriteEnabledIcon = '".addslashes(AdminskinHelper::getAdminImage("icon_favorite", $this->getLang("tag_favorite_remove")))."';
+                    tags.createFavoriteDisabledIcon = '".addslashes(AdminskinHelper::getAdminImage("icon_favoriteDisabled", $this->getLang("tag_favorite_add")))."';
                 });</script>";
 
                 $strImage = TagsFavorite::getAllFavoritesForUserAndTag($this->objSession->getUserID(), $objListEntry->getSystemid()) != null ?
                     AdminskinHelper::getAdminImage("icon_favorite", $this->getLang("tag_favorite_remove")) :
                     AdminskinHelper::getAdminImage("icon_favoriteDisabled", $this->getLang("tag_favorite_add"));
 
-                $arrButtons[] = $strJs.$this->objToolkit->listButton("<a href=\"#\" onclick=\"KAJONA.admin.tags.createFavorite('".$objListEntry->getSystemid()."', this); return false;\">".$strImage."</a>");
+                $arrButtons[] = $strJs.$this->objToolkit->listButton("<a href=\"#\" onclick=\"require('tags').createFavorite('".$objListEntry->getSystemid()."', this); return false;\">".$strImage."</a>");
             }
 
             return $arrButtons;

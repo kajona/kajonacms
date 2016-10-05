@@ -2,7 +2,9 @@
 /**
  * Functions to execute system tasks
  */
-define(["jquery", "ajax", "util", "statusDisplay"], function($, ajax, util, statusDisplay){
+define(["jquery", "ajax", "util", "statusDisplay", "dialog"], function($, ajax, util, statusDisplay, Dialog){
+
+    jsDialog_0 = new Dialog('jsDialog_0', 0);
 
     var systemTask = {
         executeTask : function(strTaskname, strAdditionalParam, bitNoContentReset) {

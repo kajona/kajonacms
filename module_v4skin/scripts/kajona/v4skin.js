@@ -321,7 +321,7 @@ define(['jquery', 'bootstrap', 'jqueryui', 'workingIndicator', 'tooltip', 'statu
          * @param arrAvailableIds -
          */
         setObjectListItems: function(strElementName, arrItems, arrAvailableIds, strDeleteButton){
-            var table = KAJONA.util.getElementFromOpener(strElementName);
+            var table = util.getElementFromOpener(strElementName);
 
             var tbody = table.find('tbody');
             if(tbody.length > 0) {
@@ -341,7 +341,7 @@ define(['jquery', 'bootstrap', 'jqueryui', 'workingIndicator', 'tooltip', 'statu
                     html+= '    <td>' + arrItems[i].strIcon + '</td>';
                     html+= '    <td>' + strEscapedTitle + ' <input type="hidden" name="' + strElementName + '[]" value="' + arrItems[i].strSystemId + '" /></td>';
                     html+= '    <td class="icon-cell">';
-                    html+= '        <a href="#" onclick="KAJONA.v4skin.removeObjectListItem(this);return false">' + strDeleteButton + '</a>';
+                    html+= '        <a href="#" onclick="require(\'v4skin\').removeObjectListItem(this);return false">' + strDeleteButton + '</a>';
                     html+= '    </td>';
                     html+= '</tr>';
 

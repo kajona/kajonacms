@@ -101,8 +101,8 @@ class FormentryMonthYearDropdown extends FormentryDate
 
         if($this->getBitMandatory()) {
             $strReturn .= "<script type='text/javascript'>
-                $(document).ready(function () {
-                    KAJONA.admin.forms.renderMandatoryFields([[ '".$this->getStrEntryName().self::MONTH_SUFFIX."', '' ], ['".$this->getStrEntryName().self::YEAR_SUFFIX."' ,  '' ]]); 
+                require(['forms'], function(forms) {
+                    forms.renderMandatoryFields([[ '".$this->getStrEntryName().self::MONTH_SUFFIX."', '' ], ['".$this->getStrEntryName().self::YEAR_SUFFIX."' ,  '' ]]); 
                 });
             </script>";
         }
