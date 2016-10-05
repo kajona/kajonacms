@@ -61,6 +61,7 @@ $lang["commons_list_new"]                = "Create new record";
 $lang["commons_list_sort_next"]          = "Move to next page";
 $lang["commons_list_sort_prev"]          = "Move to previous page";
 $lang["commons_locked"]                  = "Record is locked";
+$lang["commons_move"]                    = "Move";
 $lang["commons_module_permissions"]      = "Module permissions";
 $lang["commons_name"]                    = "Name";
 $lang["commons_next"]                    = "next";
