@@ -16,6 +16,7 @@
     <script src="_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/less/less.min.js"></script>
     <!-- KAJONA_BUILD_LESS_END -->
 
+    <script src="_webpath_/[webpath,module_system]/scripts/jquery/jquery.min.js?_system_browser_cachebuster_"></script>
     %%head%%
 
     <!-- BC layer while moving to requirejs -->

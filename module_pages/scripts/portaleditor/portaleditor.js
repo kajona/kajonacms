@@ -854,7 +854,7 @@ KAJONA.admin.folderview = {
  * Loader for dynamically loading additional js and css files after the onDOMReady event
  *
  */
-KAJONA.admin.loader = new KAJONA.util.Loader();
+KAJONA.admin.loader = KAJONA.portal.loader;
 
 
 KAJONA.admin.tooltip = {

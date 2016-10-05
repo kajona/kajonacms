@@ -35,8 +35,6 @@ class ChartsJqPlot
         echo "<script type=\"text/javascript\">
           var require = ".$objAdminHelper->generateRequireJsConfig().";
 
-            // BC layer so that we fire document ready events only after requirejs has loaded all js files
-            $.holdReady(true);
         </script>
         <script data-main='core/module_system/scripts/app' src='"._webpath_.Resourceloader::getInstance()->getCorePathForModule("module_system")."/module_system/scripts/requirejs/require.js'></script>
 ";

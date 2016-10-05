@@ -19,6 +19,8 @@ require(['jquery', 'jqueryui', 'jquery-touchPunch', 'bootstrap', 'v4skin', 'load
     KAJONA.admin.folderview.dialog = new Dialog('folderviewDialog', 0);
     folderview.dialog = KAJONA.admin.folderview.dialog;
 
+    $ = jquery;
+
     // BC layer
 
     jsDialog_0 = new Dialog('jsDialog_0', 0);

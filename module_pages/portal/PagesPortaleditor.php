@@ -242,12 +242,14 @@ class PagesPortaleditor
         $strPeToolbar .= "<script type='text/javascript'>
 
         KAJONA.portal.loader.loadFile([
-            '/core/module_pages/scripts/kajona_portaleditor.js',
+            '/core/module_pages/scripts/portaleditor/portaleditor.js',
+            '/core/module_pages/scripts/portaleditor/dialog.js',
+            '/core/module_pages/scripts/portaleditor/lang.js',
             '/core/module_system/scripts/jqueryui/jquery-ui.custom.min.js',
-            '/core/module_system/scripts/lang.js',
+            '/core/module_v4skin/scripts/bootstrap/bootstrap.min.js',
             '/core/module_system/scripts/jqueryui/css/smoothness/jquery-ui.custom.css'
         ], function() {
-
+debugger;
             KAJONA.admin.peToolbarActions = [
                 new KAJONA.admin.portaleditor.toolbar.Action('pages:pe_on_off', '', 'fa-power-off', function() { KAJONA.admin.portaleditor.switchEnabled({$bitSetEnabled}); }),
                 new KAJONA.admin.portaleditor.toolbar.Separator(),
@@ -263,13 +265,10 @@ class PagesPortaleditor
             ];
 
             KAJONA.admin.actions = ".PagesPortaleditor::getInstance()->convertToJs().";
-            KAJONA.portal.loader.loadFile([
-                '/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap.min.js',
-                '/core/module_v4skin/admin/skins/kajona_v4/js/kajona_dialog.js'
-            ], function() {
-                KAJONA.admin.portaleditor.peDialog = new KAJONA.admin.ModalDialog('peDialog', 0, true, true);
-                KAJONA.admin.portaleditor.delDialog = new KAJONA.admin.ModalDialog('delDialog', 1, false, false);
-            });
+            
+            KAJONA.admin.portaleditor.peDialog = new KAJONA.admin.ModalDialog('peDialog', 0, true, true);
+            KAJONA.admin.portaleditor.delDialog = new KAJONA.admin.ModalDialog('delDialog', 1, false, false);
+            
 
             KAJONA.admin.portaleditor.RTE.config = {
                 language : '".(Session::getInstance()->getAdminLanguage() != "" ? Session::getInstance()->getAdminLanguage() : "en")."',
