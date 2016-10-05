@@ -195,14 +195,14 @@ define(['jquery'], function ($) {
 
             //set hidden event again (needed as when replacing the events are not set anymore)
             $('#' + this.id).on('hidden', function (e) {
-                KAJONA.admin.ModalDialog.resetDialog.call(this);
+                require('dialog').resetDialog.call(this);
             })
         };
 
         //register event to reset the dialog with default settings (only if the dialog has template dialog)
         if($("#template_" +this.containerId).length > 0) {
             $('#' + this.containerId).on('hidden', function (e) {
-                KAJONA.admin.ModalDialog.resetDialog.call(this);
+                require('dialog').resetDialog.call(this);
             })
         }
     };

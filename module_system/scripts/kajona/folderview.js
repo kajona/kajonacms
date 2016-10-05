@@ -11,7 +11,7 @@ define(["jquery"], function($){
         dialog: undefined,
 
         /**
-         * holds CKEditors CKEditorFuncNum parameter to read it again in KAJONA.admin.folderview.fillFormFields()
+         * holds CKEditors CKEditorFuncNum parameter to read it again in folderview.fillFormFields()
          * so we don't have to pass through the param with all requests
          */
         selectCallbackCKEditorFuncNum: 0,

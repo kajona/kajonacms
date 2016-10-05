@@ -34,11 +34,6 @@
     </script>
     <script data-main="core/module_system/scripts/app" src="_webpath_/[webpath,module_system]/scripts/requirejs/require.js"></script>
 
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-    <script src="_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/js/html5.js?_system_browser_cachebuster_"></script>
-    <![endif]-->
-
     <link rel="shortcut icon" href="_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/img/favicon.png">
 </head>
 

@@ -73,13 +73,13 @@ But - of the path of the files change, how to load them? Whats the right place t
 	
 or
 
-	/files/extract/module_pages/pages/scripts/pages.js
+	/files/extract/module_pages/scripts/kajona/pages.js
 		
-For most cases, the matching path is resolved internally and automatically using the Kajona-Loader:
+For most cases, the matching path is resolved internally and automatically using the requirejs-loader:
 
 	<script type="text/javascript">
-    KAJONA.admin.loader.loadFile('/core/module_pages/kajona/scripts/pages.js', function() {
-	    KAJONA.admin.pages.initBlockSort();
+	require(['pages], function(pages) {
+	    pages.initBlockSort();
     });
 	</script>
 

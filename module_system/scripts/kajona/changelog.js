@@ -78,7 +78,7 @@ define(['jquery', 'ajax', 'moment'], function ($, ajax, moment) {
         ajax.genericAjaxCall("system", "changelogPropertiesForDate", "&systemid="+strSystemId+"&date="+strDate, function(data, status, jqXHR) {
             data = JSON.parse(data);
             var props = data.properties;
-            $('#date_' + strType).html("<a href='#' onclick='KAJONA.admin.changelog.selectColumn(\"" + strType + "\");return false;' style='display:block;'>" + data.date + "</a>");
+            $('#date_' + strType).html("<a href='#' onclick='require('changelog').selectColumn(\"" + strType + "\");return false;' style='display:block;'>" + data.date + "</a>");
             for (var prop in props) {
                 $('#property_' + prop + '_' + strType).html(props[prop]);
             }

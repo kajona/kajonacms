@@ -62,12 +62,6 @@ define(['jquery', 'bootstrap', 'jqueryui', 'workingIndicator', 'tooltip', 'statu
                     if (oldCount != objResponse.messageCount) {
                         var strTitle = document.title.replace("(" + oldCount + ")", "");
                         document.title = "(" + objResponse.messageCount + ") " + strTitle;
-
-                        //if (!KAJONA.v4skin.messaging.bitFirstLoad && oldCount < objResponse.messageCount) {
-                        //    KAJONA.util.desktopNotification.showMessage(KAJONA.v4skin.properties.messaging.notification_title, KAJONA.v4skin.properties.messaging.notification_body, function () {
-                        //        document.location.href = KAJONA_WEBPATH+'/index.php?admin=1&module=messaging';
-                        //    });
-                        //}
                     }
 
                 } else {

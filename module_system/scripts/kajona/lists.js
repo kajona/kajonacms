@@ -33,11 +33,7 @@ define(['jquery', 'lang'], function ($, lang) {
                 if($(this).attr('id').substr(0, 6) == "kj_cb_" && $(this).attr('id') != 'kj_cb_batchActionSwitch') {
                     var strSysid = $(this).closest("tr").data('systemid');
                     if($.inArray(strSysid, arrSystemIds) !== -1) {//if strId in array
-                        if ($(this)[0].checked) {
-                            $(this)[0].checked = false;
-                        } else {
-                            $(this)[0].checked = true;
-                        };
+                        $(this)[0].checked = !$(this)[0].checked;
                     }
                 }
             });
@@ -69,7 +65,7 @@ define(['jquery', 'lang'], function ($, lang) {
             curConfirm = curConfirm.replace('%title%', strTitle);
 
             jsDialog_1.setTitle(this.strDialogTitle);
-            jsDialog_1.setContent(curConfirm, this.strDialogStart,  'javascript:KAJONA.admin.lists.executeActions();');
+            jsDialog_1.setContent(curConfirm, this.strDialogStart,  'javascript:require(\'lists\').executeActions();');
             jsDialog_1.init();
 
             //reset pending list on hide
