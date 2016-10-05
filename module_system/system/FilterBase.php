@@ -76,7 +76,9 @@ abstract class FilterBase
 
     /**
      * Method for setting default values.
-     * Must be called manually. Not being called on creation.
+     *
+     * Being called on filter reset or if filter is not in session yet.
+     * May also be called manually.
      */
     public function configureDefaultValues()
     {
@@ -102,11 +104,12 @@ abstract class FilterBase
 
     /**
      * Returns the module name.
-     * The module name is being retrieved via the class annotation @ module
+     * The module name is being retrieved via the class annotation @module
      *
      * @param $strKey
      *
      * @return mixed
+     * @throws Exception
      */
     public function getArrModule($strKey = "")
     {
