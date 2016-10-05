@@ -636,6 +636,8 @@
 
     <!-- executes javascript jasmine tests -->
     <target name="jasmine">
+        <touch file="${basedir}${buildPath}/logs/junitresults.xml" />
+
         <!--currently disabled due to requirejs migration-->
         <!--<exec dir="${basedir}${jsPath}" executable="${path.node}" failonerror="on">-->
             <!--<arg line="./node_modules/jasmine/bin/jasmine.js"/>-->
