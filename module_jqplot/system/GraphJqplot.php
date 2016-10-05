@@ -547,7 +547,7 @@ class GraphJqplot implements GraphInterface
         $strCoreDirectory = Resourceloader::getInstance()->getCorePathForModule("module_jqplot");
         $strReturn .= "<script type='text/javascript'>
             require(['loader', 'jqlot.custom_helper'], function(loader, jqplotHelper) {
-                KAJONA.admin.loader.loadFile([
+                loader.loadFile([
                     '{$strCoreDirectory}/module_jqplot/scripts/jqplot/jquery.jqplot.css',
                     '{$strCoreDirectory}/module_jqplot/scripts/kajona/jquery.jqplot.custom.css'
                 ], function() {});
