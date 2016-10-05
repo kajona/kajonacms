@@ -43,11 +43,27 @@ class PagesPackagemanagerUpdatedListener implements GenericeventListenerInterfac
         //loop all installed modules, otherwise some modules may get lost
         $objPackagesManager = new PackagemanagerManager();
 
-        foreach($objPackagesManager->getAvailablePackages() as $objOneMetadata) {
+        foreach ($objPackagesManager->getAvailablePackages() as $objOneMetadata) {
             $objHandler = $objPackagesManager->getPackageManagerForPath($objOneMetadata->getStrPath());
 
-            if ($objHandler instanceof PackagemanagerPackagemanagerModule) {
+            if ($objHandler instanceof PackagemanagerPackagemanagerPharmodule) {
+                //read the module and extract
+                $objPharModule = new PharModule($objHandler->getObjMetadata()->getStrPath());
+                $objFilesystem = new Filesystem();
+                foreach ($objPharModule->getContentMap() as $strKey => $strFullPath) {
+                    foreach (array("js", "css", "pics") as $strOneSubfolder) {
+                        $intStrPos = StringUtil::indexOf($strFullPath, "templates/default/{$strOneSubfolder}", false);
+                        if ($intStrPos !== false) {
+                            $strTargetPath = _realpath_."templates/default/{$strOneSubfolder}/".StringUtil::substring($strFullPath, $intStrPos + StringUtil::length("templates/default/{$strOneSubfolder}"));
+                            $objFilesystem->folderCreate(dirname($strTargetPath), true, true);
+                            //copy
+                            copy($strFullPath, $strTargetPath);
+                        }
 
+                    }
+                }
+
+            } elseif ($objHandler instanceof PackagemanagerPackagemanagerModule) {
                 $objFilesystem = new Filesystem();
                 Logger::getInstance(Logger::PAGES)->addLogRow("updating default template from /".$objHandler->getObjMetadata()->getStrPath(), Logger::$levelInfo);
                 if (is_dir(_realpath_.$objHandler->getObjMetadata()->getStrPath()."/templates/default/js")) {
@@ -60,26 +76,6 @@ class PagesPackagemanagerUpdatedListener implements GenericeventListenerInterfac
 
                 if (is_dir(_realpath_.$objHandler->getObjMetadata()->getStrPath()."/templates/default/pics")) {
                     $objFilesystem->folderCopyRecursive($objHandler->getObjMetadata()->getStrPath()."/templates/default/pics", "/templates/default/pics", true);
-                }
-
-            } elseif ($objHandler instanceof PackagemanagerPackagemanagerPharmodule) {
-
-                //read the module and extract
-                $objPharModule = new PharModule($objHandler->getObjMetadata()->getStrPath());
-                $objFilesystem = new Filesystem();
-                foreach ($objPharModule->getContentMap() as $strKey => $strFullPath) {
-
-                    foreach (array("js", "css", "pics") as $strOneSubfolder) {
-
-                        $intStrPos = StringUtil::indexOf($strFullPath, "templates/default/{$strOneSubfolder}", false);
-                        if ($intStrPos !== false) {
-                            $strTargetPath = _realpath_."templates/default/{$strOneSubfolder}/".StringUtil::substring($strFullPath, $intStrPos + StringUtil::length("templates/default/{$strOneSubfolder}"));
-                            $objFilesystem->folderCreate(dirname($strTargetPath), true, true);
-                            //copy
-                            copy($strFullPath, $strTargetPath);
-                        }
-
-                    }
                 }
 
             }
