@@ -22,6 +22,7 @@ use Kajona\System\System\Cookie;
 use Kajona\System\System\Date;
 use Kajona\System\System\Exception;
 use Kajona\System\System\HttpResponsetypes;
+use Kajona\System\System\LanguagesLanguage;
 use Kajona\System\System\Link;
 use Kajona\System\System\Mail;
 use Kajona\System\System\Model;
@@ -30,6 +31,7 @@ use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Reflection;
 use Kajona\System\System\ResponseObject;
 use Kajona\System\System\Session;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\SystemPwchangehistory;
@@ -153,6 +155,22 @@ class UserAdmin extends AdminSimple implements AdminInterface
         );
 
         $strReturn .= $this->renderList($objIterator, false, "userList");
+
+        if (validateSystemid($this->getParam("editGroups"))) {
+            /** @var UserUser $objUser */
+            $objUser = Objectfactory::getInstance()->getObject($this->getParam("editGroups"));
+
+            $objUserMgmt = new UserSourcefactory();
+            if ($objUserMgmt->getUsersource($objUser->getStrSubsystem())->getMembersEditable()) {
+                $strReturn .= "<script type='text/javascript'>
+                setTimeout(function() {
+                    KAJONA.admin.folderview.dialog.setContentIFrame('".Link::getLinkAdminHref("user", "editMemberships", "&systemid=".$objUser->getSystemid())."&folderview=1&redirectToList=1'); KAJONA.admin.folderview.dialog.setTitle('".StringUtil::jsSafeString($this->getLang("user_memberships").$objUser->getStrDisplayName())."');
+                    KAJONA.admin.folderview.dialog.init();
+                }, 500);
+                </script>";
+            }
+        }
+
         return $strReturn;
     }
 
@@ -438,7 +456,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
                 }
 
                 if (count($arrDD) > 1) {
-                    $strReturn = $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "newUser"));
+                    $strReturn .= $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "newUser"));
                     $strReturn .= $this->objToolkit->formInputDropdown("usersource", $arrDD, $this->getLang("user_usersource"));
                     $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
                     $strReturn .= $this->objToolkit->formClose();
@@ -460,8 +478,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
                 }
 
                 $objForm->addField(new FormentryHidden("", "usersource"))->setStrValue($this->getParam("usersource"));
-
-                return $objForm->renderForm(Link::getLinkAdminHref($this->getArrModule("modul"), "saveUser"));
+                $strReturn .= $objForm->renderForm(Link::getLinkAdminHref($this->getArrModule("modul"), "saveUser"));
             }
         } else {
             //editing a user. this could be in two modes - globally, or in selfedit mode
@@ -517,7 +534,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
 
             $objForm->addField(new FormentryHidden("", "usersource"))->setStrValue($this->getParam("usersource"));
 
-            return $objForm->renderForm(Link::getLinkAdminHref($this->getArrModule("modul"), "saveUser"));
+            $strReturn .= $objForm->renderForm(Link::getLinkAdminHref($this->getArrModule("modul"), "saveUser"));
         }
 
 
@@ -606,9 +623,11 @@ class UserAdmin extends AdminSimple implements AdminInterface
             ->setStrValue(($this->getParam("user_skin") != "" ? $this->getParam("user_skin") : SystemSetting::getConfigValue("_admin_skin_default_")))
             ->setStrLabel($this->getLang("user_skin"));
 
+
+        $objLanguage = new LanguagesLanguage();
         $objForm->addField(new FormentryDropdown("user", "language"))
             ->setArrKeyValues($arrLang)
-            ->setStrValue(($this->getParam("user_language") != "" ? $this->getParam("user_language") : ""))
+            ->setStrValue(($this->getParam("user_language") != "" ? $this->getParam("user_language") : $objLanguage->getAdminLanguage()))
             ->setStrLabel($this->getLang("user_language"))
             ->setBitMandatory(true);
 
@@ -626,11 +645,6 @@ class UserAdmin extends AdminSimple implements AdminInterface
         if (!$bitSelfedit) {
             $objForm->addField(new FormentryCheckbox("user", "adminlogin"))->setStrLabel($this->getLang("user_admin"));
             $objForm->addField(new FormentryCheckbox("user", "portal"))->setStrLabel($this->getLang("user_portal"));
-        }
-
-        if (count($objUser->getGroupIdsForUser()) == 0 && empty($strInheritPermissionsId)) {
-            $objForm->addField(new FormentryPlaintext("group_hint"))->setStrValue($this->objToolkit->warningBox($this->getLang("form_user_hint_groups")));
-            $objForm->setFieldToPosition("group_hint", 1);
         }
 
         $objForm->addField(new FormentryHidden("", "mode"))->setStrValue($strMode);
@@ -729,9 +743,9 @@ class UserAdmin extends AdminSimple implements AdminInterface
                     $objSourceGroup->addMember($objUser->getObjSourceUser());
                 }
 
-                $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "editMemberships", "&systemid=".$objUser->getStrSystemid()));
-                return "";
             }
+            $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "list", "&editGroups=".$objUser->getSystemid()));
+            return "";
         }
 
         if ($this->getParam("mode") == "edit") {
@@ -771,6 +785,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
         $objUser = new UserUser($this->getSystemid());
         $objUser->deleteObject();
         $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "list"));
+        return "";
     }
 
     //--group-management----------------------------------------------------------------------------------
@@ -1170,6 +1185,10 @@ class UserAdmin extends AdminSimple implements AdminInterface
         $arrGroups = $objSourcesytem->getAllGroupIds();
         $arrUserGroups = $objUser->getArrGroupIds();
 
+        if (count($arrUserGroups) == 0) {
+            $strReturn .= $this->objToolkit->warningBox($this->getLang("form_user_hint_groups"));
+        }
+
         $arrRows = array();
         foreach ($arrGroups as $strSingleGroup) {
             //to avoid privilege escalation, the admin-group has to be treated in a special manner
@@ -1184,9 +1203,6 @@ class UserAdmin extends AdminSimple implements AdminInterface
             $strCheckbox = uniSubstr($strCheckbox, 0, uniStrpos($strCheckbox, ">") + 1);
 
             $arrRows[] = array($strCheckbox, $objSingleGroup->getStrName());
-
-//            $strReturn .= $this->objToolkit->formInputCheckbox($objSingleGroup->getSystemid(), $objSingleGroup->getStrName(), in_array($strSingleGroup, $arrUserGroups));
-
         }
 
         $strReturn .= <<<HTML
@@ -1200,6 +1216,7 @@ HTML;
                 KAJONA.admin.permissions.toggleEmtpyRows('".$this->getLang("permissions_toggle_visible", "system")."', '".$this->getLang("permissions_toggle_hidden", "system")."', 'table.kajona-data-table tr');
                 </script>";
 
+        $strReturn .= $this->objToolkit->formInputHidden("redirectToList", $this->getParam("redirectToList"));
         $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
         $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
         $strReturn .= $this->objToolkit->formClose();
@@ -1248,7 +1265,6 @@ HTML;
 
         //Searching for groups to enter
         foreach ($arrGroups as $strSingleGroup) {
-
             $objGroup = new UserGroup($strSingleGroup);
             //skipped for blocked groups, those won't be updated
             if (!$this->isGroupEditable($objGroup)) {
@@ -1257,7 +1273,6 @@ HTML;
 
 
             if ($this->getParam($strSingleGroup) != "") {
-
                 //add the user to this group
                 if (!in_array($strSingleGroup, $arrUserGroups)) {
                     $objGroup->getObjSourceGroup()->addMember($objUser->getObjSourceUser());
@@ -1298,10 +1313,11 @@ HTML;
         }
 
         if ($this->getParam("folderview")) {
-            $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "list", "&peClose=1&blockAction=1"));
+            $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "list", "&peClose=1&blockAction=1".($this->getParam("redirectToList") != "" ? "&peRefreshPage=".urlencode(Link::getLinkAdminHref("user", "list", "", false)) : "")));
         } else {
             $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "list"));
         }
+        return "";
     }
 
 
