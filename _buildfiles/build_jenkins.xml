@@ -479,6 +479,7 @@
             <fileset dir="${basedir}${tempPath}" includes="**/less-full.js"/>
             <fileset dir="${basedir}${tempPath}" includes="**/*.odt"/>
             <fileset dir="${basedir}${tempPath}" includes="**/core*/*/tests/**"/>
+            <fileset dir="${basedir}${tempPath}" includes="**/core*/*/scripts/spec/**"/>
             <fileset dir="${basedir}${tempPath}" includes="**/setupproject.php"/>
             <fileset dir="${basedir}${tempPath}" includes="**/V4toV5Migration.php"/>
             <fileset dir="${basedir}${tempPath}" includes="**/.git"/>
@@ -529,6 +530,7 @@
                 <exclude name="**/jquery*.js" />
                 <exclude name="**/ckeditor/**/*.js" />
                 <exclude name="core*/module_*/tests/**/*.js" />
+                <exclude name="core*/*/scripts/spec/*.js" />
             </fileset>
             <globmapper from="*.js" to="*-full.js"/>
         </copy>
@@ -636,6 +638,7 @@
 
     <!-- executes javascript jasmine tests -->
     <target name="jasmine">
+
         <!--currently disabled due to requirejs migration-->
         <!--<exec dir="${basedir}${jsPath}" executable="${path.node}" failonerror="on">-->
             <!--<arg line="./node_modules/jasmine/bin/jasmine.js"/>-->
