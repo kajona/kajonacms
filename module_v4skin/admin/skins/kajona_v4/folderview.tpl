@@ -18,26 +18,14 @@
 
     %%head%%
 
-    <!-- BC layer while moving to requirejs -->
-    <script src="_webpath_/[webpath,module_system]/scripts/jquery/jquery.min.js?_system_browser_cachebuster_"></script>
-    <script src="_webpath_/[webpath,module_system]/scripts/jqueryui/jquery-ui.custom.min.js?_system_browser_cachebuster_"></script>
-    <script src="_webpath_/[webpath,module_system]/scripts/loader.js?_system_browser_cachebuster_"></script>
-    <script src="_webpath_/[webpath,module_system]/scripts/kajona.js?_system_browser_cachebuster_"></script>
-    <!-- BC layer -->
-
     <script type="text/javascript">var searchExtendText = '[lang,search_details,search]';</script>
     <script type="text/javascript">
         var require = %%requirejs_conf%%;
-
-        // BC layer so that we fire document ready events only after requirejs has loaded all js files
-        $.holdReady(true);
     </script>
-    <script data-main="core/module_system/scripts/app" src="_webpath_/[webpath,module_system]/scripts/requirejs/require.js"></script>
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-    <script src="_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/js/html5.js?_system_browser_cachebuster_"></script>
-    <![endif]-->
+    <script src="_webpath_/[webpath,module_system]/scripts/requirejs/require.js?_system_browser_cachebuster_"></script>
+    <script type="text/javascript">
+        require(['app'], function() {});
+    </script>
 
     <link rel="shortcut icon" href="_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/img/favicon.png">
 </head>
