@@ -18,19 +18,8 @@
 
     <script src="_webpath_/[webpath,module_system]/scripts/jquery/jquery.min.js?_system_browser_cachebuster_"></script>
     %%head%%
-
-    <!-- BC layer while moving to requirejs -->
-    <script src="_webpath_/[webpath,module_system]/scripts/jquery/jquery.min.js?_system_browser_cachebuster_"></script>
-    <script src="_webpath_/[webpath,module_system]/scripts/jqueryui/jquery-ui.custom.min.js?_system_browser_cachebuster_"></script>
-    <script src="_webpath_/[webpath,module_system]/scripts/loader.js?_system_browser_cachebuster_"></script>
-    <script src="_webpath_/[webpath,module_system]/scripts/kajona.js?_system_browser_cachebuster_"></script>
-    <!-- BC layer -->
-
-    <script type="text/javascript">var searchExtendText = '[lang,search_details,search]';</script>
     <script type="text/javascript">
         var require = %%requirejs_conf%%;
-        // BC layer so that we fire document ready events only after requirejs has loaded all js files
-        $.holdReady(true);
     </script>
     <script src="_webpath_/[webpath,module_system]/scripts/requirejs/require.js?_system_browser_cachebuster_"></script>
     <script type="text/javascript">
@@ -52,6 +41,13 @@
                     <h3>Kajona V5</h3>
                 </div>
                 <div class="panel-body">
+                    <!--[if lt IE 9]>
+                    <div class="alert alert-danger">
+                        You are using an outdated version of Internet Explorer. Please use a modern webbrowser like Mozilla Firefox or Google Chrome, or upgrade your Internet Explorer installation to access this application.<br /><br />
+                        Sie verwenden eine veraltete Version des Internet Explorers. Bitte verwenden Sie einen modernen Webbrowser wie Mozilla Firefox oder Google Chrome oder aktualisieren Sie Ihre Internet Explorer Installation um auf diese Anwendung zuzugreifen.
+                    </div>
+                    <![endif]-->
+                    <!--[if lt IE 9]><style type="text/css"> #loginContainer_content {display: none;} </style><![endif]-->
                     <div id="loginContainer_content">%%content%%</div>
                 </div>
                 <div class="panel-footer">
