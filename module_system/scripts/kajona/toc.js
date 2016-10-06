@@ -3,8 +3,10 @@
  * Appends an table of contents navigation under the main navigation sidebar. The index contains all elements which
  * match the given selector. The text of the element gets used as link in the navigation. Sets also the fitting id to
  * each element.
+ *
+ * bootstrap is loaded to ensure affix() is present at time of calling
  */
-define(['jquery', 'util'], function ($, util) {
+define(['jquery', 'util', 'bootstrap'], function ($, util, bootstrap) {
 
     return {
         render: function(selector){
