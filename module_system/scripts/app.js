@@ -1,5 +1,5 @@
 
-require(['jquery', 'jqueryui', 'jquery-touchPunch', 'bootstrap', 'v4skin', 'loader', 'dialog', 'folderview'], function(jquery, jqueryui, touch, bootstrap, v4skin, loader, Dialog, folderview) {
+require(['jquery', 'jqueryui', 'jquery-touchPunch', 'bootstrap', 'v4skin', 'loader', 'dialog', 'folderview', 'lists'], function(jquery, jqueryui, touch, bootstrap, v4skin, loader, Dialog, folderview, lists) {
 
     //backwards compatibility
     if (typeof KAJONA == "undefined") {
