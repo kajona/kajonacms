@@ -149,7 +149,7 @@ class DashboardAdmin extends AdminController implements AdminInterface
         $strReturn .= "<div id='".$strContainerId."' class='calendar'></div>";
         $strReturn .= "<script type=\"text/javascript\">";
         $strReturn .= <<<JS
-        require(["jquery", "moment", "fullcalendar", "dashboard", "tooltip", "workingIndicator", "loader"], function($, moment, fullcalendar, dashboard, tooltip, workingIndicator, loader){
+        require(["jquery", "moment", "fullcalendar", "dashboard", "tooltip", "workingIndicator", "loader", "fullcalendar_lang_{$strLang}"], function($, moment, fullcalendar, dashboard, tooltip, workingIndicator, loader){
             loader.loadFile(['/core/module_dashboard/scripts/fullcalendar/fullcalendar.min.css']);
             var loadCalendar = function(){
                 $('#{$strContainerId}').fullCalendar({
@@ -181,11 +181,7 @@ class DashboardAdmin extends AdminController implements AdminInterface
                 $('.fc-button').removeClass().addClass('btn btn-default');
             };
 
-            if ('{$strLang}' != 'en') {
-                loader.loadFile(['/core/module_dashboard/scripts/fullcalendar/lang/{$strLang}.js'], loadCalendar);
-            } else {
-                loadCalendar();
-            }
+            loadCalendar();
         });
 JS;
         $strReturn .= "</script>";
