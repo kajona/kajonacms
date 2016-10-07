@@ -7,6 +7,7 @@
     "jquerycaret": "jquerytag/jquery.caret.min",
     "jquerytageditor": "jquerytag/jquery.tag-editor.min",
     "d3": "d3/d3.min",
+    "calendar-heatmap": "d3/calendar-heatmap",
     "jstree": "jstree3/dist/jstree.min",
     "moment": "moment/moment.min",
     "qtip": "qtip2/jquery.qtip.min",
