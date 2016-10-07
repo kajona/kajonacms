@@ -546,16 +546,20 @@ class GraphJqplot implements GraphInterface
         //5. Init Chart
         $strCoreDirectory = Resourceloader::getInstance()->getCorePathForModule("module_jqplot");
         $strReturn .= "<script type='text/javascript'>
-            require(['loader', 'jqlot.custom_helper'], function(loader, jqplotHelper) {
+            require(['jqplot', 'loader'], function(jqplot, loader) {
+                
                 loader.loadFile([
                     '{$strCoreDirectory}/module_jqplot/scripts/jqplot/jquery.jqplot.css',
                     '{$strCoreDirectory}/module_jqplot/scripts/kajona/jquery.jqplot.custom.css'
                 ], function() {});
+                
+            require(['jqlot.custom_helper'], function(jqplotHelper) {
                         $.jqplot.sprintf.thousandsSeparator = '$strThousandsChar';
                         $.jqplot.sprintf.decimalMark = '$strDecChar';
 
                         var objChart_$strChartId = new jqplotHelper.jqPlotChart('$strChartId', '$strTooltipId', '$strResizeableId', '$this->bitIsResizeable', $strChartData, $strChartOptions, $strPostPlotOptions, $strDataPointObjects);
                         objChart_$strChartId.render();
+                });
                 });
         </script>";
 
