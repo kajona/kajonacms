@@ -12,6 +12,7 @@ namespace Kajona\Ldap\System;
 use Kajona\System\System\Config;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Logger;
+use Kajona\System\System\StringUtil;
 
 
 /**
@@ -357,6 +358,9 @@ class Ldap
     public function getUserdetailsByName($strUsername)
     {
         $arrReturn = false;
+
+        //escape domain names
+        $strUsername = StringUtil::replace("\\", "\\\\", $strUsername);
 
         $strUserFilter = $this->arrConfig["ldap_user_search_filter"];
         $strUserFilter = uniStrReplace("?", $strUsername, $strUserFilter);
