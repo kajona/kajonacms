@@ -12,7 +12,6 @@
 
     <!-- KAJONA_BUILD_LESS_START -->
     <link href="_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/less/bootstrap.less?_system_browser_cachebuster_" rel="stylesheet/less">
-    <!--<script> less = { env:'development' }; </script>-->
     <script src="_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/less/less.min.js"></script>
     <!-- KAJONA_BUILD_LESS_END -->
 

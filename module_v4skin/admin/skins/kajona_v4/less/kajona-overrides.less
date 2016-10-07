@@ -1659,16 +1659,17 @@ table.form-control {
     background: none repeat 0% 0%;
     margin-top: 0;
 
-    -moz-animation: fa-spin 2s infinite linear;
-    -o-animation: fa-spin 2s infinite linear;
-    -webkit-animation: fa-spin 2s infinite linear;
-    animation: fa-spin 2s infinite linear;
+
 
     &:before {
         font-size: @font-size-base + 10;
         content: @fa-var-spinner;
         color: @kajona-brand-color;
+        display: block;
         font-family: fontawesome;
+        -moz-animation: fa-spin 2s infinite linear;
+        -o-animation: fa-spin 2s infinite linear;
+        -webkit-animation: fa-spin 2s infinite linear;
         animation: fa-spin 2s infinite linear;
     }
 }
