@@ -32,7 +32,7 @@ class InstallerPostacomment extends InstallerBase implements InstallerRemovableI
 		$strReturn = "";
         $objManager = new OrmSchemamanager();
 		$strReturn .= "Installing table postacomment...\n";
-        $objManager->createTable("Kajona\\Postacomment\\System\\PostacommentPost");
+        $objManager->createTable(PostacommentPost::class);
 
 		//register the module
 		$strSystemID = $this->registerModule(
@@ -74,6 +74,9 @@ class InstallerPostacomment extends InstallerBase implements InstallerRemovableI
             $objModule->setStrAspect(SystemAspect::getAspectByName("content")->getSystemid());
             $objModule->updateObjectToDb();
         }
+
+        $strReturn .= "Creating moderated setting...\n";
+        $this->registerConstant("_postacomment_post_moderated_", "false", SystemSetting::$int_TYPE_BOOL, _postacomment_modul_id_);
 
 		return $strReturn;
 
@@ -152,21 +155,21 @@ class InstallerPostacomment extends InstallerBase implements InstallerRemovableI
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.6") {
-            $strReturn = "Updating to 4.7...\n";
+            $strReturn .= "Updating to 4.7...\n";
             $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7");
             $this->updateElementVersion($this->objMetadata->getStrTitle(), "4.7");
         }
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.7") {
-            $strReturn = "Updating to 4.7.1...\n";
+            $strReturn .= "Updating to 4.7.1...\n";
             $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7.1");
             $this->updateElementVersion($this->objMetadata->getStrTitle(), "4.7.1");
         }
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.7.1") {
-            $strReturn = "Updating to 5.0...\n";
+            $strReturn .= "Updating to 5.0...\n";
             $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.0");
             $this->updateElementVersion($this->objMetadata->getStrTitle(), "5.0");
         }
@@ -177,8 +180,24 @@ class InstallerPostacomment extends InstallerBase implements InstallerRemovableI
             $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1");
             $this->updateElementVersion($this->objMetadata->getStrTitle(), "5.1");
         }
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.1") {
+            $strReturn .= $this->update_51_to_511();
+        }
 
         return $strReturn."\n\n";
+	}
+
+
+    private function update_51_to_511()
+    {
+        $strReturn = "Updating to 5.1.1...\n";
+        $strReturn .= "Creating moderated setting...\n";
+        $this->registerConstant("_postacomment_post_moderated_", "false", SystemSetting::$int_TYPE_BOOL, _postacomment_modul_id_);
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1.1");
+        $this->updateElementVersion($this->objMetadata->getStrTitle(), "5.1.1");
+
+        return $strReturn;
 	}
 
 
