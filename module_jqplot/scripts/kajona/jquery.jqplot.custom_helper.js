@@ -29,12 +29,12 @@ define([
 
 ], function($, folderview, util) {
 
-    var arrChartObjects = []; //container for all chart objects
 
     var previousNeighbor = null; //used in methods mouseLeave and mouseMove
 
     var jqplotHelper = {};
 
+    jqplotHelper.arrChartObjects = []; //container for all chart objects
 
     /**
      *
@@ -104,7 +104,7 @@ define([
             this.bitIsRendered = true;
         };
 
-        arrChartObjects[this.strChartId] = this;
+        jqplotHelper.arrChartObjects[this.strChartId] = this;
     };
 
     jqplotHelper.enableChartResizing = function (strChartId, strResizeableId) {
@@ -113,7 +113,7 @@ define([
             delay: 20,
             helper: "ui-resizable-helper-jqplot",
             stop: function (event, ui) {
-                arrChartObjects[strChartId].render();
+                jqplotHelper.arrChartObjects[strChartId].render();
             }
         });
     };
@@ -121,7 +121,7 @@ define([
     jqplotHelper.bindDataClickEvents = function (strChartId) {
         $('#' + strChartId).bind('jqplotDataClick',
             function (ev, seriesIndex, pointIndex, data) {
-                var objChart = arrChartObjects[this.id];
+                var objChart = jqplotHelper.arrChartObjects[this.id];
 
                 //check if a url and call it in a dialogue
                 if (objChart.arrSeriesToDataPoints && objChart.arrSeriesToDataPoints[seriesIndex]) {
@@ -264,7 +264,7 @@ define([
     };
 
     jqplotHelper.hasDataPoint = function (ev, seriesIndex, pointIndex) {
-        var objChart = arrChartObjects[$(ev.currentTarget).attr('id')];
+        var objChart = jqplotHelper.arrChartObjects[$(ev.currentTarget).attr('id')];
 
         if (objChart.arrSeriesToDataPoints && objChart.arrSeriesToDataPoints[seriesIndex]) {
             var objDataPoint = objChart.arrSeriesToDataPoints[seriesIndex][pointIndex];

@@ -184,7 +184,7 @@ define(['jquery', 'bootstrap', 'jqueryui', 'workingIndicator', 'tooltip', 'statu
     });
 
     //register desktop notifications for messaging
-    //KAJONA.util.desktopNotification.grantPermissions();
+    //util.desktopNotification.grantPermissions();
 
     //init offacnvas menu
     $('[data-toggle="offcanvas"]').click(function () {
@@ -375,7 +375,7 @@ define(['jquery', 'bootstrap', 'jqueryui', 'workingIndicator', 'tooltip', 'statu
                         });
                     }
 
-                    KAJONA.v4skin.setObjectListItems(strElementName, arrItems, arrAvailableIds, strDeleteButton);
+                    require('v4skin').setObjectListItems(strElementName, arrItems, arrAvailableIds, strDeleteButton);
 
                     jsDialog_1.hide();
                 }
@@ -391,7 +391,7 @@ define(['jquery', 'bootstrap', 'jqueryui', 'workingIndicator', 'tooltip', 'statu
         getCheckboxTreeSelectionFromParent: function() {
             if($('.jstree').length > 0) {
                 // the query parameter contains the name of the form element where we insert the selected elements
-                var strElementName = KAJONA.v4skin.getQueryParameter("element_name");
+                var strElementName = require('v4skin').getQueryParameter("element_name");
                 var table = parent.$('#' + strElementName);
                 var arrSystemIds = [];
                 if(table.length > 0) {
