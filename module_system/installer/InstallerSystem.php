@@ -767,6 +767,15 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
     {
         $strReturn = "Updating 5.1.1 to 5.1.2...\n";
 
+        $strReturn .= "Checking postacomment / guestbook cross-dependencies...\n";
+        if(SystemModule::getModuleByName("guestbook") !== null && SystemModule::getModuleByName("postacomment") === null) {
+            $strReturn .= "ERROR\n";
+            $strReturn .= "Module guestbook is replaced by module postacomment.\n";
+            $strReturn .= "Please install module postacomment in order to avoid a loss of guestbook data.\n";
+            $strReturn .= "Aborting update sequence.\n";
+            return $strReturn;
+        }
+
         $strReturn .= "Removing legacy samplecontent module...\n";
 
         $objFilesystem = new Filesystem();

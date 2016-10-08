@@ -10,12 +10,16 @@
 namespace Kajona\Postacomment\Installer;
 
 use Kajona\Pages\System\PagesElement;
+use Kajona\Pages\System\PagesPage;
 use Kajona\Postacomment\System\PostacommentPost;
+use Kajona\System\System\BootstrapCache;
 use Kajona\System\System\Carrier;
+use Kajona\System\System\Filesystem;
 use Kajona\System\System\InstallerBase;
 use Kajona\System\System\InstallerRemovableInterface;
 use Kajona\System\System\OrmSchemamanager;
 use Kajona\System\System\SystemAspect;
+use Kajona\System\System\SystemCommon;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\SystemSetting;
 
@@ -194,6 +198,83 @@ class InstallerPostacomment extends InstallerBase implements InstallerRemovableI
         $strReturn = "Updating to 5.1.1...\n";
         $strReturn .= "Creating moderated setting...\n";
         $this->registerConstant("_postacomment_post_moderated_", "false", SystemSetting::$int_TYPE_BOOL, _postacomment_modul_id_);
+
+        if(in_array(_dbprefix_."guestbook_post", $this->objDB->getTables())) {
+
+            //find all guestbook elements and the matching books in order to duplicate the entries
+            foreach ($this->objDB->getPArray("SELECT * FROM "._dbprefix_."element_guestbook, "._dbprefix_."system, "._dbprefix_."page_element WHERE content_id = page_element_id AND content_id = system_id", array()) as $arrOneElement) {
+                $strPostParentId = $arrOneElement["guestbook_id"];
+                $strTargetLang = $arrOneElement["page_element_ph_language"];
+                $strTargetPageId = null;
+
+                $strSysQuery = "SELECT * FROM "._dbprefix_."system WHERE system_id = ?";
+                $arrSysRecord = $this->objDB->getPRow($strSysQuery, array($arrOneElement["system_prev_id"]));
+                while ($arrSysRecord["system_id"] != "0") {
+                    if ($arrSysRecord["system_class"] == PagesPage::class) {
+                        $strTargetPageId = $arrSysRecord["system_id"];
+                        break;
+                    }
+
+                    $arrSysRecord = $this->objDB->getPRow($strSysQuery, array($arrSysRecord["system_prev_id"]));
+                }
+
+
+                if (validateSystemid($strTargetPageId) && validateSystemid($strPostParentId)) {
+                    //all set up, lets start to copy the records
+                    foreach ($this->objDB->getPArray("SELECT * FROM "._dbprefix_."system, "._dbprefix_."guestbook_post WHERE system_id = guestbook_post_id AND system_prev_id = ?", array($strPostParentId)) as $arrOnePost) {
+                        $strReturn .= "Moving guestbook entry ".$arrOnePost["system_id"]." to pac...\n";
+
+                        $objPostacomment = new PostacommentPost();
+                        $objPostacomment->setStrTitle(trim($arrOnePost["guestbook_post_name"]." ".$arrOnePost["guestbook_post_page"]));
+                        $objPostacomment->setStrComment($arrOnePost["guestbook_post_text"]);
+                        $objPostacomment->setStrUsername($arrOnePost["guestbook_post_name"]);
+                        $objPostacomment->setIntDate($arrOnePost["guestbook_post_date"]);
+                        $objPostacomment->setStrAssignedPage($strTargetPageId);
+                        $objPostacomment->setStrAssignedLanguage($strTargetLang);
+
+                        $objPostacomment->updateObjectToDb();
+                    }
+                }
+            }
+
+            $strReturn .= "Shifting page-elements...\n";
+            foreach ($this->objDB->getPArray("SELECT * FROM "._dbprefix_."element_guestbook", array()) as $arrOneRow) {
+                $this->objDB->_pQuery("INSERT INTO "._dbprefix_."element_universal (content_id, char1) VALUES (?, ?)", array($arrOneRow["content_id"], 'postacomment_ajax.tpl'));
+            }
+
+            $strReturn .= "Updating element classes...\n";
+            $objElement = PagesElement::getElement("guestbook");
+            $objElement->setStrClassAdmin("ElementPostacommentAdmin.php");
+            $objElement->setStrClassPortal("ElementPostacommentPortal.php");
+            $objElement->updateObjectToDb();
+
+            $strReturn .= "Removing entries...\n";
+            $objCommons = new SystemCommon();
+            foreach ($this->objDB->getPArray("SELECT * FROM "._dbprefix_."guestbook_post", array()) as $arrOneRow) {
+                $objCommons->deleteSystemRecord($arrOneRow["guestbook_post_id"]);
+            }
+
+            foreach ($this->objDB->getPArray("SELECT * FROM "._dbprefix_."guestbook_book", array()) as $arrOneRow) {
+                $objCommons->deleteSystemRecord($arrOneRow["guestbook_id"]);
+            }
+
+            $this->objDB->_pQuery("DROP TABLE "._dbprefix_."guestbook_post", array());
+            $this->objDB->_pQuery("DROP TABLE "._dbprefix_."guestbook_book", array());
+            $this->objDB->_pQuery("DROP TABLE "._dbprefix_."element_guestbook", array());
+
+            $objModule = SystemModule::getModuleByName("guestbook");
+            $objModule->deleteObjectFromDatabase();
+
+            $strReturn .= "Cleaning filesystem...\n";
+            $objFilesystem = new Filesystem();
+            if(is_file(_realpath_."/core/module_guestbook.phar")) {
+                $objFilesystem->fileDelete("/core/module_guestbook.phar");
+            } elseif (is_dir(_realpath_."/core/module_guestbook")) {
+                $objFilesystem->folderDeleteRecursive("/core/module_guestbook");
+            }
+            BootstrapCache::getInstance()->flushCache();
+        }
+
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1.1");
         $this->updateElementVersion($this->objMetadata->getStrTitle(), "5.1.1");
 
