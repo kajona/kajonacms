@@ -10,7 +10,7 @@
 
     <!-- KAJONA_BUILD_LESS_START -->
     <link href="_webpath_/[webpath,module_installer]/less/bootstrap.less" rel="stylesheet/less">
-    <!--<script> less = { env:'development' }; </script>-->
+    <script> less = { env:'development' }; </script>
     <script src="_webpath_/[webpath,module_installer]/less/less.min.js"></script>
     <!-- KAJONA_BUILD_LESS_END -->
 
@@ -258,6 +258,7 @@ function switchDriver() {
             $(objButton).on('click', function() {return false;} );
             $(objButton).attr('disabled', 'disabled');
             $('#statusinfo').removeClass('hidden');
+            $('#installer-cli').removeClass('hide')
             triggerNextInstaller();
         }
 
@@ -284,40 +285,53 @@ function switchDriver() {
 
             $.post(
                 '_webpath_/installer.php',
-                { step : 'triggerNextAutoInstall', module: strModule},
-                function(data) {
+                { step : 'triggerNextAutoInstall', module: strModule}
+            )
+            .done(function(data) {
 
-                    if(data.status == 'success') {
-                        $('tr[data-package="'+data.module+'"]').removeClass('info');
-                        $('tr[data-package="'+data.module+'"] td.spinner-module').html('<i class="fa fa-check"></i>');
-                        triggerNextInstaller();
-                    }
-                    else {
-                        $('tr[data-package="'+data.module+'"]').removeClass('info').addClass('danger');
-                        $('tr[data-package="'+data.module+'"] td.spinner-module').html('<i class="fa fa-times"></i>');
-                    }
-
+                if(data.status == 'success') {
+                    $('tr[data-package="'+data.module+'"]').removeClass('info');
+                    $('tr[data-package="'+data.module+'"] td.spinner-module').html('<i class="fa fa-check"></i>');
+                    $('#installer-cli pre').append(data.log);
+                    $("#installer-cli pre").animate({ scrollTop: $('#installer-cli pre').prop("scrollHeight")}, 100);
+                    triggerNextInstaller();
                 }
-            );
+            })
+            .fail(function(data) {
+                $('tr[data-package="'+strModule+'"]').removeClass('info').addClass('danger');
+                $('tr[data-package="'+strModule+'"] td.spinner-module').html('<i class="fa fa-times"></i>');
+            })
+            .always(function(data) {
+                $('#installer-cli pre').append(data.log ? data.log : data.responseText);
+                $("#installer-cli pre").animate({ scrollTop: $('#installer-cli pre').prop("scrollHeight")}, 100);
+            });
         }
 
 
         function triggerNextSamplecontent() {
             $.post(
                 '_webpath_/installer.php',
-                { step : 'getNextAutoSamplecontent'},
-                function(data) {
-                    if(data == '' || data == null) {
-                        $('#statusinfo').addClass('hidden');
-                        document.location = '_webpath_/installer.php?step=finish';
-                        return;
-                    }
+                { step : 'getNextAutoSamplecontent'}
+            )
+            .done(function(data) {
 
-                    $('tr[data-package="'+data.module+'"] td.spinner-samplecontent').html('<i class="fa fa-spinner fa-spin"></i>');
-                    triggerAutoSamplecontent(data.module);
-
+                if(data == '' || data == null) {
+                    $('#statusinfo').addClass('hidden');
+                    document.location = '_webpath_/installer.php?step=finish';
+                    return;
                 }
-            );
+
+                $('tr[data-package="'+data.module+'"] td.spinner-samplecontent').html('<i class="fa fa-spinner fa-spin"></i>');
+                triggerAutoSamplecontent(data.module);
+            })
+            .fail(function(data) {
+                $('tr[data-package="'+strModule+'"]').removeClass('info').addClass('danger');
+                $('tr[data-package="'+strModule+'"] td.spinner-module').html('<i class="fa fa-times"></i>');
+            })
+            .always(function(data) {
+                $('#installer-cli pre').append(data.log ? data.log : data.responseText);
+                $("#installer-cli pre").animate({ scrollTop: $('#installer-cli pre').prop("scrollHeight")}, 100);
+            });
         }
 
 
@@ -331,6 +345,8 @@ function switchDriver() {
                     if(data.status == 'success') {
                         $('tr[data-package="'+data.module+'"]').removeClass('info');
                         $('tr[data-package="'+data.module+'"] td.spinner-samplecontent').html('<i class="fa fa-check"></i>');
+                        $('#installer-cli pre').append(data.log);
+                        $("#installer-cli pre").animate({ scrollTop: $('#installer-cli pre').prop("scrollHeight")}, 100);
                         triggerNextSamplecontent();
                     }
                     else {
@@ -356,6 +372,12 @@ function switchDriver() {
         <td class="text-muted">%%packagehint%%</td>
     </tr>
 </autoinstall_row>
+
+<autoinstall_cli>
+    <div id="installer-cli" class="hide">
+        <pre></pre>
+    </div>
+</autoinstall_cli>
 
 
 
