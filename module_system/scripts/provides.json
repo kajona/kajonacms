@@ -3,7 +3,7 @@
     "app": "app",
 
     "jquery": "jquery/jquery.min",
-    "jqueryui": "jqueryui/jquery-ui.custom.min",
+    "jquery-ui": "jqueryui/jquery-ui.custom.min",
     "jquerycaret": "jquerytag/jquery.caret.min",
     "jquerytageditor": "jquerytag/jquery.tag-editor.min",
     "d3": "d3/d3.min",
@@ -34,7 +34,7 @@
     "workingIndicator": "kajona/workingIndicator"
   },
   "shim": {
-    "jqueryui" : {
+    "jquery-ui" : {
       "deps": ["jquery"]
     },
     "jquerycaret" : {

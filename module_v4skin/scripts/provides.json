@@ -24,7 +24,7 @@
       "deps": ["jquery"]
     },
     "jquery-touchPunch" : {
-      "deps": ["jqueryui"]
+      "deps": ["jquery-ui"]
     },
     "bootstrap-switch" : {
       "deps": ["bootstrap"]

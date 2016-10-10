@@ -1,16 +1,28 @@
 
-include('../../../core/module_system/scripts/loader.js');
-include('../../../core/module_system/scripts/kajona.js');
-include('../../../core/module_packagemanager/scripts/packagemanager.js');
+//add additional resolving paths
+module.paths.unshift(__dirname+"/../../../_buildfiles/jstests/node_modules");
+var requirejs = require('requirejs');
 
-describe("packagemanager.js", function() {
+var modulePaths = global.kajonaPaths;
+modulePaths.packagemanager = "module_packagemanager/scripts/kajona/packagemanager";
+
+requirejs.config({
+    nodeRequire: require,
+    baseUrl : __dirname+"/../../../",
+    paths : modulePaths
+});
+
+
+var packagemanager = requirejs("packagemanager");
+
+describe("packagemanager", function() {
 
     beforeEach(function() {
     });
 
     it("test functions available", function() {
-        expect(typeof KAJONA.admin.packagemanager.addPackageToTest).toBe("function");
-        expect(typeof KAJONA.admin.packagemanager.triggerUpdateCheck).toBe("function");
+        expect(typeof packagemanager.addPackageToTest).toBe("function");
+        expect(typeof packagemanager.triggerUpdateCheck).toBe("function");
     });
 
 });

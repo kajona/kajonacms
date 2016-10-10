@@ -12,9 +12,11 @@
     "jasmine": "^2.3.2",
     "jasmine-reporters": "^2.0.7",
     "jquery": "^2.1.4",
+    "jquery-ui" : "1.12.0",
     "jsdom": "^7.0.2",
     "less": "^2.5.3",
     "protractor": "^2.5.1",
-    "protractor-screenshot-reporter": "0.0.5"
+    "protractor-screenshot-reporter": "0.0.5",
+    "requirejs" : "^2.3.2"
   }
 }

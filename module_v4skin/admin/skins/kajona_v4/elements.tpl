@@ -85,7 +85,7 @@ background using the ajaxHelper.
 Loads the script-helper and adds the table to the drag-n-dropable tables getting parsed later
 <dragable_list_header>
 <script type="text/javascript">
-require(["jquery", "jqueryui", "ajax", "statusDisplay", "tooltip", "util"], function($, jqueryui, ajax, statusDisplay, tooltip, util) {
+require(["jquery", "jquery-ui", "ajax", "statusDisplay", "tooltip", "util"], function($, jqueryui, ajax, statusDisplay, tooltip, util) {
     $(function() {
 
         var bitMoveToTree = false;

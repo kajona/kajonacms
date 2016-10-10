@@ -1,9 +1,21 @@
 
-include('../../../core/module_system/scripts/loader.js');
-include('../../../core/module_system/scripts/kajona.js');
-include('../../../core/module_pages/scripts/kajona/pages.js');
+//add additional resolving paths
+module.paths.unshift(__dirname+"/../../../_buildfiles/jstests/node_modules");
+var requirejs = require('requirejs');
 
-describe("pages.js", function() {
+var modulePaths = global.kajonaPaths;
+modulePaths.pages = "module_pages/scripts/kajona/pages";
+
+requirejs.config({
+    nodeRequire: require,
+    baseUrl : __dirname+"/../../../",
+    paths : modulePaths
+});
+
+
+var pages = requirejs("pages");
+
+describe("pages", function() {
 
     beforeEach(function() {
     });

@@ -6,7 +6,7 @@ define([
     'jquery',
     'folderview',
     'util',
-    "jqueryui",
+    "jquery-ui",
     'jqplot',
     'jqplot.logAxisRenderer',
     'jqplot.barRenderer',

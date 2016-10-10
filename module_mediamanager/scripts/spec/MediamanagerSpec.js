@@ -1,22 +1,33 @@
 
-include('../../../core/module_system/scripts/loader.js');
-include('../../../core/module_system/scripts/kajona.js');
-include('../../../core/module_mediamanager/scripts/mediamanager.js');
+module.paths.unshift(__dirname+"/../../../_buildfiles/jstests/node_modules");
+var requirejs = require('requirejs');
 
-describe("mediamanager.js", function() {
+var modulePaths = global.kajonaPaths;
+modulePaths.mediamanager = "module_mediamanager/scripts/kajona/mediamanager";
+
+requirejs.config({
+    nodeRequire: require,
+    baseUrl : __dirname+"/../../../",
+    paths : modulePaths
+});
+
+
+var mediamanager = requirejs("mediamanager");
+
+describe("mediamanager", function() {
 
     beforeEach(function() {
     });
 
     it("test functions available", function() {
-        expect(typeof KAJONA.admin.mediamanager.createFolder).toBe("function");
-        expect(typeof KAJONA.admin.mediamanager.imageEditor.showRealSize).toBe("function");
-        expect(typeof KAJONA.admin.mediamanager.imageEditor.showPreview).toBe("function");
-        expect(typeof KAJONA.admin.mediamanager.imageEditor.showCropping).toBe("function");
-        expect(typeof KAJONA.admin.mediamanager.imageEditor.hideCropping).toBe("function");
-        expect(typeof KAJONA.admin.mediamanager.imageEditor.saveCropping).toBe("function");
-        expect(typeof KAJONA.admin.mediamanager.imageEditor.saveCroppingToBackend).toBe("function");
-        expect(typeof KAJONA.admin.mediamanager.imageEditor.rotate).toBe("function");
+        expect(typeof mediamanager.createFolder).toBe("function");
+        expect(typeof mediamanager.imageEditor.showRealSize).toBe("function");
+        expect(typeof mediamanager.imageEditor.showPreview).toBe("function");
+        expect(typeof mediamanager.imageEditor.showCropping).toBe("function");
+        expect(typeof mediamanager.imageEditor.hideCropping).toBe("function");
+        expect(typeof mediamanager.imageEditor.saveCropping).toBe("function");
+        expect(typeof mediamanager.imageEditor.saveCroppingToBackend).toBe("function");
+        expect(typeof mediamanager.imageEditor.rotate).toBe("function");
     });
 
 });

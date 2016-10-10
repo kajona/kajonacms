@@ -1,15 +1,27 @@
 
-include('../../../core/module_system/scripts/loader.js');
-include('../../../core/module_system/scripts/kajona.js');
-include('../../../core/module_search/scripts/search.js');
+//add additional resolving paths
+module.paths.unshift(__dirname+"/../../../_buildfiles/jstests/node_modules");
+var requirejs = require('requirejs');
 
-describe("search.js", function() {
+var modulePaths = global.kajonaPaths;
+modulePaths.search = "module_search/scripts/kajona/search";
+
+requirejs.config({
+    nodeRequire: require,
+    baseUrl : __dirname+"/../../../",
+    paths : modulePaths
+});
+
+
+var search = requirejs("search");
+
+describe("search", function() {
 
     beforeEach(function() {
     });
 
     it("test functions available", function() {
-        expect(typeof KAJONA.admin.search.triggerFullSearch).toBe("function");
+        expect(typeof search.triggerFullSearch).toBe("function");
     });
 
 });

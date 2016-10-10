@@ -93,8 +93,8 @@
 
     <target name="buildSqliteFast" depends="
 		    								init,
-					    					buildProject, installProjectSqlite,
-					    					lint,phpunitFast,jasmine,
+					    					buildProject,
+					    					jasmine,
 					    					buildAllInOneZip" />
 
 
@@ -640,9 +640,9 @@
     <target name="jasmine">
 
         <!--currently disabled due to requirejs migration-->
-        <!--<exec dir="${basedir}${jsPath}" executable="${path.node}" failonerror="on">-->
-            <!--<arg line="./node_modules/jasmine/bin/jasmine.js"/>-->
-        <!--</exec>-->
+        <exec dir="${basedir}${jsPath}" executable="${path.node}" failonerror="on">
+            <arg line="./node_modules/jasmine/bin/jasmine.js"/>
+        </exec>
     </target>
 
 

@@ -1,16 +1,29 @@
 
-include('../../../core/module_system/scripts/loader.js');
-include('../../../core/module_system/scripts/kajona.js');
-include('../../../core/module_dashboard/scripts/kajona/dashboard.js');
 
-describe("dashboard.js", function() {
+//add additional resolving paths
+module.paths.unshift(__dirname+"/../../../_buildfiles/jstests/node_modules");
+var requirejs = require('requirejs');
+
+var modulePaths = global.kajonaPaths;
+modulePaths.dashboard = "module_dashboard/scripts/kajona/dashboard";
+
+requirejs.config({
+    nodeRequire: require,
+    baseUrl : __dirname+"/../../../",
+    paths : modulePaths
+});
+
+
+var dashboard = requirejs("dashboard");
+describe("dashboard", function() {
 
     beforeEach(function() {
     });
 
     it("test functions available", function() {
-        expect(typeof KAJONA.admin.dashboard.removeWidget).toBe("function");
-        expect(typeof KAJONA.admin.dashboard.init).toBe("function");
+        expect(typeof dashboard.removeWidget).toBe("function");
+        expect(typeof dashboard.init).toBe("function");
     });
 
 });
+

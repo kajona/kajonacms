@@ -1,19 +1,31 @@
 
-include('../../../core/module_system/scripts/loader.js');
-include('../../../core/module_system/scripts/kajona.js');
-include('../../../core/module_tags/scripts/tags.js');
+//add additional resolving paths
+module.paths.unshift(__dirname+"/../../../_buildfiles/jstests/node_modules");
+var requirejs = require('requirejs');
 
-describe("tags.js", function() {
+var modulePaths = global.kajonaPaths;
+modulePaths.tags = "module_tags/scripts/kajona/tags";
+
+requirejs.config({
+    nodeRequire: require,
+    baseUrl : __dirname+"/../../../",
+    paths : modulePaths
+});
+
+
+var tags = requirejs("tags");
+
+describe("tags", function() {
 
     beforeEach(function() {
     });
 
     it("test functions available", function() {
-        expect(typeof KAJONA.admin.tags.createFavorite).toBe("function");
-        expect(typeof KAJONA.admin.tags.saveTag).toBe("function");
-        expect(typeof KAJONA.admin.tags.reloadTagList).toBe("function");
-        expect(typeof KAJONA.admin.tags.removeTag).toBe("function");
-        expect(typeof KAJONA.admin.tags.loadTagTooltipContent).toBe("function");
+        expect(typeof tags.createFavorite).toBe("function");
+        expect(typeof tags.saveTag).toBe("function");
+        expect(typeof tags.reloadTagList).toBe("function");
+        expect(typeof tags.removeTag).toBe("function");
+        expect(typeof tags.loadTagTooltipContent).toBe("function");
     });
 
 });
