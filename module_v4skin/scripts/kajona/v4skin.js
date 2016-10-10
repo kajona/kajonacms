@@ -1,5 +1,5 @@
 
-define(['jquery', 'bootstrap', 'jqueryui', 'workingIndicator', 'tooltip', 'statusDisplay', 'messaging', 'ajax', 'util'], function ($, bootstrap, jqueryui, workingIndicator, tooltip, statusDisplay, messaging, ajax, util) {
+define(['jquery', 'bootstrap', 'jquery-ui', 'workingIndicator', 'tooltip', 'statusDisplay', 'messaging', 'ajax', 'util'], function ($, bootstrap, jqueryui, workingIndicator, tooltip, statusDisplay, messaging, ajax, util) {
 
     var breadcrumb = {
 
