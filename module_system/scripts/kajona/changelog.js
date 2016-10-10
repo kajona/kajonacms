@@ -1,5 +1,5 @@
 
-define(['jquery', 'ajax', 'moment', 'd3'], function ($, ajax, moment, d3) {
+define(['jquery', 'ajax', 'moment', 'd3', 'calendar-heatmap'], function ($, ajax, moment, d3, calHeatmap) {
 
     var changelog = {};
 
@@ -144,31 +144,29 @@ define(['jquery', 'ajax', 'moment', 'd3'], function ($, ajax, moment, d3) {
             });
 
 
-            require(['calendar-heatmap', 'moment'], function() {
 
-                var heatmap = calendarHeatmap()
-                    .data(chartData)
-                    .selector('#changelogTimeline')
-                    .months(changelog.lang.months)
-                    .days(changelog.lang.days)
-                    .width(700)
-                    .padding(16)
-                    .tooltipEnabled(true)
-                    .tooltipUnit(changelog.lang.tooltipUnit)
-                    .tooltipUnitPlural(changelog.lang.tooltipUnitPlural)
-                    .tooltipDateFormat("DD.MM.YYYY")
-                    .tooltipHtml(changelog.lang.tooltipHtml)
-                    .legendEnabled(false)
-                    .toggleDays(false)
-                    .colorRange(['#eeeeee', '#6cb121'])
-                    .onClick(function (data) {
-                        var date = moment(data.date).format("YYYYMMDD235959");
-                        changelog.loadDate(me.systemId, date, changelog.selectedColumn, changelog.compareTable);
-                    });
-                heatmap(me.now, me.yearAgo);  // render the chart
+            var heatmap = calHeatmap
+                .data(chartData)
+                .selector('#changelogTimeline')
+                .months(changelog.lang.months)
+                .days(changelog.lang.days)
+                .width(700)
+                .padding(16)
+                .tooltipEnabled(true)
+                .tooltipUnit(changelog.lang.tooltipUnit)
+                .tooltipUnitPlural(changelog.lang.tooltipUnitPlural)
+                .tooltipDateFormat("DD.MM.YYYY")
+                .tooltipHtml(changelog.lang.tooltipHtml)
+                .legendEnabled(false)
+                .toggleDays(false)
+                .colorRange(['#eeeeee', '#6cb121'])
+                .onClick(function (data) {
+                    var date = moment(data.date).format("YYYYMMDD235959");
+                    changelog.loadDate(me.systemId, date, changelog.selectedColumn, changelog.compareTable);
+                });
+            heatmap(me.now, me.yearAgo);  // render the chart
 
-                $('#changelogTimeline').fadeIn();
-            });
+            $('#changelogTimeline').fadeIn();
         });
     };
 

@@ -1052,7 +1052,7 @@ JS;
             '2" style="width:30%;"' => "<div id='date_right'></div>",
         );
 
-        $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrData, "kajona-data-table-ignore-floatthread");
+        $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrData);
 
         return $strReturn;
     }
