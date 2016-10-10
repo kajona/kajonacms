@@ -26,9 +26,6 @@
      -->
 
     <!-- setting windows specific properties-->
-    <condition property="yuicompressor" value="yuicompressor-2.4.7.jar" else="yuicompressor-2.4.8.jar"> <!--using 2.4.7 for windows because of a bug 2.4.8 for windows-->
-        <os family="windows" />
-    </condition>
     <condition property="script-suffix" value=".bat" else="">
         <os family="windows" />
     </condition>
@@ -497,7 +494,7 @@
 
 
 
-    <target name="compressCss" description="Minifies the css files using the yui compressor">
+    <target name="compressCss" description="Minifies the css files using the cleancss compressor">
         <echo>Compressing css files</echo>
 
         <copy todir="${basedir}${tempPath}">
@@ -507,12 +504,9 @@
             <globmapper from="*.css" to="*-full.css"/>
         </copy>
 
-        <apply executable="java" parallel="false" dest="${basedir}${tempPath}" verbose="true" force="true" failonerror="true">
+        <apply executable="${basedir}${jsPath}/node_modules/.bin/cleancss" parallel="false" dest="${basedir}${tempPath}" verbose="false" failonerror="true">
             <fileset dir="${basedir}${tempPath}" includes="**/*-full.css"/>
-            <arg line="-jar"/>
-            <arg path="${yuicompressor}"/>
-            <arg line="--charset utf-8"/>
-            <arg line="-o"/>
+            <arg line="--output"/>
             <mapper type="glob" from="*-full.css" to="*.css"/>
             <targetfile/>
             <srcfile/>
@@ -520,7 +514,7 @@
     </target>
 
 
-    <target name="compressJs" description="Minifies the js files using the yui compressor">
+    <target name="compressJs" description="Minifies the js files using the uglifyjs compressor">
         <echo>Compressing js files</echo>
 
         <copy todir="${basedir}${tempPath}"> <!-- add verbose="true" to see the list of applied files -->
@@ -535,15 +529,14 @@
             <globmapper from="*.js" to="*-full.js"/>
         </copy>
 
-        <apply executable="java" parallel="false" dest="${basedir}${tempPath}" verbose="true" force="true" failonerror="true">
+        <apply executable="${basedir}${jsPath}/node_modules/.bin/uglifyjs" parallel="false" dest="${basedir}${tempPath}" verbose="false" failonerror="true">
             <fileset dir="${basedir}${tempPath}" includes="**/*-full.js"/>
-            <arg line="-jar"/>
-            <arg path="${yuicompressor}"/>
-            <arg line="--charset utf-8"/>
-            <arg line="-o"/>
+            <srcfile/>
+            <arg line="--compress"/>
+            <arg line="--mangle"/>
+            <arg line="--output"/>
             <mapper type="glob" from="*-full.js" to="*.js"/>
             <targetfile/>
-            <srcfile/>
         </apply>
     </target>
 

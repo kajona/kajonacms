@@ -17,6 +17,8 @@
     "less": "^2.5.3",
     "protractor": "^2.5.1",
     "protractor-screenshot-reporter": "0.0.5",
-    "requirejs" : "^2.3.2"
+    "requirejs" : "^2.3.2",
+    "uglify-js" : "^2.7.3",
+    "clean-css" : "^3.4.20"
   }
 }
