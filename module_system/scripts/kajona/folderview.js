@@ -24,7 +24,6 @@ define(["jquery"], function($){
          * @param {function} objCallback
          */
         selectCallback: function (arrTargetsValues, objCallback) {
-            // debugger;
             if (window.opener) {
                 window.opener.require('folderview').fillFormFields(arrTargetsValues);
             } else if (parent) {

@@ -249,7 +249,6 @@ class PagesPortaleditor
             '/core/module_v4skin/scripts/bootstrap/bootstrap.min.js',
             '/core/module_system/scripts/jqueryui/css/smoothness/jquery-ui.custom.css'
         ], function() {
-debugger;
             KAJONA.admin.peToolbarActions = [
                 new KAJONA.admin.portaleditor.toolbar.Action('pages:pe_on_off', '', 'fa-power-off', function() { KAJONA.admin.portaleditor.switchEnabled({$bitSetEnabled}); }),
                 new KAJONA.admin.portaleditor.toolbar.Separator(),
