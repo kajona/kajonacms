@@ -15,6 +15,7 @@ use Kajona\System\Admin\Formentries\FormentryDate;
 use Kajona\System\Admin\Formentries\FormentryDatetime;
 use Kajona\System\Admin\Formentries\FormentryDropdown;
 use Kajona\System\Admin\Formentries\FormentryObjectlist;
+use Kajona\System\Admin\Formentries\FormentryObjecttags;
 
 /**
  * Class which provides a default render implementation for the VersionableInterface. The implementation looks at the
@@ -223,9 +224,11 @@ class SystemChangelogRenderer
                 }
                 break;
 
+            case FormentryObjecttags::class:
             case FormentryObjectlist::class:
             case FormentryProzess::class:
             case FormentryOe::class:
+            case "objecttags":
             case "objectlist":
             case "prozess":
             case "oe":

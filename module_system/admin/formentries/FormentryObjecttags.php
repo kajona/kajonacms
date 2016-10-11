@@ -10,6 +10,7 @@ use Kajona\System\System\Carrier;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Model;
 use Kajona\System\System\Objectfactory;
+use Kajona\System\System\Reflection;
 use Kajona\System\System\UserUser;
 use Traversable;
 
@@ -23,15 +24,7 @@ use Traversable;
  */
 class FormentryObjecttags extends FormentryTageditor
 {
-    /**
-     * @deprecated
-     */
-    const TYPE_USER = 1;
-    const TYPE_OBJECT = 2;
-
     protected $strSource;
-
-    protected $intType = self::TYPE_USER;
 
     /**
      * @param string $strSource
@@ -62,7 +55,13 @@ class FormentryObjecttags extends FormentryTageditor
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
         }
 
-        $strReturn.= $objToolkit->formInputObjectTags($this->getStrEntryName(), $this->getStrLabel(), $this->strSource, $this->arrKeyValues, $this->strOnChangeCallback);
+        if($this->getBitReadonly()) {
+            $strReturn .= $objToolkit->formInputObjectList($this->getStrEntryName(), $this->getStrLabel(), $this->arrKeyValues, "", $this->getBitReadonly());
+        }
+        else {
+            $strReturn.= $objToolkit->formInputObjectTags($this->getStrEntryName(), $this->getStrLabel(), $this->strSource, $this->arrKeyValues, $this->strOnChangeCallback);
+        }
+
         return $strReturn;
     }
 
@@ -127,5 +126,51 @@ class FormentryObjecttags extends FormentryTageditor
         }
 
         return array();
+    }
+
+    /**
+     * Copied from FormentryObjectlist
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function setValueToObject()
+    {
+        $objSourceObject = $this->getObjSourceObject();
+        if ($objSourceObject == null) {
+            return "";
+        }
+
+        $objReflection = new Reflection($objSourceObject);
+
+        // get database object which we can not change
+        $strGetter = $objReflection->getGetter($this->getStrSourceProperty());
+        if ($strGetter === null) {
+            throw new Exception("unable to find getter for value-property ".$this->getStrSourceProperty()."@".get_class($objSourceObject), Exception::$level_ERROR);
+        }
+
+
+        $arrObjects = $objSourceObject->{$strGetter}();
+        $arrNotObjects = array_values(array_filter((array)$arrObjects, function (Model $objObject) {
+            return !$objObject->rightView();
+        }));
+
+        // merge objects
+        $arrNewObjects = array_merge($this->toObjectArray(), $arrNotObjects);
+
+        // filter double object ids
+        $arrObjects = array();
+        foreach ($arrNewObjects as $objObject) {
+            $arrObjects[$objObject->getStrSystemid()] = $objObject;
+        }
+        $arrObjects = array_values($arrObjects);
+
+        // set value
+        $strSetter = $objReflection->getSetter($this->getStrSourceProperty());
+        if ($strSetter === null) {
+            throw new Exception("unable to find setter for value-property ".$this->getStrSourceProperty()."@".get_class($objSourceObject), Exception::$level_ERROR);
+        }
+
+        return $objSourceObject->{$strSetter}($arrObjects);
     }
 }
