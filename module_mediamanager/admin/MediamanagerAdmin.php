@@ -509,27 +509,27 @@ HTML;
 
             $arrActions = array();
             $arrActions[] = $this->objToolkit->listButton(
-                Link::getLinkAdminManual("href=\"#\" onclick=\"require('mediamanager').imageEditor.showRealSize(); return false;\"", "", $this->getLang("showRealsize"), "icon_zoom_in")
+                Link::getLinkAdminManual("href=\"#\" onclick=\"require('imageeditor').showRealSize(); return false;\"", "", $this->getLang("showRealsize"), "icon_zoom_in")
             );
             $arrActions[] = $this->objToolkit->listButton(
                     Link::getLinkAdminManual(
-                        "href=\"#\" onclick=\"require('mediamanager').imageEditor.showPreview(); return false;\"",
+                        "href=\"#\" onclick=\"require('imageeditor').showPreview(); return false;\"",
                         "",
                         $this->getLang("showPreview"),
                         "icon_zoom_out"
                     )
                 )." ";
             $arrActions[] = $this->objToolkit->listButton(
-                Link::getLinkAdminManual("href=\"#\" onclick=\"require('mediamanager').imageEditor.rotate(90); return false;\"", "", $this->getLang("rotateImageLeft"), "icon_rotate_left")
+                Link::getLinkAdminManual("href=\"#\" onclick=\"require('imageeditor').rotate(90); return false;\"", "", $this->getLang("rotateImageLeft"), "icon_rotate_left")
             );
             $arrActions[] = $this->objToolkit->listButton(
-                    Link::getLinkAdminManual("href=\"#\" onclick=\"require('mediamanager').imageEditor.rotate(270); return false;\"", "", $this->getLang("rotateImageRight"), "icon_rotate_right")
+                    Link::getLinkAdminManual("href=\"#\" onclick=\"require('imageeditor').rotate(270); return false;\"", "", $this->getLang("rotateImageRight"), "icon_rotate_right")
                 )." ";
             $arrActions[] = $this->objToolkit->listButton(
-                Link::getLinkAdminManual("href=\"#\" onclick=\"require('mediamanager').imageEditor.showCropping(); return false;\"", "", $this->getLang("cropImage"), "icon_crop")
+                Link::getLinkAdminManual("href=\"#\" onclick=\"require('imageeditor').showCropping(); return false;\"", "", $this->getLang("cropImage"), "icon_crop")
             );
             $arrActions[] = $this->objToolkit->listButton(
-                    Link::getLinkAdminManual("href=\"#\" id=\"accept_icon\"  onclick=\"require('mediamanager').imageEditor.saveCropping(); return false;\"", "", $this->getLang("cropImageAccept"), "icon_crop_acceptDisabled")
+                    Link::getLinkAdminManual("href=\"#\" id=\"accept_icon\"  onclick=\"require('imageeditor').saveCropping(); return false;\"", "", $this->getLang("cropImageAccept"), "icon_crop_acceptDisabled")
                 )." ";
 
 
@@ -538,26 +538,26 @@ HTML;
             $strReturn .= "<div class=\"imageContainer\"><div class=\"image\">".$strImage."</div></div>";
 
             $strJs = "<script type=\"text/javascript\">
-                require(['mediamanager', 'loader'], function (mediamanager, loader) {
+                require(['imageeditor', 'loader'], function (imageeditor, loader) {
                     loader.loadFile([
                         '".Resourceloader::getInstance()->getCorePathForModule("module_mediamanager")."/module_mediamanager/scripts/jcrop/css/jquery.Jcrop.min.css'
                     ]);
                     
-                    mediamanager.strCropEnabled= '".addslashes(AdminskinHelper::getAdminImage("icon_crop_accept", $this->getLang("cropImageAccept")))."';
-                    mediamanager.strCropDisabled = '".addslashes(AdminskinHelper::getAdminImage("icon_crop_acceptDisabled", $this->getLang("cropImageAccept")))."';
+                    imageeditor.strCropEnabled= '".addslashes(AdminskinHelper::getAdminImage("icon_crop_accept", $this->getLang("cropImageAccept")))."';
+                    imageeditor.strCropDisabled = '".addslashes(AdminskinHelper::getAdminImage("icon_crop_acceptDisabled", $this->getLang("cropImageAccept")))."';
+
+                    imageeditor.fm_image_rawurl = '"._webpath_."/image.php?image=".urlencode($strFile)."&quality=80';
+                    imageeditor.fm_image_scaledurl = '"._webpath_."/image.php?image=".urlencode($strFile)."&maxWidth=__width__&maxHeight=__height__';
+                    imageeditor.fm_image_scaledMaxWidth = $intWidth;
+                    imageeditor.fm_image_scaledMaxHeight = $intHeight;
+                    imageeditor.fm_image_isScaled = true;
+                    imageeditor.fm_file = '".$strFile."' ;
+    
+                    imageeditor.init_fm_crop_save_warning_dialog = function () { jsDialog_1.setTitle('".$this->getLang("cropWarningDialogHeader")."'); jsDialog_1.setContent('".$this->getLang("cropWarningSaving")."', '".$this->getLang("cropWarningCrop")."', 'javascript:require(\'imageeditor\').saveCroppingToBackend()'); jsDialog_1.init(); }
+                    imageeditor.init_fm_screenlock_dialog = function () { jsDialog_3.init(); }
+                    imageeditor.hide_fm_screenlock_dialog = function () { jsDialog_3.hide(); }
+
                 });
-
-                var fm_image_rawurl = '"._webpath_."/image.php?image=".urlencode($strFile)."&quality=80';
-                var fm_image_scaledurl = '"._webpath_."/image.php?image=".urlencode($strFile)."&maxWidth=__width__&maxHeight=__height__';
-                var fm_image_scaledMaxWidth = $intWidth;
-                var fm_image_scaledMaxHeight = $intHeight;
-                var fm_image_isScaled = true;
-                var fm_file = '".$strFile."' ;
-
-                function init_fm_crop_save_warning_dialog() { jsDialog_1.setTitle('".$this->getLang("cropWarningDialogHeader")."'); jsDialog_1.setContent('".$this->getLang("cropWarningSaving")."', '".$this->getLang("cropWarningCrop")."', 'javascript:require(\'mediamanager\').imageEditor.saveCroppingToBackend()'); jsDialog_1.init(); }
-                function init_fm_screenlock_dialog() { jsDialog_3.init(); }
-                function hide_fm_screenlock_dialog() { jsDialog_3.hide(); }
-
 
                 </script>";
 

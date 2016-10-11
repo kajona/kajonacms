@@ -1,6 +1,7 @@
 {
   "paths": {
     "mediamanager": "kajona/mediamanager",
+    "imageeditor": "kajona/imageeditor",
 
 
     "jquery.iframe-transport": "jquery-fileupload/js/jquery.iframe-transport",
