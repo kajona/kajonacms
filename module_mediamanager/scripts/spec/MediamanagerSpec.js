@@ -13,6 +13,7 @@ requirejs.config({
 
 
 var mediamanager = requirejs("mediamanager");
+var imageEditor = requirejs("imageeditor");
 
 describe("mediamanager", function() {
 
@@ -21,13 +22,13 @@ describe("mediamanager", function() {
 
     it("test functions available", function() {
         expect(typeof mediamanager.createFolder).toBe("function");
-        expect(typeof mediamanager.imageEditor.showRealSize).toBe("function");
-        expect(typeof mediamanager.imageEditor.showPreview).toBe("function");
-        expect(typeof mediamanager.imageEditor.showCropping).toBe("function");
-        expect(typeof mediamanager.imageEditor.hideCropping).toBe("function");
-        expect(typeof mediamanager.imageEditor.saveCropping).toBe("function");
-        expect(typeof mediamanager.imageEditor.saveCroppingToBackend).toBe("function");
-        expect(typeof mediamanager.imageEditor.rotate).toBe("function");
+        expect(typeof imageEditor.showRealSize).toBe("function");
+        expect(typeof imageEditor.showPreview).toBe("function");
+        expect(typeof imageEditor.showCropping).toBe("function");
+        expect(typeof imageEditor.hideCropping).toBe("function");
+        expect(typeof imageEditor.saveCropping).toBe("function");
+        expect(typeof imageEditor.saveCroppingToBackend).toBe("function");
+        expect(typeof imageEditor.rotate).toBe("function");
     });
 
 });
