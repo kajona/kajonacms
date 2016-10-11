@@ -1000,12 +1000,12 @@ JS;
             $objDate = new Date($arrDate["change_date"]);
             $arrResult[substr($objDate->getLongTimestamp(), 0, 8)] = $objDate->getLongTimestamp();
         }
-        krsort($arrResult);
+        ksort($arrResult);
 
-        $objLeftDate = new Date(array_pop($arrResult));
-        $strLeftDate = $objLeftDate->setEndOfDay()->getLongTimestamp();
         $objRightDate = new Date(array_pop($arrResult));
         $strRightDate = $objRightDate->setEndOfDay()->getLongTimestamp();
+        $objLeftDate = new Date(array_pop($arrResult));
+        $strLeftDate = $objLeftDate->setEndOfDay()->getLongTimestamp();
 
         $strReturn = "";
         $strReturn .= $this->objToolkit->getContentToolbar(array(
