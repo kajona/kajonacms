@@ -4,6 +4,7 @@ var requirejs = require('requirejs');
 
 var modulePaths = global.kajonaPaths;
 modulePaths.mediamanager = "module_mediamanager/scripts/kajona/mediamanager";
+modulePaths.imageeditor = "module_mediamanager/scripts/kajona/imageeditor";
 
 requirejs.config({
     nodeRequire: require,
