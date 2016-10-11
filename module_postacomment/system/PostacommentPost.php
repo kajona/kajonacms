@@ -18,6 +18,7 @@ use Kajona\System\System\OrmObjectlistOrderby;
 use Kajona\System\System\OrmObjectlistRestriction;
 use Kajona\System\System\SearchPortalobjectInterface;
 use Kajona\System\System\SortableRatingInterface;
+use Kajona\System\System\SystemSetting;
 
 
 /**
@@ -140,6 +141,17 @@ class PostacommentPost extends \Kajona\System\System\Model implements \Kajona\Sy
         return uniStrTrim($this->strComment, 120);
     }
 
+    /**
+     * @inheritDoc
+     */
+    protected function onInsertToDb()
+    {
+        if (SystemSetting::getConfigValue("_postacomment_post_moderated_") == "true") {
+            $this->setIntRecordStatus(0);
+        }
+        return parent::onInsertToDb();
+    }
+
 
     /**
      * Returns a list of posts
@@ -176,7 +188,7 @@ class PostacommentPost extends \Kajona\System\System\Model implements \Kajona\Sy
         $objORM->addOrderBy(new OrmObjectlistOrderby("postacomment_language ASC"));
         $objORM->addOrderBy(new OrmObjectlistOrderby("postacomment_date DESC"));
 
-        return $objORM->getObjectList(get_called_class(), "", $intStart, $intEnd);
+        return $objORM->getObjectList(PostacommentPost::class, "", $intStart, $intEnd);
     }
 
     /**
@@ -209,7 +221,7 @@ class PostacommentPost extends \Kajona\System\System\Model implements \Kajona\Sy
         }
 
 
-        return $objORM->getObjectCount(get_called_class());
+        return $objORM->getObjectCount(PostacommentPost::class);
     }
 
     /**

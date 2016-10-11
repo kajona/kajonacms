@@ -10,6 +10,8 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
+$lang["_postacomment_post_moderated_"]   = "Freischaltung erforderlich";
+$lang["_postacomment_post_moderated_hint"]   = "Neue Kommentare sind standardmäßig inaktiv und müssen moderiert werden";
 $lang["form_comment_title"]              = "Titel";
 $lang["form_message_label"]              = "Nachricht";
 $lang["form_name_label"]                 = "Name";

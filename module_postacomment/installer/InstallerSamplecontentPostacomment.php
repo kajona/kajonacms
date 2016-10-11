@@ -12,6 +12,7 @@ use Kajona\Pages\Admin\Elements\ElementRichtextAdmin;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\SamplecontentContentHelper;
 use Kajona\Postacomment\Admin\Elements\ElementPostacommentAdmin;
+use Kajona\Postacomment\System\PostacommentPost;
 use Kajona\System\System\Database;
 use Kajona\System\System\SamplecontentInstallerInterface;
 
@@ -86,6 +87,47 @@ class InstallerSamplecontentPostacomment implements SamplecontentInstallerInterf
             $objRichtextElAdmin->setStrText("By using the form below, comments may be added to the current page. ");
         }
         $objRichtextElAdmin->updateForeignElement();
+
+
+
+
+        $strReturn .= "Creating new guestbook page...\n";
+        $objHelper = new SamplecontentContentHelper();
+
+        $objPage = $objHelper->createPage("guestbook", "Guestbook", PagesPage::getPageByName("samplepages")->getSystemid());
+        $strReturn .= "ID of new page: ".$objPage->getSystemid()."\n";
+
+        $objBlocks = $objHelper->createBlocksElement("Headline", $objPage);
+        $objBlock = $objHelper->createBlockElement("Headline", $objBlocks);
+
+        $strReturn .= "Adding headline-element to new page\n";
+        $objElement = $objHelper->createPageElement("headline_plaintext", $objBlock);
+        /** @var ElementPlaintextAdmin $objHeadlineAdmin */
+        $objHeadlineAdmin = $objElement->getConcreteAdminInstance();
+        $objHeadlineAdmin->setStrText("Guestbook");
+        $objHeadlineAdmin->updateForeignElement();
+
+        $objBlocks = $objHelper->createBlocksElement("Footer Area", $objPage);
+        $objBlock = $objHelper->createBlockElement("Postacomment", $objBlocks);
+
+        $objCommentEl = $objHelper->createPageElement("postacomment_postacomment", $objBlock);
+        /** @var ElementPostacommentAdmin $objCommentElAdmin */
+        $objCommentElAdmin = $objCommentEl->getConcreteAdminInstance();
+        $objCommentElAdmin->setStrChar1("postacomment_ajax.tpl");
+        $objCommentElAdmin->updateForeignElement();
+
+        $objPostacomment = new PostacommentPost();
+        $objPostacomment->setStrTitle("Kajona Team, www.kajona.de");
+        $objPostacomment->setStrAssignedPage($objPage->getSystemid());
+        $objPostacomment->setStrAssignedLanguage($this->strContentLanguage);
+        if ($this->strContentLanguage == "de") {
+            $objPostacomment->setStrComment("Das ist der erste Eintrag im Gästebuch!");
+        } else {
+            $objPostacomment->setStrComment("This is the first guestbook post!");
+        }
+
+        $objPostacomment->updateObjectToDb();
+
 
         return $strReturn;
     }
