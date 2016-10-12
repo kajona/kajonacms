@@ -504,7 +504,7 @@
             <globmapper from="*.css" to="*-full.css"/>
         </copy>
 
-        <apply executable="${basedir}${jsPath}/node_modules/.bin/cleancss" parallel="false" dest="${basedir}${tempPath}" verbose="false" failonerror="true">
+        <apply executable="${basedir}${jsPath}/node_modules/.bin/cleancss${script-suffix}" parallel="false" dest="${basedir}${tempPath}" verbose="false" failonerror="true">
             <fileset dir="${basedir}${tempPath}" includes="**/*-full.css"/>
             <arg line="--output"/>
             <mapper type="glob" from="*-full.css" to="*.css"/>
@@ -529,7 +529,7 @@
             <globmapper from="*.js" to="*-full.js"/>
         </copy>
 
-        <apply executable="${basedir}${jsPath}/node_modules/.bin/uglifyjs" parallel="false" dest="${basedir}${tempPath}" verbose="false" failonerror="true">
+        <apply executable="${basedir}${jsPath}/node_modules/.bin/uglifyjs${script-suffix}" parallel="false" dest="${basedir}${tempPath}" verbose="false" failonerror="true">
             <fileset dir="${basedir}${tempPath}" includes="**/*-full.js"/>
             <srcfile/>
             <arg line="--compress"/>
