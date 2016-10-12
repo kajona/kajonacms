@@ -11,7 +11,6 @@ use Kajona\System\System\Exception;
 use Kajona\System\System\Model;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Reflection;
-use Kajona\System\System\UserUser;
 use Traversable;
 
 
@@ -51,15 +50,15 @@ class FormentryObjecttags extends FormentryTageditor
     {
         $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         $strReturn = "";
-        if($this->getStrHint() != null) {
+        if ($this->getStrHint() != null) {
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
         }
 
-        if($this->getBitReadonly()) {
+        if ($this->getBitReadonly()) {
             $strReturn .= $objToolkit->formInputObjectList($this->getStrEntryName(), $this->getStrLabel(), $this->arrKeyValues, "", $this->getBitReadonly());
-        }
-        else {
-            $strReturn.= $objToolkit->formInputObjectTags($this->getStrEntryName(), $this->getStrLabel(), $this->strSource, $this->arrKeyValues, $this->strOnChangeCallback);
+        } else {
+            $strReturn .= $objToolkit->formInputObjectTags($this->getStrEntryName(), $this->getStrLabel(), $this->strSource, $this->arrKeyValues,
+                $this->strOnChangeCallback);
         }
 
         return $strReturn;
@@ -74,8 +73,8 @@ class FormentryObjecttags extends FormentryTageditor
     protected function updateValue()
     {
         $arrParams = Carrier::getAllParams();
-        if (isset($arrParams[$this->getStrEntryName()."_id"])) {
-            $this->setStrValue($arrParams[$this->getStrEntryName()."_id"]);
+        if (isset($arrParams[$this->getStrEntryName() . "_id"])) {
+            $this->setStrValue($arrParams[$this->getStrEntryName() . "_id"]);
         } else {
             $this->setStrValue($this->getValueFromObject());
         }
@@ -95,8 +94,7 @@ class FormentryObjecttags extends FormentryTageditor
             foreach ($strValue as $objValue) {
                 if ($objValue instanceof Model) {
                     $arrValuesIds[] = $objValue->getStrSystemid();
-                }
-                else {
+                } else {
                     $arrValuesIds[] = $objValue;
                 }
             }
@@ -146,7 +144,8 @@ class FormentryObjecttags extends FormentryTageditor
         // get database object which we can not change
         $strGetter = $objReflection->getGetter($this->getStrSourceProperty());
         if ($strGetter === null) {
-            throw new Exception("unable to find getter for value-property ".$this->getStrSourceProperty()."@".get_class($objSourceObject), Exception::$level_ERROR);
+            throw new Exception("unable to find getter for value-property " . $this->getStrSourceProperty() . "@" . get_class($objSourceObject),
+                Exception::$level_ERROR);
         }
 
 
@@ -168,7 +167,8 @@ class FormentryObjecttags extends FormentryTageditor
         // set value
         $strSetter = $objReflection->getSetter($this->getStrSourceProperty());
         if ($strSetter === null) {
-            throw new Exception("unable to find setter for value-property ".$this->getStrSourceProperty()."@".get_class($objSourceObject), Exception::$level_ERROR);
+            throw new Exception("unable to find setter for value-property " . $this->getStrSourceProperty() . "@" . get_class($objSourceObject),
+                Exception::$level_ERROR);
         }
 
         return $objSourceObject->{$strSetter}($arrObjects);
