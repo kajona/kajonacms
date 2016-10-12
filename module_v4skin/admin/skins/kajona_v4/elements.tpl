@@ -867,6 +867,7 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
                 initialTags: %%values%%,
                 forceLowercase: false,
                 onChange: %%onChange%%
+            });
         });
     </script>
 </input_tageditor>
