@@ -195,7 +195,7 @@
         <!-- start internal webserver -->
         <exec dir="${basedir}" executable="${path.php}" spawn="true">
             <!--param1=server root path, param2 = sevver IP, param3=Server Port, param4=path to file server pid file, param5=filename where pid of the server is stored-->
-            <arg line="start_phpserver.php ${basedir}${tempPath} 127.0.0.1 8080 ${user.home}/ kajona_server_pid_file.lock"/>
+            <arg line="start_phpserver.php ${basedir}${tempPath} 127.0.0.1 8080 ${user.home}/kajona_server_pid_file.lock"/>
         </exec>
     </target>
 
@@ -203,7 +203,7 @@
         <!-- stop internal webserver -->
         <exec dir="${basedir}" executable="${path.php}">
             <!--param1=path to file server pid file, param2=filename where pid of the server is stored in order to kill the process-->
-            <arg line="stop_phpserver.php ${user.home}/ kajona_server_pid_file.lock"/>
+            <arg line="stop_phpserver.php ${user.home}/kajona_server_pid_file.lock"/>
         </exec>
     </target>
 

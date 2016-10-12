@@ -26,8 +26,11 @@ function stopProcess($name)
 
                 if (strpos($content, $pid) !== false) {
                     // if the pid exists try to kill it
+                    echo 'Kill process ' . $pid . "\n";
+
                     $output = array();
                     exec(sprintf('taskkill /F /T /PID %d', $pid), $output, $exitCode);
+                    echo "Exit code kill process: ".$exitCode ."\n";
                 }
             } else {
                 // check whether pid exists
@@ -37,8 +40,11 @@ function stopProcess($name)
 
                 if (strpos($content, $pid) !== false) {
                     // if the pid exists try to kill it
+                    echo 'Kill process ' . $pid . "\n";
+
                     $output = array();
                     exec(sprintf('kill -9 %d', $pid), $output, $exitCode);
+                    echo "Exit code kill process: ".$exitCode ."\n";
                 }
             }
             //delete the file after kill
