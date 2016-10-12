@@ -24,7 +24,7 @@ function stopProcess($name)
                 exec(sprintf('tasklist /FI "PID eq %d"', $pid), $output, $exitCode);
                 $content = implode("\n", $output);
 
-                if (strpos($content, $pid) !== false) {
+                if (strpos($content, $pid."") !== false) {
                     // if the pid exists try to kill it
                     echo 'Kill process ' . $pid . "\n";
 
@@ -38,7 +38,7 @@ function stopProcess($name)
                 exec(sprintf('ps -p %d', $pid), $output, $exitCode);
                 $content = implode("\n", $output);
 
-                if (strpos($content, $pid) !== false) {
+                if (strpos($content, $pid."") !== false) {
                     // if the pid exists try to kill it
                     echo 'Kill process ' . $pid . "\n";
 
