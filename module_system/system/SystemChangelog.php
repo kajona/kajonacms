@@ -68,7 +68,7 @@ class SystemChangelog
      * @param bool $bitUseInitValues if set to true, the initial values of the object will be used for comparison, not the ones of the last update
      *
      * @throws Exception
-     * @return array
+     * @return bool
      * @deprecated
      */
     public function isObjectChanged(VersionableInterface $objObject, &$arrReducedSet = array(), $bitUseInitValues = false)
@@ -167,7 +167,6 @@ class SystemChangelog
 
 
             foreach ($arrProperties as $strProperty => $strAnnotation) {
-
                 $strValue = "";
 
                 //all prerequisites match, start creating query
@@ -181,8 +180,7 @@ class SystemChangelog
                     foreach ($strValue as $objOneValue) {
                         if (is_object($objOneValue) && $objOneValue instanceof Root) {
                             $arrNewValues[] = $objOneValue->getSystemid();
-                        }
-                        else {
+                        } else {
                             $arrNewValues[] = $objOneValue."";
                         }
                     }
@@ -208,8 +206,7 @@ class SystemChangelog
         $this->readOldValuesInternal($strSystemid);
         if (isset(self::$arrOldValueCache[$strSystemid])) {
             return self::$arrOldValueCache[$strSystemid];
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -223,8 +220,7 @@ class SystemChangelog
     {
         if (isset(self::$arrInitValueCache[$strSystemid])) {
             return self::$arrInitValueCache[$strSystemid];
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -255,8 +251,6 @@ class SystemChangelog
      */
     private function createChangeArray($objSourceModel, $bitUseInitValues = false)
     {
-
-
 
         $arrOldValues = $this->getOldValuesForSystemid($objSourceModel->getSystemid());
         if ($bitUseInitValues) {
@@ -335,7 +329,6 @@ class SystemChangelog
             return true;
         }
 
-
         $arrChanges = $this->createChangeArray($objSourceModel);
         $bitReturn = $this->processChangeArray($arrChanges, $objSourceModel, $strAction, $bitForceEntry, $bitDeleteAction);
         $this->readOldValues($objSourceModel);
@@ -352,7 +345,6 @@ class SystemChangelog
      */
     private function isVersioningAvailable(VersionableInterface $objSourceModel)
     {
-
         if (self::$bitChangelogEnabled === null) {
             return SystemSetting::getConfigValue("_system_changehistory_enabled_") === "true";
         }
@@ -381,7 +373,6 @@ class SystemChangelog
         $bitReturn = true;
 
         if (is_array($arrChanges)) {
-
             $arrReducedChanges = array();
             $this->createReducedChangeSet($arrReducedChanges, $arrChanges, $strAction, $bitForceEntry, $bitDeleteAction);
 
@@ -431,10 +422,10 @@ class SystemChangelog
         foreach (self::$arrInsertCache as $strTable => $arrRows) {
             if (count($arrRows) > 0) {
                 $bitReturn = Carrier::getInstance()->getObjDB()->multiInsert(
-                        $strTable,
-                        array("change_id", "change_date", "change_systemid", "change_system_previd", "change_user", "change_class", "change_action", "change_property", "change_oldvalue", "change_newvalue"),
-                        $arrRows
-                    ) && $bitReturn;
+                    $strTable,
+                    array("change_id", "change_date", "change_systemid", "change_system_previd", "change_user", "change_class", "change_action", "change_property", "change_oldvalue", "change_newvalue"),
+                    $arrRows
+                ) && $bitReturn;
 
                 self::$arrInsertCache[$strTable] = array();
             }
@@ -458,8 +449,6 @@ class SystemChangelog
     {
 
         foreach ($arrChanges as $arrChangeSet) {
-
-
             $strOldvalue = "";
             if (isset($arrChangeSet["oldvalue"])) {
                 $strOldvalue = $arrChangeSet["oldvalue"];
@@ -475,7 +464,6 @@ class SystemChangelog
 
             //array may be processed automatically, too
             if ((is_array($strOldvalue) || $strOldvalue instanceof ArrayAccess) && (is_array($strNewvalue) || $strNewvalue instanceof ArrayAccess)) {
-
                 $arrArrayChanges = array();
                 foreach ($strNewvalue as $strOneId) {
                     if (!in_array($strOneId, $strOldvalue)) {
@@ -519,7 +507,6 @@ class SystemChangelog
             $arrChangeSet["oldvalue"] = $strOldvalue;
             $arrChangeSet["newvalue"] = $strNewvalue;
 
-
             //add entry right here
             $arrReturn[] = $arrChangeSet;
         }
@@ -543,15 +530,12 @@ class SystemChangelog
         $arrParams = array();
 
         if (validateSystemid($strSystemidFilter)) {
-
             $strQuery = "SELECT change_date, change_systemid, change_user, change_class, change_action, change_property, change_oldvalue, change_newvalue
                            FROM "._dbprefix_.self::getTableForClass(Objectfactory::getInstance()->getClassNameForId($strSystemidFilter))."
                            WHERE change_systemid = ? ";
 
             $arrParams[] = $strSystemidFilter;
-
-        }
-        else {
+        } else {
             return array();
         }
         $strQuery .= "ORDER BY change_date DESC";
@@ -588,15 +572,13 @@ class SystemChangelog
         $arrParams = array();
 
         if (validateSystemid($strSystemidFilter)) {
-
             $strQuery = "SELECT COUNT(*)
                            FROM "._dbprefix_.self::getTableForClass(Objectfactory::getInstance()->getClassNameForId($strSystemidFilter))."
                           WHERE change_systemid = ? ";
 
             $arrParams[] = $strSystemidFilter;
 
-        }
-        else {
+        } else {
             return 0;
         }
 
@@ -846,8 +828,7 @@ class SystemChangelog
         $arrRow = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid, $strProperty, $objDate->getLongTimestamp()), 0, 1);
         if (isset($arrRow[0]["change_newvalue"])) {
             return $arrRow[0]["change_newvalue"];
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -881,9 +862,9 @@ class SystemChangelog
      * Returns all date points where a change occured
      *
      * @param $strSystemid
-     * @param $strProperty
      * @param Date $objDateFrom
      * @param Date $objDateTo
+     *
      * @return array
      */
     public static function getDatesForSystemid($strSystemid, Date $objDateFrom, Date $objDateTo)
@@ -929,8 +910,7 @@ class SystemChangelog
                 $objRestriction = new OrmObjectlistInRestriction("change_newvalue", $arrNewValues);
                 $strQuery .= " ".$objRestriction->getStrWhere();
                 $arrParameters = array_merge($arrParameters, $objRestriction->getArrParams());
-            }
-            else {
+            } else {
                 $strQuery .= " AND change_newvalue = ?";
                 $arrParameters[] = current($arrNewValues);
             }
@@ -957,7 +937,7 @@ class SystemChangelog
      *
      * @return array
      */
-    public static function getNewValuesForDateRange($strClass, $strProperty, Date $objDateFrom = null, Date $objDateTo = null, array $arrAllowedSystemIds)
+    public static function getNewValuesForDateRange($strClass, $strProperty, Date $objDateFrom = null, Date $objDateTo = null, array $arrAllowedSystemIds = array())
     {
         $arrParams = array($strClass, $strProperty);
 
@@ -1016,10 +996,15 @@ class SystemChangelog
             return self::$arrCachedProviders;
         }
 
-        $arrReturn = Resourceloader::getInstance()->getFolderContent("/system", array(".php"), false, null,
+        $arrReturn = Resourceloader::getInstance()->getFolderContent(
+            "/system",
+            array(".php"),
+            false,
+            null,
             function (&$strOneFile, $strPath) {
-                $strOneFile = Classloader::getInstance()->getInstanceFromFilename($strPath, "", "Kajona\\System\\System\\ChangelogProviderInterface");
-            });
+                $strOneFile = Classloader::getInstance()->getInstanceFromFilename($strPath, "", ChangelogProviderInterface::class);
+            }
+        );
 
         $arrReturn = array_filter($arrReturn, function ($objEl) {
             return $objEl != null;
