@@ -1035,6 +1035,15 @@ footer {
             }
         }
 
+        .inputContainer {
+            min-height: @input-height-base;
+            background-color: @input-bg;
+            border: 1px solid @gray-darker;
+
+            .admintable {
+                background-color: @white;
+            }
+        }
 
     }
 
@@ -1420,6 +1429,9 @@ footer {
         border: 3px dotted @gray;
     }
 
+    .text-muted {
+        color: lighten(@text-color, 25%);
+    }
 
 }
 

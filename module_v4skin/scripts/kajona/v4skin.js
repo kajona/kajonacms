@@ -344,6 +344,40 @@ define(['jquery', 'bootstrap', 'jquery-ui', 'workingIndicator', 'tooltip', 'stat
             }
         },
 
+        setCheckboxArrayObjectListItems : function(strElementName, arrItems){
+            var form = util.getElementFromOpener(strElementName);
+
+            var table = form.find('table');
+            if(table.length > 0) {
+                // add new elements
+                for(var i = 0; i < arrItems.length; i++) {
+                    var strEscapedTitle = $('<div></div>').text(arrItems[i].strDisplayName).html();
+                    var html = '';
+
+                    // check whether form entry exists already in the table if so skip. We need to escape the form element name
+                    // since it contains brackets
+                    var formElementName = strElementName + '[' + arrItems[i].strSystemId + ']';
+                    var existingFormEls = table.find('input[name=' + formElementName.replace(/(:|\.|\[|\]|,)/g, "\\$1") + ']');
+                    if (existingFormEls.length > 0) {
+                        continue;
+                    }
+
+                    html+= '<tbody>';
+                    html+= '<tr data-systemid="' + arrItems[i].strSystemId + '">';
+                    html+= '    <td class="listcheckbox"><input type="checkbox" name="' + formElementName + '" data-systemid="' + arrItems[i].strSystemId + '" checked></td>';
+                    html+= '    <td class="listimage">' + arrItems[i].strIcon + '</td>';
+                    html+= '    <td class="title">';
+                    html+= '        <div class="small text-muted">' + arrItems[i].strPath + '</div>';
+                    html+= '        ' + arrItems[i].strDisplayName;
+                    html+= '    </td>';
+                    html+= '</tr>';
+                    html+= '</tbody>';
+
+                    table.append(html);
+                }
+            }
+        },
+
         /**
          * We get the current tree selection from the iframe element and set the selection in the object list
          *

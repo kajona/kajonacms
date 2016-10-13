@@ -1057,28 +1057,23 @@ class ToolkitAdmin extends Toolkit
      *
      * @param string $strName
      * @param string $strTitle
-     * @param array $availableItems
-     * @param array $arrSelectedItems
+     * @param array $arrAvailableItems
+     * @param array $arrSelectedSystemids
      * @param bool $bitReadonly
      * @param bool $bitShowPath
+     *
      * @return string
      */
-    public function formInputCheckboxArrayObjectList($strName, $strTitle, array $availableItems, array $arrSelectedItems, $bitReadonly = false, $bitShowPath = true, \Closure $objShowPath = null, $strAddLink = null)
+    public function formInputCheckboxArrayObjectList($strName, $strTitle, array $arrAvailableItems, array $arrSelectedSystemids, $bitReadonly = false, $bitShowPath = true, \Closure $objShowPath = null, $strAddLink = null)
     {
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
         $arrTemplate["title"] = $strTitle;
 
-        //Render list
-        $intCount = count($availableItems);
-        $objArraySectionIterator = new ArraySectionIterator($intCount);
-        $objArraySectionIterator->setPageNumber(1);
-        $objArraySectionIterator->setArraySection($availableItems);
-
         $strList = $this->listHeader();
-        foreach($objArraySectionIterator as $objObject) {
+        foreach ($arrAvailableItems as $objObject) {
             /** @var $objObject Model */
-            $bitSelected = in_array($objObject->getStrSystemid(), $arrSelectedItems);
+            $bitSelected = in_array($objObject->getStrSystemid(), $arrSelectedSystemids);
 
             $strPath = "";
             if ($bitShowPath) {
