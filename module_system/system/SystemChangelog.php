@@ -8,6 +8,7 @@
 
 namespace Kajona\System\System;
 
+use AGP\Prozessverwaltung\System\ProzessverwaltungProzess;
 use ArrayAccess;
 
 
@@ -98,6 +99,16 @@ class SystemChangelog
     {
         self::$arrOldInstances[$objCurrentObject->getSystemid()] = clone $objCurrentObject;
         return null;
+    }
+
+    /**
+     * Resets the old values for a given object, e.g. to have a clean map on new object persits
+     * @param VersionableInterface|Model $objObject
+     */
+    public function resetOldValues(VersionableInterface $objObject)
+    {
+        self::$arrOldValueCache[$objObject->getSystemid()] = null;
+        unset(self::$arrOldInstances[$objObject->getSystemid()]);
     }
 
 
