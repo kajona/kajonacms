@@ -595,27 +595,45 @@ class SystemChangelog
      * @param string $strPropertyFilter
      * @param string $strOldvalueFilter
      * @param string $strNewvalueFilter
+     * @param Date $objStartDate
+     * @param Date $objEndDate
      *
      * @return ChangelogContainer[]
      */
-    public static function getSpecificEntries($strSystemidFilter = null, $strActionFilter = null, $strPropertyFilter = null, $strOldvalueFilter = null, $strNewvalueFilter = null)
+    public static function getSpecificEntries($strSystemidFilter = null, $strActionFilter = null, $strPropertyFilter = null, $strOldvalueFilter = null, $strNewvalueFilter = null, Date $objStartDate = null, Date $objEndDate = null)
     {
 
         $arrWhere = array();
+        $arrParams = array();
         if ($strSystemidFilter !== null) {
             $arrWhere[] = " change_systemid = ? ";
+            $arrParams[] = $strSystemidFilter;
         }
         if ($strActionFilter !== null) {
             $arrWhere[] = " change_action = ? ";
+            $arrParams[] = $strActionFilter;
         }
         if ($strPropertyFilter !== null) {
             $arrWhere[] = " change_property = ? ";
+            $arrParams[] = $strPropertyFilter;
         }
         if ($strOldvalueFilter !== null) {
             $arrWhere[] = " change_oldvalue = ? ";
+            $arrParams[] = $strOldvalueFilter;
         }
         if ($strNewvalueFilter !== null) {
             $arrWhere[] = " change_newvalue = ? ";
+            $arrParams[] = $strNewvalueFilter;
+        }
+
+        if ($objStartDate !== null) {
+            $arrWhere[] = " change_date >= ? ";
+            $arrParams[] = $objStartDate->getLongTimestamp();
+        }
+
+        if ($objEndDate !== null) {
+            $arrWhere[] = " change_date <= ? ";
+            $arrParams[] = $objEndDate->getLongTimestamp();
         }
 
         $strTable = "changelog";
@@ -623,31 +641,11 @@ class SystemChangelog
             $strTable = self::getTableForClass(Objectfactory::getInstance()->getClassNameForId($strSystemidFilter));
         }
 
+
         $strQuery = "SELECT *
                        FROM "._dbprefix_.$strTable."
                       ".(count($arrWhere) > 0 ? " WHERE ".implode("AND", $arrWhere) : "")."
                    ORDER BY change_date DESC";
-
-        $arrParams = array();
-        if ($strSystemidFilter !== null) {
-            $arrParams[] = $strSystemidFilter;
-        }
-
-        if ($strActionFilter !== null) {
-            $arrParams[] = $strActionFilter;
-        }
-
-        if ($strPropertyFilter !== null) {
-            $arrParams[] = $strPropertyFilter;
-        }
-
-        if ($strOldvalueFilter !== null) {
-            $arrParams[] = $strOldvalueFilter;
-        }
-
-        if ($strNewvalueFilter !== null) {
-            $arrParams[] = $strNewvalueFilter;
-        }
 
         $arrRows = Carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
 
@@ -1043,140 +1041,9 @@ class SystemChangelog
 
         if ($strClass != null && $strClass != "" && isset($arrTables[$strClass])) {
             return $arrTables[$strClass];
-        }
-
-        else {
+        } else {
             return "changelog";
         }
     }
 }
 
-
-/**
- * Simple data-container for logentries.
- * Has no regular use.
- */
-final class ChangelogContainer
-{
-    private $objDate;
-    private $strSystemid;
-    private $strUserId;
-    private $strClass;
-    private $strAction;
-    private $strProperty;
-    private $strOldValue;
-    private $strNewValue;
-
-    /**
-     * @param int $intDate
-     * @param string $strSystemid
-     * @param string $strUserId
-     * @param string $strClass
-     * @param string $strAction
-     * @param string $strProperty
-     * @param string $strOldValue
-     * @param string $strNewValue
-     */
-    function __construct($intDate, $strSystemid, $strUserId, $strClass, $strAction, $strProperty, $strOldValue, $strNewValue)
-    {
-        $this->objDate = new Date($intDate);
-        $this->strSystemid = $strSystemid;
-        $this->strUserId = $strUserId;
-        $this->strClass = $strClass;
-        $this->strAction = $strAction;
-        $this->strProperty = $strProperty;
-        $this->strOldValue = $strOldValue;
-        $this->strNewValue = $strNewValue;
-    }
-
-    /**
-     * @return VersionableInterface
-     */
-    public function getObjTarget()
-    {
-        if (class_exists($this->strClass)) {
-            return new $this->strClass($this->strSystemid);
-        }
-        else {
-            return null;
-        }
-    }
-
-    /**
-     * @return Date
-     */
-    public function getObjDate()
-    {
-        return $this->objDate;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getStrSystemid()
-    {
-        return $this->strSystemid;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getStrUserId()
-    {
-        return $this->strUserId;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStrUsername()
-    {
-        $strUserId = $this->getStrUserId();
-        if (validateSystemid($strUserId)) {
-            return Objectfactory::getInstance()->getObject($strUserId)->getStrDisplayName();
-        } else {
-            return "";
-        }
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getStrClass()
-    {
-        return $this->strClass;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getStrAction()
-    {
-        return $this->strAction;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getStrOldValue()
-    {
-        return $this->strOldValue;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getStrNewValue()
-    {
-        return $this->strNewValue;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getStrProperty()
-    {
-        return $this->strProperty;
-    }
-
-}
