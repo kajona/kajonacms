@@ -9,8 +9,11 @@ namespace Kajona\System\Admin\Formentries;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Model;
+use Kajona\System\System\ModelInterface;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Reflection;
+use Kajona\System\System\SystemModule;
+use ReflectionClass;
 use Traversable;
 
 
@@ -172,5 +175,75 @@ class FormentryObjecttags extends FormentryTageditor
         }
 
         return $objSourceObject->{$strSetter}($arrObjects);
+    }
+
+    /**
+     * Copied from FormentryObjectlist
+     *
+     * @inheritdoc
+     */
+    public function getValueAsText()
+    {
+        $objSourceObject = $this->getObjSourceObject();
+        if ($objSourceObject == null) {
+            return "";
+        }
+
+
+        if (!empty($this->arrKeyValues)) {
+            $strHtml = "";
+            foreach ($this->arrKeyValues as $objObject) {
+                if ($objObject instanceof Model && $objObject instanceof ModelInterface) {
+
+                    $strTitle = self::getDisplayName($objObject);
+
+                    if($objObject->rightView()) {
+
+                        //see, if the matching target-module provides a showSummary method
+                        $objModule = SystemModule::getModuleByName($objObject->getArrModule("modul"));
+                        if ($objModule != null) {
+                            $objAdmin = $objModule->getAdminInstanceOfConcreteModule($objObject->getSystemid());
+
+                            if ($objAdmin !== null && method_exists($objAdmin, "actionShowSummary")) {
+                                $strTitle = Link::getLinkAdmin($objObject->getArrModule("modul"), "showSummary", "&systemid=" . $objObject->getSystemid()."&folderview=".Carrier::getInstance()->getParam("folderview"), $strTitle);
+                            }
+                        }
+                    }
+                    $strHtml .= $strTitle."<br/>\n";
+                }
+                else {
+                    throw new Exception("Array must contain objects", Exception::$level_ERROR);
+                }
+            }
+            return $strHtml;
+        }
+
+        return "-";
+    }
+
+    /**
+     * Copied from FormentryObjectlist
+     *
+     * Renders the display name for the object and, if possible, also the object type
+     *
+     * @param ModelInterface $objObject
+     *
+     * @return string
+     */
+    public static function getDisplayName(ModelInterface $objObject)
+    {
+        $strObjectName = "";
+
+        $objClass = new ReflectionClass(get_class($objObject)); //TODO remove hardcoded cross-module dependencies
+        if ($objClass->implementsInterface('AGP\Aufgaben\System\AufgabenTaskableInterface')) {
+            $strObjectName .= "[".$objObject->getStrTaskCategory()."] ";
+        }
+        elseif ($objClass->implementsInterface('Kajona\System\System\VersionableInterface')) {
+            $strObjectName .= "[".$objObject->getVersionRecordName()."] ";
+        }
+
+        $strObjectName .= $objObject->getStrDisplayName();
+
+        return $strObjectName;
     }
 }
