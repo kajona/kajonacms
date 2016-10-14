@@ -16,8 +16,12 @@ class Form extends MainContent {
     }
 
 
-    get elementForm() {
+    get element_form() {
         return this.element_mainContent.findElement(By.css(Constants.FORM_CSS_ROOT));
+    }
+
+    get save_button() {
+        return this.element_form.findElement(By.css(Constants.FORM_CSS_SAVEBUTTON));
     }
 }
 

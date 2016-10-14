@@ -64,6 +64,7 @@ class Constants {
 
     //Form
     static get FORM_CSS_ROOT() { return "form.form-horizontal";}
+    static get FORM_CSS_SAVEBUTTON() { return "button[name=submitbtn]";}
 }
 
 module.exports = Constants;
