@@ -43,10 +43,6 @@ class SystemChangelog
 
     private static $arrOldValueCache = array();
 
-    /**
-     * @todo: is the init value cache still required?
-     * @var array
-     */
     private static $arrInitValueCache = array();
     private static $arrCachedProviders = null;
 
@@ -134,6 +130,8 @@ class SystemChangelog
 
             $arrOldValues = $this->readVersionableProperties($objCurrentObject);
             $this->setOldValuesForSystemid($strSystemid, $arrOldValues);
+            //since values have been read, remove the cloned instance to release memory
+            unset(self::$arrOldInstances[$strSystemid]);
             return $arrOldValues;
         }
         return null;
@@ -223,6 +221,10 @@ class SystemChangelog
     }
 
     /**
+     * Reuturns all initial values of versionable properties, so the state before changing
+     * an object. Useful if you change an object mutliple times within a single process and want to
+     * fetch the initital values, too.
+     *
      * @param string $strSystemid
      *
      * @return null
