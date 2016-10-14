@@ -29,6 +29,10 @@ class SystemSetting extends Model implements ModelInterface, VersionableInterfac
      * @var SystemSetting[]
      */
     private static $arrInstanceCache = null;
+
+    /**
+     * @var array
+     */
     private static $arrValueMap = array();
 
 
@@ -62,6 +66,8 @@ class SystemSetting extends Model implements ModelInterface, VersionableInterfac
      * @var int
      */
     public static $int_TYPE_PAGE = 3;
+
+    const STR_CACHE_NAME = "SystemSetting_CACHE";
 
     /**
      * @var string
@@ -186,6 +192,10 @@ class SystemSetting extends Model implements ModelInterface, VersionableInterfac
         self::$arrInstanceCache = null;
         self::$arrValueMap = null;
 
+        /** @var CacheManager $objCacheManager */
+        $objCacheManager = Carrier::getInstance()->getContainer()->offsetGet("system_cache_manager");
+        $objCacheManager->removeValue(self::STR_CACHE_NAME);
+
         if (!SystemSetting::checkConfigExisting($this->getStrName())) {
             Logger::getInstance()->addLogRow("new constant ".$this->getStrName()." with value ".$this->getStrValue(), Logger::$levelInfo);
 
@@ -193,9 +203,7 @@ class SystemSetting extends Model implements ModelInterface, VersionableInterfac
                         (system_config_id, system_config_name, system_config_value, system_config_type, system_config_module) VALUES
                         (?, ?, ?, ?, ?)";
             return $this->objDB->_pQuery($strQuery, array(generateSystemid(), $this->getStrName(), $this->getStrValue(), (int)$this->getIntType(), (int)$this->getIntModule()));
-        }
-        else {
-
+        } else {
             Logger::getInstance()->addLogRow("updated constant ".$this->getStrName()." to value ".$this->getStrValue(), Logger::$levelInfo);
 
             $strQuery = "UPDATE "._dbprefix_."system_config
@@ -234,7 +242,6 @@ class SystemSetting extends Model implements ModelInterface, VersionableInterfac
     public static function getAllConfigValues()
     {
         if (self::$arrInstanceCache == null) {
-
             SystemChangelog::$bitChangelogEnabled = false;
             if (count(Database::getInstance()->getTables()) == 0) {
                 return array();
@@ -257,6 +264,21 @@ class SystemSetting extends Model implements ModelInterface, VersionableInterfac
         }
 
         return self::$arrInstanceCache;
+    }
+
+    private static function getConfigValueMap()
+    {
+        if (self::$arrValueMap == null) {
+            /** @var CacheManager $objCacheManager */
+            $objCacheManager = Carrier::getInstance()->getContainer()->offsetGet("system_cache_manager");
+            self::$arrValueMap = $objCacheManager->getValue(self::STR_CACHE_NAME);
+            if (self::$arrValueMap === false) {
+                self::getAllConfigValues();
+                $objCacheManager->addValue(self::STR_CACHE_NAME, self::$arrValueMap, 0, CacheManager::TYPE_APC | CacheManager::TYPE_FILESYSTEM);
+            }
+        }
+
+        return self::$arrValueMap;
     }
 
     /**
@@ -301,7 +323,7 @@ class SystemSetting extends Model implements ModelInterface, VersionableInterfac
      */
     public static function getConfigValue($strName)
     {
-        self::getAllConfigValues();
+        self::getConfigValueMap();
         if (isset(self::$arrValueMap[$strName])) {
             return self::$arrValueMap[$strName];
         }
