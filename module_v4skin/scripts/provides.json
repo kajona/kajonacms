@@ -14,7 +14,8 @@
     "jquery-touchPunch": "jquery/jquery.ui.touch-punch.min",
 
     "dialog": "kajona/dialog",
-    "v4skin": "kajona/v4skin"
+    "v4skin": "kajona/v4skin",
+    "listSortable" : "kajona/listSortable"
   },
   "shim": {
     "bootstrap" : {

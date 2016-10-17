@@ -1312,7 +1312,7 @@ class ToolkitAdmin extends Toolkit
             array(
                 "listid"          => $strListId,
                 "sameTable"       => $bitOnlySameTable ? "true" : "false",
-                "jsInject"        => "bitMoveToTree = ".($bitAllowDropOnTree ? "true" : "false").";",
+                "bitMoveToTree"   => ($bitAllowDropOnTree ? "true" : "false"),
                 "elementsPerPage" => $intElementsPerPage,
                 "curPage"         => $intCurPage
             ),
