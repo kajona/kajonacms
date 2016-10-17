@@ -121,7 +121,7 @@ class FunctionsTest extends Testbase
             $this->assertTrue(strlen($strTest) == 20 && preg_match("/([a-z|A-a|0-9]){20}/", $strTest));
         }
         $intEnd = microtime(true);
-        echo "preg based : " . ($intEnd - $intStart) . " sec\n";
+        //echo "preg based : " . ($intEnd - $intStart) . " sec\n";
 
         $intStart = microtime(true);
 
@@ -129,7 +129,7 @@ class FunctionsTest extends Testbase
             $this->assertTrue(strlen($strTest) == 20 && ctype_alnum($strTest));
         }
         $intEnd = microtime(true);
-        echo "ctype based : " . ($intEnd - $intStart) . " sec\n";
+        //echo "ctype based : " . ($intEnd - $intStart) . " sec\n";
     }
 }
 
