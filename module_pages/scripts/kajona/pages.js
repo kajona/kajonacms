@@ -17,6 +17,7 @@ define(['jquery', 'ajax', 'util'], function ($, ajax, util) {
             cursor: 'move',
             forcePlaceholderSize: true,
             forceHelperSize: true,
+            placeholder: 'dndPlaceholder',
             start: function(event, ui) {
 
                 oldPos = ui.item.index();

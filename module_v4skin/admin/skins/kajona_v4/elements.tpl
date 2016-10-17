@@ -94,8 +94,14 @@ require(["jquery", "jquery-ui", "ajax", "statusDisplay", "tooltip", "util"], fun
         var oldPos = null;
 
         $('#%%listid%%_prev').sortable({
+            placeholder : 'dndPlaceholder',
             over: function(event, ui) {
                 $(ui.placeholder).hide();
+                $(this).removeClass('alert-info').addClass('alert-success');
+            },
+            out: function(event, ui) {
+                $(this).removeClass('alert-success').addClass('alert-info');
+                $(ui.placeholder).show();
             },
             receive: function(event, ui) {
                 $(ui.placeholder).hide();
@@ -119,8 +125,14 @@ require(["jquery", "jquery-ui", "ajax", "statusDisplay", "tooltip", "util"], fun
         });
 
         $('#%%listid%%_next').sortable({
+
             over: function(event, ui) {
                 $(ui.placeholder).hide();
+                $(this).removeClass('alert-info').addClass('alert-success');
+            },
+            out: function(event, ui) {
+                $(this).removeClass('alert-success').addClass('alert-info');
+                $(ui.placeholder).show();
             },
             receive: function(event, ui) {
                 $(ui.placeholder).hide();
@@ -150,7 +162,7 @@ require(["jquery", "jquery-ui", "ajax", "statusDisplay", "tooltip", "util"], fun
             cursor: 'move',
             forcePlaceholderSize: true,
             forceHelperSize: true,
-            placeholder: 'group_move_placeholder',
+            placeholder: 'dndPlaceholder table',
             connectWith: '.divPageTarget',
             start: function(event, ui) {
 
@@ -161,6 +173,9 @@ require(["jquery", "jquery-ui", "ajax", "statusDisplay", "tooltip", "util"], fun
                     $('#%%listid%%_next').css("display", "block");
 
                 oldPos = ui.item.index();
+
+                //hack the placeholder
+                ui.placeholder.html(ui.helper.html());
             },
             stop: function(event, ui) {
                 if(oldPos != ui.item.index() && !ui.item.parent().is('div') ) {
@@ -202,8 +217,6 @@ require(["jquery", "jquery-ui", "ajax", "statusDisplay", "tooltip", "util"], fun
     });
 });
 </script>
-<style>.group_move_placeholder { display: table-row; } </style>
-
 <div id='%%listid%%_prev' class='alert alert-info divPageTarget'>[lang,commons_list_sort_prev,system]</div>
 <table id="%%listid%%" class="table admintable table-striped-tbody" data-kajona-pagenum="%%curPage%%" data-kajona-elementsperpage="%%elementsPerPage%%">
 
