@@ -641,7 +641,7 @@ abstract class Root
         $bitCommit = true;
         /** @var $this Root|ModelInterface */
         if (!$this instanceof ModelInterface) {
-            throw new Exception("current object must implement \\Kajona\\System\\System\\ModelInterface", Exception::$level_FATALERROR);
+            throw new Exception("current object must implement ".ModelInterface::class, Exception::$level_FATALERROR);
         }
 
         if (!$this->getLockManager()->isAccessibleForCurrentUser()) {
@@ -716,6 +716,12 @@ abstract class Root
 
             //all updates are done, start the "real" update
             Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBQUERIES);
+
+            //reset the old values cache for the new record
+            if($this instanceof VersionableInterface) {
+                $objChanges = new SystemChangelog();
+                $objChanges->resetOldValues($this);
+            }
         }
 
         //new prev-id?
