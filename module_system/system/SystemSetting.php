@@ -266,6 +266,12 @@ class SystemSetting extends Model implements ModelInterface, VersionableInterfac
         return self::$arrInstanceCache;
     }
 
+    /**
+     * Internal helper to fill the key-value-map of settings. by default filled from the cache. secondary, as a fallback,
+     * the "real" settings-objects are read and written to the the array, the cache is filled too.
+     *
+     * @return array|mixed
+     */
     private static function getConfigValueMap()
     {
         if (self::$arrValueMap == null) {
