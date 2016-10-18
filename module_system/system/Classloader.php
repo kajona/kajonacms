@@ -45,7 +45,8 @@ class Classloader
      * @var array
      */
     private static $arrCodeFoldersBlacklist = array(
-        "vendor"
+        "scripts",
+        "vendor",
     );
 
     /**
