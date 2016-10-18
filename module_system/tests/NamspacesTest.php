@@ -35,21 +35,7 @@ class NamspacesTest extends \PHPUnit_Framework_TestCase
             Classloader::getInstance()->flushCache();
         }
 
-
-        //get all files and check if namespace is equals to file path
-        $objReflection = new \ReflectionClass(Classloader::getInstance());
-        $objReflectionPropertyCodeFolders = $objReflection->getProperty("arrCodeFolders");
-        $objReflectionPropertyCodeFolders->setAccessible(true);
-
-        $objReflectionMethodClassesInFolder = $objReflection->getMethod("getClassesInFolder");
-        $objReflectionMethodClassesInFolder->setAccessible(true);
-
-        //get all relevant classes
-        $arrMergedFiles = array();
-        foreach ($objReflectionPropertyCodeFolders->getValue() as $strFolder) {
-            $arrMergedFiles = array_merge($arrMergedFiles, $objReflectionMethodClassesInFolder->invoke(Classloader::getInstance(), $strFolder));
-        }
-
+        $arrMergedFiles = BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_CLASSES);
 
         //iterate classes
         foreach($arrMergedFiles as $strClassName => $strFileName) {
