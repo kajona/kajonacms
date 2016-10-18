@@ -9,6 +9,7 @@
 
 namespace Kajona\News\Installer;
 
+use Kajona\News\Admin\Elements\ElementNewsAdmin;
 use Kajona\News\System\NewsCategory;
 use Kajona\News\System\NewsFeed;
 use Kajona\News\System\NewsNews;
