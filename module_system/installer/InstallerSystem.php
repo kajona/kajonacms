@@ -805,6 +805,8 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $this->objDB->removeColumn("system_module", "module_xmlfilenameportal");
         $this->objDB->removeColumn("system_module", "module_xmlfilenameadmin");
 
+        Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBSTATEMENTS | Carrier::INT_CACHE_TYPE_DBQUERIES);
+
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1.3");
         return $strReturn;
