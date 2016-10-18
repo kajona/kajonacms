@@ -17,6 +17,7 @@ use Kajona\System\Portal\PortalController;
 use Kajona\System\Portal\PortalInterface;
 use Kajona\System\System\ArraySectionIterator;
 use Kajona\System\System\Link;
+use Kajona\System\System\StringUtil;
 
 
 /**
@@ -30,6 +31,7 @@ use Kajona\System\System\Link;
  */
 class SearchPortal extends PortalController implements PortalInterface
 {
+    private static $INT_MAX_NR_OF_RESULTS = 30;
 
     private $objSearchSearch;
 
@@ -53,11 +55,11 @@ class SearchPortal extends PortalController implements PortalInterface
             $this->objSearchSearch->setStrQuery(htmlToString(urldecode($this->getParam("searchterm")), true));
         }
 
-        if($this->getParam("searchmodule") != "") {
+        if ($this->getParam("searchmodule") != "") {
             $this->objSearchSearch->setFilterModules(array(urldecode($this->getParam("searchmodule"))));
         }
 
-        if(isset($this->arrElementData["search_query_append"]) && $this->arrElementData["search_query_append"] != "") {
+        if (isset($this->arrElementData["search_query_append"]) && $this->arrElementData["search_query_append"] != "") {
             $this->objSearchSearch->setStrQuery($this->arrElementData["search_query_append"]." ".$this->objSearchSearch->getStrQuery());
         }
 
@@ -131,7 +133,6 @@ class SearchPortal extends PortalController implements PortalInterface
 
         /** @var $objHit SearchResult */
         foreach ($objArraySectionIterator as $objHit) {
-
             if ($objHit->getStrPagename() == "master") {
                 continue;
             }
@@ -143,7 +144,7 @@ class SearchPortal extends PortalController implements PortalInterface
 
             $arrRow = array();
             if (($objHit->getStrPagelink() == "")) {
-                $arrRow["page_link"] = getLinkPortal(
+                $arrRow["page_link"] = Link::getLinkPortal(
                     $objHit->getStrPagename(),
                     "",
                     "_self",
@@ -151,11 +152,10 @@ class SearchPortal extends PortalController implements PortalInterface
                     "",
                     "&highlight=".urlencode(html_entity_decode(htmlToString(urldecode($this->getParam("searchterm")), true), ENT_QUOTES, "UTF-8"))."#".uniStrtolower(urlencode(html_entity_decode(htmlToString(urldecode($this->getParam("searchterm")), true), ENT_QUOTES, "UTF-8")))
                 );
-            }
-            else {
+            } else {
                 $arrRow["page_link"] = $objHit->getStrPagelink();
             }
-            $arrRow["page_description"] = uniStrTrim($objHit->getStrDescription(), 200);
+            $arrRow["page_description"] = StringUtil::truncate($objHit->getStrDescription(), 200);
             $arrRow["additionaltitle"] = $objHit->getStrAdditionalTitle();
             $arrRow["systemid"] = $objHit->getStrSystemid();
             $arrTemplate["hitlist"] .= $this->objTemplate->fillTemplateFile($arrRow, "/module_search/".$this->arrElementData["search_template"], "search_hitlist_hit", false);
@@ -169,6 +169,94 @@ class SearchPortal extends PortalController implements PortalInterface
         $arrTemplate["link_overview"] = $arrHitsFilter["strPages"];
 
         return $strReturn.$this->objTemplate->fillTemplateFile($arrTemplate, "/module_search/".$this->arrElementData["search_template"], "search_hitlist");
+    }
+
+
+
+    /**
+     * Searches for a passed string
+     *
+     * @return string
+     * @permissions view
+     */
+    protected function actionDoSearch()
+    {
+        $strReturn = "";
+
+        $objSearch = new SearchSearch();
+        $objSearch->setStrPortalLangFilter($this->getStrPortalLanguage());
+
+        if ($this->getParam("searchterm") != "") {
+            $objSearch->setStrQuery(htmlToString(urldecode($this->getParam("searchterm")), true));
+        }
+
+        if ($this->getParam("searchmodule") != "") {
+            $objSearch->setFilterModules(array(urldecode($this->getParam("searchmodule")), true));
+        }
+
+        if ($this->getParam("additionalfilters") != "") {
+            $objSearch->setStrQuery(htmlToString(urldecode($this->getParam("additionalfilters")), true)." ".$objSearch->getStrQuery());
+        }
+
+        $arrResult = array();
+        $objSearchCommons = new SearchCommons();
+        if ($objSearch->getStrQuery() != "") {
+            $arrResult = $objSearchCommons->doPortalSearch($objSearch);
+        }
+
+        $strReturn .= $this->createSearchXML(htmlToString(urldecode($this->getParam("searchterm")), true), $arrResult);
+
+        return $strReturn;
+    }
+
+
+    /**
+     * @param $strSearchterm
+     * @param SearchResult[] $arrResults
+     *
+     * @return string
+     */
+    private function createSearchXML($strSearchterm, $arrResults)
+    {
+        $strReturn = "";
+
+        $strReturn .=
+            "<search>\n"
+            ."    <searchterm>".xmlSafeString($strSearchterm)."</searchterm>\n"
+            ."    <nrofresults>".count($arrResults)."</nrofresults>\n";
+
+
+        //And now all results
+        $intI = 0;
+        $strReturn .= "    <resultset>\n";
+        foreach ($arrResults as $objOneResult) {
+            $objPage = PagesPage::getPageByName($objOneResult->getStrPagename());
+            if ($objPage === null || !$objPage->rightView() || $objPage->getIntRecordStatus() != 1) {
+                continue;
+            }
+
+
+            if (++$intI > self::$INT_MAX_NR_OF_RESULTS) {
+                break;
+            }
+
+            //create a correct link
+            if ($objOneResult->getStrPagelink() == "") {
+                $objOneResult->setStrPagelink(Link::getLinkPortal($objOneResult->getStrPagename(), "", "_self", $objOneResult->getStrPagename(), "", "&highlight=".$strSearchterm."#".$strSearchterm));
+            }
+
+            $strReturn .=
+                "        <item>\n"
+                ."            <pagename>".$objOneResult->getStrPagename()."</pagename>\n"
+                ."            <pagelink>".$objOneResult->getStrPagelink()."</pagelink>\n"
+                ."            <score>".$objOneResult->getIntHits()."</score>\n"
+                ."            <description>".xmlSafeString(StringUtil::truncate($objOneResult->getStrDescription(), 200))."</description>\n"
+                ."        </item>\n";
+        }
+
+        $strReturn .= "    </resultset>\n";
+        $strReturn .= "</search>";
+        return $strReturn;
     }
 
 }
