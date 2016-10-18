@@ -1282,7 +1282,6 @@ JS;
      * Creates a list of sites reduced to match the filter passed.
      * Used e.g. by the page-selector.
      *
-     * @xml
      * @return string
      * @permissions view
      */
@@ -1307,7 +1306,6 @@ JS;
      *
      * @return string
      * @since 3.3.0
-     * @xml
      * @permissions view
      */
     protected function actionGetChildNodes()

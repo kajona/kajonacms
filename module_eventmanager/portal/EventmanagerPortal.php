@@ -122,7 +122,6 @@ class EventmanagerPortal extends PortalController implements PortalInterface
      * Returns all eventes in json-format.
      * Expects the params start & end.
      *
-     * @xml
      * @return string
      * @permissions view
      */
@@ -159,7 +158,6 @@ class EventmanagerPortal extends PortalController implements PortalInterface
      * Expecets the param pagename for rendering the detail-links
      *
      * @permissions view
-     * @xml
      * @return string
      */
     protected function actionEventRssFeed()

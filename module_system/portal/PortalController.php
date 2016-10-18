@@ -133,14 +133,6 @@ abstract class PortalController extends AbstractController
                 }
             }
 
-            if (_xmlLoader_ === true) {
-                //check it the method is allowed for xml-requests
-                $objAnnotations = new Reflection(get_class($this));
-                if (!$objAnnotations->hasMethodAnnotation($strMethodName, "@xml") && !$this instanceof XmlPortalInterface) {
-                    throw new Exception("called method ".$strMethodName." not allowed for xml-requests", Exception::$level_FATALERROR);
-                }
-            }
-
             $this->strOutput = $this->$strMethodName();
         }
         else {

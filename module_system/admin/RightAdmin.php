@@ -264,7 +264,6 @@ class RightAdmin extends AdminController implements AdminInterface {
      * @throws Exception
      * @return string "" in case of success
      * @permissions right
-     * @xml
      */
     protected function actionSaveRights() {
 

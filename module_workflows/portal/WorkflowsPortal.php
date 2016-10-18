@@ -44,7 +44,6 @@ class WorkflowsPortal extends PortalController implements PortalInterface
     /**
      * Triggers the workflow engine
      *
-     * @xml
      * @return string
      */
     protected function actionTrigger()

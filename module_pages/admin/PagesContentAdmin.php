@@ -1036,7 +1036,6 @@ JS;
      * @throws Exception
      * @return string , "" in case of success
      * @permissions delete
-     * @xml
      */
     protected function actionDeleteElementFinalXML()
     {
@@ -1270,7 +1269,6 @@ JS;
      * - placeholder
      *
      * @permissions edit
-     * @xml
      * @return string
      */
     protected function actionMoveElement()
@@ -1325,7 +1323,6 @@ JS;
 
 
     /**
-     * @xml
      * @permissions edit
      * @return string
      */

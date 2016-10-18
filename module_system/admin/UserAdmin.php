@@ -1639,7 +1639,6 @@ HTML;
      * Returns a list of users and/or groups matching the passed query.
      *
      * @return string
-     * @xml
      */
     protected function actionGetUserByFilter()
     {

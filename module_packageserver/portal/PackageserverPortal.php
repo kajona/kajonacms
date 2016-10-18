@@ -37,7 +37,6 @@ class PackageserverPortal extends PortalController implements PortalInterface
      *
      * @return string|json
      * @permissions view
-     * @xml
      */
     protected function actionList()
     {

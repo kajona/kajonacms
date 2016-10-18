@@ -362,7 +362,6 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
      * </categories>
      *
      * @return string
-     * @xml
      */
     protected function actionListCategories()
     {
@@ -400,7 +399,6 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
      * </newslist>
      *
      * @return string
-     * @xml
      */
     protected function actionListNews()
     {
@@ -440,7 +438,6 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
      *    </news>
      *
      * @return string
-     * @xml
      */
     protected function actionNewsDetails()
     {
@@ -477,7 +474,6 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
      * Params expected are: newstitle, newsintro, newsimage, newstext, categories, startdate, enddate, archivedate
      *
      * @return string
-     * @xml
      */
     protected function actionUpdateNewsXml()
     {

@@ -41,7 +41,6 @@ class JsonapiAdmin extends AdminEvensimpler implements AdminInterface
      * Handles the incoming request. Catches all exceptions so that we return
      * a clean json response with a fitting status code if an error occured
      *
-     * @xml
      */
     protected function actionDispatch()
     {
@@ -93,7 +92,6 @@ class JsonapiAdmin extends AdminEvensimpler implements AdminInterface
      * @return array
      * @throws InvalidRequestException
      * @permissions view
-     * @xml
      */
     protected function actionGet()
     {
@@ -263,7 +261,6 @@ class JsonapiAdmin extends AdminEvensimpler implements AdminInterface
      * @return array
      * @throws AuthenticationException
      * @permissions edit
-     * @xml
      */
     protected function actionPost()
     {
@@ -308,7 +305,6 @@ class JsonapiAdmin extends AdminEvensimpler implements AdminInterface
      * @return array
      * @throws AuthenticationException
      * @permissions edit
-     * @xml
      */
     protected function actionPut()
     {
@@ -352,7 +348,6 @@ class JsonapiAdmin extends AdminEvensimpler implements AdminInterface
      * @return array
      * @throws AuthenticationException
      * @permissions delete
-     * @xml
      */
     protected function actionDelete()
     {
