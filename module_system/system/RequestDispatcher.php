@@ -150,9 +150,9 @@ class RequestDispatcher
 
 
                     //fill the history array to track actions
-                    $objHistory = new History();
-                    //Writing to the history
-                    if (Carrier::getInstance()->getParam("folderview") == "") {
+                    if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::INDEX()) && Carrier::getInstance()->getParam("folderview")) {
+                        $objHistory = new History();
+                        //Writing to the history
                         $objHistory->setAdminHistory();
                     }
 
@@ -240,7 +240,7 @@ class RequestDispatcher
             }
 
             //fill the history array to track actions
-            if (!ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML())) {
+            if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::INDEX())) {
                 $objHistory = new History();
                 $objHistory->setPortalHistory();
             }
