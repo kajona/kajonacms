@@ -205,7 +205,6 @@ JS;
      * This method stores only one value message for one messageprovider (either "_bymail" or "_enabled").
      *
      * @permissions edit
-     * @xml
      *
      * @return string
      */
@@ -377,7 +376,6 @@ JS;
      * Marks a single message as read
      *
      * @return string
-     * @xml
      * @permissions view
      */
     protected function actionSetRead()
@@ -397,7 +395,6 @@ JS;
      * Marks a single message as unread
      *
      * @return string
-     * @xml
      * @permissions view
      */
     protected function actionSetUnread()
@@ -545,7 +542,6 @@ JS;
      *
      * @permissions view
      * @autoTestable
-     * @xml
      *
      * @deprecated
      *
@@ -563,7 +559,6 @@ JS;
      * The structure is returned in an json-format.
      *
      * @permissions view
-     * @xml
      * @autoTestable
      *
      * @return string

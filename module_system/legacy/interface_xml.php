@@ -10,7 +10,7 @@
 /**
  * @deprecated
  */
-interface interface_xml extends  \Kajona\System\System\XmlInterface {
+interface interface_xml  {
 
 
 

@@ -35,13 +35,13 @@ class InstallerNews extends InstallerBase implements InstallerRemovableInterface
         $objManager = new OrmSchemamanager();
 
         $strReturn .= "Installing table news_category...\n";
-        $objManager->createTable("Kajona\\News\\System\\NewsCategory");
+        $objManager->createTable(NewsCategory::class);
 
         $strReturn .= "Installing table news...\n";
-        $objManager->createTable("Kajona\\News\\System\\NewsNews");
+        $objManager->createTable(NewsNews::class);
 
         $strReturn .= "Installing table news_feed...\n";
-        $objManager->createTable("Kajona\\News\\System\\NewsFeed");
+        $objManager->createTable(NewsFeed::class);
 
         //register the module
         $this->registerModule(
@@ -49,13 +49,11 @@ class InstallerNews extends InstallerBase implements InstallerRemovableInterface
             _news_module_id_,
             "NewsPortal.php",
             "NewsAdmin.php",
-            $this->objMetadata->getStrVersion(),
-            true,
-            "NewsPortalXml.php"
+            $this->objMetadata->getStrVersion()
         );
 
         $strReturn .= "Installing news-element table...\n";
-        $objManager->createTable("Kajona\\News\\Admin\\Elements\\ElementNewsAdmin");
+        $objManager->createTable(ElementNewsAdmin::class);
 
 
         //Register the element

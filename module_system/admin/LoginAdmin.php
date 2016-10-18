@@ -10,11 +10,14 @@
 namespace Kajona\System\Admin;
 
 use Kajona\System\System\Cookie;
+use Kajona\System\System\HttpStatuscodes;
 use Kajona\System\System\Link;
 use Kajona\System\System\Logger;
+use Kajona\System\System\RequestEntrypointEnum;
 use Kajona\System\System\ResponseObject;
 use Kajona\System\System\Session;
 use Kajona\System\System\UserUser;
+use Kajona\System\System\Wadlgenerator;
 
 
 /**
@@ -54,39 +57,55 @@ class LoginAdmin extends AdminController implements AdminInterface
     protected function actionLogin()
     {
 
-        if ($this->objSession->isLoggedin() && $this->objSession->isAdmin()) {
-            $this->loadPostLoginSite();
-            return;
+        if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML())) {
+            if ($this->objSession->login($this->getParam("username"), $this->getParam("password"))) {
+                //user allowed to access admin?
+                if (!$this->objSession->isAdmin()) {
+                    //no, reset session
+                    $this->objSession->logout();
+                }
+
+                return "<message><success>".xmlSafeString($this->getLang("login_xml_succeess", "system"))."</success></message>";
+            } else {
+                ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
+                return "<message><error>".xmlSafeString($this->getLang("login_xml_error", "system"))."</error></message>";
+            }
+        } else {
+
+            if ($this->objSession->isLoggedin() && $this->objSession->isAdmin()) {
+                $this->loadPostLoginSite();
+                return;
+            }
+
+            //Save the requested URL
+            if ($this->getParam("loginerror") == "") {
+                //Store some of the last requests' data
+                $this->objSession->setSession(self::SESSION_REFERER, getServer("QUERY_STRING"));
+                $this->objSession->setSession(self::SESSION_PARAMS, getArrayPost());
+            }
+
+            //Loading a small login-form
+            $arrTemplate = array();
+            $strForm = "";
+            $strForm .= $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "adminLogin"));
+            $strForm .= $this->objToolkit->formInputText("name", $this->getLang("login_loginUser", "user"), "", "input-large");
+            $strForm .= $this->objToolkit->formInputPassword("passwort", $this->getLang("login_loginPass", "user"), "", "input-large");
+            $strForm .= $this->objToolkit->formInputSubmit($this->getLang("login_loginButton", "user"));
+            $strForm .= $this->objToolkit->formClose();
+            $arrTemplate["form"] = $strForm;
+            $arrTemplate["loginTitle"] = $this->getLang("login_loginTitle", "user");
+            $arrTemplate["loginJsInfo"] = $this->getLang("login_loginJsInfo", "user");
+            $arrTemplate["loginCookiesInfo"] = $this->getLang("login_loginCookiesInfo", "user");
+            //An error occurred?
+            if ($this->getParam("loginerror") == 1) {
+                $arrTemplate["error"] = $this->getLang("login_loginError", "user");
+            }
+
+            $strReturn = $this->objTemplate->fillTemplateFile($arrTemplate, "/elements.tpl", "login_form");
+
+
+            return $strReturn;
         }
-
-        //Save the requested URL
-        if ($this->getParam("loginerror") == "") {
-            //Store some of the last requests' data
-            $this->objSession->setSession(self::SESSION_REFERER, getServer("QUERY_STRING"));
-            $this->objSession->setSession(self::SESSION_PARAMS, getArrayPost());
-        }
-
-        //Loading a small login-form
-        $arrTemplate = array();
-        $strForm = "";
-        $strForm .= $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "adminLogin"));
-        $strForm .= $this->objToolkit->formInputText("name", $this->getLang("login_loginUser", "user"), "", "input-large");
-        $strForm .= $this->objToolkit->formInputPassword("passwort", $this->getLang("login_loginPass", "user"), "", "input-large");
-        $strForm .= $this->objToolkit->formInputSubmit($this->getLang("login_loginButton", "user"));
-        $strForm .= $this->objToolkit->formClose();
-        $arrTemplate["form"] = $strForm;
-        $arrTemplate["loginTitle"] = $this->getLang("login_loginTitle", "user");
-        $arrTemplate["loginJsInfo"] = $this->getLang("login_loginJsInfo", "user");
-        $arrTemplate["loginCookiesInfo"] = $this->getLang("login_loginCookiesInfo", "user");
-        //An error occurred?
-        if ($this->getParam("loginerror") == 1) {
-            $arrTemplate["error"] = $this->getLang("login_loginError", "user");
-        }
-
-        $strReturn = $this->objTemplate->fillTemplateFile($arrTemplate, "/elements.tpl", "login_form");
-
-
-        return $strReturn;
     }
 
     /**
@@ -129,8 +148,7 @@ class LoginAdmin extends AdminController implements AdminInterface
                 }
 
                 $strReturn = $this->objTemplate->fillTemplateFile($arrTemplate, "/elements.tpl", "login_form");
-            }
-            else {
+            } else {
                 //check the submitted passwords.
                 $strPass1 = trim($this->getParam("password1"));
                 $strPass2 = trim($this->getParam("password2"));
@@ -145,13 +163,11 @@ class LoginAdmin extends AdminController implements AdminInterface
                     Logger::getInstance()->addLogRow("changed password of user ".$objUser->getStrUsername(), Logger::$levelInfo);
 
                     $strReturn .= $this->getLang("login_change_success", "user");
-                }
-                else {
+                } else {
                     $strReturn .= $this->getLang("login_change_error", "user");
                 }
             }
-        }
-        else {
+        } else {
             $strReturn .= $this->getLang("login_change_error", "user");
         }
 
@@ -205,12 +221,24 @@ class LoginAdmin extends AdminController implements AdminInterface
             $this->loadPostLoginSite();
 
             return true;
-        }
-        else {
+        } else {
             ResponseObject::getInstance()->setStrRedirectUrl(Link::getLinkAdminHref("login", "login", "&loginerror=1"));
             return false;
         }
     }
+
+
+    /**
+     * Ends the session of the current user
+     *
+     * @return string
+     */
+    protected function actionLogout()
+    {
+        $this->objSession->logout();
+        return "<message><success>".xmlSafeString($this->getLang("logout_xml", "system"))."</success></message>";
+    }
+
 
     /**
      * Ends the session of the current user and
@@ -230,8 +258,7 @@ class LoginAdmin extends AdminController implements AdminInterface
             ResponseObject::getInstance()->setStrRedirectUrl(_indexpath_."?".$this->objSession->getSession(self::SESSION_REFERER));
             $this->objSession->sessionUnset(self::SESSION_REFERER);
             $this->objSession->setSession(self::SESSION_LOAD_FROM_PARAMS, "true");
-        }
-        else {
+        } else {
             //route to the default module
             $strModule = "dashboard";
             if (Session::getInstance()->isLoggedin()) {
@@ -242,5 +269,47 @@ class LoginAdmin extends AdminController implements AdminInterface
             }
             ResponseObject::getInstance()->setStrRedirectUrl(Link::getLinkAdminHref($strModule));
         }
+    }
+
+    /**
+     * This method is just a placeholder to avoid error-flooding of the admins.
+     * If the session expires, the browser tries one last time to
+     * fetch the number of messages for the user. Since the user is "logged out" by the server,
+     * an "not authorized" exception is called - what is correct, but not really required right here.
+     *
+     * @return string
+     *
+     */
+    protected function actionGetRecentMessages()
+    {
+        ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
+        return "<error>".$this->getLang("commons_error_permissions")."</error>";
+    }
+
+    /**
+     * Generates the wadl file for the current module
+     *
+     * @return string
+     */
+    protected function actionWADL()
+    {
+        $objWadl = new Wadlgenerator("admin", "login");
+        $objWadl->addIncludeGrammars("http://apidocs.kajona.de/xsd/message.xsd");
+
+        $objWadl->addMethod(
+            true,
+            "login",
+            array(
+                array("username", "xsd:string", true),
+                array("password", "xsd:string", true)
+            ),
+            array(),
+            array(
+                array("application/xml", "message")
+            )
+        );
+
+        $objWadl->addMethod(true, "logout", array());
+        return $objWadl->getDocument();
     }
 }

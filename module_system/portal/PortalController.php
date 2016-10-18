@@ -16,6 +16,7 @@ use Kajona\System\System\LanguagesLanguage;
 use Kajona\System\System\Link;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Reflection;
+use Kajona\System\System\RequestEntrypointEnum;
 use Kajona\System\System\ResponseObject;
 use Kajona\System\System\SystemCommon;
 use Kajona\System\System\SystemSetting;
@@ -133,19 +134,10 @@ abstract class PortalController extends AbstractController
                 }
             }
 
-            if (_xmlLoader_ === true) {
-                //check it the method is allowed for xml-requests
-                $objAnnotations = new Reflection(get_class($this));
-                if (!$objAnnotations->hasMethodAnnotation($strMethodName, "@xml") && !$this instanceof XmlPortalInterface) {
-                    throw new Exception("called method ".$strMethodName." not allowed for xml-requests", Exception::$level_FATALERROR);
-                }
-            }
-
             $this->strOutput = $this->$strMethodName();
         }
         else {
-
-            if (_xmlLoader_ === true) {
+            if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML())) {
                 $objReflection = new ReflectionClass($this);
                 throw new Exception("called method ".$strMethodName." not existing for class ".$objReflection->getName(), Exception::$level_FATALERROR);
             }

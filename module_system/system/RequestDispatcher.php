@@ -10,7 +10,6 @@
 namespace Kajona\System\System;
 
 use Kajona\System\Admin\LoginAdmin;
-use Kajona\System\Admin\LoginAdminXml;
 
 
 /**
@@ -112,14 +111,14 @@ class RequestDispatcher
             //header itself given?
             if (!issetServer($strHeaderName)) {
                 //reload to https
-                ResponseObject::getInstance()->setStrRedirectUrl(uniStrReplace("http:", "https:", _xmlLoader_ === true ? _xmlpath_ : _indexpath_)."?".getServer("QUERY_STRING"));
+                ResponseObject::getInstance()->setStrRedirectUrl(uniStrReplace("http:", "https:", ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML()) ? _xmlpath_ : _indexpath_)."?".getServer("QUERY_STRING"));
                 ResponseObject::getInstance()->sendHeaders();
                 die("Reloading using https...");
             }
             //value of header correct?
             elseif ($strHeaderValue != "" && $strHeaderValue != strtolower(getServer($strHeaderName))) {
                 //reload to https
-                ResponseObject::getInstance()->setStrRedirectUrl(uniStrReplace("http:", "https:", _xmlLoader_ === true ? _xmlpath_ : _indexpath_)."?".getServer("QUERY_STRING"));
+                ResponseObject::getInstance()->setStrRedirectUrl(uniStrReplace("http:", "https:", ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML()) ? _xmlpath_ : _indexpath_)."?".getServer("QUERY_STRING"));
                 ResponseObject::getInstance()->sendHeaders();
                 die("Reloading using https...");
             }
@@ -150,46 +149,33 @@ class RequestDispatcher
                     }
 
 
-                    if (_xmlLoader_) {
-                        if ($objModuleRequested->getStrXmlNameAdmin() != "") {
-                            $objConcreteModule = $objModuleRequested->getAdminInstanceOfConcreteModule("", true);
-                            $strReturn = $objConcreteModule->action($strAction);
-                        }
-                        else {
-                            //xml-loader not defined, try to use the regular dispatcher
-                            $objConcreteModule = $objModuleRequested->getAdminInstanceOfConcreteModule();
-                            $strReturn = $objConcreteModule->action($strAction);
-                        }
-                    }
-                    else {
-
-                        //fill the history array to track actions
+                    //fill the history array to track actions
+                    if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::INDEX()) && Carrier::getInstance()->getParam("folderview")) {
                         $objHistory = new History();
                         //Writing to the history
-                        if (Carrier::getInstance()->getParam("folderview") == "") {
-                            $objHistory->setAdminHistory();
-                        }
-
-                        $objConcreteModule = $objModuleRequested->getAdminInstanceOfConcreteModule();
-
-                        if (Carrier::getInstance()->getParam("blockAction") != "1") {
-                            $objConcreteModule->action();
-                            $strReturn = $objConcreteModule->getModuleOutput();
-                        }
-
-                        //React, if admin was opened by the portaleditor
-                        if (Carrier::getInstance()->getParam("peClose") == "1") {
-
-                            if(getGet("peRefreshPage") != "") {
-                                $strReloadUrl = xssSafeString(getGet("peRefreshPage"));
-                                $strReturn = "<html><head></head><body><script type='text/javascript'>if(window.opener) { window.opener.location = '".$strReloadUrl."'; window.close(); } else { parent.location = '".$strReloadUrl."'; }</script></body></html>";
-                            }
-                            else {
-                                $strReturn = "<html><head></head><body><script type='text/javascript'>if(window.opener) { window.opener.location.reload(); window.close(); } else { parent.location.reload(); }</script></body></html>";
-                            }
-                        }
-
+                        $objHistory->setAdminHistory();
                     }
+
+                    $objConcreteModule = $objModuleRequested->getAdminInstanceOfConcreteModule();
+
+                    if (Carrier::getInstance()->getParam("blockAction") != "1") {
+                        $objConcreteModule->action();
+                        $strReturn = $objConcreteModule->getModuleOutput();
+                    }
+
+                    //React, if admin was opened by the portaleditor
+                    if (Carrier::getInstance()->getParam("peClose") == "1") {
+
+                        if(getGet("peRefreshPage") != "") {
+                            $strReloadUrl = xssSafeString(getGet("peRefreshPage"));
+                            $strReturn = "<html><head></head><body><script type='text/javascript'>if(window.opener) { window.opener.location = '".$strReloadUrl."'; window.close(); } else { parent.location = '".$strReloadUrl."'; }</script></body></html>";
+                        }
+                        else {
+                            $strReturn = "<html><head></head><body><script type='text/javascript'>if(window.opener) { window.opener.location.reload(); window.close(); } else { parent.location.reload(); }</script></body></html>";
+                        }
+                    }
+
+
 
                 }
                 else {
@@ -209,21 +195,14 @@ class RequestDispatcher
         }
 
         if ($bitLogin) {
-            if (_xmlLoader_) {
-                $objLogin = $this->objBuilder->factory(LoginAdminXml::class);
-                $strReturn = $objLogin->action($strAction);
+            if (count(Carrier::getInstance()->getObjDB()->getTables()) == 0 && file_exists(_realpath_."installer.php")) {
+                ResponseObject::getInstance()->setStrRedirectUrl(_webpath_."/installer.php");
+                return "";
             }
-            else {
 
-                if (count(Carrier::getInstance()->getObjDB()->getTables()) == 0 && file_exists(_realpath_."installer.php")) {
-                    ResponseObject::getInstance()->setStrRedirectUrl(_webpath_."/installer.php");
-                    return "";
-                }
-
-                $objLogin = $this->objBuilder->factory(LoginAdmin::class);
-                $objLogin->action($strAction);
-                $strReturn = $objLogin->getModuleOutput();
-            }
+            $objLogin = $this->objBuilder->factory(LoginAdmin::class);
+            $objLogin->action($strAction);
+            $strReturn = $objLogin->getModuleOutput();
 
         }
 
@@ -256,34 +235,21 @@ class RequestDispatcher
         //Load the portal parts
         $objModule = SystemModule::getModuleByName($strModule);
         if ($objModule != null) {
-
-            if (_xmlLoader_) {
-                if ($objModule->getStrXmlNamePortal() != "") {
-                    $objModuleRequested = $objModule->getPortalInstanceOfConcreteModule(null, true);
-                    $strReturn = $objModuleRequested->action($strAction);
-                }
-                else {
-                    $objModuleRequested = $objModule->getPortalInstanceOfConcreteModule();
-                    $strReturn = $objModuleRequested->action($strAction);
-                }
+            if ($strModule == "pages") {
+                $strAction = "";
             }
-            else {
-                if ($strModule == "pages") {
-                    $strAction = "";
-                }
 
-                //fill the history array to track actions
+            //fill the history array to track actions
+            if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::INDEX())) {
                 $objHistory = new History();
                 $objHistory->setPortalHistory();
-
-                $objModuleRequested = $objModule->getPortalInstanceOfConcreteModule();
-                $strReturn = $objModuleRequested->action($strAction);
             }
 
-        }
-        else {
+            $objModuleRequested = $objModule->getPortalInstanceOfConcreteModule();
+            $strReturn = $objModuleRequested->action($strAction);
 
-            if (_xmlLoader_ === false) {
+        } else {
+            if (!ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML())) {
                 if (count(Carrier::getInstance()->getObjDB()->getTables()) == 0 && file_exists(_realpath_."installer.php")) {
                     ResponseObject::getInstance()->setStrRedirectUrl(_webpath_."/installer.php");
                     return "";
@@ -364,7 +330,7 @@ class RequestDispatcher
                 $strDebug .= "<b>Classes Loaded:</b> ".Classloader::getInstance()->getIntNumberOfClassesLoaded()." ";
             }
 
-            if (_xmlLoader_ === true) {
+            if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML())) {
                 ResponseObject::getInstance()->addHeader("Kajona Debug: ".$strDebug);
             }
             else {

@@ -490,7 +490,6 @@ class NavigationAdmin extends AdminSimple implements AdminInterface {
      *
      * @return string
      * @since 3.3.0
-     * @xml
      * @permissions view
      */
     protected function actionGetChildNodes() {

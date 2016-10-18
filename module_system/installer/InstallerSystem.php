@@ -10,6 +10,7 @@
 namespace Kajona\System\Installer;
 
 use Kajona\System\System\Carrier;
+use Kajona\System\System\Classloader;
 use Kajona\System\System\Date;
 use Kajona\System\System\DbDatatypes;
 use Kajona\System\System\Filesystem;
@@ -20,6 +21,7 @@ use Kajona\System\System\MessagingConfig;
 use Kajona\System\System\MessagingMessage;
 use Kajona\System\System\OrmBase;
 use Kajona\System\System\OrmSchemamanager;
+use Kajona\System\System\Reflection;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\Rights;
 use Kajona\System\System\SystemAspect;
@@ -256,15 +258,15 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         //Now we have to register module by module
 
         //The Systemkernel
-        $this->registerModule("system", _system_modul_id_, "", "SystemAdmin.php", $this->objMetadata->getStrVersion(), true, "", "SystemAdminXml.php");
+        $this->registerModule("system", _system_modul_id_, "", "SystemAdmin.php", $this->objMetadata->getStrVersion());
         //The Rightsmodule
         $this->registerModule("right", _system_modul_id_, "", "RightAdmin.php", $this->objMetadata->getStrVersion(), false);
         //The Usermodule
-        $this->registerModule("user", _user_modul_id_, "", "UserAdmin.php", $this->objMetadata->getStrVersion(), true);
+        $this->registerModule("user", _user_modul_id_, "", "UserAdmin.php", $this->objMetadata->getStrVersion());
         //languages
-        $this->registerModule("languages", _languages_modul_id_, "", "LanguagesAdmin.php", $this->objMetadata->getStrVersion(), true);
+        $this->registerModule("languages", _languages_modul_id_, "", "LanguagesAdmin.php", $this->objMetadata->getStrVersion());
         //messaging
-        $this->registerModule("messaging", _messaging_module_id_, "", "MessagingAdmin.php", $this->objMetadata->getStrVersion(), true);
+        $this->registerModule("messaging", _messaging_module_id_, "", "MessagingAdmin.php", $this->objMetadata->getStrVersion());
 
 
         //Registering a few constants
@@ -577,6 +579,11 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
             $strReturn .= $this->update_511_512();
         }
 
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.1.2") {
+            $strReturn .= $this->update_512_513();
+        }
+
         return $strReturn."\n\n";
     }
 
@@ -788,6 +795,23 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1.2");
+        return $strReturn;
+    }
+
+    private function update_512_513()
+    {
+        $strReturn = "Updating 5.1.2 to 5.1.3...\n";
+
+        $strReturn .= "Removing xml controller entries...\n";
+
+        $this->objDB->removeColumn("system_module", "module_xmlfilenameportal");
+        $this->objDB->removeColumn("system_module", "module_xmlfilenameadmin");
+
+        Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBSTATEMENTS | Carrier::INT_CACHE_TYPE_DBQUERIES | Carrier::INT_CACHE_TYPE_MODULES | Carrier::INT_CACHE_TYPE_DBTABLES);
+        Classloader::getInstance()->flushCache();
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1.3");
         return $strReturn;
     }
 }

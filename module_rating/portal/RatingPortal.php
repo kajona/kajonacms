@@ -47,7 +47,6 @@ class RatingPortal extends PortalController implements PortalInterface
         $intNumberOfIcons = RatingRate::$intMaxRatingValue;
 
         if ($bitRatingAllowed && $bitPermissions) {
-
             for ($intI = 1; $intI <= $intNumberOfIcons; $intI++) {
                 $arrTemplate = array();
                 $arrTemplate["rating_icon_number"] = $intI;
@@ -57,12 +56,10 @@ class RatingPortal extends PortalController implements PortalInterface
 
                 $strIcons .= $this->objTemplate->fillTemplateFile($arrTemplate, "/module_rating/".$strTemplate, "rating_icon");
             }
-        }
-        else {
+        } else {
             if (!$bitRatingAllowed) {
                 $strRatingBarTitle = $this->getLang("rating_voted");
-            }
-            else {
+            } else {
                 $strRatingBarTitle = $this->getLang("commons_error_permissions");
             }
         }
@@ -77,6 +74,33 @@ class RatingPortal extends PortalController implements PortalInterface
             "/module_rating/".$strTemplate,
             "rating_bar"
         );
+    }
+
+
+    /**
+     * Saves a rating to a passed rating-file
+     *
+     * @return string the new rating for the passed file
+     * @permissions view
+     */
+    protected function actionSaveRating()
+    {
+
+        //rating already existing?
+        $objRating = RatingRate::getRating($this->getSystemid());
+        if ($objRating == null) {
+            $objRating = new RatingRate();
+            $objRating->setStrRatingSystemid($this->getSystemid());
+            $objRating->updateObjectToDb();
+        }
+
+        $strReturn = "<rating>";
+        $objRating->saveRating($this->getParam("rating"));
+        $objRating->updateObjectToDb();
+        $strReturn .= round($objRating->getFloatRating(), 2);
+
+        $strReturn .= "</rating>";
+        return $strReturn;
     }
 
 }

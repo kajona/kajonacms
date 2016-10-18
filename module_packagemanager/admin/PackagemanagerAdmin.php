@@ -213,7 +213,6 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
      * Checks if an update is available for a list of packages.
      * Renders the matching icon and tooltip or the link to update a package.
      *
-     * @xml
      * @permissions view,edit
      * @return string
      */

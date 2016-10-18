@@ -13,6 +13,8 @@ use Kajona\System\Admin\AdminController;
 use Kajona\System\Admin\AdminInterface;
 use Kajona\System\Admin\Reports\AdminStatsreportsInterface;
 use Kajona\System\System\Carrier;
+use Kajona\System\System\Date;
+use Kajona\System\System\Link;
 use Kajona\System\System\Pluginmanager;
 use Kajona\System\System\StringUtil;
 use ReflectionClass;
@@ -38,11 +40,11 @@ class StatsAdmin extends AdminController implements AdminInterface
     public static $STR_PLUGIN_EXTENSION_POINT = "core.stats.admin.statsreport";
 
     /**
-     * @var \Kajona\System\System\Date
+     * @var Date
      */
     private $objDateStart;
     /**
-     * @var \Kajona\System\System\Date
+     * @var Date
      */
     private $objDateEnd;
     private $intInterval = 2;
@@ -52,7 +54,7 @@ class StatsAdmin extends AdminController implements AdminInterface
      */
     private $objPluginManager;
 
-    static $arrReports = null;
+    private static $arrReports = null;
 
     /**
      * Constructor
@@ -68,7 +70,7 @@ class StatsAdmin extends AdminController implements AdminInterface
         }
 
         //Start: first day of current month
-        $this->objDateStart = new \Kajona\System\System\Date();
+        $this->objDateStart = new Date();
         $this->objDateStart->setTimeInOldStyle($intDateStart);
 
         //End: Current Day of month
@@ -77,7 +79,7 @@ class StatsAdmin extends AdminController implements AdminInterface
             $intDateEnd = time() + 3600 * 24;
         }
 
-        $this->objDateEnd = new \Kajona\System\System\Date();
+        $this->objDateEnd = new Date();
         $this->objDateEnd->setTimeInOldStyle($intDateEnd);
 
 
@@ -112,12 +114,11 @@ class StatsAdmin extends AdminController implements AdminInterface
         $arrReturn = array();
         //Load all plugins available and create the navigation
         if ($this->objPluginManager != null) {
-
             /** @var AdminStatsreportsInterface[] $arrReports */
             $arrReports = $this->getArrReports();
 
             foreach ($arrReports as $objPlugin) {
-                $arrReturn[] = array("view", getLinkAdmin($this->getArrModule("modul"), $this->getActionForReport($objPlugin), "", $objPlugin->getTitle(), "", "", true, "adminnavi"));
+                $arrReturn[] = array("view", Link::getLinkAdmin($this->getArrModule("modul"), $this->getActionForReport($objPlugin), "", $objPlugin->getTitle(), "", "", true, "adminnavi"));
             }
         }
 
@@ -156,7 +157,7 @@ class StatsAdmin extends AdminController implements AdminInterface
 
         foreach ($this->getArrReports() as $objOneReport) {
             if ($this->getActionForReport($objOneReport) == $this->getParam("action")) {
-                $arrPathLinks[] = getLinkAdmin($this->getArrModule("modul"), $this->getActionForReport($objOneReport), "", $objOneReport->getTitle());
+                $arrPathLinks[] = Link::getLinkAdmin($this->getArrModule("modul"), $this->getActionForReport($objOneReport), "", $objOneReport->getTitle());
             }
         }
 
@@ -205,7 +206,7 @@ class StatsAdmin extends AdminController implements AdminInterface
         $strReturn = "";
 
         //And create the selector
-        $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], $this->getParam("action")));
+        $strReturn .= $this->objToolkit->formHeader(Link::getLinkAdminHref($this->arrModule["modul"], $this->getParam("action")));
         $strReturn .= $this->objToolkit->formInputHidden("sort", $this->getParam("sort"));
         $strReturn .= $this->objToolkit->formInputHidden("action", $this->getParam("action"));
         $strReturn .= $this->objToolkit->formInputHidden("filter", "true");
@@ -241,11 +242,10 @@ class StatsAdmin extends AdminController implements AdminInterface
     {
 
         if ($this->getParam("filter") == "true") {
-
-            $this->objDateStart = new \Kajona\System\System\Date();
+            $this->objDateStart = new Date();
             $this->objDateStart->generateDateFromParams("start", $this->getAllParams());
 
-            $this->objDateEnd = new \Kajona\System\System\Date();
+            $this->objDateEnd = new Date();
             $this->objDateEnd->generateDateFromParams("end", $this->getAllParams());
 
             Carrier::getInstance()->getObjSession()->setSession(self::$STR_SESSION_KEY_DATE_START, $this->objDateStart->getTimeInOldStyle());
@@ -253,8 +253,7 @@ class StatsAdmin extends AdminController implements AdminInterface
 
             if ($this->getParam("interval") != "") {
                 $this->intInterval = (int)$this->getParam("interval");
-            }
-            else {
+            } else {
                 $this->intInterval = 2;
             }
 
@@ -346,4 +345,57 @@ class StatsAdmin extends AdminController implements AdminInterface
 
         return $strClassname;
     }
+
+
+    /**
+     * Triggers the "real" creation of the report and wraps the code inline into a xml-structure
+     *
+     * @return string
+     * @permissions view
+     */
+    protected function actionGetReport()
+    {
+        $strPlugin = $this->getParam("plugin");
+        $strReturn = "";
+
+        $objPluginManager = new Pluginmanager(StatsAdmin::$STR_PLUGIN_EXTENSION_POINT, "/admin/reports");
+
+
+        $objPlugin = null;
+        foreach ($objPluginManager->getPlugins(array(Carrier::getInstance()->getObjDB(), $this->objToolkit, $this->getObjLang())) as $objOneReport) {
+            if ($this->getActionForReport($objOneReport) == $strPlugin) {
+                $objPlugin = $objOneReport;
+                break;
+            }
+        }
+
+
+        if ($objPlugin !== null && $objPlugin instanceof AdminStatsreportsInterface) {
+            //get date-params as ints
+            $intStartDate = mktime(0, 0, 0, $this->objDateStart->getIntMonth(), $this->objDateStart->getIntDay(), $this->objDateStart->getIntYear());
+            $intEndDate = mktime(0, 0, 0, $this->objDateEnd->getIntMonth(), $this->objDateEnd->getIntDay(), $this->objDateEnd->getIntYear());
+            $objPlugin->setEndDate($intEndDate);
+            $objPlugin->setStartDate($intStartDate);
+            $objPlugin->setInterval($this->intInterval);
+
+            $arrImage = $objPlugin->getReportGraph();
+
+            if (!is_array($arrImage)) {
+                $arrImage = array($arrImage);
+            }
+
+            foreach ($arrImage as $strImage) {
+                if ($strImage != "") {
+                    $strReturn .= $this->objToolkit->getGraphContainer($strImage);
+                }
+            }
+
+
+            $strReturn .= $objPlugin->getReport();
+            $strReturn = "<content><![CDATA[".$strReturn."]]></content>";
+        }
+
+        return $strReturn;
+    }
+
 }

@@ -198,7 +198,7 @@ class DatabaseUpsertTest extends Testbase
             $this->runInsertAndUpdate($arrOneRow[0], $arrOneRow[1], $arrOneRow[2], $arrOneRow[3]);
         }
         $intTime += microtime(true);
-        echo "runInsertAndUpdate: ".sprintf('%f', $intTime) ." sec".PHP_EOL;
+        //echo "runInsertAndUpdate: ".sprintf('%f', $intTime) ." sec".PHP_EOL;
 
 
 
@@ -207,7 +207,7 @@ class DatabaseUpsertTest extends Testbase
             $this->runUpsert($arrOneRow[0], $arrOneRow[1], $arrOneRow[2], $arrOneRow[3]);
         }
         $intTime2 += microtime(true);
-        echo "runUpsert:          ".sprintf('%f', $intTime2) ." sec".PHP_EOL;
+        //echo "runUpsert:          ".sprintf('%f', $intTime2) ." sec".PHP_EOL;
 
 
         //Disbaled due to performance glitches on oracle

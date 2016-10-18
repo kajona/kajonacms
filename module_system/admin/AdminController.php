@@ -22,6 +22,7 @@ use Kajona\System\System\LanguagesLanguage;
 use Kajona\System\System\Link;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Reflection;
+use Kajona\System\System\RequestEntrypointEnum;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\ResponseObject;
 use Kajona\System\System\Rights;
@@ -198,10 +199,13 @@ abstract class AdminController extends AbstractController
      */
     public final function getModuleOutput()
     {
-
         //skip rendering everything if we just want to redirect...
         if ($this->strOutput == "" && ResponseObject::getInstance()->getStrRedirectUrl() != "") {
             return "";
+        }
+
+        if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML())) {
+            return $this->strOutput;
         }
 
 
@@ -264,7 +268,7 @@ abstract class AdminController extends AbstractController
      */
     private function validateAndUpdateCurrentAspect()
     {
-        if (_xmlLoader_ === true || $this->getArrModule("template") == "/folderview.tpl") {
+        if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML()) || $this->getArrModule("template") == "/folderview.tpl") {
             return;
         }
 
@@ -441,7 +445,7 @@ abstract class AdminController extends AbstractController
                     $this->strOutput = $this->objToolkit->warningBox($this->getLang("commons_error_permissions"));
                     $objException = new Exception("you are not authorized/authenticated to call this action", Exception::$level_ERROR);
 
-                    if (_xmlLoader_) {
+                    if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML())) {
                         throw $objException;
                     }
                     else {
@@ -449,21 +453,6 @@ abstract class AdminController extends AbstractController
                         $objException->processException();
                         return $this->strOutput;
                     }
-                }
-            }
-
-
-            //validate the loading channel - xml or regular
-            if (_xmlLoader_ === true) {
-                //check it the method is allowed for xml-requests
-
-                if (!$objAnnotations->hasMethodAnnotation($strMethodName, "@xml") && !$this instanceof XmlAdminInterface) {
-                    throw new Exception("called method ".$strMethodName." not allowed for xml-requests", Exception::$level_FATALERROR);
-                }
-
-                if ($this->getArrModule("modul") != $this->getParam("module") && ($this->getParam("module") != "messaging")) {
-                    ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
-                    throw new Exception("you are not authorized/authenticated to call this action", Exception::$level_FATALERROR);
                 }
             }
 
@@ -476,7 +465,7 @@ abstract class AdminController extends AbstractController
                 throw new Exception("You have to be logged in to use the portal editor!!!", Exception::$level_ERROR);
             }
 
-            if ($this instanceof LoginAdminXml) {
+            if ($this instanceof LoginAdmin && ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML())) {
                 ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
                 ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_XML);
                 Xml::setBitSuppressXmlHeader(true);

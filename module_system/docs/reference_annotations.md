@@ -43,4 +43,3 @@ Annotation         |Context    |Introduced in     |Description
 |@templateExport	|Property	|4.5|	A property marked with this annotation will be picked up by the portal-template-mapper, the property is available to be used in templates.
 |@templateMapper name	|Property	|4.5	|Optional annotation. If present, the named mapper will be used to transform the propties' value before writing it back to the template.
 |@versionable	|Property	|4.1	|If the changlog is enabled, the old and new values are added to the changelog on object updates.
-|@xml	|Action-Method	|4.0	|Allows the xml-loader to call the annotated method.

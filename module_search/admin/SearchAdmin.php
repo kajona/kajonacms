@@ -210,7 +210,6 @@ class SearchAdmin extends AdminSimple implements AdminInterface
      * Decoupled rendering of search results
      *
      * @permissions view
-     * @xml
      */
     public function actionRenderSearch()
     {
@@ -313,7 +312,6 @@ class SearchAdmin extends AdminSimple implements AdminInterface
      *
      * @return string
      * @permissions view
-     * @xml
      */
     protected function actionSearchXml()
     {

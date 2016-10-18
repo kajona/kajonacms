@@ -209,7 +209,7 @@ class DbPostgres extends DbBase
      */
     public function getTables()
     {
-        $arrTemp = $this->getPArray("SELECT *, table_name as name FROM information_schema.tables", array());
+        $arrTemp = $this->getPArray("SELECT *, table_name as name FROM information_schema.tables WHERE table_schema = 'public'", array());
 
         $arrReturn = array();
         foreach ($arrTemp as $arrOneRow) {
@@ -218,7 +218,7 @@ class DbPostgres extends DbBase
             }
         }
 
-        return $arrTemp;
+        return $arrReturn;
     }
 
     /**
@@ -552,5 +552,16 @@ class DbPostgres extends DbBase
         //add the limits to the query
         return $strQuery." LIMIT  ".$intEnd." OFFSET ".$intStart;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function flushQueryCache()
+    {
+        $this->_pQuery("DISCARD ALL", array());
+        parent::flushQueryCache();
+    }
+
+
 }
 
