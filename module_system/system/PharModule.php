@@ -85,7 +85,6 @@ class PharModule
 
             if (!isset($arrCodeFiles[$strClassname])) {
                 $arrCodeFiles[$strClassname] = $strPharPath;
-                break;
             }
         }
 
