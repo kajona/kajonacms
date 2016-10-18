@@ -67,10 +67,7 @@ class InstallerStats extends InstallerBase implements InstallerRemovableInterfac
             _stats_modul_id_,
             "",
             "StatsAdmin.php",
-            $this->objMetadata->getStrVersion(),
-            true,
-            "",
-            "StatsAdminXml.php"
+            $this->objMetadata->getStrVersion()
         );
 
         $strReturn .= "Registering system-constants...\n";
@@ -132,7 +129,7 @@ class InstallerStats extends InstallerBase implements InstallerRemovableInterfac
         //delete the tables
         foreach (array("stats_data", "stats_ip2country") as $strOneTable) {
             $strReturn .= "Dropping table ".$strOneTable."...\n";
-            if (!$this->objDB->_pQuery("DROP TABLE ".$this->objDB->encloseTableName(_dbprefix_.$strOneTable)."", array())) {
+            if (!$this->objDB->_pQuery("DROP TABLE ".$this->objDB->encloseTableName(_dbprefix_.$strOneTable), array())) {
                 $strReturn .= "Error deleting table, aborting.\n";
                 return false;
             }
