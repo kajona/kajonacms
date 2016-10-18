@@ -283,7 +283,7 @@ class Classloader
         foreach ($arrModules as $strPath => $strSingleModule) {
             if (strpos($strSingleModule, "module_") === 0) {
                 if (is_dir(_realpath_.$strPath)) {
-                    $arrFiles = array_merge($arrFiles, $this->getRecursiveFiles(_realpath_.$strPath, self::$arrCodeFoldersBlacklist));
+                    $arrFiles = array_merge($arrFiles, $this->getRecursiveFiles(_realpath_.$strPath));
                 }
             }
         }
@@ -293,15 +293,14 @@ class Classloader
 
     /**
      * @param string $strPath
-     * @param array $arrBlacklist
      * @return array
      */
-    private function getRecursiveFiles($strPath, array $arrBlacklist)
+    private function getRecursiveFiles($strPath)
     {
         $arrFiles = array();
         $arrTempFiles = scandir($strPath);
         foreach ($arrTempFiles as $strFile) {
-            if ($strFile != "." && $strFile != ".." && !in_array($strFile, $arrBlacklist)) {
+            if ($strFile != "." && $strFile != ".." && !in_array($strFile, self::$arrCodeFoldersBlacklist)) {
                 if (strpos($strFile, ".php") !== false) {
                     // if there is an underscore we have a legacy class name else a camel case
                     if (strpos($strFile, "_") !== false) {
@@ -316,7 +315,7 @@ class Classloader
                         }
                     }
                 } elseif (is_dir($strPath . "/" . $strFile)) {
-                    $arrFiles = array_merge($arrFiles, $this->getRecursiveFiles($strPath . "/" . $strFile, $arrBlacklist));
+                    $arrFiles = array_merge($arrFiles, $this->getRecursiveFiles($strPath . "/" . $strFile));
                 }
             }
         }
