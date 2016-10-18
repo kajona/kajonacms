@@ -110,7 +110,7 @@ class NewsTest extends Testbase
         $this->flushDBCache();
 
 
-        $objNewsPortalXML = new NewsPortalXml();
+        $objNewsPortalXML = new NewsPortal();
         $objNewsPortalXML->setParam("feedTitle", "autotest");
         $strFeed = $objNewsPortalXML->action("newsFeed");
         $this->assertTrue(uniStrpos($strFeed, "<title>autotest</title>") !== false, __FILE__." check rss feed");
