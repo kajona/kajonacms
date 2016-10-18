@@ -78,8 +78,7 @@ class Exception extends \Exception
             if (Database::getInstance()->getBitConnected()) {
                 $strAdminMail = SystemSetting::getConfigValue("_system_admin_email_");
             }
-        }
-        catch (Exception $objEx) {
+        } catch (Exception $objEx) {
         }
 
         if ($strAdminMail != "") {
@@ -152,7 +151,6 @@ class Exception extends \Exception
         }
 
 
-
         //Handle  errors.
         $strLogMessage = basename($this->getFile()).":".$this->getLine()." -- ".$this->getMessage();
         Logger::getInstance()->addLogRow($strLogMessage, Logger::$levelError);
@@ -173,22 +171,21 @@ class Exception extends \Exception
             die();
         }
 
-
     }
 
     /**
      * Renders the passed exception, either using the xml channes or using the web channel
+     *
      * @param Exception $objException
      *
      * @return string
      */
     public static function renderException(Exception $objException)
     {
-        if (_xmlLoader_ === true) {
+        if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML())) {
             $strErrormessage = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
             $strErrormessage .= "<error>".xmlSafeString($objException->getMessage())."</error>";
-        }
-        else {
+        } else {
             $strErrormessage = "<html><head></head><body><div style=\"border: 1px solid red; padding: 5px; margin: 20px; font-family: arial,verdana,sans-serif; font-size: 12px;  \">\n";
             $strErrormessage .= "<div style=\"background-color: #cccccc; color: #000000; font-weight: bold; \">An error occurred:</div>\n";
             $strErrormessage .= "<pre>".(htmlspecialchars($objException->getMessage(), ENT_QUOTES, "UTF-8", false))."</pre><br />";

@@ -29,6 +29,7 @@ use Kajona\System\System\Lockmanager;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\OrmBase;
 use Kajona\System\System\Reflection;
+use Kajona\System\System\RequestEntrypointEnum;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\ResponseObject;
 use Kajona\System\System\ServiceProvider;
@@ -58,7 +59,7 @@ class PagesContentAdmin extends AdminSimple implements AdminInterface
     {
         parent::__construct();
 
-        if (_xmlLoader_) {
+        if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML())) {
             $this->setArrModuleEntry("modul", "pages_content");
         }
 

@@ -268,7 +268,7 @@ abstract class AdminController extends AbstractController
      */
     private function validateAndUpdateCurrentAspect()
     {
-        if (_xmlLoader_ === true || $this->getArrModule("template") == "/folderview.tpl") {
+        if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML()) || $this->getArrModule("template") == "/folderview.tpl") {
             return;
         }
 
@@ -445,7 +445,7 @@ abstract class AdminController extends AbstractController
                     $this->strOutput = $this->objToolkit->warningBox($this->getLang("commons_error_permissions"));
                     $objException = new Exception("you are not authorized/authenticated to call this action", Exception::$level_ERROR);
 
-                    if (_xmlLoader_) {
+                    if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML())) {
                         throw $objException;
                     }
                     else {

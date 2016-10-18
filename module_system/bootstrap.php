@@ -17,6 +17,7 @@ else {
 
 // -- Loader pre-configuration -----------------------------------------------------------------------------------------
 if (!defined("_xmlLoader_")) {
+    /** @depreacted use ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML()) instead */
     define("_xmlLoader_", false);
 }
 

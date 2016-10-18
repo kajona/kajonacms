@@ -16,6 +16,7 @@ use Kajona\System\System\LanguagesLanguage;
 use Kajona\System\System\Link;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Reflection;
+use Kajona\System\System\RequestEntrypointEnum;
 use Kajona\System\System\ResponseObject;
 use Kajona\System\System\SystemCommon;
 use Kajona\System\System\SystemSetting;
@@ -136,8 +137,7 @@ abstract class PortalController extends AbstractController
             $this->strOutput = $this->$strMethodName();
         }
         else {
-
-            if (_xmlLoader_ === true) {
+            if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML())) {
                 $objReflection = new ReflectionClass($this);
                 throw new Exception("called method ".$strMethodName." not existing for class ".$objReflection->getName(), Exception::$level_FATALERROR);
             }

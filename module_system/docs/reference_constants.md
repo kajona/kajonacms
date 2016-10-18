@@ -81,7 +81,7 @@ Kajona provides a number of constants created during runtime or based on config-
 
 * `_realpath_` absolute path on the filesystem pointing to the Kajona installation. Example: /var/www/html/kajona
 * `_webpath_` absolute URL pointing to the current Kajona installation. Example: http://www.example.com/kajona. The path is based on the browser-request!
-* `_xmlLoader_` boolean value indicating if the current request is triggered by index.php (false) or xml.php (true) 
+* `_xmlLoader_` boolean value indicating if the current request is triggered by index.php (false) or xml.php (true). Deprecated, please use `ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML())` instead
 
 The following constants are based on the values given in config.php:
 
