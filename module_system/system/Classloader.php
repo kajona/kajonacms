@@ -45,8 +45,8 @@ class Classloader
      * @var array
      */
     private static $arrCodeFoldersBlacklist = array(
-        "scripts",
-        "vendor",
+        "scripts/",
+        "vendor/",
     );
 
     /**
@@ -300,7 +300,7 @@ class Classloader
         $arrFiles = array();
         $arrTempFiles = scandir($strPath);
         foreach ($arrTempFiles as $strFile) {
-            if ($strFile != "." && $strFile != ".." && !in_array($strFile, self::$arrCodeFoldersBlacklist)) {
+            if ($strFile != "." && $strFile != ".." && !in_array($strFile . "/", self::$arrCodeFoldersBlacklist)) {
                 if (strpos($strFile, ".php") !== false) {
                     // if there is an underscore we have a legacy class name else a camel case
                     if (strpos($strFile, "_") !== false) {
