@@ -107,7 +107,7 @@ class Lang
      * If you have placeholders in the property (like {1}, {2}, you may replace them with the values of the third param.
      *
      * @param string $strText
-     * @param $strModule
+     * @param string $strModule the module does not contain the module_ prefix
      * @param array $arrParameters an array of variables which are embedded into the string
      *
      * @return string
