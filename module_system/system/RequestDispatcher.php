@@ -10,7 +10,6 @@
 namespace Kajona\System\System;
 
 use Kajona\System\Admin\LoginAdmin;
-use Kajona\System\Admin\LoginAdminXml;
 
 
 /**
@@ -209,8 +208,8 @@ class RequestDispatcher
         }
 
         if ($bitLogin) {
-            if (_xmlLoader_) {
-                $objLogin = $this->objBuilder->factory(LoginAdminXml::class);
+            if (_xmlLoader_) { //TODO: still required?
+                $objLogin = $this->objBuilder->factory(LoginAdmin::class);
                 $strReturn = $objLogin->action($strAction);
             }
             else {

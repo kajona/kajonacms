@@ -85,11 +85,11 @@ abstract class InstallerBase extends Root implements InstallerInterface {
 	 * @param string $strFileAdmin
 	 * @param string $strVersion
 	 * @param bool $bitNavi
-	 * @param string $strXmlPortal
-	 * @param string $strXmlAdmin
+	 * @internal string $strXmlPortal
+	 * @internal string $strXmlAdmin
 	 * @return string the new SystemID of the record
 	 */
-	protected function registerModule($strName, $intModuleNr, $strFilePortal, $strFileAdmin, $strVersion, $bitNavi, $strXmlPortal = "", $strXmlAdmin = "") {
+	protected function registerModule($strName, $intModuleNr, $strFilePortal, $strFileAdmin, $strVersion, $bitNavi = true, $strXmlPortal = "", $strXmlAdmin = "") {
 
         $this->objDB->flushQueryCache();
 
@@ -103,8 +103,6 @@ abstract class InstallerBase extends Root implements InstallerInterface {
         $objModule->setStrNameAdmin($strFileAdmin);
         $objModule->setStrVersion($strVersion);
         $objModule->setIntNavigation($bitNavi ? 1 : 0);
-        $objModule->setStrXmlNamePortal($strXmlPortal);
-        $objModule->setStrXmlNameAdmin($strXmlAdmin);
         $objModule->setIntDate(time());
         $objModule->setIntModuleNr($intModuleNr);
         $objModule->setArrModuleEntry("moduleId", $intModuleNr);
