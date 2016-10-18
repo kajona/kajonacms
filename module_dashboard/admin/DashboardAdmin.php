@@ -56,7 +56,7 @@ class DashboardAdmin extends AdminController implements AdminInterface
     protected function getArrOutputNaviEntries()
     {
         $arrReturn = parent::getArrOutputNaviEntries();
-        if(isset($arrReturn[count($arrReturn) - 2])) {
+        if (isset($arrReturn[count($arrReturn) - 2])) {
             unset($arrReturn[count($arrReturn) - 2]);
         }
         return $arrReturn;
@@ -78,10 +78,10 @@ class DashboardAdmin extends AdminController implements AdminInterface
         $objDashboardmodel = new DashboardWidget();
         $arrColumns = array();
         //build each row
-        foreach($this->arrColumnsOnDashboard as $strColumnName) {
+        foreach ($this->arrColumnsOnDashboard as $strColumnName) {
             $strColumnContent = $this->objToolkit->getDashboardColumnHeader($strColumnName);
             $strWidgetContent = "";
-            foreach($objDashboardmodel->getWidgetsForColumn($strColumnName, SystemAspect::getCurrentAspectId()) as $objOneSystemmodel) {
+            foreach ($objDashboardmodel->getWidgetsForColumn($strColumnName, SystemAspect::getCurrentAspectId()) as $objOneSystemmodel) {
                 $strWidgetContent .= $this->layoutAdminWidget($objOneSystemmodel);
             }
 
@@ -244,11 +244,11 @@ JS;
     {
         $strReturn = "";
         //step 1: select a widget, plz
-        if($this->getParam("step") == "") {
+        if ($this->getParam("step") == "") {
             $arrWidgetsAvailable = DashboardWidget::getListOfWidgetsAvailable();
 
             $arrDD = array();
-            foreach($arrWidgetsAvailable as $strOneWidget) {
+            foreach ($arrWidgetsAvailable as $strOneWidget) {
                 /** @var $objWidget AdminwidgetInterface|Adminwidget */
                 $objWidget = new $strOneWidget();
                 $arrDD[$strOneWidget] = $objWidget->getWidgetName();
@@ -256,7 +256,7 @@ JS;
             }
 
             $arrColumnsAvailable = array();
-            foreach($this->arrColumnsOnDashboard as $strOneColumn) {
+            foreach ($this->arrColumnsOnDashboard as $strOneColumn) {
                 $arrColumnsAvailable[$strOneColumn] = $this->getLang($strOneColumn);
             }
 
@@ -269,17 +269,15 @@ JS;
             $strReturn .= $this->objToolkit->formClose();
 
             $strReturn .= $this->objToolkit->setBrowserFocus("widget");
-        }
-        //step 2: loading the widget and allow it to show a view fields
-        else if($this->getParam("step") == "2") {
+        } //step 2: loading the widget and allow it to show a view fields
+        elseif ($this->getParam("step") == "2") {
             $strWidgetClass = $this->getParam("widget");
             /** @var Adminwidget|AdminwidgetInterface $objWidget */
             $objWidget = new $strWidgetClass();
 
-            if($objWidget->getEditForm() == "") {
+            if ($objWidget->getEditForm() == "") {
                 $this->adminReload(Link::getLinkAdminHref("dashboard", "addWidgetToDashboard", "&step=3&widget=".$strWidgetClass."&column=".$this->getParam("column")));
-            }
-            else {
+            } else {
                 //ask the widget to generate its form-parts and wrap our elements around
                 $strReturn .= $this->objToolkit->formHeader(Link::getLinkAdminHref("dashboard", "addWidgetToDashboard"));
                 $strReturn .= $objWidget->getEditForm();
@@ -289,9 +287,8 @@ JS;
                 $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
                 $strReturn .= $this->objToolkit->formClose();
             }
-        }
-        //step 3: save all to the database
-        else if($this->getParam("step") == "3") {
+        } //step 3: save all to the database
+        elseif ($this->getParam("step") == "3") {
             //instantiate the concrete widget
             $strWidgetClass = $this->getParam("widget");
             /** @var Adminwidget|AdminwidgetInterface $objWidget */
@@ -307,10 +304,9 @@ JS;
             $objDashboard->setStrColumn($this->getParam("column"));
             $objDashboard->setStrUser($this->objSession->getUserID());
             $objDashboard->setStrAspect(SystemAspect::getCurrentAspectId());
-            if($objDashboard->updateObjectToDb(DashboardWidget::getWidgetsRootNodeForUser($this->objSession->getUserID(), SystemAspect::getCurrentAspectId()))) {
+            if ($objDashboard->updateObjectToDb(DashboardWidget::getWidgetsRootNodeForUser($this->objSession->getUserID(), SystemAspect::getCurrentAspectId()))) {
                 $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul")));
-            }
-            else {
+            } else {
                 return $this->getLang("errorSavingWidget");
             }
         }
@@ -330,7 +326,7 @@ JS;
     {
         $strReturn = "";
         $objDashboardwidget = new DashboardWidget($this->getSystemid());
-        if(!$objDashboardwidget->deleteObject()) {
+        if (!$objDashboardwidget->deleteObject()) {
             throw new Exception("Error deleting widget", Exception::$level_ERROR);
         }
 
@@ -350,7 +346,7 @@ JS;
     {
         $strReturn = "";
         $this->setArrModuleEntry("template", "/folderview.tpl");
-        if($this->getParam("saveWidget") == "") {
+        if ($this->getParam("saveWidget") == "") {
             $objDashboardwidget = new DashboardWidget($this->getSystemid());
             $objWidget = $objDashboardwidget->getConcreteAdminwidget();
 
@@ -361,8 +357,7 @@ JS;
             $strReturn .= $this->objToolkit->formInputHidden("saveWidget", "1");
             $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
             $strReturn .= $this->objToolkit->formClose();
-        }
-        elseif($this->getParam("saveWidget") == "1") {
+        } elseif ($this->getParam("saveWidget") == "1") {
             //the dashboard entry
             $objDashboardwidget = new DashboardWidget($this->getSystemid());
             //the concrete widget
@@ -370,7 +365,7 @@ JS;
             $objConcreteWidget->loadFieldsFromArray($this->getAllParams());
 
             $objDashboardwidget->setStrContent($objConcreteWidget->getFieldsAsString());
-            if(!$objDashboardwidget->updateObjectToDb()) {
+            if (!$objDashboardwidget->updateObjectToDb()) {
                 throw new Exception("Error updating widget to db!", Exception::$level_ERROR);
             }
 
