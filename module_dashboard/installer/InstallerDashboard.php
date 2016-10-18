@@ -9,6 +9,7 @@
 
 namespace Kajona\Dashboard\Installer;
 
+use Kajona\Dashboard\System\DashboardWidget;
 use Kajona\System\System\InstallerBase;
 use Kajona\System\System\InstallerInterface;
 use Kajona\System\System\OrmSchemamanager;
@@ -28,10 +29,10 @@ class InstallerDashboard extends InstallerBase implements InstallerInterface {
 
         $objManager = new OrmSchemamanager();
 		$strReturn .= "Installing table dashboard...\n";
-        $objManager->createTable("Kajona\\Dashboard\\System\\DashboardWidget");
+        $objManager->createTable(DashboardWidget::class);
 
         //the dashboard
-        $this->registerModule("dashboard", _dashboard_module_id_, "", "DashboardAdmin.php", $this->objMetadata->getStrVersion(), true, "", "DashboardAdminXml.php");
+        $this->registerModule("dashboard", _dashboard_module_id_, "", "DashboardAdmin.php", $this->objMetadata->getStrVersion());
 
         $strReturn .= "Setting dashboard to pos 1 in navigation.../n";
         $objModule = SystemModule::getModuleByName("dashboard");
