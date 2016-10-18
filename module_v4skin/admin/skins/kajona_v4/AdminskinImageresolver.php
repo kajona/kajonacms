@@ -5,7 +5,7 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                           *
 ********************************************************************************************************/
-namespace Kajona\V4Skin\Admin\Skins\Kajona_V4;
+namespace Kajona\V4skin\Admin\Skins\Kajona_V4;
 
 use Kajona\System\Admin\AdminskinImageresolverInterface;
 
