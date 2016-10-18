@@ -64,36 +64,33 @@ class PharModule
      * @param string[] List of folders supposed to contain code.
      * @return string[] A list of class names and corresponding absolute file paths.
      */
-    public function load($arrCodeFolders)
+    public function load($arrCodeFoldersBlacklist)
     {
         $arrCodeFiles = [];
         foreach ($this->getContentMap() as $strArchivePath => $strPharPath) {
-
-            if(substr($strArchivePath, -4) !== ".php") {
+            // do we have a php file
+            if (substr($strArchivePath, -4) !== ".php") {
                 continue;
             }
 
-
-            $strFullFilename = basename($strArchivePath);
-
-            foreach ($arrCodeFolders as $strFolder) {
-                $strFolder = $strFolder.$strFullFilename;
-
-                if ($strArchivePath == $strFolder) {
-                    $strClassname = substr($strFullFilename, 0, -4);
-
-                    if (!isset($arrCodeFiles[$strClassname])) {
-                        $arrCodeFiles[$strClassname] = $strPharPath;
-                        break;
-                    }
+            // check whether path contains a blacklisted path
+            foreach ($arrCodeFoldersBlacklist as $strBlacklistName) {
+                if (strpos($strArchivePath, $strBlacklistName) !== false) {
+                    continue;
                 }
             }
 
+            $strFullFilename = basename($strArchivePath);
+            $strClassname = substr($strFullFilename, 0, -4);
+
+            if (!isset($arrCodeFiles[$strClassname])) {
+                $arrCodeFiles[$strClassname] = $strPharPath;
+                break;
+            }
         }
 
         return $arrCodeFiles;
     }
-
 
     public function loadModuleIds()
     {

@@ -40,36 +40,12 @@ class Classloader
     private $arrCoreDirs = array();
 
     /**
-     * List of folder names that are supposed to contain code.
+     * List of folder names which are not scanned for classes inside a module folder
      *
      * @var array
      */
-    private static $arrCodeFolders = array(
-        "/admin/elements/",
-        "/admin/formentries/",
-        "/admin/reports/",
-        "/admin/systemtasks/",
-        "/admin/widgets/",
-        "/admin/formgenerators/", // contains all form generator classes (extends Kajona\System\Admin\AdminFormgenerator)
-        "/admin/",
-        "/portal/elements/",
-        "/portal/forms/",
-        "/portal/templatemapper/",
-        "/portal/",
-        "/system/db/",
-        "/system/usersources/",
-        "/system/imageplugins/",
-        "/system/validators/",
-        "/system/workflows/",
-        "/system/messageproviders/",
-        "/system/scriptlets/",
-        "/system/models/", // contains all model classes (extends Kajona\System\System\Root / ModelInterface)
-        "/system/filters/", // contains form filter classes (extends Kajona\System\System\FilterBase)
-        "/system/",
-        "/installer/",
-        "/event/",
-        "/legacy/",
-        "/tests/"
+    private static $arrCodeFoldersBlacklist = array(
+        "vendor"
     );
 
     /**
@@ -246,21 +222,15 @@ class Classloader
      */
     private function indexAvailableCodefiles()
     {
-
         if (!empty(BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_CLASSES))) {
             return;
         }
 
-        $arrMergedFiles = array();
-
-        foreach (self::$arrCodeFolders as $strFolder) {
-            $arrMergedFiles = array_merge($arrMergedFiles, $this->getClassesInFolder($strFolder));
-        }
-
+        $arrMergedFiles = $this->getClassesInFolder();
 
         foreach (BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_PHARMODULES) as $strPath => $strSingleModule) {
             $objPhar = new PharModule($strPath);
-            $arrFiles = $objPhar->load(self::$arrCodeFolders);
+            $arrFiles = $objPhar->load(self::$arrCodeFoldersBlacklist);
 
             $arrResolved = array();
             foreach ($arrFiles as $strName => $strPath) {
@@ -295,7 +265,7 @@ class Classloader
      *
      * @return string[]
      */
-    private function getClassesInFolder($strFolder)
+    private function getClassesInFolder()
     {
         $arrFiles = array();
 
@@ -304,30 +274,15 @@ class Classloader
         // add module redefinitions from /project for both, phars and non phars
         foreach ($this->getArrModules() as $strModulePath => $strSingleModule) {
             $strPath = "project/" . $strSingleModule;
-            if (is_dir(_realpath_.$strPath.$strFolder)) {
+            if (is_dir(_realpath_ . $strPath)) {
                 $arrModules[$strPath] = $strSingleModule;
             }
         }
 
         foreach ($arrModules as $strPath => $strSingleModule) {
-            if (is_dir(_realpath_.$strPath.$strFolder)) {
-                $arrTempFiles = scandir(_realpath_.$strPath.$strFolder);
-                foreach ($arrTempFiles as $strSingleFile) {
-                    if (strpos($strSingleFile, ".php") !== false) {
-
-                        // if there is an underscore we have a legacy class name else a camel case
-                        if (strpos($strSingleFile, "_") !== false) {
-                            if (preg_match("/(class|interface|trait)(.*)\.php$/i", $strSingleFile)) {
-                                $arrFiles[substr($strSingleFile, 0, -4)] = _realpath_.$strPath.$strFolder.$strSingleFile;
-                            }
-                        }
-                        else {
-                            $strClassName = $this->getClassnameFromFilename(_realpath_.$strPath.$strFolder.$strSingleFile);
-                            if (!empty($strClassName)) {
-                                $arrFiles[$strClassName] = _realpath_.$strPath.$strFolder.$strSingleFile;
-                            }
-                        }
-                    }
+            if (strpos($strSingleModule, "module_") === 0) {
+                if (is_dir(_realpath_.$strPath)) {
+                    $arrFiles = array_merge($arrFiles, $this->getRecursiveFiles(_realpath_.$strPath, self::$arrCodeFoldersBlacklist));
                 }
             }
         }
@@ -335,6 +290,37 @@ class Classloader
         return $arrFiles;
     }
 
+    /**
+     * @param string $strPath
+     * @param array $arrBlacklist
+     * @return array
+     */
+    private function getRecursiveFiles($strPath, array $arrBlacklist)
+    {
+        $arrFiles = array();
+        $arrTempFiles = scandir($strPath);
+        foreach ($arrTempFiles as $strFile) {
+            if ($strFile != "." && $strFile != ".." && !in_array($strFile, $arrBlacklist)) {
+                if (strpos($strFile, ".php") !== false) {
+                    // if there is an underscore we have a legacy class name else a camel case
+                    if (strpos($strFile, "_") !== false) {
+                        if (preg_match("/(class|interface|trait)(.*)\.php$/i", $strFile)) {
+                            $arrFiles[substr($strFile, 0, -4)] = $strPath . "/" . $strFile;
+                        }
+                    }
+                    else {
+                        $strClassName = $this->getClassnameFromFilename($strPath . "/" . $strFile);
+                        if (!empty($strClassName)) {
+                            $arrFiles[$strClassName] = $strPath . "/" . $strFile;
+                        }
+                    }
+                } elseif (is_dir($strPath . "/" . $strFile)) {
+                    $arrFiles = array_merge($arrFiles, $this->getRecursiveFiles($strPath . "/" . $strFile, $arrBlacklist));
+                }
+            }
+        }
+        return $arrFiles;
+    }
 
     /**
      * The class-loader itself. Loads the class, if existing. Otherwise the chain of class-loaders is triggered.
