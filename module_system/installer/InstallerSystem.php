@@ -10,6 +10,7 @@
 namespace Kajona\System\Installer;
 
 use Kajona\System\System\Carrier;
+use Kajona\System\System\Classloader;
 use Kajona\System\System\Date;
 use Kajona\System\System\DbDatatypes;
 use Kajona\System\System\Filesystem;
@@ -20,6 +21,7 @@ use Kajona\System\System\MessagingConfig;
 use Kajona\System\System\MessagingMessage;
 use Kajona\System\System\OrmBase;
 use Kajona\System\System\OrmSchemamanager;
+use Kajona\System\System\Reflection;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\Rights;
 use Kajona\System\System\SystemAspect;
@@ -805,7 +807,8 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $this->objDB->removeColumn("system_module", "module_xmlfilenameportal");
         $this->objDB->removeColumn("system_module", "module_xmlfilenameadmin");
 
-        Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBSTATEMENTS | Carrier::INT_CACHE_TYPE_DBQUERIES);
+        Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBSTATEMENTS | Carrier::INT_CACHE_TYPE_DBQUERIES | Carrier::INT_CACHE_TYPE_MODULES | Carrier::INT_CACHE_TYPE_DBTABLES);
+        Classloader::getInstance()->flushCache();
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1.3");
