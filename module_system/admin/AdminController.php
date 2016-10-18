@@ -199,10 +199,13 @@ abstract class AdminController extends AbstractController
      */
     public final function getModuleOutput()
     {
-
         //skip rendering everything if we just want to redirect...
         if ($this->strOutput == "" && ResponseObject::getInstance()->getStrRedirectUrl() != "") {
             return "";
+        }
+
+        if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML())) {
+            return $this->strOutput;
         }
 
 

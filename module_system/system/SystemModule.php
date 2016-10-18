@@ -45,24 +45,10 @@ class SystemModule extends Model implements ModelInterface, AdminListableInterfa
 
     /**
      * @var string
-     * @tableColumn system_module.module_xmlfilenameportal
-     * @tableColumnDatatype char254
-     */
-    private $strXmlNamePortal = "";
-
-    /**
-     * @var string
      * @tableColumn system_module.module_filenameadmin
      * @tableColumnDatatype char254
      */
     private $strNameAdmin = "";
-
-    /**
-     * @var string
-     * @tableColumn system_module.module_xmlfilenameadmin
-     * @tableColumnDatatype char254
-     */
-    private $strXmlNameAdmin = "";
 
     /**
      * @var string
@@ -183,8 +169,7 @@ class SystemModule extends Model implements ModelInterface, AdminListableInterfa
         $objAdminInstance = $this->getAdminInstanceOfConcreteModule();
         if ($objAdminInstance != null) {
             $strDescription = $objAdminInstance->getModuleDescription();
-        }
-        else {
+        } else {
             $strDescription = "";
         }
 
@@ -238,7 +223,6 @@ class SystemModule extends Model implements ModelInterface, AdminListableInterfa
         return parent::deleteObjectFromDatabase();
     }
 
-
     /**
      * Counts the number of modules available
      *
@@ -252,7 +236,6 @@ class SystemModule extends Model implements ModelInterface, AdminListableInterfa
         return count(self::loadModuleData());
     }
 
-
     /**
      * Tries to look up a module using the given name. If the module
      * is not active / not installed, null is returned instead
@@ -265,13 +248,10 @@ class SystemModule extends Model implements ModelInterface, AdminListableInterfa
      */
     public static function getModuleByName($strName, $bitIgnoreStatus = false)
     {
-
         foreach (self::getAllModules() as $objOneModule) {
             if ($objOneModule->getStrName() == $strName) {
-
                 if (!$bitIgnoreStatus && $objOneModule->getIntRecordStatus() == 0) {
                     return null;
-
                 }
 
                 return $objOneModule;
@@ -295,7 +275,6 @@ class SystemModule extends Model implements ModelInterface, AdminListableInterfa
     public static function getModuleBySystemid($strSystemid)
     {
         return Objectfactory::getInstance()->getObject($strSystemid);
-
     }
 
     /**
@@ -314,7 +293,6 @@ class SystemModule extends Model implements ModelInterface, AdminListableInterfa
             }
         }
         return "";
-
     }
 
     /**
@@ -356,13 +334,13 @@ class SystemModule extends Model implements ModelInterface, AdminListableInterfa
      *
      * @return AdminInterface|AdminController
      */
-    public function getAdminInstanceOfConcreteModule($strSystemid = "", $bitXml = false)
+    public function getAdminInstanceOfConcreteModule($strSystemid = "")
     {
 
         /** @var \Kajona\System\System\ObjectBuilder $objBuilder */
         $objBuilder = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_OBJECT_BUILDER);
 
-        $strClassname = $bitXml ? $this->getStrXmlNameAdmin() : $this->getStrNameAdmin();
+        $strClassname = $this->getStrNameAdmin();
         if (uniStrpos($strClassname, ".php") !== false) {
             $strFullpath = Resourceloader::getInstance()->getPathForFile("/admin/".$strClassname);
             if ($strFullpath == "") {
@@ -374,8 +352,7 @@ class SystemModule extends Model implements ModelInterface, AdminListableInterfa
         if ($strClassname != "") {
             if (validateSystemid($strSystemid)) {
                 return $objBuilder->factory($strClassname, array($strSystemid));
-            }
-            else {
+            } else {
                 return $objBuilder->factory($strClassname);
             }
         }
@@ -393,13 +370,13 @@ class SystemModule extends Model implements ModelInterface, AdminListableInterfa
      *
      * @return PortalInterface
      */
-    public function getPortalInstanceOfConcreteModule($arrElementData = null, $bitXml = false)
+    public function getPortalInstanceOfConcreteModule($arrElementData = null)
     {
 
         /** @var \Kajona\System\System\ObjectBuilder $objBuilder */
         $objBuilder = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_OBJECT_BUILDER);
 
-        $strClassname = $bitXml ? $this->getStrXmlNamePortal() : $this->getStrNamePortal();
+        $strClassname = $this->getStrNamePortal();
         if (uniStrpos($strClassname, ".php") !== false) {
             $strFullpath = Resourceloader::getInstance()->getPathForFile("/portal/".$strClassname);
             if ($strFullpath == "") {
@@ -411,8 +388,7 @@ class SystemModule extends Model implements ModelInterface, AdminListableInterfa
         if ($strClassname != "") {
             if (is_array($arrElementData)) {
                 return $objBuilder->factory($strClassname, array($arrElementData));
-            }
-            else {
+            } else {
                 return $objBuilder->factory($strClassname, array());
             }
         }
@@ -472,25 +448,9 @@ class SystemModule extends Model implements ModelInterface, AdminListableInterfa
     /**
      * @return string
      */
-    public function getStrXmlNamePortal()
-    {
-        return $this->strXmlNamePortal;
-    }
-
-    /**
-     * @return string
-     */
     public function getStrNameAdmin()
     {
         return $this->strNameAdmin;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStrXmlNameAdmin()
-    {
-        return $this->strXmlNameAdmin;
     }
 
     /**
@@ -546,16 +506,6 @@ class SystemModule extends Model implements ModelInterface, AdminListableInterfa
     }
 
     /**
-     * @param string $strXmlPortal
-     *
-     * @return void
-     */
-    public function setStrXmlNamePortal($strXmlPortal)
-    {
-        $this->strXmlNamePortal = $strXmlPortal;
-    }
-
-    /**
      * @param string $strAdmin
      *
      * @return void
@@ -563,16 +513,6 @@ class SystemModule extends Model implements ModelInterface, AdminListableInterfa
     public function setStrNameAdmin($strAdmin)
     {
         $this->strNameAdmin = $strAdmin;
-    }
-
-    /**
-     * @param string $strXmlAdmin
-     *
-     * @return void
-     */
-    public function setStrXmlNameAdmin($strXmlAdmin)
-    {
-        $this->strXmlNameAdmin = $strXmlAdmin;
     }
 
     /**
