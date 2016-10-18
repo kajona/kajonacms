@@ -13,8 +13,6 @@ if (typeof KAJONA.portal.rating == "undefined") {
  * @param {Number} intNumberOfIcons
  */
 KAJONA.portal.rating.rate = function (strSystemid, floatRating, intNumberOfIcons) {
-    //hide tooltip
-    KAJONA.portal.tooltip.hide();
 
     //disable rating buttons
     var objRatingBar = document.getElementById("kajona_rating_"+strSystemid);
