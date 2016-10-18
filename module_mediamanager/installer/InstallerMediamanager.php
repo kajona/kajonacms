@@ -58,9 +58,8 @@ class InstallerMediamanager extends InstallerBase implements InstallerInterface
             _mediamanager_module_id_,
             "MediamanagerPortal.php",
             "MediamanagerAdmin.php",
-            $this->objMetadata->getStrVersion(),
-            true, "",
-            "MediamanagerAdminXml.php");
+            $this->objMetadata->getStrVersion()
+        );
 
         //The folderview
         $this->registerModule("folderview", _mediamanager_folderview_modul_id_, "", "FolderviewAdmin.php", $this->objMetadata->getStrVersion(), false);

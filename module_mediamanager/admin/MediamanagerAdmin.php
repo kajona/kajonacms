@@ -16,12 +16,21 @@ use Kajona\System\Admin\AdminInterface;
 use Kajona\System\System\AdminListableInterface;
 use Kajona\System\System\AdminskinHelper;
 use Kajona\System\System\ArraySectionIterator;
+use Kajona\System\System\Date;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Filesystem;
+use Kajona\System\System\HttpResponsetypes;
+use Kajona\System\System\HttpStatuscodes;
+use Kajona\System\System\Image2;
+use Kajona\System\System\Imageplugins\ImageCrop;
+use Kajona\System\System\Imageplugins\ImageRotate;
 use Kajona\System\System\Link;
+use Kajona\System\System\Logger;
+use Kajona\System\System\Model;
 use Kajona\System\System\ModelInterface;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Resourceloader;
+use Kajona\System\System\ResponseObject;
 
 /**
  * Admin class of the mediamanager-module. Used to sync the repos with the filesystem and to upload / manage
@@ -74,16 +83,11 @@ class MediamanagerAdmin extends AdminEvensimpler implements AdminInterface
             return array($this->objToolkit->listButton(
                 Link::getLinkAdmin($this->getArrModule("modul"), "openFolder", "&sync=true&systemid=".$objListEntry->getSystemid(), "", $this->getLang("action_open_folder"), "icon_folderActionOpen")
             ));
-        }
-
-        elseif ($objListEntry instanceof MediamanagerFile && $objListEntry->getIntType() == MediamanagerFile::$INT_TYPE_FOLDER && $objListEntry->rightView()) {
+        } elseif ($objListEntry instanceof MediamanagerFile && $objListEntry->getIntType() == MediamanagerFile::$INT_TYPE_FOLDER && $objListEntry->rightView()) {
             return array($this->objToolkit->listButton(
                 Link::getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("action_open_folder"), "icon_folderActionOpen")
             ));
-        }
-
-        elseif ($objListEntry instanceof MediamanagerFile && $objListEntry->getIntType() == MediamanagerFile::$INT_TYPE_FILE) {
-
+        } elseif ($objListEntry instanceof MediamanagerFile && $objListEntry->getIntType() == MediamanagerFile::$INT_TYPE_FILE) {
             $arrReturn = array();
             //add a crop icon?
             $arrMime = $this->objToolkit->mimeType($objListEntry->getStrFilename());
@@ -114,7 +118,6 @@ class MediamanagerAdmin extends AdminEvensimpler implements AdminInterface
     {
         if ($objListEntry instanceof MediamanagerRepo) {
             if ($objListEntry->rightDelete()) {
-
                 $objLockmanager = $objListEntry->getLockManager();
                 if (!$objLockmanager->isAccessibleForCurrentUser()) {
                     return $this->objToolkit->listButton(AdminskinHelper::getAdminImage("icon_deleteLocked", $this->getLang("commons_locked")));
@@ -125,12 +128,10 @@ class MediamanagerAdmin extends AdminEvensimpler implements AdminInterface
                     $this->getLang("delete_question_repo", $objListEntry->getArrModule("modul")),
                     Link::getLinkAdminHref($objListEntry->getArrModule("modul"), "delete", "&systemid=".$objListEntry->getSystemid().$this->getStrPeAddon())
                 );
-            }
-            else {
+            } else {
                 return "";
             }
-        }
-        else {
+        } else {
             return parent::renderDeleteAction($objListEntry);
         }
     }
@@ -153,8 +154,7 @@ class MediamanagerAdmin extends AdminEvensimpler implements AdminInterface
                 }
             }
 
-        }
-        else {
+        } else {
             return parent::getNewEntryAction($strListIdentifier, $bitDialog);
         }
 
@@ -173,8 +173,7 @@ class MediamanagerAdmin extends AdminEvensimpler implements AdminInterface
 
             if ($objCur instanceof MediamanagerFile) {
                 return $this->objToolkit->listButton(Link::getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$objCur->getPrevId(), "..", $this->getLang("commons_one_level_up"), "icon_folderActionLevelup"));
-            }
-            elseif ($objCur instanceof MediamanagerRepo) {
+            } elseif ($objCur instanceof MediamanagerRepo) {
                 return $this->objToolkit->listButton(Link::getLinkAdmin($this->getArrModule("modul"), "list", "", "..", $this->getLang("commons_one_level_up"), "icon_folderActionLevelup"));
             }
         }
@@ -210,8 +209,7 @@ class MediamanagerAdmin extends AdminEvensimpler implements AdminInterface
                             $objListEntry->getArrModule("modul"), "editFile", "&systemid=".$objListEntry->getSystemid().$this->getStrPeAddon(), $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_edit"
                         )
                     );
-                }
-                else {
+                } else {
                     return $this->objToolkit->listButton(
                         Link::getLinkAdminDialog(
                             $objListEntry->getArrModule("modul"), "editFile", "&folderview=1&systemid=".$objListEntry->getSystemid().$this->getStrPeAddon(), $this->getLang("commons_list_edit"), $this->getLang("commons_list_edit"), "icon_edit"
@@ -221,8 +219,7 @@ class MediamanagerAdmin extends AdminEvensimpler implements AdminInterface
             }
 
             return "";
-        }
-        else {
+        } else {
             return parent::renderEditAction($objListEntry, $bitDialog);
         }
     }
@@ -255,11 +252,9 @@ class MediamanagerAdmin extends AdminEvensimpler implements AdminInterface
         $strPrevid = $objRecord->getPrevId();
 
         if ($objRecord != null && $objRecord->rightDelete()) {
-
             if ($objRecord instanceof MediamanagerFile) {
                 $this->setParam("mediamanagerDeleteFileFromFilesystem", true);
             }
-
 
             if (!$objRecord->deleteObject()) {
                 throw new Exception("error deleting object ".$objRecord->getStrDisplayName(), Exception::$level_ERROR);
@@ -269,18 +264,16 @@ class MediamanagerAdmin extends AdminEvensimpler implements AdminInterface
 
             if ($objRecord instanceof MediamanagerRepo) {
                 $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "list"));
-            }
-            else {
+            } else {
                 $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "openFolder", "&systemid=".$strPrevid));
             }
-        }
-        else {
+        } else {
             throw new Exception("error loading object ".$this->getSystemid(), Exception::$level_ERROR);
         }
     }
 
     /**
-     * @param \Kajona\System\System\Model|AdminListableInterface|\Kajona\System\System\ModelInterface $objOneIterable
+     * @param AdminListableInterface|ModelInterface $objOneIterable
      * @param string $strListIdentifier
      *
      * @return string
@@ -291,13 +284,11 @@ class MediamanagerAdmin extends AdminEvensimpler implements AdminInterface
             $strTargetfield = xssSafeString($this->getParam("form_element"));
 
             if ($objOneIterable instanceof MediamanagerFile && $objOneIterable->rightView()) {
-
                 if ($objOneIterable->getIntType() == MediamanagerFile::$INT_TYPE_FOLDER) {
                     return $this->objToolkit->listButton(
                         Link::getLinkAdmin($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$objOneIterable->getSystemid(), "", $this->getLang("action_open_folder"), "icon_folderActionOpen")
                     );
-                }
-                elseif ($objOneIterable->getIntType() == MediamanagerFile::$INT_TYPE_FILE) {
+                } elseif ($objOneIterable->getIntType() == MediamanagerFile::$INT_TYPE_FILE) {
                     return $this->objToolkit->listButton(
                         "<a href=\"#\" title=\"".$this->getLang("commons_accept")."\" rel=\"tooltip\" onclick=\"require('folderview').selectCallback([['".$strTargetfield."', '".$objOneIterable->getStrFilename()."']]);\">".AdminskinHelper::getAdminImage("icon_accept")."</a>"
                     );
@@ -461,8 +452,7 @@ HTML;
         $this->flushCompletePagesCache();
         if ($this->getParam("source") != "") {
             $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "openFolder", "&systemid=".$objFile->getPrevId()));
-        }
-        else {
+        } else {
             $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "openFolder", "&peClose=1&blockAction=1&systemid=".$objFile->getPrevId()));
         }
         return "";
@@ -487,7 +477,6 @@ HTML;
 
 
         if (is_file(_realpath_.$strFile)) {
-
             $objFilesystem = new Filesystem();
             $arrDetails = $objFilesystem->getFileDetails($strFile);
             $arrSize = getimagesize(_realpath_.$strFile);
@@ -512,25 +501,25 @@ HTML;
                 Link::getLinkAdminManual("href=\"#\" onclick=\"require('imageeditor').showRealSize(); return false;\"", "", $this->getLang("showRealsize"), "icon_zoom_in")
             );
             $arrActions[] = $this->objToolkit->listButton(
-                    Link::getLinkAdminManual(
-                        "href=\"#\" onclick=\"require('imageeditor').showPreview(); return false;\"",
-                        "",
-                        $this->getLang("showPreview"),
-                        "icon_zoom_out"
-                    )
-                )." ";
+                Link::getLinkAdminManual(
+                    "href=\"#\" onclick=\"require('imageeditor').showPreview(); return false;\"",
+                    "",
+                    $this->getLang("showPreview"),
+                    "icon_zoom_out"
+                )
+            )." ";
             $arrActions[] = $this->objToolkit->listButton(
                 Link::getLinkAdminManual("href=\"#\" onclick=\"require('imageeditor').rotate(90); return false;\"", "", $this->getLang("rotateImageLeft"), "icon_rotate_left")
             );
             $arrActions[] = $this->objToolkit->listButton(
-                    Link::getLinkAdminManual("href=\"#\" onclick=\"require('imageeditor').rotate(270); return false;\"", "", $this->getLang("rotateImageRight"), "icon_rotate_right")
-                )." ";
+                Link::getLinkAdminManual("href=\"#\" onclick=\"require('imageeditor').rotate(270); return false;\"", "", $this->getLang("rotateImageRight"), "icon_rotate_right")
+            )." ";
             $arrActions[] = $this->objToolkit->listButton(
                 Link::getLinkAdminManual("href=\"#\" onclick=\"require('imageeditor').showCropping(); return false;\"", "", $this->getLang("cropImage"), "icon_crop")
             );
             $arrActions[] = $this->objToolkit->listButton(
-                    Link::getLinkAdminManual("href=\"#\" id=\"accept_icon\"  onclick=\"require('imageeditor').saveCropping(); return false;\"", "", $this->getLang("cropImageAccept"), "icon_crop_acceptDisabled")
-                )." ";
+                Link::getLinkAdminManual("href=\"#\" id=\"accept_icon\"  onclick=\"require('imageeditor').saveCropping(); return false;\"", "", $this->getLang("cropImageAccept"), "icon_crop_acceptDisabled")
+            )." ";
 
 
             $strReturn .= $this->objToolkit->getContentToolbar($arrActions);
@@ -595,7 +584,7 @@ HTML;
     }
 
     /**
-     * @param \Kajona\System\System\ModelInterface|\Kajona\System\System\Model $objInstance
+     * @param ModelInterface|Model $objInstance
      *
      * @return string
      */
@@ -661,8 +650,7 @@ HTML;
             if (count($arrObjRepos) == 0) {
                 $strReturn .= $this->getLang("commons_list_empty");
             }
-        }
-        else {
+        } else {
             $objFile = Objectfactory::getInstance()->getObject($this->getSystemid());
             if ($objFile === null || !$objFile->rightView()) {
                 return $this->getLang("commons_error_permissions");
@@ -689,14 +677,11 @@ HTML;
     protected function renderGridEntryClickAction($objOneIterable, $strListIdentifier)
     {
         if ($strListIdentifier == self::INT_LISTTYPE_FOLDERVIEW && $objOneIterable instanceof MediamanagerFile) {
-
             $strTargetfield = xssSafeString($this->getParam("form_element"));
 
-            if($objOneIterable->getIntType() == MediamanagerFile::$INT_TYPE_FOLDER) {
+            if ($objOneIterable->getIntType() == MediamanagerFile::$INT_TYPE_FOLDER) {
                 return "onclick=\"document.location='".Link::getLinkAdminHref($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$objOneIterable->getSystemid())."'\"";
-            }
-            elseif ($objOneIterable->getIntType() == MediamanagerFile::$INT_TYPE_FILE) {
-
+            } elseif ($objOneIterable->getIntType() == MediamanagerFile::$INT_TYPE_FILE) {
                 $strValue = $objOneIterable->getStrFilename();
                 $arrMime = $this->objToolkit->mimeType($strValue);
                 $bitImage = false;
@@ -706,11 +691,9 @@ HTML;
 
                 if ($bitImage && $strTargetfield == "ckeditor") {
                     $strValue = _webpath_."/image.php?image=".$strValue;
-                }
-                else {
+                } else {
                     $strValue = _webpath_.$strValue;
                 }
-
 
                 return "onclick=\"require('folderview').selectCallback([['".$strTargetfield."', '".$strValue."']]);\"";
             }
@@ -831,8 +814,7 @@ HTML;
             if ($arrOneLog["downloads_log_ip"] != "127.0.0.1" && $arrOneLog["downloads_log_ip"] != "::1") {
                 $arrLogs[$intKey][5] = Link::getLinkAdminManual($strUtraceLinkMap, "", $this->getLang("login_utrace_showmap", "user"), "icon_earth")
                     ." ".Link::getLinkAdminManual($strUtraceLinkText, "", $this->getLang("login_utrace_showtext", "user"), "icon_text");
-            }
-            else {
+            } else {
                 $arrLogs[$intKey][5] = AdminskinHelper::getAdminImage("icon_earthDisabled", $this->getLang("login_utrace_noinfo", "user"))." "
                     .AdminskinHelper::getAdminImage("icon_textDisabled", $this->getLang("login_utrace_noinfo", "user"));
             }
@@ -865,13 +847,12 @@ HTML;
         if ($this->getParam("flush") == "") {
             $strReturn .= $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "logbookFlush", "flush=1"));
             $strReturn .= $this->objToolkit->formTextRow($this->getLang("logbook_hint_date"));
-            $strReturn .= $this->objToolkit->formDateSingle("date", $this->getLang("commons_date"), new \Kajona\System\System\Date());
+            $strReturn .= $this->objToolkit->formDateSingle("date", $this->getLang("commons_date"), new Date());
             $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
             $strReturn .= $this->objToolkit->formClose();
-        }
-        elseif ($this->getParam("flush") == "1") {
+        } elseif ($this->getParam("flush") == "1") {
             //Build the date
-            $objDate = new \Kajona\System\System\Date();
+            $objDate = new Date();
             $objDate->generateDateFromParams("date", $this->getAllParams());
 
             if (!MediamanagerLogbook::deleteFromLogs($objDate->getTimeInOldStyle())) {
@@ -882,5 +863,322 @@ HTML;
         }
         return $strReturn;
     }
+
+
+    /**
+     * Create a new folder using the combination of passed folder & systemid
+     *
+     * @return string
+     * @permissions edit
+     */
+    protected function actionCreateFolder()
+    {
+        $strReturn = "";
+
+        /** @var MediamanagerRepo|MediamanagerFile $objInstance */
+        $objInstance = Objectfactory::getInstance()->getObject($this->getSystemid());
+
+        if ($objInstance->rightEdit()) {
+            if ($objInstance instanceof MediamanagerFile && $objInstance->getIntType() == MediamanagerFile::$INT_TYPE_FOLDER) {
+                $strPrevPath = $objInstance->getStrFilename();
+            } elseif ($objInstance instanceof MediamanagerRepo) {
+                $strPrevPath = $objInstance->getStrPath();
+            } else {
+                return "";
+            }
+
+            //create repo-instance
+            $strFolder = $this->getParam("folder");
+
+            //Create the folder
+            $strFolder = createFilename($strFolder, true);
+            //folder already existing?
+            if (!is_dir(_realpath_.$strPrevPath."/".$strFolder)) {
+
+                Logger::getInstance()->addLogRow("creating folder ".$strPrevPath."/".$strFolder, Logger::$levelInfo);
+
+                $objFilesystem = new Filesystem();
+                if ($objFilesystem->folderCreate($strPrevPath."/".$strFolder)) {
+                    $strReturn = "<message>".xmlSafeString($this->getLang("folder_create_success"))."</message>";
+                } else {
+                    ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_INTERNAL_SERVER_ERROR);
+                    $strReturn = "<message><error>".xmlSafeString($this->getLang("folder_create_error"))."</error></message>";
+                }
+            } else {
+                ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_INTERNAL_SERVER_ERROR);
+                $strReturn = "<message><error>".xmlSafeString($this->getLang("folder_create_error"))."</error></message>";
+            }
+        } else {
+            ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
+            $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
+        }
+
+        return $strReturn;
+    }
+
+
+    /**
+     * Tries to save the passed file.
+     * Therefore, the following post-params should be given:
+     * action = fileUpload
+     * folder = the folder to store the file within
+     * systemid = the filemanagers' repo-id
+     * inputElement = name of the inputElement
+     *
+     * @return string
+     * @permissions right1
+     */
+    protected function actionFileupload()
+    {
+        $strReturn = "";
+
+        /** @var MediamanagerRepo|MediamanagerFile $objFile */
+        $objFile = Objectfactory::getInstance()->getObject($this->getSystemid());
+
+        /**
+         * @var MediamanagerRepo
+         */
+        $objRepo = null;
+
+        if ($objFile instanceof MediamanagerFile) {
+            $strFolder = $objFile->getStrFilename();
+            if (!$objFile->rightEdit() || $objFile->getIntType() != MediamanagerFile::$INT_TYPE_FOLDER) {
+                ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
+                $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
+                return $strReturn;
+            }
+
+            $objRepo = Objectfactory::getInstance()->getObject($objFile->getPrevId());
+            while (!$objRepo instanceof MediamanagerRepo) {
+                $objRepo = Objectfactory::getInstance()->getObject($objRepo->getPrevId());
+            }
+        } elseif ($objFile instanceof MediamanagerRepo) {
+            $objRepo = $objFile;
+            $strFolder = $objFile->getStrPath();
+            if (!$objFile->rightEdit()) {
+                ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
+                $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
+                return $strReturn;
+            }
+
+        } else {
+            ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
+            $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
+            return $strReturn;
+        }
+
+        //Handle the fileupload
+        $arrSource = $this->getParam($this->getParam("inputElement"));
+
+
+        $bitJsonResponse = $this->getParam("jsonResponse") != "";
+
+        $bitPostData = false;
+        if (is_array($arrSource)) {
+            $strFilename = $arrSource["name"];
+        } else {
+            $bitPostData = getPostRawData() != "";
+            $strFilename = $arrSource;
+        }
+
+        $strTarget = $strFolder."/".createFilename($strFilename);
+        $objFilesystem = new Filesystem();
+
+        if (!file_exists(_realpath_.$strFolder)) {
+            $objFilesystem->folderCreate($strFolder, true);
+        }
+
+        if ($objFilesystem->isWritable($strFolder)) {
+            //Check file for correct filters
+            $arrAllowed = explode(",", $objRepo->getStrUploadFilter());
+
+            $strSuffix = uniStrtolower(uniSubstr($strFilename, uniStrrpos($strFilename, ".")));
+            if ($objRepo->getStrUploadFilter() == "" || in_array($strSuffix, $arrAllowed)) {
+                if ($bitPostData) {
+                    $objFilesystem = new Filesystem();
+                    $objFilesystem->openFilePointer($strTarget);
+                    $bitCopySuccess = $objFilesystem->writeToFile(getPostRawData());
+                    $objFilesystem->closeFilePointer();
+                } else {
+                    $bitCopySuccess = $objFilesystem->copyUpload($strTarget, $arrSource["tmp_name"]);
+                }
+                if ($bitCopySuccess) {
+                    if ($bitJsonResponse) {
+                        $strReturn = json_encode(array('success' => true));
+                    } else {
+                        $strReturn .= "<message>".$this->getLang("xmlupload_success")."</message>";
+                    }
+
+                    Logger::getInstance()->addLogRow("uploaded file ".$strTarget, Logger::$levelInfo);
+
+                    $objRepo->syncRepo();
+                } else {
+                    if ($bitJsonResponse) {
+                        $strReturn .= json_encode(array('error' => $this->getLang("xmlupload_error_copyUpload")));
+                    } else {
+                        $strReturn .= "<message><error>".$this->getLang("xmlupload_error_copyUpload")."</error></message>";
+                    }
+                }
+            } else {
+                ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_BADREQUEST);
+
+                if ($bitJsonResponse) {
+                    $strReturn .= json_encode(array('error' => $this->getLang("xmlupload_error_filter")));
+                } else {
+                    $strReturn .= "<message><error>".$this->getLang("xmlupload_error_filter")."</error></message>";
+                }
+            }
+        } else {
+            ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_INTERNAL_SERVER_ERROR);
+
+            if ($bitJsonResponse) {
+                $strReturn .= json_encode(array('error' => $this->getLang("xmlupload_error_notWritable")));
+            } else {
+                $strReturn .= "<message><error>".xmlSafeString($this->getLang("xmlupload_error_notWritable"))."</error></message>";
+            }
+        }
+
+
+        if ($bitJsonResponse) {
+            //disabled for ie. otherwise the upload won't work due to the headers.
+            ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_HTML);
+        }
+        @unlink($arrSource["tmp_name"]);
+        return $strReturn;
+    }
+
+    /**
+     * Syncs the repo partially
+     *
+     * @return string
+     * @permissions edit
+     */
+    protected function actionPartialSyncRepo()
+    {
+        $strReturn = "";
+        $strResult = "";
+
+        /** @var MediamanagerRepo|MediamanagerFile $objInstance */
+        $objInstance = Objectfactory::getInstance()->getObject($this->getSystemid());
+
+        if ($objInstance instanceof MediamanagerFile) {
+            $arrSyncs = MediamanagerFile::syncRecursive($objInstance->getSystemid(), $objInstance->getStrFilename());
+        } elseif ($objInstance instanceof MediamanagerRepo) {
+            $arrSyncs = $objInstance->syncRepo();
+        } else {
+            return "";
+        }
+
+
+        $strResult .= $this->getLang("sync_end")."<br />";
+        $strResult .= $this->getLang("sync_add").$arrSyncs["insert"]."<br />".$this->getLang("sync_del").$arrSyncs["delete"];
+
+        $strReturn .= "<repo>".xmlSafeString(strip_tags($strResult))."</repo>";
+
+        Logger::getInstance()->addLogRow("synced gallery partially >".$this->getSystemid().": ".$strResult, Logger::$levelInfo);
+
+        return $strReturn;
+    }
+
+    /**
+     * Syncs the repo partially
+     *
+     * @return string
+     * @permissions edit
+     */
+    protected function actionSyncRepo()
+    {
+        $strReturn = "";
+
+        /** @var MediamanagerRepo|MediamanagerFile $objInstance */
+        $objInstance = Objectfactory::getInstance()->getObject($this->getSystemid());
+        //close the session to avoid a blocking behaviour
+        $this->objSession->sessionClose();
+        if ($objInstance instanceof MediamanagerRepo) {
+            $arrSyncs = $objInstance->syncRepo();
+        } else {
+            return "<error>mediamanager repo could not be loaded</error>";
+        }
+
+        $strResult = 0;
+
+        $strResult += $arrSyncs["insert"] + $arrSyncs["delete"];
+        $strReturn .= "<repo>".xmlSafeString(strip_tags($strResult))."</repo>";
+
+        Logger::getInstance()->addLogRow("synced gallery partially >".$this->getSystemid().": ".$strResult, Logger::$levelInfo);
+
+        return $strReturn;
+    }
+
+
+    /**
+     * Tries to rotate the passed imaged.
+     * The following params are needed:
+     * action = rotateImage
+     * folder = the files' location
+     * file = the file to crop
+     * systemid = the repo-id
+     * angle
+     *
+     * @return string
+     * @permissions edit
+     */
+    protected function actionRotate()
+    {
+        $strReturn = "";
+
+        $strFile = $this->getParam("file");
+
+        $objImage = new Image2();
+        $objImage->setUseCache(false);
+        $objImage->load($strFile);
+        $objImage->addOperation(new ImageRotate($this->getParam("angle")));
+        if ($objImage->save($strFile)) {
+            Logger::getInstance()->addLogRow("rotated file ".$strFile, Logger::$levelInfo);
+            $strReturn .= "<message>".xmlSafeString($this->getLang("xml_rotate_success"))."</message>";
+        } else {
+            ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
+            $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
+        }
+
+        return $strReturn;
+    }
+
+    /**
+     * Tries to save the passed cropping.
+     * The following params are needed:
+     * action = saveCropping
+     * folder = the files' location
+     * file = the file to crop
+     * systemid = the repo-id
+     * intX
+     * intY
+     * intWidth
+     * intHeight
+     *
+     * @return string
+     * @permissions edit
+     */
+    protected function actionSaveCropping()
+    {
+        $strReturn = "";
+
+        $strFile = $this->getParam("file");
+
+        $objImage = new Image2();
+        $objImage->setUseCache(false);
+        $objImage->load($strFile);
+        $objImage->addOperation(new ImageCrop($this->getParam("intX"), $this->getParam("intY"), $this->getParam("intWidth"), $this->getParam("intHeight")));
+        if ($objImage->save($strFile)) {
+            Logger::getInstance()->addLogRow("cropped file ".$strFile, Logger::$levelInfo);
+            $strReturn .= "<message>".xmlSafeString($this->getLang("xml_cropping_success"))."</message>";
+        } else {
+            ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
+            $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
+        }
+
+        return $strReturn;
+    }
+
 }
 
