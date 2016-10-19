@@ -2,6 +2,7 @@
 
 namespace Kajona\News\Tests;
 
+use Kajona\News\Portal\NewsPortal;
 use Kajona\News\Portal\NewsPortalXml;
 use Kajona\News\System\NewsCategory;
 use Kajona\News\System\NewsFeed;
@@ -90,7 +91,7 @@ class NewsTest extends Testbase
         $this->assertEquals(1, count(NewsFeed::getNewsList($objFeed->getStrCat(), 1)), __FILE__." check news for feed");
 
 
-        $objNewsPortalXML = new NewsPortalXml();
+        $objNewsPortalXML = new NewsPortal();
         $objNewsPortalXML->setParam("feedTitle", "autotest");
         $strFeed = $objNewsPortalXML->action("newsFeed");
         $this->assertTrue(uniStrpos($strFeed, "<title>autotest</title>") !== false, __FILE__." check rss feed");
@@ -109,7 +110,7 @@ class NewsTest extends Testbase
         $this->flushDBCache();
 
 
-        $objNewsPortalXML = new NewsPortalXml();
+        $objNewsPortalXML = new NewsPortal();
         $objNewsPortalXML->setParam("feedTitle", "autotest");
         $strFeed = $objNewsPortalXML->action("newsFeed");
         $this->assertTrue(uniStrpos($strFeed, "<title>autotest</title>") !== false, __FILE__." check rss feed");

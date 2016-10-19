@@ -38,6 +38,7 @@ class ResponseObject
      */
     private function __construct()
     {
+        $this->objEntryPoint = RequestEntrypointEnum::INDEX();
         $this->strStatusCode = HttpStatuscodes::SC_OK;
         $this->strResponseType = HttpResponsetypes::STR_TYPE_HTML;
     }
