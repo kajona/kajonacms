@@ -76,7 +76,7 @@ class PharModule
             // check whether path contains a blacklisted path
             foreach ($arrCodeFoldersBlacklist as $strBlacklistName) {
                 if (strpos($strArchivePath, $strBlacklistName) !== false) {
-                    continue;
+                    continue 2;
                 }
             }
 
