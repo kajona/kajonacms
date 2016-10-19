@@ -336,7 +336,7 @@ class RequestDispatcher
             else {
                 $strDebug = "<pre style='z-index: 2000000; position: fixed; background-color: white; width: 100%; top: 0; font-size: 10px; padding: 0; margin: 0;'>Kajona Debug: ".$strDebug."</pre>";
 
-                $intBodyPos = uniStrpos($strReturn, "</body>");
+                $intBodyPos = StringUtil::indexOf($strReturn, "</body>");
                 if ($intBodyPos !== false) {
                     $strReturn = uniSubstr($strReturn, 0, $intBodyPos).$strDebug.uniSubstr($strReturn, $intBodyPos);
                 }

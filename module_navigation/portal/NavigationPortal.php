@@ -19,6 +19,7 @@ use Kajona\System\Portal\PortalController;
 use Kajona\System\Portal\PortalInterface;
 use Kajona\System\System\Link;
 use Kajona\System\System\Objectfactory;
+use Kajona\System\System\StringUtil;
 
 /**
  * Portal-part of the navigation. Creates the different navigation-views as sitemap or tree.
@@ -195,7 +196,7 @@ class NavigationPortal extends PortalController implements PortalInterface
 
                 //And load all points below
                 $strChilds = "";
-                if (uniStrpos($strCurrentPoint, "level".($intLevel + 1)) !== false) {
+                if (StringUtil::indexOf($strCurrentPoint, "level".($intLevel + 1)) !== false) {
                     $strChilds = $this->sitemapRecursive($intLevel + 1, $arrOneChild, $strStack);
                 }
 

@@ -7,6 +7,8 @@
 
 namespace Kajona\Pdf\System;
 
+use Kajona\System\System\StringUtil;
+
 
 /**
  * This class provides access to a rudimentary pdf-generation.
@@ -336,7 +338,7 @@ class Pdf {
     public function addImage($strImage, $intX, $intY, $intWidth = 0, $intHeight = 0) {
         $strFilename = uniStrtolower(basename($strImage));
 
-        if(uniStrpos($strFilename, ".svg") !== false) {
+        if(StringUtil::indexOf($strFilename, ".svg") !== false) {
             $this->objPdf->ImageSVG(_realpath_.$strImage, $intX, $intY, $intWidth, $intHeight);
         }
         else {

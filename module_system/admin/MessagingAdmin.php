@@ -24,7 +24,6 @@ use Kajona\System\System\Objectfactory;
 use Kajona\System\System\ResponseObject;
 use Kajona\System\System\Session;
 use Kajona\System\System\SystemChangelog;
-use Kajona\System\System\UserUser;
 
 
 /**

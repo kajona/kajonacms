@@ -9,7 +9,6 @@ namespace Kajona\Eventmanager\System;
 use Kajona\Dashboard\System\EventEntry;
 use Kajona\Dashboard\System\TodoEntry;
 use Kajona\Dashboard\System\TodoProviderInterface;
-use Kajona\System\System\Date;
 use Kajona\System\System\Lang;
 use Kajona\System\System\Link;
 use Kajona\System\System\SystemModule;

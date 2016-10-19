@@ -12,10 +12,9 @@ use Kajona\System\Admin\ToolkitAdmin;
 use Kajona\System\System\Database;
 use Kajona\System\System\GraphFactory;
 use Kajona\System\System\Lang;
-use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Session;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemSetting;
-use Kajona\System\System\UserUser;
 
 /**
  * This plugin creates a view common numbers, such as "user online" oder "total pagehits"
@@ -180,9 +179,9 @@ class StatsReportTopqueries implements AdminStatsreportsInterface
         $arrQuerypatterns = array("q=", "query=");
         foreach ($arrRecords as $arrOneRecord) {
             foreach ($arrQuerypatterns as $strOnePattern) {
-                if (uniStrpos($arrOneRecord["stats_referer"], $strOnePattern) !== false) {
-                    $strQueryterm = uniSubstr($arrOneRecord["stats_referer"], (uniStrpos($arrOneRecord["stats_referer"], $strOnePattern) + uniStrlen($strOnePattern)));
-                    $strQueryterm = uniSubstr($strQueryterm, 0, uniStrpos($strQueryterm, "&"));
+                if (StringUtil::indexOf($arrOneRecord["stats_referer"], $strOnePattern) !== false) {
+                    $strQueryterm = uniSubstr($arrOneRecord["stats_referer"], (StringUtil::indexOf($arrOneRecord["stats_referer"], $strOnePattern) + uniStrlen($strOnePattern)));
+                    $strQueryterm = uniSubstr($strQueryterm, 0, StringUtil::indexOf($strQueryterm, "&"));
                     $strQueryterm = uniStrtolower(trim(urldecode($strQueryterm)));
                     if ($strQueryterm != "") {
                         if (isset($arrHits[$strQueryterm])) {

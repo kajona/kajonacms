@@ -11,7 +11,6 @@ use Kajona\Pages\Admin\ElementAdmin;
 use Kajona\Pages\Portal\ElementPortal;
 use Kajona\Pages\Portal\PortalElementInterface;
 use Kajona\System\System\AdminListableInterface;
-use Kajona\System\System\Cache;
 use Kajona\System\System\CacheManager;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Classloader;
@@ -24,6 +23,7 @@ use Kajona\System\System\OrmRowcache;
 use Kajona\System\System\Reflection;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\ServiceProvider;
+use Kajona\System\System\StringUtil;
 
 /**
  * Model for a element assigned to a page. NOT the raw-element!
@@ -319,7 +319,7 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
 
         foreach ($arrElementData as $strColumn => $strValue) {
             foreach ($arrMappedProperties as $strPropertyname => $strAnnotation) {
-                $strMappedColumn = uniSubstr($strAnnotation, uniStrpos($strAnnotation, ".") + 1);
+                $strMappedColumn = uniSubstr($strAnnotation, StringUtil::indexOf($strAnnotation, ".") + 1);
                 if ($strColumn == $strMappedColumn) {
                     $objSetter = $objAnnotation->getSetter($strPropertyname);
                     if ($objSetter != null) {

@@ -17,6 +17,7 @@ use Kajona\System\System\Filesystem;
 use Kajona\System\System\InstallerInterface;
 use Kajona\System\System\InstallerRemovableInterface;
 use Kajona\System\System\Logger;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\SystemSetting;
 
@@ -121,7 +122,7 @@ class PackagemanagerPackagemanagerModule implements PackagemanagerPackagemanager
             return "";
         }
 
-        if (uniStrpos($this->getObjMetadata()->getStrPath(), "core") === false) {
+        if (StringUtil::indexOf($this->getObjMetadata()->getStrPath(), "core") === false) {
             throw new Exception("Current module not located in a core directory.", Exception::$level_ERROR);
         }
 
@@ -195,7 +196,7 @@ class PackagemanagerPackagemanagerModule implements PackagemanagerPackagemanager
                     $arrModules = Classloader::getInstance()->getArrModules();
                     $objMetadata = null;
                     foreach ($arrModules as $strPath => $strOneFolder) {
-                        if (uniStrpos($strOneFolder, $strOneModule) !== false) {
+                        if (StringUtil::indexOf($strOneFolder, $strOneModule) !== false) {
                             $objMetadata = new PackagemanagerMetadata();
                             $objMetadata->autoInit("/".$strPath);
 

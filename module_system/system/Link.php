@@ -404,10 +404,10 @@ class Link
 
         // any anchors set to the page?
         $strAnchor = "";
-        if (uniStrpos($strPageI, "#") !== false) {
+        if (StringUtil::indexOf($strPageI, "#") !== false) {
             //get anchor, remove anchor from link
-            $strAnchor = urlencode(uniSubstr($strPageI, uniStrpos($strPageI, "#") + 1));
-            $strPageI = uniSubstr($strPageI, 0, uniStrpos($strPageI, "#"));
+            $strAnchor = urlencode(uniSubstr($strPageI, StringUtil::indexOf($strPageI, "#") + 1));
+            $strPageI = uniSubstr($strPageI, 0, StringUtil::indexOf($strPageI, "#"));
         }
 
         //urlencoding

@@ -8,6 +8,7 @@ namespace Kajona\Debugging\Debug;
 
 use Kajona\System\System\Filesystem;
 use Kajona\System\System\Resourceloader;
+use Kajona\System\System\StringUtil;
 use Kajona\System\Tests\Testbase;
 use ReflectionClass;
 
@@ -233,7 +234,7 @@ class PHPUnit_Framework_TestCase {
         $arrMethods = $objReflection->getMethods();
 
         foreach($arrMethods as $objOneMethod) {
-            if(uniStrpos($objOneMethod->getName(), "test") !== false) {
+            if(StringUtil::indexOf($objOneMethod->getName(), "test") !== false) {
                 echo "calling ".$objOneMethod->getName()."...\n";
                 $objOneMethod->invoke($this);
             }

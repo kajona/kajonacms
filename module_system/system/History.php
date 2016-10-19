@@ -69,7 +69,7 @@ class History
         }
 
         //Just do s.th., if not in the rights-mgmt
-        if (uniStrpos($strQueryString, "module=right") !== false) {
+        if (StringUtil::indexOf($strQueryString, "module=right") !== false) {
             return;
         }
 

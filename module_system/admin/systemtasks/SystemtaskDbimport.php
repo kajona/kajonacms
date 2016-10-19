@@ -11,6 +11,7 @@ namespace Kajona\System\Admin\Systemtasks;
 
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Filesystem;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemModule;
 
 
@@ -78,8 +79,8 @@ class SystemtaskDbimport extends SystemtaskBase implements AdminSystemtaskInterf
             $arrDetails = $objFilesystem->getFileDetails(_projectpath_."/dbdumps/".$strOneFile);
 
             $strTimestamp = "";
-            if (uniStrpos($strOneFile, "_") !== false) {
-                $strTimestamp = uniSubstr($strOneFile, uniStrrpos($strOneFile, "_") + 1, (uniStrpos($strOneFile, ".") - uniStrrpos($strOneFile, "_")));
+            if (StringUtil::indexOf($strOneFile, "_") !== false) {
+                $strTimestamp = uniSubstr($strOneFile, uniStrrpos($strOneFile, "_") + 1, (StringUtil::indexOf($strOneFile, ".") - uniStrrpos($strOneFile, "_")));
             }
 
             if (uniStrlen($strTimestamp) > 9 && is_numeric($strTimestamp)) {

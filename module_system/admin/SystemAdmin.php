@@ -43,6 +43,7 @@ use Kajona\System\System\RequestDispatcher;
 use Kajona\System\System\RequestEntrypointEnum;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\ResponseObject;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemChangelog;
 use Kajona\System\System\SystemChangelogRestorer;
@@ -304,7 +305,7 @@ class SystemAdmin extends AdminSimple implements AdminInterface
     {
         $arrParams = array();
         foreach ($this->getAllParams() as $strName => $intValue) {
-            if (uniStrpos($strName, "aspect_") !== false) {
+            if (StringUtil::indexOf($strName, "aspect_") !== false) {
                 $arrParams[] = uniSubstr($strName, 7);
             }
         }
@@ -799,12 +800,12 @@ JS;
 
             //find out what the user is doing...
             $strLastUrl = $objOneSession->getStrLasturl();
-            if (uniStrpos($strLastUrl, "?") !== false) {
-                $strLastUrl = uniSubstr($strLastUrl, uniStrpos($strLastUrl, "?"));
+            if (StringUtil::indexOf($strLastUrl, "?") !== false) {
+                $strLastUrl = uniSubstr($strLastUrl, StringUtil::indexOf($strLastUrl, "?"));
             }
             $strActivity = "";
 
-            if (uniStrpos($strLastUrl, "admin=1") !== false) {
+            if (StringUtil::indexOf($strLastUrl, "admin=1") !== false) {
                 $strActivity .= $this->getLang("session_admin");
                 foreach (explode("&amp;", $strLastUrl) as $strOneParam) {
                     $arrUrlParam = explode("=", $strOneParam);

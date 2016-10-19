@@ -14,6 +14,7 @@ use Kajona\System\Portal\PortalInterface;
 use Kajona\System\System\Exception;
 use Kajona\System\System\HttpResponsetypes;
 use Kajona\System\System\ResponseObject;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemSetting;
 
 /**
@@ -162,7 +163,7 @@ class PackageserverPortal extends PortalController implements PortalInterface
                 if ($strNameFilter !== false) {
                     $intStart = null;
                     $intEnd = null;
-                    if (uniStrpos($strNameFilter, ",") !== false) {
+                    if (StringUtil::indexOf($strNameFilter, ",") !== false) {
                         if (!in_array($objOneFile->getStrName(), explode(",", $strNameFilter))) {
                             $bitAdd = false;
                         }

@@ -18,10 +18,9 @@ use Kajona\System\System\Exception;
 use Kajona\System\System\Lang;
 use Kajona\System\System\Model;
 use Kajona\System\System\ModelInterface;
-use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Reflection;
-use Kajona\System\System\ReflectionEnum;
 use Kajona\System\System\Resourceloader;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\UserUser;
 use Kajona\System\System\ValidatorInterface;
 use Kajona\System\System\Validators\ObjectvalidatorBase;
@@ -608,7 +607,7 @@ class AdminFormgenerator
 
         //backslash given?
         //the V5 way: namespaces
-        if (uniStrpos($strName, "\\") !== false) {
+        if (StringUtil::indexOf($strName, "\\") !== false) {
             $strClassname = $strName;
         } else {
             //backwards support for v4
@@ -647,7 +646,7 @@ class AdminFormgenerator
             return new $strClassname();
         }
 
-        if (uniStrpos($strClassname, "class_") === false) {
+        if (StringUtil::indexOf($strClassname, "class_") === false) {
             $strClassname = "class_" . $strClassname . "_validator";
         }
 

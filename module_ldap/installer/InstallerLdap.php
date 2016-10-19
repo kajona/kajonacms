@@ -72,7 +72,7 @@ class InstallerLdap extends InstallerBase implements InstallerRemovableInterface
      */
     public function isRemovable()
     {
-        return uniStrpos(Config::getInstance()->getConfig("loginproviders"), "ldap") === false;
+        return StringUtil::indexOf(Config::getInstance()->getConfig("loginproviders"), "ldap") === false;
     }
 
     /**

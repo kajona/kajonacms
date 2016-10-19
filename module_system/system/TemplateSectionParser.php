@@ -26,7 +26,7 @@ class TemplateSectionParser
         $intStart = false;
         if (preg_match("/<".$strSection."([\ a-zA-Z0-9\-='\"])*>/i", $strTemplate, $arrMatches) > 0) {
             $strPattern = $arrMatches[0];
-            $intStart = uniStrpos($strTemplate, $strPattern);
+            $intStart = StringUtil::indexOf($strTemplate, $strPattern);
 
             if (!$bitKeepSectionTag) {
                 $intStart += uniStrlen($strPattern);
@@ -34,7 +34,7 @@ class TemplateSectionParser
         }
 
         //find closing tag
-        $intEnd = uniStrpos($strTemplate, "</".$strSection.">");
+        $intEnd = StringUtil::indexOf($strTemplate, "</".$strSection.">");
         if ($bitKeepSectionTag) {
             $intEnd += uniStrlen("</".$strSection.">");
         }

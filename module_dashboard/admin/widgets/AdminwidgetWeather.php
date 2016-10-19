@@ -11,6 +11,7 @@ namespace Kajona\Dashboard\Admin\Widgets;
 
 use Kajona\System\System\Exception;
 use Kajona\System\System\Remoteloader;
+use Kajona\System\System\StringUtil;
 
 /**
  * @package module_dashboard
@@ -61,7 +62,7 @@ class AdminwidgetWeather extends Adminwidget implements AdminwidgetInterface {
             return "Please set up a location";
         }
 
-        if(uniStrpos($this->getFieldValue("location"), "GM") !== false) {
+        if(StringUtil::indexOf($this->getFieldValue("location"), "GM") !== false) {
             return "This widget changed, please update your location by editing the widget";
         }
 

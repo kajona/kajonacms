@@ -506,7 +506,7 @@ class MediamanagerFile extends \Kajona\System\System\Model implements \Kajona\Sy
 
         if ($strNameFilter !== false) {
             $arrParams = array();
-            if (uniStrpos($strNameFilter, ",") !== false) {
+            if (StringUtil::indexOf($strNameFilter, ",") !== false) {
                 $arrWhere = array();
                 foreach (explode(",", $strNameFilter) as $strOneLike) {
                     $arrWhere[] = " file_name = ?";
@@ -551,7 +551,7 @@ class MediamanagerFile extends \Kajona\System\System\Model implements \Kajona\Sy
 
         if ($strNameFilter !== false) {
             $arrParams = array();
-            if (uniStrpos($strNameFilter, ",") !== false) {
+            if (StringUtil::indexOf($strNameFilter, ",") !== false) {
                 $arrWhere = array();
                 foreach (explode(",", $strNameFilter) as $strOneLike) {
                     $arrWhere[] = " file_name = ?";

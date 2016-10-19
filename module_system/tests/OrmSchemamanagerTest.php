@@ -71,7 +71,7 @@ class OrmSchemamanagerTest extends Testbase
         }
 
         $this->assertNotNull($objEx);
-        $this->assertTrue(uniStrpos($objEx->getMessage(), "provides no target-table!") !== false);
+        $this->assertTrue(StringUtil::indexOf($objEx->getMessage(), "provides no target-table!") !== false);
     }
 
     public function testTargetTableException2()
@@ -86,7 +86,7 @@ class OrmSchemamanagerTest extends Testbase
         }
 
         $this->assertNotNull($objEx);
-        $this->assertTrue(uniStrpos($objEx->getMessage(), "is not in table.primaryColumn format") !== false);
+        $this->assertTrue(StringUtil::indexOf($objEx->getMessage(), "is not in table.primaryColumn format") !== false);
     }
 
     public function testDataTypeException()
@@ -101,7 +101,7 @@ class OrmSchemamanagerTest extends Testbase
         }
 
         $this->assertNotNull($objEx);
-        $this->assertTrue(uniStrpos($objEx->getMessage(), " is unknown (") !== false);
+        $this->assertTrue(StringUtil::indexOf($objEx->getMessage(), " is unknown (") !== false);
     }
 
     public function testTableColumnSyntaxException()
@@ -116,7 +116,7 @@ class OrmSchemamanagerTest extends Testbase
         }
 
         $this->assertNotNull($objEx);
-        $this->assertTrue(uniStrpos($objEx->getMessage(), "Syntax for tableColumn annotation at property") !== false);
+        $this->assertTrue(StringUtil::indexOf($objEx->getMessage(), "Syntax for tableColumn annotation at property") !== false);
     }
 
 

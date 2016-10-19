@@ -20,6 +20,7 @@ use Kajona\System\System\OrmObjectlistOrderby;
 use Kajona\System\System\OrmObjectlistRestriction;
 use Kajona\System\System\SearchPortalobjectInterface;
 use Kajona\System\System\SearchResultobjectInterface;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemChangelog;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\SystemSetting;
@@ -523,8 +524,8 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
     public static function getPageByName($strName)
     {
         //strip possible anchors
-        if (uniStrpos($strName, "#") !== false) {
-            $strName = uniSubstr($strName, 0, uniStrpos($strName, "#"));
+        if (StringUtil::indexOf($strName, "#") !== false) {
+            $strName = uniSubstr($strName, 0, StringUtil::indexOf($strName, "#"));
         }
 
         $objORM = new OrmObjectlist();

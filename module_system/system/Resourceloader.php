@@ -564,7 +564,7 @@ class Resourceloader
     public function getCorePathForPath($strPath, $bitPrependRealpath = false)
     {
         $strPath = uniStrReplace(_realpath_, "", $strPath);
-        $strPath = uniSubstr($strPath, 0, uniStrpos($strPath, "/"));
+        $strPath = uniSubstr($strPath, 0, StringUtil::indexOf($strPath, "/"));
 
         return ($bitPrependRealpath ? _realpath_ : "")."/".$strPath;
     }

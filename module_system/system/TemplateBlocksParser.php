@@ -35,9 +35,9 @@ class TemplateBlocksParser
         while (preg_match("/<".$strBlockDefinition."([\ a-zA-Z0-9=']*)(.*) ".TemplateKajonaSections::ATTR_NAME."=(\"|\')([\-\ a-zA-Z0-9]*)(\"|\')(.*)>/i", $strTemplate, $arrMatches) > 0) {
 
             $strPattern = $arrMatches[0];
-            $intStart = uniStrpos($strTemplate, $strPattern);
+            $intStart = StringUtil::indexOf($strTemplate, $strPattern);
 
-            $intEnd = uniStrpos($strTemplate, "</".$strBlockDefinition.">");
+            $intEnd = StringUtil::indexOf($strTemplate, "</".$strBlockDefinition.">");
             $intEnd += uniStrlen("</".$strBlockDefinition.">");
 
 

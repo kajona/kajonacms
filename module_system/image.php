@@ -21,6 +21,7 @@ use Kajona\System\System\Imageplugins\ImageText;
 use Kajona\System\System\RequestEntrypointEnum;
 use Kajona\System\System\ResponseObject;
 use Kajona\System\System\Session;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemEventidentifier;
 use Kajona\System\System\SystemModule;
 
@@ -170,7 +171,7 @@ class Flyimage
     private function resizeImage()
     {
         //Load the image-dimensions
-        if (is_file(_realpath_.$this->strFilename) && (uniStrpos($this->strFilename, "files") !== false || uniStrpos($this->strFilename, "templates") !== false)) {
+        if (is_file(_realpath_.$this->strFilename) && (StringUtil::indexOf($this->strFilename, "files") !== false || StringUtil::indexOf($this->strFilename, "templates") !== false)) {
 
             $strConditionalGetChecksum = md5(_realpath_.$this->strFilename.$this->intMaxWidth.$this->intMaxHeight.$this->intFixedWidth.$this->intFixedHeight);
             //check headers, maybe execution could be terminated right here  - done f

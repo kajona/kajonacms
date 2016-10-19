@@ -11,6 +11,7 @@ use Kajona\System\System\Database;
 use Kajona\System\System\DbDatatypes;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Filesystem;
+use Kajona\System\System\StringUtil;
 use SQLite3;
 use SQLite3Stmt;
 
@@ -691,8 +692,8 @@ class DbSqlite3 extends DbBase
     private function processQuery($strQuery)
     {
         $intCount = 1;
-        while (uniStrpos($strQuery, "?") !== false) {
-            $intPos = uniStrpos($strQuery, "?");
+        while (StringUtil::indexOf($strQuery, "?") !== false) {
+            $intPos = StringUtil::indexOf($strQuery, "?");
             $strQuery = substr($strQuery, 0, $intPos).":param".$intCount++.substr($strQuery, $intPos + 1);
         }
         return $strQuery;

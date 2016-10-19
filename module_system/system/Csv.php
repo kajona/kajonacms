@@ -281,7 +281,7 @@ class Csv
     public function setStrFilename($strFilename)
     {
         //replace realpath?
-        if (uniStrpos($strFilename, _realpath_) !== false) {
+        if (StringUtil::indexOf($strFilename, _realpath_) !== false) {
             $strFilename = uniStrReplace(_realpath_, "", $strFilename);
         }
         $this->strFilename = $strFilename;

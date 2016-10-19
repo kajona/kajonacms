@@ -18,7 +18,6 @@ use Kajona\System\System\InstallerBase;
 use Kajona\System\System\InstallerInterface;
 use Kajona\System\System\InstallerRemovableInterface;
 use Kajona\System\System\Logger;
-use Kajona\System\System\PharModule;
 use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemSetting;
 use Phar;
@@ -115,7 +114,7 @@ class PackagemanagerPackagemanagerPharmodule extends PackagemanagerPackagemanage
             return "";
         }
 
-        if (uniStrpos($this->getObjMetadata()->getStrPath(), "core") === false) {
+        if (StringUtil::indexOf($this->getObjMetadata()->getStrPath(), "core") === false) {
             throw new Exception("Current module not located in a core directory.", Exception::$level_ERROR);
         }
 

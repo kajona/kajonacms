@@ -33,6 +33,7 @@ use Kajona\System\System\RequestEntrypointEnum;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\ResponseObject;
 use Kajona\System\System\ServiceProvider;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\Template;
 use Kajona\System\System\TemplateBlockContainer;
@@ -1285,7 +1286,7 @@ JS;
             $strPlaceholder = $this->getParam("placeholder");
             $arrParts = explode("_", $strPlaceholder);
 
-            if (uniStrpos($arrParts[1], $objObject->getStrElement()) !== false) {
+            if (StringUtil::indexOf($arrParts[1], $objObject->getStrElement()) !== false) {
                 if (!$objLockmanager->isLocked()) {
                     $objLockmanager->lockRecord();
                 }

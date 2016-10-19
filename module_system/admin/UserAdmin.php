@@ -1199,8 +1199,8 @@ class UserAdmin extends AdminSimple implements AdminInterface
             }
 
             $strCheckbox = $this->objToolkit->formInputCheckbox($objSingleGroup->getSystemid(), "", in_array($strSingleGroup, $arrUserGroups));
-            $strCheckbox = uniSubstr($strCheckbox, uniStrpos($strCheckbox, "<input"));
-            $strCheckbox = uniSubstr($strCheckbox, 0, uniStrpos($strCheckbox, ">") + 1);
+            $strCheckbox = uniSubstr($strCheckbox, StringUtil::indexOf($strCheckbox, "<input"));
+            $strCheckbox = uniSubstr($strCheckbox, 0, StringUtil::indexOf($strCheckbox, ">") + 1);
 
             $arrRows[] = array($strCheckbox, $objSingleGroup->getStrName());
         }

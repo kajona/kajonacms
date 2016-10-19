@@ -13,6 +13,7 @@ use Kajona\System\System\Carrier;
 use Kajona\System\System\Classloader;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\SamplecontentInstallerInterface;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemModule;
 
 class SamplecontentInstallerHelper
@@ -80,7 +81,7 @@ class SamplecontentInstallerHelper
     {
         $arrTempInstaller = Resourceloader::getInstance()->getFolderContent("/installer", array(".php"));
         foreach($arrTempInstaller as $strPath => $strFilename) {
-            if(uniStrpos($strPath, $objPackage->getStrPath()) !== false) {
+            if(StringUtil::indexOf($strPath, $objPackage->getStrPath()) !== false) {
 
                 /** @var SamplecontentInstallerInterface $objInstance */
                 $objInstance = Classloader::getInstance()->getInstanceFromFilename($strPath, null, "Kajona\\System\\System\\SamplecontentInstallerInterface");

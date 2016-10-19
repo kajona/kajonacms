@@ -125,7 +125,7 @@ class PharModule
      */
     public static function isPhar($strPharFilePath)
     {
-        return uniStrpos($strPharFilePath, ".phar") !== false;
+        return StringUtil::indexOf($strPharFilePath, ".phar") !== false;
     }
 
     /**
@@ -136,7 +136,7 @@ class PharModule
      */
     public static function getPharBasename($strPharFilePath)
     {
-        $intExtensionPos = uniStrpos($strPharFilePath, ".phar");
+        $intExtensionPos = StringUtil::indexOf($strPharFilePath, ".phar");
         if ($intExtensionPos !== false) {
             return substr($strPharFilePath, 0, $intExtensionPos);
         }

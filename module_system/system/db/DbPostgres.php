@@ -506,8 +506,8 @@ class DbPostgres extends DbBase
     private function processQuery($strQuery)
     {
         $intCount = 1;
-        while (uniStrpos($strQuery, "?") !== false) {
-            $intPos = uniStrpos($strQuery, "?");
+        while (StringUtil::indexOf($strQuery, "?") !== false) {
+            $intPos = StringUtil::indexOf($strQuery, "?");
             $strQuery = substr($strQuery, 0, $intPos)."$".$intCount++.substr($strQuery, $intPos + 1);
         }
 

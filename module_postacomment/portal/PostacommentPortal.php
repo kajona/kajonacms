@@ -21,10 +21,10 @@ use Kajona\System\Portal\PortalInterface;
 use Kajona\System\System\ArraySectionIterator;
 use Kajona\System\System\HttpResponsetypes;
 use Kajona\System\System\Link;
-use Kajona\System\System\MessagingMessage;
 use Kajona\System\System\MessagingMessagehandler;
 use Kajona\System\System\ResponseObject;
 use Kajona\System\System\Rights;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\UserGroup;
 
@@ -149,7 +149,7 @@ class PostacommentPortal extends PortalController implements PortalInterface
             $arrForm["validation_errors"] = $this->strErrors;
 
             foreach ($arrForm as $strKey => $strValue) {
-                if (uniStrpos($strKey, "comment_") !== false) {
+                if (StringUtil::indexOf($strKey, "comment_") !== false) {
                     $arrForm[$strKey] = htmlspecialchars($strValue, ENT_QUOTES, "UTF-8", false);
                 }
             }
@@ -219,7 +219,7 @@ class PostacommentPortal extends PortalController implements PortalInterface
             $arrForm["error_fields"] = implode(",", $this->arrErrorFields);
 
             foreach ($arrForm as $strKey => $strValue) {
-                if (uniStrpos($strKey, "comment_") !== false) {
+                if (StringUtil::indexOf($strKey, "comment_") !== false) {
                     $arrForm[$strKey] = htmlspecialchars($strValue, ENT_QUOTES, "UTF-8", false);
                 }
             }

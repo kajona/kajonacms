@@ -20,7 +20,6 @@ use Kajona\System\System\ResponseObject;
 use Kajona\System\System\Rssfeed;
 use Kajona\System\System\ScriptletHelper;
 use Kajona\System\System\TemplateMapper;
-use Kajona\System\System\UserUser;
 use Kajona\System\System\Validators\EmailValidator;
 use Kajona\System\System\Validators\TextValidator;
 

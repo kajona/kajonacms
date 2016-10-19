@@ -8,7 +8,6 @@
 namespace Kajona\Navigation\System;
 
 use Kajona\Pages\Portal\ElementPortal;
-use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
@@ -299,7 +298,7 @@ class NavigationPoint extends Model implements ModelInterface, AdminListableInte
                     //if in alias mode, then check what type of target is requested
                     if ($objOneEntry->getIntType() == PagesPage::$INT_TYPE_ALIAS) {
                         $strAlias = uniStrtolower($objOneEntry->getStrAlias());
-                        if (uniStrpos($strAlias, "http") !== false) {
+                        if (StringUtil::indexOf($strAlias, "http") !== false) {
                             $objPoint->setStrPageE($objOneEntry->getStrAlias());
                         }
                         else {

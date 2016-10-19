@@ -153,7 +153,7 @@ class Toolkit
 
         //Determing the type
         $strType = "";
-        if (uniStrpos($strFilename, ".") !== false) {
+        if (StringUtil::indexOf($strFilename, ".") !== false) {
             $strType = uniSubstr($strFilename, uniStrrpos($strFilename, ".") + 1);
         }
         else {

@@ -70,7 +70,7 @@ abstract class AdminSimple extends AdminController
      */
     protected function getContentActionToolbar()
     {
-        if (uniStrpos($this->getAction(), "list") !== false || uniStrpos($this->getAction(), "new") !== false || uniStrpos($this->getAction(), "save") !== false) {
+        if (StringUtil::indexOf($this->getAction(), "list") !== false || StringUtil::indexOf($this->getAction(), "new") !== false || StringUtil::indexOf($this->getAction(), "save") !== false) {
             return "";
         }
 
@@ -132,7 +132,7 @@ abstract class AdminSimple extends AdminController
 
             $strTargetUrl = urldecode($this->getParam("reloadUrl"));
 
-            if ($strTargetUrl == "" || uniStrpos($strTargetUrl, $this->getSystemid()) !== false) {
+            if ($strTargetUrl == "" || StringUtil::indexOf($strTargetUrl, $this->getSystemid()) !== false) {
 
                 $strTargetUrl = "admin=1&module=".$this->getArrModule("modul");
 
@@ -140,8 +140,8 @@ abstract class AdminSimple extends AdminController
                 while ($this->getHistory($intI) !== null) {
                     $strTargetUrl = $this->getHistory($intI++);
 
-                    if (uniStrpos($strTargetUrl, $this->getSystemid()) === false) {
-                        if (uniStrpos($strTargetUrl, "admin=1") === false) {
+                    if (StringUtil::indexOf($strTargetUrl, $this->getSystemid()) === false) {
+                        if (StringUtil::indexOf($strTargetUrl, "admin=1") === false) {
                             $strTargetUrl = "admin=1&module=".$this->getArrModule("modul");
                         }
 
