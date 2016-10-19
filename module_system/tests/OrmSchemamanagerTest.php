@@ -5,6 +5,7 @@ namespace Kajona\System\Tests;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\OrmException;
 use Kajona\System\System\OrmSchemamanager;
+use Kajona\System\System\StringUtil;
 
 class OrmSchemamanagerTest extends Testbase
 {

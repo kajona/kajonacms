@@ -13,6 +13,7 @@ use Kajona\System\System\Config;
 use Kajona\System\System\DbDatatypes;
 use Kajona\System\System\InstallerBase;
 use Kajona\System\System\InstallerRemovableInterface;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\UserGroup;
 use Kajona\System\System\UserUser;
