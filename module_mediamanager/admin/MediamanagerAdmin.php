@@ -31,6 +31,7 @@ use Kajona\System\System\ModelInterface;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\ResponseObject;
+use Kajona\System\System\StringUtil;
 
 /**
  * Admin class of the mediamanager-module. Used to sync the repos with the filesystem and to upload / manage
@@ -745,7 +746,7 @@ HTML;
                 Link::getLinkAdmin(
                     $this->getArrModule("modul"),
                     "folderListFolderview",
-                    "&folder=".uniSubstr($strFolder, 0, uniStrrpos($strFolder, "/"))."&form_element=".$strFormElement,
+                    "&folder=".uniSubstr($strFolder, 0, StringUtil::lastIndexOf($strFolder, "/"))."&form_element=".$strFormElement,
                     $this->getLang("commons_one_level_up"),
                     $this->getLang("commons_one_level_up"),
                     "icon_folderActionLevelup"
@@ -992,7 +993,7 @@ HTML;
             //Check file for correct filters
             $arrAllowed = explode(",", $objRepo->getStrUploadFilter());
 
-            $strSuffix = uniStrtolower(uniSubstr($strFilename, uniStrrpos($strFilename, ".")));
+            $strSuffix = uniStrtolower(uniSubstr($strFilename, StringUtil::lastIndexOf($strFilename, ".")));
             if ($objRepo->getStrUploadFilter() == "" || in_array($strSuffix, $arrAllowed)) {
                 if ($bitPostData) {
                     $objFilesystem = new Filesystem();

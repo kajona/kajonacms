@@ -886,14 +886,14 @@ function createFilename($strName, $bitFolder = false)
     $strName = uniStrtolower($strName);
 
     if (!$bitFolder) {
-        $strEnding = uniSubstr($strName, (uniStrrpos($strName, ".") + 1));
+        $strEnding = uniSubstr($strName, (StringUtil::lastIndexOf($strName, ".") + 1));
     }
     else {
         $strEnding = "";
     }
 
     if (!$bitFolder) {
-        $strReturn = uniSubstr($strName, 0, (uniStrrpos($strName, ".")));
+        $strReturn = uniSubstr($strName, 0, (StringUtil::lastIndexOf($strName, ".")));
     }
     else {
         $strReturn = $strName;
@@ -934,7 +934,7 @@ function createFilename($strName, $bitFolder = false)
  */
 function getFileExtension($strPath)
 {
-    return uniStrtolower(uniSubstr($strPath, uniStrrpos($strPath, ".")));
+    return uniStrtolower(uniSubstr($strPath, StringUtil::lastIndexOf($strPath, ".")));
 }
 
 /**

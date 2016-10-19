@@ -34,7 +34,7 @@ abstract class InstallerBase extends Root implements InstallerInterface {
         //try to fetch the current dir
 
         $strClassname = get_class($this);
-        $intStrps = uniStrrpos($strClassname, "\\");
+        $intStrps = StringUtil::lastIndexOf($strClassname, "\\");
         if($intStrps !== false) {
             $strClassname = uniSubstr($strClassname, $intStrps+1);
         }

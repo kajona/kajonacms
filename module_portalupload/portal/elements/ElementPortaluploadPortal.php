@@ -17,6 +17,7 @@ use Kajona\System\System\HttpStatuscodes;
 use Kajona\System\System\Link;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\ResponseObject;
+use Kajona\System\System\StringUtil;
 
 
 /**
@@ -172,7 +173,7 @@ class ElementPortaluploadPortal extends ElementPortal implements PortalElementIn
 
                 //Check file for correct filters
                 $arrAllowed = explode(",", $objFilemanagerRepo->getStrUploadFilter());
-                $strSuffix = uniStrtolower(uniSubstr($arrSource["name"], uniStrrpos($arrSource["name"], ".")));
+                $strSuffix = uniStrtolower(uniSubstr($arrSource["name"], StringUtil::lastIndexOf($arrSource["name"], ".")));
                 if ($objFilemanagerRepo->getStrUploadFilter() == "" || in_array($strSuffix, $arrAllowed)) {
                     if ($objFilesystem->copyUpload($strTarget, $arrSource["tmp_name"])) {
 

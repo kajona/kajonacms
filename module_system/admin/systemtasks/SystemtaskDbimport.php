@@ -80,7 +80,7 @@ class SystemtaskDbimport extends SystemtaskBase implements AdminSystemtaskInterf
 
             $strTimestamp = "";
             if (StringUtil::indexOf($strOneFile, "_") !== false) {
-                $strTimestamp = uniSubstr($strOneFile, uniStrrpos($strOneFile, "_") + 1, (StringUtil::indexOf($strOneFile, ".") - uniStrrpos($strOneFile, "_")));
+                $strTimestamp = uniSubstr($strOneFile, StringUtil::lastIndexOf($strOneFile, "_") + 1, (StringUtil::indexOf($strOneFile, ".") - StringUtil::lastIndexOf($strOneFile, "_")));
             }
 
             if (uniStrlen($strTimestamp) > 9 && is_numeric($strTimestamp)) {

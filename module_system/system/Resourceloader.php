@@ -366,7 +366,7 @@ class Resourceloader
                         }
                         else {
                             //check, if suffix is in allowed list
-                            $strFileSuffix = uniSubstr($strSingleEntry, uniStrrpos($strSingleEntry, "."));
+                            $strFileSuffix = uniSubstr($strSingleEntry, StringUtil::lastIndexOf($strSingleEntry, "."));
                             if (in_array($strFileSuffix, $arrExtensionFilter)) {
                                 $arrReturn[_realpath_.$strCorePath.$strFolder."/".$strSingleEntry] = $strSingleEntry;
                             }
@@ -394,7 +394,7 @@ class Resourceloader
                 }
                 else {
                     //check, if suffix is in allowed list
-                    $strFileSuffix = uniSubstr($strSingleEntry, uniStrrpos($strSingleEntry, "."));
+                    $strFileSuffix = uniSubstr($strSingleEntry, StringUtil::lastIndexOf($strSingleEntry, "."));
                     if (in_array($strFileSuffix, $arrExtensionFilter)) {
                         $strKey = array_search($strSingleEntry, $arrReturn);
                         if ($strKey !== false) {

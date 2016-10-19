@@ -57,8 +57,8 @@ class SamplecontentInstallerHelper
 
         uksort($arrInstaller, function ($strA, $strB) {
 
-            $strNameA = uniStrrpos($strA, "\\") !== false ? uniSubstr($strA, uniStrrpos($strA, "\\") + 1) : $strA;
-            $strNameB = uniStrrpos($strB, "\\") !== false ? uniSubstr($strB, uniStrrpos($strB, "\\") + 1) : $strB;
+            $strNameA = StringUtil::lastIndexOf($strA, "\\") !== false ? uniSubstr($strA, StringUtil::lastIndexOf($strA, "\\") + 1) : $strA;
+            $strNameB = StringUtil::lastIndexOf($strB, "\\") !== false ? uniSubstr($strB, StringUtil::lastIndexOf($strB, "\\") + 1) : $strB;
 
             return strcmp(strtolower($strNameA), strtolower($strNameB));
         });

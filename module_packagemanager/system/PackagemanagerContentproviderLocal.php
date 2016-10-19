@@ -15,6 +15,7 @@ use Kajona\System\System\Filesystem;
 use Kajona\System\System\Logger;
 use Kajona\System\System\Reflection;
 use Kajona\System\System\Resourceloader;
+use Kajona\System\System\StringUtil;
 
 
 /**
@@ -86,7 +87,7 @@ class PackagemanagerContentproviderLocal implements PackagemanagerContentprovide
         $objFilesystem = new Filesystem();
 
         //Check file for correct filters
-        $strSuffix = uniStrtolower(uniSubstr($arrSource["name"], uniStrrpos($arrSource["name"], ".")));
+        $strSuffix = uniStrtolower(uniSubstr($arrSource["name"], StringUtil::lastIndexOf($arrSource["name"], ".")));
         if (in_array($strSuffix, array(".phar"))) {
             if ($objFilesystem->copyUpload($strTarget, $arrSource["tmp_name"])) {
                 Logger::getInstance(Logger::PACKAGEMANAGEMENT)->addLogRow("uploaded package ".$arrSource["name"]." to ".$strTarget, Logger::$levelInfo);

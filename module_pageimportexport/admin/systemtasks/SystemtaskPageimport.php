@@ -17,6 +17,7 @@ use Kajona\System\System\Filesystem;
 use Kajona\System\System\LanguagesLanguage;
 use Kajona\System\System\Logger;
 use Kajona\System\System\Objectfactory;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\XmlParser;
 use SimpleXMLElement;
@@ -133,7 +134,7 @@ class SystemtaskPageimport extends SystemtaskBase implements AdminSystemtaskInte
         $objFilesystem = new Filesystem();
         $strTarget = "/import_".generateSystemid().".xml";
 
-        $strSuffix = uniStrtolower(uniSubstr($arrFile["name"], uniStrrpos($arrFile["name"], ".")));
+        $strSuffix = uniStrtolower(uniSubstr($arrFile["name"], StringUtil::lastIndexOf($arrFile["name"], ".")));
         if ($strSuffix == ".xml") {
             if ($objFilesystem->copyUpload($strTarget, $arrFile["tmp_name"])) {
                 Logger::getInstance()->addLogRow("uploaded file ".$strTarget, Logger::$levelInfo);
