@@ -157,7 +157,11 @@ class MessagingMessagehandler
         }
 
         $objMail->setSubject($strSubject);
-        $objMail->setText($strBody);
+
+        //add a read image to the body
+        $strImageUrl = _xmlpath_."?module=messaging&action=setRead&systemid=".$objMessage->getSystemid();
+        $strBody .= "<img src='{$strImageUrl}' width='1' height='1'>";
+        $objMail->setHtml($strBody);
         $objMail->addTo($objUser->getStrEmail());
 
         Carrier::getInstance()->getObjLang()->setStrTextLanguage($strOriginalLang);
