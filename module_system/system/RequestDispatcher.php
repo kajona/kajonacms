@@ -147,7 +147,7 @@ class RequestDispatcher
 
 
                     //fill the history array to track actions
-                    if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::INDEX()) && Carrier::getInstance()->getParam("folderview")) {
+                    if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::INDEX()) && empty(Carrier::getInstance()->getParam("folderview"))) {
                         $objHistory = new History();
                         //Writing to the history
                         $objHistory->setAdminHistory();
