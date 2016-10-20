@@ -463,7 +463,7 @@ class NavigationPoint extends Model implements ModelInterface, AdminListableInte
      */
     public function setStrImage($strImage)
     {
-        $strImage = uniStrReplace(_webpath_, "", $strImage);
+        $strImage = StringUtil::replace(_webpath_, "", $strImage);
         $this->strImage = $strImage;
     }
 

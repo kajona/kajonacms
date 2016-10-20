@@ -7,6 +7,7 @@
 namespace Kajona\System\System\Scriptlets;
 
 use Kajona\System\System\ScriptletInterface;
+use Kajona\System\System\StringUtil;
 
 
 /**
@@ -39,14 +40,14 @@ class ScriptletImagehelper implements ScriptletInterface
         foreach ($arrTemp[0] as $intKey => $strSearchString) {
 
             if (isset($arrTemp[4][$intKey]) && $arrTemp[4][$intKey] == ",fixed") {
-                $strContent = uniStrReplace(
+                $strContent = StringUtil::replace(
                     $strSearchString,
                     _webpath_."/image.php?image=".urlencode($arrTemp[1][$intKey])."&amp;fixedWidth=".$arrTemp[2][$intKey]."&amp;fixedHeight=".$arrTemp[3][$intKey],
                     $strContent
                 );
             }
             else {
-                $strContent = uniStrReplace(
+                $strContent = StringUtil::replace(
                     $strSearchString,
                     _webpath_."/image.php?image=".urlencode($arrTemp[1][$intKey])."&amp;maxWidth=".$arrTemp[2][$intKey]."&amp;maxHeight=".$arrTemp[3][$intKey],
                     $strContent

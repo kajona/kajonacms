@@ -89,7 +89,7 @@ function DEBUG_walkFolderRecursive($strStartFolder, $arrSearchPatterns, &$arrOcc
         }
 
         if(array_sum($arrHits) > 0) {
-            echo uniStrReplace(_realpath_, "", $strStartFolder)."/<b>".$strFilename."</b>\n";
+            echo StringUtil::replace(_realpath_, "", $strStartFolder)."/<b>".$strFilename."</b>\n";
             foreach($arrHits as $strOneHit => $intCount) {
                 $arrOccurences[$strOneHit] += $intCount;
                 if($intCount > 0) {

@@ -164,7 +164,7 @@ class Lang
     public function replaceParams($strProperty, $arrParameters)
     {
         foreach ($arrParameters as $intKey => $strParameter) {
-            $strProperty = uniStrReplace("{".$intKey."}", $strParameter, $strProperty);
+            $strProperty = StringUtil::replace("{".$intKey."}", $strParameter, $strProperty);
         }
 
         return $strProperty;

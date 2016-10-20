@@ -577,7 +577,7 @@ abstract class AdminSimple extends AdminController
 
             //sanitize critical chars
             $strDialogTitle = $objListEntry->getStrDisplayName();
-            $strDialogTitle = addslashes(uniStrReplace(array("\n", "\r"), array(), strip_tags(nl2br($strDialogTitle))));
+            $strDialogTitle = addslashes(StringUtil::replace(array("\n", "\r"), array(), strip_tags(nl2br($strDialogTitle))));
 
 
             //the tag list is more complex and wrapped by a js-logic to load the tags by ajax afterwards

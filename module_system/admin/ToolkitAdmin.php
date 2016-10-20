@@ -167,8 +167,8 @@ class ToolkitAdmin extends Toolkit
                 toolbar : '".$strToolbarset."',
                 ".$strTemplateInit."
                 language : '".$strLanguage."',
-                filebrowserBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("folderview", "browserChooser", "&form_element=ckeditor"))."',
-                filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid=".SystemSetting::getConfigValue("_mediamanager_default_imagesrepoid_")."&form_element=ckeditor&bit_link=1"))."'
+                filebrowserBrowseUrl : '".StringUtil::replace("&amp;", "&", getLinkAdminHref("folderview", "browserChooser", "&form_element=ckeditor"))."',
+                filebrowserImageBrowseUrl : '".StringUtil::replace("&amp;", "&", getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid=".SystemSetting::getConfigValue("_mediamanager_default_imagesrepoid_")."&form_element=ckeditor&bit_link=1"))."'
 	        };
             CKEDITOR.replace($(\"textarea[name='".$strName."'][data-kajona-editorid='".$arrTemplate["editorid"]."']\")[0], ckeditorConfig);
         ";
@@ -334,7 +334,7 @@ class ToolkitAdmin extends Toolkit
 
         $arrTemplate["opener"] .= $strAddonAction;
 
-        $strJsVarName = uniStrReplace(array("[", "]"), array("", ""), $strName);
+        $strJsVarName = StringUtil::replace(array("[", "]"), array("", ""), $strName);
 
         $arrTemplate["ajaxScript"] = "
 	        <script type=\"text/javascript\">
@@ -353,7 +353,7 @@ class ToolkitAdmin extends Toolkit
                             });
                         };
 
-                        $('#".uniStrReplace(array("[", "]"), array("\\\[", "\\\]"), $strName)."').autocomplete(objConfig);
+                        $('#".StringUtil::replace(array("[", "]"), array("\\\[", "\\\]"), $strName)."').autocomplete(objConfig);
                     });
 	            });
 	        </script>
@@ -422,7 +422,7 @@ class ToolkitAdmin extends Toolkit
 
         $arrTemplate["opener"] .= $strResetIcon;
 
-        $strName = uniStrReplace(array("[", "]"), array("\\\[", "\\\]"), $strName);
+        $strName = StringUtil::replace(array("[", "]"), array("\\\[", "\\\]"), $strName);
         $arrTemplate["ajaxScript"] = "
 	        <script type=\"text/javascript\">
 	            require(['jquery', 'v4skin'], function($, v4skin){
@@ -729,8 +729,8 @@ class ToolkitAdmin extends Toolkit
         $arrTemplate["mediamanagerRepoId"] = $strMediamangerRepoSystemId;
         $arrTemplate["uploadId"] = $strUploadId;
 
-        $strAllowedFileRegex = uniStrReplace(array(".", ","), array("", "|"), $strAllowedFileTypes);
-        $strAllowedFileTypes = uniStrReplace(array(".", ","), array("", "', '"), $strAllowedFileTypes);
+        $strAllowedFileRegex = StringUtil::replace(array(".", ","), array("", "|"), $strAllowedFileTypes);
+        $strAllowedFileTypes = StringUtil::replace(array(".", ","), array("", "', '"), $strAllowedFileTypes);
 
         $arrTemplate["allowedExtensions"] = $strAllowedFileTypes != "" ? $objText->getLang("upload_allowed_extensions", "mediamanager").": '".$strAllowedFileTypes."'" : $strAllowedFileTypes;
         $arrTemplate["maxFileSize"] = $objConfig->getPhpMaxUploadSize();
@@ -1535,8 +1535,8 @@ class ToolkitAdmin extends Toolkit
      */
     public function listDeleteButton($strElementName, $strQuestion, $strLinkHref)
     {
-        $strElementName = uniStrReplace(array('\''), array('\\\''), $strElementName);
-        $strQuestion = uniStrReplace("%%element_name%%", htmlToString($strElementName, true), $strQuestion);
+        $strElementName = StringUtil::replace(array('\''), array('\\\''), $strElementName);
+        $strQuestion = StringUtil::replace("%%element_name%%", htmlToString($strElementName, true), $strQuestion);
 
 
         return $this->listConfirmationButton($strQuestion, $strLinkHref, "icon_delete", Carrier::getInstance()->getObjLang()->getLang("commons_delete", "system"), Carrier::getInstance()->getObjLang()->getLang("dialog_deleteHeader", "system"), Carrier::getInstance()->getObjLang()->getLang("dialog_deleteButton", "system"));
@@ -2143,7 +2143,7 @@ HTML;
             $strOneLine = str_replace(array("<pre>", "</pre>", "\n"), array(" ", " ", "\r\n"), $strOneLine);
 
             $strOneLine = htmlToString($strOneLine, true);
-            $strOneLine = uniStrReplace(
+            $strOneLine = StringUtil::replace(
                 array("INFO", "ERROR", "WARNING"),
                 array(
                     "<span style=\"color: green\">INFO</span>",
@@ -2479,7 +2479,7 @@ HTML;
         $strReturn = "";
         $arrTemplate = array();
         $arrTemplate["title"] = Carrier::getInstance()->getObjLang()->getLang("quickhelp_title", "system");
-        $arrTemplate["text"] = uniStrReplace(array("\r", "\n"), "", addslashes($strText));
+        $arrTemplate["text"] = StringUtil::replace(array("\r", "\n"), "", addslashes($strText));
         $strReturn .= $this->objTemplate->fillTemplateFile($arrTemplate, "/elements.tpl", "quickhelp");
 
         //and the button
@@ -2597,7 +2597,7 @@ HTML;
                         return false;
                     };
 
-                    $('#".uniStrReplace(array("[", "]"), array("\\\[", "\\\]"), $strName)."').autocomplete(objConfig);
+                    $('#".StringUtil::replace(array("[", "]"), array("\\\[", "\\\]"), $strName)."').autocomplete(objConfig);
                 });
             
             });
@@ -2849,7 +2849,7 @@ HTML;
                 "elementName"          => $arrOneEntry["name"],
                 "elementAction"        => $arrOneEntry["onclick"],
                 "elementLink"          => $arrOneEntry["link"],
-                "elementActionEscaped" => uniStrReplace("'", "\'", $arrOneEntry["onclick"]),
+                "elementActionEscaped" => StringUtil::replace("'", "\'", $arrOneEntry["onclick"]),
                 "elementFullEntry"     => $arrOneEntry["fullentry"]
             );
 
@@ -2888,7 +2888,7 @@ HTML;
                             "elementName"          => $arrOneSubmenu["name"],
                             "elementAction"        => $arrOneSubmenu["onclick"],
                             "elementLink"          => $arrOneSubmenu["link"],
-                            "elementActionEscaped" => uniStrReplace("'", "\'", $arrOneSubmenu["onclick"]),
+                            "elementActionEscaped" => StringUtil::replace("'", "\'", $arrOneSubmenu["onclick"]),
                             "elementFullEntry"     => $arrOneEntry["fullentry"]
                         );
 

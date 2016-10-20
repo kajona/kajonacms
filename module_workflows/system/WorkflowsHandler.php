@@ -222,7 +222,7 @@ class WorkflowsHandler extends \Kajona\System\System\Model implements \Kajona\Sy
         }
 
         if ($this->getStrHandlerClass() != "" && Resourceloader::getInstance()->getPathForFile("/system/workflows/".$strClassname.".php") !== false) {
-            $strClassname = uniStrReplace(".php", "", $this->getStrHandlerClass());
+            $strClassname = StringUtil::replace(".php", "", $this->getStrHandlerClass());
             $objReflection = new ReflectionClass($strClassname);
 
             if (!$objReflection->isAbstract()) {

@@ -50,7 +50,7 @@ class SamplecontentInstallerHelper
         $arrInstaller = array();
         foreach ($arrTempInstaller as $objInstaller) {
             if ($objInstaller !== null) {
-                $arrInstaller[uniStrReplace("class_", "", get_class($objInstaller))] = $objInstaller;
+                $arrInstaller[StringUtil::replace("class_", "", get_class($objInstaller))] = $objInstaller;
             }
         }
 

@@ -621,7 +621,7 @@ class Reflection
      */
     private function searchAllAnnotationsInDoc($strDoc)
     {
-        $strDoc = uniStrReplace(array("\r\n", "\r"), "\n", $strDoc); //replace needed as regex on windows or mac won't work properly
+        $strDoc = StringUtil::replace(array("\r\n", "\r"), "\n", $strDoc); //replace needed as regex on windows or mac won't work properly
 
         $arrReturn = array();
 
@@ -702,8 +702,8 @@ class Reflection
                 }
                 elseif (isset($arrOneMatch[6]) && $arrOneMatch[6] != "") {
                     $strParamValue = $arrOneMatch[6];
-                    $strParamValue = uniStrReplace(array("{"), "[", $strParamValue);
-                    $strParamValue = uniStrReplace(array("}"), "]", $strParamValue);
+                    $strParamValue = StringUtil::replace(array("{"), "[", $strParamValue);
+                    $strParamValue = StringUtil::replace(array("}"), "]", $strParamValue);
                     $strParamValue = json_decode($strParamValue);
                 }
                 $arrParams[$strParamName] = $strParamValue;

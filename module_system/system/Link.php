@@ -140,7 +140,7 @@ class Link
         }
 
         if (!$bitEncodedAmpersand) {
-            $strLink = uniStrReplace("&amp;", "&", $strLink);
+            $strLink = StringUtil::replace("&amp;", "&", $strLink);
         }
 
         return $strLink;
@@ -202,7 +202,7 @@ class Link
         }
 
         if (!$bitEncodedAmpersand) {
-            $strLink = uniStrReplace("&amp;", "&", $strLink);
+            $strLink = StringUtil::replace("&amp;", "&", $strLink);
         }
 
         return $strLink;
@@ -230,7 +230,7 @@ class Link
         $strLink = "";
         //if($strParams != "")
         //    $strParams = str_replace("&", "&amp;", $strParams);
-        $strTitle = addslashes(uniStrReplace(array("\n", "\r"), array(), strip_tags(nl2br($strTitle))));
+        $strTitle = addslashes(StringUtil::replace(array("\n", "\r"), array(), strip_tags(nl2br($strTitle))));
 
         if ($bitPortalEditor && $intHeight == "500") {
             $intHeight = 690;
@@ -289,7 +289,7 @@ class Link
     public static function getLinkAdminDialog($strModule, $strAction, $strParams = "", $strText = "", $strAlt = "", $strImage = "", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false, $strOnClick = "", $intWidth = null, $intHeight = null)
     {
         $strLink = "";
-        $strTitle = addslashes(uniStrReplace(array("\n", "\r"), array(), strip_tags(nl2br($strTitle))));
+        $strTitle = addslashes(StringUtil::replace(array("\n", "\r"), array(), strip_tags(nl2br($strTitle))));
 
         if ($bitPortalEditor) {
             $strParams .= "&pe=1";
@@ -548,7 +548,7 @@ class Link
      */
     private static function parseParamsString($strParams, &$strSystemid = "")
     {
-        $strParams = uniStrReplace("&amp;", "&", $strParams);
+        $strParams = StringUtil::replace("&amp;", "&", $strParams);
 
         //if given, remove first ampersand from params
         if (substr($strParams, 0, 1) == "&") {

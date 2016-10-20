@@ -24,6 +24,7 @@ use Kajona\System\System\HttpResponsetypes;
 use Kajona\System\System\Link;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\ResponseObject;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemJSTreeBuilder;
 use Kajona\System\System\SystemJSTreeConfig;
 use Kajona\System\System\SystemModule;
@@ -338,8 +339,8 @@ class NavigationAdmin extends AdminSimple implements AdminInterface {
         $objForm->updateSourceObject();
 
         $strExternalLink = $objPoint->getStrPageE();
-        $strExternalLink = uniStrReplace(_indexpath_, "_indexpath_", $strExternalLink);
-        $strExternalLink = uniStrReplace(_webpath_, "_webpath_", $strExternalLink);
+        $strExternalLink = StringUtil::replace(_indexpath_, "_indexpath_", $strExternalLink);
+        $strExternalLink = StringUtil::replace(_webpath_, "_webpath_", $strExternalLink);
         $objPoint->setStrPageE($strExternalLink);
 
         if($this->getParam("mode") == "new")

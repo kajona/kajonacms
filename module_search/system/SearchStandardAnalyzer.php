@@ -123,7 +123,7 @@ class SearchStandardAnalyzer {
      */
     private function clearmarks() {
         $arrMarks = Config::getInstance("module_search")->getConfig("marks_list");
-        $this->setText(uniStrReplace($arrMarks, "", html_entity_decode($this->getText())));
+        $this->setText(StringUtil::replace($arrMarks, "", html_entity_decode($this->getText())));
     }
 
 }

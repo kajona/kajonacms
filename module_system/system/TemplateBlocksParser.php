@@ -62,7 +62,7 @@ class TemplateBlocksParser
                     $strContent = StringUtil::substring($strTemplateSection, StringUtil::length($arrMatches[0]), StringUtil::length("</".$strBlockDefinition.">") * -1);
                     $arrBlocks[$arrMatches[4]] = new TemplateBlockContainer($strBlockDefinition, $arrMatches[4], $arrMatches[0], $strContent, $strTemplateSection);
 
-                    $strTemplate = uniStrReplace($strTemplateSection, "", $strTemplate);
+                    $strTemplate = StringUtil::replace($strTemplateSection, "", $strTemplate);
                 }
             }
             else {
@@ -87,7 +87,7 @@ class TemplateBlocksParser
         foreach ($arrBlocks as $strBlockName => $strContent) {
             if (isset($arrBlocksOnTemplate[$strBlockName])) {
                 $objCurBlock = $arrBlocksOnTemplate[$strBlockName];
-                $strTemplate = uniStrReplace($objCurBlock->getStrFullSection(), $strContent, $strTemplate);
+                $strTemplate = StringUtil::replace($objCurBlock->getStrFullSection(), $strContent, $strTemplate);
             }
 
         }

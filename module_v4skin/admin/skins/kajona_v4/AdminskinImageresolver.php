@@ -8,6 +8,7 @@
 namespace Kajona\V4skin\Admin\Skins\Kajona_V4;
 
 use Kajona\System\Admin\AdminskinImageresolverInterface;
+use Kajona\System\System\StringUtil;
 
 /**
  * @author sidler@mulchprod.de
@@ -29,7 +30,7 @@ class AdminskinImageresolver implements AdminskinImageresolverInterface {
      */
     public function getImage($strName, $strAlt = "", $bitBlockTooltip = false, $strEntryId = "") {
 
-        $strName = uniStrReplace(".png", "", $strName);
+        $strName = StringUtil::replace(".png", "", $strName);
 
         $strFA = $this->getFASomeImage($strName, ($bitBlockTooltip ? "" : $strAlt));
         if($strFA != null)
@@ -48,7 +49,7 @@ class AdminskinImageresolver implements AdminskinImageresolverInterface {
      */
     private function getFASomeImage($strImage, $strTooltip) {
 
-        $strName = uniStrReplace(array(".png", ".gif"), "", $strImage);
+        $strName = StringUtil::replace(array(".png", ".gif"), "", $strImage);
         if(isset(self::$arrFAImages[$strName] )) {
             if($strTooltip == "")
                 return self::$arrFAImages[$strName];

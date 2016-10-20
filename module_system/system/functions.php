@@ -523,12 +523,12 @@ function dateToString($objDate, $bitLong = true, $strFormat = "")
         }
 
         //"d.m.Y H:i:s";
-        $strReturn = uniStrReplace("d", $objDate->getIntDay(), $strReturn);
-        $strReturn = uniStrReplace("m", $objDate->getIntMonth(), $strReturn);
-        $strReturn = uniStrReplace("y", $objDate->getIntYear(), $strReturn);
-        $strReturn = uniStrReplace("h", $objDate->getIntHour(), $strReturn);
-        $strReturn = uniStrReplace("i", $objDate->getIntMin(), $strReturn);
-        $strReturn = uniStrReplace("s", $objDate->getIntSec(), $strReturn);
+        $strReturn = StringUtil::replace("d", $objDate->getIntDay(), $strReturn);
+        $strReturn = StringUtil::replace("m", $objDate->getIntMonth(), $strReturn);
+        $strReturn = StringUtil::replace("y", $objDate->getIntYear(), $strReturn);
+        $strReturn = StringUtil::replace("h", $objDate->getIntHour(), $strReturn);
+        $strReturn = StringUtil::replace("i", $objDate->getIntMin(), $strReturn);
+        $strReturn = StringUtil::replace("s", $objDate->getIntSec(), $strReturn);
 
     }
     return $strReturn;
@@ -774,9 +774,9 @@ function htmlStripTags($strHtml, $strAllowTags = "")
 function processWysiwygHtmlContent($strHtmlContent)
 {
     //replace the webpath to remain flexible
-    $strHtmlContent = uniStrReplace(_webpath_, "_webpath_", $strHtmlContent);
+    $strHtmlContent = StringUtil::replace(_webpath_, "_webpath_", $strHtmlContent);
 
-    $strHtmlContent = uniStrReplace("%%", "\%\%", $strHtmlContent);
+    $strHtmlContent = StringUtil::replace("%%", "\%\%", $strHtmlContent);
 
     //synchronize the width/height style-values set via WYSIWYG editor for on-the-fly images
     $arrImages = "";
@@ -790,7 +790,7 @@ function processWysiwygHtmlContent($strHtmlContent)
         $strScalingParams = $strNewWidth >= $strNewHeight ? "&amp;maxWidth=".$strNewWidth : "&amp;maxHeight=".$strNewHeight;
 
         $strReplace = "image.php?image=".$arrImages[1][$i].$strScalingParams."\" ".$arrImages[3][$i]."width: ".$strNewWidth."px; height: ".$strNewHeight."px;";
-        $strHtmlContent = uniStrReplace($strSearch, $strReplace, $strHtmlContent);
+        $strHtmlContent = StringUtil::replace($strSearch, $strReplace, $strHtmlContent);
     }
 
     return $strHtmlContent;
@@ -865,7 +865,7 @@ function xssSafeString($strText) {
 function removeDirectoryTraversals($strFilename)
 {
     $strFilename = urldecode($strFilename);
-    $strFilename = uniStrReplace("..", "", $strFilename);
+    $strFilename = StringUtil::replace("..", "", $strFilename);
     return $strFilename;
 //    return uniStrReplace("//", "/", $strFilename); //FIXME: should stay in place but breaks "phar:///". 
 }
@@ -901,11 +901,11 @@ function createFilename($strName, $bitFolder = false)
     $arrSearch = array(" ", ".", ":", "ä", "ö", "ü", "/", "ß", "!");
     $arrReplace = array("_", "_", "_", "ae", "oe", "ue", "_", "ss", "_");
 
-    $strReturn = uniStrReplace($arrSearch, $arrReplace, $strReturn);
+    $strReturn = StringUtil::replace($arrSearch, $arrReplace, $strReturn);
 
     //and the ending
     if (!$bitFolder) {
-        $strEnding = uniStrReplace($arrSearch, $arrReplace, $strEnding);
+        $strEnding = StringUtil::replace($arrSearch, $arrReplace, $strEnding);
     }
 
     //remove all other special characters

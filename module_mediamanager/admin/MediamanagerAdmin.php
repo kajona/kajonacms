@@ -369,7 +369,7 @@ HTML;
                         require(['mediamanager']);
                         function init_fm_newfolder_dialog() {
                             jsDialog_1.setTitle('".$this->getLang("folder_new_dialogHeader")."');
-                            jsDialog_1.setContent('".uniStrReplace(array("\r\n", "\n"), "", addslashes($strDialog))."',
+                            jsDialog_1.setContent('".StringUtil::replace(array("\r\n", "\n"), "", addslashes($strDialog))."',
                                                   '".$this->getLang("commons_create_folder")."',
                                                   'javascript:require(\'mediamanager\').createFolder(\'folderName\', \'".$this->getSystemid()."\'); jsDialog_1.hide();');
                                     jsDialog_1.init(); }
@@ -474,7 +474,7 @@ HTML;
         $this->setArrModuleEntry("template", "/folderview.tpl");
 
         $strFile = $this->getParam("file");
-        $strFile = uniStrReplace(_webpath_, "", $strFile);
+        $strFile = StringUtil::replace(_webpath_, "", $strFile);
 
 
         if (is_file(_realpath_.$strFile)) {

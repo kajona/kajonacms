@@ -84,7 +84,7 @@ class TemplateSectionParser
     {
         do {
             $strFullSection = $this->readSection($strTemplate, $strSection, true);
-            $strTemplate = uniStrReplace($strFullSection, "", $strTemplate);
+            $strTemplate = StringUtil::replace($strFullSection, "", $strTemplate);
         } while ($strFullSection != "" && $strFullSection != null);
 
         return $strTemplate;

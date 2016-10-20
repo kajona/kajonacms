@@ -14,6 +14,7 @@ use Kajona\System\Admin\Systemtasks\SystemtaskBase;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Exception;
 use Kajona\System\System\LanguagesLanguage;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemModule;
 use XMLWriter;
 
@@ -255,7 +256,7 @@ class SystemtaskPageexport extends SystemtaskBase implements AdminSystemtaskInte
 
             $objWriter->startElement("foreignTable");
             $objWriter->startAttribute("table");
-            $objWriter->text(uniStrReplace(_dbprefix_, "", $strElementTable));
+            $objWriter->text(StringUtil::replace(_dbprefix_, "", $strElementTable));
             $objWriter->endAttribute();
 
 

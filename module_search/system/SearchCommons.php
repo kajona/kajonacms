@@ -46,7 +46,7 @@ class SearchCommons extends \Kajona\System\System\Model implements \Kajona\Syste
      */
     public function doPortalSearch($objSearch, $intStart = 0, $intEnd = 50)
     {
-        $objSearch->setStrQuery(trim(uniStrReplace("%", "", $objSearch->getStrQuery())));
+        $objSearch->setStrQuery(trim(StringUtil::replace("%", "", $objSearch->getStrQuery())));
         if (StringUtil::length($objSearch->getStrQuery()) == 0) {
             return array();
         }

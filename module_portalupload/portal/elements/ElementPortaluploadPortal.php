@@ -81,7 +81,7 @@ class ElementPortaluploadPortal extends ElementPortal implements PortalElementIn
 
             $arrTemplate["formErrors"] = $formErrors;
 
-            $strAllowedFileRegex = uniStrReplace(array(".", ","), array("", "|"), $objFilemanagerRepo->getStrUploadFilter());
+            $strAllowedFileRegex = StringUtil::replace(array(".", ","), array("", "|"), $objFilemanagerRepo->getStrUploadFilter());
 
             $arrTemplate["formAction"] = Link::getLinkPortalHref($this->getPagename(), "", $this->getAction(), "", $strDlFolderId);
             $arrTemplate["maxFileSize"] = \Kajona\System\System\Carrier::getInstance()->getObjConfig()->getPhpMaxUploadSize();

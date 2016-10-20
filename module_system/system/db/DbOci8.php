@@ -641,7 +641,7 @@ class DbOci8 extends DbBase
     {
 
         if (uniStripos($strQuery, "select") !== false) {
-            $strQuery = uniStrReplace(array(" as ", " AS "), array(" ", " "), $strQuery);
+            $strQuery = StringUtil::replace(array(" as ", " AS "), array(" ", " "), $strQuery);
         }
 
         $objStatement = oci_parse($this->linkDB, $strQuery);

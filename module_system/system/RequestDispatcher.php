@@ -111,14 +111,14 @@ class RequestDispatcher
             //header itself given?
             if (!issetServer($strHeaderName)) {
                 //reload to https
-                ResponseObject::getInstance()->setStrRedirectUrl(uniStrReplace("http:", "https:", ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML()) ? _xmlpath_ : _indexpath_)."?".getServer("QUERY_STRING"));
+                ResponseObject::getInstance()->setStrRedirectUrl(StringUtil::replace("http:", "https:", ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML()) ? _xmlpath_ : _indexpath_)."?".getServer("QUERY_STRING"));
                 ResponseObject::getInstance()->sendHeaders();
                 die("Reloading using https...");
             }
             //value of header correct?
             elseif ($strHeaderValue != "" && $strHeaderValue != strtolower(getServer($strHeaderName))) {
                 //reload to https
-                ResponseObject::getInstance()->setStrRedirectUrl(uniStrReplace("http:", "https:", ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML()) ? _xmlpath_ : _indexpath_)."?".getServer("QUERY_STRING"));
+                ResponseObject::getInstance()->setStrRedirectUrl(StringUtil::replace("http:", "https:", ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML()) ? _xmlpath_ : _indexpath_)."?".getServer("QUERY_STRING"));
                 ResponseObject::getInstance()->sendHeaders();
                 die("Reloading using https...");
             }

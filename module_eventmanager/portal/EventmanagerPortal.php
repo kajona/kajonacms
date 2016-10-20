@@ -19,6 +19,7 @@ use Kajona\System\System\Mail;
 use Kajona\System\System\ResponseObject;
 use Kajona\System\System\Rssfeed;
 use Kajona\System\System\ScriptletHelper;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\TemplateMapper;
 use Kajona\System\System\Validators\EmailValidator;
 use Kajona\System\System\Validators\TextValidator;
@@ -143,7 +144,7 @@ class EventmanagerPortal extends PortalController implements PortalInterface
                 $arrSingleEvent["title"] = $objOneEvent->getStrTitle();
                 $arrSingleEvent["start"] = $objOneEvent->getObjStartDate()->getTimeInOldStyle();
                 $arrSingleEvent["end"] = $objOneEvent->getObjEndDate() != null ? $objOneEvent->getObjEndDate()->getTimeInOldStyle() : "";
-                $arrSingleEvent["url"] = uniStrReplace("&amp;", "&", Link::getLinkPortalHref($this->getParam("page"), "", "eventDetails", "", $objOneEvent->getSystemid(), "", $objOneEvent->getStrTitle()));
+                $arrSingleEvent["url"] = StringUtil::replace("&amp;", "&", Link::getLinkPortalHref($this->getParam("page"), "", "eventDetails", "", $objOneEvent->getSystemid(), "", $objOneEvent->getStrTitle()));
                 $arrPrintableEvents[] = $arrSingleEvent;
             }
         }

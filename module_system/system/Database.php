@@ -801,7 +801,7 @@ class Database
 
         if (count($arrTablesToExclude) > 0) {
             foreach ($arrTables as $strOneTable) {
-                if (!in_array(uniStrReplace(_dbprefix_, "", $strOneTable), $arrTablesToExclude)) {
+                if (!in_array(StringUtil::replace(_dbprefix_, "", $strOneTable), $arrTablesToExclude)) {
                     $arrTablesFinal[] = $strOneTable;
                 }
             }

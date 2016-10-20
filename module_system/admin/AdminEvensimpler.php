@@ -143,7 +143,7 @@ abstract class AdminEvensimpler extends AdminSimple
 
         if(StringUtil::indexOf($strActionName, $strAutoMatchAction) === 0) {
             // Set name of current list object
-            $this->setStrCurObjectTypeName(uniStrReplace($strAutoMatchAction, "", $strActionName));
+            $this->setStrCurObjectTypeName(StringUtil::replace($strAutoMatchAction, "", $strActionName));
             $strActionName = $strAutoMatchAction;
 
             $objReflection = new Reflection($this);

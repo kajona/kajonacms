@@ -106,13 +106,13 @@ class Csv
                         //include the mapping specified
                         //add an encloser?
                         if ($this->strTextEncloser != null) {
-                            $strHeader = uniStrReplace($this->strTextEncloser, "", trim($strHeader));
+                            $strHeader = StringUtil::replace($this->strTextEncloser, "", trim($strHeader));
                         }
                         $strRowKey = $this->arrMapping[$strHeader];
                         $strValue = $arrOneRow[$intKey];
                         //remove an encloser?
                         if ($this->strTextEncloser != null) {
-                            $strValue = uniStrReplace($this->strTextEncloser, "", trim($strValue));
+                            $strValue = StringUtil::replace($this->strTextEncloser, "", trim($strValue));
                         }
                         $arrCSVRow[$strRowKey] = $strValue;
                     }
@@ -197,7 +197,7 @@ class Csv
                     if (isset($arrOneRow[$strSourceCol])) {
                         $strEntry = $arrOneRow[$strSourceCol];
                         //escape the delimiter maybe occuring in the text
-                        $strEntry = uniStrReplace($this->strDelimiter, "\\".$this->strDelimiter, $strEntry);
+                        $strEntry = StringUtil::replace($this->strDelimiter, "\\".$this->strDelimiter, $strEntry);
                         //add enclosers?
                         if ($this->strTextEncloser != null) {
                             $strEntry = $this->strTextEncloser.$strEntry.$this->strTextEncloser;
@@ -281,7 +281,7 @@ class Csv
     {
         //replace realpath?
         if (StringUtil::indexOf($strFilename, _realpath_) !== false) {
-            $strFilename = uniStrReplace(_realpath_, "", $strFilename);
+            $strFilename = StringUtil::replace(_realpath_, "", $strFilename);
         }
         $this->strFilename = $strFilename;
     }

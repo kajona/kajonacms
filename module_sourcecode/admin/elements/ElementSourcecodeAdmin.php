@@ -11,6 +11,7 @@ namespace Kajona\Sourcecode\Admin\Elements;
 
 use Kajona\Pages\Admin\AdminElementInterface;
 use Kajona\Pages\Admin\ElementAdmin;
+use Kajona\System\System\StringUtil;
 
 
 /**
@@ -77,7 +78,7 @@ class ElementSourcecodeAdmin extends ElementAdmin implements AdminElementInterfa
      */
     public function setStrText($intText)
     {
-        $this->strText = uniStrReplace("<br />", "\n", $intText);
+        $this->strText = StringUtil::replace("<br />", "\n", $intText);
     }
 
 

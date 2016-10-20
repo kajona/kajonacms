@@ -52,9 +52,9 @@ class ElementRssfeedPortal extends ElementPortal implements PortalElementInterfa
                 $objRemoteloader->setStrProtocolHeader("https://");
             }
 
-            $this->arrElementData["char2"] = uniStrReplace("&amp;", "&", $this->arrElementData["char2"]);
+            $this->arrElementData["char2"] = StringUtil::replace("&amp;", "&", $this->arrElementData["char2"]);
 
-            $objRemoteloader->setStrHost(uniStrReplace(array("http://", "https://"), "", $this->arrElementData["char2"]));
+            $objRemoteloader->setStrHost(StringUtil::replace(array("http://", "https://"), "", $this->arrElementData["char2"]));
             $objRemoteloader->setIntPort(0);
             $strFeed = $objRemoteloader->getRemoteContent();
         }

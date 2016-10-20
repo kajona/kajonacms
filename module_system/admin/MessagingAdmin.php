@@ -23,6 +23,7 @@ use Kajona\System\System\Model;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\ResponseObject;
 use Kajona\System\System\Session;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemChangelog;
 
 
@@ -114,7 +115,7 @@ JS;
             $bitAlwaysEnabled = $objOneProvider instanceof MessageproviderExtendedInterface && $objOneProvider->isAlwaysActive();
             $bitAlwaysMail = $objOneProvider instanceof MessageproviderExtendedInterface && $objOneProvider->isAlwaysByMail();
 
-            $strClassname = uniStrReplace("\\", "-", get_class($objOneProvider));
+            $strClassname = StringUtil::replace("\\", "-", get_class($objOneProvider));
 
             $arrRows[] = array(
                 $objOneProvider->getStrName(),
@@ -187,7 +188,7 @@ JS;
 
         foreach ($arrMessageproviders as $objOneProvider) {
 
-            $strClassname = uniStrReplace("\\", "", get_class($objOneProvider));
+            $strClassname = StringUtil::replace("\\", "", get_class($objOneProvider));
 
             $objConfig = MessagingConfig::getConfigForUserAndProvider($this->objSession->getUserID(), $objOneProvider);
             $objConfig->setBitBymail($this->getParam($strClassname."_bymail") != "");
@@ -216,7 +217,7 @@ JS;
         foreach ($arrMessageproviders as $objOneProvider) {
             $objConfig = MessagingConfig::getConfigForUserAndProvider($this->objSession->getUserID(), $objOneProvider);
 
-            $strClassname = uniStrReplace("\\", "-", get_class($objOneProvider));
+            $strClassname = StringUtil::replace("\\", "-", get_class($objOneProvider));
 
             //only update the message provider which is set in the param "messageprovidertype"
             if ($this->getParam("messageprovidertype") == $strClassname) {

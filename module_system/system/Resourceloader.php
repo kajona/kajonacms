@@ -507,7 +507,7 @@ class Resourceloader
             return null;
         }
 
-        $strPath = StringUtil::substring(uniStrReplace(array($strModule.".phar", $strModule), "", $arrFlipped[$strModule]), 0, -1);
+        $strPath = StringUtil::substring(StringUtil::replace(array($strModule.".phar", $strModule), "", $arrFlipped[$strModule]), 0, -1);
 
         return ($bitPrependRealpath ? _realpath_ : "")."/".$strPath;
     }
@@ -563,7 +563,7 @@ class Resourceloader
      */
     public function getCorePathForPath($strPath, $bitPrependRealpath = false)
     {
-        $strPath = uniStrReplace(_realpath_, "", $strPath);
+        $strPath = StringUtil::replace(_realpath_, "", $strPath);
         $strPath = StringUtil::substring($strPath, 0, StringUtil::indexOf($strPath, "/"));
 
         return ($bitPrependRealpath ? _realpath_ : "")."/".$strPath;

@@ -66,7 +66,7 @@ class Zip
     public function addFile($strSourceFile, $strTargetFile = "")
     {
 
-        $strSourceFile = uniStrReplace(_realpath_, "", $strSourceFile);
+        $strSourceFile = StringUtil::replace(_realpath_, "", $strSourceFile);
 
         if ($strTargetFile == "") {
             $strTargetFile = $strSourceFile;

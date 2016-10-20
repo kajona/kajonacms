@@ -41,7 +41,7 @@ abstract class InstallerBase extends Root implements InstallerInterface {
         $strDir = Resourceloader::getInstance()->getPathForFile("/installer/".$strClassname.".php");
         $strDir = dirname(_realpath_.$strDir);
         $this->objMetadata = new PackagemanagerMetadata();
-        $this->objMetadata->autoInit(uniStrReplace(array("/installer", _realpath_), array("", ""), $strDir));
+        $this->objMetadata->autoInit(StringUtil::replace(array("/installer", _realpath_), array("", ""), $strDir));
         parent::__construct();
     }
 
