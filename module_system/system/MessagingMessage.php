@@ -118,10 +118,10 @@ class MessagingMessage extends Model implements ModelInterface, AdminListableInt
     public function getStrDisplayName()
     {
         if($this->getStrTitle() != "") {
-            return uniStrTrim($this->getStrTitle(), 70);
+            return StringUtil::truncate($this->getStrTitle(), 70);
         }
 
-        return uniStrTrim($this->getStrBody(), 70);
+        return StringUtil::truncate($this->getStrBody(), 70);
     }
 
     /**

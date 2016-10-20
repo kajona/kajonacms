@@ -18,6 +18,7 @@ use Kajona\System\System\OrmObjectlistOrderby;
 use Kajona\System\System\OrmObjectlistRestriction;
 use Kajona\System\System\SearchPortalobjectInterface;
 use Kajona\System\System\SortableRatingInterface;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemSetting;
 
 
@@ -138,7 +139,7 @@ class PostacommentPost extends \Kajona\System\System\Model implements \Kajona\Sy
      */
     public function getStrLongDescription()
     {
-        return uniStrTrim($this->strComment, 120);
+        return StringUtil::truncate($this->strComment, 120);
     }
 
     /**

@@ -364,7 +364,7 @@ class SystemSession extends Model implements ModelInterface
     public function setStrLasturl($strLasturl)
     {
         //limit to 255 chars
-        $this->strLasturl = uniStrTrim($strLasturl, 450, "");
+        $this->strLasturl = StringUtil::truncate($strLasturl, 450, "");
     }
 
     /**

@@ -949,17 +949,17 @@ JS;
             $strNewValue = htmlStripTags($strNewValue);
 
             $arrRowData[] = dateToString($objOneEntry->getObjDate());
-            $arrRowData[] = $this->objToolkit->getTooltipText(uniStrTrim($objOneEntry->getStrUsername(), 15), $objOneEntry->getStrUsername());
+            $arrRowData[] = $this->objToolkit->getTooltipText(StringUtil::truncate($objOneEntry->getStrUsername(), 15), $objOneEntry->getStrUsername());
             if ($strSystemid == "") {
                 $arrRowData[] = $objTarget != null ? $objTarget->getArrModule("modul") : "";
             }
             if ($strSystemid == "") {
-                $arrRowData[] = $objTarget != null ? $this->objToolkit->getTooltipText(uniStrTrim($objTarget->getVersionRecordName(), 20), $objTarget->getVersionRecordName()." ".$objOneEntry->getStrSystemid()) : "";
+                $arrRowData[] = $objTarget != null ? $this->objToolkit->getTooltipText(StringUtil::truncate($objTarget->getVersionRecordName(), 20), $objTarget->getVersionRecordName()." ".$objOneEntry->getStrSystemid()) : "";
             }
-            $arrRowData[] = $objTarget != null ? $this->objToolkit->getTooltipText(uniStrTrim($objTarget->getVersionActionName($objOneEntry->getStrAction()), 15), $objTarget->getVersionActionName($objOneEntry->getStrAction())) : "";
-            $arrRowData[] = $objTarget != null ? $this->objToolkit->getTooltipText(uniStrTrim($objTarget->getVersionPropertyName($objOneEntry->getStrProperty()), 20), $objTarget->getVersionPropertyName($objOneEntry->getStrProperty())) : "";
-            $arrRowData[] = $this->objToolkit->getTooltipText(uniStrTrim($strOldValue, 20), $strOldValue);
-            $arrRowData[] = $this->objToolkit->getTooltipText(uniStrTrim($strNewValue, 20), $strNewValue);
+            $arrRowData[] = $objTarget != null ? $this->objToolkit->getTooltipText(StringUtil::truncate($objTarget->getVersionActionName($objOneEntry->getStrAction()), 15), $objTarget->getVersionActionName($objOneEntry->getStrAction())) : "";
+            $arrRowData[] = $objTarget != null ? $this->objToolkit->getTooltipText(StringUtil::truncate($objTarget->getVersionPropertyName($objOneEntry->getStrProperty()), 20), $objTarget->getVersionPropertyName($objOneEntry->getStrProperty())) : "";
+            $arrRowData[] = $this->objToolkit->getTooltipText(StringUtil::truncate($strOldValue, 20), $strOldValue);
+            $arrRowData[] = $this->objToolkit->getTooltipText(StringUtil::truncate($strNewValue, 20), $strNewValue);
 
             $arrData[] = $arrRowData;
         }

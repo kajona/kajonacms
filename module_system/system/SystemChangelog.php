@@ -397,7 +397,7 @@ class SystemChangelog
 
                 Logger::getInstance()->addLogRow(
                     "change in class ".get_class($objSourceModel)."@".$strAction." systemid: ".$objSourceModel->getSystemid()." property: ".$strProperty." old value: "
-                    .uniStrTrim($strOldvalue, 60)." new value: ".uniStrTrim($strNewvalue, 60),
+                    .StringUtil::truncate($strOldvalue, 60)." new value: ".StringUtil::truncate($strNewvalue, 60),
                     Logger::$levelInfo
                 );
 

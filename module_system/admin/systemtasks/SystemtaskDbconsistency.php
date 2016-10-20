@@ -10,6 +10,7 @@
 namespace Kajona\System\Admin\Systemtasks;
 
 use Kajona\System\System\Objectfactory;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\SystemWorker;
 
@@ -70,7 +71,7 @@ class SystemtaskDbconsistency extends SystemtaskBase implements AdminSystemtaskI
             $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("systemtask_dbconsistency_firstlevel_error"), getImageAdmin("icon_disabled"), "");
             foreach ($arrCorruptedRecords as $arrRow) {
                 $objRecord = Objectfactory::getInstance()->getObject($arrRow["system_id"]);
-                $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $arrRow["system_id"]." (".uniStrTrim(($objRecord != null ? $objRecord->getStrDisplayName() : $arrRow["system_comment"]), 20).")", "", "");
+                $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $arrRow["system_id"]." (".StringUtil::truncate(($objRecord != null ? $objRecord->getStrDisplayName() : $arrRow["system_comment"]), 20).")", "", "");
             }
             $strReturn .= $this->objToolkit->listFooter();
         }
@@ -110,7 +111,7 @@ class SystemtaskDbconsistency extends SystemtaskBase implements AdminSystemtaskI
             $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("systemtask_dbconsistency_right_error"), getImageAdmin("icon_disabled"), "");
             foreach ($arrCorruptedRecords as $arrOneRecords) {
                 $objRecord = Objectfactory::getInstance()->getObject($arrOneRecords["system_id"]);
-                $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $arrOneRecords["right_id"]." (".uniStrTrim(($objRecord != null ? $objRecord->getStrDisplayName() : $arrOneRecords["system_comment"]), 20).")", "", "");
+                $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $arrOneRecords["right_id"]." (".StringUtil::truncate(($objRecord != null ? $objRecord->getStrDisplayName() : $arrOneRecords["system_comment"]), 20).")", "", "");
             }
             $strReturn .= $this->objToolkit->listFooter();
         }

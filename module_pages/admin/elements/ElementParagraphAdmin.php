@@ -11,6 +11,7 @@ namespace Kajona\Pages\Admin\Elements;
 
 use Kajona\Pages\Admin\AdminElementInterface;
 use Kajona\Pages\Admin\ElementAdmin;
+use Kajona\System\System\StringUtil;
 
 
 /**
@@ -100,7 +101,7 @@ class ElementParagraphAdmin extends ElementAdmin implements AdminElementInterfac
             return htmlStripTags($this->getStrTitle());
         }
         elseif ($this->getStrTextContent() != "") {
-            return uniStrTrim(htmlStripTags($this->getStrTextContent()), 120);
+            return StringUtil::truncate(htmlStripTags($this->getStrTextContent()), 120);
         }
         else {
             return parent::getContentTitle();

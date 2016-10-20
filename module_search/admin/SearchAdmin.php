@@ -26,6 +26,7 @@ use Kajona\System\System\Model;
 use Kajona\System\System\ModelInterface;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\ResponseObject;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemModule;
 
 
@@ -401,7 +402,7 @@ class SearchAdmin extends AdminSimple implements AdminInterface
             $arrItem["systemid"] = $objOneResult->getStrSystemid();
             $arrItem["icon"] = AdminskinHelper::getAdminImage($strIcon, "", true);
             $arrItem["score"] = $objOneResult->getStrSystemid();
-            $arrItem["description"] = uniStrTrim($objOneResult->getObjObject()->getStrDisplayName(), 200);
+            $arrItem["description"] = StringUtil::truncate($objOneResult->getObjObject()->getStrDisplayName(), 200);
             $arrItem["link"] = html_entity_decode($strLink);
 
             $arrItems[] = $arrItem;
@@ -456,7 +457,7 @@ class SearchAdmin extends AdminSimple implements AdminInterface
                 ."            <systemid>".$objOneResult->getStrSystemid()."</systemid>\n"
                 ."            <icon>".xmlSafeString($strIcon)."</icon>\n"
                 ."            <score>".$objOneResult->getIntHits()."</score>\n"
-                ."            <description>".xmlSafeString(uniStrTrim($objOneResult->getObjObject()->getStrDisplayName(), 200))."</description>\n"
+                ."            <description>".xmlSafeString(StringUtil::truncate($objOneResult->getObjObject()->getStrDisplayName(), 200))."</description>\n"
                 ."            <link>".xmlSafeString($strLink)."</link>\n"
                 ."        </item>\n";
         }

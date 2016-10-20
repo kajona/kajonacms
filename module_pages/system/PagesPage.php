@@ -252,7 +252,7 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
     public function getStrAdditionalInfo()
     {
         if ($this->getIntType() == self::$INT_TYPE_ALIAS) {
-            return "-> ".uniStrTrim($this->getStrAlias(), 20);
+            return "-> ".StringUtil::truncate($this->getStrAlias(), 20);
         }
         else {
             return $this->getStrName();

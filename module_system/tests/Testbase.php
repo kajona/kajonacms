@@ -150,7 +150,7 @@ abstract class Testbase extends PHPUnit_Framework_TestCase
                                 $objMethodValue = $strPropName."_".$objObject->getStrSystemid();
 
                                 if (StringUtil::length($objMethodValue) > 10) {
-                                    $objMethodValue = uniStrTrim($objMethodValue, 10, "");
+                                    $objMethodValue = StringUtil::truncate($objMethodValue, 10, "");
                                 }
                             }
                         }

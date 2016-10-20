@@ -953,7 +953,7 @@ abstract class Root
                     $this->getStrLockId(),
                     (int)$this->getIntLockTime(),
                     (int)$this->getIntRecordStatus(),
-                    uniStrTrim($this->getStrRecordComment(), 245),
+                    StringUtil::truncate($this->getStrRecordComment(), 245),
                     $this->getStrRecordClass(),
                     $this->getLongCreateDate(),
                     $this->getSystemid()
@@ -991,7 +991,7 @@ abstract class Root
                     $this->getStrLockId(),
                     (int)$this->getIntLockTime(),
                     (int)$this->getIntRecordStatus(),
-                    uniStrTrim($this->getStrRecordComment(), 245),
+                    StringUtil::truncate($this->getStrRecordComment(), 245),
                     $this->getStrRecordClass(),
                     $this->getLongCreateDate(),
                     $this->getIntRecordDeleted(),
@@ -1073,7 +1073,7 @@ abstract class Root
 
         $this->setStrPrevId($strPrevId);
 
-        $strComment = uniStrTrim(strip_tags($strComment), 240);
+        $strComment = StringUtil::truncate(strip_tags($strComment), 240);
 
 
         if (SystemModule::getModuleByName("system") != null && version_compare(SystemModule::getModuleByName("system")->getStrVersion(), "4.7.5", "lt")) {
@@ -2146,7 +2146,7 @@ abstract class Root
     public function setStrRecordComment($strRecordComment)
     {
         if (StringUtil::length($strRecordComment) > 254) {
-            $strRecordComment = uniStrTrim($strRecordComment, 250);
+            $strRecordComment = StringUtil::truncate($strRecordComment, 250);
         }
         $this->strRecordComment = $strRecordComment;
     }

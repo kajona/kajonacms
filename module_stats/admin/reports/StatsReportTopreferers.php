@@ -16,6 +16,7 @@ use Kajona\System\System\Lang;
 use Kajona\System\System\Link;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Session;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemSetting;
 use Kajona\System\System\UserUser;
 
@@ -135,7 +136,7 @@ class StatsReportTopreferers implements AdminStatsreportsInterface
                 $arrOneStat["refurl"] = $this->objTexts->getLang("referer_direkt", "stats");
             }
             else {
-                $arrOneStat["refurl"] = Link::getLinkPortal("", $arrOneStat["refurl"], "_blank", uniStrTrim($arrOneStat["refurl"], 45));
+                $arrOneStat["refurl"] = Link::getLinkPortal("", $arrOneStat["refurl"], "_blank", StringUtil::truncate($arrOneStat["refurl"], 45));
             }
 
             $arrValues[$intI] = array();

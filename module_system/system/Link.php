@@ -444,7 +444,7 @@ class Link
                     }
 
                     //trim string
-                    $strAddKeys = uniStrTrim($strAddKeys, 100, "");
+                    $strAddKeys = StringUtil::truncate($strAddKeys, 100, "");
 
                     if ($strLanguage != "") {
                         $strHref .= $strLanguage."/";
