@@ -341,7 +341,7 @@ class SystemModule extends Model implements ModelInterface, AdminListableInterfa
         $objBuilder = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_OBJECT_BUILDER);
 
         $strClassname = $this->getStrNameAdmin();
-        if (uniStrpos($strClassname, ".php") !== false) {
+        if (StringUtil::indexOf($strClassname, ".php") !== false) {
             $strFullpath = Resourceloader::getInstance()->getPathForFile("/admin/".$strClassname);
             if ($strFullpath == "") {
                 $strFullpath = Resourceloader::getInstance()->getPathForFile("/legacy/".$strClassname);
@@ -377,7 +377,7 @@ class SystemModule extends Model implements ModelInterface, AdminListableInterfa
         $objBuilder = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_OBJECT_BUILDER);
 
         $strClassname = $this->getStrNamePortal();
-        if (uniStrpos($strClassname, ".php") !== false) {
+        if (StringUtil::indexOf($strClassname, ".php") !== false) {
             $strFullpath = Resourceloader::getInstance()->getPathForFile("/portal/".$strClassname);
             if ($strFullpath == "") {
                 $strFullpath = Resourceloader::getInstance()->getPathForFile("/legacy/".$strClassname);

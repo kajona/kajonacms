@@ -503,7 +503,7 @@ function dateToString($objDate, $bitLong = true, $strFormat = "")
     $strReturn = "";
 
     //if the $objDate is a string, convert it to date object
-    if ($objDate != null && !$objDate instanceof Date && uniEreg("([0-9]){14}", $objDate)) {
+    if ($objDate != null && !$objDate instanceof Date && StringUtil::matches($objDate, "([0-9]){14}")) {
         $objDate = new Date($objDate);
     }
 

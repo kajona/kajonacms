@@ -8,6 +8,7 @@
 
 namespace Kajona\System\System\Validators;
 
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\ValidatorInterface;
 
 
@@ -34,7 +35,7 @@ class EmailValidator implements ValidatorInterface {
             return false;
 
 
-        $intTest = uniEreg("([A-Za-z0-9])([A-Za-z0-9]|_|-|\.)*@([A-Za-z0-9]|_|-|\.)+\.([A-Za-z])([A-Za-z])+", $objValue);
+        $intTest = StringUtil::matches($objValue, "([A-Za-z0-9])([A-Za-z0-9]|_|-|\.)*@([A-Za-z0-9]|_|-|\.)+\.([A-Za-z])([A-Za-z])+");
         if($intTest === false || $intTest <= 0)
             return false;
         else

@@ -194,7 +194,7 @@ class Date
 
     private function validateDate()
     {
-        if (!uniEreg("([0-9]){14}", $this->getLongTimestamp()) || $this->getLongTimestamp() < 0) {
+        if (!StringUtil::matches($this->getLongTimestamp(), "([0-9]){14}") || $this->getLongTimestamp() < 0) {
             echo $this->__toString()."\n";
             if (function_exists("debug_backtrace")) {
                 $arrStack = debug_backtrace();
@@ -651,7 +651,7 @@ class Date
      */
     public function setLongTimestamp($longTimestamp)
     {
-        if (uniEreg("([0-9]){14}", $longTimestamp)) {
+        if (StringUtil::matches($longTimestamp, "([0-9]){14}")) {
             $this->longTimestamp = $longTimestamp;
         }
         return $this;
