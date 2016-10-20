@@ -173,7 +173,7 @@ class ElementPortaluploadPortal extends ElementPortal implements PortalElementIn
 
                 //Check file for correct filters
                 $arrAllowed = explode(",", $objFilemanagerRepo->getStrUploadFilter());
-                $strSuffix = uniStrtolower(uniSubstr($arrSource["name"], StringUtil::lastIndexOf($arrSource["name"], ".")));
+                $strSuffix = uniStrtolower(StringUtil::substring($arrSource["name"], StringUtil::lastIndexOf($arrSource["name"], ".")));
                 if ($objFilemanagerRepo->getStrUploadFilter() == "" || in_array($strSuffix, $arrAllowed)) {
                     if ($objFilesystem->copyUpload($strTarget, $arrSource["tmp_name"])) {
 

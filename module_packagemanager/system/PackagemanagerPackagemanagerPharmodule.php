@@ -200,7 +200,7 @@ class PackagemanagerPackagemanagerPharmodule extends PackagemanagerPackagemanage
         $objPhar = new Phar(_realpath_.$objMetadata->getStrPath());
         $arrReturn = array();
         foreach (new RecursiveIteratorIterator($objPhar) as $objFile) {
-            if (strpos($objFile->getPathname(), "/installer/") !== false && uniSubstr($objFile->getPathname(), -4) === ".php") {
+            if (strpos($objFile->getPathname(), "/installer/") !== false && StringUtil::substring($objFile->getPathname(), -4) === ".php") {
                 /** @var $objInstaller InstallerInterface */
                 $objInstaller = Classloader::getInstance()->getInstanceFromFilename($objFile->getPathname());
                 $arrReturn[] = $objInstaller;

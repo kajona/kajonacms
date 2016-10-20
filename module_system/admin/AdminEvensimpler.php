@@ -118,7 +118,7 @@ abstract class AdminEvensimpler extends AdminSimple
 
                 foreach($arrAnnotations as $strProperty) {
                     if(StringUtil::indexOf($strProperty, $strAnnotationPrefix) === 0) {
-                        return $strAction.uniSubstr($strProperty, uniStrlen($strAnnotationPrefix));
+                        return $strAction.StringUtil::substring($strProperty, uniStrlen($strAnnotationPrefix));
                     }
                 }
             }
@@ -232,7 +232,7 @@ abstract class AdminEvensimpler extends AdminSimple
             throw new Exception("given object with system id {$this->getSystemid()} does not exist", Exception::$level_ERROR);
         }
 
-        $strObjectTypeName = uniSubstr($this->getActionNameForClass("edit", $objInstance), 4);
+        $strObjectTypeName = StringUtil::substring($this->getActionNameForClass("edit", $objInstance), 4);
         if($strObjectTypeName != "") {
             $strType = get_class($objInstance);
             $this->setCurObjectClassName($strType);

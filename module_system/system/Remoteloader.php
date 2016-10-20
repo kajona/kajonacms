@@ -247,16 +247,16 @@ class Remoteloader
 
                 $strReturn = trim($strReturn);
                 if (StringUtil::indexOf($strReturn, "\r\n\r\n") !== false) {
-                    $strReturn = trim(uniSubstr($strReturn, StringUtil::indexOf($strReturn, "\r\n\r\n")));
+                    $strReturn = trim(StringUtil::substring($strReturn, StringUtil::indexOf($strReturn, "\r\n\r\n")));
                 }
 
                 if (StringUtil::indexOf($strReturn, "<") !== false) {
-                    $strReturn = trim(uniSubstr($strReturn, StringUtil::indexOf($strReturn, "<")));
+                    $strReturn = trim(StringUtil::substring($strReturn, StringUtil::indexOf($strReturn, "<")));
                 }
 
                 //and, if given, remove the last 0
-                if (uniSubstr($strReturn, -1) == "0") {
-                    $strReturn = uniSubstr($strReturn, 0, -1);
+                if (StringUtil::substring($strReturn, -1) == "0") {
+                    $strReturn = StringUtil::substring($strReturn, 0, -1);
                 }
 
             }
@@ -330,8 +330,8 @@ class Remoteloader
                 }
 
                 //and, if given, remove the last 0
-                if (uniSubstr($strReturn, -1) == "0") {
-                    $strReturn = uniSubstr($strReturn, 0, -1);
+                if (StringUtil::substring($strReturn, -1) == "0") {
+                    $strReturn = StringUtil::substring($strReturn, 0, -1);
                 }
 
             }

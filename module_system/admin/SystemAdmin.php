@@ -10,7 +10,6 @@
 namespace Kajona\System\Admin;
 
 use Kajona\Packagemanager\System\PackagemanagerManager;
-use Kajona\Pages\System\PagesPageelement;
 use Kajona\System\Admin\Formentries\FormentryHidden;
 use Kajona\System\Admin\Formentries\FormentryText;
 use Kajona\System\Admin\Formentries\FormentryTextarea;
@@ -39,7 +38,6 @@ use Kajona\System\System\OrmBase;
 use Kajona\System\System\OrmDeletedhandlingEnum;
 use Kajona\System\System\Pluginmanager;
 use Kajona\System\System\Reflection;
-use Kajona\System\System\RequestDispatcher;
 use Kajona\System\System\RequestEntrypointEnum;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\ResponseObject;
@@ -306,7 +304,7 @@ class SystemAdmin extends AdminSimple implements AdminInterface
         $arrParams = array();
         foreach ($this->getAllParams() as $strName => $intValue) {
             if (StringUtil::indexOf($strName, "aspect_") !== false) {
-                $arrParams[] = uniSubstr($strName, 7);
+                $arrParams[] = StringUtil::substring($strName, 7);
             }
         }
 
@@ -801,7 +799,7 @@ JS;
             //find out what the user is doing...
             $strLastUrl = $objOneSession->getStrLasturl();
             if (StringUtil::indexOf($strLastUrl, "?") !== false) {
-                $strLastUrl = uniSubstr($strLastUrl, StringUtil::indexOf($strLastUrl, "?"));
+                $strLastUrl = StringUtil::substring($strLastUrl, StringUtil::indexOf($strLastUrl, "?"));
             }
             $strActivity = "";
 
@@ -825,7 +823,7 @@ JS;
                         }
                     }
 
-                    if ($strActivity == $this->getLang("session_portal") && uniSubstr($strLastUrl, 0, 5) == "image") {
+                    if ($strActivity == $this->getLang("session_portal") && StringUtil::substring($strLastUrl, 0, 5) == "image") {
                         $strActivity .= $this->getLang("session_portal_imagegeneration");
                     }
                 }

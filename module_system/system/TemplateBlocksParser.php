@@ -57,9 +57,9 @@ class TemplateBlocksParser
                     }
 
                     //delete substring before and after
-                    $strTemplateSection = uniSubstr($strTemplate, $intStart, $intEnd);
+                    $strTemplateSection = StringUtil::substring($strTemplate, $intStart, $intEnd);
 
-                    $strContent = uniSubstr($strTemplateSection, uniStrlen($arrMatches[0]), uniStrlen("</".$strBlockDefinition.">") * -1);
+                    $strContent = StringUtil::substring($strTemplateSection, uniStrlen($arrMatches[0]), uniStrlen("</".$strBlockDefinition.">") * -1);
                     $arrBlocks[$arrMatches[4]] = new TemplateBlockContainer($strBlockDefinition, $arrMatches[4], $arrMatches[0], $strContent, $strTemplateSection);
 
                     $strTemplate = uniStrReplace($strTemplateSection, "", $strTemplate);

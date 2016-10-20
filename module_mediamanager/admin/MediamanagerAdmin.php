@@ -746,7 +746,7 @@ HTML;
                 Link::getLinkAdmin(
                     $this->getArrModule("modul"),
                     "folderListFolderview",
-                    "&folder=".uniSubstr($strFolder, 0, StringUtil::lastIndexOf($strFolder, "/"))."&form_element=".$strFormElement,
+                    "&folder=".StringUtil::substring($strFolder, 0, StringUtil::lastIndexOf($strFolder, "/"))."&form_element=".$strFormElement,
                     $this->getLang("commons_one_level_up"),
                     $this->getLang("commons_one_level_up"),
                     "icon_folderActionLevelup"
@@ -993,7 +993,7 @@ HTML;
             //Check file for correct filters
             $arrAllowed = explode(",", $objRepo->getStrUploadFilter());
 
-            $strSuffix = uniStrtolower(uniSubstr($strFilename, StringUtil::lastIndexOf($strFilename, ".")));
+            $strSuffix = uniStrtolower(StringUtil::substring($strFilename, StringUtil::lastIndexOf($strFilename, ".")));
             if ($objRepo->getStrUploadFilter() == "" || in_array($strSuffix, $arrAllowed)) {
                 if ($bitPostData) {
                     $objFilesystem = new Filesystem();

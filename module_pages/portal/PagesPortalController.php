@@ -292,12 +292,12 @@ class PagesPortalController extends PortalController implements PortalInterface
         $intPosXml = uniStripos($strPageContent, "<?xml");
         if ($intBodyPos !== false) {
             $intBodyPos += 0;
-            $strPageContent = uniSubstr($strPageContent, 0, $intBodyPos).$strHeader.uniSubstr($strPageContent, $intBodyPos);
+            $strPageContent = StringUtil::substring($strPageContent, 0, $intBodyPos).$strHeader.StringUtil::substring($strPageContent, $intBodyPos);
         }
         elseif ($intPosXml !== false) {
             $intBodyPos = uniStripos($strPageContent, "?>");
             $intBodyPos += 2;
-            $strPageContent = uniSubstr($strPageContent, 0, $intBodyPos).$strHeader.uniSubstr($strPageContent, $intBodyPos);
+            $strPageContent = StringUtil::substring($strPageContent, 0, $intBodyPos).$strHeader.StringUtil::substring($strPageContent, $intBodyPos);
         }
         else {
             $strPageContent = $strHeader.$strPageContent;

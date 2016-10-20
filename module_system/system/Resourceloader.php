@@ -366,7 +366,7 @@ class Resourceloader
                         }
                         else {
                             //check, if suffix is in allowed list
-                            $strFileSuffix = uniSubstr($strSingleEntry, StringUtil::lastIndexOf($strSingleEntry, "."));
+                            $strFileSuffix = StringUtil::substring($strSingleEntry, StringUtil::lastIndexOf($strSingleEntry, "."));
                             if (in_array($strFileSuffix, $arrExtensionFilter)) {
                                 $arrReturn[_realpath_.$strCorePath.$strFolder."/".$strSingleEntry] = $strSingleEntry;
                             }
@@ -394,7 +394,7 @@ class Resourceloader
                 }
                 else {
                     //check, if suffix is in allowed list
-                    $strFileSuffix = uniSubstr($strSingleEntry, StringUtil::lastIndexOf($strSingleEntry, "."));
+                    $strFileSuffix = StringUtil::substring($strSingleEntry, StringUtil::lastIndexOf($strSingleEntry, "."));
                     if (in_array($strFileSuffix, $arrExtensionFilter)) {
                         $strKey = array_search($strSingleEntry, $arrReturn);
                         if ($strKey !== false) {
@@ -507,7 +507,7 @@ class Resourceloader
             return null;
         }
 
-        $strPath = uniSubstr(uniStrReplace(array($strModule.".phar", $strModule), "", $arrFlipped[$strModule]), 0, -1);
+        $strPath = StringUtil::substring(uniStrReplace(array($strModule.".phar", $strModule), "", $arrFlipped[$strModule]), 0, -1);
 
         return ($bitPrependRealpath ? _realpath_ : "")."/".$strPath;
     }
@@ -564,7 +564,7 @@ class Resourceloader
     public function getCorePathForPath($strPath, $bitPrependRealpath = false)
     {
         $strPath = uniStrReplace(_realpath_, "", $strPath);
-        $strPath = uniSubstr($strPath, 0, StringUtil::indexOf($strPath, "/"));
+        $strPath = StringUtil::substring($strPath, 0, StringUtil::indexOf($strPath, "/"));
 
         return ($bitPrependRealpath ? _realpath_ : "")."/".$strPath;
     }

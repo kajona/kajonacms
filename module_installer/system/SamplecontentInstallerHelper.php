@@ -31,7 +31,7 @@ class SamplecontentInstallerHelper
 
             //See if a legacy class was stored in the file
             if ($objInstance == null) {
-                $strClass = uniSubstr($strFilename, 0, -4);
+                $strClass = StringUtil::substring($strFilename, 0, -4);
                 $strClass = "class_".$strClass;
 
                 if (in_array($strClass, get_declared_classes())) {
@@ -57,8 +57,8 @@ class SamplecontentInstallerHelper
 
         uksort($arrInstaller, function ($strA, $strB) {
 
-            $strNameA = StringUtil::lastIndexOf($strA, "\\") !== false ? uniSubstr($strA, StringUtil::lastIndexOf($strA, "\\") + 1) : $strA;
-            $strNameB = StringUtil::lastIndexOf($strB, "\\") !== false ? uniSubstr($strB, StringUtil::lastIndexOf($strB, "\\") + 1) : $strB;
+            $strNameA = StringUtil::lastIndexOf($strA, "\\") !== false ? StringUtil::substring($strA, StringUtil::lastIndexOf($strA, "\\") + 1) : $strA;
+            $strNameB = StringUtil::lastIndexOf($strB, "\\") !== false ? StringUtil::substring($strB, StringUtil::lastIndexOf($strB, "\\") + 1) : $strB;
 
             return strcmp(strtolower($strNameA), strtolower($strNameB));
         });

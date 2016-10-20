@@ -23,7 +23,7 @@ class TemplateFileParser
         $strFilename = $this->getPathForTemplate($strTemplateFilename);
 
         //We have to read the whole template from the filesystem
-        if (uniSubstr($strFilename, -4) == ".tpl" && is_file($strFilename)) {
+        if (StringUtil::substring($strFilename, -4) == ".tpl" && is_file($strFilename)) {
             $strTemplateContent = file_get_contents($strFilename);
         }
         else {
@@ -34,7 +34,7 @@ class TemplateFileParser
         preg_match_all("#\[KajonaTemplateInclude,([A-Za-z0-9_/\.]+)\]#i", $strTemplateContent, $arrTemp);
 
         foreach ($arrTemp[0] as $intKey => $strSearchString) {
-            $strTemplateContent = \Kajona\System\System\StringUtil::replace($strSearchString, $this->readTemplate($arrTemp[1][$intKey]), $strTemplateContent);
+            $strTemplateContent = StringUtil::replace($strSearchString, $this->readTemplate($arrTemp[1][$intKey]), $strTemplateContent);
         }
 
         //Saving to the cache

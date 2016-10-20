@@ -647,7 +647,7 @@ abstract class ElementAdmin extends AdminController implements SearchPortalobjec
      */
     public function getElementDescription()
     {
-        $strName = uniSubstr(get_class($this), uniStrlen("class_"), -6);//TODO class name parsing
+        $strName = StringUtil::substring(get_class($this), uniStrlen("class_"), -6);//TODO class name parsing
         $strDesc = $this->getLang($strName."_description");
         if ($strDesc == "!".$strName."_description!") {
             $strDesc = "";

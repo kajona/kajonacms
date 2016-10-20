@@ -9,7 +9,6 @@
 
 namespace Kajona\System\System;
 
-
 /**
  * Csv, used to access data stored in csv-files.
  * This class can either be used to write to csv-files or to read from csv-files
@@ -179,7 +178,7 @@ class Csv
                     $strRow .= $strTagetCol.$this->strDelimiter;
                 }
                 //remove last delimiter, eol
-                $strRow = uniSubstr($strRow, 0, (uniStrlen($this->strDelimiter)) * -1);
+                $strRow = StringUtil::substring($strRow, 0, (uniStrlen($this->strDelimiter)) * -1);
                 //add a linebreak
                 $strRow .= "\n";
                 //write header to file
@@ -211,7 +210,7 @@ class Csv
                     $strRow .= $strEntry.$this->strDelimiter;
                 }
                 //remove last delimiter, eol
-                $strRow = uniSubstr($strRow, 0, (uniStrlen($this->strDelimiter)) * -1);
+                $strRow = StringUtil::substring($strRow, 0, (uniStrlen($this->strDelimiter)) * -1);
                 //add linebreak
                 $strRow .= "\n";
                 //and write to file

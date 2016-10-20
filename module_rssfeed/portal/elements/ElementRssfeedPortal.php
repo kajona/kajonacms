@@ -13,6 +13,7 @@ use Kajona\Pages\Portal\ElementPortal;
 use Kajona\Pages\Portal\PortalElementInterface;
 use Kajona\System\System\Date;
 use Kajona\System\System\Remoteloader;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\XmlParser;
 
 
@@ -47,7 +48,7 @@ class ElementRssfeedPortal extends ElementPortal implements PortalElementInterfa
         try {
             $objRemoteloader = new Remoteloader();
 
-            if (uniStrtolower(uniSubstr($this->arrElementData["char2"], 0, 8)) == "https://") {
+            if (uniStrtolower(StringUtil::substring($this->arrElementData["char2"], 0, 8)) == "https://") {
                 $objRemoteloader->setStrProtocolHeader("https://");
             }
 

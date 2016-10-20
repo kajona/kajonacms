@@ -141,7 +141,7 @@ class Zip
     {
 
         if ($strFilename[0] == "/") {
-            $strFilename = uniSubstr($strFilename, 1);
+            $strFilename = StringUtil::substring($strFilename, 1);
         }
 
         $this->objArchive->open(_realpath_.$strSourceArchive);

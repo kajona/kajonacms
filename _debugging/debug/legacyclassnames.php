@@ -10,6 +10,7 @@ namespace Kajona\Debugging\Debug;
 
 use Kajona\System\System\Classloader;
 use Kajona\System\System\Filesystem;
+use Kajona\System\System\StringUtil;
 
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
@@ -62,7 +63,7 @@ function DEBUG_getLegacyClassNames()
             $arrClasses = $objFilesystem->getFilelist($strFolder, array(".php"));
 
             $arrReturn = array_merge($arrReturn, array_map(function ($strFilename) {
-                return uniSubstr($strFilename, 0, -4);
+                return StringUtil::substring($strFilename, 0, -4);
             }, $arrClasses));
         }
     }

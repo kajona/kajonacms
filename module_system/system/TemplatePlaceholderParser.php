@@ -77,7 +77,7 @@ class TemplatePlaceholderParser
                 continue;
             }
 
-            $strTemp = uniSubstr($strPlacehoder, 2, -2);
+            $strTemp = StringUtil::substring($strPlacehoder, 2, -2);
             $arrTemp = explode("_", $strTemp);
             //are there any pipes?
             if (StringUtil::indexOf($arrTemp[1], "|") !== false) {

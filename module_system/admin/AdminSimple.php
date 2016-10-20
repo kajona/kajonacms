@@ -703,8 +703,8 @@ abstract class AdminSimple extends AdminController
             //search for a title attribute
             $arrMatches = array();
             if (preg_match('/<a.*?title=(["\'])(.*?)\1.*$/i', $strOneAction, $arrMatches)) {
-                if (uniSubstr($strOneAction, -11) == "</a></span>") {
-                    $strOneAction = uniSubstr($strOneAction, 0, -11).$arrMatches[2]."</a></span>";
+                if (StringUtil::substring($strOneAction, -11) == "</a></span>") {
+                    $strOneAction = StringUtil::substring($strOneAction, 0, -11).$arrMatches[2]."</a></span>";
                 }
                 else {
                     $strOneAction .= $arrMatches[2];

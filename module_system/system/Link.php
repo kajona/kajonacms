@@ -406,8 +406,8 @@ class Link
         $strAnchor = "";
         if (StringUtil::indexOf($strPageI, "#") !== false) {
             //get anchor, remove anchor from link
-            $strAnchor = urlencode(uniSubstr($strPageI, StringUtil::indexOf($strPageI, "#") + 1));
-            $strPageI = uniSubstr($strPageI, 0, StringUtil::indexOf($strPageI, "#"));
+            $strAnchor = urlencode(StringUtil::substring($strPageI, StringUtil::indexOf($strPageI, "#") + 1));
+            $strPageI = StringUtil::substring($strPageI, 0, StringUtil::indexOf($strPageI, "#"));
         }
 
         //urlencoding

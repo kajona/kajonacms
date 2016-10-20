@@ -199,7 +199,7 @@ class WorkflowsHandler extends \Kajona\System\System\Model implements \Kajona\Sy
 
             $strClassname = $objOneWorkflow->getStrHandlerClass();
             if (StringUtil::lastIndexOf($objOneWorkflow->getStrHandlerClass(), "\\") > 0) {
-                $strClassname = uniSubstr($objOneWorkflow->getStrHandlerClass(), StringUtil::lastIndexOf($objOneWorkflow->getStrHandlerClass(), "\\") + 1);
+                $strClassname = StringUtil::substring($objOneWorkflow->getStrHandlerClass(), StringUtil::lastIndexOf($objOneWorkflow->getStrHandlerClass(), "\\") + 1);
             }
 
             if (!in_array($strClassname.".php", $arrFiles)) {
@@ -218,7 +218,7 @@ class WorkflowsHandler extends \Kajona\System\System\Model implements \Kajona\Sy
 
         $strClassname = $this->getStrHandlerClass();
         if (StringUtil::lastIndexOf($this->getStrHandlerClass(), "\\") > 0) {
-            $strClassname = uniSubstr($this->getStrHandlerClass(), StringUtil::lastIndexOf($this->getStrHandlerClass(), "\\") + 1);
+            $strClassname = StringUtil::substring($this->getStrHandlerClass(), StringUtil::lastIndexOf($this->getStrHandlerClass(), "\\") + 1);
         }
 
         if ($this->getStrHandlerClass() != "" && Resourceloader::getInstance()->getPathForFile("/system/workflows/".$strClassname.".php") !== false) {

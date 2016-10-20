@@ -525,7 +525,7 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
     {
         //strip possible anchors
         if (StringUtil::indexOf($strName, "#") !== false) {
-            $strName = uniSubstr($strName, 0, StringUtil::indexOf($strName, "#"));
+            $strName = StringUtil::substring($strName, 0, StringUtil::indexOf($strName, "#"));
         }
 
         $objORM = new OrmObjectlist();

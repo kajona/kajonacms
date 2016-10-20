@@ -145,7 +145,7 @@ class MediamanagerRepo extends \Kajona\System\System\Model implements \Kajona\Sy
 
     public function setStrPath($strPath)
     {
-        if (StringUtil::indexOf(uniSubstr($strPath, 0, 7), "files") === false) {
+        if (StringUtil::indexOf(StringUtil::substring($strPath, 0, 7), "files") === false) {
             $strPath = "/files".$strPath;
         }
 

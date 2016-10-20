@@ -36,7 +36,7 @@ abstract class InstallerBase extends Root implements InstallerInterface {
         $strClassname = get_class($this);
         $intStrps = StringUtil::lastIndexOf($strClassname, "\\");
         if($intStrps !== false) {
-            $strClassname = uniSubstr($strClassname, $intStrps+1);
+            $strClassname = StringUtil::substring($strClassname, $intStrps+1);
         }
         $strDir = Resourceloader::getInstance()->getPathForFile("/installer/".$strClassname.".php");
         $strDir = dirname(_realpath_.$strDir);

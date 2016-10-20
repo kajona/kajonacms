@@ -354,7 +354,7 @@ class Classloader
     public function getClassnameFromFilename($strFilename, $bitAddToClassmap = true)
     {
         // if empty we cant resolve a class name
-        if (empty($strFilename) || uniSubstr($strFilename, -4) != '.php') {
+        if (empty($strFilename) || StringUtil::substring($strFilename, -4) != '.php') {
             return null;
         }
 
@@ -367,7 +367,7 @@ class Classloader
             }
         }
 
-        $strFile = uniSubstr(basename($strFilename), 0, -4);
+        $strFile = StringUtil::substring(basename($strFilename), 0, -4);
         $strClassname = null;
 
         // if the filename contains an underscore we have an old class else a camelcase one
@@ -390,7 +390,7 @@ class Classloader
                         return null;
                     }
 
-                    $strParsedFilename = str_replace(array("\\", ".phar"), array("/", ""), uniSubstr($strFilename, 0, -4));
+                    $strParsedFilename = str_replace(array("\\", ".phar"), array("/", ""), StringUtil::substring($strFilename, 0, -4));
 
 
                     $strClassname = "Kajona\\";

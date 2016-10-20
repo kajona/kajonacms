@@ -9,6 +9,7 @@ use Kajona\System\System\Carrier;
 use Kajona\System\System\Classloader;
 use Kajona\System\System\Reflection;
 use Kajona\System\System\Resourceloader;
+use Kajona\System\System\StringUtil;
 use ReflectionClass;
 use ReflectionMethod;
 
@@ -93,9 +94,9 @@ class GeneralActionTest extends Testbase
             if ($objAnnotations->hasMethodAnnotation($objOneMethod->getName(), "@autoTestable")) {
                 //echo "found method " . get_class($objViewInstance) . "@" . $objOneMethod->getName() . " marked as @autoTestable, preparing call\n";
 
-                if (uniSubstr($objOneMethod->getName(), 0, 6) == "action" && $objReflection->hasMethod("action")) {
+                if (StringUtil::substring($objOneMethod->getName(), 0, 6) == "action" && $objReflection->hasMethod("action")) {
                     //echo "   calling via action() method\n";
-                    $objViewInstance->action(uniSubstr($objOneMethod->getName(), 6));
+                    $objViewInstance->action(StringUtil::substring($objOneMethod->getName(), 6));
                 } else {
                     //echo "   direct call";
                     $objOneMethod->invoke($objViewInstance);

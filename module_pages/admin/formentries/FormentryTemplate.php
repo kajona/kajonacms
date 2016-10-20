@@ -11,8 +11,8 @@ use Kajona\System\Admin\FormentryInterface;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Reflection;
 use Kajona\System\System\Resourceloader;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\Validators\TextValidator;
-
 
 /**
  * A yes-no field renders a dropdown containing a list of entries.
@@ -80,7 +80,7 @@ class FormentryTemplate extends FormentryBase implements FormentryInterface
             $strSourceProperty = null;
 
             foreach ($arrProperties as $strPropertyName => $strValue) {
-                if (uniSubstr(uniStrtolower($strPropertyName), (uniStrlen($this->getStrSourceProperty())) * -1) == $this->getStrSourceProperty()) {
+                if (StringUtil::substring(uniStrtolower($strPropertyName), (uniStrlen($this->getStrSourceProperty())) * -1) == $this->getStrSourceProperty()) {
                     $strSourceProperty = $strPropertyName;
                 }
             }

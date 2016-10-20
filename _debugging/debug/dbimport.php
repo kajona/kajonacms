@@ -45,7 +45,7 @@ else {
 
             $strTimestamp = "";
             if(StringUtil::indexOf($strOneFile, "_") !== false)
-                $strTimestamp = uniSubstr($strOneFile, StringUtil::lastIndexOf($strOneFile, "_")+1, (StringUtil::indexOf($strOneFile, ".")-StringUtil::lastIndexOf($strOneFile, "_")));
+                $strTimestamp = StringUtil::substring($strOneFile, StringUtil::lastIndexOf($strOneFile, "_")+1, (StringUtil::indexOf($strOneFile, ".")-StringUtil::lastIndexOf($strOneFile, "_")));
 
             
             if(uniStrlen($strTimestamp) > 9 && is_numeric($strTimestamp))

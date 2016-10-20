@@ -92,7 +92,7 @@ class Date
      */
     public function isSameDay(Date $objDateToCompare)
     {
-        return uniSubstr($objDateToCompare->getLongTimestamp(), 0, 8) == uniSubstr($this->getLongTimestamp(), 0, 8);
+        return StringUtil::substring($objDateToCompare->getLongTimestamp(), 0, 8) == StringUtil::substring($this->getLongTimestamp(), 0, 8);
     }
 
     /**

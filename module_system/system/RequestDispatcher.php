@@ -338,7 +338,7 @@ class RequestDispatcher
 
                 $intBodyPos = StringUtil::indexOf($strReturn, "</body>");
                 if ($intBodyPos !== false) {
-                    $strReturn = uniSubstr($strReturn, 0, $intBodyPos).$strDebug.uniSubstr($strReturn, $intBodyPos);
+                    $strReturn = StringUtil::substring($strReturn, 0, $intBodyPos).$strDebug.StringUtil::substring($strReturn, $intBodyPos);
                 }
                 else {
                     $strReturn = $strDebug.$strReturn;

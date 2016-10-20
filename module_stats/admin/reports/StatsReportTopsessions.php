@@ -13,10 +13,9 @@ use Kajona\System\Admin\Reports\AdminStatsreportsInterface;
 use Kajona\System\Admin\ToolkitAdmin;
 use Kajona\System\System\Database;
 use Kajona\System\System\Lang;
-use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Session;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemSetting;
-use Kajona\System\System\UserUser;
 
 /**
  * This plugin creates a view showing infos about the sessions
@@ -204,7 +203,7 @@ class StatsReportTopsessions implements AdminStatsreportsInterface
                 $strDetails .= $arrOnePage["stats_page"]." - ";
             }
 
-            $strDetails = uniSubstr($strDetails, 0, -2);
+            $strDetails = StringUtil::substring($strDetails, 0, -2);
             $arrFolder = $this->objToolkit->getLayoutFolder($strDetails, $this->objTexts->getLang("top_session_detail", "stats"));
             $arrSessions[$intKey]["detail"] = $arrFolder[1].$arrFolder[0];
         }

@@ -48,7 +48,7 @@ class TemplateSectionParser
             }
             else {
                 //delete substring before and after
-                $strTemplate = uniSubstr($strTemplate, $intStart, $intEnd);
+                $strTemplate = StringUtil::substring($strTemplate, $intStart, $intEnd);
             }
         }
         else {

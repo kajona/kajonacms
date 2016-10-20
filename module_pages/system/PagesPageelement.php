@@ -319,7 +319,7 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
 
         foreach ($arrElementData as $strColumn => $strValue) {
             foreach ($arrMappedProperties as $strPropertyname => $strAnnotation) {
-                $strMappedColumn = uniSubstr($strAnnotation, StringUtil::indexOf($strAnnotation, ".") + 1);
+                $strMappedColumn = StringUtil::substring($strAnnotation, StringUtil::indexOf($strAnnotation, ".") + 1);
                 if ($strColumn == $strMappedColumn) {
                     $objSetter = $objAnnotation->getSetter($strPropertyname);
                     if ($objSetter != null) {

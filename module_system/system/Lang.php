@@ -9,7 +9,6 @@
 
 namespace Kajona\System\System;
 
-
 /**
  * Class managing access to lang-files
  *
@@ -180,19 +179,19 @@ class Lang
      */
     public function propertyWithoutPrefix($strPropertyName)
     {
-        $strStart = uniSubstr($strPropertyName, 0, 3);
+        $strStart = StringUtil::substring($strPropertyName, 0, 3);
         if (in_array($strStart, array("int", "bit", "str", "arr", "obj"))) {
-            $strPropertyName = uniStrtolower(uniSubstr($strPropertyName, 3));
+            $strPropertyName = uniStrtolower(StringUtil::substring($strPropertyName, 3));
         }
 
-        $strStart = uniSubstr($strPropertyName, 0, 4);
+        $strStart = StringUtil::substring($strPropertyName, 0, 4);
         if (in_array($strStart, array("long"))) {
-            $strPropertyName = uniStrtolower(uniSubstr($strPropertyName, 4));
+            $strPropertyName = uniStrtolower(StringUtil::substring($strPropertyName, 4));
         }
 
-        $strStart = uniSubstr($strPropertyName, 0, 5);
+        $strStart = StringUtil::substring($strPropertyName, 0, 5);
         if (in_array($strStart, array("float"))) {
-            $strPropertyName = uniStrtolower(uniSubstr($strPropertyName, 5));
+            $strPropertyName = uniStrtolower(StringUtil::substring($strPropertyName, 5));
         }
 
         return $strPropertyName;
@@ -213,7 +212,7 @@ class Lang
         $strLastChar = "";
 
         for ($i = 0; $i < uniStrlen($strText); $i++) {
-            $strChar = uniSubstr($strText, $i, 1);
+            $strChar = StringUtil::substring($strText, $i, 1);
             $strCharLower = uniStrtolower($strChar);
 
             if ($i > 0 && $strChar != $strCharLower && $strLastChar != "_") {

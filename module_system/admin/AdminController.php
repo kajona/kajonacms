@@ -11,7 +11,6 @@ namespace Kajona\System\Admin;
 
 use Kajona\System\System\AbstractController;
 use Kajona\System\System\AdminskinHelper;
-use Kajona\System\System\BootstrapCache;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Classloader;
 use Kajona\System\System\Exception;
@@ -423,7 +422,7 @@ abstract class AdminController extends AbstractController
         $strAction = $this->getAction();
 
         //search for the matching method - build method name
-        $strMethodName = "action".uniStrtoupper($strAction[0]).uniSubstr($strAction, 1);
+        $strMethodName = "action".uniStrtoupper($strAction[0]).StringUtil::substring($strAction, 1);
 
         if (method_exists($this, $strMethodName)) {
 

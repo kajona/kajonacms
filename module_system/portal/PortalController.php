@@ -18,6 +18,7 @@ use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Reflection;
 use Kajona\System\System\RequestEntrypointEnum;
 use Kajona\System\System\ResponseObject;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemCommon;
 use Kajona\System\System\SystemSetting;
 use ReflectionClass;
@@ -104,7 +105,7 @@ abstract class PortalController extends AbstractController
         $strAction = $this->getAction();
 
         //search for the matching method - build method name
-        $strMethodName = "action".uniStrtoupper($strAction[0]).uniSubstr($strAction, 1);
+        $strMethodName = "action".uniStrtoupper($strAction[0]).StringUtil::substring($strAction, 1);
 
         $objAnnotations = new Reflection(get_class($this));
         if (method_exists($this, $strMethodName)) {

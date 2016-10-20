@@ -12,9 +12,7 @@ require_once (__DIR__."/StringUtil.php");
 use Kajona\System\System\AdminskinHelper;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Date;
-use Kajona\System\System\HttpStatuscodes;
 use Kajona\System\System\Link;
-use Kajona\System\System\ResponseObject;
 use Kajona\System\System\StringUtil;
 use Kajona\System\System\Validators\EmailValidator;
 use Kajona\System\System\Validators\NumericValidator;
@@ -886,14 +884,14 @@ function createFilename($strName, $bitFolder = false)
     $strName = uniStrtolower($strName);
 
     if (!$bitFolder) {
-        $strEnding = uniSubstr($strName, (StringUtil::lastIndexOf($strName, ".") + 1));
+        $strEnding = StringUtil::substring($strName, (StringUtil::lastIndexOf($strName, ".") + 1));
     }
     else {
         $strEnding = "";
     }
 
     if (!$bitFolder) {
-        $strReturn = uniSubstr($strName, 0, (StringUtil::lastIndexOf($strName, ".")));
+        $strReturn = StringUtil::substring($strName, 0, (StringUtil::lastIndexOf($strName, ".")));
     }
     else {
         $strReturn = $strName;
@@ -934,7 +932,7 @@ function createFilename($strName, $bitFolder = false)
  */
 function getFileExtension($strPath)
 {
-    return uniStrtolower(uniSubstr($strPath, StringUtil::lastIndexOf($strPath, ".")));
+    return uniStrtolower(StringUtil::substring($strPath, StringUtil::lastIndexOf($strPath, ".")));
 }
 
 /**

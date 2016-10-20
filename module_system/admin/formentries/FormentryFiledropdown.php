@@ -10,6 +10,7 @@ use Kajona\System\Admin\FormentryInterface;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Filesystem;
 use Kajona\System\System\Reflection;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\Validators\FileValidator;
 
 
@@ -70,7 +71,7 @@ class FormentryFiledropdown extends FormentryBase implements FormentryInterface 
             $arrProperties = $objReflection->getPropertiesWithAnnotation(self::STR_SOURCEDIR_ANNOTATION);
             $strSourceProperty = null;
             foreach($arrProperties as $strPropertyName => $strValue) {
-                if(uniSubstr(uniStrtolower($strPropertyName), (uniStrlen($this->getStrSourceProperty())) * -1) == $this->getStrSourceProperty()) {
+                if(StringUtil::substring(uniStrtolower($strPropertyName), (uniStrlen($this->getStrSourceProperty())) * -1) == $this->getStrSourceProperty()) {
                     $strSourceProperty = $strPropertyName;
                 }
             }
