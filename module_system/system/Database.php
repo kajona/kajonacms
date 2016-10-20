@@ -599,7 +599,7 @@ class Database
             //Filtering tables not used by this project, if dbprefix was given
             if (_dbprefix_ != "") {
                 foreach ($arrTemp as $arrTable) {
-                    $intPos = uniStripos($arrTable["name"], _dbprefix_);
+                    $intPos = StringUtil::indexOf($arrTable["name"], _dbprefix_, false);
                     if ($intPos !== false && $intPos == 0) {
                         if ($bitAll) {
                             $arrReturn[] = $arrTable;

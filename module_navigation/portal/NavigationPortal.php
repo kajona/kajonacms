@@ -179,7 +179,7 @@ class NavigationPortal extends PortalController implements PortalInterface
 
                 //current point active?
                 $bitActive = false;
-                if (uniStripos($strStack, $arrOneChild["node"]->getSystemid()) !== false) {
+                if (StringUtil::indexOf($strStack, $arrOneChild["node"]->getSystemid(), false) !== false) {
                     $bitActive = true;
                 }
 

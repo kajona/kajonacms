@@ -288,14 +288,14 @@ class PagesPortalController extends PortalController implements PortalInterface
         $strHeader .= "For more information about Kajona see http://www.kajona.de\n";
         $strHeader .= "-->\n";
 
-        $intBodyPos = uniStripos($strPageContent, "</head>");
-        $intPosXml = uniStripos($strPageContent, "<?xml");
+        $intBodyPos = StringUtil::indexOf($strPageContent, "</head>", false);
+        $intPosXml = StringUtil::indexOf($strPageContent, "<?xml", false);
         if ($intBodyPos !== false) {
             $intBodyPos += 0;
             $strPageContent = StringUtil::substring($strPageContent, 0, $intBodyPos).$strHeader.StringUtil::substring($strPageContent, $intBodyPos);
         }
         elseif ($intPosXml !== false) {
-            $intBodyPos = uniStripos($strPageContent, "?>");
+            $intBodyPos = StringUtil::indexOf($strPageContent, "?>", false);
             $intBodyPos += 2;
             $strPageContent = StringUtil::substring($strPageContent, 0, $intBodyPos).$strHeader.StringUtil::substring($strPageContent, $intBodyPos);
         }

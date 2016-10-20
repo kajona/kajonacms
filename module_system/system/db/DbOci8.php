@@ -640,7 +640,7 @@ class DbOci8 extends DbBase
     private function getParsedStatement($strQuery)
     {
 
-        if (uniStripos($strQuery, "select") !== false) {
+        if (StringUtil::indexOf($strQuery, "select", false) !== false) {
             $strQuery = StringUtil::replace(array(" as ", " AS "), array(" ", " "), $strQuery);
         }
 

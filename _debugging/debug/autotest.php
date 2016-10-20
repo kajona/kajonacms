@@ -65,7 +65,7 @@ if(issetPost("dotest")) {
         include_once $strSearched;
         $arrClasses = get_php_classes(file_get_contents($strSearched));
         foreach($arrClasses as $strClassName) {
-            if(uniStripos($strClassName, "test") !== false) {
+            if(StringUtil::indexOf($strClassName, "test", false) !== false) {
                 $objTest = new $strClassName();
                 if($objTest instanceof Testbase) {
                     echo " invoking kajonaTestTrigger() on instance of ".$strClassName."\n\n\n\n";
