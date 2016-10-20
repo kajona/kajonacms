@@ -70,8 +70,7 @@ class RequestDispatcher
         if ($bitAdmin) {
             $strReturn = $this->processAdminRequest($strModule, $strAction, $strLanguageParam);
             $strReturn = $this->callScriptlets($strReturn, ScriptletInterface::BIT_CONTEXT_ADMIN);
-        }
-        else {
+        } else {
             $strReturn = $this->processPortalRequest($strModule, $strAction, $strLanguageParam);
             $strReturn = $this->callScriptlets($strReturn, ScriptletInterface::BIT_CONTEXT_PORTAL_PAGE);
         }
@@ -114,8 +113,7 @@ class RequestDispatcher
                 ResponseObject::getInstance()->setStrRedirectUrl(StringUtil::replace("http:", "https:", ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML()) ? _xmlpath_ : _indexpath_)."?".getServer("QUERY_STRING"));
                 ResponseObject::getInstance()->sendHeaders();
                 die("Reloading using https...");
-            }
-            //value of header correct?
+            } //value of header correct?
             elseif ($strHeaderValue != "" && $strHeaderValue != strtolower(getServer($strHeaderName))) {
                 //reload to https
                 ResponseObject::getInstance()->setStrRedirectUrl(StringUtil::replace("http:", "https:", ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML()) ? _xmlpath_ : _indexpath_)."?".getServer("QUERY_STRING"));
@@ -137,7 +135,6 @@ class RequestDispatcher
                 //try to load the module
                 $objModuleRequested = SystemModule::getModuleByName($strModule);
                 if ($objModuleRequested != null) {
-
                     //see if there is data from a previous, failed request
                     if (Carrier::getInstance()->getObjSession()->getSession(LoginAdmin::SESSION_LOAD_FROM_PARAMS) === "true") {
                         foreach (Carrier::getInstance()->getObjSession()->getSession(LoginAdmin::SESSION_PARAMS) as $strOneKey => $strOneVal) {
@@ -165,28 +162,21 @@ class RequestDispatcher
 
                     //React, if admin was opened by the portaleditor
                     if (Carrier::getInstance()->getParam("peClose") == "1") {
-
-                        if(getGet("peRefreshPage") != "") {
+                        if (getGet("peRefreshPage") != "") {
                             $strReloadUrl = xssSafeString(getGet("peRefreshPage"));
                             $strReturn = "<html><head></head><body><script type='text/javascript'>if(window.opener) { window.opener.location = '".$strReloadUrl."'; window.close(); } else { parent.location = '".$strReloadUrl."'; }</script></body></html>";
-                        }
-                        else {
+                        } else {
                             $strReturn = "<html><head></head><body><script type='text/javascript'>if(window.opener) { window.opener.location.reload(); window.close(); } else { parent.location.reload(); }</script></body></html>";
                         }
                     }
 
-
-
-                }
-                else {
+                } else {
                     throw new Exception("Requested module ".$strModule." not existing", Exception::$level_FATALERROR);
                 }
-            }
-            else {
+            } else {
                 throw new Exception("Sorry, but you don't have the needed permissions to access the admin-area", Exception::$level_FATALERROR);
             }
-        }
-        else {
+        } else {
             $bitLogin = true;
 
             if ($strModule != "login") {
@@ -332,15 +322,13 @@ class RequestDispatcher
 
             if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML())) {
                 ResponseObject::getInstance()->addHeader("Kajona Debug: ".$strDebug);
-            }
-            else {
+            } else {
                 $strDebug = "<pre style='z-index: 2000000; position: fixed; background-color: white; width: 100%; top: 0; font-size: 10px; padding: 0; margin: 0;'>Kajona Debug: ".$strDebug."</pre>";
 
                 $intBodyPos = StringUtil::indexOf($strReturn, "</body>");
                 if ($intBodyPos !== false) {
                     $strReturn = StringUtil::substring($strReturn, 0, $intBodyPos).$strDebug.StringUtil::substring($strReturn, $intBodyPos);
-                }
-                else {
+                } else {
                     $strReturn = $strDebug.$strReturn;
                 }
             }

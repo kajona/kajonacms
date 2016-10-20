@@ -105,7 +105,9 @@ class StatsAdmin extends AdminController implements AdminInterface
 
         $this->objPluginManager = new Pluginmanager(self::$STR_PLUGIN_EXTENSION_POINT, "/admin/reports");
 
-        $this->setAction("list");
+        if ($this->getAction() != "getReport") {
+            $this->setAction("list");
+        }
     }
 
 
@@ -186,7 +188,7 @@ class StatsAdmin extends AdminController implements AdminInterface
         }
 
         if ($objPlugin) {
-            $strReturn .= $this->getInlineLoadingCode($objPlugin);
+            $strReturn .= $this->getInlineLoadingCode($objPlugin, $this->getParam("pv"));
             //place date-selector before
             $strReturn = $this->createDateSelector($objPlugin).$strReturn;
         }

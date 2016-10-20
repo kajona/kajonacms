@@ -28,7 +28,6 @@ use Kajona\System\System\HttpResponsetypes;
 use Kajona\System\System\HttpStatuscodes;
 use Kajona\System\System\Link;
 use Kajona\System\System\ResponseObject;
-use Kajona\System\System\Session;
 use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemChangelog;
 use Kajona\System\System\SystemJSTreeBuilder;
@@ -153,46 +152,11 @@ class DashboardAdmin extends AdminController implements AdminInterface
     {
         $strReturn = "";
 
-        $strContainerId = "calendar-".generateSystemid();
-        $strEventCallback = Link::getLinkAdminXml("dashboard", "getCalendarEvents");
-        $strLang = Session::getInstance()->getAdminLanguage();
-
-        $strReturn .= "<div id='".$strContainerId."' class='calendar'></div>";
+        $strReturn .= "<div id='dashboard-calendar' class='calendar'></div>";
         $strReturn .= "<script type=\"text/javascript\">";
         $strReturn .= <<<JS
-        require(["jquery", "moment", "fullcalendar", "dashboard", "tooltip", "workingIndicator", "loader", "fullcalendar_lang_{$strLang}"], function($, moment, fullcalendar, dashboard, tooltip, workingIndicator, loader){
-            loader.loadFile(['/core/module_dashboard/scripts/fullcalendar/fullcalendar.min.css']);
-            var loadCalendar = function(){
-                $('#{$strContainerId}').fullCalendar({
-                    header: {
-                        left: 'prev,next',
-                        center: 'title',
-                        right: ''
-                    },
-                    editable: false,
-                    theme: false,
-                    lang: '{$strLang}',
-                    eventLimit: true,
-                    events: '{$strEventCallback}',
-                    eventRender: function(event, el){
-                        tooltip.addTooltip(el, event.tooltip);
-                        if (event.icon) {
-                            el.find("span.fc-title").prepend(event.icon);
-                        }
-                    },
-                    loading: function(isLoading){
-                        if (isLoading) {
-                            workingIndicator.start();
-                        } else {
-                            workingIndicator.stop();
-                        }
-                    }
-                });
-                $('.fc-button-group').removeClass().addClass('btn-group');
-                $('.fc-button').removeClass().addClass('btn btn-default');
-            };
-
-            loadCalendar();
+        require(["dashboard-calendar"], function(calendar){
+            calendar.init();
         });
 JS;
         $strReturn .= "</script>";
