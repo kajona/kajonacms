@@ -947,7 +947,7 @@ abstract class Root
                     $this->getStrLockId(),
                     (int)$this->getIntLockTime(),
                     (int)$this->getIntRecordStatus(),
-                    uniStrTrim($this->getStrRecordComment(), 245),
+                    uniStrTrim($this->getStrRecordComment(), 240),
                     $this->getStrRecordClass(),
                     $this->getLongCreateDate(),
                     $this->getSystemid()
@@ -985,7 +985,7 @@ abstract class Root
                     $this->getStrLockId(),
                     (int)$this->getIntLockTime(),
                     (int)$this->getIntRecordStatus(),
-                    uniStrTrim($this->getStrRecordComment(), 245),
+                    uniStrTrim($this->getStrRecordComment(), 240),
                     $this->getStrRecordClass(),
                     $this->getLongCreateDate(),
                     $this->getIntRecordDeleted(),
