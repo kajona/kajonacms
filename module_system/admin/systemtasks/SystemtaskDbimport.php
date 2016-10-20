@@ -83,7 +83,7 @@ class SystemtaskDbimport extends SystemtaskBase implements AdminSystemtaskInterf
                 $strTimestamp = StringUtil::substring($strOneFile, StringUtil::lastIndexOf($strOneFile, "_") + 1, (StringUtil::indexOf($strOneFile, ".") - StringUtil::lastIndexOf($strOneFile, "_")));
             }
 
-            if (uniStrlen($strTimestamp) > 9 && is_numeric($strTimestamp)) {
+            if (StringUtil::length($strTimestamp) > 9 && is_numeric($strTimestamp)) {
                 $arrOptions[$strOneFile] = $strOneFile." (".bytesToString($arrDetails["filesize"]).")"
                     ."<br />".$this->getLang("systemtask_dbimport_datefilename")." ".timeToString($strTimestamp)
                     ."<br />".$this->getLang("systemtask_dbimport_datefileinfo")." ".timeToString($arrDetails['filechange']);

@@ -275,7 +275,7 @@ class Flyimage
         //place characters in the image
         for ($intI = 0; $intI < $intNumberOfChars; $intI++) {
             //character to place
-            $strCurrentChar = $strCharsPossible[rand(0, (uniStrlen($strCharsPossible) - 1))];
+            $strCurrentChar = $strCharsPossible[rand(0, (StringUtil::length($strCharsPossible) - 1))];
             $strCharactersPlaced .= $strCurrentChar;
             //color to use
             $intCol1 = rand(0, 200);

@@ -419,7 +419,7 @@ HTML;
                     }
                 }
 
-                if ((int)uniStrlen($strOutputAtPlaceholder) > 0) {
+                if ((int)StringUtil::length($strOutputAtPlaceholder) > 0) {
                     $arrSinglePlaceholder = explode("_", $arrOneElementOnTemplate["placeholder"]);
                     if (count($arrSinglePlaceholder) == 2 && !$bitRenderCompact) {
                         $strOutputAtPlaceholder .= $this->objToolkit->formHeadline($arrSinglePlaceholder[0]);

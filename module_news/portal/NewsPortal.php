@@ -25,6 +25,7 @@ use Kajona\System\System\ArraySectionIterator;
 use Kajona\System\System\Link;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Rssfeed;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\TemplateMapper;
 
@@ -134,7 +135,7 @@ class NewsPortal extends PortalController implements PortalInterface
                 $objMapper->addPlaceholder("news_text", $objOneNews->getStrText());
 
                 //reset more link? -> no text, no image and no redirect page
-                if (uniStrlen(htmlStripTags($objOneNews->getStrText())) == 0 && uniStrlen($objOneNews->getStrImage()) == 0 && ($objOneNews->getIntRedirectEnabled() == "0" || $objOneNews->getStrRedirectPage() == "")) {
+                if (StringUtil::length(htmlStripTags($objOneNews->getStrText())) == 0 && StringUtil::length($objOneNews->getStrImage()) == 0 && ($objOneNews->getIntRedirectEnabled() == "0" || $objOneNews->getStrRedirectPage() == "")) {
                     $objMapper->addPlaceholder("news_more_link", "");
                 }
 

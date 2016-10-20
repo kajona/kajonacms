@@ -48,7 +48,7 @@ else {
                 $strTimestamp = StringUtil::substring($strOneFile, StringUtil::lastIndexOf($strOneFile, "_")+1, (StringUtil::indexOf($strOneFile, ".")-StringUtil::lastIndexOf($strOneFile, "_")));
 
             
-            if(uniStrlen($strTimestamp) > 9 && is_numeric($strTimestamp))
+            if(StringUtil::length($strTimestamp) > 9 && is_numeric($strTimestamp))
                 //if the timestamp is the last part of the filename, we can use $strTimestamp
                 $strFileInfo = $strOneFile
                     ." (".bytesToString($arrDetails['filesize']).")"

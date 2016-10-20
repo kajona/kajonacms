@@ -299,12 +299,12 @@ class PostacommentPortal extends PortalController implements PortalInterface
     {
         $bitReturn = true;
 
-        if (uniStrlen($this->getParam("comment_name")) < 2) {
+        if (StringUtil::length($this->getParam("comment_name")) < 2) {
             $bitReturn = false;
             $this->strErrors .= $this->objTemplate->fillTemplateFile(array("error" => $this->getLang("validation_name")), "/module_postacomment/".$this->getParam("comment_template"), "validation_error_row");
             $this->arrErrorFields[] = "'comment_name_{$this->getParam("comment_systemid")}'";
         }
-        if (uniStrlen($this->getParam("comment_message")) < 2) {
+        if (StringUtil::length($this->getParam("comment_message")) < 2) {
             $bitReturn = false;
             $this->strErrors .= $this->objTemplate->fillTemplateFile(array("error" => $this->getLang("validation_message")), "/module_postacomment/".$this->getParam("comment_template"), "validation_error_row");
             $this->arrErrorFields[] = "'comment_message_{$this->getParam("comment_systemid")}'";

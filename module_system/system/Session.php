@@ -358,7 +358,7 @@ final class Session
         } else {
             //try to load a language the user requested
             $strUserLanguages = str_replace(";", ",", getServer("HTTP_ACCEPT_LANGUAGE"));
-            if (uniStrlen($strUserLanguages) > 0) {
+            if (StringUtil::length($strUserLanguages) > 0) {
                 $arrLanguages = explode(",", $strUserLanguages);
                 //check, if one of the requested languages is available on our system
                 foreach ($arrLanguages as $strOneLanguage) {

@@ -439,7 +439,7 @@ class Link
                     }
 
                     $strAddKeys = $objPage->getStrSeostring().($strSeoAddon != "" && $objPage->getStrSeostring() != "" ? "-" : "").urlSafeString($strSeoAddon);
-                    if (uniStrlen($strAddKeys) > 0 && uniStrlen($strAddKeys) <= 2) {
+                    if (StringUtil::length($strAddKeys) > 0 && StringUtil::length($strAddKeys) <= 2) {
                         $strAddKeys .= "__";
                     }
 

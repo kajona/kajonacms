@@ -8,6 +8,7 @@
 
 namespace Kajona\System\System\Validators;
 
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\ValidatorInterface;
 
 
@@ -29,7 +30,7 @@ class FolderValidator implements ValidatorInterface {
      */
     public function validate($objValue) {
 
-        if(!is_string($objValue) || uniStrlen($objValue) == 0)
+        if(!is_string($objValue) || StringUtil::length($objValue) == 0)
             return false;
 
         return is_dir(_realpath_.$objValue);

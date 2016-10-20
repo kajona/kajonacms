@@ -9,6 +9,7 @@
 
 namespace Kajona\Search\System;
 use Kajona\System\System\Config;
+use Kajona\System\System\StringUtil;
 
 
 /**
@@ -87,7 +88,7 @@ class SearchStandardAnalyzer {
         preg_match_all('/\w{1,}/u', $this->getText(), $arrResults);
 
         $arrFiltered = array_filter($arrResults[0], function($strOneHit) {
-            return is_numeric($strOneHit) || uniStrlen($strOneHit) > 2;
+            return is_numeric($strOneHit) || StringUtil::length($strOneHit) > 2;
         });
 
         $this->setResults($arrFiltered);

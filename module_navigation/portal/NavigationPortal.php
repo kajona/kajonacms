@@ -211,7 +211,7 @@ class NavigationPortal extends PortalController implements PortalInterface
 
         //wrap into the wrapper-section
         $strWrappedLevel = $this->objTemplate->fillTemplateFile(array("level".$intLevel => $strReturn), "/module_navigation/".$this->arrElementData["navigation_template"], "level_".$intLevel."_wrapper");
-        if (uniStrlen($strWrappedLevel) > 0) {
+        if (StringUtil::length($strWrappedLevel) > 0) {
             $strReturn = $strWrappedLevel;
         }
 
@@ -251,7 +251,7 @@ class NavigationPortal extends PortalController implements PortalInterface
         $strStack = "";
         //search the deepest stack
         foreach ($arrStacks as $strOneStack) {
-            if (uniStrlen($strOneStack) > uniStrlen($strStack)) {
+            if (StringUtil::length($strOneStack) > StringUtil::length($strStack)) {
                 $strStack = $strOneStack;
             }
         }

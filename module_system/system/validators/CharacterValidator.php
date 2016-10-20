@@ -8,6 +8,7 @@
 
 namespace Kajona\System\System\Validators;
 
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\ValidatorInterface;
 
 
@@ -30,7 +31,7 @@ class CharacterValidator implements ValidatorInterface {
      */
     public function validate($objValue) {
 
-        if(is_string($objValue) && uniStrlen($objValue) == 1)
+        if(is_string($objValue) && StringUtil::length($objValue) == 1)
             return true;
 
         return false;

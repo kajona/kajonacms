@@ -644,7 +644,7 @@ HTML;
                 }
             }
 
-            if (uniStrlen($strReturn) != 0) {
+            if (StringUtil::length($strReturn) != 0) {
                 $strReturn = $this->objToolkit->listHeader().$strReturn.$this->objToolkit->listFooter();
             }
 

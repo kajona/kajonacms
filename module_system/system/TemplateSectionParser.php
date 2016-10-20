@@ -29,14 +29,14 @@ class TemplateSectionParser
             $intStart = StringUtil::indexOf($strTemplate, $strPattern);
 
             if (!$bitKeepSectionTag) {
-                $intStart += uniStrlen($strPattern);
+                $intStart += StringUtil::length($strPattern);
             }
         }
 
         //find closing tag
         $intEnd = StringUtil::indexOf($strTemplate, "</".$strSection.">");
         if ($bitKeepSectionTag) {
-            $intEnd += uniStrlen("</".$strSection.">");
+            $intEnd += StringUtil::length("</".$strSection.">");
         }
 
 

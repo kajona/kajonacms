@@ -2145,7 +2145,7 @@ abstract class Root
      */
     public function setStrRecordComment($strRecordComment)
     {
-        if (uniStrlen($strRecordComment) > 254) {
+        if (StringUtil::length($strRecordComment) > 254) {
             $strRecordComment = uniStrTrim($strRecordComment, 250);
         }
         $this->strRecordComment = $strRecordComment;

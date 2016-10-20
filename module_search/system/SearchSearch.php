@@ -11,6 +11,7 @@ use Kajona\System\System\AdminListableInterface;
 use Kajona\System\System\Model;
 use Kajona\System\System\ModelInterface;
 use Kajona\System\System\SortableRatingInterface;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemModule;
 
 /**
@@ -104,7 +105,7 @@ class SearchSearch extends Model implements ModelInterface, SortableRatingInterf
      */
     public function getFilterModules()
     {
-        if (uniStrlen($this->strInternalFilterModules) > 0 && $this->strInternalFilterModules != "-1") {
+        if (StringUtil::length($this->strInternalFilterModules) > 0 && $this->strInternalFilterModules != "-1") {
             return explode(",", $this->strInternalFilterModules);
         }
         return array();

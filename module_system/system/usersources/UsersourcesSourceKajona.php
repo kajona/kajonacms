@@ -11,6 +11,7 @@ namespace Kajona\System\System\Usersources;
 
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Logger;
+use Kajona\System\System\StringUtil;
 
 
 /**
@@ -60,7 +61,7 @@ class UsersourcesSourceKajona implements UsersourcesUsersourceInterface
     {
         if ($objUser instanceof UsersourcesUserKajona) {
             $bitMD5Encryption = false;
-            if (uniStrlen($objUser->getStrFinalPass()) == 32) {
+            if (StringUtil::length($objUser->getStrFinalPass()) == 32) {
                 $bitMD5Encryption = true;
             }
             if ($objUser->getStrFinalPass() == self::encryptPassword($strPassword, $objUser->getStrSalt(), $bitMD5Encryption)) {

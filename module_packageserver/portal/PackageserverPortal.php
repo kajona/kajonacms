@@ -168,7 +168,7 @@ class PackageserverPortal extends PortalController implements PortalInterface
                             $bitAdd = false;
                         }
                     }
-                    elseif (StringUtil::substring($objOneFile->getStrName(), 0, uniStrlen($strNameFilter)) != $strNameFilter) {
+                    elseif (StringUtil::substring($objOneFile->getStrName(), 0, StringUtil::length($strNameFilter)) != $strNameFilter) {
                         $bitAdd = false;
                     }
                 }

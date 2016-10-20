@@ -118,7 +118,7 @@ abstract class AdminEvensimpler extends AdminSimple
 
                 foreach($arrAnnotations as $strProperty) {
                     if(StringUtil::indexOf($strProperty, $strAnnotationPrefix) === 0) {
-                        return $strAction.StringUtil::substring($strProperty, uniStrlen($strAnnotationPrefix));
+                        return $strAction.StringUtil::substring($strProperty, StringUtil::length($strAnnotationPrefix));
                     }
                 }
             }

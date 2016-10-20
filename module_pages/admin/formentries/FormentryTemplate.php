@@ -80,7 +80,7 @@ class FormentryTemplate extends FormentryBase implements FormentryInterface
             $strSourceProperty = null;
 
             foreach ($arrProperties as $strPropertyName => $strValue) {
-                if (StringUtil::substring(uniStrtolower($strPropertyName), (uniStrlen($this->getStrSourceProperty())) * -1) == $this->getStrSourceProperty()) {
+                if (StringUtil::substring(uniStrtolower($strPropertyName), (StringUtil::length($this->getStrSourceProperty())) * -1) == $this->getStrSourceProperty()) {
                     $strSourceProperty = $strPropertyName;
                 }
             }

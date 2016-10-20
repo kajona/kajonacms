@@ -589,7 +589,7 @@ function rgb2hex($arrRGB)
         }
 
         $strHexVal = dechex($intColor);
-        if (uniStrlen($strHexVal) == 1) {
+        if (StringUtil::length($strHexVal) == 1) {
             $strHexVal = '0'.$strHexVal;
         }
         $strHex .= $strHexVal;

@@ -98,7 +98,7 @@ class Csv
 
             $strRow = $objFilesystem->readLineFromFile();
             while ($strRow !== false) {
-                if (uniStrlen($strRow) > 0) {
+                if (StringUtil::length($strRow) > 0) {
                     $arrOneRow = explode($this->strDelimiter, $strRow);
                     $arrCSVRow = array();
                     foreach ($arrHeader as $intKey => $strHeader) {
@@ -178,7 +178,7 @@ class Csv
                     $strRow .= $strTagetCol.$this->strDelimiter;
                 }
                 //remove last delimiter, eol
-                $strRow = StringUtil::substring($strRow, 0, (uniStrlen($this->strDelimiter)) * -1);
+                $strRow = StringUtil::substring($strRow, 0, (StringUtil::length($this->strDelimiter)) * -1);
                 //add a linebreak
                 $strRow .= "\n";
                 //write header to file
@@ -210,7 +210,7 @@ class Csv
                     $strRow .= $strEntry.$this->strDelimiter;
                 }
                 //remove last delimiter, eol
-                $strRow = StringUtil::substring($strRow, 0, (uniStrlen($this->strDelimiter)) * -1);
+                $strRow = StringUtil::substring($strRow, 0, (StringUtil::length($this->strDelimiter)) * -1);
                 //add linebreak
                 $strRow .= "\n";
                 //and write to file

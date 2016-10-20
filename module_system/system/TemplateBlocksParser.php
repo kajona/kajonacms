@@ -38,7 +38,7 @@ class TemplateBlocksParser
             $intStart = StringUtil::indexOf($strTemplate, $strPattern);
 
             $intEnd = StringUtil::indexOf($strTemplate, "</".$strBlockDefinition.">");
-            $intEnd += uniStrlen("</".$strBlockDefinition.">");
+            $intEnd += StringUtil::length("</".$strBlockDefinition.">");
 
 
             if ($intStart !== false && $intEnd !== false) {
@@ -59,7 +59,7 @@ class TemplateBlocksParser
                     //delete substring before and after
                     $strTemplateSection = StringUtil::substring($strTemplate, $intStart, $intEnd);
 
-                    $strContent = StringUtil::substring($strTemplateSection, uniStrlen($arrMatches[0]), uniStrlen("</".$strBlockDefinition.">") * -1);
+                    $strContent = StringUtil::substring($strTemplateSection, StringUtil::length($arrMatches[0]), StringUtil::length("</".$strBlockDefinition.">") * -1);
                     $arrBlocks[$arrMatches[4]] = new TemplateBlockContainer($strBlockDefinition, $arrMatches[4], $arrMatches[0], $strContent, $strTemplateSection);
 
                     $strTemplate = uniStrReplace($strTemplateSection, "", $strTemplate);

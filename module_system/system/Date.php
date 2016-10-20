@@ -457,10 +457,10 @@ class Date
             return $this;
         }
 
-        if (uniStrlen($intYear) == 2) {
+        if (StringUtil::length($intYear) == 2) {
             $intYear = "20".$intYear;
         }
-        if (uniStrlen($intYear) == 1) {
+        if (StringUtil::length($intYear) == 1) {
             $intYear = "200".$intYear;
         }
 

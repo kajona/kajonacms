@@ -9,6 +9,7 @@ namespace Kajona\Search\System;
 use Kajona\Pages\System\PagesPageelement;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\SearchResultobjectInterface;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemModule;
 
 
@@ -46,7 +47,7 @@ class SearchCommons extends \Kajona\System\System\Model implements \Kajona\Syste
     public function doPortalSearch($objSearch, $intStart = 0, $intEnd = 50)
     {
         $objSearch->setStrQuery(trim(uniStrReplace("%", "", $objSearch->getStrQuery())));
-        if (uniStrlen($objSearch->getStrQuery()) == 0) {
+        if (StringUtil::length($objSearch->getStrQuery()) == 0) {
             return array();
         }
 

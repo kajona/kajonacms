@@ -64,7 +64,7 @@ class ElementRssfeedPortal extends ElementPortal implements PortalElementInterfa
 
         $strContent = "";
         $arrTemplate = array();
-        if (uniStrlen($strFeed) == 0) {
+        if (StringUtil::length($strFeed) == 0) {
             $strContent = $this->getLang("rssfeed_errorloading");
         }
         else {

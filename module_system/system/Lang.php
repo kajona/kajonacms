@@ -211,7 +211,7 @@ class Lang
         $strReturn = "";
         $strLastChar = "";
 
-        for ($i = 0; $i < uniStrlen($strText); $i++) {
+        for ($i = 0; $i < StringUtil::length($strText); $i++) {
             $strChar = StringUtil::substring($strText, $i, 1);
             $strCharLower = uniStrtolower($strChar);
 

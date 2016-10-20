@@ -247,7 +247,7 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
             //try to load the default language
             //maybe the user sent a wanted language
             $strUserLanguages = str_replace(";", ",", getServer("HTTP_ACCEPT_LANGUAGE"));
-            if(uniStrlen($strUserLanguages) > 0) {
+            if(StringUtil::length($strUserLanguages) > 0) {
                 $arrLanguages = explode(",", $strUserLanguages);
                 //check, if one of the requested languages is available on our system
                 foreach($arrLanguages as $strOneLanguage) {
