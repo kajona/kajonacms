@@ -9,6 +9,7 @@
 namespace Kajona\Debugging\Debug;
 
 use Kajona\System\System\Filesystem;
+use Kajona\System\System\StringUtil;
 
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
