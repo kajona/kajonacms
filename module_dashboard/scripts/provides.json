@@ -6,6 +6,7 @@
     "fullcalendar_lang_pt": "fullcalendar/lang/pt",
     "fullcalendar_lang_ru": "fullcalendar/lang/ru",
     "fullcalendar_lang_sv": "fullcalendar/lang/sv",
-    "dashboard": "kajona/dashboard"
+    "dashboard": "kajona/dashboard",
+    "dashboard-calendar": "kajona/dashboard-calendar"
   }
 }
