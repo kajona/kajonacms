@@ -105,7 +105,7 @@ abstract class PortalController extends AbstractController
         $strAction = $this->getAction();
 
         //search for the matching method - build method name
-        $strMethodName = "action".uniStrtoupper($strAction[0]).StringUtil::substring($strAction, 1);
+        $strMethodName = "action".StringUtil::toUpperCase($strAction[0]).StringUtil::substring($strAction, 1);
 
         $objAnnotations = new Reflection(get_class($this));
         if (method_exists($this, $strMethodName)) {
