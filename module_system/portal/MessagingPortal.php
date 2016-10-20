@@ -54,6 +54,7 @@ class MessagingPortal extends PortalController implements PortalInterface
     }
 
     /**
+     * Marks a message as read and returns a 1x1px tansaparent gif as a "read indicator"
      * @return string
      */
     protected function actionSetRead()
