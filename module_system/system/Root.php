@@ -953,7 +953,7 @@ abstract class Root
                     $this->getStrLockId(),
                     (int)$this->getIntLockTime(),
                     (int)$this->getIntRecordStatus(),
-                    StringUtil::truncate($this->getStrRecordComment(), 245),
+                    StringUtil::truncate($this->getStrRecordComment(), 240),
                     $this->getStrRecordClass(),
                     $this->getLongCreateDate(),
                     $this->getSystemid()
@@ -991,7 +991,7 @@ abstract class Root
                     $this->getStrLockId(),
                     (int)$this->getIntLockTime(),
                     (int)$this->getIntRecordStatus(),
-                    StringUtil::truncate($this->getStrRecordComment(), 245),
+                    StringUtil::truncate($this->getStrRecordComment(), 240),
                     $this->getStrRecordClass(),
                     $this->getLongCreateDate(),
                     $this->getIntRecordDeleted(),
