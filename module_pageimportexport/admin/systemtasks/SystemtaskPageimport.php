@@ -133,7 +133,7 @@ class SystemtaskPageimport extends SystemtaskBase implements AdminSystemtaskInte
         $objFilesystem = new Filesystem();
         $strTarget = "/import_".generateSystemid().".xml";
 
-        $strSuffix = uniStrtolower(StringUtil::substring($arrFile["name"], StringUtil::lastIndexOf($arrFile["name"], ".")));
+        $strSuffix = StringUtil::toLowerCase(StringUtil::substring($arrFile["name"], StringUtil::lastIndexOf($arrFile["name"], ".")));
         if ($strSuffix == ".xml") {
             if ($objFilesystem->copyUpload($strTarget, $arrFile["tmp_name"])) {
                 Logger::getInstance()->addLogRow("uploaded file ".$strTarget, Logger::$levelInfo);

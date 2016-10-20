@@ -217,7 +217,7 @@ class MediamanagerPortal extends PortalController implements PortalInterface
         $arrFileTemplate = array();
 
         //check, if it's an image
-        $strSuffix = uniStrtolower(StringUtil::substring($objOneFile->getStrFilename(), StringUtil::lastIndexOf($objOneFile->getStrFilename(), ".")));
+        $strSuffix = StringUtil::toLowerCase(StringUtil::substring($objOneFile->getStrFilename(), StringUtil::lastIndexOf($objOneFile->getStrFilename(), ".")));
         if (in_array($strSuffix, $this->arrImageTypes) && isset($this->arrElementData["gallery_maxh_d"]) && isset($this->arrElementData["gallery_maxw_d"])) {
             //provide image placeholders
             $arrFileTemplate["image_detail_src"] = $this->getImageUrl(
@@ -299,7 +299,7 @@ class MediamanagerPortal extends PortalController implements PortalInterface
 
         $objFirstFile = $this->getFirstFileInFolder($objOneFile->getSystemid());
         if ($objFirstFile != null) {
-            $strSuffix = uniStrtolower(StringUtil::substring($objFirstFile->getStrFilename(), StringUtil::lastIndexOf($objFirstFile->getStrFilename(), ".")));
+            $strSuffix = StringUtil::toLowerCase(StringUtil::substring($objFirstFile->getStrFilename(), StringUtil::lastIndexOf($objFirstFile->getStrFilename(), ".")));
             if (in_array($strSuffix, array(".jpg", ".jpeg", ".gif", ".png"))) {
                 //provide image placeholders
                 $arrFolder["folder_preview_image_src"] = $objFirstFile->getStrFilename();
@@ -383,7 +383,7 @@ class MediamanagerPortal extends PortalController implements PortalInterface
         }
 
         //if its an image, provide additional information
-        $strSuffix = uniStrtolower(StringUtil::substring($objFile->getStrFilename(), StringUtil::lastIndexOf($objFile->getStrFilename(), ".")));
+        $strSuffix = StringUtil::toLowerCase(StringUtil::substring($objFile->getStrFilename(), StringUtil::lastIndexOf($objFile->getStrFilename(), ".")));
         if (in_array($strSuffix, $this->arrImageTypes) && isset($this->arrElementData["gallery_maxh_d"]) && isset($this->arrElementData["gallery_maxw_d"])) {
             $bitIsImage = true;
             $arrDetailsTemplate["image_src"] = $this->getImageUrl(

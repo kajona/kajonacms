@@ -55,7 +55,7 @@ class SearchStandardAnalyzer {
      * @return void
      */
     private function lowerize() {
-        $this->setText(uniStrtolower($this->getText()));
+        $this->setText(StringUtil::toLowerCase($this->getText()));
     }
 
     /**

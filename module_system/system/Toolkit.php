@@ -160,7 +160,7 @@ class Toolkit
             $strType = $strFilename;
         }
 
-        $strType = uniStrtolower($strType);
+        $strType = StringUtil::toLowerCase($strType);
 
         //Known Type?
         if (isset($arrMime[$strType])) {

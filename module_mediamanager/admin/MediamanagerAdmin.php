@@ -993,7 +993,7 @@ HTML;
             //Check file for correct filters
             $arrAllowed = explode(",", $objRepo->getStrUploadFilter());
 
-            $strSuffix = uniStrtolower(StringUtil::substring($strFilename, StringUtil::lastIndexOf($strFilename, ".")));
+            $strSuffix = StringUtil::toLowerCase(StringUtil::substring($strFilename, StringUtil::lastIndexOf($strFilename, ".")));
             if ($objRepo->getStrUploadFilter() == "" || in_array($strSuffix, $arrAllowed)) {
                 if ($bitPostData) {
                     $objFilesystem = new Filesystem();

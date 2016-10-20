@@ -90,7 +90,7 @@ class OrmObjectupdate extends OrmBase
                 if ($strGetter !== null) {
                     //explicit casts required? could be relevant, depending on the target column type / database system
                     $mixedValue = $this->getObjObject()->{$strGetter}();
-                    if ($mixedValue !== null && (uniStrtolower(StringUtil::substring($strGetter, 0, 6)) == "getint" || uniStrtolower(StringUtil::substring($strGetter, 0, 6)) == "getbit")) {
+                    if ($mixedValue !== null && (StringUtil::toLowerCase(StringUtil::substring($strGetter, 0, 6)) == "getint" || StringUtil::toLowerCase(StringUtil::substring($strGetter, 0, 6)) == "getbit")) {
                         //different casts on 32bit / 64bit
                         if ($mixedValue > PHP_INT_MAX) {
                             $mixedValue = (float)$mixedValue;

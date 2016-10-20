@@ -13,6 +13,7 @@ use Kajona\System\System\Lang;
 use Kajona\System\System\Model;
 use Kajona\System\System\Reflection;
 use Kajona\System\System\ReflectionEnum;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\ValidatorExtendedInterface;
 use Kajona\System\System\ValidatorInterface;
 
@@ -75,7 +76,7 @@ class FormentryBase
             $strFormName .= "_";
         }
 
-        $this->strEntryName = uniStrtolower($strFormName.$strSourceProperty);
+        $this->strEntryName = StringUtil::toLowerCase($strFormName.$strSourceProperty);
 
         if($objSourceObject != null) {
             $this->updateLabel();

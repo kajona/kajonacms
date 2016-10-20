@@ -104,7 +104,7 @@ class FormentryDate extends FormentryBase implements FormentryPrintableInterface
         $objReflection = new Reflection($this->getObjSourceObject());
         $strSetter = $objReflection->getSetter($this->getStrSourceProperty());
 
-        if ($strSetter !== null && uniStrtolower(StringUtil::substring($strSetter, 0, 6)) == "setobj" && !$this->getStrValue() instanceof Date && $this->getStrValue() > 0) {
+        if ($strSetter !== null && StringUtil::toLowerCase(StringUtil::substring($strSetter, 0, 6)) == "setobj" && !$this->getStrValue() instanceof Date && $this->getStrValue() > 0) {
             $this->setStrValue(new Date($this->getStrValue()));
         }
 

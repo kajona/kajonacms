@@ -150,7 +150,7 @@ class SearchPortal extends PortalController implements PortalInterface
                     "_self",
                     $objHit->getStrPagename(),
                     "",
-                    "&highlight=".urlencode(html_entity_decode(htmlToString(urldecode($this->getParam("searchterm")), true), ENT_QUOTES, "UTF-8"))."#".uniStrtolower(urlencode(html_entity_decode(htmlToString(urldecode($this->getParam("searchterm")), true), ENT_QUOTES, "UTF-8")))
+                    "&highlight=".urlencode(html_entity_decode(htmlToString(urldecode($this->getParam("searchterm")), true), ENT_QUOTES, "UTF-8"))."#".StringUtil::toLowerCase(urlencode(html_entity_decode(htmlToString(urldecode($this->getParam("searchterm")), true), ENT_QUOTES, "UTF-8")))
                 );
             } else {
                 $arrRow["page_link"] = $objHit->getStrPagelink();

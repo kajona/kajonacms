@@ -46,7 +46,7 @@ class PackagemanagerPackagemanagerPharmodule extends PackagemanagerPackagemanage
 
         $strTarget = $this->objMetadata->getStrTarget();
         if ($strTarget == "") {
-            $strTarget = uniStrtolower($this->objMetadata->getStrType()."_".createFilename($this->objMetadata->getStrTitle(), true)).".phar";
+            $strTarget = StringUtil::toLowerCase($this->objMetadata->getStrType()."_".createFilename($this->objMetadata->getStrTitle(), true)).".phar";
         }
 
         $arrModules = array_flip(Classloader::getInstance()->getArrModules());

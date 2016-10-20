@@ -48,7 +48,7 @@ class ElementRssfeedPortal extends ElementPortal implements PortalElementInterfa
         try {
             $objRemoteloader = new Remoteloader();
 
-            if (uniStrtolower(StringUtil::substring($this->arrElementData["char2"], 0, 8)) == "https://") {
+            if (StringUtil::toLowerCase(StringUtil::substring($this->arrElementData["char2"], 0, 8)) == "https://") {
                 $objRemoteloader->setStrProtocolHeader("https://");
             }
 

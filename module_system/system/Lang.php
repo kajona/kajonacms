@@ -181,17 +181,17 @@ class Lang
     {
         $strStart = StringUtil::substring($strPropertyName, 0, 3);
         if (in_array($strStart, array("int", "bit", "str", "arr", "obj"))) {
-            $strPropertyName = uniStrtolower(StringUtil::substring($strPropertyName, 3));
+            $strPropertyName = StringUtil::toLowerCase(StringUtil::substring($strPropertyName, 3));
         }
 
         $strStart = StringUtil::substring($strPropertyName, 0, 4);
         if (in_array($strStart, array("long"))) {
-            $strPropertyName = uniStrtolower(StringUtil::substring($strPropertyName, 4));
+            $strPropertyName = StringUtil::toLowerCase(StringUtil::substring($strPropertyName, 4));
         }
 
         $strStart = StringUtil::substring($strPropertyName, 0, 5);
         if (in_array($strStart, array("float"))) {
-            $strPropertyName = uniStrtolower(StringUtil::substring($strPropertyName, 5));
+            $strPropertyName = StringUtil::toLowerCase(StringUtil::substring($strPropertyName, 5));
         }
 
         return $strPropertyName;
@@ -213,7 +213,7 @@ class Lang
 
         for ($i = 0; $i < StringUtil::length($strText); $i++) {
             $strChar = StringUtil::substring($strText, $i, 1);
-            $strCharLower = uniStrtolower($strChar);
+            $strCharLower = StringUtil::toLowerCase($strChar);
 
             if ($i > 0 && $strChar != $strCharLower && $strLastChar != "_") {
                 $strReturn .= "_".$strCharLower;

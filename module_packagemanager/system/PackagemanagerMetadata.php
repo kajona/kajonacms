@@ -282,7 +282,7 @@ class PackagemanagerMetadata implements AdminListableInterface
                         if (isset($arrOneImage["attributes"]["path"])) {
                             $strImage = $arrOneImage["attributes"]["path"];
 
-                            if (in_array(uniStrtolower(StringUtil::substring($strImage, -4)), array(".jpg", ".jpeg", ".gif", ".png"))) {
+                            if (in_array(StringUtil::toLowerCase(StringUtil::substring($strImage, -4)), array(".jpg", ".jpeg", ".gif", ".png"))) {
                                 $this->arrScreenshots[] = $strImage;
                             }
                         }

@@ -297,7 +297,7 @@ class NavigationPoint extends Model implements ModelInterface, AdminListableInte
 
                     //if in alias mode, then check what type of target is requested
                     if ($objOneEntry->getIntType() == PagesPage::$INT_TYPE_ALIAS) {
-                        $strAlias = uniStrtolower($objOneEntry->getStrAlias());
+                        $strAlias = StringUtil::toLowerCase($objOneEntry->getStrAlias());
                         if (StringUtil::indexOf($strAlias, "http") !== false) {
                             $objPoint->setStrPageE($objOneEntry->getStrAlias());
                         }
@@ -389,7 +389,7 @@ class NavigationPoint extends Model implements ModelInterface, AdminListableInte
      */
     public function getStrPageI()
     {
-        return uniStrtolower($this->strPageI);
+        return StringUtil::toLowerCase($this->strPageI);
     }
 
     /**

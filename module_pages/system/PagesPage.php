@@ -850,7 +850,7 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
     public function setStrName($strName)
     {
         //make a valid pagename
-        $strName = uniStrtolower(urlSafeString($strName));
+        $strName = StringUtil::toLowerCase(urlSafeString($strName));
 
         $this->strName = $strName;
     }

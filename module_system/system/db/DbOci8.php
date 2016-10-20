@@ -301,7 +301,7 @@ class DbOci8 extends DbBase
         $arrTemp = $this->getPArray("SELECT table_name AS name FROM ALL_TABLES", array());
 
         foreach ($arrTemp as $intKey => $strValue) {
-            $arrTemp[$intKey]["name"] = uniStrtolower($strValue["name"]);
+            $arrTemp[$intKey]["name"] = StringUtil::toLowerCase($strValue["name"]);
         }
         return $arrTemp;
     }

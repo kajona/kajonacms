@@ -182,7 +182,7 @@ class StatsReportTopqueries implements AdminStatsreportsInterface
                 if (StringUtil::indexOf($arrOneRecord["stats_referer"], $strOnePattern) !== false) {
                     $strQueryterm = StringUtil::substring($arrOneRecord["stats_referer"], (StringUtil::indexOf($arrOneRecord["stats_referer"], $strOnePattern) + StringUtil::length($strOnePattern)));
                     $strQueryterm = StringUtil::substring($strQueryterm, 0, StringUtil::indexOf($strQueryterm, "&"));
-                    $strQueryterm = uniStrtolower(trim(urldecode($strQueryterm)));
+                    $strQueryterm = StringUtil::toLowerCase(trim(urldecode($strQueryterm)));
                     if ($strQueryterm != "") {
                         if (isset($arrHits[$strQueryterm])) {
                             $arrHits[$strQueryterm]++;

@@ -336,7 +336,7 @@ class Pdf {
      * @return void
      */
     public function addImage($strImage, $intX, $intY, $intWidth = 0, $intHeight = 0) {
-        $strFilename = uniStrtolower(basename($strImage));
+        $strFilename = StringUtil::toLowerCase(basename($strImage));
 
         if(StringUtil::indexOf($strFilename, ".svg") !== false) {
             $this->objPdf->ImageSVG(_realpath_.$strImage, $intX, $intY, $intWidth, $intHeight);

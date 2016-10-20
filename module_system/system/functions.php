@@ -415,7 +415,7 @@ function phpSizeToBytes($strBytes)
 {
     $intReturn = 0;
 
-    $strBytes = uniStrtolower($strBytes);
+    $strBytes = StringUtil::toLowerCase($strBytes);
 
     if (strpos($strBytes, "m") !== false) {
         $intReturn = str_replace("m", "", $strBytes);
@@ -512,10 +512,10 @@ function dateToString($objDate, $bitLong = true, $strFormat = "")
         //convert to a current date
         if ($strFormat == "") {
             if ($bitLong) {
-                $strReturn = uniStrtolower(Carrier::getInstance()->getObjLang()->getLang("dateStyleLong", "system"));
+                $strReturn = StringUtil::toLowerCase(Carrier::getInstance()->getObjLang()->getLang("dateStyleLong", "system"));
             }
             else {
-                $strReturn = uniStrtolower(Carrier::getInstance()->getObjLang()->getLang("dateStyleShort", "system"));
+                $strReturn = StringUtil::toLowerCase(Carrier::getInstance()->getObjLang()->getLang("dateStyleShort", "system"));
             }
         }
         else {
@@ -881,7 +881,7 @@ function removeDirectoryTraversals($strFilename)
  */
 function createFilename($strName, $bitFolder = false)
 {
-    $strName = uniStrtolower($strName);
+    $strName = StringUtil::toLowerCase($strName);
 
     if (!$bitFolder) {
         $strEnding = StringUtil::substring($strName, (StringUtil::lastIndexOf($strName, ".") + 1));
@@ -932,7 +932,7 @@ function createFilename($strName, $bitFolder = false)
  */
 function getFileExtension($strPath)
 {
-    return uniStrtolower(StringUtil::substring($strPath, StringUtil::lastIndexOf($strPath, ".")));
+    return StringUtil::toLowerCase(StringUtil::substring($strPath, StringUtil::lastIndexOf($strPath, ".")));
 }
 
 /**
