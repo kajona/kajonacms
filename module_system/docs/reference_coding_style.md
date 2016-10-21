@@ -1,9 +1,4 @@
-# Namespaces
-
-With the 5.0 release Kajona supports namespaces. This document will explain the basic standards how to write and use new 
-namespaced classes. Also it explains how you can transition an existing module to the new namespaced structure.
-
-## Coding style
+# Coding style
 
 All classes should follow the [PSR-2] coding style.
 
@@ -50,6 +45,25 @@ the module. In the following as example some class to file mappings:
 |-----------|---------------|
 | Kajona\News\System\News   | core\module_news\system\News.php |
 | Kajona\News\System\Validators\EmailValidator | core\module_news\system\Validators\EmailValidator.php |
+
+## Folder names
+
+It is possible to create arbitrary folder hierarchies inside a module. Folders inside the `system/`
+folder should have plural names.
+
+## Comments
+
+Writing comments help other developers to understand a class or method. The following table
+shows for which components you should/must write detailed php comments. With comments we mean
+a text describing the behaviour, comments which describe the parameters and types must be
+always added.
+
+| Priority | Description   | Required          |
+|----------|---------------|--------------------
+| 1 | interfaces and abstract methods | yes |
+| 2 | classes and public methods | yes |
+| 3 | protected methods | yes |
+| 4 | private methods | no |
 
 ## Legacy
 
