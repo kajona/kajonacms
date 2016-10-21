@@ -9,27 +9,10 @@
 
 namespace Kajona\System\Portal;
 
-use Kajona\News\System\NewsCategory;
-use Kajona\News\System\NewsFeed;
-use Kajona\News\System\NewsNews;
-use Kajona\Pages\Portal\PagesPortalController;
-use Kajona\Pages\Portal\PagesPortaleditor;
-use Kajona\Pages\System\PagesPortaleditorActionEnum;
-use Kajona\Pages\System\PagesPortaleditorSystemidAction;
-use Kajona\Postacomment\Portal\PostacommentPortal;
-use Kajona\Postacomment\System\PostacommentPost;
-use Kajona\Rating\Portal\RatingPortal;
-use Kajona\System\Portal\PortalController;
-use Kajona\System\Portal\PortalInterface;
-use Kajona\System\System\ArraySectionIterator;
 use Kajona\System\System\HttpResponsetypes;
-use Kajona\System\System\Link;
 use Kajona\System\System\MessagingMessage;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\ResponseObject;
-use Kajona\System\System\Rssfeed;
-use Kajona\System\System\SystemModule;
-use Kajona\System\System\TemplateMapper;
 
 /**
  * Portal-class of the messaging framework
@@ -54,7 +37,8 @@ class MessagingPortal extends PortalController implements PortalInterface
     }
 
     /**
-     * Marks a message as read and returns a 1x1px tansaparent gif as a "read indicator"
+     * Marks a message as read and returns a 1x1px transparent gif as a "read indicator"
+     *
      * @return string
      */
     protected function actionSetRead()
@@ -66,10 +50,7 @@ class MessagingPortal extends PortalController implements PortalInterface
             $objMessage->updateObjectToDb();
         }
 
-
-        header("Content-type: image/gif");
         ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_GIF);
-        ResponseObject::getInstance()->setStrContent(base64_decode("R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="));
         return base64_decode("R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==");
     }
 
