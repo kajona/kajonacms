@@ -44,7 +44,7 @@ the module. In the following as example some class to file mappings:
 | Class     | File          |
 |-----------|---------------|
 | Kajona\News\System\News   | core\module_news\system\News.php |
-| Kajona\News\System\Validators\EmailValidator | core\module_news\system\Validators\EmailValidator.php |
+| Kajona\News\System\Validators\EmailValidator | core\module_news\system\validators\EmailValidator.php |
 
 ## Folder names
 
@@ -63,7 +63,7 @@ always added.
 | 1 | interfaces and abstract methods | yes |
 | 2 | classes and public methods | yes |
 | 3 | protected methods | yes |
-| 4 | private methods | no |
+| 4 | private methods | only required if the method is complex |
 
 ## Legacy
 
