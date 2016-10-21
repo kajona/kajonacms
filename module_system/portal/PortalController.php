@@ -8,20 +8,10 @@
 namespace Kajona\System\Portal;
 
 use Kajona\System\System\AbstractController;
-use Kajona\System\System\Carrier;
-use Kajona\System\System\Exception;
 use Kajona\System\System\History;
-use Kajona\System\System\HttpStatuscodes;
 use Kajona\System\System\LanguagesLanguage;
-use Kajona\System\System\Link;
-use Kajona\System\System\Objectfactory;
-use Kajona\System\System\Reflection;
-use Kajona\System\System\RequestEntrypointEnum;
 use Kajona\System\System\ResponseObject;
-use Kajona\System\System\StringUtil;
-use Kajona\System\System\SystemCommon;
 use Kajona\System\System\SystemSetting;
-use ReflectionClass;
 
 
 /**
@@ -86,7 +76,7 @@ abstract class PortalController extends AbstractController
         if ($strSystemid == "") {
             $strSystemid = $this->getSystemid();
         }
-        $objCommon = new SystemCommon($strSystemid);
+        $objCommon = $this->objFactory->getObject($strSystemid);
         return $objCommon->getIntRecordStatus();
     }
 
@@ -94,7 +84,7 @@ abstract class PortalController extends AbstractController
      * Returns the name of the user who last edited the record
      *
      * @param string $strSystemid
-     *
+     * @deprecated
      * @return string
      */
     public function getLastEditUser($strSystemid = "")
@@ -102,7 +92,7 @@ abstract class PortalController extends AbstractController
         if ($strSystemid == 0) {
             $strSystemid = $this->getSystemid();
         }
-        $objCommon = new SystemCommon($strSystemid);
+        $objCommon = $this->objFactory->getObject($strSystemid);
         return $objCommon->getLastEditUser();
     }
 
@@ -119,7 +109,7 @@ abstract class PortalController extends AbstractController
         if ($strSystemid == "") {
             $strSystemid = $this->getSystemid();
         }
-        $objCommon = new SystemCommon($strSystemid);
+        $objCommon = $this->objFactory->getObject($strSystemid);
         return $objCommon->getPrevId();
     }
 
@@ -170,13 +160,11 @@ abstract class PortalController extends AbstractController
         //check, if the portal is disabled
         if (SystemSetting::getConfigValue("_system_portal_disable_") == "true") {
             $strReturn = SystemSetting::getConfigValue("_system_portal_disablepage_");
-        }
-        else {
+        } else {
             //Standard
             if ($this->getParam("page") != "") {
                 $strReturn = $this->getParam("page");
-            }
-            //Use the page set in the configs
+            } //Use the page set in the configs
             else {
                 $strReturn = SystemSetting::getConfigValue("_pages_indexpage_") != "" ? SystemSetting::getConfigValue("_pages_indexpage_") : "index";
             }
