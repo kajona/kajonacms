@@ -8,6 +8,9 @@
 
 namespace Kajona\System\System;
 
+use Kajona\System\Admin\LoginAdmin;
+use Kajona\System\Xml;
+
 
 /**
  * A common base class for AdminController and PortalController.
@@ -55,6 +58,18 @@ abstract class AbstractController
      * @var Lang
      */
     protected $objLang;
+
+    /**
+     * @inject system_object_factory
+     * @var Objectfactory
+     */
+    protected $objFactory;
+
+    /**
+     * @inject system_rights
+     * @var Rights
+     */
+    protected $objRights;
 
     /**
      * Instance of the current modules' definition
@@ -147,6 +162,83 @@ abstract class AbstractController
         }
 
         $this->strLangBase = $this->getArrModule("modul");
+    }
+
+
+
+    /**
+     * This method triggers the internal processing.
+     * It may be overridden if required, e.g. to implement your own action-handling.
+     * By default, the method to be called is set up out of the action-param passed.
+     * Example: The action requested is named "newPage". Therefore, the framework tries to
+     * call actionNewPage(). If now method matching the schema is found, nothing is done.
+     * <b> Please note that this is different from the admin-handling! </b> In the case of admin-classes,
+     * an exception is thrown. But since there could be many modules on a single page, not each module
+     * may be triggered.
+     * Since Kajona 4.0, the check on declarative permissions via annotations is supported.
+     * Therefore the list of permissions, named after the "permissions" annotation are validated against
+     * the module currently loaded.
+     *
+     *
+     * @param string $strAction
+     *
+     * @see Rights::validatePermissionString
+     * @throws Exception
+     * @return string
+     * @since 3.4
+     */
+    public function action($strAction = "")
+    {
+
+        if ($strAction != "") {
+            $this->setAction($strAction);
+        }
+
+        $strAction = $this->getAction();
+
+        //search for the matching method - build method name
+        $strMethodName = "action".StringUtil::toUpperCase($strAction[0]).StringUtil::substring($strAction, 1);
+        $objReflection = new Reflection(get_class($this));
+
+        if (!method_exists($this, $strMethodName)) {
+            //and quit. nothing to do here, method not existing
+            $this->strOutput = Carrier::getInstance()->getObjToolkit("admin")->warningBox("called method ".$strMethodName." not existing for class ".get_called_class());
+            $objException = new ActionNotFoundException("called method ".$strMethodName." not existing for class ".get_called_class(), Exception::$level_ERROR);
+            $this->strOutput = Exception::renderException($objException);
+            throw $objException;
+        }
+
+
+        $strPermissions = $objReflection->getMethodAnnotationValue($strMethodName, "@permissions");
+        if ($strPermissions !== false) {
+            //fetch the object to validate, either the module or a directly referenced object
+            if (validateSystemid($this->getSystemid()) && $this->objFactory->getObject($this->getSystemid()) != null) {
+                $objObjectToCheck = $this->objFactory->getObject($this->getSystemid());
+            } else {
+                $objObjectToCheck = $this->getObjModule();
+            }
+
+            if (!$this->objRights->validatePermissionString($strPermissions, $objObjectToCheck)) {
+                ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
+                $this->strOutput = Carrier::getInstance()->getObjToolkit("admin")->warningBox($this->getLang("commons_error_permissions"));
+                $objException = new AuthenticationException("you are not authorized/authenticated to call this action", Exception::$level_ERROR);
+
+                if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML())) {
+                    throw $objException;
+                } else {
+                    //todo: throw exception, too?
+                    $objException->setIntDebuglevel(0);
+                    $objException->processException();
+                    return $this->strOutput;
+                }
+            }
+        }
+
+        $this->strOutput = $this->$strMethodName();
+
+
+
+        return $this->strOutput;
     }
 
 

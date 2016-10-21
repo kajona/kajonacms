@@ -10,7 +10,7 @@
 namespace Kajona\System\System;
 
 use Kajona\System\Admin\LoginAdmin;
-
+use Kajona\System\Xml;
 
 /**
  * The request-dispatcher is called by all external request-entries and acts as a controller.
@@ -110,13 +110,17 @@ class RequestDispatcher
             //header itself given?
             if (!issetServer($strHeaderName)) {
                 //reload to https
-                ResponseObject::getInstance()->setStrRedirectUrl(StringUtil::replace("http:", "https:", ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML()) ? _xmlpath_ : _indexpath_)."?".getServer("QUERY_STRING"));
+                ResponseObject::getInstance()->setStrRedirectUrl(
+                    StringUtil::replace("http:", "https:", ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML()) ? _xmlpath_ : _indexpath_)."?".getServer("QUERY_STRING")
+                );
                 ResponseObject::getInstance()->sendHeaders();
                 die("Reloading using https...");
             } //value of header correct?
             elseif ($strHeaderValue != "" && $strHeaderValue != strtolower(getServer($strHeaderName))) {
                 //reload to https
-                ResponseObject::getInstance()->setStrRedirectUrl(StringUtil::replace("http:", "https:", ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML()) ? _xmlpath_ : _indexpath_)."?".getServer("QUERY_STRING"));
+                ResponseObject::getInstance()->setStrRedirectUrl(
+                    StringUtil::replace("http:", "https:", ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML()) ? _xmlpath_ : _indexpath_)."?".getServer("QUERY_STRING")
+                );
                 ResponseObject::getInstance()->sendHeaders();
                 die("Reloading using https...");
             }
@@ -156,8 +160,13 @@ class RequestDispatcher
                     $objConcreteModule = $objModuleRequested->getAdminInstanceOfConcreteModule();
 
                     if (Carrier::getInstance()->getParam("blockAction") != "1") {
-                        $objConcreteModule->action();
-                        $strReturn = $objConcreteModule->getModuleOutput();
+                        try {
+                            $objConcreteModule->action();
+                            $strReturn = $objConcreteModule->getModuleOutput();
+                        } catch (ActionNotFoundException $objEx) {
+                            $strReturn = $objConcreteModule->getModuleOutput();
+                        }
+
                     }
 
                     //React, if admin was opened by the portaleditor
@@ -185,6 +194,14 @@ class RequestDispatcher
         }
 
         if ($bitLogin) {
+            //skip in case of xml requests
+            if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML())) {
+                ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
+                ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_XML);
+                Xml::setBitSuppressXmlHeader(true);
+                return Exception::renderException(new ActionNotFoundException("you are not authorized/authenticated to call this action", Exception::$level_FATALERROR));
+            }
+
             if (count(Carrier::getInstance()->getObjDB()->getTables()) == 0 && file_exists(_realpath_."installer.php")) {
                 ResponseObject::getInstance()->setStrRedirectUrl(_webpath_."/installer.php");
                 return "";
@@ -236,7 +253,14 @@ class RequestDispatcher
             }
 
             $objModuleRequested = $objModule->getPortalInstanceOfConcreteModule();
-            $strReturn = $objModuleRequested->action($strAction);
+
+            //catch problems on top level
+            try {
+                $strReturn = $objModuleRequested->action($strAction);
+            } catch (ActionNotFoundException $objException) {
+                $strReturn = Exception::renderException($objException);
+            }
+
 
         } else {
             if (!ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML())) {
