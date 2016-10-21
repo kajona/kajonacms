@@ -30,7 +30,6 @@ use Kajona\System\System\ScriptletHelper;
 use Kajona\System\System\ScriptletInterface;
 use Kajona\System\System\ServiceProvider;
 use Kajona\System\System\SystemSetting;
-use Prophecy\Exception\Doubler\MethodNotFoundException;
 
 /**
  * Base Class for all portal-elements
@@ -105,8 +104,7 @@ abstract class ElementPortal extends PortalController
     						FROM ".$this->getTable()."
     						WHERE content_id = ? ";
             return Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strSystemid));
-        }
-        else {
+        } else {
             return array();
         }
 
@@ -127,17 +125,18 @@ abstract class ElementPortal extends PortalController
         $this->arrElementData = array_merge($this->getElementContent($this->objElementData->getSystemid()), $this->arrElementData);
 
         //wrap all in a try catch block
+        $strOldAction = $this->getParam("action");
         try {
             try {
                 $strReturn = $this->loadData();
             } catch (ActionNotFoundException $objEx) {
                 //maybe we need another action, by default the "list" one
-                $strOldAction = $this->getParam("action");
                 $this->setParam("action", "list");
                 $strReturn = $this->loadData();
                 $this->setParam("action", $strOldAction);
             }
         } catch (Exception $objEx) {
+            $this->setParam("action", $strOldAction);
             //An error occurred during content generation. redirect to error page
             //if available, show the error-page.
             if (!empty(SystemSetting::getConfigValue("_pages_errorpage_")) && $this->getPagename() != SystemSetting::getConfigValue("_pages_errorpage_")) {
