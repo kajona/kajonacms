@@ -266,7 +266,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         //languages
         $this->registerModule("languages", _languages_modul_id_, "", "LanguagesAdmin.php", $this->objMetadata->getStrVersion());
         //messaging
-        $this->registerModule("messaging", _messaging_module_id_, "", "MessagingAdmin.php", $this->objMetadata->getStrVersion());
+        $this->registerModule("messaging", _messaging_module_id_, "MessagingPortal.php", "MessagingAdmin.php", $this->objMetadata->getStrVersion());
 
 
         //Registering a few constants
@@ -801,6 +801,11 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
     private function update_512_513()
     {
         $strReturn = "Updating 5.1.2 to 5.1.3...\n";
+
+        $strReturn .= "Registering messaging portal controller\n";
+        $objModule = SystemModule::getModuleByName("messaging");
+        $objModule->setStrNamePortal("MessagingAdmin.php");
+        $objModule->updateObjectToDb();
 
         $strReturn .= "Removing xml controller entries...\n";
 

@@ -125,7 +125,7 @@ abstract class PortalController extends AbstractController
                     $this->strOutput = $this->getLang("commons_error_permissions");
 
                     //redirect to the error page
-                    if ($this->getPagename() != SystemSetting::getConfigValue("_pages_errorpage_")) {
+                    if ($this->getPagename() != SystemSetting::getConfigValue("_pages_errorpage_") && !empty(SystemSetting::getConfigValue("_pages_errorpage_"))) {
                         $this->portalReload(Link::getLinkPortalHref(SystemSetting::getConfigValue("_pages_errorpage_"), ""));
                         return "";
                     }

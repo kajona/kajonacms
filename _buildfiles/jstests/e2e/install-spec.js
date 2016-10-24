@@ -14,41 +14,43 @@ describe('installation', function() {
 
         SeleniumUtil.gotToUrl('installer.php');
 
-        browser.driver.findElement(by.css('.btn-primary')).click();
+        let webDriver = SeleniumUtil.getWebDriver();
+
+        webDriver.findElement(By.css('.btn-primary')).click();
 
         // db settings
-        browser.driver.findElement(by.id('hostname')).sendKeys('localhost');
-        browser.driver.findElement(by.id('username')).sendKeys('kajona');
-        browser.driver.findElement(by.id('password')).sendKeys('kajona');
-        browser.driver.findElement(by.id('dbname')).sendKeys('autotest');
+        webDriver.findElement(By.id('hostname')).sendKeys('localhost');
+        webDriver.findElement(By.id('username')).sendKeys('kajona');
+        webDriver.findElement(By.id('password')).sendKeys('kajona');
+        webDriver.findElement(By.id('dbname')).sendKeys('autotest');
         // default is "kajona_"
-        //browser.driver.findElement(by.id('dbprefix')).sendKeys('');
-        browser.driver.findElement(by.css('option[value="sqlite3"]')).click();
+        //webDriver.findElement(by.id('dbprefix')).sendKeys('');
+        webDriver.findElement(By.css('option[value="sqlite3"]')).click();
 
-        browser.driver.findElement(by.css('.savechanges')).click();
+        webDriver.findElement(By.css('.savechanges')).click();
 
         // create new admin user
-        browser.driver.findElement(by.id('username')).sendKeys('test');
-        browser.driver.findElement(by.id('password')).sendKeys('test123');
-        browser.driver.findElement(by.id('email')).sendKeys('test@test.com');
+        webDriver.findElement(By.id('username')).sendKeys('test');
+        webDriver.findElement(By.id('password')).sendKeys('test123');
+        webDriver.findElement(By.id('email')).sendKeys('test@test.com');
 
-        browser.driver.findElement(by.css('.savechanges')).click();
+        webDriver.findElement(By.css('.savechanges')).click();
 
         // start the installation this takes some time
-        browser.driver.findElement(by.css('.savechanges')).click();
+        webDriver.findElement(By.css('.savechanges')).click();
 
         // wait for the installation
-        browser.driver.wait(function() {
-            return browser.driver.getCurrentUrl().then(function(url) {
+        webDriver.wait(function() {
+            return webDriver.getCurrentUrl().then(function(url) {
                 return /finish/.test(url);
             });
         }, 60000 * 5);
 
         // now we must have a success message
-        expect(browser.driver.findElement(by.css('.alert-success')).getText()).toMatch('Herzlichen Glückwunsch!');
+        expect(webDriver.findElement(By.css('.alert-success')).getText()).toMatch('Herzlichen Glückwunsch!');
 
         // this is required so that our installation sets all needed settings i.e. turn nice urls / ssl off etc.
-        browser.get('http://127.0.0.1:8080/setupSeleniumConfig.php');
+        SeleniumUtil.gotToUrl("setupSeleniumConfig.php");
     });
 
 });
