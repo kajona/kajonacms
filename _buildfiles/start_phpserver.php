@@ -10,7 +10,7 @@ $strServerPort = $argv[3];
 $strPathToFileName = $argv[4];
 $strFileName = $argv[5];
 
-startProcess($strPathToFileName.$strFileName, "php -S $strServerIp:$strServerPort -t $strServerRootPath ./server.php");
+startProcess($strPathToFileName.$strFileName, "php -S $strServerIp:$strServerPort -t $strServerRootPath");
 
 function startProcess($name, $cmd)
 {
