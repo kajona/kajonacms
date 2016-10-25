@@ -20,6 +20,7 @@ abstract class OrmBase
 
     /**
      * An array of blocked / reserved sql keywords not be used when creating table aliases
+     *
      * @var array
      */
     private $arrBlockedTableAlias = array('user');
@@ -68,16 +69,16 @@ abstract class OrmBase
     {
         $this->objObject = $objObject;
         if (self::$bitLogcialDeleteAvailable === null) {
-
             $arrColumns = Database::getInstance()->getColumnsOfTable(_dbprefix_."system");
             self::$bitLogcialDeleteAvailable = count(array_filter($arrColumns, function ($arrOneTable) {
-                    return $arrOneTable["columnName"] == "system_deleted";
+                return $arrOneTable["columnName"] == "system_deleted";
             })) > 0;
         }
     }
 
     /**
      * Used to reset the internal flag detecting if logical deletions are present, or not
+     *
      * @internal
      */
     public static function resetBitLogicalDeleteAvailable()
@@ -149,7 +150,7 @@ abstract class OrmBase
         foreach ($arrTargetTables as $strOneTable) {
             $arrOneTable = explode(".", $strOneTable);
             $strWhere .= "AND system_id=".$arrOneTable[1]." ";
-            if(in_array($arrOneTable[0], $this->arrBlockedTableAlias)) {
+            if (in_array($arrOneTable[0], $this->arrBlockedTableAlias)) {
                 $arrTables[] = Carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_.$arrOneTable[0])." ";
             } else {
                 $arrTables[] = Carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_.$arrOneTable[0])." AS ".Carrier::getInstance()->getObjDB()->encloseTableName($arrOneTable[0])."";
@@ -176,7 +177,7 @@ abstract class OrmBase
      *
      * @return string[] array of systemids
      */
-    public final function getAssignmentsFromDatabase($strPropertyName)
+    final public function getAssignmentsFromDatabase($strPropertyName)
     {
         $objCfg = OrmAssignmentConfig::getConfigForProperty($this->getObjObject(), $strPropertyName);
         $objDB = Carrier::getInstance()->getObjDB();
@@ -236,8 +237,7 @@ abstract class OrmBase
         if (self::$bitLogcialDeleteAvailable) {
             if ($this->getIntCombinedLogicalDeletionConfig() === OrmDeletedhandlingEnum::EXCLUDED) {
                 $strQuery .= " ".$strConjunction." {$strSystemTablePrefix}system_deleted = 0 ";
-            }
-            elseif ($this->getIntCombinedLogicalDeletionConfig() === OrmDeletedhandlingEnum::EXCLUSIVE) {
+            } elseif ($this->getIntCombinedLogicalDeletionConfig() === OrmDeletedhandlingEnum::EXCLUSIVE) {
                 $strQuery .= " ".$strConjunction." {$strSystemTablePrefix}system_deleted = 1 ";
             }
         }
@@ -259,7 +259,7 @@ abstract class OrmBase
     }
 
     /**
-     * @return OrmDeletedhandlingEnum
+     * @return int
      */
     public function getObjHandleLogicalDeleted()
     {
@@ -284,22 +284,4 @@ abstract class OrmBase
     {
         return self::$objHandleLogicalDeletedGlobal;
     }
-}
-
-/**
- * Most exceptions thrown by the orm system will use the OrmException type in order
- * to react with special catch-blocks
- */
-class OrmException extends Exception
-{
-
-}
-
-/**
- * Most exceptions thrown by the orm system will use the OrmException type in order
- * to react with special catch-blocks
- */
-class class_orm_exception extends OrmException
-{
-
 }

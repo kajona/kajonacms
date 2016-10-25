@@ -8,20 +8,10 @@
 namespace Kajona\System\Portal;
 
 use Kajona\System\System\AbstractController;
-use Kajona\System\System\Carrier;
-use Kajona\System\System\Exception;
 use Kajona\System\System\History;
-use Kajona\System\System\HttpStatuscodes;
 use Kajona\System\System\LanguagesLanguage;
-use Kajona\System\System\Link;
-use Kajona\System\System\Objectfactory;
-use Kajona\System\System\Reflection;
-use Kajona\System\System\RequestEntrypointEnum;
 use Kajona\System\System\ResponseObject;
-use Kajona\System\System\StringUtil;
-use Kajona\System\System\SystemCommon;
 use Kajona\System\System\SystemSetting;
-use ReflectionClass;
 
 
 /**
@@ -73,108 +63,6 @@ abstract class PortalController extends AbstractController
         $this->arrElementData = $arrElementData;
     }
 
-
-    /**
-     * This method triggers the internal processing.
-     * It may be overridden if required, e.g. to implement your own action-handling.
-     * By default, the method to be called is set up out of the action-param passed.
-     * Example: The action requested is named "newPage". Therefore, the framework tries to
-     * call actionNewPage(). If now method matching the schema is found, nothing is done.
-     * <b> Please note that this is different from the admin-handling! </b> In the case of admin-classes,
-     * an exception is thrown. But since there could be many modules on a single page, not each module
-     * may be triggered.
-     * Since Kajona 4.0, the check on declarative permissions via annotations is supported.
-     * Therefore the list of permissions, named after the "permissions" annotation are validated against
-     * the module currently loaded.
-     *
-     *
-     * @param string $strAction
-     *
-     * @see Rights::validatePermissionString
-     * @throws Exception
-     * @return string
-     * @since 3.4
-     */
-    public function action($strAction = "")
-    {
-
-        if ($strAction != "") {
-            $this->setAction($strAction);
-        }
-
-        $strAction = $this->getAction();
-
-        //search for the matching method - build method name
-        $strMethodName = "action".StringUtil::toUpperCase($strAction[0]).StringUtil::substring($strAction, 1);
-
-        $objAnnotations = new Reflection(get_class($this));
-        if (method_exists($this, $strMethodName)) {
-
-            //validate the permissions required to call this method, the xml-part is validated afterwards
-            $strPermissions = $objAnnotations->getMethodAnnotationValue($strMethodName, "@permissions");
-            if ($strPermissions !== false) {
-
-                if (validateSystemid($this->getSystemid()) && Objectfactory::getInstance()->getObject($this->getSystemid()) != null) {
-                    $objObjectToCheck = Objectfactory::getInstance()->getObject($this->getSystemid());
-                }
-                else {
-                    $objObjectToCheck = $this->getObjModule();
-                }
-
-                if (!Carrier::getInstance()->getObjRights()->validatePermissionString($strPermissions, $objObjectToCheck)) {
-                    $this->strOutput = $this->getLang("commons_error_permissions");
-
-                    //redirect to the error page
-                    if ($this->getPagename() != SystemSetting::getConfigValue("_pages_errorpage_") && !empty(SystemSetting::getConfigValue("_pages_errorpage_"))) {
-                        $this->portalReload(Link::getLinkPortalHref(SystemSetting::getConfigValue("_pages_errorpage_"), ""));
-                        return "";
-                    }
-
-                    ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
-                    throw new Exception("you are not authorized/authenticated to call this action", Exception::$level_ERROR);
-                }
-            }
-
-            $this->strOutput = $this->$strMethodName();
-        }
-        else {
-            if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML())) {
-                $objReflection = new ReflectionClass($this);
-                throw new Exception("called method ".$strMethodName." not existing for class ".$objReflection->getName(), Exception::$level_FATALERROR);
-            }
-
-            //try to load the list-method
-            $strListMethodName = "actionList";
-            if (method_exists($this, $strListMethodName)) {
-
-                $strPermissions = $objAnnotations->getMethodAnnotationValue($strListMethodName, "@permissions");
-                if ($strPermissions !== false) {
-
-                    if (validateSystemid($this->getSystemid()) && Objectfactory::getInstance()->getObject($this->getSystemid()) != null) {
-                        $objObjectToCheck = Objectfactory::getInstance()->getObject($this->getSystemid());
-                    }
-                    else {
-                        $objObjectToCheck = $this->getObjModule();
-                    }
-
-                    if (!Carrier::getInstance()->getObjRights()->validatePermissionString($strPermissions, $objObjectToCheck)) {
-                        $this->strOutput = $this->getLang("commons_error_permissions");
-                        throw new Exception("you are not authorized/authenticated to call this action", Exception::$level_ERROR);
-                    }
-                }
-
-                $this->strOutput = $this->$strListMethodName();
-            }
-            else {
-                $objReflection = new ReflectionClass($this);
-                throw new Exception("called method ".$strMethodName." not existing for class ".$objReflection->getName(), Exception::$level_ERROR);
-            }
-        }
-
-        return $this->strOutput;
-    }
-
-
     /**
      * Gets the status of a systemRecord
      *
@@ -188,7 +76,7 @@ abstract class PortalController extends AbstractController
         if ($strSystemid == "") {
             $strSystemid = $this->getSystemid();
         }
-        $objCommon = new SystemCommon($strSystemid);
+        $objCommon = $this->objFactory->getObject($strSystemid);
         return $objCommon->getIntRecordStatus();
     }
 
@@ -196,7 +84,7 @@ abstract class PortalController extends AbstractController
      * Returns the name of the user who last edited the record
      *
      * @param string $strSystemid
-     *
+     * @deprecated
      * @return string
      */
     public function getLastEditUser($strSystemid = "")
@@ -204,7 +92,7 @@ abstract class PortalController extends AbstractController
         if ($strSystemid == 0) {
             $strSystemid = $this->getSystemid();
         }
-        $objCommon = new SystemCommon($strSystemid);
+        $objCommon = $this->objFactory->getObject($strSystemid);
         return $objCommon->getLastEditUser();
     }
 
@@ -221,7 +109,7 @@ abstract class PortalController extends AbstractController
         if ($strSystemid == "") {
             $strSystemid = $this->getSystemid();
         }
-        $objCommon = new SystemCommon($strSystemid);
+        $objCommon = $this->objFactory->getObject($strSystemid);
         return $objCommon->getPrevId();
     }
 
@@ -272,13 +160,11 @@ abstract class PortalController extends AbstractController
         //check, if the portal is disabled
         if (SystemSetting::getConfigValue("_system_portal_disable_") == "true") {
             $strReturn = SystemSetting::getConfigValue("_system_portal_disablepage_");
-        }
-        else {
+        } else {
             //Standard
             if ($this->getParam("page") != "") {
                 $strReturn = $this->getParam("page");
-            }
-            //Use the page set in the configs
+            } //Use the page set in the configs
             else {
                 $strReturn = SystemSetting::getConfigValue("_pages_indexpage_") != "" ? SystemSetting::getConfigValue("_pages_indexpage_") : "index";
             }

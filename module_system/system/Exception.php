@@ -258,37 +258,3 @@ class Exception extends \Exception
 
 }
 
-
-//bad coding-style, but define a few more specific exceptions for special cases
-
-/**
- * Class class_authentication_exception
- */
-class AuthenticationException extends Exception
-{
-
-}
-
-/**
- * Class class_io_exception
- */
-class IoException extends Exception
-{
-
-}
-
-/**
- * @deprecated
- */
-class class_authentication_exception extends AuthenticationException
-{
-
-}
-
-/**
- * @deprecated
- */
-class class_io_exception extends IoException
-{
-
-}
