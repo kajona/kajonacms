@@ -40,7 +40,7 @@ class OrmInCondition extends OrmCondition
     /**
      * @param array $arrParams
      *
-     * @throws class_orm_exception
+     * @throws OrmException
      */
     public function setArrParams($arrParams)
     {
@@ -51,7 +51,7 @@ class OrmInCondition extends OrmCondition
     /**
      * @param string $strWhere
      *
-     * @throws class_orm_exception
+     * @throws OrmException
      */
     public function setStrWhere($strWhere)
     {
@@ -62,7 +62,7 @@ class OrmInCondition extends OrmCondition
      * Here comes the magic, generation a where restriction out of the passed property name and the comparator
      *
      * @return string
-     * @throws class_orm_exception
+     * @throws OrmException
      */
     public function getStrWhere()
     {

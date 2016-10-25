@@ -99,7 +99,7 @@ class OrmComparatorEnum extends EnumBase
             return self::NotInOrEmpty;
         }
 
-        throw new class_orm_exception("Unknown sql comparator", Exception::$level_ERROR);
+        throw new OrmException("Unknown sql comparator", Exception::$level_ERROR);
     }
 }
 
