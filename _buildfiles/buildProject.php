@@ -141,6 +141,8 @@ class BuildHelper {
             }
         }
 
+
+        echo dateToString(new \Kajona\System\System\Date()). " Finished buildProject\n";
     }
 
 }
