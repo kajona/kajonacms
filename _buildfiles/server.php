@@ -5,6 +5,8 @@ $bitFound = false;
 
 chdir(__DIR__ . "/temp/kajona");
 
+ini_set("max_execution_time", 0);
+
 foreach ($arrFiles as $strFile) {
     if (substr($_SERVER['REQUEST_URI'], 1, strlen($strFile)) == $strFile) {
         require_once $strFile;
