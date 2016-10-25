@@ -32,6 +32,7 @@ class Reflection
     private static $STR_HASMETHOD_CACHE = "hasmethods";
 
     private static $STR_PROPERTIES_CACHE = "properties";
+    private static $STR_PROPERTIES_ANNOTATION_VALUE_CACHE = "properties_annotation_value";
     private static $STR_HASPROPERTY_CACHE = "hasproperty";
     private static $STR_GETTER_CACHE = "getters";
     private static $STR_SETTER_CACHE = "setters";
@@ -79,6 +80,7 @@ class Reflection
                 self::$STR_METHOD_CACHE,
                 self::$STR_HASMETHOD_CACHE,
                 self::$STR_PROPERTIES_CACHE,
+                self::$STR_PROPERTIES_ANNOTATION_VALUE_CACHE,
                 self::$STR_HASPROPERTY_CACHE,
                 self::$STR_DOC_COMMENT_PROPERTIES_CACHE,
                 self::$STR_GETTER_CACHE,
@@ -404,6 +406,10 @@ class Reflection
      */
     public function getAnnotationValueForProperty($strProperty, $strAnnotation, $intEnum = ReflectionEnum::VALUES)
     {
+        $strCacheKey = $strProperty."_".$strAnnotation."_".$intEnum;
+        if (isset($this->arrCurrentCache[self::$STR_PROPERTIES_ANNOTATION_VALUE_CACHE][$strCacheKey])) {
+            return $this->arrCurrentCache[self::$STR_PROPERTIES_ANNOTATION_VALUE_CACHE][$strCacheKey];
+        }
 
         $arrProperties = $this->objReflectionClass->getProperties();
 
@@ -419,6 +425,8 @@ class Reflection
                 }
 
                 if ($strFirstAnnotation !== false) {
+                    $this->arrCurrentCache[self::$STR_PROPERTIES_ANNOTATION_VALUE_CACHE][$strCacheKey] = $strFirstAnnotation;
+                    $this->bitCacheSaveRequired = true;
                     return $strFirstAnnotation;
                 }
             }
@@ -428,7 +436,10 @@ class Reflection
         $objBaseClass = $this->objReflectionClass->getParentClass();
         if ($objBaseClass !== false) {
             $objBaseAnnotations = new Reflection($objBaseClass->getName());
-            return $objBaseAnnotations->getAnnotationValueForProperty($strProperty, $strAnnotation, $intEnum);
+            $strValue = $objBaseAnnotations->getAnnotationValueForProperty($strProperty, $strAnnotation, $intEnum);
+            $this->arrCurrentCache[self::$STR_PROPERTIES_ANNOTATION_VALUE_CACHE][$strCacheKey] = $strValue;
+            $this->bitCacheSaveRequired = true;
+            return $strValue;
         }
 
         return null;
@@ -446,7 +457,7 @@ class Reflection
      */
     public function getParamValueForPropertyAndAnnotation($strProperty, $strAnnotation, $strParamName) {
         $arrParams = $this->getAnnotationValueForProperty($strProperty, $strAnnotation, ReflectionEnum::PARAMS);
-        
+
         if(is_array($arrParams) && array_key_exists($strParamName, $arrParams)) {
             return $arrParams[$strParamName];
         }
