@@ -10,7 +10,7 @@ describe('installation', function() {
 
     it('test installation', function() {
         // wait max 5 minutes for the installation
-        browser.manage().timeouts().pageLoadTimeout(60000 * 5);
+        browser.manage().timeouts().pageLoadTimeout(60000 * 8);
 
         SeleniumUtil.gotToUrl('installer.php');
 
@@ -44,7 +44,7 @@ describe('installation', function() {
             return webDriver.getCurrentUrl().then(function(url) {
                 return /finish/.test(url);
             });
-        }, 60000 * 5);
+        }, 60000 * 8);
 
         // now we must have a success message
         expect(webDriver.findElement(By.css('.alert-success')).getText()).toMatch('Herzlichen Glückwunsch!');

@@ -17,7 +17,7 @@ exports.config = {
         }
     },
     jasmineNodeOpts: {
-        defaultTimeoutInterval: 300000 // 5 minutes
+        defaultTimeoutInterval: 480000 // 8 minutes
     },
     plugins: [{
         package: 'protractor-console-plugin',
