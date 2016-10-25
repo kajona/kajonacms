@@ -60,7 +60,8 @@ class DbSqlite3 extends DbBase
             $this->_pQuery('PRAGMA encoding = "UTF-8"', array());
             //TODO deprecated in sqlite, so may be removed
             $this->_pQuery('PRAGMA short_column_names = ON', array());
-            $this->_pQuery("PRAGMA journal_mode = TRUNCATE", array());
+            $this->_pQuery("PRAGMA journal_mode = MEMORY", array());
+            $this->_pQuery("PRAGMA temp_store = MEMORY", array());
             if (method_exists($this->linkDB, "busyTimeout")) {
                 $this->linkDB->busyTimeout(5000);
             }
