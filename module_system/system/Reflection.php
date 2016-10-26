@@ -33,6 +33,7 @@ class Reflection
 
     private static $STR_PROPERTIES_CACHE = "properties";
     private static $STR_PROPERTIES_ANNOTATION_VALUE_CACHE = "properties_annotation_value";
+    private static $STR_PROPERTIES_ANNOTATION_PARAM_VALUE_CACHE = "properties_annotation_param_value";
     private static $STR_HASPROPERTY_CACHE = "hasproperty";
     private static $STR_GETTER_CACHE = "getters";
     private static $STR_SETTER_CACHE = "setters";
@@ -76,15 +77,16 @@ class Reflection
         $this->arrCurrentCache = BootstrapCache::getInstance()->getCacheRow(BootstrapCache::CACHE_REFLECTION, $this->strSourceClass);
         if ($this->arrCurrentCache === false) {
             $this->arrCurrentCache = array(
-                self::$STR_CLASS_PROPERTIES_CACHE,
-                self::$STR_METHOD_CACHE,
-                self::$STR_HASMETHOD_CACHE,
-                self::$STR_PROPERTIES_CACHE,
-                self::$STR_PROPERTIES_ANNOTATION_VALUE_CACHE,
-                self::$STR_HASPROPERTY_CACHE,
-                self::$STR_DOC_COMMENT_PROPERTIES_CACHE,
-                self::$STR_GETTER_CACHE,
-                self::$STR_SETTER_CACHE
+                self::$STR_CLASS_PROPERTIES_CACHE => array(),
+                self::$STR_METHOD_CACHE => array(),
+                self::$STR_HASMETHOD_CACHE => array(),
+                self::$STR_PROPERTIES_CACHE => array(),
+                self::$STR_PROPERTIES_ANNOTATION_VALUE_CACHE => array(),
+                self::$STR_PROPERTIES_ANNOTATION_PARAM_VALUE_CACHE => array(),
+                self::$STR_HASPROPERTY_CACHE => array(),
+                self::$STR_DOC_COMMENT_PROPERTIES_CACHE => array(),
+                self::$STR_GETTER_CACHE => array(),
+                self::$STR_SETTER_CACHE => array()
             );
             $this->bitCacheSaveRequired = true;
         }
@@ -128,8 +130,9 @@ class Reflection
     public function getAnnotationValuesFromClass($strAnnotation, $intEnum = ReflectionEnum::VALUES)
     {
 
-        if (isset($this->arrCurrentCache[self::$STR_CLASS_PROPERTIES_CACHE][$strAnnotation."_".$intEnum])) {
-            return $this->arrCurrentCache[self::$STR_CLASS_PROPERTIES_CACHE][$strAnnotation."_".$intEnum];
+        $strCacheKey = $strAnnotation . "_" . $intEnum;
+        if (isset($this->arrCurrentCache[self::$STR_CLASS_PROPERTIES_CACHE][$strCacheKey])) {
+            return $this->arrCurrentCache[self::$STR_CLASS_PROPERTIES_CACHE][$strCacheKey];
         }
 
         $strClassDoc = $this->objReflectionClass->getDocComment();
@@ -152,7 +155,7 @@ class Reflection
             $arrReturn = array_merge($arrReturn, $objBaseAnnotations->getAnnotationValuesFromClass($strAnnotation, $intEnum));
         }
 
-        $this->arrCurrentCache[self::$STR_CLASS_PROPERTIES_CACHE][$strAnnotation."_".$intEnum] = $arrReturn;
+        $this->arrCurrentCache[self::$STR_CLASS_PROPERTIES_CACHE][$strCacheKey] = $arrReturn;
         $this->bitCacheSaveRequired = true;
         return $arrReturn;
     }
@@ -221,8 +224,9 @@ class Reflection
      */
     public function hasMethodAnnotation($strMethodName, $strAnnotation)
     {
-        if (isset($this->arrCurrentCache[self::$STR_HASMETHOD_CACHE][$strMethodName."_".$strAnnotation])) {
-            return $this->arrCurrentCache[self::$STR_HASMETHOD_CACHE][$strMethodName."_".$strAnnotation];
+        $strCacheKey = $strMethodName . "_" . $strAnnotation;
+        if (isset($this->arrCurrentCache[self::$STR_HASMETHOD_CACHE][$strCacheKey])) {
+            return $this->arrCurrentCache[self::$STR_HASMETHOD_CACHE][$strCacheKey];
         }
 
         try {
@@ -233,7 +237,7 @@ class Reflection
             $bitReturn = false;
         }
 
-        $this->arrCurrentCache[self::$STR_HASMETHOD_CACHE][$strMethodName."_".$strAnnotation] = $bitReturn;
+        $this->arrCurrentCache[self::$STR_HASMETHOD_CACHE][$strCacheKey] = $bitReturn;
         $this->bitCacheSaveRequired = true;
         return $bitReturn;
     }
@@ -276,8 +280,9 @@ class Reflection
      */
     public function hasPropertyAnnotation($strPropertyName, $strAnnotation)
     {
-        if (isset($this->arrCurrentCache[self::$STR_HASPROPERTY_CACHE][$strPropertyName."_".$strAnnotation])) {
-            return $this->arrCurrentCache[self::$STR_HASPROPERTY_CACHE][$strPropertyName."_".$strAnnotation];
+        $strCacheKey = $strPropertyName . "_" . $strAnnotation;
+        if (isset($this->arrCurrentCache[self::$STR_HASPROPERTY_CACHE][$strCacheKey])) {
+            return $this->arrCurrentCache[self::$STR_HASPROPERTY_CACHE][$strCacheKey];
         }
 
         try {
@@ -295,7 +300,7 @@ class Reflection
             }
         }
 
-        $this->arrCurrentCache[self::$STR_HASPROPERTY_CACHE][$strPropertyName."_".$strAnnotation] = $bitReturn;
+        $this->arrCurrentCache[self::$STR_HASPROPERTY_CACHE][$strCacheKey] = $bitReturn;
         $this->bitCacheSaveRequired = true;
         return $bitReturn;
     }
@@ -321,8 +326,9 @@ class Reflection
     public function getMethodAnnotationValue($strMethodName, $strAnnotation, $intEnum = ReflectionEnum::VALUES)
     {
 
-        if (isset($this->arrCurrentCache[self::$STR_METHOD_CACHE][$strMethodName."_".$strAnnotation."_".$intEnum])) {
-            return $this->arrCurrentCache[self::$STR_METHOD_CACHE][$strMethodName."_".$strAnnotation."_".$intEnum];
+        $strCacheKey = $strMethodName . "_" . $strAnnotation . "_" . $intEnum;
+        if (isset($this->arrCurrentCache[self::$STR_METHOD_CACHE][$strCacheKey])) {
+            return $this->arrCurrentCache[self::$STR_METHOD_CACHE][$strCacheKey];
         }
 
         $objReflectionMethod = $this->objReflectionClass->getMethod($strMethodName);
@@ -337,12 +343,12 @@ class Reflection
         }
 
         if ($arrReturn === false) {
-            $this->arrCurrentCache[self::$STR_METHOD_CACHE][$strMethodName."_".$strAnnotation."_".$intEnum] = false;
+            $this->arrCurrentCache[self::$STR_METHOD_CACHE][$strCacheKey] = false;
             return false;
         }
 
         //strip the annotation parts
-        $this->arrCurrentCache[self::$STR_METHOD_CACHE][$strMethodName."_".$strAnnotation."_".$intEnum] = $strReturn;
+        $this->arrCurrentCache[self::$STR_METHOD_CACHE][$strCacheKey] = $strReturn;
         $this->bitCacheSaveRequired = true;
         return $strReturn;
     }
@@ -359,9 +365,9 @@ class Reflection
      */
     public function getPropertiesWithAnnotation($strAnnotation, $intEnum = ReflectionEnum::VALUES)
     {
-
-        if (isset($this->arrCurrentCache[self::$STR_PROPERTIES_CACHE][$strAnnotation."_".$intEnum])) {
-            return $this->arrCurrentCache[self::$STR_PROPERTIES_CACHE][$strAnnotation."_".$intEnum];
+        $strCacheKey = $strAnnotation . "_" . $intEnum;
+        if (isset($this->arrCurrentCache[self::$STR_PROPERTIES_CACHE][$strCacheKey])) {
+            return $this->arrCurrentCache[self::$STR_PROPERTIES_CACHE][$strCacheKey];
         }
 
         $arrReturn = array();
@@ -390,7 +396,7 @@ class Reflection
             }
         }
 
-        $this->arrCurrentCache[self::$STR_PROPERTIES_CACHE][$strAnnotation."_".$intEnum] = $arrReturn;
+        $this->arrCurrentCache[self::$STR_PROPERTIES_CACHE][$strCacheKey] = $arrReturn;
         $this->bitCacheSaveRequired = true;
         return $arrReturn;
     }
@@ -407,10 +413,11 @@ class Reflection
     public function getAnnotationValueForProperty($strProperty, $strAnnotation, $intEnum = ReflectionEnum::VALUES)
     {
         $strCacheKey = $strProperty."_".$strAnnotation."_".$intEnum;
-        if (isset($this->arrCurrentCache[self::$STR_PROPERTIES_ANNOTATION_VALUE_CACHE][$strCacheKey])) {
+        if (array_key_exists($strCacheKey, $this->arrCurrentCache[self::$STR_PROPERTIES_ANNOTATION_VALUE_CACHE])) {
             return $this->arrCurrentCache[self::$STR_PROPERTIES_ANNOTATION_VALUE_CACHE][$strCacheKey];
         }
 
+        $strValue = null;
         $arrProperties = $this->objReflectionClass->getProperties();
 
         foreach ($arrProperties as $objOneProperty) {
@@ -437,12 +444,11 @@ class Reflection
         if ($objBaseClass !== false) {
             $objBaseAnnotations = new Reflection($objBaseClass->getName());
             $strValue = $objBaseAnnotations->getAnnotationValueForProperty($strProperty, $strAnnotation, $intEnum);
-            $this->arrCurrentCache[self::$STR_PROPERTIES_ANNOTATION_VALUE_CACHE][$strCacheKey] = $strValue;
-            $this->bitCacheSaveRequired = true;
-            return $strValue;
         }
 
-        return null;
+        $this->arrCurrentCache[self::$STR_PROPERTIES_ANNOTATION_VALUE_CACHE][$strCacheKey] = $strValue;
+        $this->bitCacheSaveRequired = true;
+        return $strValue;
     }
 
 
@@ -456,13 +462,22 @@ class Reflection
      * @return mixed|null
      */
     public function getParamValueForPropertyAndAnnotation($strProperty, $strAnnotation, $strParamName) {
-        $arrParams = $this->getAnnotationValueForProperty($strProperty, $strAnnotation, ReflectionEnum::PARAMS);
 
-        if(is_array($arrParams) && array_key_exists($strParamName, $arrParams)) {
-            return $arrParams[$strParamName];
+        $strCacheKey = $strProperty."_".$strAnnotation."_".$strParamName;
+        if (array_key_exists($strCacheKey, $this->arrCurrentCache[self::$STR_PROPERTIES_ANNOTATION_PARAM_VALUE_CACHE])) {
+            return $this->arrCurrentCache[self::$STR_PROPERTIES_ANNOTATION_PARAM_VALUE_CACHE][$strCacheKey];
         }
 
-        return null;
+        $strParamValue = null;
+        $arrParams = $this->getAnnotationValueForProperty($strProperty, $strAnnotation, ReflectionEnum::PARAMS);
+        if(is_array($arrParams) && array_key_exists($strParamName, $arrParams)) {
+            $strParamValue = $arrParams[$strParamName];
+        }
+
+        $this->arrCurrentCache[self::$STR_PROPERTIES_ANNOTATION_PARAM_VALUE_CACHE][$strCacheKey] = $strParamValue;
+        $this->bitCacheSaveRequired = true;
+
+        return $strParamValue;
     }
 
     /**
@@ -477,9 +492,11 @@ class Reflection
     public function getSetter($strPropertyName)
     {
 
-        if (isset($this->arrCurrentCache[self::$STR_SETTER_CACHE][$strPropertyName])) {
+        if (array_key_exists($strPropertyName, $this->arrCurrentCache[self::$STR_SETTER_CACHE])) {
             return $this->arrCurrentCache[self::$STR_SETTER_CACHE][$strPropertyName];
         }
+
+        $strSetter = null;
 
         $arrSetters = array(
             "setStr".$strPropertyName,
@@ -494,13 +511,15 @@ class Reflection
 
         foreach ($arrSetters as $strOneSetter) {
             if (method_exists($this->strSourceClass, $strOneSetter)) {
-                $this->arrCurrentCache[self::$STR_SETTER_CACHE][$strPropertyName] = $strOneSetter;
-                $this->bitCacheSaveRequired = true;
-                return $strOneSetter;
+                $strSetter = $strOneSetter;
+                break;
             }
         }
 
-        return null;
+        $this->arrCurrentCache[self::$STR_SETTER_CACHE][$strPropertyName] = $strSetter;
+        $this->bitCacheSaveRequired = true;
+
+        return $strSetter;
     }
 
 
@@ -516,9 +535,11 @@ class Reflection
     public function getGetter($strPropertyName)
     {
 
-        if (isset($this->arrCurrentCache[self::$STR_GETTER_CACHE][$strPropertyName])) {
+        if (array_key_exists($strPropertyName, $this->arrCurrentCache[self::$STR_GETTER_CACHE])) {
             return $this->arrCurrentCache[self::$STR_GETTER_CACHE][$strPropertyName];
         }
+
+        $strGetter = null;
 
         $arrGetters = array(
             "getStr".$strPropertyName,
@@ -534,13 +555,15 @@ class Reflection
 
         foreach ($arrGetters as $strOneGetter) {
             if (method_exists($this->strSourceClass, $strOneGetter)) {
-                $this->arrCurrentCache[self::$STR_GETTER_CACHE][$strPropertyName] = $strOneGetter;
-                $this->bitCacheSaveRequired = true;
-                return $strOneGetter;
+                $strGetter = $strOneGetter;
+                break;
             }
         }
 
-        return null;
+        $this->arrCurrentCache[self::$STR_GETTER_CACHE][$strPropertyName] = $strGetter;
+        $this->bitCacheSaveRequired = $strGetter;
+
+        return $strGetter;
     }
 
     /**
