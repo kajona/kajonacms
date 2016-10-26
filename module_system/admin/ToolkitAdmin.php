@@ -1825,13 +1825,19 @@ JS;
 <script type="text/javascript">
 require(['jquery', 'forms'], function($, forms){
     $('#{$strMainTabId} > li > a[data-href!=""]').on('click', function(e){
-        forms.loadTab($(e.target).data('target').substr(1), $(e.target).data('href'));
+        if(!$(e.target).data('loaded')) {
+            forms.loadTab($(e.target).data('target').substr(1), $(e.target).data('href'));
+            $(e.target).data('loaded', true);
+        }
     });
     
     $(document).ready(function(){
         var el = $('#{$strMainTabId} > li.active > a[data-href!=""]');
         if (el.length > 0) {
-            forms.loadTab(el.data('target').substr(1), el.data('href'));
+            if(!el.data('loaded')) {
+                forms.loadTab(el.data('target').substr(1), el.data('href'));
+                el.data('loaded', true);
+            }
         }
     });
 });
@@ -2101,10 +2107,10 @@ HTML;
         }
 
         $strRows = "";
-        $strRendercode .= "<script type=\"text/javascript\">
+        $strRendercode .= ">
 
          require(['forms'], function(forms) {
-            forms.renderMissingMandatoryFields([";
+            forms.renderMissingMandatoryFields([;;";
 
         foreach ($arrErrors as $strKey => $arrOneErrors) {
             foreach ($arrOneErrors as $strOneError) {
