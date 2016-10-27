@@ -45,8 +45,14 @@ class Classloader
      * @var array
      */
     private static $arrCodeFoldersBlacklist = array(
+        "docs/",
+        "lang/",
+        "less/", // installer
+        "pics/",
         "scripts/",
+        "templates/",
         "vendor/",
+        "node_modules/",
     );
 
     /**
