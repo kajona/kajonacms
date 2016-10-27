@@ -2,9 +2,6 @@
 
 namespace Kajona\System\Tests;
 
-use Kajona\System\System\A;
-use Kajona\System\System\B;
-use Kajona\System\System\C;
 use Kajona\System\System\Reflection;
 use Kajona\System\System\ReflectionEnum;
 
@@ -61,6 +58,9 @@ class ReflectionTest extends Testbase
     {
         $objAnnotations = new Reflection(new B());
 
+        $arrClassAnnotations = $objAnnotations->getAnnotationsWithValueFromClass("DummyValue");
+        $this->assertEquals(0, count($arrClassAnnotations));
+
         $arrClassAnnotations = $objAnnotations->getAnnotationsWithValueFromClass("val2");
         $this->assertEquals(2, count($arrClassAnnotations));
         $this->assertTrue(in_array("@classTest", $arrClassAnnotations));
@@ -76,9 +76,9 @@ class ReflectionTest extends Testbase
         $objAnnotations = new Reflection(new B());
 
         $this->assertTrue($objAnnotations->hasMethodAnnotation("testMethod", "@methodTest"));
-        $this->assertTrue(!$objAnnotations->hasMethodAnnotation("testMethod", "@method2Test"));
+        $this->assertFalse($objAnnotations->hasMethodAnnotation("testMethod", "@method2Test"));
 
-        $this->assertTrue(!$objAnnotations->hasMethodAnnotation("test2Method", "@method2Test"));
+        $this->assertFalse($objAnnotations->hasMethodAnnotation("test2Method", "@method2Test"));
     }
 
     /**
@@ -90,7 +90,7 @@ class ReflectionTest extends Testbase
         $objAnnotations = new Reflection(new B());
 
         $this->assertTrue($objAnnotations->hasPropertyAnnotation("propertyB1", "@propertyTest"));
-        $this->assertTrue(!$objAnnotations->hasPropertyAnnotation("propertyB1", "@property2Test"));
+        $this->assertFalse($objAnnotations->hasPropertyAnnotation("propertyB1", "@property2Test"));
 
         $objAnnotations = new Reflection(new A());
         $this->assertTrue($objAnnotations->hasPropertyAnnotation("propertyA1", "@propertyTest"));
@@ -105,7 +105,7 @@ class ReflectionTest extends Testbase
         $objAnnotations = new Reflection(new B());
 
         $this->assertEquals("val1", $objAnnotations->getMethodAnnotationValue("testMethod", "@methodTest"));
-        $this->assertTrue(!$objAnnotations->getMethodAnnotationValue("testMethod", "@method2Test"));
+        $this->assertFalse($objAnnotations->getMethodAnnotationValue("testMethod", "@method2Test"));
     }
 
     /**
@@ -135,7 +135,7 @@ class ReflectionTest extends Testbase
 
         $this->assertEquals("valB1", $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyTest"));
         $this->assertEquals("valA1", $objAnnotations->getAnnotationValueForProperty("propertyA1", "@propertyTest"));
-        $this->assertNull($objAnnotations->getAnnotationValueForProperty("propertyA1", "@notAPropertyTest"));
+        $this->assertNull($objAnnotations->getAnnotationValueForProperty("propertyA1", "@DummyAnnotation"));
 
     }
 
@@ -157,9 +157,14 @@ class ReflectionTest extends Testbase
 
         $strValues = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyParamTest3");
         $this->assertEquals("", $strValues);
+        $this->assertNotNull($strValues);
 
         $strValues = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyParamTest4");
         $this->assertEquals("", $strValues);
+        $this->assertNotNull($strValues);
+
+        $strValues = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@DummyAnnotation");
+        $this->assertNull($strValues);
     }
 
     /**
@@ -173,6 +178,7 @@ class ReflectionTest extends Testbase
         $objReflection = new Reflection(new B());
         $this->assertEquals(strtolower("getLongPropertyA1"), strtolower($objReflection->getGetter("propertyA1")));
         $this->assertEquals(strtolower("getBitPropertyB1"), strtolower($objReflection->getGetter("propertyB1")));
+        $this->assertNull($objReflection->getGetter("property_dummy"));
     }
 
     /**
@@ -186,6 +192,7 @@ class ReflectionTest extends Testbase
         $objReflection = new Reflection(new B());
         $this->assertEquals(strtolower("setStrPropertyA1"), strtolower($objReflection->getSetter("propertyA1")));
         $this->assertEquals(strtolower("setIntPropertyB1"), strtolower($objReflection->getSetter("propertyB1")));
+        $this->assertNull($objReflection->getGetter("property_dummy"));
     }
 
     /**
@@ -195,9 +202,11 @@ class ReflectionTest extends Testbase
     {
         $objReflection = new Reflection(new A());
         $this->assertEquals("val CA", $objReflection->getAnnotationValueForProperty("propertyC", "@propertyTestInheritance"));
+        $this->assertNull($objReflection->getAnnotationValueForProperty("propertyC", "@DummyAnnotation"));
 
         $objReflection = new Reflection(new B());
         $this->assertEquals("val CB", $objReflection->getAnnotationValueForProperty("propertyC", "@propertyTestInheritance"));
+        $this->assertNull($objReflection->getAnnotationValueForProperty("propertyC", "@DummyAnnotation"));
     }
 
 
@@ -214,7 +223,10 @@ class ReflectionTest extends Testbase
         $this->assertTrue($objReflection->hasClassAnnotation("@classParamTest3"));
         $this->assertTrue($objReflection->hasClassAnnotation("@classParamTest4"));
         $this->assertTrue($objReflection->hasClassAnnotation("@fieldDDValues"));
+        $this->assertFalse($objReflection->hasClassAnnotation("@DummyAnnotation"));
 
+        $arrClassAnnotations = $objReflection->getAnnotationValuesFromClass("@DummyAnnotation");
+        $this->assertEquals(0, count($arrClassAnnotations));
 
         $arrClassAnnotations = $objReflection->getAnnotationValuesFromClass("@classTest");
         $this->assertEquals(5, count($arrClassAnnotations));
@@ -307,6 +319,9 @@ class ReflectionTest extends Testbase
     {
         $objAnnotations = new Reflection(new C());
 
+        $arrClassAnnotations = $objAnnotations->getAnnotationsWithValueFromClass("Dummy value", ReflectionEnum::PARAMS);
+        $this->assertEquals(0, count($arrClassAnnotations));
+
         $arrClassAnnotations = $objAnnotations->getAnnotationsWithValueFromClass(54, ReflectionEnum::PARAMS);
         $this->assertEquals(1, count($arrClassAnnotations));
 
@@ -355,6 +370,10 @@ class ReflectionTest extends Testbase
     {
         $objAnnotations = new Reflection(new C());
 
+        //Existing property but not existing param
+        $arrParams = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@DummyAnnotation", ReflectionEnum::PARAMS);
+        $this->assertNull($arrParams);
+
         $arrParams = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyTest", ReflectionEnum::PARAMS);
         $this->assertCount(0, $arrParams);
 
@@ -389,13 +408,15 @@ class ReflectionTest extends Testbase
         $strParamValue = $objAnnotations->getParamValueForPropertyAndAnnotation("propertyB1", "@propertyParamTest1", "param3");
         $this->assertEquals("astring", $strParamValue);
 
-        $strParamValue = $objAnnotations->getParamValueForPropertyAndAnnotation("propertyB1", "@propertyParamTest1", "paramXYZ");
+        //Existing property with existing annotation but not existing param
+        $strParamValue = $objAnnotations->getParamValueForPropertyAndAnnotation("propertyB1", "@propertyParamTest1", "DummyParam");
+        $this->assertNull($strParamValue);
+
+        //Existing property with not existing annotation param
+        $strParamValue = $objAnnotations->getParamValueForPropertyAndAnnotation("propertyB1", "@DummyAnnotation", "param1");
         $this->assertNull($strParamValue);
     }
 }
-namespace Kajona\System\System;
-
-use Kajona\System\Tests\Testbase;
 
 //set up test-structures
 
@@ -527,9 +548,5 @@ class C extends B {
     public function getBitPropertyB1() {
         return $this->propertyB1;
     }
-
-
-
-
 }
 
