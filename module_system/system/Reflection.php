@@ -33,7 +33,6 @@ class Reflection
 
     private static $STR_PROPERTIES_CACHE = "properties";
     private static $STR_PROPERTIES_ANNOTATION_VALUE_CACHE = "properties_annotation_value";
-    private static $STR_PROPERTIES_ANNOTATION_PARAM_VALUE_CACHE = "properties_annotation_param_value";
     private static $STR_HASPROPERTY_CACHE = "hasproperty";
     private static $STR_GETTER_CACHE = "getters";
     private static $STR_SETTER_CACHE = "setters";
@@ -82,7 +81,6 @@ class Reflection
                 self::$STR_HASMETHOD_CACHE => array(),
                 self::$STR_PROPERTIES_CACHE => array(),
                 self::$STR_PROPERTIES_ANNOTATION_VALUE_CACHE => array(),
-                self::$STR_PROPERTIES_ANNOTATION_PARAM_VALUE_CACHE => array(),
                 self::$STR_HASPROPERTY_CACHE => array(),
                 self::$STR_DOC_COMMENT_PROPERTIES_CACHE => array(),
                 self::$STR_GETTER_CACHE => array(),
@@ -462,22 +460,13 @@ class Reflection
      * @return mixed|null
      */
     public function getParamValueForPropertyAndAnnotation($strProperty, $strAnnotation, $strParamName) {
-
-        $strCacheKey = $strProperty."_".$strAnnotation."_".$strParamName;
-        if (array_key_exists($strCacheKey, $this->arrCurrentCache[self::$STR_PROPERTIES_ANNOTATION_PARAM_VALUE_CACHE])) {
-            return $this->arrCurrentCache[self::$STR_PROPERTIES_ANNOTATION_PARAM_VALUE_CACHE][$strCacheKey];
-        }
-
-        $strParamValue = null;
         $arrParams = $this->getAnnotationValueForProperty($strProperty, $strAnnotation, ReflectionEnum::PARAMS);
+
         if(is_array($arrParams) && array_key_exists($strParamName, $arrParams)) {
-            $strParamValue = $arrParams[$strParamName];
+            return $arrParams[$strParamName];
         }
 
-        $this->arrCurrentCache[self::$STR_PROPERTIES_ANNOTATION_PARAM_VALUE_CACHE][$strCacheKey] = $strParamValue;
-        $this->bitCacheSaveRequired = true;
-
-        return $strParamValue;
+        return null;
     }
 
     /**
