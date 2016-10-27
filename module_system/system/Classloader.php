@@ -52,6 +52,7 @@ class Classloader
         "scripts/",
         "templates/",
         "vendor/",
+        "node_modules/",
     );
 
     /**
