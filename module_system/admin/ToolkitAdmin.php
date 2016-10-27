@@ -2107,10 +2107,10 @@ HTML;
         }
 
         $strRows = "";
-        $strRendercode .= ">
+        $strRendercode .= "<script type=\"text/javascript\">
 
          require(['forms'], function(forms) {
-            forms.renderMissingMandatoryFields([;;";
+            forms.renderMissingMandatoryFields([";
 
         foreach ($arrErrors as $strKey => $arrOneErrors) {
             foreach ($arrOneErrors as $strOneError) {
