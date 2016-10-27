@@ -12,14 +12,12 @@
 
     <!-- KAJONA_BUILD_LESS_START -->
     <link href="_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/less/bootstrap.less?_system_browser_cachebuster_" rel="stylesheet/less">
+    <!--<script> less = { env:'development' }; </script>-->
     <script src="_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/less/less.min.js"></script>
     <!-- KAJONA_BUILD_LESS_END -->
 
     <script src="_webpath_/[webpath,module_system]/scripts/jquery/jquery.min.js?_system_browser_cachebuster_"></script>
     %%head%%
-    <script type="text/javascript">
-        var require = %%requirejs_conf%%;
-    </script>
     <script src="_webpath_/[webpath,module_system]/scripts/requirejs/require.js?_system_browser_cachebuster_"></script>
     <script type="text/javascript">
         require(['app'], function() {});
