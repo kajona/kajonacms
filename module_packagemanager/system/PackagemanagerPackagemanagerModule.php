@@ -17,6 +17,7 @@ use Kajona\System\System\Filesystem;
 use Kajona\System\System\InstallerInterface;
 use Kajona\System\System\InstallerRemovableInterface;
 use Kajona\System\System\Logger;
+use Kajona\System\System\SamplecontentInstallerInterface;
 use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\SystemSetting;
@@ -306,6 +307,10 @@ class PackagemanagerPackagemanagerModule implements PackagemanagerPackagemanager
         //scan installers in order to query them on their removable status
         $bitIsRemovable = true;
         foreach ($this->getInstaller($this->getObjMetadata()) as $objOneInstaller) {
+            if($objOneInstaller instanceof SamplecontentInstallerInterface) {
+                continue;
+            }
+
             if (!$objOneInstaller instanceof InstallerRemovableInterface) {
                 $bitIsRemovable = false;
                 break;
