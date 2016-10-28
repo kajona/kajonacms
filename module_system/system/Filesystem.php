@@ -624,8 +624,10 @@ class Filesystem
      * Make sure to die() the process afterwards, this is not done by this method!
      *
      * @param $strSourceFile
+     * @param bool $bitDeleteOnStream if set to true, the file is deleted as soon as streaming finished
+     * @param string $strContentType
      */
-    public function streamFile($strSourceFile)
+    public function streamFile($strSourceFile, $bitDeleteOnStream = false, $strContentType = null)
     {
         $strSourceFile = $this->prependRealpath($strSourceFile);
 
@@ -634,19 +636,22 @@ class Filesystem
         //Check the current browsertype
         if (StringUtil::indexOf($strBrowser, "IE") !== false) {
             //Internet Explorer
-            ResponseObject::getInstance()->addHeader("Content-type: application/x-ms-download");
-            ResponseObject::getInstance()->addHeader("Content-type: x-type/subtype\n");
-            ResponseObject::getInstance()->addHeader("Content-type: application/force-download");
-            ResponseObject::getInstance()->addHeader(
-                "Content-Disposition: attachment; filename=".preg_replace(
-                    '/\./', '%2e',
-                    saveUrlEncode(trim(basename($strSourceFile))), substr_count(basename($strSourceFile), '.') - 1
-                )
-            );
-        }
-        else {
+            if ($strContentType === null) {
+                ResponseObject::getInstance()->addHeader("Content-type: application/x-ms-download");
+                ResponseObject::getInstance()->addHeader("Content-type: x-type/subtype\n");
+                ResponseObject::getInstance()->addHeader("Content-type: application/force-download");
+            } else {
+                ResponseObject::getInstance()->addHeader("Content-type: ".$strContentType);
+            }
+            ResponseObject::getInstance()->addHeader("Content-Disposition: attachment; filename=".preg_replace('/\./', '%2e', saveUrlEncode(trim(basename($strSourceFile))), substr_count(basename($strSourceFile), '.') - 1));
+        } else {
             //Good: another browser vendor
-            ResponseObject::getInstance()->addHeader("Content-Type: application/octet-stream");
+            if ($strContentType === null) {
+                ResponseObject::getInstance()->addHeader("Content-Type: application/octet-stream");
+            } else {
+                ResponseObject::getInstance()->addHeader("Content-type: ".$strContentType);
+            }
+
             ResponseObject::getInstance()->addHeader("Content-Disposition: attachment; filename=".saveUrlEncode(trim(basename($strSourceFile))));
         }
         //Common headers
@@ -668,6 +673,10 @@ class Filesystem
         @fclose($ptrFile);
         ob_flush();
         flush();
+
+        if ($bitDeleteOnStream && StringUtil::indexOf(realpath($strSourceFile), _realpath_."project/temp") === 0) {
+            $this->fileDelete($strSourceFile);
+        }
     }
 }
 
