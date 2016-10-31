@@ -91,8 +91,8 @@ class FormentryTemplate extends FormentryBase implements FormentryInterface
 
             $strTemplateDir = $objReflection->getAnnotationValueForProperty($strSourceProperty, self::STR_TEMPLATEDIR_ANNOTATION);
 
-            //load templates
-            $arrTemplates = Resourceloader::getInstance()->getTemplatesInFolder($strTemplateDir, true);
+            //load templates, array_reverse so that the template-pack entry is handled as the last entry overwriting those from the default module
+            $arrTemplates = array_reverse(Resourceloader::getInstance()->getTemplatesInFolder($strTemplateDir, true));
             $arrTemplatesDD = array();
             if (count($arrTemplates) > 0) {
                 foreach ($arrTemplates as $strPath => $strTemplate) {
