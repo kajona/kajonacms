@@ -289,7 +289,7 @@ class InstallerPages extends InstallerBase implements InstallerInterface {
         }
         
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "5.0.1") {
+        if($arrModule["module_version"] == "5.0.1" || $arrModule["module_version"] == "5.0.2") {
             $strReturn .= $this->update_501_51();
         }
 
