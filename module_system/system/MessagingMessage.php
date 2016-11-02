@@ -407,7 +407,7 @@ class MessagingMessage extends Model implements ModelInterface, AdminListableInt
      */
     public function setStrTitle($strTitle)
     {
-        $this->strTitle = $strTitle;
+        $this->strTitle = strip_tags($strTitle);
     }
 
     /**
