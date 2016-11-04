@@ -1491,6 +1491,7 @@ The language switch surrounds the buttons
         <h2 class="">%%widget_name%%</h2>
         <div class="adminwidgetactions pull-right">%%widget_edit%% %%widget_delete%%</div>
         <div class="additionalNameContent">%%widget_name_additional_content%%</div>
+        <div class="contentSeparator"></div>
         <div class="content loadingContainer">
             %%widget_content%%
         </div>
@@ -1701,7 +1702,7 @@ It containes a list of aspects and provides the possibility to switch the differ
 ---------------------------------------------------------------------------------------------------------
 -- MENU -------------------------------------------------------------------------------------------------
 <contextmenu_wrapper>
-    <div class="dropdown-menu generalContextMenu" role="menu">
+    <div class="dropdown-menu generalContextMenu %%ddclass%%" role="menu">
         <ul>
             %%entries%%
         </ul>

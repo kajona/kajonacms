@@ -28,6 +28,7 @@ use Kajona\System\System\HttpResponsetypes;
 use Kajona\System\System\HttpStatuscodes;
 use Kajona\System\System\Link;
 use Kajona\System\System\ResponseObject;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemChangelog;
 use Kajona\System\System\SystemJSTreeBuilder;
@@ -121,18 +122,48 @@ class DashboardAdmin extends AdminController implements AdminInterface
         $strWidgetName = $objConcreteWidget->getWidgetName();
         $strWidgetNameAdditionalContent = $objConcreteWidget->getWidgetNameAdditionalContent();
 
+
+        $arrActions = array();
+        if ($objDashboardWidget->rightEdit()) {
+            $arrActions[] = array(
+                "fullentry" => Link::getLinkAdminDialog(
+                    "dashboard",
+                    "editWidget",
+                    "&systemid=".$objDashboardWidget->getSystemid(),
+                    (AdminskinHelper::getAdminImage("icon_edit"))." ".$this->getLang("editWidget"),
+                    "",
+                    "",
+                    $objDashboardWidget->getConcreteAdminwidget()->getWidgetName(),
+                    false
+                )
+            );
+        }
+        if ($objDashboardWidget->rightDelete()) {
+            $strQuestion = StringUtil::replace("%%element_name%%", StringUtil::jsSafeString($strWidgetName), $this->getLang("widgetDeleteQuestion"));
+
+            $strHeader = Carrier::getInstance()->getObjLang()->getLang("dialog_deleteHeader", "system");
+            $strConfirmationButtonLabel = Carrier::getInstance()->getObjLang()->getLang("dialog_deleteButton", "system");
+            $strConfirmationLinkHref = "javascript:require(\'dashboard\').removeWidget(\'".$objDashboardWidget->getSystemid()."\');";
+
+            $arrActions[] = array(
+                "fullentry" => Link::getLinkAdminManual(
+                    "href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('{$strHeader}'); jsDialog_1.setContent('{$strQuestion}', '{$strConfirmationButtonLabel}',  '".$strConfirmationLinkHref."'); jsDialog_1.init(); return false;\"",
+                    (AdminskinHelper::getAdminImage("icon_delete")). " ". Carrier::getInstance()->getObjLang()->getLang("commons_delete", "system"), "", "", "", "", false
+                )
+            );
+        }
+
+
         $strWidgetContent .= $this->objToolkit->getDashboardWidgetEncloser(
             $objDashboardWidget->getSystemid(),
             $this->objToolkit->getAdminwidget(
                 $strWidgetId,
                 $strWidgetName,
                 $strWidgetNameAdditionalContent,
-                ($objDashboardWidget->rightEdit() ? Link::getLinkAdminDialog("dashboard", "editWidget", "&systemid=".$objDashboardWidget->getSystemid(), "", $this->getLang("editWidget"), "icon_edit", $objDashboardWidget->getConcreteAdminwidget()->getWidgetName()) : ""),
-                ($objDashboardWidget->rightDelete() ? $this->objToolkit->listDeleteButton(
-                    $objDashboardWidget->getConcreteAdminwidget()->getWidgetName(),
-                    $this->getLang("widgetDeleteQuestion"),
-                    "javascript:require(\'dashboard\').removeWidget(\'".$objDashboardWidget->getSystemid()."\');"
-                ) : ""),
+                $this->objToolkit->listButton(
+                    "<span class='dropdown'><a href='#' data-toggle='dropdown' role='button'>".AdminskinHelper::getAdminImage("icon_submenu")."</a>".$this->objToolkit->registerMenu($objDashboardWidget->getSystemid(), $arrActions, true)."</span>"
+                ),
+                "",
                 $objDashboardWidget->getConcreteAdminwidget()->getLayoutSection()
             )
         );
