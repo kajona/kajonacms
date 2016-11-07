@@ -281,12 +281,10 @@ class Link
      * @param bool $bitTooltip
      * @param bool $bitPortalEditor
      * @param bool|string $strOnClick
-     * @param null|int $intWidth
-     * @param null|int $intHeight
      *
      * @return string
      */
-    public static function getLinkAdminDialog($strModule, $strAction, $strParams = "", $strText = "", $strAlt = "", $strImage = "", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false, $strOnClick = "", $intWidth = null, $intHeight = null)
+    public static function getLinkAdminDialog($strModule, $strAction, $strParams = "", $strText = "", $strAlt = "", $strImage = "", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false, $strOnClick = "")
     {
         $strLink = "";
         $strTitle = addslashes(StringUtil::replace(array("\n", "\r"), array(), strip_tags(nl2br($strTitle))));
@@ -300,14 +298,8 @@ class Link
         $strAction = urlencode($strAction);
 
         if ($strOnClick == "") {
-            if ($intWidth !== null && $intHeight !== null) {
-                $strOnClick = "require('folderview').dialog.setContentIFrame('".Link::getLinkAdminHref($strModule, $strAction, $strParams)."'); require('folderview').dialog.setTitle('".$strTitle."'); ".
-                    "require('folderview').dialog.init('".$intWidth."', '".$intHeight."'); return false;";
-            }
-            else {
-                $strOnClick = "require('folderview').dialog.setContentIFrame('".Link::getLinkAdminHref($strModule, $strAction, $strParams)."'); require('folderview').dialog.setTitle('".$strTitle."'); ".
-                    "require('folderview').dialog.init(); return false;";
-            }
+            $strLink = Link::getLinkAdminHref($strModule, $strAction, $strParams);
+            $strOnClick = "require(['dialogHelper'], function(dialog) {dialog.showIframeDialog('{$strLink}', '{$strTitle}')} ); return false;";
         }
 
 

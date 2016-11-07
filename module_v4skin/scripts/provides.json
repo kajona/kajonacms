@@ -14,6 +14,7 @@
     "jquery-touchPunch": "jquery/jquery.ui.touch-punch.min",
 
     "dialog": "kajona/dialog",
+    "dialogHelper": "kajona/dialogHelper",
     "v4skin": "kajona/v4skin",
     "listSortable" : "kajona/listSortable"
   },

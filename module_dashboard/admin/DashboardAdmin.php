@@ -147,7 +147,7 @@ class DashboardAdmin extends AdminController implements AdminInterface
 
             $arrActions[] = array(
                 "fullentry" => Link::getLinkAdminManual(
-                    "href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('{$strHeader}'); jsDialog_1.setContent('{$strQuestion}', '{$strConfirmationButtonLabel}',  '".$strConfirmationLinkHref."'); jsDialog_1.init(); return false;\"",
+                    "href=\"#\" onclick=\"require(['dialogHelper'], function(dialog) { dialog.showConfirmationDialog('{$strHeader}', '{$strQuestion}', '{$strConfirmationButtonLabel}', '{$strConfirmationLinkHref}'); } ); return false;\"",
                     (AdminskinHelper::getAdminImage("icon_delete")). " ". Carrier::getInstance()->getObjLang()->getLang("commons_delete", "system"), "", "", "", "", false
                 )
             );
