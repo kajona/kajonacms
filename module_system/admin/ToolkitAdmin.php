@@ -2830,14 +2830,14 @@ HTML;
      * @param string $strIdentifier
      * @param string[] $arrEntries
      *
+     * @param bool $bitOpenToLeft
+     *
      * @return string
      */
-    public function registerMenu($strIdentifier, array $arrEntries)
+    public function registerMenu($strIdentifier, array $arrEntries, $bitOpenToLeft = false)
     {
         $strEntries = "";
         foreach ($arrEntries as $arrOneEntry) {
-
-
             if (!isset($arrOneEntry["link"])) {
                 $arrOneEntry["link"] = "";
             }
@@ -2924,6 +2924,10 @@ HTML;
         $arrTemplate = array();
         $arrTemplate["id"] = $strIdentifier;
         $arrTemplate["entries"] = StringUtil::substring($strEntries, 0, -1);
+        if ($bitOpenToLeft) {
+            $arrTemplate["ddclass"] = "dropdown-menu-right";
+
+        }
         return $this->objTemplate->fillTemplateFile($arrTemplate, "/elements.tpl", "contextmenu_wrapper");
     }
 }

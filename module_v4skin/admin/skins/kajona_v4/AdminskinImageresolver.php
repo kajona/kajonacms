@@ -156,6 +156,7 @@ class AdminskinImageresolver implements AdminskinImageresolverInterface {
         "icon_rss"                         => "<i class='kj-icon fa fa-rss'></i>",
         "icon_sitemap"                     => "<i class='kj-icon fa fa-sitemap'></i>",
         "icon_sound"                       => "<i class='kj-icon fa fa-music'></i>",
+        "icon_submenu"                     => "<i class='kj-icon fa fa-chevron-down'></i>",
         "icon_sync"                        => "<i class='kj-icon fa fa-refresh'></i>",
         "icon_systemtask"                  => "<i class='kj-icon fa fa-tasks'></i>",
         "icon_tag"                         => "<i class='kj-icon fa fa-tag'></i>",

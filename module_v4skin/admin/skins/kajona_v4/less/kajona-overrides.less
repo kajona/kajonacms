@@ -1401,22 +1401,41 @@ footer {
             }
 
             .dbEntry {
+
+                h2 {
+                    margin: 0 0 5px 0;
+                }
+
+                div.contentSeparator {
+                    z-index: 298;
+                    height: 8px;
+                    position: relative;
+
+                    background-image: linear-gradient(to top, rgba(234, 234, 234, 0.02), rgba(245, 245, 245, 0.99));
+
+                    //background-image: -webkit-linear-gradient(top, rgba(255,255,255,0.001) 0%, #fff 5%, #fff 100%);
+
+                }
+
                 .adminwidgetactions {
                     display: inline;
-                    margin-top: -35px;
+                    margin-top: -27px;
                 }
 
                 .additionalNameContent {
                     font-size: @font-size-small - 1;
-                    margin-top: -@font-size-small;
+                    margin-top: -6px;
                 }
 
                 .content {
-                    margin-top: 5px;
+                    margin-top: -8px;
+                    padding-top: 8px;
+                    overflow-x: auto;
+                    max-height: 500px;
                 }
 
                 &.sortActive {
-                    .opacity(0.8);
+                    .opacity(0.7);
                 }
             }
 

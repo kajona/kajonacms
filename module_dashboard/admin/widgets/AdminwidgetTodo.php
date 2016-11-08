@@ -60,7 +60,6 @@ class AdminwidgetTodo extends Adminwidget implements AdminwidgetInterface
     public function getWidgetOutput()
     {
         $strReturn = "";
-        $strReturn .= "<br>";
 
         $arrCategories = TodoRepository::getAllCategories();
 
