@@ -274,7 +274,7 @@ define(['jquery', 'bootstrap', 'jquery-ui', 'workingIndicator', 'tooltip', 'stat
          *
          * @param el
          */
-        removeObjectListItem: function(){
+        removeObjectListItem: function(el){
             // remove all active tooltips
             tooltip.removeTooltip(el);
 
