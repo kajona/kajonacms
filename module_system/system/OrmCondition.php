@@ -51,11 +51,8 @@ class OrmCondition extends OrmObjectlistRestriction implements OrmConditionInter
      * @param $strValue
      * @param $strTableColumn
      * @param OrmComparatorEnum|null $objFilterCompareOperator
-     * @param string $strCondition
      *
      * @return OrmCondition|null
-     * @throws OrmException
-     *
      */
     public final static function getORMConditionForValue($strValue, $strTableColumn, OrmComparatorEnum $objFilterCompareOperator = null)
     {
@@ -67,7 +64,11 @@ class OrmCondition extends OrmObjectlistRestriction implements OrmConditionInter
             }
             else {
                 $strCompareOperator = $objFilterCompareOperator === null ? OrmComparatorEnum::Like : $objFilterCompareOperator->getEnumAsSqlString();
-                return new OrmCondition("$strTableColumn $strCompareOperator ?", array("%".$strValue."%"));
+                if ($strCompareOperator === OrmComparatorEnum::Like) {
+                    return new OrmCondition("$strTableColumn $strCompareOperator ?", array("%".$strValue."%"));
+                } else {
+                    return new OrmCondition("$strTableColumn $strCompareOperator ?", array($strValue));
+                }
             }
         }
         elseif(is_int($strValue) || is_float($strValue)) {
