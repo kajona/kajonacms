@@ -1461,6 +1461,7 @@ class ToolkitAdmin extends Toolkit
      * Returns a table filled with infos.
      * The header may be build using cssclass -> value or index -> value arrays
      * Values may be build using cssclass -> value or index -> value arrays, too (per row)
+     * For header, the passing of the fake-classes colspan-2 and colspan-3 are allowed in order to combine cells
      *
      * @param mixed $arrHeader the first row to name the columns
      * @param mixed $arrValues every entry is one row
@@ -1481,8 +1482,29 @@ class ToolkitAdmin extends Toolkit
         if (is_array($arrHeader) && !empty($arrHeader)) {
             $strReturn .= $this->objTemplate->fillTemplateFile(array(), "/elements.tpl", "datalist_column_head_header");
 
+            $bitNrToSkip = 0;
             foreach ($arrHeader as $strCssClass => $strHeader) {
-                $strReturn .= $this->objTemplate->fillTemplateFile(array("value" => $strHeader, "class" => $strCssClass), "/elements.tpl", "datalist_column_head");
+
+                $bitSkipPrint = 0;
+                $strAddon = "";
+                if(StringUtil::indexOf($strCssClass, "colspan-2") !== false) {
+                    $strAddon = " colspan='2' ";
+                    $bitSkipPrint = 1;
+                    $strCssClass = StringUtil::replace("colspan-2", "", $strCssClass);
+                } elseif(StringUtil::indexOf($strCssClass, "colspan-3") !== false) {
+                    $strAddon = " colspan='3' ";
+                    $bitSkipPrint = 2;
+                    $strCssClass = StringUtil::replace("colspan-3", "", $strCssClass);
+                }
+
+                if($bitNrToSkip-- <= 0) {
+                    $strReturn .= $this->objTemplate->fillTemplateFile(array("value" => $strHeader, "class" => $strCssClass, "addons" => $strAddon), "/elements.tpl", "datalist_column_head");
+                }
+
+                if($bitSkipPrint > 0) {
+                    $bitNrToSkip = $bitSkipPrint;
+                }
+
             }
 
             $strReturn .= $this->objTemplate->fillTemplateFile(array(), "/elements.tpl", "datalist_column_head_footer");

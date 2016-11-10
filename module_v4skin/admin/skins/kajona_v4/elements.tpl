@@ -212,7 +212,7 @@ One Column in a row (header record) - the header, the content, the footer
 </datalist_column_head_header>
 
 <datalist_column_head>
-    <th class="%%class%%">%%value%%</th>
+    <th class="%%class%%" %%addons%%>%%value%%</th>
 </datalist_column_head>
 
 <datalist_column_head_footer>
