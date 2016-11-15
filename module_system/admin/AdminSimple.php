@@ -321,9 +321,15 @@ abstract class AdminSimple extends AdminController
             }
 
             $strActions = $this->getActionIcons($objOneIterable, $strListIdentifier);
+
+            $strActions = "<div class='actionBar'>{$strActions}</div><div class='actionToggle'>".$this->objToolkit->listButton("<i class='kj-icon fa fa-arrow-circle-down'></i>")."</div>";
+
             $strReturn .= $this->objToolkit->simpleAdminList($objOneIterable, $strActions, count($arrMassActions) > 0);
 
+
+
         }
+
 
         $strNewActions = $this->mergeNewEntryActions($this->getNewEntryAction($strListIdentifier));
         $strBatchActions = "";
@@ -342,6 +348,31 @@ abstract class AdminSimple extends AdminController
         else {
             $strReturn .= $this->objToolkit->listFooter();
         }
+
+        $strReturn .= "<style type='text/css'>
+        .actionBar {
+            display: none;
+            position: absolute;
+            right: 37px;
+        }
+        
+        .actionToggle {
+            display: inline-block;
+            transition: transform .3s ease;
+            
+        }
+        
+        tr:hover .actionToggle {
+            transform: rotate(90deg);
+        }
+        
+        tr:hover .actionBar {
+            display: block;
+        }
+        
+        @keyframes spin { 100% { transform:rotate(180deg); } }
+        
+</style>";
 
         $objArraySectionIterator->setIntTotalElements($intTotalNrOfElements);
         $strReturn .= $this->objToolkit->getPageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction(), "&systemid=".$this->getSystemid().$this->strPeAddon.$strPagerAddon);
