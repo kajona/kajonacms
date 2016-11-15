@@ -322,7 +322,7 @@ abstract class AdminSimple extends AdminController
 
             $strActions = $this->getActionIcons($objOneIterable, $strListIdentifier);
 
-            $strActions = "<div class='actionBar'>{$strActions}</div><div class='actionToggle'>".$this->objToolkit->listButton("<i class='kj-icon fa fa-arrow-circle-down'></i>")."</div>";
+            $strActions = "<div class='actionBar'>{$strActions}</div><div class='actionToggle'>".$this->objToolkit->listButton("<i class='kj-icon fa fa-arrow-circle-down'></i>")."</div>".$this->renderStatusAction($objOneIterable);
 
             $strReturn .= $this->objToolkit->simpleAdminList($objOneIterable, $strActions, count($arrMassActions) > 0);
 
@@ -353,7 +353,9 @@ abstract class AdminSimple extends AdminController
         .actionBar {
             display: none;
             position: absolute;
-            right: 37px;
+            right: 60px;
+            box-shadow: 0 0 4px 4px rgb(255, 255, 255);
+            background-color: #fff;
         }
         
         .actionToggle {
@@ -368,7 +370,9 @@ abstract class AdminSimple extends AdminController
         
         tr:hover .actionBar {
             display: block;
+            
         }
+        
         
         @keyframes spin { 100% { transform:rotate(180deg); } }
         
@@ -399,7 +403,7 @@ abstract class AdminSimple extends AdminController
         }
         $strActions .= $this->renderDeleteAction($objOneIterable);
         $strActions .= $this->renderCopyAction($objOneIterable);
-        $strActions .= $this->renderStatusAction($objOneIterable);
+
         $strActions .= $this->renderTagAction($objOneIterable);
         $strActions .= $this->renderChangeHistoryAction($objOneIterable);
         $strActions .= $this->renderPermissionsAction($objOneIterable);
