@@ -35,7 +35,7 @@ class OrmPropertyCondition extends OrmCondition
      */
     public function __construct($strProperty, OrmComparatorEnum $objComparator, $strValue)
     {
-        parent::__construct("", array($strValue));
+        $this->arrParams = array($strValue);
         $this->objComparator = $objComparator;
         $this->strProperty = $strProperty;
     }
