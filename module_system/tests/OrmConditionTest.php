@@ -3,11 +3,50 @@
 namespace Kajona\System\Tests;
 
 use Kajona\System\System\Exception;
+use Kajona\System\System\OrmComparatorEnum;
 use Kajona\System\System\OrmCondition;
 use Kajona\System\System\OrmPropertyInCondition;
 
 class OrmConditionTest extends Testbase
 {
+
+    public function testGetORMConditionForValue()
+    {
+        $objCondition = OrmCondition::getORMConditionForValue("test", "col", OrmComparatorEnum::Equal());
+        $this->assertEquals("col = ?", $objCondition->getStrWhere());
+        $this->assertEquals("test", $objCondition->getArrParams()[0]);
+
+        $objCondition = OrmCondition::getORMConditionForValue("test", "col", OrmComparatorEnum::GreaterThen());
+        $this->assertEquals("col > ?", $objCondition->getStrWhere());
+        $this->assertEquals("test", $objCondition->getArrParams()[0]);
+
+        $objCondition = OrmCondition::getORMConditionForValue("test", "col", OrmComparatorEnum::Like());
+        $this->assertEquals("col LIKE ?", $objCondition->getStrWhere());
+        $this->assertEquals("%test%", $objCondition->getArrParams()[0]);
+
+
+
+
+        $objCondition = OrmCondition::getORMConditionForValue(123, "col", OrmComparatorEnum::Equal());
+        $this->assertEquals("col = ?", $objCondition->getStrWhere());
+        $this->assertEquals(123, $objCondition->getArrParams()[0]);
+
+        $objCondition = OrmCondition::getORMConditionForValue(123, "col", OrmComparatorEnum::Like());
+        $this->assertEquals("col LIKE ?", $objCondition->getStrWhere());
+        $this->assertEquals(123, $objCondition->getArrParams()[0]);
+
+
+
+
+        $objCondition = OrmCondition::getORMConditionForValue(false, "col", OrmComparatorEnum::Equal());
+        $this->assertEquals("col = ?", $objCondition->getStrWhere());
+        $this->assertEquals(0, $objCondition->getArrParams()[0]);
+
+        $objCondition = OrmCondition::getORMConditionForValue(true, "col", OrmComparatorEnum::Equal());
+        $this->assertEquals("col = ?", $objCondition->getStrWhere());
+        $this->assertEquals(1, $objCondition->getArrParams()[0]);
+    }
+
 
     /**
      * Test OrmCondition
