@@ -30,7 +30,7 @@ class OrmInCondition extends OrmCondition
 
     public function __construct($strColumnName, array $arrParams, $strInCondition = self::STR_CONDITION_IN)
     {
-        parent::__construct("", $arrParams);
+        $this->arrParams = $arrParams;
         $this->setStrInCondition($strInCondition);
 
         $this->strColumnName = $strColumnName;

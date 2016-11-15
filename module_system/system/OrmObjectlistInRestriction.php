@@ -48,8 +48,8 @@ class OrmObjectlistInRestriction extends OrmObjectlistRestriction
         if ($strInCondition !== self::STR_CONDITION_IN && $strInCondition !== self::STR_CONDITION_NOTIN) {
             throw new Exception("Wrong condition set", Exception::$level_ERROR);
         }
-        parent::__construct("", $arrParams);
 
+        $this->arrParams = $arrParams;
         $this->strCondition = $strCondition;
         $this->strColumnName = $strProperty;
         $this->strInCondition = $strInCondition;
