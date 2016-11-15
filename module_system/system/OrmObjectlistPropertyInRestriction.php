@@ -8,7 +8,6 @@
 
 namespace Kajona\System\System;
 
-
 /**
  * A objectlist restriction may be used to create where restrictions for the objectList and objectCount queries.
  * This restrcition creates an IN statement e.g. "AND <columnname> IN (<parameters>)"
@@ -16,7 +15,7 @@ namespace Kajona\System\System;
  * @package module_system
  * @author stefan.meyer1@yahoo.de
  * @since 4.8
- * 
+ *
  * @deprecated
  */
 class OrmObjectlistPropertyInRestriction extends OrmObjectlistInRestriction
@@ -59,5 +58,4 @@ class OrmObjectlistPropertyInRestriction extends OrmObjectlistInRestriction
 
         return $this->getInStatement($strPropertyValue);
     }
-
 }

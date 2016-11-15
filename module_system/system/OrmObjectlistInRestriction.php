@@ -18,7 +18,7 @@ namespace Kajona\System\System;
  * @author stefan.meyer1@yahoo.de
  * @since 4.8
  *
- * @deprecated 
+ * @deprecated
  */
 class OrmObjectlistInRestriction extends OrmObjectlistRestriction
 {
@@ -40,15 +40,16 @@ class OrmObjectlistInRestriction extends OrmObjectlistRestriction
      * @param string $strCondition
      * @param string $strInCondition
      *
+     * @throws Exception
      * @deprecated
      */
-    function __construct($strProperty, array $arrParams, $strCondition = "AND", $strInCondition = self::STR_CONDITION_IN)
+    public function __construct($strProperty, array $arrParams, $strCondition = "AND", $strInCondition = self::STR_CONDITION_IN)
     {
-        if($strInCondition !== self::STR_CONDITION_IN && $strInCondition !== self::STR_CONDITION_NOTIN) {
+        if ($strInCondition !== self::STR_CONDITION_IN && $strInCondition !== self::STR_CONDITION_NOTIN) {
             throw new Exception("Wrong condition set", Exception::$level_ERROR);
         }
+        parent::__construct("", $arrParams);
 
-        $this->arrParams = $arrParams;
         $this->strCondition = $strCondition;
         $this->strColumnName = $strProperty;
         $this->strInCondition = $strInCondition;
@@ -88,18 +89,18 @@ class OrmObjectlistInRestriction extends OrmObjectlistRestriction
 
     protected function getInStatement($strColumnName)
     {
-        if(is_array($this->arrParams) && count($this->arrParams) > 0) {
-            if(count($this->arrParams) > self::MAX_IN_VALUES) {
+        if (is_array($this->arrParams) && count($this->arrParams) > 0) {
+            if (count($this->arrParams) > self::MAX_IN_VALUES) {
                 $intCount = ceil(count($this->arrParams) / self::MAX_IN_VALUES);
                 $arrParts = array();
 
-                for($intI = 0; $intI < $intCount; $intI++) {
+                for ($intI = 0; $intI < $intCount; $intI++) {
                     $arrParams = array_slice($this->arrParams, $intI * self::MAX_IN_VALUES, self::MAX_IN_VALUES);
                     $arrParamsPlaceholder = array_map(function ($objParameter) {
                         return "?";
                     }, $arrParams);
                     $strPlaceholder = implode(",", $arrParamsPlaceholder);
-                    if(!empty($strPlaceholder)) {
+                    if (!empty($strPlaceholder)) {
                         $arrParts[] = "{$strColumnName} {$this->strInCondition} ({$strPlaceholder})";
                     }
                 }
@@ -108,8 +109,7 @@ class OrmObjectlistInRestriction extends OrmObjectlistRestriction
                     $strParts = implode(" OR ", $arrParts);
                     return $this->strCondition." (($strParts) {$this->addAdditionalConditions($strColumnName, "OR")})";
                 }
-            }
-            else {
+            } else {
                 $arrParamsPlaceholder = array_map(function ($objParameter) {
                     return "?";
                 }, $this->arrParams);
@@ -122,7 +122,7 @@ class OrmObjectlistInRestriction extends OrmObjectlistRestriction
         }
 
         $strAdditionalCondition = $this->addAdditionalConditions($strColumnName, "");
-        if($strAdditionalCondition != "") {
+        if ($strAdditionalCondition != "") {
             return "{$this->strInCondition} ({$strAdditionalCondition})";
         }
 

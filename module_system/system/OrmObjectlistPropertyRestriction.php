@@ -40,8 +40,7 @@ class OrmObjectlistPropertyRestriction extends OrmObjectlistRestriction
      */
     public function __construct($strProperty, OrmComparatorEnum $objComparator, $strValue)
     {
-
-        $this->arrParams = array($strValue);
+        parent::__construct("", array($strValue));
         $this->objComparator = $objComparator;
         $this->strProperty = $strProperty;
     }

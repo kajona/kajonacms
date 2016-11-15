@@ -27,35 +27,39 @@ class OrmInOrEmptyCondition extends OrmInCondition
     /**
      * OrmObjectlistInOrEmptyRestriction constructor.
      *
-     * @param bool $bitIncludeNullOrEmptyValues
+     * @param string $strColumnName
+     * @param array $arrParams
+     * @param string $strInCondition
+     *
+     * @internal param bool $bitIncludeNullOrEmptyValues
      */
-    function __construct($strColumnName, array $arrParams, $strInCondition = self::STR_CONDITION_IN)
+    public function __construct($strColumnName, array $arrParams, $strInCondition = self::STR_CONDITION_IN)
     {
         parent::__construct($strColumnName, $arrParams, $strInCondition);
 
         $intIndex = array_search(self::NULL_OR_EMPTY, $this->arrParams, true);
-        if($intIndex !== false) {
+        if ($intIndex !== false) {
             $this->bitIncludeNullOrEmptyValues = true;
             unset($this->arrParams[$intIndex]);
         }
 
         $intIndex = array_search(self::NULL, $this->arrParams, true);
-        if($intIndex !== false) {
+        if ($intIndex !== false) {
             $this->bitIncludeNullValues = true;
             unset($this->arrParams[$intIndex]);
         }
 
         //magic guessowrk - try to find the data-types of all params and flip the condition in case of non-string only values - then no comparison against '', plz
-        if($this->bitIncludeNullOrEmptyValues && count($this->arrParams) > 0) {
+        if ($this->bitIncludeNullOrEmptyValues && count($this->arrParams) > 0) {
             $bitItString = false;
-            foreach($this->arrParams as $objOneParam) {
-                if(is_string($objOneParam)) {
+            foreach ($this->arrParams as $objOneParam) {
+                if (is_string($objOneParam)) {
                     $bitItString = true;
                     break;
                 }
             }
-            
-            if(!$bitItString) {
+
+            if (!$bitItString) {
                 $this->bitIncludeNullOrEmptyValues = false;
                 $this->bitIncludeNullValues = true;
             }
@@ -66,15 +70,15 @@ class OrmInOrEmptyCondition extends OrmInCondition
     {
         $strWhere = parent::getStrWhere();
 
-        if($this->bitIncludeNullOrEmptyValues) {
-            if($strWhere != "") {
+        if ($this->bitIncludeNullOrEmptyValues) {
+            if ($strWhere != "") {
                 $strWhere = "({$strWhere}) OR ";
             }
             return "({$strWhere}($this->strColumnName IS NULL) OR ($this->strColumnName = ''))";
-        }  
-        
-        if($this->bitIncludeNullValues) {
-            if($strWhere != "") {
+        }
+
+        if ($this->bitIncludeNullValues) {
+            if ($strWhere != "") {
                 $strWhere = "({$strWhere}) OR ";
             }
             return "({$strWhere}($this->strColumnName IS NULL))";

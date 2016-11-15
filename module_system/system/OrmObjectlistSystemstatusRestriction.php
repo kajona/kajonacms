@@ -27,7 +27,7 @@ class OrmObjectlistSystemstatusRestriction extends OrmObjectlistPropertyRestrict
      *
      * @deprecated
      */
-    function __construct(OrmComparatorEnum $objComparator, $intStatus)
+    public function __construct(OrmComparatorEnum $objComparator, $intStatus)
     {
         parent::__construct("intRecordStatus", $objComparator, $intStatus);
     }

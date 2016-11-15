@@ -8,7 +8,6 @@
 
 namespace Kajona\System\System;
 
-
 /**
  * A objectlist restriction may be used to create where restrictions for the objectList and objectCount queries.
  * This restrcition creates an IN statement e.g. "AND <columnname> IN (<parameters>)"
@@ -16,7 +15,7 @@ namespace Kajona\System\System;
  * @package module_system
  * @author stefan.meyer1@yahoo.de
  * @since 4.8
- * 
+ *
  * @deprecated
  */
 class OrmObjectlistInOrEmptyRestriction extends OrmObjectlistInRestriction
@@ -28,15 +27,20 @@ class OrmObjectlistInOrEmptyRestriction extends OrmObjectlistInRestriction
     /**
      * OrmObjectlistInOrEmptyRestriction constructor.
      *
-     * @param bool $bitIncludeNullOrEmptyValues
+     * @param string $strProperty
+     * @param array $arrParams
+     * @param string $strCondition
+     * @param string $strInCondition
+     *
+     * @internal param bool $bitIncludeNullOrEmptyValues
      *
      * @deprecated
      */
-    function __construct($strProperty, array $arrParams, $strCondition = "AND", $strInCondition = self::STR_CONDITION_IN)
+    public function __construct($strProperty, array $arrParams, $strCondition = "AND", $strInCondition = self::STR_CONDITION_IN)
     {
         parent::__construct($strProperty, $arrParams, $strCondition, $strInCondition);
 
-        if(in_array(self::NULL_OR_EMPTY, $this->arrParams)) {
+        if (in_array(self::NULL_OR_EMPTY, $this->arrParams)) {
             $this->bitIncludeNullOrEmptyValues = true;
         }
     }
@@ -50,7 +54,7 @@ class OrmObjectlistInOrEmptyRestriction extends OrmObjectlistInRestriction
      */
     protected function addAdditionalConditions($strColumnName, $strCondition)
     {
-        if($this->bitIncludeNullOrEmptyValues) {
+        if ($this->bitIncludeNullOrEmptyValues) {
             return "$strCondition ($strColumnName IS NULL OR $strColumnName = '')";
         }
 

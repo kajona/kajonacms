@@ -23,7 +23,7 @@ class OrmSystemstatusCondition extends OrmPropertyCondition
      * @param OrmComparatorEnum $objComparator
      * @param string $intStatus
      */
-    function __construct(OrmComparatorEnum $objComparator, $intStatus)
+    public function __construct(OrmComparatorEnum $objComparator, $intStatus)
     {
         parent::__construct("intRecordStatus", $objComparator, $intStatus);
     }
