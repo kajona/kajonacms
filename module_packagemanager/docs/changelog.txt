@@ -1,5 +1,8 @@
 Module Packagemanager
 
+V4.7.1 --------------------------------------------------------------------------------------------------
+UPDATE: module_packagemanager | KajonaBase -> disabled the KajonaBase packageprovider ahead of the shutdown of the KajonaBase
+
 V4.6 ----------------------------------------------------------------------------------------------------
 NEW: module_packagemanager | remoteloader_kajona -> changed the access from http to https
 BUG: module_packagemanager | package details view -> fixed the rendering of screenshots while processing a zipped package
