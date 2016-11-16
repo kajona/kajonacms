@@ -9,7 +9,6 @@ namespace Kajona\System\System\Db;
 
 use Kajona\System\System\Database;
 use Kajona\System\System\DbConnectionParams;
-use Kajona\System\System\Exception;
 
 /**
  * Interface to specify the layout of db-drivers.
