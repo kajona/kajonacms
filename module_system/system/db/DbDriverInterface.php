@@ -8,6 +8,7 @@
 namespace Kajona\System\System\Db;
 
 use Kajona\System\System\Database;
+use Kajona\System\System\DbConnectionParams;
 use Kajona\System\System\Exception;
 
 /**
@@ -22,16 +23,11 @@ interface DbDriverInterface
     /**
      * This method makes sure to connect to the database properly
      *
-     * @param string $strHost
-     * @param string $strUsername
-     * @param string $strPass
-     * @param string $strDbName
-     * @param int $intPort
+     * @param DbConnectionParams $objParams
      *
      * @return bool
-     * @throws Exception
      */
-    public function dbconnect($strHost, $strUsername, $strPass, $strDbName, $intPort);
+    public function dbconnect(DbConnectionParams $objParams);
 
     /**
      * Closes the connection to the database

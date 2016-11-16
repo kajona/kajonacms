@@ -15,6 +15,7 @@ use Kajona\System\System\Carrier;
 use Kajona\System\System\Classloader;
 use Kajona\System\System\Cookie;
 use Kajona\System\System\CoreEventdispatcher;
+use Kajona\System\System\DbConnectionParams;
 use Kajona\System\System\Exception;
 use Kajona\System\System\HttpResponsetypes;
 use Kajona\System\System\Lang;
@@ -269,15 +270,7 @@ class Installer
 
 
             //try to validate the data passed
-            $bitCxCheck = Carrier::getInstance()->getObjDB()->validateDbCxData(
-                $_POST["driver"],
-                $_POST["hostname"],
-                $_POST["username"],
-                $_POST["password"],
-                $_POST["dbname"],
-                $_POST["port"]
-            );
-
+            $bitCxCheck = Carrier::getInstance()->getObjDB()->validateDbCxData($_POST["driver"], new DbConnectionParams($_POST["hostname"], $_POST["username"], $_POST["password"], $_POST["dbname"], $_POST["port"]));
 
             if ($bitCxCheck) {
                 $strFileContent = "<?php\n";
