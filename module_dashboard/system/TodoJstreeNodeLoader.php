@@ -7,14 +7,14 @@
 namespace Kajona\Dashboard\System;
 
 use Kajona\System\System\Carrier;
-use Kajona\System\System\InterfaceJStreeNodeLoader;
+use Kajona\System\System\JStreeNodeLoaderInterface;
 use Kajona\System\System\SystemJSTreeNode;
 
 /**
  * @package module_prozessverwaltung
  * @author christoph.kappestein@artemeon.de
  */
-class TodoJstreeNodeLoader implements InterfaceJStreeNodeLoader
+class TodoJstreeNodeLoader implements JStreeNodeLoaderInterface
 {
     private $objToolkit = null;
 

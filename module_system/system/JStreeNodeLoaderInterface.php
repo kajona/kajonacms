@@ -13,9 +13,33 @@ namespace Kajona\System\System;
 /**
  * Interface for loading tree nodes
  *
- * @deprecated
+ * @package module_system
+ * @author stefan.meyer1@yahoo.de
+ *
+ * @module system
+ * @moduleId _system_modul_id_
+ *
+ *
  */
-interface InterfaceJStreeNodeLoader extends JStreeNodeLoaderInterface
+interface JStreeNodeLoaderInterface
 {
 
+    /**
+     * Returns all child nodes for the given system id.
+     *
+     * @param $strSystemId
+     *
+     * @return SystemJSTreeNode[]
+     */
+    public function getChildNodes($strSystemId);
+
+
+    /**
+     * Returns a node for the tree.
+     *
+     * @param $strSystemId
+     *
+     * @return SystemJSTreeNode
+     */
+    public function getNode($strSystemId);
 }

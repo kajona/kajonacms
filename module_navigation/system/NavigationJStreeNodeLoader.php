@@ -12,7 +12,7 @@ namespace Kajona\Navigation\System;
 use Kajona\Pages\System\PagesPage;
 use Kajona\System\System\AdminskinHelper;
 use Kajona\System\System\Carrier;
-use Kajona\System\System\InterfaceJStreeNodeLoader;
+use Kajona\System\System\JStreeNodeLoaderInterface;
 use Kajona\System\System\Link;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\SystemJSTreeNode;
@@ -24,7 +24,7 @@ use Kajona\System\System\SystemJSTreeNode;
  * @module navigation
  * @moduleId navigation_modul_id_
  */
-class NavigationJStreeNodeLoader implements InterfaceJStreeNodeLoader
+class NavigationJStreeNodeLoader implements JStreeNodeLoaderInterface
 {
 
     const NODE_TYPE_NAVIGATIONPOINT = "navigationpoint";

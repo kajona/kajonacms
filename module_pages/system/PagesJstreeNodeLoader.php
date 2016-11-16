@@ -11,7 +11,7 @@ namespace Kajona\Pages\System;
 
 use Kajona\System\System\AdminskinHelper;
 use Kajona\System\System\Carrier;
-use Kajona\System\System\InterfaceJStreeNodeLoader;
+use Kajona\System\System\JStreeNodeLoaderInterface;
 use Kajona\System\System\Link;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\SystemJSTreeNode;
@@ -24,7 +24,7 @@ use Kajona\System\System\SystemModule;
  * @module pages
  * @moduleId _pages_modul_id_
  */
-class PagesJstreeNodeLoader implements InterfaceJStreeNodeLoader
+class PagesJstreeNodeLoader implements JStreeNodeLoaderInterface
 {
 
     const NODE_TYPE_PAGE_MODULE = "page_module";

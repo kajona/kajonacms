@@ -11,7 +11,7 @@
 namespace Kajona\System\System;
 
 /**
- * Base class for the tree nodes based on a class of type InterfaceJStreeNodeLoader.
+ * Base class for the tree nodes based on a class of type JStreeNodeLoaderInterface.
  * This class actually retrieves the nodes for a tree based on the given JsTreeNodeLoader
  *
  * @package module_system
@@ -32,9 +32,9 @@ class SystemJSTreeBuilder
     /**
      * SystemJSTreeBuilder constructor.
      *
-     * @param InterfaceJStreeNodeLoader $objNodeGetter
+     * @param JStreeNodeLoaderInterface $objNodeGetter
      */
-    public function __construct(InterfaceJStreeNodeLoader $objNodeGetter)
+    public function __construct(JStreeNodeLoaderInterface $objNodeGetter)
     {
         $this->objNodeLoader = $objNodeGetter;
     }
