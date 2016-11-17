@@ -17,39 +17,8 @@ namespace Kajona\System\System;
  * @module system
  * @moduleId _system_modul_id_
  */
-class SystemWorker {
-
-
-    /**
-     * Fetches a list of records currently marked as deleted
-     *
-     * @return Model[]
-     */
-    public static function getDeletedRecords($intStart = null, $intEnd = null) {
-        OrmBase::setObjHandleLogicalDeletedGlobal(OrmDeletedhandlingEnum::INCLUDED);
-        $strQuery = "SELECT system_id FROM "._dbprefix_."system WHERE system_deleted = 1 ORDER BY system_id DESC";
-        $arrRows = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
-
-        $arrReturn = array();
-        foreach($arrRows as $arrOneRow) {
-            $arrReturn[] = Objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
-        }
-
-        OrmBase::setObjHandleLogicalDeletedGlobal(OrmDeletedhandlingEnum::EXCLUDED);
-        return $arrReturn;
-    }
-
-    /**
-     * Counts the number of records currently marked as deleted
-     *
-     * @return int
-     */
-    public static function getDeletedRecordsCount() {
-        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_deleted = 1 ";
-        $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
-        return $arrRow["COUNT(*)"];
-    }
-
+class SystemWorker
+{
 
     /**
      * Checks if there are more nodes on the first level
@@ -57,7 +26,8 @@ class SystemWorker {
      *
      * @return array
      */
-    public function checkFirstLevelNodeConsistency() {
+    public function checkFirstLevelNodeConsistency()
+    {
         $strQuery = "SELECT system_id, system_comment
                        FROM "._dbprefix_."system
                        LEFT JOIN "._dbprefix_."system_module
@@ -78,7 +48,8 @@ class SystemWorker {
      *
      * @return array
      */
-    public function checkSystemTableCurPrevRelations() {
+    public function checkSystemTableCurPrevRelations()
+    {
         $arrReturn = array();
 
         //fetch all records
@@ -89,11 +60,11 @@ class SystemWorker {
         //Check every record for its prev_id. To get valid results, flush the db-cache
         Carrier::getInstance()->getObjDB()->flushQueryCache();
         foreach ($arrRecords as $arrOneRecord) {
-            $strQuery = "SELECT COUNT(*) as number
+            $strQuery = "SELECT COUNT(*) AS number
                            FROM "._dbprefix_."system
                           WHERE system_id = ?";
             $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($arrOneRecord["system_prev_id"]));
-            if($arrRow["number"] == "0") {
+            if ($arrRow["number"] == "0") {
                 $arrReturn[$arrOneRecord["system_id"]] = $arrOneRecord["system_comment"];
             }
         }
@@ -106,7 +77,8 @@ class SystemWorker {
      *
      * @return array
      */
-    public function chekRightSystemRelations() {
+    public function chekRightSystemRelations()
+    {
         $strQuery = "SELECT right_id, system_comment
                        FROM "._dbprefix_."system_right
                        LEFT JOIN "._dbprefix_."system
@@ -123,7 +95,8 @@ class SystemWorker {
      *
      * @return array
      */
-    public function checkDateSystemRelations() {
+    public function checkDateSystemRelations()
+    {
         $strQuery = "SELECT system_date_id
                        FROM "._dbprefix_."system_date
                        LEFT JOIN "._dbprefix_."system

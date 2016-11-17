@@ -24,6 +24,7 @@ use Kajona\System\System\ChangelogContainer;
 use Kajona\System\System\Date;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Filesystem;
+use Kajona\System\System\Filters\DeletedRecordsFilter;
 use Kajona\System\System\HttpResponsetypes;
 use Kajona\System\System\HttpStatuscodes;
 use Kajona\System\System\Lang;
@@ -69,8 +70,14 @@ use PHPExcel_Style_Fill;
  *
  * @module system
  * @moduleId _system_modul_id_
+ *
+ * @objectListAspect Kajona\System\System\SystemAspect
+ * @objectEditAspect Kajona\System\System\SystemAspect
+ * @objectNewAspect Kajona\System\System\SystemAspect
+ *
+ * @autoTestable listAspect
  */
-class SystemAdmin extends AdminSimple implements AdminInterface
+class SystemAdmin extends AdminEvensimpler implements AdminInterface
 {
 
     /**
@@ -87,7 +94,7 @@ class SystemAdmin extends AdminSimple implements AdminInterface
         if (SystemSetting::getConfigValue("_system_changehistory_enabled_") != "false") {
             $arrReturn[] = array("right3", Link::getLinkAdmin($this->getArrModule("modul"), "genericChangelog", "&bitBlockFolderview=true", $this->getLang("action_changelog"), "", "", true, "adminnavi"));
         }
-        $arrReturn[] = array("right5", Link::getLinkAdmin($this->getArrModule("modul"), "aspects", "", $this->getLang("action_aspects"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right5", Link::getLinkAdmin($this->getArrModule("modul"), "listAspect", "", $this->getLang("action_list_aspect"), "", "", true, "adminnavi"));
         $arrReturn[] = array("right1", Link::getLinkAdmin($this->getArrModule("modul"), "systemSessions", "", $this->getLang("action_system_sessions"), "", "", true, "adminnavi"));
         $arrReturn[] = array("right1", Link::getLinkAdmin($this->getArrModule("modul"), "lockedRecords", "", $this->getLang("action_locked_records"), "", "", true, "adminnavi"));
         $arrReturn[] = array("right1", Link::getLinkAdmin($this->getArrModule("modul"), "deletedRecords", "", $this->getLang("action_deleted_records"), "", "", true, "adminnavi"));
@@ -115,15 +122,7 @@ class SystemAdmin extends AdminSimple implements AdminInterface
         }
     }
 
-    /**
-     * Renders the form to create a new entry
-     *
-     * @return string
-     */
-    protected function actionNew()
-    {
 
-    }
 
     /**
      * Renders the form to edit an existing entry
@@ -135,7 +134,9 @@ class SystemAdmin extends AdminSimple implements AdminInterface
 
         $objInstance = Objectfactory::getInstance()->getObject($this->getSystemid());
         if ($objInstance instanceof SystemAspect) {
-            $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "editAspect", "&systemid=".$objInstance->getSystemid()));
+            $this->setStrCurObjectTypeName("Aspect");
+            $this->setCurObjectClassName(SystemAspect::class);
+            return parent::actionEdit();
         }
 
         if ($objInstance instanceof SystemModule) {
@@ -153,6 +154,11 @@ class SystemAdmin extends AdminSimple implements AdminInterface
      */
     protected function actionList()
     {
+        if ($this->getParam("action") == "listAspect") {
+            $this->setStrCurObjectTypeName("Aspect");
+            $this->setCurObjectClassName(SystemAspect::class);
+            return parent::actionList();
+        }
 
         $objIterator = new ArraySectionIterator(SystemModule::getObjectCountFiltered());
         $objIterator->setPageNumber($this->getParam("pv"));
@@ -232,9 +238,9 @@ class SystemAdmin extends AdminSimple implements AdminInterface
             return "";
         }
 
-        if ($objListEntry instanceof SystemAspect && $objListEntry->rightDelete()) {
-            return $this->objToolkit->listDeleteButton($objListEntry->getStrName(), $this->getLang("aspect_delete_question"), Link::getLinkAdminHref($this->getArrModule("modul"), "deleteAspect", "&systemid=".$objListEntry->getSystemid()));
-        }
+//        if ($objListEntry instanceof SystemAspect && $objListEntry->rightDelete()) {
+//            return $this->objToolkit->listDeleteButton($objListEntry->getStrName(), $this->getLang("aspect_delete_question"), Link::getLinkAdminHref($this->getArrModule("modul"), "deleteAspect", "&systemid=".$objListEntry->getSystemid()));
+//        }
 
         return parent::renderDeleteAction($objListEntry);
     }
@@ -251,9 +257,9 @@ class SystemAdmin extends AdminSimple implements AdminInterface
             return "";
         }
 
-        if ($strListIdentifier == "aspectList" && $this->getObjModule()->rightEdit()) {
-            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "newAspect", "", $this->getLang("aspect_create"), $this->getLang("aspect_create"), "icon_new"));
-        }
+//        if ($strListIdentifier == "aspectList" && $this->getObjModule()->rightEdit()) {
+//            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "newAspect", "", $this->getLang("aspect_create"), $this->getLang("aspect_create"), "icon_new"));
+//        }
 
         return parent::getNewEntryAction($strListIdentifier);
     }
@@ -639,11 +645,20 @@ JS;
      */
     protected function actionDeletedRecords()
     {
-        $objArraySectionIterator = new ArraySectionIterator(SystemWorker::getDeletedRecordsCount());
-        $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-        $objArraySectionIterator->setArraySection(SystemWorker::getDeletedRecords($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
         $strReturn = "";
+        /** @var  DeletedRecordsFilter $objFilter */
+        $objFilter = DeletedRecordsFilter::getOrCreateFromSession();
+        $strFilterForm = $this->renderFilter($objFilter);
+        if ($strFilterForm === AdminFormgeneratorFilter::STR_FILTER_REDIRECT) {
+            return "";
+        }
+        $strReturn .= $strFilterForm;
+
+        $objArraySectionIterator = new ArraySectionIterator(DeletedRecordsFilter::getDeletedRecordsCount($objFilter));
+        $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+        $objArraySectionIterator->setArraySection(DeletedRecordsFilter::getDeletedRecords($objFilter, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+
         if (!$objArraySectionIterator->valid()) {
             $strReturn .= $this->getLang("commons_list_empty");
         }
@@ -652,7 +667,6 @@ JS;
 
         /** @var Model $objOneRecord */
         foreach ($objArraySectionIterator as $objOneRecord) {
-
             $strImage = "";
             if ($objOneRecord instanceof AdminListableInterface) {
                 $strImage = $objOneRecord->getStrIcon();
@@ -1191,140 +1205,6 @@ JS;
         $objWriter->save('php://output');
         flush();
         die();
-    }
-
-    /**
-     * Renders the list of aspects available
-     *
-     * @return string
-     * @autoTestable
-     * @permissions right5
-     */
-    protected function actionAspects()
-    {
-        $objIterator = new ArraySectionIterator(SystemAspect::getObjectCountFiltered());
-        $objIterator->setPageNumber($this->getParam("pv"));
-        $objIterator->setArraySection(SystemAspect::getObjectListFiltered(null, "", $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
-        return $this->renderList($objIterator, false, "aspectList");
-    }
-
-    /**
-     * Delegate to actionNewAspect
-     *
-     * @return string
-     * @see actionNewAspect
-     */
-    protected function actionEditAspect()
-    {
-        return $this->actionNewAspect("edit");
-    }
-
-    /**
-     * Creates the form to edit an existing aspect or to create a new one
-     *
-     * @param string $strMode
-     * @param AdminFormgenerator $objFormManager
-     *
-     * @return string
-     * @permissions right5
-     */
-    protected function actionNewAspect($strMode = "new", AdminFormgenerator $objFormManager = null)
-    {
-
-        $objAspect = null;
-        if ($strMode == "new") {
-            $objAspect = new SystemAspect();
-        } elseif ($strMode == "edit") {
-            $objAspect = new SystemAspect($this->getSystemid());
-            if (!$objAspect->rightEdit()) {
-                $objAspect = null;
-            }
-        }
-
-        if ($objAspect != null) {
-
-            if ($objFormManager == null) {
-                $objFormManager = $this->getFormForAspect($objAspect);
-            }
-
-            $objFormManager->addField(new FormentryHidden("", "mode"))->setStrValue($strMode);
-            $strReturn = $objFormManager->renderForm(Link::getLinkAdminHref($this->getArrModule("modul"), "saveAspect"));
-
-        } else {
-            $strReturn = $this->getLang("commons_error_permissions");
-        }
-
-        return $strReturn;
-    }
-
-    /**
-     * Creates the admin-form to edit / create an aspect
-     *
-     * @param SystemAspect $objAspect
-     *
-     * @return AdminFormgenerator
-     */
-    private function getFormForAspect(SystemAspect $objAspect)
-    {
-        $objFormManager = new AdminFormgenerator("aspect", $objAspect);
-        $objFormManager->generateFieldsFromObject();
-        return $objFormManager;
-    }
-
-    /**
-     * saves the submitted form-data as a new aspect or updates an existing one
-     *
-     * @throws Exception
-     * @return string, "" in case of success
-     * @permissions right5
-     */
-    protected function actionSaveAspect()
-    {
-        $objAspect = null;
-
-        if ($this->getParam("mode") == "new") {
-            $objAspect = new SystemAspect();
-        } elseif ($this->getParam("mode") == "edit") {
-            $objAspect = new SystemAspect($this->getSystemid());
-        }
-
-        if ($objAspect != null) {
-
-            $objFormManager = $this->getFormForAspect($objAspect);
-
-            if (!$objFormManager->validateForm()) {
-                return $this->actionNewAspect($this->getParam("mode"), $objFormManager);
-            }
-
-            $objFormManager->updateSourceObject();
-
-            if (!$objAspect->updateObjectToDb()) {
-                throw new Exception("Error creating new aspect", Exception::$level_ERROR);
-            }
-        }
-        $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "aspects"));
-        return "";
-    }
-
-    /**
-     * Deletes an aspect
-     *
-     * @throws Exception
-     * @return string
-     */
-    protected function actionDeleteAspect()
-    {
-        $objAspect = new SystemAspect($this->getSystemid());
-        if ($objAspect->rightDelete() && $objAspect->rightRight5()) {
-            if (!$objAspect->deleteObject()) {
-                throw new Exception("Error deleting aspect", Exception::$level_ERROR);
-            }
-
-            $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "aspects"));
-        } else {
-            return $this->getLang("commons_error_permissions");
-        }
-        return "";
     }
 
 
