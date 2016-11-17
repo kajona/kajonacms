@@ -2,7 +2,7 @@
 /**
  * Folderview functions
  */
-define(["jquery"], function($){
+define(["jquery", "util"], function($, util){
 
     return {
         /**
@@ -64,6 +64,88 @@ define(["jquery"], function($){
                     }
                 }
             }
+        },
+
+        /**
+         * Sets an array of items to an object list. We remove only elements which are available in the arrAvailableIds array
+         *
+         * @param {string} strElementName  - name of the objectlist element
+         * @param {Array} arrItems        - array with item of the following format {strSystemId: <systemid>, strDisplayName:<displayname>, strIcon:<icon>}
+         * @param {Array} arrAvailableIds -
+         * @param {string} strDeleteButton -
+         */
+        setObjectListItems: function(strElementName, arrItems, arrAvailableIds, strDeleteButton){
+            var table = util.getElementFromOpener(strElementName);
+
+            var tbody = table.find('tbody');
+            if(tbody.length > 0) {
+                // remove only elements which are in the arrAvailableIds array
+                tbody.children().each(function(){
+                    var strId = $(this).find('input[type="hidden"]').val();
+                    if($.inArray(strId, arrAvailableIds) !== -1) {//if strId in array
+                        $(this).remove();
+                    }
+                });
+
+                // add new elements
+                for(var i = 0; i < arrItems.length; i++) {
+                    var strEscapedTitle = $('<div></div>').text(arrItems[i].strDisplayName).html();
+                    var html = '';
+                    html+= '<tr>';
+                    html+= '    <td>' + arrItems[i].strIcon + '</td>';
+                    html+= '    <td>' + strEscapedTitle + ' <input type="hidden" name="' + strElementName + '[]" value="' + arrItems[i].strSystemId + '" /></td>';
+                    html+= '    <td class="icon-cell">';
+                    html+= '        <a href="#" onclick="require(\'v4skin\').removeObjectListItem(this);return false">' + strDeleteButton + '</a>';
+                    html+= '    </td>';
+                    html+= '</tr>';
+
+                    tbody.append(html);
+                }
+            }
+
+            this.close();
+        },
+
+        /**
+         * Sets an array of items to an checkbox object list
+         *
+         * @param {string} strElementName  - name of the objectlist element
+         * @param {Array} arrItems        - array with item of the following format {strSystemId: <systemid>, strDisplayName:<displayname>, strIcon:<icon>, strPath:<string>}
+         */
+        setCheckboxArrayObjectListItems : function(strElementName, arrItems){
+            var form = util.getElementFromOpener(strElementName);
+
+            var table = form.find('table');
+            if(table.length > 0) {
+                // add new elements
+                for(var i = 0; i < arrItems.length; i++) {
+                    var strEscapedTitle = $('<div></div>').text(arrItems[i].strDisplayName).html();
+                    var html = '';
+
+                    // check whether form entry exists already in the table if so skip. We need to escape the form element name
+                    // since it contains brackets
+                    var formElementName = strElementName + '[' + arrItems[i].strSystemId + ']';
+                    var existingFormEls = table.find('input[name=' + formElementName.replace(/(:|\.|\[|\]|,)/g, "\\$1") + ']');
+                    if (existingFormEls.length > 0) {
+                        continue;
+                    }
+
+                    html+= '<tbody>';
+                    html+= '<tr data-systemid="' + arrItems[i].strSystemId + '">';
+                    html+= '    <td class="listcheckbox"><input type="checkbox" name="' + formElementName + '" data-systemid="' + arrItems[i].strSystemId + '" checked></td>';
+                    html+= '    <td class="listimage">' + arrItems[i].strIcon + '</td>';
+                    html+= '    <td class="title">';
+                    html+= '        <div class="small text-muted">' + arrItems[i].strPath + '</div>';
+                    html+= '        ' + arrItems[i].strDisplayName;
+                    html+= '    </td>';
+                    html+= '</tr>';
+                    html+= '</tbody>';
+
+                    table.append(html);
+                }
+            }
+
+            this.close();
         },
 
         /**
