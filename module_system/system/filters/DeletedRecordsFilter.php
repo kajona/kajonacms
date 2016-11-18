@@ -10,9 +10,9 @@ namespace Kajona\System\System\Filters;
 
 use Kajona\System\System\Carrier;
 use Kajona\System\System\FilterBase;
-use Kajona\System\System\Model;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\OrmBase;
+use Kajona\System\System\OrmCompositeCondition;
 use Kajona\System\System\OrmDeletedhandlingEnum;
 
 /**
@@ -50,22 +50,31 @@ class DeletedRecordsFilter extends FilterBase
      */
     private $strComment;
 
+    /**
+     * @var int
+     * @tableColumn system.system_deleted
+     */
+    private $intDeleted = 1;
 
     /**
      * Fetches a list of records currently marked as deleted
      *
-     * @return Model[]
+     * @param DeletedRecordsFilter $objFilter
+     * @param null $intStart
+     * @param null $intEnd
+     *
+     * @return \Kajona\System\System\Model[]
      */
     public static function getDeletedRecords(DeletedRecordsFilter $objFilter, $intStart = null, $intEnd = null)
     {
         OrmBase::setObjHandleLogicalDeletedGlobal(OrmDeletedhandlingEnum::INCLUDED);
-        $strQuery = "SELECT system_id FROM "._dbprefix_."system AS system WHERE system.system_deleted = 1";
 
-        $arrParams = array();
-        foreach ($objFilter->getOrmConditions() as $objOneCondition) {
-            $strQuery .= " AND ".$objOneCondition->getStrWhere();
-            $arrParams = array_merge($arrParams, $objOneCondition->getArrParams());
-        }
+        $objFilter->setIntDeleted(1);
+        $strQuery = "SELECT system_id FROM "._dbprefix_."system AS system WHERE ";
+
+        $objCompound = new OrmCompositeCondition($objFilter->getOrmConditions());
+        $strQuery .= $objCompound->getStrWhere();
+        $arrParams = $objCompound->getArrParams();
 
         $strQuery .= " ORDER BY system.system_id DESC";
 
@@ -85,16 +94,18 @@ class DeletedRecordsFilter extends FilterBase
     /**
      * Counts the number of records currently marked as deleted
      *
+     * @param DeletedRecordsFilter $objFilter
+     *
      * @return int
      */
     public static function getDeletedRecordsCount(DeletedRecordsFilter $objFilter)
     {
-        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system AS system WHERE system.system_deleted = 1 ";
-        $arrParams = array();
-        foreach ($objFilter->getOrmConditions() as $objOneCondition) {
-            $strQuery .= " AND ".$objOneCondition->getStrWhere();
-            $arrParams = array_merge($arrParams, $objOneCondition->getArrParams());
-        }
+        $objFilter->setIntDeleted(1);
+        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system AS system WHERE ";
+
+        $objCompound = new OrmCompositeCondition($objFilter->getOrmConditions());
+        $strQuery .= $objCompound->getStrWhere();
+        $arrParams = $objCompound->getArrParams();
 
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
         return $arrRow["COUNT(*)"];
@@ -148,6 +159,24 @@ class DeletedRecordsFilter extends FilterBase
     {
         $this->strComment = $strComment;
     }
+
+    /**
+     * @return int
+     */
+    public function getIntDeleted()
+    {
+        return $this->intDeleted;
+    }
+
+    /**
+     * @param int $intDeleted
+     */
+    public function setIntDeleted($intDeleted)
+    {
+        $this->intDeleted = $intDeleted;
+    }
+
+
 
 
 
