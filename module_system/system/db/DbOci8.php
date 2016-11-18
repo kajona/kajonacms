@@ -8,6 +8,7 @@
 namespace Kajona\System\System\Db;
 
 use Kajona\System\System\Database;
+use Kajona\System\System\DbConnectionParams;
 use Kajona\System\System\DbDatatypes;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Logger;
@@ -25,11 +26,8 @@ class DbOci8 extends DbBase
 {
 
     private $linkDB; //DB-Link
-    private $strHost = "";
-    private $strUsername = "";
-    private $strPass = "";
-    private $strDbName = "";
-    private $intPort = "";
+    /** @var DbConnectionParams  */
+    private $objCfg = null;
 
     private $strDumpBin = "exp"; // Binary to dump db (if not in path, add the path here)
     // /usr/lib/oracle/xe/app/oracle/product/10.2.0/server/bin/
@@ -47,34 +45,18 @@ class DbOci8 extends DbBase
     private $bitResetOrder = false;
 
     /**
-     * This method makes sure to connect to the database properly
-     *
-     * @param string $strHost
-     * @param string $strUsername
-     * @param string $strPass
-     * @param string $strDbName
-     * @param int $intPort
-     *
-     * @return bool
-     * @throws Exception
+     * @inheritdoc
      */
-    public function dbconnect($strHost, $strUsername, $strPass, $strDbName, $intPort)
+    public function dbconnect(DbConnectionParams $objParams)
     {
-        if ($intPort == "") {
-            $intPort = "1521";
+        if ($objParams->getIntPort() == "" || $objParams->getIntPort() == 0) {
+            $objParams->setIntPort(1521);
         }
-
-        //save connection-details
-        $this->strHost = $strHost;
-        $this->strUsername = $strUsername;
-        $this->strPass = $strPass;
-        $this->strDbName = $strDbName;
-        $this->intPort = $intPort;
-
-        //try to set the NLS_LANG env attribute
+        $this->objCfg = $objParams;
+                //try to set the NLS_LANG env attribute
         putenv("NLS_LANG=American_America.UTF8");
 
-        $this->linkDB = @oci_connect($strUsername, $strPass, $strHost.":".$intPort."/".$strDbName, "AL32UTF8");
+        $this->linkDB = @oci_connect($this->objCfg->getStrUsername(), $this->objCfg->getStrPass(), $this->objCfg->getStrHost().":".$this->objCfg->getIntPort()."/".$this->objCfg->getStrDbName(), "AL32UTF8");
 
 
         if ($this->linkDB !== false) {
@@ -571,13 +553,7 @@ class DbOci8 extends DbBase
         $strFilename = _realpath_.$strFilename;
         $strTables = implode(",", $arrTables);
 
-        /*
-        if ($this->strPass != "") {
-        	$strParamPass = " -p".$this->strPass;
-        }
-        */
-
-        $strCommand = $this->strDumpBin." ".$this->strUsername."/".$this->strPass." CONSISTENT=n TABLES=".$strTables." FILE='".$strFilename."'";
+        $strCommand = $this->strDumpBin." ".$this->objCfg->getStrUsername()."/".$this->objCfg->getStrPass()." CONSISTENT=n TABLES=".$strTables." FILE='".$strFilename."'";
         Logger::getInstance(Logger::DBLOG)->addLogRow("dump command: ".$strCommand, Logger::$levelInfo);
         //Now do a systemfork
         $intTemp = "";
@@ -597,7 +573,7 @@ class DbOci8 extends DbBase
     {
 
         $strFilename = _realpath_.$strFilename;
-        $strCommand = $this->strRestoreBin." ".$this->strUsername."/".$this->strPass." FILE='".$strFilename."'";
+        $strCommand = $this->strRestoreBin." ".$this->objCfg->getStrUsername()."/".$this->objCfg->getStrPass()." FILE='".$strFilename."'";
         $intTemp = "";
         system($strCommand, $intTemp);
         Logger::getInstance(Logger::DBLOG)->addLogRow($this->strRestoreBin." exited with code ".$intTemp, Logger::$levelInfo);

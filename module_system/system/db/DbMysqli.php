@@ -8,6 +8,7 @@
 namespace Kajona\System\System\Db;
 
 use Kajona\System\System\Database;
+use Kajona\System\System\DbConnectionParams;
 use Kajona\System\System\DbDatatypes;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Logger;
@@ -23,48 +24,30 @@ use mysqli_stmt;
 class DbMysqli extends DbBase
 {
 
-    /**
-     * @var mysqli
-     */
+    /**  @var mysqli */
     private $linkDB; //DB-Link
-    private $strHost = "";
-    private $strUsername = "";
-    private $strPass = "";
-    private $strDbName = "";
-    private $intPort = "";
+    /** @var  DbConnectionParams */
+    private $objCfg;
     private $strDumpBin = "mysqldump"; //Binary to dump db (if not in path, add the path here)
     private $strRestoreBin = "mysql"; //Binary to dump db (if not in path, add the path here)
 
     private $strErrorMessage = "";
 
     /**
-     * This method makes sure to connect to the database properly
-     *
-     * @param string $strHost
-     * @param string $strUsername
-     * @param string $strPass
-     * @param string $strDbName
-     * @param int $intPort
-     *
-     * @return bool
-     * @throws Exception
+     * @inheritdoc
      */
-    public function dbconnect($strHost, $strUsername, $strPass, $strDbName, $intPort)
+    public function dbconnect(DbConnectionParams $objParams)
     {
-        if ($intPort == "") {
-            $intPort = "3306";
+        if ($objParams->getIntPort() == "" || $objParams->getIntPort() == 0) {
+            $objParams->setIntPort(3306);
         }
 
         //save connection-details
-        $this->strHost = $strHost;
-        $this->strUsername = $strUsername;
-        $this->strPass = $strPass;
-        $this->strDbName = $strDbName;
-        $this->intPort = $intPort;
+        $this->objCfg = $objParams;
 
-        $this->linkDB = @new mysqli($strHost, $strUsername, $strPass, $strDbName, $intPort);
+        $this->linkDB = @new mysqli($this->objCfg->getStrHost(), $this->objCfg->getStrUsername(), $this->objCfg->getStrPass(), $this->objCfg->getStrDbName(), $this->objCfg->getIntPort());
         if ($this->linkDB !== false) {
-            if (@$this->linkDB->select_db($strDbName)) {
+            if (@$this->linkDB->select_db($this->objCfg->getStrDbName())) {
                 //erst ab mysql-client-bib > 4
                 //mysqli_set_charset($this->linkDB, "utf8");
                 $this->_pQuery("SET NAMES 'utf8'", array());
@@ -482,11 +465,11 @@ class DbMysqli extends DbBase
         $strTables = implode(" ", $arrTables);
         $strParamPass = "";
 
-        if ($this->strPass != "") {
-            $strParamPass = " -p\"".$this->strPass."\"";
+        if ($this->objCfg->getStrPass() != "") {
+            $strParamPass = " -p\"".$this->objCfg->getStrPass()."\"";
         }
 
-        $strCommand = $this->strDumpBin." -h".$this->strHost." -u".$this->strUsername.$strParamPass." -P".$this->intPort." ".$this->strDbName." ".$strTables." > \"".$strFilename."\"";
+        $strCommand = $this->strDumpBin." -h".$this->objCfg->getStrHost()." -u".$this->objCfg->getStrUsername().$strParamPass." -P".$this->objCfg->getIntPort()." ".$this->objCfg->getStrDbName()." ".$strTables." > \"".$strFilename."\"";
         //Now do a systemfork
         $intTemp = "";
         system($strCommand, $intTemp);
@@ -511,11 +494,11 @@ class DbMysqli extends DbBase
         $strFilename = _realpath_.$strFilename;
         $strParamPass = "";
 
-        if ($this->strPass != "") {
-            $strParamPass = " -p\"".$this->strPass."\"";
+        if ($this->objCfg->getStrPass() != "") {
+            $strParamPass = " -p\"".$this->objCfg->getStrPass()."\"";
         }
 
-        $strCommand = $this->strRestoreBin." -h".$this->strHost." -u".$this->strUsername.$strParamPass." -P".$this->intPort." ".$this->strDbName." < \"".$strFilename."\"";
+        $strCommand = $this->strRestoreBin." -h".$this->objCfg->getStrHost()." -u".$this->objCfg->getStrUsername().$strParamPass." -P".$this->objCfg->getIntPort()." ".$this->objCfg->getStrDbName()." < \"".$strFilename."\"";
         $intTemp = "";
         system($strCommand, $intTemp);
         if ($intTemp == 0) {

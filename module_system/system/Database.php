@@ -72,7 +72,6 @@ class Database
         //Load the defined db-driver
         $strDriver = Config::getInstance()->getConfig("dbdriver");
         if ($strDriver != "%%defaultdriver%%") {
-
             //build a class-name & include the driver
             $strPath = Resourceloader::getInstance()->getPathForFile("/system/db/Db".ucfirst($strDriver).".php");
             $objDriver = Classloader::getInstance()->getInstanceFromFilename($strPath);
@@ -133,15 +132,9 @@ class Database
         if ($this->objDbDriver !== null) {
             try {
                 Logger::getInstance(Logger::DBLOG)->addLogRow("creating database-connection using driver ".get_class($this->objDbDriver), Logger::$levelInfo);
-                $this->objDbDriver->dbconnect(
-                    Config::getInstance()->getConfig("dbhost"),
-                    Config::getInstance()->getConfig("dbusername"),
-                    Config::getInstance()->getConfig("dbpassword"),
-                    Config::getInstance()->getConfig("dbname"),
-                    Config::getInstance()->getConfig("dbport")
-                );
-            }
-            catch (Exception $objException) {
+                $objCfg = Config::getInstance("module_system", "config.php");
+                $this->objDbDriver->dbconnect(new DbConnectionParams($objCfg->getConfig("dbhost"), $objCfg->getConfig("dbusername"), $objCfg->getConfig("dbpassword"), $objCfg->getConfig("dbname"), $objCfg->getConfig("dbport")));
+            } catch (Exception $objException) {
                 $objException->processException();
             }
 
@@ -520,7 +513,6 @@ class Database
         }
 
         if ($this->objDbDriver != null) {
-
             //check, if the current tx is allowed to be commited
             if ($this->intNumberOfOpenTransactions == 1) {
                 //so, this is the last remaining tx. Commit or rollback?
@@ -552,7 +544,6 @@ class Database
         }
 
         if ($this->objDbDriver != null) {
-
             if ($this->intNumberOfOpenTransactions == 1) {
                 //so, this is the last remaining tx. rollback anyway
                 $this->objDbDriver->transactionRollback();
@@ -585,7 +576,6 @@ class Database
 
         $arrReturn = array();
         if ($this->objDbDriver != null) {
-
             if ($bitAll && isset($this->arrTablesCache["all"])) {
                 return $this->arrTablesCache["all"];
             } elseif (isset($this->arrTablesCache["filtered"])) {
@@ -816,8 +806,7 @@ class Database
                 if (!$objGzip->compressFile($strTargetFilename, true)) {
                     Logger::getInstance(Logger::DBLOG)->addLogRow("Failed to compress (gzip) the file ".basename($strTargetFilename)."", Logger::$levelWarning);
                 }
-            }
-            catch (Exception $objExc) {
+            } catch (Exception $objExc) {
                 $objExc->processException();
             }
         }
@@ -855,8 +844,7 @@ class Database
                     Logger::getInstance(Logger::DBLOG)->addLogRow("Failed to decompress (gzip) the file ".basename($strFilename)."", Logger::$levelWarning);
                     return false;
                 }
-            }
-            catch (Exception $objExc) {
+            } catch (Exception $objExc) {
                 $objExc->processException();
                 return false;
             }
@@ -1088,15 +1076,11 @@ class Database
      * The connection established will be closed directly and is not usable by other modules.
      *
      * @param string $strDriver
-     * @param string $strDbHost
-     * @param string $strDbUser
-     * @param string $strDbPass
-     * @param string $strDbName
-     * @param int $intDbPort
+     * @param DbConnectionParams $objCfg
      *
      * @return bool
      */
-    public function validateDbCxData($strDriver, $strDbHost, $strDbUser, $strDbPass, $strDbName, $intDbPort)
+    public function validateDbCxData($strDriver, DbConnectionParams $objCfg)
     {
 
         /** @var $objDbDriver DbDriverInterface */
@@ -1110,12 +1094,11 @@ class Database
         }
 
         try {
-            if ($objDbDriver != null && $objDbDriver->dbconnect($strDbHost, $strDbUser, $strDbPass, $strDbName, $intDbPort)) {
+            if ($objDbDriver != null && $objDbDriver->dbconnect($objCfg)) {
                 $objDbDriver->dbclose();
                 return true;
             }
-        }
-        catch (Exception $objEx) {
+        } catch (Exception $objEx) {
             return false;
         }
 
@@ -1156,7 +1139,6 @@ class Database
     public function prettifyQuery($strQuery, $arrParams)
     {
         foreach ($arrParams as $strOneParam) {
-
             if (!is_numeric($strOneParam)) {
                 $strOneParam = "'{$strOneParam}'";
             }
