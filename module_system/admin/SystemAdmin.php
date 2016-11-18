@@ -238,10 +238,6 @@ class SystemAdmin extends AdminEvensimpler implements AdminInterface
             return "";
         }
 
-//        if ($objListEntry instanceof SystemAspect && $objListEntry->rightDelete()) {
-//            return $this->objToolkit->listDeleteButton($objListEntry->getStrName(), $this->getLang("aspect_delete_question"), Link::getLinkAdminHref($this->getArrModule("modul"), "deleteAspect", "&systemid=".$objListEntry->getSystemid()));
-//        }
-
         return parent::renderDeleteAction($objListEntry);
     }
 
@@ -256,10 +252,6 @@ class SystemAdmin extends AdminEvensimpler implements AdminInterface
         if ($strListIdentifier == "moduleList") {
             return "";
         }
-
-//        if ($strListIdentifier == "aspectList" && $this->getObjModule()->rightEdit()) {
-//            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "newAspect", "", $this->getLang("aspect_create"), $this->getLang("aspect_create"), "icon_new"));
-//        }
 
         return parent::getNewEntryAction($strListIdentifier);
     }
@@ -605,7 +597,6 @@ JS;
         $strReturn .= $this->objToolkit->listHeader();
 
         foreach ($objArraySectionIterator as $objOneRecord) {
-
             $strImage = "";
             if ($objOneRecord instanceof AdminListableInterface) {
                 $strImage = $objOneRecord->getStrIcon();
@@ -748,7 +739,6 @@ JS;
             $strReturn .= $this->objToolkit->formClose();
             return $strReturn;
         } else {
-
             OrmBase::setObjHandleLogicalDeletedGlobal(OrmDeletedhandlingEnum::INCLUDED);
             $objRecord = Objectfactory::getInstance()->getObject($this->getSystemid());
             if ($objRecord !== null && !$objRecord->rightDelete()) {
@@ -1084,6 +1074,7 @@ JS;
      *
      * @since 4.6.6
      * @permissions changelog
+     * @return string
      */
     protected function actionGenericChangelogExportExcel($strSystemid = "")
     {
@@ -1469,7 +1460,7 @@ JS;
      */
     protected function actionDelete()
     {
-        if(ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML())) {
+        if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML())) {
             $strReturn = "";
             $objCommon = Objectfactory::getInstance()->getObject($this->getSystemid());
             if ($objCommon != null && $objCommon->rightDelete() && $objCommon->getLockManager()->isAccessibleForCurrentUser()) {
@@ -1486,8 +1477,7 @@ JS;
             }
 
             return $strReturn;
-        }
-        else {
+        } else {
             parent::actionDelete();
         }
         return "";
@@ -1644,8 +1634,6 @@ JS;
         $objYearAgo = new Date($this->getParam("yearAgo"));
         $strSystemId = $this->getSystemid();
 
-        /** @var VersionableInterface $objObject */
-        $objObject = Objectfactory::getInstance()->getObject($strSystemId);
         $arrDates = SystemChangelog::getDatesForSystemid($strSystemId, $objYearAgo, $objNow);
 
         $arrResult = array();
@@ -1663,6 +1651,4 @@ JS;
 
         return json_encode($arrChart);
     }
-
 }
-
