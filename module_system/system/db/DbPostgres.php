@@ -8,6 +8,7 @@
 namespace Kajona\System\System\Db;
 
 use Kajona\System\System\Carrier;
+use Kajona\System\System\DbConnectionParams;
 use Kajona\System\System\DbDatatypes;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Logger;
@@ -24,42 +25,25 @@ class DbPostgres extends DbBase
 {
 
     private $linkDB; //DB-Link
-    private $strHost = "";
-    private $strUsername = "";
-    private $strPass = "";
-    private $strDbName = "";
-    private $intPort = "";
+
+    /** @var DbConnectionParams */
+    private $objCfg = null;
+
     private $strDumpBin = "pg_dump"; //Binary to dump db (if not in path, add the path here)
     private $strRestoreBin = "psql"; //Binary to restore db (if not in path, add the path here)
 
     private $arrCxInfo = array();
 
     /**
-     * This method makes sure to connect to the database properly
-     *
-     * @param string $strHost
-     * @param string $strUsername
-     * @param string $strPass
-     * @param string $strDbName
-     * @param int $intPort
-     *
-     * @return bool
-     * @throws Exception
+     * @inheritdoc
      */
-    public function dbconnect($strHost, $strUsername, $strPass, $strDbName, $intPort)
+    public function dbconnect(DbConnectionParams $objParams)
     {
-        if ($intPort == "") {
-            $intPort = "5432";
+        if ($objParams->getIntPort() == "" || $objParams->getIntPort() == 0) {
+            $objParams->setIntPort(5432);
         }
-
-        //save connection-details
-        $this->strHost = $strHost;
-        $this->strUsername = $strUsername;
-        $this->strPass = $strPass;
-        $this->strDbName = $strDbName;
-        $this->intPort = $intPort;
-
-        $this->linkDB = @pg_connect("host='".$strHost."' port='".$intPort."' dbname='".$strDbName."' user='".$strUsername."' password='".$strPass."'");
+        $this->objCfg = $objParams;
+        $this->linkDB = @pg_connect("host='".$objParams->getStrHost()."' port='".$objParams->getIntPort()."' dbname='".$objParams->getStrDbName()."' user='".$objParams->getStrUsername()."' password='".$objParams->getStrPass()."'");
 
         if ($this->linkDB !== false) {
             $this->_pQuery("SET client_encoding='UTF8'", array());
@@ -449,12 +433,12 @@ class DbPostgres extends DbBase
         $strTables = "-t ".implode(" -t ", $arrTables);
 
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            $strCommand = "SET \"PGPASSWORD=$this->strPass\" && ";
+            $strCommand = "SET \"PGPASSWORD=".$this->objCfg->getStrPass()."\" && ";
         } else {
-            $strCommand = "PGPASSWORD=\"".$this->strPass."\" ";
+            $strCommand = "PGPASSWORD=\"".$this->objCfg->getStrPass()."\" ";
         }
 
-        $strCommand .= $this->strDumpBin." --clean --no-owner -h".$this->strHost." -U".$this->strUsername." -p".$this->intPort." ".$strTables." ".$this->strDbName." > \"".$strFilename."\"";
+        $strCommand .= $this->strDumpBin." --clean --no-owner -h".$this->objCfg->getStrHost()." -U".$this->objCfg->getStrUsername()." -p".$this->objCfg->getIntPort()." ".$strTables." ".$this->objCfg->getStrDbName()." > \"".$strFilename."\"";
         //Now do a systemfork
         $intTemp = "";
         $strResult = system($strCommand, $intTemp);
@@ -474,12 +458,12 @@ class DbPostgres extends DbBase
         $strFilename = _realpath_.$strFilename;
 
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            $strCommand = "SET \"PGPASSWORD=$this->strPass\" && ";
+            $strCommand = "SET \"PGPASSWORD=".$this->objCfg->getStrPass()."\" && ";
         } else {
-            $strCommand = "PGPASSWORD=\"".$this->strPass."\" ";
+            $strCommand = "PGPASSWORD=\"".$this->objCfg->getStrPass()."\" ";
         }
 
-        $strCommand .= $this->strRestoreBin." -q -h".$this->strHost." -U".$this->strUsername." -p".$this->intPort." ".$this->strDbName." < \"".$strFilename."\"";
+        $strCommand .= $this->strRestoreBin." -q -h".$this->objCfg->getStrHost()." -U".$this->objCfg->getStrUsername()." -p".$this->objCfg->getIntPort()." ".$this->objCfg->getStrDbName()." < \"".$strFilename."\"";
         $intTemp = "";
         $strResult = system($strCommand, $intTemp);
         Logger::getInstance(Logger::DBLOG)->addLogRow($this->strRestoreBin." exited with code ".$intTemp, Logger::$levelInfo);
@@ -561,7 +545,4 @@ class DbPostgres extends DbBase
         $this->_pQuery("DISCARD ALL", array());
         parent::flushQueryCache();
     }
-
-
 }
-

@@ -12,7 +12,7 @@ use Kajona\System\System\AdminskinHelper;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Exception;
 use Kajona\System\System\GraphCommons;
-use Kajona\System\System\GraphInterface;
+use Kajona\System\System\GraphExtendedInterface;
 use Kajona\System\System\Lang;
 use Kajona\System\System\Resourceloader;
 
@@ -25,7 +25,7 @@ use Kajona\System\System\Resourceloader;
  * @since 4.3
  * @author stefan.meyer1@yahoo.de
  */
-class GraphJqplot implements GraphInterface
+class GraphJqplot implements GraphExtendedInterface
 {
 
     private $intWidth = 700;
