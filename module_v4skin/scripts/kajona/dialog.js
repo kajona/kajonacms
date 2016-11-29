@@ -1,5 +1,5 @@
 
-define(['jquery'], function ($) {
+define(['jquery', 'bootstrap'], function ($, bootstrap) {
 
     return function (strDialogId, intDialogType, bitDragging, bitResizing) {
         this.dialog = null;
