@@ -8,6 +8,7 @@
 namespace Kajona\System\System\Db;
 
 use Kajona\System\System\Database;
+use Kajona\System\System\DbConnectionParams;
 use Kajona\System\System\DbDatatypes;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Filesystem;
@@ -34,25 +35,15 @@ class DbSqlite3 extends DbBase
     private $strDbFile;
 
     /**
-     * This method makes sure to connect to the database properly
-     *
-     * @param string $strHost
-     * @param string $strUsername
-     * @param string $strPass
-     * @param string $strDbName
-     * @param int $intPort
-     *
-     * @throws Exception
-     * @return bool
+     * @inheritdoc
      */
-    public function dbconnect($strHost, $strUsername, $strPass, $strDbName, $intPort)
+    public function dbconnect(DbConnectionParams $objParams)
     {
-
-        if ($strDbName == "") {
+        if ($objParams->getStrDbName() == "") {
             return false;
         }
 
-        $this->strDbFile = _projectpath_.'/dbdumps/'.$strDbName.'.db3';
+        $this->strDbFile = _projectpath_.'/dbdumps/'.$objParams->getStrDbName().'.db3';
 
         try {
             $strPath = _realpath_.$this->strDbFile;
@@ -92,7 +83,7 @@ class DbSqlite3 extends DbBase
         /* Get existing table info */
         $arrPragmaTableInfo = $this->getPArray("PRAGMA table_info('{$strTargetTableName}')", array());
         $arrColumnsPragma = array();
-        foreach($arrPragmaTableInfo as $arrRow) {
+        foreach ($arrPragmaTableInfo as $arrRow) {
             $arrColumnsPragma[$arrRow['name']] = $arrRow;
         }
 
@@ -116,10 +107,9 @@ class DbSqlite3 extends DbBase
         foreach ($arrTargetTableInfo as $arrOneColumn) {
             $arrRow = null;
 
-            if(array_key_exists($arrOneColumn["columnName"], $arrColumnsPragma)) {
+            if (array_key_exists($arrOneColumn["columnName"], $arrColumnsPragma)) {
                 $arrRow = $arrColumnsPragma[$arrOneColumn["columnName"]];
-            }
-            else {
+            } else {
                 $arrRow["name"] = $arrOneColumn["columnName"];
                 $arrRow["type"] = $arrOneColumn["columnType"];
             }
@@ -127,20 +117,19 @@ class DbSqlite3 extends DbBase
             //column settings
             $strColumn = " ".$arrRow["name"]." ".$arrRow["type"];
 
-            if(array_key_exists("notnull", $arrRow) && $arrRow["notnull"] === 1) {
+            if (array_key_exists("notnull", $arrRow) && $arrRow["notnull"] === 1) {
                 $strColumn .= " NOT NULL ";
-            }
-            elseif(array_key_exists("notnull", $arrRow) && $arrRow["notnull"] === 0) {
+            } elseif (array_key_exists("notnull", $arrRow) && $arrRow["notnull"] === 0) {
                 $strColumn .= " NULL ";
             }
 
-            if(array_key_exists("dflt_value", $arrRow) && $arrRow["dflt_value"] !== null) {
+            if (array_key_exists("dflt_value", $arrRow) && $arrRow["dflt_value"] !== null) {
                 $strColumn .= " DEFAULT {$arrRow["dflt_value"]} ";
             }
             $arrColumns[] = $strColumn;
 
             //primary key?
-            if(array_key_exists("pk", $arrRow) && $arrRow["pk"] === 1) {
+            if (array_key_exists("pk", $arrRow) && $arrRow["pk"] === 1) {
                 $arrPks[] = $arrRow["name"];
             }
         }
@@ -149,7 +138,7 @@ class DbSqlite3 extends DbBase
         $strQuery .= implode(",\n", $arrColumns);
 
         //primary keys
-        if(count($arrPks) > 0) {
+        if (count($arrPks) > 0) {
             $strQuery .= ",PRIMARY KEY (";
             $strQuery .= implode(",", $arrPks);
             $strQuery .= ")\n";
@@ -194,8 +183,7 @@ class DbSqlite3 extends DbBase
                 );
 
                 $arrTargetTableInfo[] = $arrNewRow;
-            }
-            else {
+            } else {
                 $arrTargetTableInfo[] = $arrOneColumn;
             }
 
@@ -250,10 +238,8 @@ class DbSqlite3 extends DbBase
         $arrVersion = SQLite3::version();
         if (version_compare("3.7.11", $arrVersion["versionString"], "<=")) {
             return parent::triggerMultiInsert($strTable, $arrColumns, $arrValueSets, $objDb);
-        }
-        //legacy code
-        else {
-
+        } else {
+            //legacy code
             $arrSafeColumns = array();
             $arrPlaceholder = array();
             foreach ($arrColumns as $strOneColumn) {
@@ -265,7 +251,6 @@ class DbSqlite3 extends DbBase
 
             $strQuery = "INSERT INTO ".$this->encloseTableName($strTable)."  (".implode(",", $arrSafeColumns).") ";
             for ($intI = 0; $intI < count($arrValueSets); $intI++) {
-
                 $arrTemp = array();
                 for ($intK = 0; $intK < count($arrColumns); $intK++) {
                     $arrTemp[] = " ? AS ".$this->encloseColumnName($arrColumns[$intK]);
@@ -273,8 +258,7 @@ class DbSqlite3 extends DbBase
 
                 if ($intI == 0) {
                     $strQuery .= " SELECT ".implode(", ", $arrTemp);
-                }
-                else {
+                } else {
                     $strQuery .= " UNION SELECT ".implode(", ", $arrTemp);
                 }
 
@@ -346,7 +330,8 @@ class DbSqlite3 extends DbBase
     }
 
     /**
-     * This method is used to retrieve an array of resultsets from the database using
+     * This method is used to retrieve an array of resultsets from the database usin
+     *
      * a prepared statement
      *
      * @param string $strQuery
@@ -436,7 +421,7 @@ class DbSqlite3 extends DbBase
         $arrTableInfo = $this->getPArray("PRAGMA table_info('{$strTableName}')", array());
 
         $arrColumns = array();
-        foreach($arrTableInfo as $arrRow) {
+        foreach ($arrTableInfo as $arrRow) {
             $arrColumns[] = array(
                 "columnName" => $arrRow['name'],
                 "columnType" => $arrRow['type']
@@ -500,8 +485,7 @@ class DbSqlite3 extends DbBase
             //nullable?
             if ($arrColumnSettings[1] === true) {
                 $strQuery .= ", \n";
-            }
-            else {
+            } else {
                 $strQuery .= " NOT NULL, \n";
             }
 
@@ -633,35 +617,25 @@ class DbSqlite3 extends DbBase
 
         if ($strType == DbDatatypes::STR_TYPE_INT) {
             $strReturn .= " INTEGER ";
-        }
-        elseif ($strType == DbDatatypes::STR_TYPE_LONG) {
+        } elseif ($strType == DbDatatypes::STR_TYPE_LONG) {
             $strReturn .= " INTEGER ";
-        }
-        elseif ($strType == DbDatatypes::STR_TYPE_DOUBLE) {
+        } elseif ($strType == DbDatatypes::STR_TYPE_DOUBLE) {
             $strReturn .= " REAL ";
-        }
-        elseif ($strType == DbDatatypes::STR_TYPE_CHAR10) {
+        } elseif ($strType == DbDatatypes::STR_TYPE_CHAR10) {
             $strReturn .= " TEXT ";
-        }
-        elseif ($strType == DbDatatypes::STR_TYPE_CHAR20) {
+        } elseif ($strType == DbDatatypes::STR_TYPE_CHAR20) {
             $strReturn .= " TEXT ";
-        }
-        elseif ($strType == DbDatatypes::STR_TYPE_CHAR100) {
+        } elseif ($strType == DbDatatypes::STR_TYPE_CHAR100) {
             $strReturn .= " TEXT ";
-        }
-        elseif ($strType == DbDatatypes::STR_TYPE_CHAR254) {
+        } elseif ($strType == DbDatatypes::STR_TYPE_CHAR254) {
             $strReturn .= " TEXT ";
-        }
-        elseif ($strType == DbDatatypes::STR_TYPE_CHAR500) {
+        } elseif ($strType == DbDatatypes::STR_TYPE_CHAR500) {
             $strReturn .= " TEXT ";
-        }
-        elseif ($strType == DbDatatypes::STR_TYPE_TEXT) {
+        } elseif ($strType == DbDatatypes::STR_TYPE_TEXT) {
             $strReturn .= " TEXT ";
-        }
-        elseif ($strType == DbDatatypes::STR_TYPE_LONGTEXT) {
+        } elseif ($strType == DbDatatypes::STR_TYPE_LONGTEXT) {
             $strReturn .= " TEXT ";
-        }
-        else {
+        } else {
             $strReturn .= " TEXT ";
         }
 

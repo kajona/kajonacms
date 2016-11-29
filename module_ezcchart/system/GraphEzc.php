@@ -24,7 +24,7 @@ use ezcGraphRenderer2d;
 use ezcGraphRenderer3d;
 use Kajona\System\System\Exception;
 use Kajona\System\System\GraphCommons;
-use Kajona\System\System\GraphInterface;
+use Kajona\System\System\GraphExtendedInterface;
 
 /**
  * This class could be used to create graphs based on the ez components API.
@@ -34,7 +34,7 @@ use Kajona\System\System\GraphInterface;
  * @since 3.4
  * @author sidler@mulchprod.de
  */
-class GraphEzc implements GraphInterface
+class GraphEzc implements GraphExtendedInterface
 {
 
 

@@ -75,7 +75,7 @@ abstract class DbBase implements DbDriverInterface
         }
 
         if ($strDefault !== null) {
-            $strQuery .= " DEFAULT " . $strDefault;
+            $strQuery .= " DEFAULT ".$strDefault;
         }
 
         return $this->_pQuery($strQuery, array());
@@ -136,7 +136,6 @@ abstract class DbBase implements DbDriverInterface
     }
 
 
-
     /**
      * Dummy implementation, using a select & insert combination. This is not threadsafe, so the
      * make sure to implement it in each driver specifically.
@@ -162,32 +161,30 @@ abstract class DbBase implements DbDriverInterface
             $arrPlaceholder[] = "?";
             $arrMappedColumns[] = $this->encloseColumnName($strOneCol);
 
-            if(in_array($strOneCol, $arrPrimaryColumns)) {
-                $arrPrimaryCompares[] = $strOneCol ." = ? ";
+            if (in_array($strOneCol, $arrPrimaryColumns)) {
+                $arrPrimaryCompares[] = $strOneCol." = ? ";
                 $arrPrimaryValues[] = $arrValues[$intKey];
 
-                $arrUpdateKeyValueKey[] = $strOneCol ." = ? ";
+                $arrUpdateKeyValueKey[] = $strOneCol." = ? ";
                 $arrUpdateKeyParams[] = $arrValues[$intKey];
-            }
-            else {
-                $arrUpdateKeyValue[] = $strOneCol ." = ? ";
+            } else {
+                $arrUpdateKeyValue[] = $strOneCol." = ? ";
                 $arrUpdateParams[] = $arrValues[$intKey];
             }
         }
 
         $arrRow = $this->getPArraySection("SELECT COUNT(*) FROM ".$this->encloseTableName(_dbprefix_.$strTable)." WHERE ".implode(" AND ", $arrPrimaryCompares), $arrPrimaryValues, 0, 1);
 
-        if($arrRow === false) {
+        if ($arrRow === false) {
             return false;
         }
 
         $arrSingleRow = isset($arrRow[0]) ? $arrRow[0] : null;
 
-        if($arrSingleRow === null || $arrSingleRow["COUNT(*)"] == "0") {
+        if ($arrSingleRow === null || $arrSingleRow["COUNT(*)"] == "0") {
             $strQuery = "INSERT INTO ".$this->encloseTableName(_dbprefix_.$strTable)." (".implode(", ", $arrMappedColumns).") VALUES (".implode(", ", $arrPlaceholder).")";
             return $this->_pQuery($strQuery, $arrValues);
-        }
-        else {
+        } else {
             $strQuery = "UPDATE ".$this->encloseTableName(_dbprefix_.$strTable)." SET ".implode(", ", $arrUpdateKeyValue)." WHERE ".implode(" AND ", $arrUpdateKeyValueKey);
             return $this->_pQuery($strQuery, array_merge($arrUpdateParams, $arrUpdateKeyParams));
         }
@@ -277,7 +274,7 @@ abstract class DbBase implements DbDriverInterface
         $intEnd = $intEnd - $intStart + 1;
         //add the limits to the query
 
-        return $strQuery . " LIMIT " . $intStart . ", " . $intEnd;
+        return $strQuery." LIMIT ".$intStart.", ".$intEnd;
     }
 }
 

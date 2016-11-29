@@ -2117,7 +2117,9 @@ HTML;
 
                 $strRendercode .= "<script type=\"text/javascript\">
                     require(['forms'], function(forms){
-                        forms.renderMandatoryFields($strRequiredFields);
+                        $(document).on('ready', function() {
+                            forms.renderMandatoryFields($strRequiredFields);
+                        });
                     });
                 </script>";
             }
@@ -2132,6 +2134,7 @@ HTML;
         $strRendercode .= "<script type=\"text/javascript\">
 
          require(['forms'], function(forms) {
+         $(document).on('ready', function() {
             forms.renderMissingMandatoryFields([";
 
         foreach ($arrErrors as $strKey => $arrOneErrors) {
@@ -2142,7 +2145,7 @@ HTML;
                 $strRendercode .= "[ '".$strKey."' ], ";
             }
         }
-        $strRendercode .= " [] ]); });</script>";
+        $strRendercode .= " [] ]); }); });</script>";
         $arrTemplate = array();
         $arrTemplate["errorrows"] = $strRows;
         $arrTemplate["errorintro"] = Lang::getInstance()->getLang("errorintro", "system");
