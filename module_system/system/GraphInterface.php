@@ -83,9 +83,10 @@ interface GraphInterface
      *
      * @param array $arrValues - an array with simple values or an array of data points (GraphDatapoint).
      *                           The advantage of a data points are that action handlers can be defined for each data point which will be executed when clicking on the data point in the chart.
+     * @param bool $bitWriteValues Enables the rendering of values on top of the graphs
      * @param string $strLegend
      */
-    public function addStackedBarChartSet($arrValues, $strLegend);
+    public function addStackedBarChartSet($arrValues, $strLegend, $bitWriteValues = true);
 
     /**
      * Registers a new plot to the current graph. Works in line-plot-mode only.
