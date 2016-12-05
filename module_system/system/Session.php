@@ -53,6 +53,10 @@ final class Session
     const STR_SESSION_ADMIN_SKIN_KEY = "STR_SESSION_ADMIN_SKIN_KEY";
     const STR_SESSION_ADMIN_LANG_KEY = "STR_SESSION_ADMIN_LANG_KEY";
 
+    const STR_SESSION_USERID = "STR_SESSION_USERID";
+    const STR_SESSION_GROUPIDS = "STR_SESSION_GROUPIDS";
+    const STR_SESSION_ISADMIN = "STR_SESSION_ISADMIN";
+
 
     /**
      * Singleton, use getInstance() instead
@@ -261,7 +265,7 @@ final class Session
     public function isAdmin()
     {
         if ($this->isLoggedin()) {
-            if ($this->getUser() != null && $this->getUser()->getIntAdmin() == 1) {
+            if ($this->getSession(self::STR_SESSION_ISADMIN) == 1) {
                 return true;
             } else {
                 return false;
@@ -450,8 +454,7 @@ final class Session
                 $objUser = $objUsersources->getUserByUsername($strName);
                 $bitReturn = $this->internalLoginHelper($objUser);
             }
-        }
-        catch (AuthenticationException $objEx) {
+        } catch (AuthenticationException $objEx) {
             $bitReturn = false;
         }
 
@@ -478,10 +481,10 @@ final class Session
         if ($this->isLoggedin()) {
             if (Carrier::getInstance()->getObjSession()->isSuperAdmin() || $bitForce) {
                 $this->getObjInternalSession()->setStrLoginstatus(SystemSession::$LOGINSTATUS_LOGGEDIN);
-                $this->getObjInternalSession()->setStrUserid($objTargetUser->getSystemid());
+                $this->setSession(self::STR_SESSION_USERID, $objTargetUser->getSystemid());
 
                 $strGroups = implode(",", $objTargetUser->getArrGroupIds());
-                $this->getObjInternalSession()->setStrGroupids($strGroups);
+                $this->setSession(self::STR_SESSION_GROUPIDS, $strGroups);
                 $this->getObjInternalSession()->updateObjectToDb();
                 $this->objUser = $objTargetUser;
 
@@ -503,13 +506,14 @@ final class Session
     {
 
         if ($objUser->getIntRecordStatus() == 1) {
-
-
             $this->getObjInternalSession()->setStrLoginstatus(SystemSession::$LOGINSTATUS_LOGGEDIN);
-            $this->getObjInternalSession()->setStrUserid($objUser->getSystemid());
-
             $strGroups = implode(",", $objUser->getArrGroupIds());
-            $this->getObjInternalSession()->setStrGroupids($strGroups);
+
+            //save some metadata to the php-session
+            $this->setSession(self::STR_SESSION_USERID, $objUser->getSystemid());
+            $this->setSession(self::STR_SESSION_GROUPIDS, $strGroups);
+            $this->setSession(self::STR_SESSION_ISADMIN, $objUser->getIntAdmin());
+
             $this->getObjInternalSession()->updateObjectToDb();
             $this->objUser = $objUser;
 
@@ -553,10 +557,8 @@ final class Session
         UserLog::registerLogout();
 
         CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_USERLOGOUT, array($this->getUserID()));
-
-        $this->getObjInternalSession()->setStrLoginstatus(SystemSession::$LOGINSTATUS_LOGGEDOUT);
-        $this->getObjInternalSession()->updateObjectToDb();
         $this->getObjInternalSession()->deleteObjectFromDatabase();
+
         $this->objInternalSession = null;
         $this->objUser = null;
         if (isset($_COOKIE[session_name()])) {
@@ -596,7 +598,7 @@ final class Session
     public function getUserID()
     {
         if ($this->getObjInternalSession() != null && $this->isLoggedin()) {
-            $strUserid = $this->getObjInternalSession()->getStrUserid();
+            $strUserid = $this->getSession(self::STR_SESSION_USERID);
         } else {
             $strUserid = "";
         }
@@ -642,7 +644,7 @@ final class Session
     public function getGroupIdsAsString()
     {
         if ($this->getObjInternalSession() != null) {
-            $strGroupids = $this->getObjInternalSession()->getStrGroupids();
+            $strGroupids = $this->getSession(self::STR_SESSION_GROUPIDS);
         } else {
             $strGroupids = SystemSetting::getConfigValue("_guests_group_id_");
         }
@@ -656,12 +658,7 @@ final class Session
      */
     public function getGroupIdsAsArray()
     {
-        if ($this->getObjInternalSession() != null) {
-            $strGroupids = $this->getObjInternalSession()->getStrGroupids();
-        } else {
-            $strGroupids = SystemSetting::getConfigValue("_guests_group_id_");
-        }
-        return explode(",", $strGroupids);
+        return explode(",", $this->getGroupIdsAsString());
     }
 
     /**
@@ -720,17 +717,8 @@ final class Session
 
         }
 
-        //try to load the matching groups
-        $strGroups = SystemSetting::getConfigValue("_guests_group_id_");
-        if (validateSystemid($this->getUserID())) {
-            $this->objUser = Objectfactory::getInstance()->getObject($this->getUserID());
-            $strGroups = implode(",", $this->objUser->getArrGroupIds());
-        }
-
         $objSession = new SystemSession();
         $objSession->setStrPHPSessionId($this->getSessionId());
-        $objSession->setStrUserid($this->getUserID());
-        $objSession->setStrGroupids($strGroups);
         $objSession->setIntReleasetime(time() + (int)SystemSetting::getConfigValue("_system_release_time_"));
         $objSession->setStrLasturl(getServer("QUERY_STRING"));
         $objSession->setSystemid(generateSystemid());
