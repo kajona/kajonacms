@@ -431,7 +431,8 @@ class Classloader
 
                     //file is in project path?
                     if(strpos($strParsedFilename, "/project/") !== false) {
-                        if(is_dir(_realpath_."core/module_".strtolower(array_reverse($arrPath)[0]))) {
+                        $strTargetPath = _realpath_."core/module_".strtolower(array_reverse($arrPath)[0]);
+                        if(is_dir($strTargetPath) || is_file($strTargetPath.".phar")) {
                             $strClassname = "Kajona\\";
                         }
                         else {
