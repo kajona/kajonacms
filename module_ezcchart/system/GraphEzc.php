@@ -100,8 +100,8 @@ class GraphEzc implements GraphInterface
     public function __construct()
     {
         //try to replace the font-path if necessary
-        $this->strFont = Resourceloader::getInstance()->getAbsolutePathForModule("module_system")."/system/fonts/dejavusans.ttf";
-        if (StringUtil::startsWith($this->strFont, "phar://")) {
+        if (StringUtil::startsWith(Resourceloader::getInstance()->getAbsolutePathForModule("module_system"), "phar://")) {
+            $this->strFont = Resourceloader::getInstance()->getAbsolutePathForModule("module_system")."/system/fonts/dejavusans.ttf";
             $objFs = new Filesystem();
             $objFs->fileCopy($this->strFont, "/project/temp/dejavusans.ttf");
             $this->strFont = "/project/temp/dejavusans.ttf";
