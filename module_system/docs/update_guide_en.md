@@ -44,7 +44,7 @@ Normally, major updates are handled by downloading new version of all installed 
 In order to automate and simplify this process, we created a simple upgrade-script available on GitHub at
 https://github.com/kajona/systemupgrade/blob/master/upgrade.php
 
-Download the file directly from https://raw.githubusercontent.com/kajona/systemupgrade/master/upgrade.php` and save it as `upgrade.php` in the root-
+Download the file directly from `https://raw.githubusercontent.com/kajona/systemupgrade/master/upgrade.php` and save it as `upgrade.php` in the root-
 directory of your Kajona installation, so on the same level as `index.php` and `download.php`.
 Call the script using your browser of choice, e.g. `http://www.mykajona.domain/upgrade.php`. The script will perform the following tasks:
 
