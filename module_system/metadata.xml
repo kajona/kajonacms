@@ -4,7 +4,11 @@
         xsi:noNamespaceSchemaLocation="https://apidocs.kajona.de/xsd/package.xsd"
         >
     <title>system</title>
-    <description>Core of the Kajona framework. By default, the system-packages includes several modules, e.g. system, permissions, user, messaging and languages.</description>
+    <description>Core of the Kajona framework. By default, the system-packages includes several modules, e.g. system, permissions, user, messaging and languages.
+
+When updating from 5.0 to 5.1 or performing another major update from x.x to x.y, make sure to use the upgrade script instead of the internal package management. See https://www.kajona.de/updateguide.html for details.
+
+    </description>
     <version>5.1.4</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
