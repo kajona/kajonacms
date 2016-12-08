@@ -1430,8 +1430,11 @@ footer {
                 .content {
                     margin-top: -8px;
                     padding-top: 8px;
-                    overflow-x: auto;
                     max-height: 500px;
+
+                    &.loaded {
+                        overflow-x: auto;
+                    }
                 }
 
                 &.sortActive {
