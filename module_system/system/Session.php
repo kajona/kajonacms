@@ -481,6 +481,7 @@ final class Session
         if ($this->isLoggedin()) {
             if (Carrier::getInstance()->getObjSession()->isSuperAdmin() || $bitForce) {
                 $this->getObjInternalSession()->setStrLoginstatus(SystemSession::$LOGINSTATUS_LOGGEDIN);
+                $this->getObjInternalSession()->setStrUserid($objTargetUser->getSystemid());
                 $this->setSession(self::STR_SESSION_USERID, $objTargetUser->getSystemid());
 
                 $strGroups = implode(",", $objTargetUser->getArrGroupIds());
@@ -507,6 +508,8 @@ final class Session
 
         if ($objUser->getIntRecordStatus() == 1) {
             $this->getObjInternalSession()->setStrLoginstatus(SystemSession::$LOGINSTATUS_LOGGEDIN);
+            $this->getObjInternalSession()->setStrUserid($objUser->getSystemid());
+            $this->getObjInternalSession()->setStrLoginprovider($objUser->getStrSubsystem());
             $strGroups = implode(",", $objUser->getArrGroupIds());
 
             //save some metadata to the php-session
@@ -719,6 +722,7 @@ final class Session
 
         $objSession = new SystemSession();
         $objSession->setStrPHPSessionId($this->getSessionId());
+        $objSession->setStrUserid($this->getUserID());
         $objSession->setIntReleasetime(time() + (int)SystemSetting::getConfigValue("_system_release_time_"));
         $objSession->setStrLasturl(getServer("QUERY_STRING"));
         $objSession->setSystemid(generateSystemid());

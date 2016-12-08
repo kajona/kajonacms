@@ -202,6 +202,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $arrFields["session_loginstatus"] = array("char254", true);
         $arrFields["session_loginprovider"] = array("char20", true);
         $arrFields["session_lasturl"] = array("text", true);
+        $arrFields["session_userid"] = array("char20", true);
 
         if(!$this->objDB->createTable("session", $arrFields, array("session_id"), array("session_phpid", "session_releasetime")))
             $strReturn .= "An error occurred! ...\n";
@@ -837,7 +838,6 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         }
 
         //remove columns
-        $this->objDB->removeColumn("session", "session_userid");
         $this->objDB->removeColumn("session", "session_groupids");
 
         $strReturn .= "Updating module-versions...\n";

@@ -35,6 +35,7 @@ class SystemSession extends Model implements ModelInterface
     public static $LOGINSTATUS_LOGGEDOUT = "loggedout";
 
     private $strPHPSessionId = "";
+    private $strUserid = "";
     private $intReleasetime = 0;
     private $strLoginprovider = "";
     private $strLasturl = "";
@@ -84,6 +85,7 @@ class SystemSession extends Model implements ModelInterface
 
         if (count($arrRow) > 1) {
             $this->setStrPHPSessionId($arrRow["session_phpid"]);
+            $this->setStrUserid($arrRow["session_userid"]);
             $this->setIntReleasetime($arrRow["session_releasetime"]);
             $this->setStrLoginstatus($arrRow["session_loginstatus"]);
             $this->setStrLoginprovider($arrRow["session_loginprovider"]);
@@ -123,17 +125,19 @@ class SystemSession extends Model implements ModelInterface
             $strQuery = "INSERT INTO "._dbprefix_."session
                          (session_id,
                           session_phpid,
+                          session_userid,
                           session_releasetime,
                           session_loginstatus,
                           session_loginprovider,
                           session_lasturl
-                          ) VALUES ( ?,?,?,?,?,? )";
+                          ) VALUES ( ?,?,?,?,?,?,? )";
 
             return $this->objDB->_pQuery(
                 $strQuery,
                 array(
                     $this->strDbSystemid,
                     $this->getStrPHPSessionId(),
+                    $this->getStrUserid(),
                     (int)$this->getIntReleasetime(),
                     $this->getStrLoginstatus(),
                     $this->getStrLoginprovider(),
@@ -144,16 +148,22 @@ class SystemSession extends Model implements ModelInterface
         } else {
             Logger::getInstance()->addLogRow("updated session ".$this->getSystemid(), Logger::$levelInfo);
             $strQuery = "UPDATE "._dbprefix_."session SET
+                          session_phpid = ?,
+                          session_userid = ?,
                           session_releasetime = ?,
                           session_loginstatus = ?,
+                          session_loginprovider = ?,
                           session_lasturl = ?
                         WHERE session_id = ? ";
 
             return $this->objDB->_pQuery(
                 $strQuery,
                 array(
+                    $this->getStrPHPSessionId(),
+                    $this->getStrUserid(),
                     (int)$this->getIntReleasetime(),
                     $this->getStrLoginstatus(),
+                    $this->getStrLoginprovider(),
                     $this->getStrLasturl(),
                     $this->getSystemid()
                 )
@@ -297,6 +307,16 @@ class SystemSession extends Model implements ModelInterface
     }
 
     /**
+     * @param string $strUserid
+     *
+     * @return void
+     */
+    public function setStrUserid($strUserid)
+    {
+        $this->strUserid = $strUserid;
+    }
+
+    /**
      * @param int $intReleasetime
      *
      * @return void
@@ -343,6 +363,14 @@ class SystemSession extends Model implements ModelInterface
     public function getStrPHPSessionId()
     {
         return $this->strPHPSessionId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrUserid()
+    {
+        return $this->strUserid;
     }
 
     /**
