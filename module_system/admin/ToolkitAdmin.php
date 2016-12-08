@@ -91,11 +91,8 @@ class ToolkitAdmin extends Toolkit
         $arrTemplate["valueHour"] = $objDateToShow != null ? $objDateToShow->getIntHour() : "";
         $arrTemplate["valueMin"] = $objDateToShow != null ? $objDateToShow->getIntMin() : "";
         $arrTemplate["valuePlain"] = dateToString($objDateToShow, false);
-//        if($bitWithTime)
         $arrTemplate["dateFormat"] = Carrier::getInstance()->getObjLang()->getLang("dateStyleShort", "system");
-//        else
-//            $arrTemplate["dateFormat"] = Carrier::getInstance()->getObjLang()->getLang("dateStyleLong", "system");
-        $arrTemplate["calendarLang"] = Carrier::getInstance()->getObjSession()->getAdminLanguage();
+        $arrTemplate["calendarLang"] = empty(Carrier::getInstance()->getObjSession()->getAdminLanguage()) ? 'en' : Carrier::getInstance()->getObjSession()->getAdminLanguage();
 
         $arrTemplate["titleTime"] = Carrier::getInstance()->getObjLang()->getLang("titleTime", "system");
 

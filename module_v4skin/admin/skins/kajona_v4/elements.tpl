@@ -688,19 +688,21 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
         <div class="col-sm-1">
         </div>
         <script>
-            require(["bootstrap-datepicker-%%calendarLang%%", "util"], function(datepicker, util){
-                $('#%%calendarId%%').datepicker({
-                    format: util.transformDateFormat('%%dateFormat%%', "bootstrap-datepicker"),
-                    weekStart: 1,
-                    autoclose: true,
-                    language: '%%calendarLang%%',
-                    todayHighlight: true
-                });
+            require(["bootstrap-datepicker"], function() {
+                require(["bootstrap-datepicker-%%calendarLang%%", "util"], function(datepicker, util){
+                    $('#%%calendarId%%').datepicker({
+                        format: util.transformDateFormat('%%dateFormat%%', "bootstrap-datepicker"),
+                        weekStart: 1,
+                        autoclose: true,
+                        language: '%%calendarLang%%',
+                        todayHighlight: true
+                    });
 
-                if($('#%%calendarId%%').is(':focus')) {
-                    $('#%%calendarId%%').blur();
-                    $('#%%calendarId%%').focus();
-                }
+                    if($('#%%calendarId%%').is(':focus')) {
+                        $('#%%calendarId%%').blur();
+                        $('#%%calendarId%%').focus();
+                    }
+                });
             });
         </script>
     </div>

@@ -33,12 +33,6 @@
     },
     "bootstrap-datepicker" : {
       "deps": ["bootstrap"]
-    },
-    "bootstrap-datepicker-de" : {
-      "deps": ["bootstrap-datepicker"]
-    },
-    "bootstrap-datepicker-en" : {
-      "deps": ["bootstrap-datepicker"]
     }
   }
 }
