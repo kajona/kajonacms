@@ -530,6 +530,7 @@ HTML;
             }
 
             if (!$bitParentIsBlock) {
+                if(!$objOneIterable->getConcreteAdminInstance() instanceof ElementBlockAdmin)
                 //The Icons to sort the list and to copy the element
                 $strActions .= $this->objToolkit->listButton(Link::getLinkAdminDialog("pages_content", "copyElement", "&systemid=".$objOneIterable->getSystemid(), "", $this->getLang("element_copy"), "icon_copy"));
                 //The status-icons
@@ -1077,7 +1078,7 @@ JS;
         $this->setArrModuleEntry("template", "/folderview.tpl");
 
         $objSourceElement = new PagesPageelement($this->getSystemid());
-        if ($objSourceElement->rightEdit($this->getSystemid())) {
+        if ($objSourceElement->rightEdit()) {
             $objLang = null;
             if ($this->getParam("copyElement_language") != "") {
                 $objLang = new LanguagesLanguage($this->getParam("copyElement_language"));
@@ -1088,13 +1089,17 @@ JS;
             $objPage = null;
             if ($this->getParam("copyElement_page") != "") {
                 $objPage = PagesPage::getPageByName($this->getParam("copyElement_page"));
-                if ($objPage == null) {
-                    throw new Exception("failed to load page ".$this->getParam("copyElement_page"), Exception::$level_ERROR);
+                if ($objPage != null) {
+                    $objPage->setStrLanguage($objLang->getStrName());
+                    $objPage->initObject();
                 }
-                $objPage->setStrLanguage($objLang->getStrName());
-                $objPage->initObject();
-            } else {
-                $objPage = new PagesPage($objSourceElement->getPrevId());
+            }
+
+            if ($objPage == null) {
+                $objPage = Objectfactory::getInstance()->getObject($objSourceElement->getPrevId());
+                while (!$objPage instanceof PagesPage) {
+                    $objPage = Objectfactory::getInstance()->getObject($objPage->getPrevId());
+                }
             }
 
             //form header
@@ -1183,7 +1188,9 @@ JS;
 
                         };
 
-	                    KAJONA.admin.copyElement_page.bind('autocompleteselect', reloadForm);
+	                    $('#copyElement_page').bind('change', reloadForm);
+	                    $('#copyElement_page').bind('blur', reloadForm);
+	                    $('#copyElement_page').bind('autocompleteselect', reloadForm);
 
 	                    var languageField = document.getElementById('copyElement_language');
 	                    languageField.onchange = reloadForm;
