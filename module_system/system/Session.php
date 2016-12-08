@@ -375,7 +375,7 @@ final class Session
             }
         }
 
-        return "";
+        return Lang::getInstance()->getStrFallbackLanguage();
     }
 
     /**
