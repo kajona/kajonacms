@@ -9,6 +9,7 @@ namespace Kajona\Stats\System;
 
 use Kajona\System\System\Database;
 use Kajona\System\System\Session;
+use Kajona\System\System\StringUtil;
 
 /**
  * Model for a stats-worker
@@ -107,7 +108,7 @@ class StatsWorker
 
         return $this->objDB->_pQuery(
             $strQuery,
-            array(generateSystemid(), $strIp, $intDate, $strPage, $strReferer, $strBrowser, $strSession, $strLanguage)
+            array(generateSystemid(), $strIp, $intDate, $strPage, StringUtil::truncate($strReferer, 240), $strBrowser, $strSession, $strLanguage)
         );
     }
 
