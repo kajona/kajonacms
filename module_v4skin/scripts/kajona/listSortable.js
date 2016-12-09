@@ -37,7 +37,6 @@ define(["jquery", "jquery-ui", "ajax", "statusDisplay", "tooltip", "util"], func
                 },
                 receive: function (event, ui) {
                     $(ui.placeholder).hide();
-
                     if (intCurPage > 1) {
                         ajax.setAbsolutePosition(ui.item.find('tr').data('systemid'), (intElementsPerPage * (intCurPage - 1)), null, function (data, status, jqXHR) {
                             if (status == 'success') {
@@ -67,8 +66,7 @@ define(["jquery", "jquery-ui", "ajax", "statusDisplay", "tooltip", "util"], func
                 receive: function (event, ui) {
                     $(ui.placeholder).hide();
                     var intOnPage = $('#'+strListId+' tbody:has(tr[data-systemid!=""])').length + 1;
-
-                    if (intOnPage == intElementsPerPage) {
+                    if (intOnPage >= intElementsPerPage) {
                         ajax.setAbsolutePosition(ui.item.find('tr').data('systemid'), (intElementsPerPage * intCurPage + 1), null, function (data, status, jqXHR) {
                             if (status == 'success') {
                                 location.reload();
@@ -97,7 +95,7 @@ define(["jquery", "jquery-ui", "ajax", "statusDisplay", "tooltip", "util"], func
                     if ($("#"+strListId).attr("data-kajona-pagenum") > 1)
                         $('#'+strListId+'_prev').css("display", "block");
 
-                    if ($('#'+strListId+' tbody:has(tr[data-systemid!=""])').length == $("#"+strListId).attr("data-kajona-elementsperpage"))
+                    if ($('#'+strListId+' tbody:has(tr[data-systemid!=""])').length >= $("#"+strListId).attr("data-kajona-elementsperpage"))
                         $('#'+strListId+'_next').css("display", "block");
 
                     oldPos = ui.item.index();
@@ -110,7 +108,7 @@ define(["jquery", "jquery-ui", "ajax", "statusDisplay", "tooltip", "util"], func
                         var intOffset = 1;
                         //see, if there are nodes not being sortable - would lead to another offset
                         $('#'+strListId+' > tbody').each(function (index) {
-                            if ($(this).find('tr').data('systemid') == "")
+                            if ($(this).find('tr').data('systemid') == "" )
                                 intOffset--;
                             if ($(this).find('tr').data('systemid') == ui.item.find('tr').data('systemid'))
                                 return false;
@@ -119,6 +117,8 @@ define(["jquery", "jquery-ui", "ajax", "statusDisplay", "tooltip", "util"], func
                         //calc the page-offset
                         var intCurPage = $("#"+strListId).attr("data-kajona-pagenum");
                         var intElementsPerPage = $("#"+strListId).attr("data-kajona-elementsperpage");
+
+                        debugger;
 
                         var intPagingOffset = 0;
                         if (intCurPage > 1 && intElementsPerPage > 0)
