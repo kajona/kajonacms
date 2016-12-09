@@ -445,7 +445,7 @@ class ToolkitAdmin extends Toolkit
                         $('#".$strName."').autocomplete(objConfig).data( 'ui-autocomplete' )._renderItem = function( ul, item ) {
                             return $( '<li></li>' )
                                 .data('ui-autocomplete-item', item)
-                                .append( '<a class=\'ui-autocomplete-item\' >'+item.icon+item.title+'</a>' )
+                                .append( '<div class=\'ui-autocomplete-item\' >'+item.icon+item.title+'</a>' )
                                 .appendTo( ul );
                         } ;
                     });

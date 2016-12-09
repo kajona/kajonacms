@@ -84,6 +84,10 @@ define(['jquery', 'bootstrap', 'jquery-ui', 'workingIndicator', 'tooltip', 'stat
     };
 
     $.widget('custom.catcomplete', $.ui.autocomplete, {
+        _create: function() {
+            this._super();
+            this.widget().menu( "option", "items", "> :not(.ui-autocomplete-category)" );
+        },
         _renderMenu: function(ul, items) {
             var self = this;
             var currentCategory = '';
@@ -96,7 +100,7 @@ define(['jquery', 'bootstrap', 'jquery-ui', 'workingIndicator', 'tooltip', 'stat
                 self._renderItemData(ul, item);
             });
 
-            ul.append('<li class="detailedResults"><a href="#">'+searchExtendText+'</a></li>');
+            ul.append('<li class="detailedResults"><div href="#">'+searchExtendText+'</div></li>');
             ul.addClass('dropdown-menu');
             ul.addClass('search-dropdown-menu');
 
@@ -105,9 +109,9 @@ define(['jquery', 'bootstrap', 'jquery-ui', 'workingIndicator', 'tooltip', 'stat
             });
         },
         _renderItemData: function (ul, item) {
-            return $('<li class="clearfix"></li>')
+            return $('<li></li>')
                 .data('ui-autocomplete-item', item)
-                .append('<a>' + item.icon + item.description + '</a>')
+                .append('<div>' + item.icon + item.description + '</div>')
                 .appendTo(ul);
         }
     });
