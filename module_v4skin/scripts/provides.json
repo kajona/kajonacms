@@ -30,9 +30,6 @@
     },
     "bootstrap-switch" : {
       "deps": ["bootstrap"]
-    },
-    "bootstrap-datepicker" : {
-      "deps": ["bootstrap"]
     }
   }
 }
