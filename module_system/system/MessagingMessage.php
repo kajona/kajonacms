@@ -231,6 +231,7 @@ class MessagingMessage extends Model implements ModelInterface, AdminListableInt
 
         $objOrm = new OrmObjectlist();
         $objOrm->addWhereRestriction(new OrmObjectlistPropertyRestriction("strUser", OrmComparatorEnum::Equal(), $strUserid));
+        $objOrm->addOrderBy(new OrmObjectlistOrderby(" system_create_date DESC  "));
         return $objOrm->getObjectList(__CLASS__, "", $intStart, $intEnd);
     }
 
@@ -347,7 +348,7 @@ class MessagingMessage extends Model implements ModelInterface, AdminListableInt
     }
 
     /**
-     * @return \\Kajona\System\System\Date
+     * @return Date
      */
     public function getObjDate()
     {
