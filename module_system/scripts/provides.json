@@ -42,9 +42,6 @@
     },
     "jquerytageditor" : {
       "deps": ["jquery", "jquerycaret"]
-    },
-    "jstree" : {
-      "deps": ["jquery"]
     }
   }
 }
