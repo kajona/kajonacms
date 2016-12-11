@@ -118,8 +118,6 @@ define(["jquery", "jquery-ui", "ajax", "statusDisplay", "tooltip", "util"], func
                         var intCurPage = $("#"+strListId).attr("data-kajona-pagenum");
                         var intElementsPerPage = $("#"+strListId).attr("data-kajona-elementsperpage");
 
-                        debugger;
-
                         var intPagingOffset = 0;
                         if (intCurPage > 1 && intElementsPerPage > 0)
                             intPagingOffset = (intCurPage * intElementsPerPage) - intElementsPerPage;
