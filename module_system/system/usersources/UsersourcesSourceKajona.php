@@ -177,7 +177,37 @@ class UsersourcesSourceKajona implements UsersourcesUsersourceInterface
 
         $arrIds = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strUsername));
         if (isset($arrIds["user_id"]) && validateSystemid($arrIds["user_id"])) {
+            if (!isset(self::$arrUserCache[$arrIds["user_id"]])) {
+                self::$arrUserCache[$arrIds["user_id"]] = new UsersourcesUserKajona($arrIds["user_id"]);
+            }
 
+            return self::$arrUserCache[$arrIds["user_id"]];
+        }
+
+        return null;
+    }
+
+    /**
+     * Fetches a user by mail. This way of fetching users is not offically supported since not covered by all login-providers.
+     *
+     * @param string $strEmail
+     *
+     * @return UsersourcesUserInterface or null
+     */
+    public function getUserByEmail($strEmail)
+    {
+        $strQuery = "SELECT sysuser.user_id 
+                       FROM "._dbprefix_."user as sysuser, 
+                            "._dbprefix_."user_kajona as kjuser, 
+                            "._dbprefix_."system 
+                      WHERE sysuser.user_id = system_id 
+                        AND sysuser.user_id = kjuser.user_id 
+                        AND user_email = ? 
+                        AND user_subsystem = 'kajona' 
+                        AND (system_deleted = 0 OR system_deleted IS NULL)";
+
+        $arrIds = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strEmail));
+        if (isset($arrIds["user_id"]) && validateSystemid($arrIds["user_id"])) {
             if (!isset(self::$arrUserCache[$arrIds["user_id"]])) {
                 self::$arrUserCache[$arrIds["user_id"]] = new UsersourcesUserKajona($arrIds["user_id"]);
             }

@@ -114,6 +114,11 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
      */
     private $strFinalPass = "";
 
+    /**
+     * @var string
+     */
+    private $strSpecialConfig = "";
+
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
@@ -147,6 +152,7 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
             $this->setLongDate($arrRow["user_date"]);
             $this->setSystemid($arrRow["user_id"]);
             $this->setStrSalt($arrRow["user_salt"]);
+            $this->setStrSpecialConfig($arrRow["user_specialconfig"]);
 
             $this->strFinalPass = $arrRow["user_pass"];
         }
@@ -184,18 +190,19 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
             $strUserid = generateSystemid();
             $this->setSystemid($strUserid);
             $strQuery = "INSERT INTO "._dbprefix_."user_kajona (
-                        user_id,
+                        user_specialconfig, user_id,
                         user_pass, user_email, user_forename,
                         user_name, 	user_street,
                         user_postal, user_city,
                         user_tel, user_mobile,
-                        user_date, user_salt
+                        user_date, user_salt, 
 
-                        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+                        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             Logger::getInstance(Logger::USERSOURCES)->addLogRow("new kajona user: ".$this->getStrEmail(), Logger::$levelInfo);
 
             return $this->objDB->_pQuery($strQuery, array(
+                $this->getStrSpecialConfig(),
                 $strUserid,
                 $this->getStrPass(),
                 $this->getStrEmail(),
@@ -208,7 +215,7 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
                 $this->getStrMobile(),
                 $this->getLongDate(),
                 $this->getStrSalt()
-            ));
+            ), array(false));
         }
         else {
 
@@ -216,23 +223,22 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
             $arrParams = array();
 
             if ($this->getStrPass() != "") {
-                $strQuery = "UPDATE "._dbprefix_."user_kajona SET
+                $strQuery = "UPDATE "._dbprefix_."user_kajona SET user_specialconfig=?, 
                         user_pass=?, user_email=?, user_forename=?, user_name=?, user_street=?, user_postal=?, user_city=?, user_tel=?, user_mobile=?,
-                        user_date=?, user_salt=? WHERE user_id = ?";
+                        user_date=?, user_salt=?  WHERE user_id = ?";
                 $arrParams = array(
-                    $this->getStrPass(),
+                    $this->getStrSpecialConfig(), $this->getStrPass(),
                     $this->getStrEmail(), $this->getStrForename(), $this->getStrName(), $this->getStrStreet(), $this->getStrPostal(),
-                    $this->getStrCity(), $this->getStrTel(), $this->getStrMobile(), $this->getLongDate(), $this->getStrSalt(), $this->getSystemid()
+                    $this->getStrCity(), $this->getStrTel(), $this->getStrMobile(), $this->getLongDate(), $this->getStrSalt(),  $this->getSystemid()
                 );
 
-            }
-            else {
-                $strQuery = "UPDATE "._dbprefix_."user_kajona SET
+            } else {
+                $strQuery = "UPDATE "._dbprefix_."user_kajona SET user_specialconfig=?,
                         user_email=?, user_forename=?, user_name=?, user_street=?, user_postal=?, user_city=?, user_tel=?, user_mobile=?,
                         user_date=?, user_salt=? WHERE user_id = ?";
 
                 $arrParams = array(
-                    $this->getStrEmail(), $this->getStrForename(), $this->getStrName(), $this->getStrStreet(), $this->getStrPostal(),
+                    $this->getStrSpecialConfig(), $this->getStrEmail(), $this->getStrForename(), $this->getStrName(), $this->getStrStreet(), $this->getStrPostal(),
                     $this->getStrCity(), $this->getStrTel(), $this->getStrMobile(), $this->getLongDate(), $this->getStrSalt(), $this->getSystemid()
                 );
 
@@ -240,7 +246,7 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
 
             Logger::getInstance(Logger::USERSOURCES)->addLogRow("updated user ".$this->getStrEmail(), Logger::$levelInfo);
 
-            return $this->objDB->_pQuery($strQuery, $arrParams);
+            return $this->objDB->_pQuery($strQuery, $arrParams, array(false));
         }
     }
 
@@ -484,5 +490,22 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
     {
         return $this->strSalt;
     }
+
+    /**
+     * @return string
+     */
+    public function getStrSpecialConfig()
+    {
+        return $this->strSpecialConfig;
+    }
+
+    /**
+     * @param string $strSpecialConfig
+     */
+    public function setStrSpecialConfig($strSpecialConfig)
+    {
+        $this->strSpecialConfig = $strSpecialConfig;
+    }
+
 
 }

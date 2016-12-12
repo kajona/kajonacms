@@ -9,7 +9,7 @@
 When updating from 5.0 to 5.1 or performing another major update from x.x to x.y, make sure to use the upgrade script instead of the internal package management. See https://www.kajona.de/updateguide.html for details.
 
     </description>
-    <version>5.1.4</version>
+    <version>5.1.5</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
