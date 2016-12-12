@@ -19,10 +19,10 @@
         define([
             'jquery',
             'tmpl',
-            './jquery.fileupload-image',
-            './jquery.fileupload-audio',
-            './jquery.fileupload-video',
-            './jquery.fileupload-validate'
+            'jquery.fileupload-image',
+            'jquery.fileupload-audio',
+            'jquery.fileupload-video',
+            'jquery.fileupload-validate'
         ], factory);
     } else if (typeof exports === 'object') {
         // Node/CommonJS:
