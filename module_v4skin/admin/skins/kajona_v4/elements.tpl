@@ -650,7 +650,10 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
                             autoclose: true,
                             language: '%%calendarLang%%',
                             todayHighlight: true,
-                            container: '#content'
+                            container: '#content',
+                            todayBtn: "linked",
+                            daysOfWeekHighlighted: "0,6",
+                            calendarWeeks: true
                         });
 
                         if($('#%%calendarId%%').is(':focus')) {
@@ -697,7 +700,10 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
                         autoclose: true,
                         language: '%%calendarLang%%',
                         todayHighlight: true,
-                        container: '#content'
+                        container: '#content',
+                        todayBtn: "linked",
+                        daysOfWeekHighlighted: "0,6",
+                        calendarWeeks: true
                     });
 
                     if($('#%%calendarId%%').is(':focus')) {
