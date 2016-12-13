@@ -52,7 +52,7 @@ class NavigationPoint extends Model implements ModelInterface, AdminListableInte
      * @var string
      * @tableColumn navigation.navigation_page_e
      * @tableColumnDatatype char254
-     * @fieldType objecttags
+     * @fieldType Kajona\System\Admin\Formentries\FormentryFile
      * @fieldLabel navigation_page_e
      *
      * @addSearchIndex
@@ -63,7 +63,7 @@ class NavigationPoint extends Model implements ModelInterface, AdminListableInte
      * @var string
      * @tableColumn navigation.navigation_page_i
      * @tableColumnDatatype char254
-     * @fieldType page
+     * @fieldType Kajona\System\Admin\Formentries\FormentryPage
      * @fieldLabel navigation_page_i
      *
      * @addSearchIndex
