@@ -195,7 +195,7 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
                         user_name, 	user_street,
                         user_postal, user_city,
                         user_tel, user_mobile,
-                        user_date, user_salt, 
+                        user_date, user_salt
 
                         ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 

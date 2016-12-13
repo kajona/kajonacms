@@ -188,7 +188,7 @@ class UsersourcesSourceKajona implements UsersourcesUsersourceInterface
     }
 
     /**
-     * Fetches a user by mail. This way of fetching users is not offically supported since not covered by all login-providers.
+     * Fetches a user by mail. This way of fetching users is not officially supported since not covered by all login-providers.
      *
      * @param string $strEmail
      *
