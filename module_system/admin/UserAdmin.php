@@ -1094,7 +1094,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
         $objSourceGroup = $objGroup->getObjSourceGroup();
 
         $objSourceGroup->addMember($objUser->getObjSourceUser());
-        $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "groupMember", "&systemid=".$objGroup->getSystemid())."&peClose=1&blockAction=1");
+        $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "groupMember", "&systemid=".$objGroup->getSystemid()."&peClose=1&blockAction=1"));
         return "";
     }
 
