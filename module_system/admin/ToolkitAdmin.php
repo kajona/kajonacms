@@ -2113,10 +2113,8 @@ HTML;
                 $strRequiredFields = json_encode($arrRequiredFields);
 
                 $strRendercode .= "<script type=\"text/javascript\">
-                    require(['forms'], function(forms){
-                        $(document).on('ready', function() {
-                            forms.renderMandatoryFields($strRequiredFields);
-                        });
+                    require(['forms', 'domReady'], function(forms){
+                        forms.renderMandatoryFields($strRequiredFields);
                     });
                 </script>";
             }
@@ -2130,8 +2128,7 @@ HTML;
         $strRows = "";
         $strRendercode .= "<script type=\"text/javascript\">
 
-         require(['forms'], function(forms) {
-         $(document).on('ready', function() {
+         require(['forms', 'domReady'], function(forms) {
             forms.renderMissingMandatoryFields([";
 
         foreach ($arrErrors as $strKey => $arrOneErrors) {
@@ -2142,7 +2139,7 @@ HTML;
                 $strRendercode .= "[ '".$strKey."' ], ";
             }
         }
-        $strRendercode .= " [] ]); }); });</script>";
+        $strRendercode .= " [] ]); });</script>";
         $arrTemplate = array();
         $arrTemplate["errorrows"] = $strRows;
         $arrTemplate["errorintro"] = Lang::getInstance()->getLang("errorintro", "system");
