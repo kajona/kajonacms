@@ -30,13 +30,7 @@ class FaqsFormgenerator extends AdminFormgenerator
         //inject the categories formentries
         $arrCats = FaqsCategory::getObjectListFiltered();
         if (count($arrCats) > 0) {
-            $arrKeyValues = array();
-            /** @var FaqsCategory $objOneCat */
-            foreach ($arrCats as $objOneCat) {
-                $arrKeyValues[$objOneCat->getSystemid()] = $objOneCat->getStrDisplayName();
-            }
-
-            $this->getField("cats")->setStrLabel($this->getLang("commons_categories"))->setArrKeyValues(FaqsCategory::getObjectListFiltered());
+            $this->getField("cats")->setStrLabel($this->getLang("commons_categories"))->setArrKeyValues($arrCats);
         }
     }
 

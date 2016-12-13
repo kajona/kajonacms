@@ -204,7 +204,7 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
     /**
      * @var NewsCategory[]
      * @objectList news_member (source="newsmem_news", target="newsmem_category")
-     * @fieldType Kajona\System\Admin\Formentries\FormentryCheckboxarray
+     * @fieldType Kajona\System\Admin\Formentries\FormentryCheckboxarrayObjectList
      * @versionable
      */
     private $arrCats = null;
