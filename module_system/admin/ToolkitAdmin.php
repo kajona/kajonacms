@@ -2142,7 +2142,7 @@ HTML;
                 $strRendercode .= "[ '".$strKey."' ], ";
             }
         }
-        $strRendercode .= " [] ]); ]); });</script>";
+        $strRendercode .= " [] ]); }); });</script>";
         $arrTemplate = array();
         $arrTemplate["errorrows"] = $strRows;
         $arrTemplate["errorintro"] = Lang::getInstance()->getLang("errorintro", "system");
