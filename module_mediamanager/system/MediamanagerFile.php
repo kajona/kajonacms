@@ -684,7 +684,7 @@ class MediamanagerFile extends \Kajona\System\System\Model implements \Kajona\Sy
                 //File or folder
                 if ($objOneFileDB->getintType() == self::$INT_TYPE_FILE) {
                     //compare
-                    if ($objOneFileDB->getStrFilename() == str_replace(_realpath_, "", $arrOneFileFilesystem["filepath"])) {
+                    if ($objOneFileDB->getStrFilename() == str_replace(_realpath_, "/", $arrOneFileFilesystem["filepath"])) {
                         //And unset from both arrays
                         unset($arrFilesystem["files"][$intKeyFS]);
                         unset($arrObjDB[$intKeyDB]);
@@ -711,7 +711,7 @@ class MediamanagerFile extends \Kajona\System\System\Model implements \Kajona\Sy
 
         //the remaining records from the database have to be deleted!
         if (count($arrObjDB) > 0) {
-
+            Carrier::getInstance()->setParam("mediamanagerDeleteFileFromFilesystem", false);
             foreach ($arrObjDB as $objOneFileDB) {
                 $objOneFileDB->deleteObjectFromDatabase();
                 $arrReturn["delete"]++;
@@ -721,7 +721,7 @@ class MediamanagerFile extends \Kajona\System\System\Model implements \Kajona\Sy
         //the remaining records from the filesystem have to be added
         foreach ($arrFilesystem["files"] as $arrOneFileFilesystem) {
             $strFileName = $arrOneFileFilesystem["filename"];
-            $strFileFilename = str_replace(_realpath_, "", $arrOneFileFilesystem["filepath"]);
+            $strFileFilename = str_replace(_realpath_, "/", $arrOneFileFilesystem["filepath"]);
             $objFile = new MediamanagerFile();
             $objFile->setStrFilename($strFileFilename);
             $objFile->setStrName($strFileName);

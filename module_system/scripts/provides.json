@@ -11,6 +11,7 @@
     "jstree": "jstree3/dist/jstree.min",
     "moment": "moment/moment.min",
     "qtip": "qtip2/jquery.qtip.min",
+    "domReady": "requirejs/domReady",
 
     "ajax": "kajona/ajax",
     "cacheManager": "kajona/cacheManager",

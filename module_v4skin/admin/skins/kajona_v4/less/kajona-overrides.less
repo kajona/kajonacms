@@ -460,6 +460,7 @@ footer {
             font-size: @font-size-base - 1;
             border-radius: 0;
             color: @link-color;
+            font-family: @font-family-base;
 
             &:hover {
                 text-decoration: none;
@@ -1104,96 +1105,6 @@ footer {
 			.transition(all linear .2s);
 		}
 
-	}
-
-
-
-	table.calendar {
-		border: 1px solid #efefef;
-		border-collapse: collapse;
-		width: 100%;
-
-		.mouseOver {
-			border: 1px solid #AF0A0A;
-			border-left-width: 2px;
-			border-right-width: 2px;
-			color: #000000;
-			margin: 2px 0 !important;
-			.box-shadow(3px #888);
-		}
-
-
-		td {
-			border: 1px solid @gray-light;
-			vertical-align: top;
-
-			&.calendarDateToday {
-				background-color: lighten(@kajona-brand-color, 40%);
-			}
-
-			&.calendarEntry div.calendarHeader,
-			&.calendarEntryOutOfRange div.calendarHeader,
-			&.calendarEntryBlocked div.calendarHeader {
-				background-color: #efefef;
-				text-align: right;
-				padding: 0 2px;
-				margin: 2px;
-			}
-
-			&.calendarEntryOutOfRange div.calendarHeader {
-                color: lighten(@text-color, 20%);
-			}
-
-			&.calendarEntryBlocked div.calendarHeader {
-                background-color: darken(@gray-light, 10%);
-			}
-		}
-
-	}
-
-	table.calendarPager {
-		border-collapse: collapse;
-		width: 100%;
-		margin-bottom: 5px;
-	}
-
-	div.calendarLegend {
-		margin: 10px 0 4px 0 ;
-		line-height: 26px;
-
-		div.calendarLegendEntry {
-			padding: 2px 3px !important;
-			display: inline;
-			margin: 3px !important;
-		}
-	}
-
-	div.calendarEvent {
-        #calendar > .event(#DEDF45);
-
-		&.calendarNews {
-            #calendar > .event(#077ff9);
-		}
-	}
-
-	#calendarFilter {
-		margin: 10px 0 4px 0 ;
-
-		label {
-			float: none !important;
-			display: inline !important;
-		}
-
-		div {
-			padding: 2px 3px !important;
-			display: inline;
-			margin: 3px !important;
-			white-space: nowrap;
-		}
-
-        input {
-            margin-right:4px;
-        }
 	}
 
 
@@ -1965,4 +1876,11 @@ body.login {
 
 .day-cell {
     cursor: pointer;
+}
+
+
+
+/* bootstrap-datepicker */
+.datepicker table tr td.highlighted {
+    background: lighten(@kajona-brand-color, 40%);
 }

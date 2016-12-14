@@ -44,7 +44,6 @@ class NewsNewsFormgenerator extends AdminFormgenerator
             //search the languages maintained
             $objLanguageManager = LanguagesLanguageset::getLanguagesetForSystemid($objNews->getSystemid());
             if ($objLanguageManager != null) {
-
                 $arrMaintained = $objLanguageManager->getArrLanguageSet();
                 $arrDD = array();
                 foreach ($arrMaintained as $strLanguageId => $strSystemid) {
@@ -63,12 +62,7 @@ class NewsNewsFormgenerator extends AdminFormgenerator
 
         $arrCats = NewsCategory::getObjectListFiltered();
         if (count($arrCats) > 0) {
-            $arrKeyValues = array();
-            /** @var NewsCategory $objOneCat */
-            foreach ($arrCats as $objOneCat) {
-                $arrKeyValues[$objOneCat->getSystemid()] = $objOneCat->getStrDisplayName();
-            }
-            $this->getField("cats")->setStrLabel($this->getLang("commons_categories"))->setArrKeyValues($arrKeyValues);
+            $this->getField("cats")->setStrLabel($this->getLang("commons_categories"))->setArrKeyValues($arrCats);
         }
 
         if (SystemSetting::getConfigValue("_news_news_datetime_") == "true") {

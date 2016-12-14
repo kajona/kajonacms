@@ -188,7 +188,7 @@ class AdminHelper
         if (empty($arrRequireConf)) {
             //base config
             $arrRequireConf = array(
-                "baseUrl" => _webpath_,
+                "baseUrl" => '_webpath_',
                 "paths" => array(),
                 "shim" => array(),
             );
