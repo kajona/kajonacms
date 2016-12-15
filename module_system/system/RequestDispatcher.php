@@ -124,6 +124,7 @@ class RequestDispatcher
                     StringUtil::replace("http:", "https:", ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML()) ? _xmlpath_ : _indexpath_)."?".getServer("QUERY_STRING")
                 );
                 ResponseObject::getInstance()->sendHeaders();
+                die("Reloading using https...");
             }
 
         }
