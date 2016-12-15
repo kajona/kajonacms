@@ -104,19 +104,21 @@ class RequestDispatcher
         //validate https status
         if (SystemSetting::getConfigValue("_admin_only_https_") == "true") {
             //check which headers to compare
-            $strHeaderName = Carrier::getInstance()->getObjConfig()->getConfig("https_header");
+            $arrHeaderNames = Carrier::getInstance()->getObjConfig()->getConfig("https_header");
+            if (!is_array($arrHeaderNames)) {
+                $arrHeaderNames = array($arrHeaderNames);
+            }
             $strHeaderValue = strtolower(Carrier::getInstance()->getObjConfig()->getConfig("https_header_value"));
 
-            //header itself given?
-            if (!issetServer($strHeaderName)) {
-                //reload to https
-                ResponseObject::getInstance()->setStrRedirectUrl(
-                    StringUtil::replace("http:", "https:", ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML()) ? _xmlpath_ : _indexpath_)."?".getServer("QUERY_STRING")
-                );
-                ResponseObject::getInstance()->sendHeaders();
-                die("Reloading using https...");
-            } //value of header correct?
-            elseif ($strHeaderValue != "" && $strHeaderValue != strtolower(getServer($strHeaderName))) {
+            $bitRedirectRequired = true;
+            foreach ($arrHeaderNames as $strSingleName) {
+                if (issetServer($strSingleName) && $strHeaderValue == strtolower(getServer($strSingleName))) {
+                    $bitRedirectRequired = false;
+                    break;
+                }
+            }
+
+            if ($bitRedirectRequired) {
                 //reload to https
                 ResponseObject::getInstance()->setStrRedirectUrl(
                     StringUtil::replace("http:", "https:", ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML()) ? _xmlpath_ : _indexpath_)."?".getServer("QUERY_STRING")
@@ -124,6 +126,7 @@ class RequestDispatcher
                 ResponseObject::getInstance()->sendHeaders();
                 die("Reloading using https...");
             }
+
         }
 
         //process language-param
