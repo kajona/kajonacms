@@ -21,7 +21,7 @@ module.exports = function(grunt) {
           '../../core/module_system/scripts/jquery/jquery.min.js',
           '../../core/module_system/scripts/jquerytag/jquery.tag-editor.min.js',
           '../../core/module_system/scripts/jqueryui/jquery-ui.custom.min.js',
-          '../../core/module_system/scripts/jstree/jquery.jstree.js',
+          '../../core/module_system/scripts/jstree3/dist/jstree.min.js',
           '../../core/module_system/scripts/qtip2/jquery.qtip.min.js',
           '../../kajona.min.js'
         ],
