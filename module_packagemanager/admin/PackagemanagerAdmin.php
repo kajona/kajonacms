@@ -814,6 +814,7 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
         $arrModules = $this->getParam("pack_path");
         foreach ($arrModules as $strName => $strValue) {
             if ($strValue != "") {
+                $strName = StringUtil::replace(StringUtil::toLowerCase(_realpath_), _realpath_, $strName);
                 $strTarget = _templatepath_."/".$objPack->getStrName()."/".StringUtil::substring($strName, StringUtil::indexOf($strName, "/default/") + 9);
                 $objFilesystem->fileCopy($strName, $strTarget);
             }
