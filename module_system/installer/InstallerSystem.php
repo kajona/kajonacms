@@ -807,7 +807,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
         $strReturn .= "Registering messaging portal controller\n";
         $objModule = SystemModule::getModuleByName("messaging");
-        $objModule->setStrNamePortal("MessagingAdmin.php");
+        $objModule->setStrNamePortal("MessagingPortal.php");
         $objModule->updateObjectToDb();
 
         $strReturn .= "Removing xml controller entries...\n";
