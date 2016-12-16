@@ -132,6 +132,10 @@ class DbPostgres extends DbBase
 
             //cast values if required
             foreach ($arrRow as $strColumn => $mixedValue) {
+                if ($mixedValue === null) {
+                    break;
+                }
+
                 //cast ints and floats
                 if ($arrTypeMap[$strColumn] == "int") {
                     $arrRow[$strColumn] = (int)$mixedValue;
