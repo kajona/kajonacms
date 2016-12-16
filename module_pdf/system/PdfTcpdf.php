@@ -17,7 +17,7 @@ require_once(__DIR__ . "/../vendor/autoload.php");
 /**
  * Cache directory for temporary files (full path).
  */
-define('K_PATH_CACHE', _realpath_ . '/project/temp');
+define('K_PATH_CACHE', _realpath_ . 'project/temp/');
 
 /**
  * Extends the TCPDF class and is being used internally by Pdf.
