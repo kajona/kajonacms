@@ -24,6 +24,7 @@ class GraphColorpalettes {
     const STR_COLOR_YELLOW = "#F47902";
     const STR_COLOR_RED = "#EE2929";
     const STR_COLOR_GREY = "#DDDDDD";
+    const STR_COLOR_GREY_DARK = "#9A9897";
     const STR_COLOR_BLUE = "#2f7ed8";
 
 
