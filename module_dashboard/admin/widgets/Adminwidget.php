@@ -263,7 +263,7 @@ abstract class Adminwidget
 
     public function getWidgetNameAdditionalContent()
     {
-        return "<span>&nbsp;</span>";
+        return "&nbsp;";
     }
 }
 
