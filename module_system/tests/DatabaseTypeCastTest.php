@@ -55,6 +55,32 @@ class DatabaseTypeCastTest extends Testbase
         $this->assertTrue(is_string($arrRow["temp_longtext"]));
 
 
+        $strId = generateSystemid();
+        $this->assertTrue($objDB->_pQuery("INSERT INTO {$strTestTable} (temp_id, temp_char254, temp_int, temp_long, temp_float, temp_text, temp_longtext) VALUES (?, ?, ?, ?, ?, ?, ?)", array($strId, null, null, null, null, null, null)));
+        $arrRow = $objDB->getPRow("SELECT * FROM {$strTestTable} WHERE temp_id = ?", array($strId));
+
+        $this->assertTrue($arrRow["temp_id"] === $strId);
+        $this->assertTrue(is_string($arrRow["temp_id"]));
+
+        $this->assertTrue($arrRow["temp_char254"] === null);
+        $this->assertTrue(is_null($arrRow["temp_char254"]));
+
+        $this->assertTrue($arrRow["temp_int"] === null);
+        $this->assertTrue(is_null($arrRow["temp_int"]));
+
+        $this->assertTrue($arrRow["temp_long"] === null);
+        $this->assertTrue(is_null($arrRow["temp_long"]));
+
+        $this->assertTrue($arrRow["temp_float"] === null);
+        $this->assertTrue(is_null($arrRow["temp_float"]));
+
+        $this->assertTrue($arrRow["temp_text"] === null);
+        $this->assertTrue(is_null($arrRow["temp_text"]));
+
+        $this->assertTrue($arrRow["temp_longtext"] === null);
+        $this->assertTrue(is_null($arrRow["temp_longtext"]));
+
+
 
         Carrier::getInstance()->getObjDB()->_pQuery("DROP TABLE {$strTestTable}", array());
 
