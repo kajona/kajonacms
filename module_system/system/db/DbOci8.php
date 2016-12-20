@@ -246,8 +246,14 @@ class DbOci8 extends DbBase
             return false;
         }
 
+        $arrTypeMap = null;
         while ($arrRow = oci_fetch_array($objStatement, OCI_ASSOC + OCI_RETURN_NULLS + OCI_RETURN_LOBS)) {
-            $arrRow = $this->parseResultRow($arrRow);
+            if ($arrTypeMap == null) {
+                //build result map if not yet done
+                $arrTypeMap = $this->buildResultSetTypeMap($arrRow, $objStatement);
+            }
+
+            $arrRow = $this->parseResultRow($arrRow, $arrTypeMap);
             $arrReturn[$intCounter++] = $arrRow;
         }
         @oci_free_statement($objStatement);
@@ -255,6 +261,47 @@ class DbOci8 extends DbBase
         if ($this->bitResetOrder) {
             $this->setCaseSensitiveSort();
             $this->bitResetOrder = false;
+        }
+
+        return $arrReturn;
+    }
+
+
+    /**
+     * Builds a map of datatypes per result-set.
+     * The postgres types are mapped to plain, simplified types.
+     * Used in getPArray to cast values from the database to their expected
+     * php pendant.
+     *
+     * @param $arrRow
+     * @param $objResultSet
+     *
+     * @return array
+     */
+    private function buildResultSetTypeMap($arrRow, $objResultSet)
+    {
+        $arrReturn = array();
+        foreach (array_keys($arrRow) as $intIndex => $strName) {
+            $strType = oci_field_type($objResultSet, $intIndex+1);
+
+            $strMapped = "char";
+            switch ($strType) {
+                //test most likely one first
+                case "CLOB":
+                case "VARCHAR2":
+                    break;
+                case "NUMBER":
+                    //fetch the precision
+                    $intScale = oci_field_scale($objResultSet, $intIndex+1);
+                    if ($intScale < 0) {
+                        $strMapped = "float";
+                    } else {
+                        $strMapped = "int";
+                    }
+                    break;
+            }
+
+            $arrReturn[$strName] = $strMapped;
         }
 
         return $arrReturn;
@@ -629,10 +676,27 @@ class DbOci8 extends DbBase
      *
      * @param array $arrRow
      *
+     * @param array $arrTypeMap
+     *
      * @return array
      */
-    private function parseResultRow(array $arrRow)
+    private function parseResultRow(array $arrRow, array $arrTypeMap)
     {
+
+        //cast values if required
+        foreach ($arrRow as $strColumn => $mixedValue) {
+            if ($mixedValue === null) {
+                break;
+            }
+
+            //cast ints and floats
+            if ($arrTypeMap[$strColumn] == "int") {
+                $arrRow[$strColumn] = (int)$mixedValue;
+            } elseif ($arrTypeMap[$strColumn] == "float") {
+                $arrRow[$strColumn] = (float)$mixedValue;
+            }
+        }
+
         $arrRow = array_change_key_case($arrRow, CASE_LOWER);
         if (isset($arrRow["count(*)"])) {
             $arrRow["COUNT(*)"] = $arrRow["count(*)"];

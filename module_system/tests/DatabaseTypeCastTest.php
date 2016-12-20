@@ -22,6 +22,7 @@ class DatabaseTypeCastTest extends Testbase
         $arrFields["temp_id"] = array(DbDatatypes::STR_TYPE_CHAR20, false);
         $arrFields["temp_char254"] = array(DbDatatypes::STR_TYPE_CHAR254, true);
         $arrFields["temp_int"] = array(DbDatatypes::STR_TYPE_INT, true);
+        $arrFields["temp_long"] = array(DbDatatypes::STR_TYPE_LONG, true);
         $arrFields["temp_float"] = array(DbDatatypes::STR_TYPE_DOUBLE, true);
         $arrFields["temp_text"] = array(DbDatatypes::STR_TYPE_TEXT, true);
         $arrFields["temp_longtext"] = array(DbDatatypes::STR_TYPE_LONGTEXT, true);
@@ -29,7 +30,7 @@ class DatabaseTypeCastTest extends Testbase
         $objDB->createTable("temp_typecasttest", $arrFields, array("temp_id"));
 
         $strId = generateSystemid();
-        $this->assertTrue($objDB->_pQuery("INSERT INTO {$strTestTable} (temp_id, temp_char254, temp_int, temp_float, temp_text, temp_longtext) VALUES (?, ?, ?, ?, ?, ?)", array($strId, "char254", 12345, 1234.56, "text", "longtext")));
+        $this->assertTrue($objDB->_pQuery("INSERT INTO {$strTestTable} (temp_id, temp_char254, temp_int, temp_long, temp_float, temp_text, temp_longtext) VALUES (?, ?, ?, ?, ?, ?, ?)", array($strId, "char254", 12345, 123456789, 1234.56, "text", "longtext")));
         $arrRow = $objDB->getPRow("SELECT * FROM {$strTestTable} WHERE temp_id = ?", array($strId));
 
         $this->assertTrue($arrRow["temp_id"] === $strId);
@@ -40,6 +41,9 @@ class DatabaseTypeCastTest extends Testbase
 
         $this->assertTrue($arrRow["temp_int"] === 12345);
         $this->assertTrue(is_int($arrRow["temp_int"]));
+
+        $this->assertTrue($arrRow["temp_long"] === 123456789);
+        $this->assertTrue(is_int($arrRow["temp_long"]));
 
         $this->assertTrue($arrRow["temp_float"] === 1234.56);
         $this->assertTrue(is_float($arrRow["temp_float"]));
