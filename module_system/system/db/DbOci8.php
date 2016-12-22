@@ -691,7 +691,7 @@ class DbOci8 extends DbBase
 
             //cast ints and floats
             if ($arrTypeMap[$strColumn] == "int") {
-                $arrRow[$strColumn] = (int)$mixedValue;
+                $arrRow[$strColumn] = $mixedValue+0;
             } elseif ($arrTypeMap[$strColumn] == "float") {
                 $arrRow[$strColumn] = (float)$mixedValue;
             }
