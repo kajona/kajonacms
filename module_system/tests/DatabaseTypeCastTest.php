@@ -33,25 +33,25 @@ class DatabaseTypeCastTest extends Testbase
         $this->assertTrue($objDB->_pQuery("INSERT INTO {$strTestTable} (temp_id, temp_char254, temp_int, temp_long, temp_float, temp_text, temp_longtext) VALUES (?, ?, ?, ?, ?, ?, ?)", array($strId, "char254", 12345, 20161221144714, 1234.56, "text", "longtext")));
         $arrRow = $objDB->getPRow("SELECT * FROM {$strTestTable} WHERE temp_id = ?", array($strId));
 
-        $this->assertTrue($arrRow["temp_id"] === $strId);
+        $this->assertSame($arrRow["temp_id"], $strId);
         $this->assertTrue(is_string($arrRow["temp_id"]));
 
-        $this->assertTrue($arrRow["temp_char254"] === "char254");
+        $this->assertSame($arrRow["temp_char254"], "char254");
         $this->assertTrue(is_string($arrRow["temp_char254"]));
 
-        $this->assertTrue($arrRow["temp_int"] === 12345);
+        $this->assertSame($arrRow["temp_int"], 12345);
         $this->assertTrue(is_int($arrRow["temp_int"]));
 
-        $this->assertTrue($arrRow["temp_long"] === 20161221144714);
+        $this->assertSame($arrRow["temp_long"], 20161221144714);
         $this->assertTrue(is_int($arrRow["temp_long"]));
 
-        $this->assertTrue($arrRow["temp_float"] === 1234.56);
+        $this->assertSame($arrRow["temp_float"], 1234.56);
         $this->assertTrue(is_float($arrRow["temp_float"]));
 
-        $this->assertTrue($arrRow["temp_text"] === "text");
+        $this->assertSame($arrRow["temp_text"], "text");
         $this->assertTrue(is_string($arrRow["temp_text"]));
 
-        $this->assertTrue($arrRow["temp_longtext"] === "longtext");
+        $this->assertSame($arrRow["temp_longtext"], "longtext");
         $this->assertTrue(is_string($arrRow["temp_longtext"]));
 
 
