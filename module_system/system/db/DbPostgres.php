@@ -122,28 +122,7 @@ class DbPostgres extends DbBase
             return false;
         }
 
-        $arrTypeMap = null;
-
         while ($arrRow = @pg_fetch_array($resultSet, null, PGSQL_ASSOC)) {
-            if ($arrTypeMap == null) {
-                //build result map if not yet done
-                $arrTypeMap = $this->buildResultSetTypeMap($arrRow, $resultSet);
-            }
-
-            //cast values if required
-            foreach ($arrRow as $strColumn => $mixedValue) {
-                if ($mixedValue === null) {
-                    break;
-                }
-
-                //cast ints and floats
-                if ($arrTypeMap[$strColumn] == "int") {
-                    $arrRow[$strColumn] = $mixedValue+0;
-                } elseif ($arrTypeMap[$strColumn] == "float") {
-                    $arrRow[$strColumn] = (float)$mixedValue;
-                }
-            }
-
             //conversions to remain compatible:
             //   count --> COUNT(*)
             if (isset($arrRow["count"])) {
@@ -157,47 +136,6 @@ class DbPostgres extends DbBase
 
         return $arrReturn;
     }
-
-    /**
-     * Builds a map of datatypes per result-set.
-     * The postgres types are mapped to plain, simplified types.
-     * Used in getPArray to cast values from the database to their expected
-     * php pendant.
-     *
-     * @param $arrRow
-     * @param $objResultSet
-     *
-     * @return array
-     */
-    private function buildResultSetTypeMap($arrRow, $objResultSet)
-    {
-        $arrReturn = array();
-        foreach (array_keys($arrRow) as $intIndex => $strName) {
-            $strType = @pg_field_type($objResultSet, $intIndex);
-
-            $strMapped = "char";
-            switch ($strType) {
-                //test most likely one first
-                case "varchar":
-                    break;
-                case "int2":
-                case "int4":
-                case "int8":
-                    $strMapped = "int";
-                    break;
-                case "numeric":
-                case "float4":
-                case "float8":
-                    $strMapped = "float";
-                    break;
-            }
-
-            $arrReturn[$strName] = $strMapped;
-        }
-
-        return $arrReturn;
-    }
-
 
     /**
      * Postgres supports UPSERTS since 9.5, see http://michael.otacoo.com/postgresql-2/postgres-9-5-feature-highlight-upsert/.
