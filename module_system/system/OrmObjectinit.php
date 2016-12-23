@@ -82,7 +82,7 @@ class OrmObjectinit extends OrmBase
                         } else {
                             $arrRow[$strColumn] = (int)$arrRow[$strColumn];
                         }
-                    } elseif ($arrRow[$strColumn] != null && (StringUtil::toLowerCase(StringUtil::substring($strSetter, 0, 8)) == "setfloat" || StringUtil::toLowerCase(StringUtil::substring($strSetter, 0, 9)) == "setdouble")) {
+                    } elseif ($arrRow[$strColumn] != null && (StringUtil::toLowerCase(StringUtil::substring($strSetter, 0, 8)) == "setfloat" || StringUtil::toLowerCase(StringUtil::substring($strSetter, 0, 7)) == "setlong")) {
                         $arrRow[$strColumn] = (float)$arrRow[$strColumn];
                     }
 
