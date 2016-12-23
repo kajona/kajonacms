@@ -75,14 +75,14 @@ class OrmObjectinit extends OrmBase
                     $strVar = $objReflection->getAnnotationValueForProperty($strPropertyName, "@var");
                     if (StringUtil::indexOf($strVar, "Date") !== false && $arrRow[$strColumn] > 0) {
                         $arrRow[$strColumn] = new Date($arrRow[$strColumn]);
-                    } elseif ($arrRow[$strColumn] != null && (StringUtil::toLowerCase(StringUtil::substring($strSetter, 0, 6)) == "setint" || StringUtil::toLowerCase(StringUtil::substring($strSetter, 0, 6)) == "setbit")) {
+                    } elseif ($arrRow[$strColumn] != null && (StringUtil::toLowerCase(StringUtil::substring($strSetter, 0, 6)) == "setint" || StringUtil::toLowerCase(StringUtil::substring($strSetter, 0, 6)) == "setbit") || StringUtil::toLowerCase(StringUtil::substring($strSetter, 0, 7)) == "setlong") {
                         //different casts on 32bit / 64bit
                         if ($arrRow[$strColumn] > PHP_INT_MAX) {
                             $arrRow[$strColumn] = (float)$arrRow[$strColumn];
                         } else {
                             $arrRow[$strColumn] = (int)$arrRow[$strColumn];
                         }
-                    } elseif ($arrRow[$strColumn] != null && (StringUtil::toLowerCase(StringUtil::substring($strSetter, 0, 8)) == "setfloat" || StringUtil::toLowerCase(StringUtil::substring($strSetter, 0, 7)) == "setlong")) {
+                    } elseif ($arrRow[$strColumn] != null && (StringUtil::toLowerCase(StringUtil::substring($strSetter, 0, 8)) == "setfloat")) {
                         $arrRow[$strColumn] = (float)$arrRow[$strColumn];
                     }
 
