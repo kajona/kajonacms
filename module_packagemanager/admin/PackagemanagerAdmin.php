@@ -470,6 +470,7 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
 
                 //reload the current request in order to flush the class-loader
                 //pass the reload header and quit to avoid other problems, e.g. due to undefined classes
+                Classloader::getInstance()->flushCache();
                 header("Location: ".$strUrlToLoad);
                 die();
             } else {
