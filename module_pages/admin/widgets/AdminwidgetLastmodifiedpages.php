@@ -76,8 +76,7 @@ class AdminwidgetLastmodifiedpages extends Adminwidget implements AdminwidgetInt
         foreach ($arrRecords as $objPage) {
             if ($objPage->rightEdit()) {
                 $strReturn .= $this->widgetText(Link::getLinkAdmin("pages_content", "list", "&systemid=".$objPage->getSystemid(), $objPage->getStrDisplayName()));
-            }
-            else {
+            } else {
                 $strReturn .= $this->widgetText($objPage->getStrDisplayName());
             }
 
@@ -86,30 +85,6 @@ class AdminwidgetLastmodifiedpages extends Adminwidget implements AdminwidgetInt
 
         return $strReturn;
     }
-
-    /**
-     * This callback is triggered on a users' first login into the system.
-     * You may use this method to install a widget as a default widget to
-     * a users dashboard.
-     *
-     * @param string $strUserid
-     *
-     * @return bool
-     */
-    public function onFistLogin($strUserid)
-    {
-        if (SystemModule::getModuleByName("pages") !== null && SystemAspect::getAspectByName("content") !== null) {
-            $objDashboard = new DashboardWidget();
-            $objDashboard->setStrColumn("column1");
-            $objDashboard->setStrUser($strUserid);
-            $objDashboard->setStrClass(__CLASS__);
-            $objDashboard->setStrContent("a:1:{s:8:\"nrofrows\";s:1:\"4\";}");
-            return $objDashboard->updateObjectToDb(DashboardWidget::getWidgetsRootNodeForUser($strUserid, SystemAspect::getAspectByName("content")->getSystemid()));
-        }
-
-        return true;
-    }
-
 
     /**
      * Return a short (!) name of the widget.
@@ -122,5 +97,4 @@ class AdminwidgetLastmodifiedpages extends Adminwidget implements AdminwidgetInt
     }
 
 }
-
 
