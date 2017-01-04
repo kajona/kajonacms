@@ -5,7 +5,6 @@
 
 namespace Kajona\Dashboard\Service;
 
-
 use Kajona\Dashboard\Admin\Widgets\AdminwidgetNote;
 use Kajona\Dashboard\Admin\Widgets\AdminwidgetRssfeed;
 use Kajona\Dashboard\Admin\Widgets\AdminwidgetSystemcheck;
@@ -19,6 +18,13 @@ use Kajona\Stats\Admin\Widgets\AdminwidgetStats;
 use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemModule;
 
+/**
+ * A service creating the default dashboard for new users.
+ *
+ * @package Kajona\Dashboard\Service
+ * @author sidler@mulchprod.de
+ * @since 6.2
+ */
 class DashboardInitializerService
 {
 

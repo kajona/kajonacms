@@ -7,7 +7,7 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
 /**
- * ServiceProvider
+ * ServiceProvider for the dashboard module
  *
  * @package Kajona\System\System
  * @author sidler@mulchprod.de
