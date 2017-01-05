@@ -153,7 +153,6 @@ class InstallerVotings extends InstallerBase implements InstallerRemovableInterf
             $this->updateModuleVersion("votings", "1.5");
             $strReturn .= "Updating element-versions...\n";
             $this->updateElementVersion("votings", "1.5");
-            $this->objDB->flushQueryCache();
         }
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
@@ -163,7 +162,6 @@ class InstallerVotings extends InstallerBase implements InstallerRemovableInterf
             $this->updateModuleVersion("votings", "1.6");
             $strReturn .= "Updating element-versions...\n";
             $this->updateElementVersion("votings", "1.6");
-            $this->objDB->flushQueryCache();
         }
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
@@ -173,7 +171,6 @@ class InstallerVotings extends InstallerBase implements InstallerRemovableInterf
             $this->updateModuleVersion("votings", "1.7");
             $strReturn .= "Updating element-versions...\n";
             $this->updateElementVersion("votings", "1.7");
-            $this->objDB->flushQueryCache();
         }
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
@@ -183,7 +180,6 @@ class InstallerVotings extends InstallerBase implements InstallerRemovableInterf
             $this->updateModuleVersion("votings", "5.0");
             $strReturn .= "Updating element-versions...\n";
             $this->updateElementVersion("votings", "5.0");
-            $this->objDB->flushQueryCache();
         }
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
@@ -193,7 +189,13 @@ class InstallerVotings extends InstallerBase implements InstallerRemovableInterf
             $this->updateModuleVersion("votings", "5.1");
             $strReturn .= "Updating element-versions...\n";
             $this->updateElementVersion("votings", "5.1");
-            $this->objDB->flushQueryCache();
+        }
+
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.1") {
+            $strReturn .= "Updating to 6.2...\n";
+            $this->updateModuleVersion("votings", "6.2");
+            $this->updateElementVersion("votings", "6.2");
         }
 
         return $strReturn."\n\n";

@@ -173,7 +173,6 @@ class InstallerTags extends InstallerBase implements InstallerRemovableInterface
             $strReturn .= "Updating to 4.7...\n";
             $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7");
             $this->updateElementVersion($this->objMetadata->getStrTitle(), "4.7");
-            $this->objDB->flushQueryCache();
         }
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
@@ -181,7 +180,6 @@ class InstallerTags extends InstallerBase implements InstallerRemovableInterface
             $strReturn .= "Updating to 5.0...\n";
             $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.0");
             $this->updateElementVersion($this->objMetadata->getStrTitle(), "5.0");
-            $this->objDB->flushQueryCache();
         }
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
@@ -189,7 +187,13 @@ class InstallerTags extends InstallerBase implements InstallerRemovableInterface
             $strReturn .= "Updating to 5.1...\n";
             $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1");
             $this->updateElementVersion($this->objMetadata->getStrTitle(), "5.1");
-            $this->objDB->flushQueryCache();
+        }
+
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.1") {
+            $strReturn .= "Updating to 6.2...\n";
+            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "6.2");
+            $this->updateElementVersion($this->objMetadata->getStrTitle(), "6.2");
         }
 
         return $strReturn."\n\n";
