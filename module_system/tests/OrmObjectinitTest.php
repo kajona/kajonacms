@@ -53,6 +53,7 @@ class OrmObjectinitTest extends Testbase
         $objObject->setIntInteger(12345);
         $objObject->setIntBigint(20161223120000);
         $objObject->setFloatDouble(123.45);
+        $objObject->setBitBoolean(false);
 
         $longDate = 20160827011525;
         $objObject->setObjDate(new Date($longDate));
@@ -73,6 +74,13 @@ class OrmObjectinitTest extends Testbase
         $this->assertSame(12345, $objObj->getIntInteger());
         $this->assertSame(20161223120000, $objObj->getIntBigint());
         $this->assertSame(123.45, $objObj->getFloatDouble());
+        $this->assertSame(false, $objObj->getBitBoolean());
+
+        $objObj->setBitBoolean(true);
+        $objObj->updateObjectToDb();
+
+        $objObj = Objectfactory::getInstance()->getObject($objObject->getSystemid());
+        $this->assertSame(true, $objObj->getBitBoolean());
     }
 
 
@@ -93,6 +101,7 @@ class OrmObjectinitTest extends Testbase
         $this->assertNull($objObj->getIntBigint());
         $this->assertNull($objObj->getFloatDouble());
         $this->assertNull($objObj->getObjDate());
+        $this->assertNull($objObj->getBitBoolean());
     }
 
 
@@ -154,15 +163,22 @@ class OrmObjectinitTestclass extends Model implements ModelInterface
     private $intInteger = null;
 
     /**
-     * @var int
+     * @var bool
      * @tableColumn inittestclass.col7
+     * @tableColumnDatatype int
+     */
+    private $bitBoolean = null;
+
+    /**
+     * @var int
+     * @tableColumn inittestclass.col8
      * @tableColumnDatatype long
      */
     private $intBigint = null;
 
     /**
      * @var float
-     * @tableColumn inittestclass.col8
+     * @tableColumn inittestclass.col9
      * @tableColumnDatatype double
      */
     private $floatDouble = null;
@@ -303,6 +319,22 @@ class OrmObjectinitTestclass extends Model implements ModelInterface
     public function setFloatDouble($floatDouble)
     {
         $this->floatDouble = $floatDouble;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getBitBoolean()
+    {
+        return $this->bitBoolean;
+    }
+
+    /**
+     * @param bool $bitBoolean
+     */
+    public function setBitBoolean($bitBoolean)
+    {
+        $this->bitBoolean = $bitBoolean;
     }
 
 }
