@@ -298,19 +298,14 @@ define(['jquery', 'jstree', 'ajax', 'lang', 'cacheManager'], function ($, jstree
             var treeInstance = data.instance;
 
             /*Select nodes after the tree has loaded
-             if treeContext.initiallySelectedNodes contains id's, select all nodes with the given id's in the tree
-             otherwise the last id in array treeContext.treeviewExpanders is automatically being selected
+                if treeContext.initiallySelectedNodes contains id's, select all nodes with the given id's in the tree
+                otherwise the last id in array treeContext.treeviewExpanders is automatically being selected
              */
             if(treeContext.initiallySelectedNodes instanceof Array) {
-                treeContext.initiallySelectedNodes.forEach(function(strId) {
-                    var $element = $("#" + strId);
-                    treeInstance.select_node($element);
-                });
-
+                treeInstance.select_node(treeContext.initiallySelectedNodes);
             } else if(treeContext.treeviewExpanders instanceof Array) {
-                var strId = "#" + treeContext.treeviewExpanders[treeContext.treeviewExpanders.length-1];
-                var $element = $(strId);
-                treeInstance.select_node($element);
+                var strSelectId = "#" + treeContext.treeviewExpanders[treeContext.treeviewExpanders.length-1];
+                treeInstance.select_node(strSelectId);
             }
         }
     };
