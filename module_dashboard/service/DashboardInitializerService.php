@@ -44,7 +44,7 @@ class DashboardInitializerService
                 $objDashboard->setStrColumn("column1");
                 $objDashboard->setStrUser($strUserid);
                 $objDashboard->setStrClass(AdminwidgetLastmodifiedpages::class);
-                $objDashboard->setStrContent("a:1:{s:8:\"nrofrows\";s:1:\"4\";}");
+                $objDashboard->setStrContent(serialize(["nrofrows" => "4"]));
                 $objDashboard->updateObjectToDb(DashboardWidget::getWidgetsRootNodeForUser($strUserid, $strContentAspectId));
             }
 
@@ -52,7 +52,15 @@ class DashboardInitializerService
             $objDashboard->setStrColumn("column2");
             $objDashboard->setStrUser($strUserid);
             $objDashboard->setStrClass(AdminwidgetNote::class);
-            $objDashboard->setStrContent("a:1:{s:7:\"content\";s:1460:\"Welcome to Kajona V5!<br /><br  />Kajona is developed by volunteers all over the world - show them your support by liking Kajona on facebook or donating a beer.<div id=\"fb-root\"></div><script>(function(d, s, id) {  var js, fjs = d.getElementsByTagName(s)[0]; if (d.getElementById(id)) {return;} js = d.createElement(s); js.id = id; js.src = \"//connect.facebook.net/en_US/all.js#appId=141503865945925&xfbml=1\"; fjs.parentNode.insertBefore(js, fjs); }(document, 'script', 'facebook-jssdk'));</script><div class=\"fb-like\" data-href=\"https://www.facebook.com/pages/Kajona%C2%B3/156841314360532\" data-send=\"false\" data-layout=\"button_count\" data-width=\"60\" data-show-faces=\"false\"></div><form action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\"><input type=\"hidden\" name=\"cmd\" value=\"_donations\" /> <input type=\"hidden\" name=\"business\" value=\"donate@kajona.de\" /> <input type=\"hidden\" name=\"item_name\" value=\"Kajona Development\" /> <input type=\"hidden\" name=\"no_shipping\" value=\"0\" /> <input type=\"hidden\" name=\"no_note\" value=\"1\" /> <input type=\"hidden\" name=\"currency_code\" value=\"EUR\" /> <input type=\"hidden\" name=\"tax\" value=\"0\" /> <input type=\"hidden\" name=\"bn\" value=\"PP-DonationsBF\" /> <input type=\"image\" border=\"0\" src=\"https://www.paypal.com/en_US/i/btn/btn_donate_LG.gif\" name=\"submit\" alt=\"PayPal - The safer, easier way to pay online!\" /> <img height=\"1\" width=\"1\" border=\"0\" alt=\"\" src=\"https://www.paypal.com/en_US/i/scr/pixel.gif\" /></form>\";}");
+            $objDashboard->setStrContent(serialize(["content" => "Welcome to Kajona V5!<br /><br  />Kajona is developed by volunteers all over the world - show them your support by liking Kajona on facebook or donating a beer.
+                        <div id=\"fb-root\"></div>
+                        <script>(function(d, s, id) {  var js, fjs = d.getElementsByTagName(s)[0]; if (d.getElementById(id)) {return;} js = d.createElement(s); js.id = id; js.src = \"//connect.facebook.net/en_US/all.js#appId=141503865945925&xfbml=1\"; fjs.parentNode.insertBefore(js, fjs); }(document, 'script', 'facebook-jssdk'));</script>
+                        <div class=\"fb-like\" data-href=\"https://www.facebook.com/pages/Kajona%C2%B3/156841314360532\" data-send=\"false\" data-layout=\"button_count\" data-width=\"60\" data-show-faces=\"false\"></div>
+                        <form action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\"><input type=\"hidden\" name=\"cmd\" value=\"_donations\" /> <input type=\"hidden\" name=\"business\" value=\"donate@kajona.de\" /> 
+                        <input type=\"hidden\" name=\"item_name\" value=\"Kajona Development\" /> <input type=\"hidden\" name=\"no_shipping\" value=\"0\" /> <input type=\"hidden\" name=\"no_note\" value=\"1\" /> 
+                        <input type=\"hidden\" name=\"currency_code\" value=\"EUR\" /> <input type=\"hidden\" name=\"tax\" value=\"0\" /> <input type=\"hidden\" name=\"bn\" value=\"PP-DonationsBF\" /> 
+                        <input type=\"image\" border=\"0\" src=\"https://www.paypal.com/en_US/i/btn/btn_donate_LG.gif\" name=\"submit\" alt=\"PayPal - The safer, easier way to pay online!\" /> 
+                        <img height=\"1\" width=\"1\" border=\"0\" alt=\"\" src=\"https://www.paypal.com/en_US/i/scr/pixel.gif\" /></form>"]));
             $objDashboard->updateObjectToDb(DashboardWidget::getWidgetsRootNodeForUser($strUserid, $strContentAspectId));
 
             $objDashboard = new DashboardWidget();
@@ -71,7 +79,7 @@ class DashboardInitializerService
             $objDashboard->setStrColumn("column3");
             $objDashboard->setStrUser($strUserid);
             $objDashboard->setStrClass(AdminwidgetRssfeed::class);
-            $objDashboard->setStrContent("a:2:{s:7:\"feedurl\";s:39:\"http://www.kajona.de/kajona_news_en.rss\";s:5:\"posts\";s:1:\"4\";}");
+            $objDashboard->setStrContent(serialize(["feedurl" => "http://www.kajona.de/kajona_news_en.rss", "posts" => "4"]));
             $objDashboard->updateObjectToDb(DashboardWidget::getWidgetsRootNodeForUser($strUserid, $strContentAspectId));
 
         }
@@ -86,21 +94,21 @@ class DashboardInitializerService
                 $objDashboard->setStrColumn("column1");
                 $objDashboard->setStrUser($strUserid);
                 $objDashboard->setStrClass(AdminwidgetSystemcheck::class);
-                $objDashboard->setStrContent("a:2:{s:3:\"php\";s:7:\"checked\";s:6:\"kajona\";s:7:\"checked\";}");
+                $objDashboard->setStrContent(serialize(array("php" => "checked", "kajona" => "checked")));
                 $objDashboard->updateObjectToDb(DashboardWidget::getWidgetsRootNodeForUser($strUserid, $strManagementAspectId));
 
                 $objDashboard = new DashboardWidget();
                 $objDashboard->setStrColumn("column1");
                 $objDashboard->setStrUser($strUserid);
                 $objDashboard->setStrClass(AdminwidgetSysteminfo::class);
-                $objDashboard->setStrContent("a:3:{s:3:\"php\";s:7:\"checked\";s:6:\"server\";s:7:\"checked\";s:6:\"kajona\";s:7:\"checked\";}");
+                $objDashboard->setStrContent(serialize(array("php" => "checked", "server" => "checked", "kajona" => "checked")));
                 $objDashboard->updateObjectToDb(DashboardWidget::getWidgetsRootNodeForUser($strUserid, $strManagementAspectId));
 
                 $objDashboard = new DashboardWidget();
                 $objDashboard->setStrColumn("column3");
                 $objDashboard->setStrUser($strUserid);
                 $objDashboard->setStrClass(AdminwidgetSystemlog::class);
-                $objDashboard->setStrContent("a:1:{s:8:\"nrofrows\";s:1:\"1\";}");
+                $objDashboard->setStrContent(serialize(array("nrofrows" => "1")));
                 $objDashboard->updateObjectToDb(DashboardWidget::getWidgetsRootNodeForUser($strUserid, $strManagementAspectId));
             }
 
@@ -109,7 +117,7 @@ class DashboardInitializerService
                 $objDashboard->setStrColumn("column2");
                 $objDashboard->setStrUser($strUserid);
                 $objDashboard->setStrClass(AdminwidgetStats::class);
-                $objDashboard->setStrContent("a:5:{s:7:\"current\";s:7:\"checked\";s:3:\"day\";s:7:\"checked\";s:4:\"last\";s:7:\"checked\";s:6:\"nrLast\";s:1:\"4\";s:5:\"chart\";s:7:\"checked\";}");
+                $objDashboard->setStrContent(serialize(array("current" => "checked", "day" => "checked", "last" => "checked", "nrLast" => "4", "chart" => "checked")));
                 $objDashboard->updateObjectToDb(DashboardWidget::getWidgetsRootNodeForUser($strUserid, $strManagementAspectId));
             }
         }
