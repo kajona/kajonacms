@@ -2478,20 +2478,14 @@ HTML;
      */
     public function getTree(SystemJSTreeConfig $objTreeConfig)
     {
-        $arrNodesToExpand = $objTreeConfig->getArrNodesToExpand();
-
         $arrTemplate = array();
         $arrTemplate["rootNodeSystemid"] = $objTreeConfig->getStrRootNodeId();
         $arrTemplate["loadNodeDataUrl"] = $objTreeConfig->getStrNodeEndpoint();
         $arrTemplate["treeId"] = "tree_".$objTreeConfig->getStrRootNodeId();
         $arrTemplate["treeConfig"] = $objTreeConfig->toJson();
-        $arrTemplate["treeviewExpanders"] = "";
-        for ($intI = 0; $intI < count($arrNodesToExpand); $intI++) {
-            $arrTemplate["treeviewExpanders"] .= "\"".$arrNodesToExpand[$intI]."\"";
-            if ($intI < count($arrNodesToExpand) - 1) {
-                $arrTemplate["treeviewExpanders"] .= ",";
-            }
-        }
+        $arrTemplate["treeviewExpanders"] = json_encode($objTreeConfig->getArrNodesToExpand());
+        $arrTemplate["initiallySelectedNodes"] = json_encode($objTreeConfig->getArrInitiallySelectedNodes());
+
         return $this->objTemplate->fillTemplateFile($arrTemplate, "/elements.tpl", "tree");
     }
 

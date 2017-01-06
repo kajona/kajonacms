@@ -39,11 +39,19 @@ class SystemJSTreeConfig
     private $strNodeEndpoint = null;
 
     /**
-     * Contains an array of id's. If set, then treepath will be opened
+ * Contains an array of id's. If set, then treepath will be opened
+ *
+ * @var null
+ */
+    private $arrNodesToExpand = null;
+
+
+    /**
+     * Contains an array of id's. Id's in this array will initially be selected in the tree
      *
      * @var null
      */
-    private $arrNodesToExpand = null;
+    private $arrInitiallySelectedNodes = null;
 
     /**
      * @var bool - if true dnd is enabled on the tree (@see dnd plugin from jstree)
@@ -201,6 +209,22 @@ class SystemJSTreeConfig
     public function setArrNodesToExpand($arrNodesToExpand)
     {
         $this->arrNodesToExpand = $arrNodesToExpand;
+    }
+
+    /**
+     * @return null
+     */
+    public function getArrInitiallySelectedNodes()
+    {
+        return $this->arrInitiallySelectedNodes;
+    }
+
+    /**
+     * @param null $arrInitiallySelectedNodes
+     */
+    public function setArrInitiallySelectedNodes($arrInitiallySelectedNodes)
+    {
+        $this->arrInitiallySelectedNodes = $arrInitiallySelectedNodes;
     }
 
     /**
