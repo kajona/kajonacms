@@ -188,6 +188,14 @@ class InstallerPostacomment extends InstallerBase implements InstallerRemovableI
             $strReturn .= $this->update_51_to_511();
         }
 
+
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.1.1") {
+            $strReturn = "Updating to 6.2...\n";
+            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "6.2");
+            $this->updateElementVersion($this->objMetadata->getStrTitle(), "6.2");
+        }
+
         return $strReturn."\n\n";
 	}
 

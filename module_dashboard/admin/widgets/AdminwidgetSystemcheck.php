@@ -81,7 +81,7 @@ class AdminwidgetSystemcheck extends Adminwidget implements AdminwidgetInterface
 
 
             $arrFilesAvailable = array(
-                "/installer.php", "/debug.php", "/v3_v4_postupdate.php"
+                "/installer.php", "/upgrade.php", "/debug.php", "/v3_v4_postupdate.php"
             );
 
             foreach($arrFilesAvailable as $strOneFile) {

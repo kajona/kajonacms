@@ -5,12 +5,12 @@
         >
     <title>navigation</title>
     <description>The module navigation is capable of rendering a navigation-tree, either created manually or rendered out of the current site-structure.</description>
-    <version>5.1</version>
+    <version>6.2</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="system" version="5.1" />
-        <module name="pages" version="5.1" />
+        <module name="system" version="6.2" />
+        <module name="pages" version="6.2" />
     </requiredModules>
 </package>

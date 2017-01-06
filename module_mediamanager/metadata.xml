@@ -9,11 +9,11 @@
         If you have the package "qr-code" installed, the download links may be illustrated using a qrcode-image, too.
         The mediamanager replaces the old (v3) download- and gallery-modules.
     </description>
-    <version>5.1</version>
+    <version>6.2</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="system" version="5.1" />
+        <module name="system" version="6.2" />
     </requiredModules>
 </package>
