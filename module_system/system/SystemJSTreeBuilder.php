@@ -23,8 +23,6 @@ class SystemJSTreeBuilder
 {
     const STR_PARAM_INITIALTOGGLING = "jstree_initialtoggling";
     const STR_PARAM_LOADALLCHILDNOES = "jstree_loadallchildnodes";
-    const STR_PARAM_SELECTNODE = "jstree_selectednode";
-
 
     /** @var JStreeNodeLoaderInterface|null  */
     private $objNodeLoader = null;
