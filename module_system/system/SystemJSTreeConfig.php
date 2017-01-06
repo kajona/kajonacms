@@ -3,8 +3,6 @@
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2016 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                                *
 ********************************************************************************************************/
 
 
@@ -27,29 +25,28 @@ class SystemJSTreeConfig
     /**
      * The root id of the tree
      *
-     * @var null
+     * @var string
      */
     private $strRootNodeId = null;
 
     /**
      * Endpoint (URL) which is being called for loading the nodes
      *
-     * @var null
+     * @var null|array
      */
     private $strNodeEndpoint = null;
 
     /**
- * Contains an array of id's. If set, then treepath will be opened
- *
- * @var null
- */
+     * Contains an array of id's. If set, then treepath will be opened
+     *
+     * @var null|array
+     */
     private $arrNodesToExpand = null;
-
 
     /**
      * Contains an array of id's. Id's in this array will initially be selected in the tree
      *
-     * @var null
+     * @var null|array
      */
     private $arrInitiallySelectedNodes = null;
 
@@ -69,7 +66,7 @@ class SystemJSTreeConfig
     private $arrTypes = null;
 
     /**
-     * @var null (@see contextmenu plugin from jstree)
+     * @var string (@see contextmenu plugin from jstree)
      */
     private $strContextMenuItemFunction = "function(o, cb){ return tree.contextmenu.createDefaultContextMenu(o, cb);}";
 
@@ -164,23 +161,23 @@ class SystemJSTreeConfig
     }
 
     /**
-     * @return null
+     * @return string
      */
-    public function getStrRootNodeId()
+    public function getStrRootNodeId(): string
     {
         return $this->strRootNodeId;
     }
 
     /**
-     * @param null $strRootNodeId
+     * @param string $strRootNodeId
      */
-    public function setStrRootNodeId($strRootNodeId)
+    public function setStrRootNodeId(string $strRootNodeId)
     {
         $this->strRootNodeId = $strRootNodeId;
     }
 
     /**
-     * @return null
+     * @return array|null
      */
     public function getStrNodeEndpoint()
     {
@@ -188,7 +185,7 @@ class SystemJSTreeConfig
     }
 
     /**
-     * @param null $strNodeEndpoint
+     * @param array|null $strNodeEndpoint
      */
     public function setStrNodeEndpoint($strNodeEndpoint)
     {
@@ -196,7 +193,7 @@ class SystemJSTreeConfig
     }
 
     /**
-     * @return null
+     * @return array|null
      */
     public function getArrNodesToExpand()
     {
@@ -204,7 +201,7 @@ class SystemJSTreeConfig
     }
 
     /**
-     * @param null $arrNodesToExpand
+     * @param array|null $arrNodesToExpand
      */
     public function setArrNodesToExpand($arrNodesToExpand)
     {
@@ -212,7 +209,7 @@ class SystemJSTreeConfig
     }
 
     /**
-     * @return null
+     * @return array|null
      */
     public function getArrInitiallySelectedNodes()
     {
@@ -220,7 +217,7 @@ class SystemJSTreeConfig
     }
 
     /**
-     * @param null $arrInitiallySelectedNodes
+     * @param array|null $arrInitiallySelectedNodes
      */
     public function setArrInitiallySelectedNodes($arrInitiallySelectedNodes)
     {
@@ -228,7 +225,7 @@ class SystemJSTreeConfig
     }
 
     /**
-     * @return null
+     * @return string
      */
     public function getStrContextMenuItemFunction()
     {
@@ -236,7 +233,7 @@ class SystemJSTreeConfig
     }
 
     /**
-     * @param null $strContextMenuItemFunction
+     * @param string $strContextMenuItemFunction
      */
     public function setStrContextMenuItemFunction($strContextMenuItemFunction)
     {
