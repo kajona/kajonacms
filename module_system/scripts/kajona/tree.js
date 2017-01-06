@@ -275,6 +275,14 @@ define(['jquery', 'jstree', 'ajax', 'lang', 'cacheManager'], function ($, jstree
                     moveNode(data);
                 });
 
+            $jsTree
+                .on('ready.jstree', function (e, data) {
+
+                    var elemId = "#" + treeContext.treeviewExpanders[treeContext.treeviewExpanders.length-1];
+                    var $element = $(elemId);
+                    kajonatree.helper.getTreeInstance().select_node($element);
+                });
+
             //4. init jstree draggable for lists
             $('td.treedrag.jstree-listdraggable').on('mousedown', this.listDnd);
         };
