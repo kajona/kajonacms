@@ -13,6 +13,7 @@ use Kajona\Pages\System\PagesPage;
 use Kajona\Search\System\SearchResult;
 use Kajona\System\System\AdminListableInterface;
 use Kajona\System\System\Carrier;
+use Kajona\System\System\Date;
 use Kajona\System\System\FilterBase;
 use Kajona\System\System\LanguagesLanguage;
 use Kajona\System\System\LanguagesLanguageset;
@@ -539,9 +540,9 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      */
     public function renderVersionValue($strProperty, $strValue)
     {
-        if (($strProperty == "objDateStart" || $strProperty == "objDateEnd" || $strProperty == "objDateSpecial") && $strValue > 0) {
+        if (($strProperty == "objDateStart" || $strProperty == "objDateEnd" || $strProperty == "objDateSpecial") && ($strValue instanceof Date || $strValue > 0)) {
             return dateToString(new \Kajona\System\System\Date($strValue), false);
-        } else if ($strProperty == "assignedCategories" && validateSystemid($strValue)) {
+        } elseif ($strProperty == "assignedCategories" && validateSystemid($strValue)) {
             $objCategory = new NewsCategory($strValue);
             return $objCategory->getStrTitle();
         }

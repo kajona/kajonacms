@@ -2,7 +2,7 @@
 //       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
 
 
-define(['jquery', 'ajax', 'util'], function ($, ajax, util) {
+define(['jquery', 'ajax', 'util', 'jquery-ui'], function ($, ajax, util, ui) {
 
     var pages = {};
 

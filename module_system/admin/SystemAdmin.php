@@ -1607,7 +1607,11 @@ JS;
             foreach ($arrProps as $strPropertyName => $strValue) {
                 $strGetter = $objReflection->getGetter($strPropertyName);
                 if (!empty($strGetter)) {
-                    $arrData[$strPropertyName] = strval($objObject->renderVersionValue($strPropertyName, $objObject->$strGetter()));
+                    $strValue = $objObject->$strGetter();
+                    if (is_array($strValue)) {
+                        $strValue = implode(", ", $strValue);
+                    }
+                    $arrData[$strPropertyName] = strval($objObject->renderVersionValue($strPropertyName, $strValue));
                 }
             }
 

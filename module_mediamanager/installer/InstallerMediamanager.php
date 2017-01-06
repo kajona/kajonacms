@@ -116,6 +116,13 @@ class InstallerMediamanager extends InstallerBase implements InstallerInterface
             $this->updateModuleVersion("folderview", "5.1");
         }
 
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if ($arrModule["module_version"] == "5.1") {
+            $strReturn = "Updating to 6.2...\n";
+            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "6.2");
+            $this->updateModuleVersion("folderview", "6.2");
+        }
+
         return $strReturn."\n\n";
     }
 

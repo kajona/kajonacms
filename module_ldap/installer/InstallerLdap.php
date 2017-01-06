@@ -169,6 +169,12 @@ class InstallerLdap extends InstallerBase implements InstallerRemovableInterface
             $this->updateModuleVersion("ldap", "5.1");
         }
 
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if ($arrModule["module_version"] == "5.1") {
+            $strReturn .= "Updating to 6.2...\n";
+            $this->updateModuleVersion("ldap", "6.2");
+        }
+
         return $strReturn."\n\n";
     }
 
