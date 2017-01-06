@@ -591,7 +591,14 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "5.1.4") {
             $strReturn .= "Updating 5.1.4 to 6.2...\n";
-            $this->updateModuleVersion("", "6.2");
+            $this->update_514_62();
+            $this->objDB->flushQueryCache();
+        }
+
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.1.5") {
+            $strReturn .= "Updating 5.1.5 to 6.2...\n";
+            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "6.2");
             $this->objDB->flushQueryCache();
         }
 
@@ -853,15 +860,15 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         return $strReturn;
     }
 
-    private function update_514_515()
+    private function update_514_62()
     {
-        $strReturn = "Updating 5.1.4 to 5.1.5...\n";
+        $strReturn = "Updating 5.1.4 to 6.2...\n";
 
         $strReturn .= "Updating user table\n";
         $this->objDB->addColumn("user_kajona", "user_specialconfig", DbDatatypes::STR_TYPE_TEXT, true);
 
         $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1.5");
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "6.2");
         return $strReturn;
     }
 }
