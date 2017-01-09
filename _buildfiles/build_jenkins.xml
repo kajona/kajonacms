@@ -49,6 +49,8 @@
     <property name="composerPath"     value="/composer" />
     <!-- path to the composer binaries -->
     <property name="composerBinariesPath" value="${basedir}${buildPath}/composerbuild/vendor/bin" />
+    <!-- npm local cache registry -->
+    <property name="npmLocalRegistry" value="https://buildpackages.kajona.de:4873/" />
 
 
 
@@ -143,6 +145,9 @@
     <!-- installs all node dependencies -->
     <target name="installNpmBuildDependencies" >
         <echo>Execute npm</echo>
+        <exec dir="${basedir}${jsPath}" executable="${path.npm}" failonerror="on">
+            <arg line=" config set registry ${npmLocalRegistry}"/>
+        </exec>
         <exec dir="${basedir}${jsPath}" executable="${path.npm}" failonerror="on">
             <arg line=" install"/>
         </exec>
