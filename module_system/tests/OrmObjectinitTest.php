@@ -74,13 +74,13 @@ class OrmObjectinitTest extends Testbase
         $this->assertSame(12345, $objObj->getIntInteger());
         $this->assertSame(20161223120000, $objObj->getIntBigint());
         $this->assertSame(123.45, $objObj->getFloatDouble());
-        $this->assertSame(false, $objObj->getBitBoolean());
+        $this->assertEquals(false, $objObj->getBitBoolean());
 
         $objObj->setBitBoolean(true);
         $objObj->updateObjectToDb();
 
         $objObj = Objectfactory::getInstance()->getObject($objObject->getSystemid());
-        $this->assertSame(true, $objObj->getBitBoolean());
+        $this->assertEquals(true, $objObj->getBitBoolean());
     }
 
 
