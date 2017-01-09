@@ -9,23 +9,23 @@
 
 namespace Kajona\Dashboard\Admin\Widgets;
 
-use Kajona\Dashboard\System\DashboardWidget;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Remoteloader;
-use Kajona\System\System\SystemAspect;
 use Kajona\System\System\XmlParser;
 
 /**
  * @package module_dashboard
  *
  */
-class AdminwidgetRssfeed extends Adminwidget implements AdminwidgetInterface {
+class AdminwidgetRssfeed extends Adminwidget implements AdminwidgetInterface
+{
 
     /**
      * Basic constructor, registers the fields to be persisted and loaded
      *
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         //register the fields to be persisted and loaded
         $this->setPersistenceKeys(array("feedurl", "posts"));
@@ -37,7 +37,8 @@ class AdminwidgetRssfeed extends Adminwidget implements AdminwidgetInterface {
      *
      * @return string
      */
-    public function getEditForm() {
+    public function getEditForm()
+    {
         $strReturn = "";
         $strReturn .= $this->objToolkit->formInputText("feedurl", $this->getLang("rssfeed_feedurl"), $this->getFieldValue("feedurl"));
         $strReturn .= $this->objToolkit->formInputText("posts", $this->getLang("rssfeed_posts"), $this->getFieldValue("posts"));
@@ -51,7 +52,8 @@ class AdminwidgetRssfeed extends Adminwidget implements AdminwidgetInterface {
      *
      * @return string
      */
-    public function getWidgetOutput() {
+    public function getWidgetOutput()
+    {
         $strReturn = "";
 
         //request the xml...
@@ -62,8 +64,10 @@ class AdminwidgetRssfeed extends Adminwidget implements AdminwidgetInterface {
             $objRemoteloader = new Remoteloader();
 
             $intPort = isset($arrUrl["port"]) ? $arrUrl["port"] : "";
-            if($intPort == "") {
-                if($arrUrl["scheme"] == "https" ? 443 : 80);
+            if ($intPort == "") {
+                if ($arrUrl["scheme"] == "https" ? 443 : 80) {
+                    ;
+                }
             }
 
             $objRemoteloader->setStrHost($arrUrl["host"]);
@@ -76,16 +80,16 @@ class AdminwidgetRssfeed extends Adminwidget implements AdminwidgetInterface {
             $strContent = "";
         }
 
-        if($strContent != "") {
+        if ($strContent != "") {
             $objXmlparser = new XmlParser();
             $objXmlparser->loadString($strContent);
 
             $arrFeed = $objXmlparser->xmlToArray();
 
-            if(count($arrFeed) >= 1) {
+            if (count($arrFeed) >= 1) {
 
                 //rss feed
-                if(isset($arrFeed["rss"])) {
+                if (isset($arrFeed["rss"])) {
                     $intCounter = 0;
                     foreach ($arrFeed["rss"][0]["channel"][0]["item"] as $arrOneItem) {
 
@@ -95,14 +99,15 @@ class AdminwidgetRssfeed extends Adminwidget implements AdminwidgetInterface {
                         $strReturn .= $this->widgetText("<a href=\"".$strLink."\" target=\"_blank\">".$strTitle."</a>");
                         $strReturn .= $this->widgetSeparator();
 
-                        if(++$intCounter >= $this->getFieldValue("posts"))
-                           break;
+                        if (++$intCounter >= $this->getFieldValue("posts")) {
+                            break;
+                        }
 
                     }
                 }
 
                 //atom feed
-                if(isset($arrFeed["feed"]) && isset($arrFeed["feed"][0]["entry"])) {
+                if (isset($arrFeed["feed"]) && isset($arrFeed["feed"][0]["entry"])) {
                     $intCounter = 0;
                     foreach ($arrFeed["feed"][0]["entry"] as $arrOneItem) {
 
@@ -112,46 +117,22 @@ class AdminwidgetRssfeed extends Adminwidget implements AdminwidgetInterface {
                         $strReturn .= $this->widgetText("<a href=\"".$strLink."\" target=\"_blank\">".$strTitle."</a>");
                         $strReturn .= $this->widgetSeparator();
 
-                        if(++$intCounter >= $this->getFieldValue("posts"))
-                           break;
+                        if (++$intCounter >= $this->getFieldValue("posts")) {
+                            break;
+                        }
 
                     }
                 }
-            }
-            else {
+            } else {
                 $strContent = $this->getLang("rssfeed_errorparsing");
             }
 
-        }
-        else
+        } else {
             $strReturn .= $this->getLang("rssfeed_errorloading");
-
+        }
 
 
         return $strReturn;
-    }
-
-
-    /**
-     * This callback is triggered on a users' first login into the system.
-     * You may use this method to install a widget as a default widget to
-     * a users dashboard.
-     *
-     * @param $strUserid
-     *
-     * @return bool
-     */
-    public function onFistLogin($strUserid) {
-        if(SystemAspect::getAspectByName("content") !== null) {
-            $objDashboard = new DashboardWidget();
-            $objDashboard->setStrColumn("column3");
-            $objDashboard->setStrUser($strUserid);
-            $objDashboard->setStrClass(__CLASS__);
-            $objDashboard->setStrContent("a:2:{s:7:\"feedurl\";s:39:\"http://www.kajona.de/kajona_news_en.rss\";s:5:\"posts\";s:1:\"4\";}");
-            return $objDashboard->updateObjectToDb(DashboardWidget::getWidgetsRootNodeForUser($strUserid, SystemAspect::getAspectByName("content")->getSystemid()));
-        }
-
-        return true;
     }
 
     /**
@@ -159,10 +140,10 @@ class AdminwidgetRssfeed extends Adminwidget implements AdminwidgetInterface {
      *
      * @return string
      */
-    public function getWidgetName() {
+    public function getWidgetName()
+    {
         return $this->getLang("rssfeed_name");
     }
 
 }
-
 

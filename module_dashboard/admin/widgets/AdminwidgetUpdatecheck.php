@@ -9,10 +9,8 @@
 
 namespace Kajona\Dashboard\Admin\Widgets;
 
-use Kajona\Dashboard\System\DashboardWidget;
 use Kajona\Packagemanager\System\PackagemanagerManager;
 use Kajona\System\System\Link;
-use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemModule;
 
 /**
@@ -20,13 +18,15 @@ use Kajona\System\System\SystemModule;
  *
  * @package module_dashboard
  */
-class AdminwidgetUpdatecheck extends Adminwidget implements AdminwidgetInterface {
+class AdminwidgetUpdatecheck extends Adminwidget implements AdminwidgetInterface
+{
 
     /**
      * Basic constructor, registers the fields to be persisted and loaded
      *
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         //register the fields to be persisted and loaded
     }
@@ -37,7 +37,8 @@ class AdminwidgetUpdatecheck extends Adminwidget implements AdminwidgetInterface
      *
      * @return string
      */
-    public function getEditForm() {
+    public function getEditForm()
+    {
         return "";
     }
 
@@ -48,25 +49,29 @@ class AdminwidgetUpdatecheck extends Adminwidget implements AdminwidgetInterface
      *
      * @return string
      */
-    public function getWidgetOutput() {
+    public function getWidgetOutput()
+    {
         $strReturn = "";
 
-        if(!SystemModule::getModuleByName("packagemanager")->rightEdit())
+        if (!SystemModule::getModuleByName("packagemanager")->rightEdit()) {
             return $this->getLang("commons_error_permissions");
+        }
 
         $objManager = new PackagemanagerManager();
         $arrRemotePackages = $objManager->scanForUpdates();
 
         $strSystemVersion = "n.a.";
-        if(isset($arrRemotePackages["system"]))
+        if (isset($arrRemotePackages["system"])) {
             $strSystemVersion = $arrRemotePackages["system"];
+        }
 
         $arrUpdates = array();
         $arrLocalPackages = $objManager->getAvailablePackages();
-        foreach($arrLocalPackages as $objOneMetadata) {
-            if(isset($arrRemotePackages[$objOneMetadata->getStrTitle()])) {
-                if($arrRemotePackages[$objOneMetadata->getStrTitle()] != null && version_compare($arrRemotePackages[$objOneMetadata->getStrTitle()], $objOneMetadata->getStrVersion(), ">"))
+        foreach ($arrLocalPackages as $objOneMetadata) {
+            if (isset($arrRemotePackages[$objOneMetadata->getStrTitle()])) {
+                if ($arrRemotePackages[$objOneMetadata->getStrTitle()] != null && version_compare($arrRemotePackages[$objOneMetadata->getStrTitle()], $objOneMetadata->getStrVersion(), ">")) {
                     $arrUpdates[$objOneMetadata->getStrTitle()] = $arrRemotePackages[$objOneMetadata->getStrTitle()];
+                }
             }
         }
 
@@ -74,9 +79,10 @@ class AdminwidgetUpdatecheck extends Adminwidget implements AdminwidgetInterface
         $strReturn .= $this->widgetText($this->getLang("sysinfo_kajona_version")." ".SystemModule::getModuleByName("system")->getStrVersion());
         $strReturn .= $this->widgetText($this->getLang("sysinfo_kajona_versionAvail")." ".$strSystemVersion);
         $strReturn .= $this->widgetSeparator();
-        if(count($arrUpdates) > 0)
+        if (count($arrUpdates) > 0) {
             $strReturn .= $this->widgetText($this->getLang("updatecheck_versionAvail"));
-        foreach($arrUpdates as $strPackage => $intVersion) {
+        }
+        foreach ($arrUpdates as $strPackage => $intVersion) {
             $strReturn .= $this->widgetText(Link::getLinkAdmin("packagemanager", "list", "&packagelist_filter=".$strPackage."&doFilter=1", $strPackage." (".$intVersion.")"));
         }
 
@@ -85,36 +91,14 @@ class AdminwidgetUpdatecheck extends Adminwidget implements AdminwidgetInterface
     }
 
     /**
-     * This callback is triggered on a users' first login into the system.
-     * You may use this method to install a widget as a default widget to
-     * a users dashboard.
-     *
-     * @param string $strUserid
-     *
-     * @return bool
-     */
-    public function onFistLogin($strUserid) {
-        if(SystemModule::getModuleByName("system") !== null && SystemAspect::getAspectByName("content") !== null) {
-            $objDashboard = new DashboardWidget();
-            $objDashboard->setStrColumn("column2");
-            $objDashboard->setStrUser($strUserid);
-            $objDashboard->setStrClass(__CLASS__);
-            return $objDashboard->updateObjectToDb(DashboardWidget::getWidgetsRootNodeForUser($strUserid, SystemAspect::getAspectByName("content")->getSystemid()));
-        }
-
-        return true;
-    }
-
-    /**
      * Return a short (!) name of the widget.
      *
      * @return string
      */
-    public function getWidgetName() {
+    public function getWidgetName()
+    {
         return $this->getLang("updatecheck_name");
     }
 
-
 }
-
 
