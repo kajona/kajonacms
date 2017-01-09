@@ -68,11 +68,19 @@ class InstallerMaps extends InstallerBase implements InstallerInterface
             $strReturn .= "Updating 5.0 to 5.1...\n";
             $this->updateElementAndModule("5.1");
         }
+
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if ($arrModule["module_version"] == "5.1") {
+            $strReturn .= "Updating 5.1 to 5.1.1...\n";
+            $this->updateElementAndModule("5.1.1");
+        }
+
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if ($arrModule["module_version"] == "5.1") {
             $strReturn .= "Updating 5.1 to 6.2...\n";
             $this->updateElementAndModule("6.2");
         }
+
 
         return $strReturn;
     }

@@ -1,9 +1,9 @@
 <!-- see section "Template-API" of module manual for a list of available placeholders -->
-<!-- ATTENTION: Please respect the terms of use of the Google Maps API. -->
+<!-- ATTENTION: Please respect the terms of use of the Google Maps API. Set up your own api key in the config file -->
 
 <!-- available placeholders: address, lat, lng, infotext, systemid -->
 <map>
-    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=%%apikey%%"></script>
     <script type="text/javascript">
         $(function () {
             var map;
