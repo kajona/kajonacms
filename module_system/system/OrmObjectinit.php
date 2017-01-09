@@ -6,7 +6,6 @@
 
 namespace Kajona\System\System;
 
-
 /**
  * The orm object init class is used to init an object from the database.
  * Pass an object with a given systemid using the constructor and call
@@ -37,11 +36,9 @@ class OrmObjectinit extends OrmBase
         $objReflection = new Reflection($this->getObjObject());
 
         if (validateSystemid($this->getObjObject()->getSystemid()) && $this->hasTargetTable()) {
-
             if (OrmRowcache::getCachedInitRow($this->getObjObject()->getSystemid()) !== null) {
                 $arrRow = OrmRowcache::getCachedInitRow($this->getObjObject()->getSystemid());
-            }
-            else {
+            } else {
                 $strQuery = "SELECT *
                           ".$this->getQueryBase()."
                            AND system.system_id = ? ";
@@ -57,7 +54,6 @@ class OrmObjectinit extends OrmBase
             $arrProperties = $objReflection->getPropertiesWithAnnotation(OrmBase::STR_ANNOTATION_TABLECOLUMN);
 
             foreach ($arrProperties as $strPropertyName => $strColumn) {
-
                 $arrColumn = explode(".", $strColumn);
 
                 if (count($arrColumn) == 2) {
@@ -75,12 +71,23 @@ class OrmObjectinit extends OrmBase
 
                 $strSetter = $objReflection->getSetter($strPropertyName);
                 if ($strSetter !== null) {
-
                     //some properties may be set converted, e.g. a date object
                     $strVar = $objReflection->getAnnotationValueForProperty($strPropertyName, "@var");
-                    if(StringUtil::indexOf($strVar, "Date") !== false && $arrRow[$strColumn] > 0) {
+                    if (StringUtil::indexOf($strVar, "Date") !== false && $arrRow[$strColumn] > 0) {
                         $arrRow[$strColumn] = new Date($arrRow[$strColumn]);
+                    } elseif ($arrRow[$strColumn] != null && (StringUtil::toLowerCase(StringUtil::substring($strSetter, 0, 6)) == "setint" || StringUtil::toLowerCase(StringUtil::substring($strSetter, 0, 7)) == "setlong")) {
+                        //different casts on 32bit / 64bit
+                        if ($arrRow[$strColumn] > PHP_INT_MAX) {
+                            $arrRow[$strColumn] = (float)$arrRow[$strColumn];
+                        } else {
+                            $arrRow[$strColumn] = (int)$arrRow[$strColumn];
+                        }
+                    } elseif ($arrRow[$strColumn] != null && StringUtil::toLowerCase(StringUtil::substring($strSetter, 0, 6)) == "setbit") {
+                        $arrRow[$strColumn] = (bool)$arrRow[$strColumn];
+                    } elseif ($arrRow[$strColumn] != null && StringUtil::toLowerCase(StringUtil::substring($strSetter, 0, 8)) == "setfloat") {
+                        $arrRow[$strColumn] = (float)$arrRow[$strColumn];
                     }
+
                     $this->getObjObject()->{$strSetter}($arrRow[$strColumn]);
                 }
             }
@@ -102,7 +109,6 @@ class OrmObjectinit extends OrmBase
         $arrProperties = $objReflection->getPropertiesWithAnnotation(OrmBase::STR_ANNOTATION_OBJECTLIST, ReflectionEnum::PARAMS);
 
         foreach ($arrProperties as $strPropertyName => $arrValues) {
-
             $objPropertyLazyLoader = new OrmAssignmentArray($this->getObjObject(), $strPropertyName, $this->getIntCombinedLogicalDeletionConfig());
 
             $strSetter = $objReflection->getSetter($strPropertyName);
@@ -112,5 +118,4 @@ class OrmObjectinit extends OrmBase
         }
 
     }
-
 }

@@ -44,8 +44,18 @@ class OrmObjectinitTest extends Testbase
 
     public function testObjectInit()
     {
-        $longDate = 20160827011525;
         $objObject = new OrmObjectinitTestclass();
+
+        $objObject->setStrChar20("char20");
+        $objObject->setStrChar254("char254");
+        $objObject->setStrText("text");
+        $objObject->setStrLongtext("longtext");
+        $objObject->setIntInteger(12345);
+        $objObject->setIntBigint(20161223120000);
+        $objObject->setFloatDouble(123.45);
+        $objObject->setBitBoolean(false);
+
+        $longDate = 20160827011525;
         $objObject->setObjDate(new Date($longDate));
         $objObject->updateObjectToDb();
 
@@ -54,8 +64,44 @@ class OrmObjectinitTest extends Testbase
         /** @var OrmObjectinitTestclass $objObj */
         $objObj = Objectfactory::getInstance()->getObject($objObject->getSystemid());
 
-        $this->assertTrue($objObj->objDate instanceof Date);
-        $this->assertTrue($objObj->objDate->isSameDay(new Date($longDate)));
+        $this->assertTrue($objObj->getObjDate() instanceof Date);
+        $this->assertTrue($objObj->getObjDate()->isSameDay(new Date($longDate)));
+
+        $this->assertSame("char20", $objObj->getStrChar20());
+        $this->assertSame("char254", $objObj->getStrChar254());
+        $this->assertSame("text", $objObj->getStrText());
+        $this->assertSame("longtext", $objObj->getStrLongtext());
+        $this->assertSame(12345, $objObj->getIntInteger());
+        $this->assertSame(20161223120000, $objObj->getIntBigint());
+        $this->assertSame(123.45, $objObj->getFloatDouble());
+        $this->assertSame(false, $objObj->getBitBoolean());
+
+        $objObj->setBitBoolean(true);
+        $objObj->updateObjectToDb();
+
+        $objObj = Objectfactory::getInstance()->getObject($objObject->getSystemid());
+        $this->assertSame(true, $objObj->getBitBoolean());
+    }
+
+
+    public function testObjectInitNull()
+    {
+        $objObject = new OrmObjectinitTestclass();
+        $objObject->updateObjectToDb();
+        Objectfactory::getInstance()->flushCache();
+
+        /** @var OrmObjectinitTestclass $objObj */
+        $objObj = Objectfactory::getInstance()->getObject($objObject->getSystemid());
+
+        $this->assertNull($objObj->getStrChar20());
+        $this->assertNull($objObj->getStrChar254());
+        $this->assertNull($objObj->getStrText());
+        $this->assertNull($objObj->getStrLongtext());
+        $this->assertNull($objObj->getIntInteger());
+        $this->assertNull($objObj->getIntBigint());
+        $this->assertNull($objObj->getFloatDouble());
+        $this->assertNull($objObj->getObjDate());
+        $this->assertNull($objObj->getBitBoolean());
     }
 
 
@@ -77,8 +123,65 @@ class OrmObjectinitTestclass extends Model implements ModelInterface
     /**
      * @var Date
      * @tableColumn inittestclass.col1
+     * @tableColumnDatatype long
      */
-    public $objDate = null;
+    private $objDate = null;
+
+    /**
+     * @var string
+     * @tableColumn inittestclass.col2
+     * @tableColumnDatatype char20
+     */
+    private $strChar20 = null;
+
+    /**
+     * @var string
+     * @tableColumn inittestclass.col3
+     * @tableColumnDatatype char254
+     */
+    private $strChar254 = null;
+
+    /**
+     * @var string
+     * @tableColumn inittestclass.col4
+     * @tableColumnDatatype text
+     */
+    private $strText = null;
+
+    /**
+     * @var string
+     * @tableColumn inittestclass.col5
+     * @tableColumnDatatype longtext
+     */
+    private $strLongtext = null;
+
+    /**
+     * @var int
+     * @tableColumn inittestclass.col6
+     * @tableColumnDatatype int
+     */
+    private $intInteger = null;
+
+    /**
+     * @var bool
+     * @tableColumn inittestclass.col7
+     * @tableColumnDatatype int
+     */
+    private $bitBoolean = null;
+
+    /**
+     * @var int
+     * @tableColumn inittestclass.col8
+     * @tableColumnDatatype long
+     */
+    private $intBigint = null;
+
+    /**
+     * @var float
+     * @tableColumn inittestclass.col9
+     * @tableColumnDatatype double
+     */
+    private $floatDouble = null;
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
@@ -106,9 +209,133 @@ class OrmObjectinitTestclass extends Model implements ModelInterface
         $this->objDate = $objDate;
     }
 
+    /**
+     * @return string
+     */
+    public function getStrChar20()
+    {
+        return $this->strChar20;
+    }
 
+    /**
+     * @param string $strChar20
+     */
+    public function setStrChar20($strChar20)
+    {
+        $this->strChar20 = $strChar20;
+    }
 
+    /**
+     * @return string
+     */
+    public function getStrChar254()
+    {
+        return $this->strChar254;
+    }
 
+    /**
+     * @param string $strChar254
+     */
+    public function setStrChar254($strChar254)
+    {
+        $this->strChar254 = $strChar254;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrText()
+    {
+        return $this->strText;
+    }
+
+    /**
+     * @param string $strText
+     */
+    public function setStrText($strText)
+    {
+        $this->strText = $strText;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrLongtext()
+    {
+        return $this->strLongtext;
+    }
+
+    /**
+     * @param string $strLongtext
+     */
+    public function setStrLongtext($strLongtext)
+    {
+        $this->strLongtext = $strLongtext;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIntInteger()
+    {
+        return $this->intInteger;
+    }
+
+    /**
+     * @param int $intInteger
+     */
+    public function setIntInteger($intInteger)
+    {
+        $this->intInteger = $intInteger;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIntBigint()
+    {
+        return $this->intBigint;
+    }
+
+    /**
+     * @param int $intBigint
+     */
+    public function setIntBigint($intBigint)
+    {
+        $this->intBigint = $intBigint;
+    }
+
+    /**
+     * @return float
+     */
+    public function getFloatDouble()
+    {
+        return $this->floatDouble;
+    }
+
+    /**
+     * @param float $floatDouble
+     */
+    public function setFloatDouble($floatDouble)
+    {
+        $this->floatDouble = $floatDouble;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getBitBoolean()
+    {
+        return $this->bitBoolean;
+    }
+
+    /**
+     * @param bool $bitBoolean
+     */
+    public function setBitBoolean($bitBoolean)
+    {
+        $this->bitBoolean = $bitBoolean;
+    }
 
 }
 
