@@ -18,8 +18,8 @@ use Kajona\System\System\AdminListableInterface;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Classloader;
 use Kajona\System\System\Exception;
+use Kajona\System\System\OrmCondition;
 use Kajona\System\System\OrmObjectlist;
-use Kajona\System\System\OrmObjectlistRestriction;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\TemplateBlockContainer;
 
@@ -206,7 +206,7 @@ class PagesElement extends \Kajona\System\System\Model implements \Kajona\System
     public static function getElement($strName)
     {
         $objORM = new OrmObjectlist();
-        $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND element_name = ?", array($strName)));
+        $objORM->addWhereRestriction(new OrmCondition("element_name = ?", array($strName)));
         return $objORM->getSingleObject(get_called_class());
     }
 

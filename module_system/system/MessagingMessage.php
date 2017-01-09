@@ -267,7 +267,7 @@ class MessagingMessage extends Model implements ModelInterface, AdminListableInt
         $objOrm = new OrmObjectlist();
         $objOrm->addWhereRestriction(new OrmObjectlistPropertyRestriction("strUser", OrmComparatorEnum::Equal(), $strUserid));
         if ($bitOnlyUnread) {
-            $objOrm->addWhereRestriction(new OrmObjectlistRestriction("AND (message_read IS NULL OR message_read = 0 )"));
+            $objOrm->addWhereRestriction(new OrmCondition("(message_read IS NULL OR message_read = 0 )"));
         }
 
         return $objOrm->getObjectCount(__CLASS__);

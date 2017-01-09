@@ -10,9 +10,9 @@ namespace Kajona\Eventmanager\System;
 use Kajona\System\System\AdminListableInterface;
 use Kajona\System\System\ModelInterface;
 use Kajona\System\System\OrmComparatorEnum;
+use Kajona\System\System\OrmCondition;
 use Kajona\System\System\OrmObjectlist;
 use Kajona\System\System\OrmObjectlistOrderby;
-use Kajona\System\System\OrmObjectlistRestriction;
 use Kajona\System\System\OrmObjectlistSystemstatusRestriction;
 use Kajona\System\System\SystemChangelog;
 use Kajona\System\System\VersionableInterface;
@@ -237,11 +237,11 @@ class EventmanagerEvent extends \Kajona\System\System\Model implements ModelInte
         $objORM = new OrmObjectlist();
 
         if ($objStartDate != null && $objEndDate != null) {
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND (system_date_start > ? AND system_date_start <= ?) ", array($objStartDate->getLongTimestamp(), $objEndDate->getLongTimestamp())));
+            $objORM->addWhereRestriction(new OrmCondition("(system_date_start > ? AND system_date_start <= ?) ", array($objStartDate->getLongTimestamp(), $objEndDate->getLongTimestamp())));
 
         }
         if ($intStatusFilter != null) {
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND em_ev_eventstatus = ?", array($intStatusFilter)));
+            $objORM->addWhereRestriction(new OrmCondition("em_ev_eventstatus = ?", array($intStatusFilter)));
         }
 
         if ($bitOnlyActive) {
