@@ -97,6 +97,7 @@
 #php_value log_errors On
 #php_value error_log project/log/php.log
 
+# the following directives require mod_header to be available
 # Enable a header to suppress IE and Chrome from sniffing some headers, see http://stackoverflow.com/questions/18337630/what-is-x-content-type-options-nosniff
 #Header set X-Content-Type-Options "nosniff"
 

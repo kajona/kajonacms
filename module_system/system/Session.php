@@ -98,7 +98,7 @@ final class Session
                 $strPath = "/".$strPath;
             }
 
-            @session_set_cookie_params(0, $strPath, null, false, true);
+            @session_set_cookie_params(0, $strPath, null, SystemSetting::getConfigValue("_cookies_only_https_") == "true", true);
             @session_start();
         }
 
