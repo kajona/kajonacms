@@ -78,6 +78,7 @@ class FormentryCheckboxarrayObjectList extends FormentryCheckboxarray
         }
 
         $strReturn .= $objToolkit->formInputCheckboxArrayObjectList($this->getStrEntryName(), $this->getStrLabel(), $this->getAvailableItems(), $this->getSelectedItems(), $this->getBitReadonly(), $this->getBitShowPath(), $this->getBitPathCallback(), $this->getStrAddLink());
+        $strReturn .= $objToolkit->formInputHidden($this->getStrEntryName()."_prescheck", "1");
 
         return $strReturn;
 

@@ -17,8 +17,8 @@ use Kajona\System\System\LanguagesLanguage;
 use Kajona\System\System\Model;
 use Kajona\System\System\ModelInterface;
 use Kajona\System\System\Objectfactory;
+use Kajona\System\System\OrmCondition;
 use Kajona\System\System\OrmObjectlist;
-use Kajona\System\System\OrmObjectlistRestriction;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\StringUtil;
 
@@ -52,7 +52,7 @@ class NavigationPoint extends Model implements ModelInterface, AdminListableInte
      * @var string
      * @tableColumn navigation.navigation_page_e
      * @tableColumnDatatype char254
-     * @fieldType objecttags
+     * @fieldType Kajona\System\Admin\Formentries\FormentryFile
      * @fieldLabel navigation_page_e
      *
      * @addSearchIndex
@@ -63,7 +63,7 @@ class NavigationPoint extends Model implements ModelInterface, AdminListableInte
      * @var string
      * @tableColumn navigation.navigation_page_i
      * @tableColumnDatatype char254
-     * @fieldType page
+     * @fieldType Kajona\System\Admin\Formentries\FormentryPage
      * @fieldLabel navigation_page_i
      *
      * @addSearchIndex
@@ -189,7 +189,7 @@ class NavigationPoint extends Model implements ModelInterface, AdminListableInte
     {
         $objOrm = new OrmObjectlist();
         if ($bitJustActive) {
-            $objOrm->addWhereRestriction(new OrmObjectlistRestriction(" AND system_status = 1 ", array()));
+            $objOrm->addWhereRestriction(new OrmCondition("system_status = 1"));
         }
         return $objOrm->getObjectList(get_called_class(), $strSystemid, $intStart, $intEnd);
     }
@@ -249,8 +249,8 @@ class NavigationPoint extends Model implements ModelInterface, AdminListableInte
     public static function loadPagePoint($strPagename)
     {
         $objOrm = new OrmObjectlist();
-        $objOrm->addWhereRestriction(new OrmObjectlistRestriction(" AND system_status = 1 ", array()));
-        $objOrm->addWhereRestriction(new OrmObjectlistRestriction(" AND navigation_page_i = ? ", array($strPagename)));
+        $objOrm->addWhereRestriction(new OrmCondition("system_status = 1"));
+        $objOrm->addWhereRestriction(new OrmCondition("navigation_page_i = ?", array($strPagename)));
         return $objOrm->getObjectList(get_called_class());
     }
 

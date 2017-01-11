@@ -36,7 +36,6 @@ class SystemSession extends Model implements ModelInterface
 
     private $strPHPSessionId = "";
     private $strUserid = "";
-    private $strGroupids = "";
     private $intReleasetime = 0;
     private $strLoginprovider = "";
     private $strLasturl = "";
@@ -87,7 +86,6 @@ class SystemSession extends Model implements ModelInterface
         if (count($arrRow) > 1) {
             $this->setStrPHPSessionId($arrRow["session_phpid"]);
             $this->setStrUserid($arrRow["session_userid"]);
-            $this->setStrGroupids($arrRow["session_groupids"]);
             $this->setIntReleasetime($arrRow["session_releasetime"]);
             $this->setStrLoginstatus($arrRow["session_loginstatus"]);
             $this->setStrLoginprovider($arrRow["session_loginprovider"]);
@@ -128,12 +126,11 @@ class SystemSession extends Model implements ModelInterface
                          (session_id,
                           session_phpid,
                           session_userid,
-                          session_groupids,
                           session_releasetime,
                           session_loginstatus,
                           session_loginprovider,
                           session_lasturl
-                          ) VALUES ( ?,?,?,?,?,?,?,? )";
+                          ) VALUES ( ?,?,?,?,?,?,? )";
 
             return $this->objDB->_pQuery(
                 $strQuery,
@@ -141,7 +138,6 @@ class SystemSession extends Model implements ModelInterface
                     $this->strDbSystemid,
                     $this->getStrPHPSessionId(),
                     $this->getStrUserid(),
-                    $this->getStrGroupids(),
                     (int)$this->getIntReleasetime(),
                     $this->getStrLoginstatus(),
                     $this->getStrLoginprovider(),
@@ -149,14 +145,11 @@ class SystemSession extends Model implements ModelInterface
                 )
             );
 
-        }
-        else {
-
+        } else {
             Logger::getInstance()->addLogRow("updated session ".$this->getSystemid(), Logger::$levelInfo);
             $strQuery = "UPDATE "._dbprefix_."session SET
                           session_phpid = ?,
                           session_userid = ?,
-                          session_groupids = ?,
                           session_releasetime = ?,
                           session_loginstatus = ?,
                           session_loginprovider = ?,
@@ -168,7 +161,6 @@ class SystemSession extends Model implements ModelInterface
                 array(
                     $this->getStrPHPSessionId(),
                     $this->getStrUserid(),
-                    $this->getStrGroupids(),
                     (int)$this->getIntReleasetime(),
                     $this->getStrLoginstatus(),
                     $this->getStrLoginprovider(),
@@ -228,8 +220,7 @@ class SystemSession extends Model implements ModelInterface
         $objSession = new SystemSession($strSessionid);
         if ($objSession->isSessionValid()) {
             return $objSession;
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -280,8 +271,7 @@ class SystemSession extends Model implements ModelInterface
     {
         if ($this->isSessionValid() && $this->getStrLoginstatus() == self::$LOGINSTATUS_LOGGEDIN) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -324,16 +314,6 @@ class SystemSession extends Model implements ModelInterface
     public function setStrUserid($strUserid)
     {
         $this->strUserid = $strUserid;
-    }
-
-    /**
-     * @param string $strGroupids
-     *
-     * @return void
-     */
-    public function setStrGroupids($strGroupids)
-    {
-        $this->strGroupids = $strGroupids;
     }
 
     /**
@@ -391,14 +371,6 @@ class SystemSession extends Model implements ModelInterface
     public function getStrUserid()
     {
         return $this->strUserid;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStrGroupids()
-    {
-        return $this->strGroupids;
     }
 
     /**

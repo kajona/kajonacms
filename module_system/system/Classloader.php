@@ -115,12 +115,12 @@ class Classloader
     /**
      * Scans all core directories for matching modules
      *
-     * @return void
+     * @param bool $bitForce
      */
-    private function scanModules()
+    private function scanModules($bitForce = false)
     {
 
-        if (BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_MODULES) !== false && BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_PHARMODULES) !== false) {
+        if (!$bitForce && (BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_MODULES) !== false && BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_PHARMODULES) !== false)) {
             return;
         }
 
@@ -217,8 +217,8 @@ class Classloader
     public function flushCache()
     {
         BootstrapCache::getInstance()->flushCache();
-        $this->scanModules();
-        $this->indexAvailableCodefiles();
+        $this->scanModules(true);
+        $this->indexAvailableCodefiles(true);
     }
 
     /**
@@ -227,9 +227,9 @@ class Classloader
      *
      * @return void
      */
-    private function indexAvailableCodefiles()
+    private function indexAvailableCodefiles($bitForce = false)
     {
-        if (!empty(BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_CLASSES))) {
+        if (!$bitForce && !empty(BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_CLASSES))) {
             return;
         }
 
@@ -431,7 +431,8 @@ class Classloader
 
                     //file is in project path?
                     if(strpos($strParsedFilename, "/project/") !== false) {
-                        if(is_dir(_realpath_."core/module_".strtolower(array_reverse($arrPath)[0]))) {
+                        $strTargetPath = _realpath_."core/module_".strtolower(array_reverse($arrPath)[0]);
+                        if(is_dir($strTargetPath) || is_file($strTargetPath.".phar")) {
                             $strClassname = "Kajona\\";
                         }
                         else {

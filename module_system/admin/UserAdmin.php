@@ -164,7 +164,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
             if ($objUserMgmt->getUsersource($objUser->getStrSubsystem())->getMembersEditable()) {
                 $strReturn .= "<script type='text/javascript'>
                 setTimeout(function() {
-                    KAJONA.admin.folderview.dialog.setContentIFrame('".Link::getLinkAdminHref("user", "editMemberships", "&systemid=".$objUser->getSystemid())."&folderview=1&redirectToList=1'); KAJONA.admin.folderview.dialog.setTitle('".StringUtil::jsSafeString($this->getLang("user_memberships").$objUser->getStrDisplayName())."');
+                    KAJONA.admin.folderview.dialog.setContentIFrame('".Link::getLinkAdminHref("user", "editMemberships", "&systemid=".$objUser->getSystemid()."&folderview=1&redirectToList=1")."'); KAJONA.admin.folderview.dialog.setTitle('".StringUtil::jsSafeString($this->getLang("user_memberships").$objUser->getStrDisplayName())."');
                     KAJONA.admin.folderview.dialog.init();
                 }, 500);
                 </script>";
@@ -1094,7 +1094,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
         $objSourceGroup = $objGroup->getObjSourceGroup();
 
         $objSourceGroup->addMember($objUser->getObjSourceUser());
-        $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "groupMember", "&systemid=".$objGroup->getSystemid())."&peClose=1&blockAction=1");
+        $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "groupMember", "&systemid=".$objGroup->getSystemid()."&peClose=1&blockAction=1"));
         return "";
     }
 

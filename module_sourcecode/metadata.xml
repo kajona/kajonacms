@@ -9,12 +9,12 @@
         Therefore the element makes use of https://highlightjs.org.
         The sources of the element are available at https://github.com/sidler/element_sourcecode
     </description>
-    <version>5.1</version>
+    <version>6.2</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="pages" version="5.1" />
+        <module name="pages" version="6.2" />
     </requiredModules>
     <screenshots>
         <screenshot path="screenshots/screen1.png" />

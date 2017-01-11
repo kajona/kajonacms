@@ -34,7 +34,7 @@ define(["jquery", "jquery-ui", "ajax", "statusDisplay", "tooltip", "util"], func
                         var $parent = content.parent();
                         content.remove();
 
-                        var $newNode = $("<div class='content'></div>").append($.parseJSON(data));
+                        var $newNode = $("<div class='content loaded'></div>").append($.parseJSON(data));
                         $parent.append($newNode);
 
                         //TODO use jquerys eval?

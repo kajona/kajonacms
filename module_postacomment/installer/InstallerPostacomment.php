@@ -12,8 +12,8 @@ namespace Kajona\Postacomment\Installer;
 use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Postacomment\System\PostacommentPost;
-use Kajona\System\System\BootstrapCache;
 use Kajona\System\System\Carrier;
+use Kajona\System\System\Classloader;
 use Kajona\System\System\Filesystem;
 use Kajona\System\System\InstallerBase;
 use Kajona\System\System\InstallerRemovableInterface;
@@ -188,6 +188,14 @@ class InstallerPostacomment extends InstallerBase implements InstallerRemovableI
             $strReturn .= $this->update_51_to_511();
         }
 
+
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.1.1") {
+            $strReturn = "Updating to 6.2...\n";
+            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "6.2");
+            $this->updateElementVersion($this->objMetadata->getStrTitle(), "6.2");
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -271,7 +279,7 @@ class InstallerPostacomment extends InstallerBase implements InstallerRemovableI
             } elseif (is_dir(_realpath_."/core/module_guestbook")) {
                 $objFilesystem->folderDeleteRecursive("/core/module_guestbook");
             }
-            BootstrapCache::getInstance()->flushCache();
+            Classloader::getInstance()->flushCache();
         }
 
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1.1");

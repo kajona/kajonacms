@@ -5,12 +5,12 @@
         >
     <title>stats</title>
     <description>A module analyzing the portal in order to gather statistical data. Renders charts and other visual reports.</description>
-    <version>5.1</version>
+    <version>6.2</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="system" version="5.1" />
-        <module name="jqplot" version="5.1" />
+        <module name="system" version="6.2" />
+        <module name="jqplot" version="6.2" />
     </requiredModules>
 </package>

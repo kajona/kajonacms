@@ -628,7 +628,6 @@ class DbOci8 extends DbBase
      * converts a result-row. changes all keys to lower-case keys again
      *
      * @param array $arrRow
-     *
      * @return array
      */
     private function parseResultRow(array $arrRow)

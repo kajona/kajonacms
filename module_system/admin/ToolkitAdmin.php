@@ -91,11 +91,8 @@ class ToolkitAdmin extends Toolkit
         $arrTemplate["valueHour"] = $objDateToShow != null ? $objDateToShow->getIntHour() : "";
         $arrTemplate["valueMin"] = $objDateToShow != null ? $objDateToShow->getIntMin() : "";
         $arrTemplate["valuePlain"] = dateToString($objDateToShow, false);
-//        if($bitWithTime)
         $arrTemplate["dateFormat"] = Carrier::getInstance()->getObjLang()->getLang("dateStyleShort", "system");
-//        else
-//            $arrTemplate["dateFormat"] = Carrier::getInstance()->getObjLang()->getLang("dateStyleLong", "system");
-        $arrTemplate["calendarLang"] = Carrier::getInstance()->getObjSession()->getAdminLanguage();
+        $arrTemplate["calendarLang"] = empty(Carrier::getInstance()->getObjSession()->getAdminLanguage()) ? 'en' : Carrier::getInstance()->getObjSession()->getAdminLanguage();
 
         $arrTemplate["titleTime"] = Carrier::getInstance()->getObjLang()->getLang("titleTime", "system");
 
@@ -448,7 +445,7 @@ class ToolkitAdmin extends Toolkit
                         $('#".$strName."').autocomplete(objConfig).data( 'ui-autocomplete' )._renderItem = function( ul, item ) {
                             return $( '<li></li>' )
                                 .data('ui-autocomplete-item', item)
-                                .append( '<a class=\'ui-autocomplete-item\' >'+item.icon+item.title+'</a>' )
+                                .append( '<div class=\'ui-autocomplete-item\' >'+item.icon+item.title+'</a>' )
                                 .appendTo( ul );
                         } ;
                     });
@@ -2116,8 +2113,8 @@ HTML;
                 $strRequiredFields = json_encode($arrRequiredFields);
 
                 $strRendercode .= "<script type=\"text/javascript\">
-                    require(['forms'], function(forms){
-                        $(document).on('ready', function() {
+                    require(['forms', 'domReady'], function(forms, domReady){
+                        domReady(function(){
                             forms.renderMandatoryFields($strRequiredFields);
                         });
                     });
@@ -2133,9 +2130,9 @@ HTML;
         $strRows = "";
         $strRendercode .= "<script type=\"text/javascript\">
 
-         require(['forms'], function(forms) {
-         $(document).on('ready', function() {
-            forms.renderMissingMandatoryFields([";
+         require(['forms', 'domReady'], function(forms, domReady) {
+            domReady(function(){
+                forms.renderMissingMandatoryFields([";
 
         foreach ($arrErrors as $strKey => $arrOneErrors) {
             foreach ($arrOneErrors as $strOneError) {
@@ -2481,20 +2478,14 @@ HTML;
      */
     public function getTree(SystemJSTreeConfig $objTreeConfig)
     {
-        $arrNodesToExpand = $objTreeConfig->getArrNodesToExpand();
-
         $arrTemplate = array();
         $arrTemplate["rootNodeSystemid"] = $objTreeConfig->getStrRootNodeId();
         $arrTemplate["loadNodeDataUrl"] = $objTreeConfig->getStrNodeEndpoint();
         $arrTemplate["treeId"] = "tree_".$objTreeConfig->getStrRootNodeId();
         $arrTemplate["treeConfig"] = $objTreeConfig->toJson();
-        $arrTemplate["treeviewExpanders"] = "";
-        for ($intI = 0; $intI < count($arrNodesToExpand); $intI++) {
-            $arrTemplate["treeviewExpanders"] .= "\"".$arrNodesToExpand[$intI]."\"";
-            if ($intI < count($arrNodesToExpand) - 1) {
-                $arrTemplate["treeviewExpanders"] .= ",";
-            }
-        }
+        $arrTemplate["treeviewExpanders"] = json_encode(array_values($objTreeConfig->getArrNodesToExpand()));//using array_values just in case an associative array is being returned
+        $arrTemplate["initiallySelectedNodes"] = json_encode(array_values($objTreeConfig->getArrInitiallySelectedNodes()));//using array_values just in case an associative array is being returned
+
         return $this->objTemplate->fillTemplateFile($arrTemplate, "/elements.tpl", "tree");
     }
 

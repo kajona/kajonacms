@@ -29,7 +29,7 @@ $lang["_system_graph_type_hint"]         = "Giltiga värden: pchart, ezc, jqplot
 $lang["_system_lock_maxtime_"]           = "Maximal spärrtid";
 $lang["_system_lock_maxtime_hint"]       = "Efter den angivna tiden i sekunder kommer den spärrade dataposten automatisk att frigöras.";
 $lang["_system_mod_rewrite_"]            = "URL-omskrivning";
-$lang["_system_mod_rewrite_hint"]        = "Aktiverar/deaktiverar URL-omskrivning för Nice-URL. Apachemodulen \"mod_rewrite\ måste för detta vara installerad i .htaccess-filen och vara aktiverad!";
+$lang["_system_mod_rewrite_hint"]        = "Aktiverar/deaktiverar URL-omskrivning för Nice-URL. Apachemodulen \"mod_rewrite\" måste för detta vara installerad i .htaccess-filen och vara aktiverad!";
 $lang["_system_output_gzip_"]            = "GZIP-komprimering av utfilen.";
 $lang["_system_output_gzip_hint"]        = "Aktiverar GPZ-komprimering av utfilen, innan denna skicka till webläsaren. Bättre: Aktiverar kompressionsinställningen i  .htaccess-filen.";
 $lang["_system_portal_disable_"]         = "Deaktivera portal";
@@ -38,7 +38,7 @@ $lang["_system_portal_disablepage_"]     = "Temporär sida";
 $lang["_system_portal_disablepage_hint"] = "Denna sida visas när portalen är deaktiverad.";
 $lang["_system_release_time_"]           = "Sessions varaktighet";
 $lang["_system_release_time_hint"]       = "Efter denna tid i sekunder blir en session ogiltig.";
-$lang["about_part1"]                     = "<h2>Kajona V5 - Öppen kod Content Management System</h2>Kajona V 5.0, Kodnamn \"phartastic\"<br /><br /><a href=\"http://www.kajona.de\" target=\"_blank\">www.kajona.de</a><br /><a href=\"mailto:info@kajona.de\" target=\"_blank\">info@kajona.de</a><br /><br />För ytterligare information, support eller förslag besök vår hemsida.<br />Support kan också fås i vårt forum <a href=\"http://board.kajona.de/\" target=\"_blank\">Forum</a>.";
+$lang["about_part1"]                     = "<h2>Kajona V5 - Öppen kod Content Management System</h2>Kajona V 5.1<br /><br /><a href=\"http://www.kajona.de\" target=\"_blank\">www.kajona.de</a><br /><a href=\"mailto:info@kajona.de\" target=\"_blank\">info@kajona.de</a><br /><br />För ytterligare information, support eller förslag besök vår hemsida.<br />Support kan också fås i vårt forum <a href=\"http://board.kajona.de/\" target=\"_blank\">Forum</a>.";
 $lang["about_part2_header"]              = "<h2>Utvecklingsledning</h2>";
 $lang["about_part2a_header"]             = "<h2>Bidragsgivare / Utvecklare</h2>";
 $lang["about_part2b_header"]             = "<h2>Översättningar</h2>";

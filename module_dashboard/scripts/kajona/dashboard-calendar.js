@@ -8,7 +8,10 @@ define(["jquery", "moment", "fullcalendar", "dashboard", "tooltip", "workingIndi
     return {
 
         init: function () {
-            require(["fullcalendar_lang_" + KAJONA_LANGUAGE], function () {
+
+            var strLang = KAJONA_LANGUAGE ? KAJONA_LANGUAGE : 'en';
+
+            require(["fullcalendar_lang_" + strLang], function () {
 
 
                 loader.loadFile(['/core/module_dashboard/scripts/fullcalendar/fullcalendar.min.css']);

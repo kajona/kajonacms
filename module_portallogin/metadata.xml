@@ -5,11 +5,11 @@
         >
     <title>portallogin</title>
     <description>Creates a login-form on your portal-page. If enabled, users are able to change their profile-data and may request a new password (password forgotten functionality).</description>
-    <version>5.1</version>
+    <version>6.2</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="pages" version="5.1" />
+        <module name="pages" version="6.2" />
     </requiredModules>
 </package>

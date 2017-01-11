@@ -16,12 +16,14 @@ use Kajona\System\System\StringUtil;
 /**
  * @package module_dashboard
  */
-class AdminwidgetWeather extends Adminwidget implements AdminwidgetInterface {
+class AdminwidgetWeather extends Adminwidget implements AdminwidgetInterface
+{
 
     /**
      * Basic constructor, registers the fields to be persisted and loaded
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         //register the fields to be persisted and loaded
         $this->setPersistenceKeys(array("unit", "location"));
@@ -33,7 +35,8 @@ class AdminwidgetWeather extends Adminwidget implements AdminwidgetInterface {
      *
      * @return string
      */
-    public function getEditForm() {
+    public function getEditForm()
+    {
         $strReturn = "";
         $strReturn .= $this->objToolkit->formInputDropdown(
             "unit",
@@ -55,43 +58,40 @@ class AdminwidgetWeather extends Adminwidget implements AdminwidgetInterface {
      *
      * @return string
      */
-    public function getWidgetOutput() {
+    public function getWidgetOutput()
+    {
         $strReturn = "";
 
-        if($this->getFieldValue("location") == "") {
+        if ($this->getFieldValue("location") == "") {
             return "Please set up a location";
         }
 
-        if(StringUtil::indexOf($this->getFieldValue("location"), "GM") !== false) {
+        if (StringUtil::indexOf($this->getFieldValue("location"), "GM") !== false) {
             return "This widget changed, please update your location by editing the widget";
         }
 
 
         //request the xml...
         try {
-
             $strFormat = "metric";
-            if($this->getFieldValue("unit") == "f")
+            if ($this->getFieldValue("unit") == "f") {
                 $strFormat = "imperial";
+            }
 
             $objRemoteloader = new Remoteloader();
             $objRemoteloader->setStrHost("api.openweathermap.org");
-            $objRemoteloader->setStrQueryParams("/data/2.5/forecast/daily?APPID=4bdceecc2927e65c5fb712d1222c5293&q=" . $this->getFieldValue("location") . "&units=" . $strFormat."&cnt=4");
+            $objRemoteloader->setStrQueryParams("/data/2.5/forecast/daily?APPID=4bdceecc2927e65c5fb712d1222c5293&q=".$this->getFieldValue("location")."&units=".$strFormat."&cnt=4");
             $strContent = $objRemoteloader->getRemoteContent();
-        }
-        catch(Exception $objExeption) {
+        } catch (Exception $objExeption) {
             $strContent = "";
         }
 
-        if($strContent != "" && json_decode($strContent, true) !== null) {
-
+        if ($strContent != "" && json_decode($strContent, true) !== null) {
             $arrResponse = json_decode($strContent, true);
+            $strReturn .= $this->widgetText($this->getLang("weather_location_string").$arrResponse["city"]["name"].", ".$arrResponse["city"]["country"]);
 
 
-            $strReturn .= $this->widgetText($this->getLang("weather_location_string") . $arrResponse["city"]["name"].", ".$arrResponse["city"]["country"]);
-
-
-            foreach($arrResponse["list"] as $arrOneForecast) {
+            foreach ($arrResponse["list"] as $arrOneForecast) {
                 $objDate = new \Kajona\System\System\Date($arrOneForecast["dt"]);
                 $strReturn .= "<div>";
                 $strReturn .= $this->widgetText("<div style='float: left;'>".dateToString($objDate, false).": ".round($arrOneForecast["temp"]["day"], 1)."°</div>");
@@ -99,8 +99,7 @@ class AdminwidgetWeather extends Adminwidget implements AdminwidgetInterface {
                 $strReturn .= "</div><div style='clear: both;'></div>";
             }
 
-        }
-        else {
+        } else {
             $strReturn .= $this->getLang("weather_errorloading");
         }
 
@@ -109,28 +108,13 @@ class AdminwidgetWeather extends Adminwidget implements AdminwidgetInterface {
     }
 
     /**
-     * This callback is triggered on a users' first login into the system.
-     * You may use this method to install a widget as a default widget to
-     * a users dashboard.
-     *
-     * @param $strUserid
-     *
-     * @return bool
-     */
-    public function onFistLogin($strUserid) {
-        return true;
-    }
-
-
-    /**
      * Return a short (!) name of the widget.
      *
      * @return string
      */
-    public function getWidgetName() {
+    public function getWidgetName()
+    {
         return $this->getLang("weather_name");
     }
 
 }
-
-

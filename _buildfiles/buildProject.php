@@ -20,6 +20,7 @@ class BuildHelper {
         echo "   onlySetup: ".($this->bitOnlyProjectsetup ? "true" : "false")."\n";
         echo "\n\n";
         echo "  PHP Version: ".PHP_VERSION."\n";
+        echo "  PHP integer size: ".PHP_INT_SIZE." (4 = 32bit, 8 = 64bit)\n";
         echo "\n\n";
 
 

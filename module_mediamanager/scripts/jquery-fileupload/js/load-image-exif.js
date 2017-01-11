@@ -9,15 +9,15 @@
  * http://www.opensource.org/licenses/MIT
  */
 
-/*global define, module, require, window, console */
+/* global define */
 
 ;(function (factory) {
   'use strict'
   if (typeof define === 'function' && define.amd) {
     // Register as an anonymous AMD module:
-    define(['./load-image', './load-image-meta'], factory)
+    define(['load-image', 'load-image-meta'], factory)
   } else if (typeof module === 'object' && module.exports) {
-    factory(require('./load-image'), require('./load-image-meta'))
+    factory(require('load-image'), require('load-image-meta'))
   } else {
     // Browser globals:
     factory(window.loadImage)

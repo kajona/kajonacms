@@ -204,6 +204,13 @@ class InstallerSearch extends InstallerBase implements InstallerRemovableInterfa
             $strReturn .= $this->update_50_51();
         }
 
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.1") {
+            $strReturn .= "Updating to 6.2...\n";
+            $this->updateModuleVersion("search", "6.2");
+            $this->updateElementVersion("search", "6.2");
+        }
+
         if($this->bitIndexRebuild) {
             $strReturn .= "Rebuilding search index...\n";
             $this->updateIndex();

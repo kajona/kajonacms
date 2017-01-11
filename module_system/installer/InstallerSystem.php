@@ -21,9 +21,9 @@ use Kajona\System\System\MessagingConfig;
 use Kajona\System\System\MessagingMessage;
 use Kajona\System\System\OrmBase;
 use Kajona\System\System\OrmSchemamanager;
-use Kajona\System\System\Reflection;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\Rights;
+use Kajona\System\System\Session;
 use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemChangelog;
 use Kajona\System\System\SystemCommon;
@@ -32,7 +32,6 @@ use Kajona\System\System\SystemPwchangehistory;
 use Kajona\System\System\SystemSetting;
 use Kajona\System\System\UserGroup;
 use Kajona\System\System\UserUser;
-use PHPCodeBrowser\File;
 
 /**
  * Installer for the system-module
@@ -148,6 +147,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $arrFields["user_tel"] = array("char254", true);
         $arrFields["user_mobile"] = array("char254", true);
         $arrFields["user_date"] = array("long", true);
+        $arrFields["user_specialconfig"] = array("text", true);
 
         if(!$this->objDB->createTable("user_kajona", $arrFields, array("user_id")))
             $strReturn .= "An error occurred! ...\n";
@@ -199,14 +199,13 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $arrFields = array();
         $arrFields["session_id"] = array("char20", false);
         $arrFields["session_phpid"] = array("char254", true);
-        $arrFields["session_userid"] = array("char20", true);
-        $arrFields["session_groupids"] = array("text", true);
         $arrFields["session_releasetime"] = array("int", true);
         $arrFields["session_loginstatus"] = array("char254", true);
         $arrFields["session_loginprovider"] = array("char20", true);
         $arrFields["session_lasturl"] = array("text", true);
+        $arrFields["session_userid"] = array("char20", true);
 
-        if(!$this->objDB->createTable("session", $arrFields, array("session_id"), array("session_phpid", "session_releasetime", "session_userid")))
+        if(!$this->objDB->createTable("session", $arrFields, array("session_id"), array("session_phpid", "session_releasetime")))
             $strReturn .= "An error occurred! ...\n";
 
         // caching --------------------------------------------------------------------------------------
@@ -584,6 +583,25 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
             $strReturn .= $this->update_512_513();
         }
 
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.1.3") {
+            $strReturn .= $this->update_513_514();
+        }
+
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.1.4") {
+            $strReturn .= "Updating 5.1.4 to 6.2...\n";
+            $this->update_514_62();
+            $this->objDB->flushQueryCache();
+        }
+
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.1.5") {
+            $strReturn .= "Updating 5.1.5 to 6.2...\n";
+            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "6.2");
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn."\n\n";
     }
 
@@ -804,7 +822,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
         $strReturn .= "Registering messaging portal controller\n";
         $objModule = SystemModule::getModuleByName("messaging");
-        $objModule->setStrNamePortal("MessagingAdmin.php");
+        $objModule->setStrNamePortal("MessagingPortal.php");
         $objModule->updateObjectToDb();
 
         $strReturn .= "Removing xml controller entries...\n";
@@ -817,6 +835,40 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1.3");
+        return $strReturn;
+    }
+
+    private function update_513_514()
+    {
+        $strReturn = "Updating 5.1.3 to 5.1.4...\n";
+        $strReturn .= "Updating session table\n";
+
+        //save some user metadata, if available, for future requests
+        $objUser = Session::getInstance()->getUser();
+        if ($objUser !== null) {
+            $strGroups = implode(",", $objUser->getArrGroupIds());
+            Session::getInstance()->setSession(Session::STR_SESSION_USERID, $objUser->getSystemid());
+            Session::getInstance()->setSession(Session::STR_SESSION_GROUPIDS, $strGroups);
+            Session::getInstance()->setSession(Session::STR_SESSION_ISADMIN, $objUser->getIntAdmin());
+        }
+
+        //remove columns
+        $this->objDB->removeColumn("session", "session_groupids");
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1.4");
+        return $strReturn;
+    }
+
+    private function update_514_62()
+    {
+        $strReturn = "Updating 5.1.4 to 6.2...\n";
+
+        $strReturn .= "Updating user table\n";
+        $this->objDB->addColumn("user_kajona", "user_specialconfig", DbDatatypes::STR_TYPE_TEXT, true);
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "6.2");
         return $strReturn;
     }
 }

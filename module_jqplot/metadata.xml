@@ -5,11 +5,11 @@
     >
     <title>jqplot</title>
     <description>jqPlot charting engine. Used to render charts on the client-side, based on the common jqPlot library.</description>
-    <version>5.1</version>
+    <version>6.2</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>FALSE</providesInstaller>
     <requiredModules>
-        <module name="system" version="5.1" />
+        <module name="system" version="6.2" />
     </requiredModules>
 </package>

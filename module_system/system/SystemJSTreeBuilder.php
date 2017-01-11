@@ -3,8 +3,6 @@
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2016 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                                *
 ********************************************************************************************************/
 
 
@@ -26,7 +24,7 @@ class SystemJSTreeBuilder
     const STR_PARAM_INITIALTOGGLING = "jstree_initialtoggling";
     const STR_PARAM_LOADALLCHILDNOES = "jstree_loadallchildnodes";
 
-
+    /** @var JStreeNodeLoaderInterface|null  */
     private $objNodeLoader = null;
 
     /**

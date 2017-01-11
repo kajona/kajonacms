@@ -76,6 +76,12 @@ class InstallerDashboard extends InstallerBase implements InstallerInterface {
             $this->updateModuleVersion("dashboard", "5.1");
         }
 
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.1") {
+            $strReturn .= "Updating to 6.2...\n";
+            $this->updateModuleVersion("dashboard", "6.2");
+        }
+
         return $strReturn."\n\n";
 	}
 

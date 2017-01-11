@@ -252,7 +252,7 @@ TXT;
             return;
 
         echo "placing allow htaccess in ".$strPath."\n";
-        $strContent = "\n\nAllow from all\n\n";
+        $strContent = "\n\nOrder allow,deny\n\nAllow from all\n\nSatisfy any\n\n";
         file_put_contents(self::$strRealPath.$strPath, $strContent);
     }
 

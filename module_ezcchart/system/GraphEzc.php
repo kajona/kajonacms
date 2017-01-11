@@ -23,8 +23,11 @@ use ezcGraphPieChart;
 use ezcGraphRenderer2d;
 use ezcGraphRenderer3d;
 use Kajona\System\System\Exception;
+use Kajona\System\System\Filesystem;
 use Kajona\System\System\GraphCommons;
-use Kajona\System\System\GraphExtendedInterface;
+use Kajona\System\System\GraphInterface;
+use Kajona\System\System\Resourceloader;
+use Kajona\System\System\StringUtil;
 
 /**
  * This class could be used to create graphs based on the ez components API.
@@ -34,7 +37,7 @@ use Kajona\System\System\GraphExtendedInterface;
  * @since 3.4
  * @author sidler@mulchprod.de
  */
-class GraphEzc implements GraphExtendedInterface
+class GraphEzc implements GraphInterface
 {
 
 
@@ -96,7 +99,13 @@ class GraphEzc implements GraphExtendedInterface
      */
     public function __construct()
     {
-
+        //try to replace the font-path if necessary
+        if (StringUtil::startsWith(Resourceloader::getInstance()->getAbsolutePathForModule("module_system"), "phar://")) {
+            $this->strFont = Resourceloader::getInstance()->getAbsolutePathForModule("module_system")."/system/fonts/dejavusans.ttf";
+            $objFs = new Filesystem();
+            $objFs->fileCopy($this->strFont, "/project/temp/dejavusans.ttf");
+            $this->strFont = "/project/temp/dejavusans.ttf";
+        }
     }
 
 
@@ -469,7 +478,6 @@ class GraphEzc implements GraphExtendedInterface
         //data sets
 
         foreach ($this->arrDataSets as $strName => $arrSet) {
-
             $this->objGraph->data[$strName] = $arrSet["data"];
             if (isset($arrSet["symbol"])) {
                 $this->objGraph->data[$strName]->symbol = $arrSet["symbol"];
@@ -529,7 +537,6 @@ class GraphEzc implements GraphExtendedInterface
 
         //x-axis lables?
         if ($this->intCurrentGraphMode != $this->GRAPH_TYPE_PIE) {
-
             if ($this->intXAxisAngle != 0) {
                 $this->objGraph->xAxis->axisLabelRenderer = new ezcGraphAxisRotatedLabelRenderer();
                 $this->objGraph->xAxis->axisLabelRenderer->angle = $this->intXAxisAngle;

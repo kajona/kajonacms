@@ -328,4 +328,13 @@ class Lang
         return $this->strLanguage;
     }
 
+    /**
+     * @return string
+     */
+    public function getStrFallbackLanguage()
+    {
+        return $this->strFallbackLanguage;
+    }
+
+
 }

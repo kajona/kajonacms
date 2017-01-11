@@ -5,11 +5,11 @@
         >
     <title>lastmodified</title>
     <description>Renders the date of the pages' last modification.</description>
-    <version>5.1</version>
+    <version>6.2</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="pages" version="5.1" />
+        <module name="pages" version="6.2" />
     </requiredModules>
 </package>

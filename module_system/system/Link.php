@@ -299,7 +299,7 @@ class Link
 
         if ($strOnClick == "") {
             $strLink = Link::getLinkAdminHref($strModule, $strAction, $strParams);
-            $strOnClick = "require(['dialogHelper'], function(dialog) {dialog.showIframeDialog('{$strLink}', '{$strTitle}')} ); return false;";
+            $strOnClick = "require('dialogHelper').showIframeDialog('{$strLink}', '{$strTitle}'); return false;";
         }
 
 

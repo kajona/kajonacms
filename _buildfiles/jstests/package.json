@@ -15,7 +15,7 @@
     "jquery-ui" : "1.12.0",
     "jsdom": "^7.0.2",
     "less": "^2.5.3",
-    "protractor": "^4.0.9",
+    "protractor": "^4.0.13",
     "protractor-console-plugin": "^0.1.1",
     "protractor-screenshot-reporter": "0.0.5",
     "requirejs" : "^2.3.2",

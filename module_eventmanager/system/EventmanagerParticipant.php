@@ -11,8 +11,8 @@ use Kajona\System\System\AdminListableInterface;
 use Kajona\System\System\Link;
 use Kajona\System\System\MessagingMessage;
 use Kajona\System\System\MessagingMessagehandler;
+use Kajona\System\System\OrmCondition;
 use Kajona\System\System\OrmObjectlist;
-use Kajona\System\System\OrmObjectlistRestriction;
 use Kajona\System\System\Rights;
 use Kajona\System\System\SystemChangelog;
 use Kajona\System\System\UserGroup;
@@ -241,7 +241,7 @@ class EventmanagerParticipant extends \Kajona\System\System\Model implements \Ka
     public static function getParticipantByUserid($strUserid, $strEventId) {
 
         $objOrm = new OrmObjectlist();
-        $objOrm->addWhereRestriction(new OrmObjectlistRestriction("AND em_pt_userid = ?", array($strUserid)));
+        $objOrm->addWhereRestriction(new OrmCondition("em_pt_userid = ?", array($strUserid)));
         return $objOrm->getSingleObject(get_called_class(), $strEventId);
     }
 
@@ -253,7 +253,7 @@ class EventmanagerParticipant extends \Kajona\System\System\Model implements \Ka
      */
     public static function getActiveParticipantsCount($strEventId) {
         $objOrm = new OrmObjectlist();
-        $objOrm->addWhereRestriction(new OrmObjectlistRestriction("AND em_pt_status != 2", array()));
+        $objOrm->addWhereRestriction(new OrmCondition("em_pt_status != 2"));
         return $objOrm->getObjectCount(get_called_class(), $strEventId);
     }
 

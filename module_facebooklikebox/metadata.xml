@@ -5,11 +5,11 @@
         >
     <title>facebooklikebox</title>
     <description>Want a "like my page on facebook" button on your site? Then this element is yours.</description>
-    <version>5.1</version>
+    <version>6.2</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="pages" version="5.1" />
+        <module name="pages" version="6.2" />
     </requiredModules>
 </package>
