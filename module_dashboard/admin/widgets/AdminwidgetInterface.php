@@ -41,18 +41,6 @@ interface AdminwidgetInterface {
      */
     public function getWidgetName();
 
-    /**
-     * This callback is triggered on a users' first login into the system.
-     * You may use this method to install a widget as a default widget to
-     * a users dashboard.
-     *
-     * @abstract
-     *
-     * @param $strUserid
-     *
-     * @return bool
-     */
-    public function onFistLogin($strUserid);
 }
 
 

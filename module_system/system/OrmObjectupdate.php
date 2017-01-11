@@ -10,7 +10,6 @@ namespace Kajona\System\System;
 
 use ArrayObject;
 
-
 /**
  * The objectupdate class is used to save an objects' state back to the database.
  * Therefore the passed object is analyzed, all properties with a matching target-column
@@ -66,7 +65,6 @@ class OrmObjectupdate extends OrmBase
             $arrProperties = $objReflection->getPropertiesWithAnnotation(OrmBase::STR_ANNOTATION_TABLECOLUMN);
 
             foreach ($arrProperties as $strPropertyName => $strColumn) {
-
                 //check if there are table annotation available
                 $arrColumnDef = explode(".", $strColumn);
 
@@ -140,7 +138,6 @@ class OrmObjectupdate extends OrmBase
         $arrProperties = $objReflection->getPropertiesWithAnnotation(OrmBase::STR_ANNOTATION_OBJECTLIST, ReflectionEnum::PARAMS);
 
         foreach ($arrProperties as $strPropertyName => $arrValues) {
-
             $objCfg = OrmAssignmentConfig::getConfigForProperty($this->getObjObject(), $strPropertyName);
 
             //try to load the orm config of the arrayObject - if given
@@ -248,14 +245,13 @@ class OrmObjectupdate extends OrmBase
 
         $arrReturn = array();
         foreach ($arrValues as $objOneValue) {
-
             if (is_object($objOneValue) && $objOneValue instanceof Model) {
                 if ($arrClassFilter == null ||
                     count(array_filter($arrClassFilter, function ($strSingleClass) use ($objOneValue) {
                         return $objOneValue instanceof $strSingleClass;
                     })) > 0
                 ) {
-                    if($bitCreateIfNotExisting && !validateSystemid($objOneValue->getSystemid())) {
+                    if ($bitCreateIfNotExisting && !validateSystemid($objOneValue->getSystemid())) {
                         //seems we need an insert right here!
                         $objOneValue->updateObjectToDb();
                     }
@@ -306,6 +302,4 @@ class OrmObjectupdate extends OrmBase
         return $objDB->_pQuery($strQuery, $arrValues, $arrEscapes);
 
     }
-
-
 }

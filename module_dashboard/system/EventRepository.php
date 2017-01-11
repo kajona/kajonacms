@@ -62,27 +62,6 @@ class EventRepository
     }
 
     /**
-     * Returns all available open events
-     *
-     * @return EventEntry[]
-     */
-    public static function getAllEventsByDate(\Kajona\System\System\Date $objDate)
-    {
-        $arrCategories = self::getAllCategories();
-        $arrEvents = array();
-
-        foreach ($arrCategories as $strTitle => $arrCategory) {
-            foreach ($arrCategory as $strKey => $strCategoryName) {
-                $arrEvents = array_merge($arrEvents, self::getEventsByCategoryAndDate($strKey, $objDate));
-            }
-        }
-
-        self::sortEvents($arrEvents);
-
-        return $arrEvents;
-    }
-
-    /**
      * Returns all available categories
      *
      * @return array

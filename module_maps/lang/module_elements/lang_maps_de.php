@@ -17,3 +17,4 @@ $lang["maps_geocode_error"]              = "Die eingegebene Adresse konnte nicht
 $lang["maps_geocode_hint"]               = "Die Markierung auf der Karte kann anschließend manuell verschoben werden.";
 $lang["maps_infotext"]                   = "Info-Text";
 $lang["maps_preview"]                    = "Vorschau der Karte";
+$lang["maps_apikey_missing"]             = "Es wurde kein Google Maps API Key hinterlegt. Bitte legen Sie diesen unter /project/module_maps/system/config/config.php ab, vgl. https://github.com/kajona/kajonacms/blob/master/module_maps/system/config/config.php als Vorlage.";

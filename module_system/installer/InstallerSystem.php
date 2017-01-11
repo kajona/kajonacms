@@ -147,6 +147,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $arrFields["user_tel"] = array("char254", true);
         $arrFields["user_mobile"] = array("char254", true);
         $arrFields["user_date"] = array("long", true);
+        $arrFields["user_specialconfig"] = array("text", true);
 
         if(!$this->objDB->createTable("user_kajona", $arrFields, array("user_id")))
             $strReturn .= "An error occurred! ...\n";
@@ -590,7 +591,14 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "5.1.4") {
             $strReturn .= "Updating 5.1.4 to 6.2...\n";
-            $this->updateModuleVersion("", "6.2");
+            $this->update_514_62();
+            $this->objDB->flushQueryCache();
+        }
+
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.1.5") {
+            $strReturn .= "Updating 5.1.5 to 6.2...\n";
+            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "6.2");
             $this->objDB->flushQueryCache();
         }
 
@@ -829,10 +837,10 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1.3");
         return $strReturn;
     }
+
     private function update_513_514()
     {
         $strReturn = "Updating 5.1.3 to 5.1.4...\n";
-
         $strReturn .= "Updating session table\n";
 
         //save some user metadata, if available, for future requests
@@ -849,6 +857,18 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1.4");
+        return $strReturn;
+    }
+
+    private function update_514_62()
+    {
+        $strReturn = "Updating 5.1.4 to 6.2...\n";
+
+        $strReturn .= "Updating user table\n";
+        $this->objDB->addColumn("user_kajona", "user_specialconfig", DbDatatypes::STR_TYPE_TEXT, true);
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "6.2");
         return $strReturn;
     }
 }
