@@ -32,7 +32,7 @@ class SystemJSTreeConfig
     /**
      * Endpoint (URL) which is being called for loading the nodes
      *
-     * @var null|array
+     * @var null|string
      */
     private $strNodeEndpoint = null;
 
@@ -177,7 +177,7 @@ class SystemJSTreeConfig
     }
 
     /**
-     * @return array|null
+     * @return string|null
      */
     public function getStrNodeEndpoint()
     {
@@ -185,7 +185,7 @@ class SystemJSTreeConfig
     }
 
     /**
-     * @param array|null $strNodeEndpoint
+     * @param string|null $strNodeEndpoint
      */
     public function setStrNodeEndpoint($strNodeEndpoint)
     {
