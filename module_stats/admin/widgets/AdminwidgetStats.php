@@ -11,11 +11,9 @@ namespace Kajona\Stats\Admin\Widgets;
 
 use Kajona\Dashboard\Admin\Widgets\Adminwidget;
 use Kajona\Dashboard\Admin\Widgets\AdminwidgetInterface;
-use Kajona\Dashboard\System\DashboardWidget;
 use Kajona\Stats\Admin\Reports\StatsReportCommon;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\GraphFactory;
-use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemModule;
 
 
@@ -133,7 +131,6 @@ class AdminwidgetStats extends Adminwidget implements AdminwidgetInterface
             $strReturn .= $this->widgetSeparator();
         }
         if ($this->getFieldValue("last") == "checked") {
-
             $strReturn .= $this->widgetText($this->getLang("stats_ip")." ".$this->getLang("stats_page"));
 
             $intMaxRecords = $this->getFieldValue("nrLast");
@@ -152,29 +149,6 @@ class AdminwidgetStats extends Adminwidget implements AdminwidgetInterface
     }
 
     /**
-     * This callback is triggered on a users' first login into the system.
-     * You may use this method to install a widget as a default widget to
-     * a users dashboard.
-     *
-     * @param $strUserid
-     *
-     * @return bool
-     */
-    public function onFistLogin($strUserid)
-    {
-        if (SystemModule::getModuleByName("stats") !== null && SystemAspect::getAspectByName("management") !== null) {
-            $objDashboard = new DashboardWidget();
-            $objDashboard->setStrColumn("column2");
-            $objDashboard->setStrUser($strUserid);
-            $objDashboard->setStrClass(__CLASS__);
-            $objDashboard->setStrContent("a:5:{s:7:\"current\";s:7:\"checked\";s:3:\"day\";s:7:\"checked\";s:4:\"last\";s:7:\"checked\";s:6:\"nrLast\";s:1:\"4\";s:5:\"chart\";s:7:\"checked\";}");
-            return $objDashboard->updateObjectToDb(DashboardWidget::getWidgetsRootNodeForUser($strUserid, SystemAspect::getAspectByName("management")->getSystemid()));
-        }
-
-        return true;
-    }
-
-    /**
      * Return a short (!) name of the widget.
      *
      * @return string
@@ -185,5 +159,4 @@ class AdminwidgetStats extends Adminwidget implements AdminwidgetInterface
     }
 
 }
-
 

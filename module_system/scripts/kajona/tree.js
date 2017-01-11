@@ -11,7 +11,7 @@ define(['jquery', 'jstree', 'ajax', 'lang', 'cacheManager'], function ($, jstree
     };
 
     /**
-     * Object to initilaze a JsTree
+     * Object to initialize a JsTree
      */
     kajonatree.jstree = function () {
 
@@ -21,11 +21,12 @@ define(['jquery', 'jstree', 'ajax', 'lang', 'cacheManager'], function ($, jstree
         this.rootNodeSystemid = null;
         this.treeConfig = null;//@see class \Kajona\System\System\SystemJSTreeConfig for structure
         this.treeId = null;
-        this.treeviewExpanders = null;
+        this.treeviewExpanders = null; //array of ids
+        this.initiallySelectedNodes = null; //array of ids
 
         /**
          * Moves nodes below another node.
-         * Triggers a relaod of the page after node was moved
+         * Triggers a reload of the page after node was moved
          *
          * @param data
          * @returns {boolean}
@@ -210,7 +211,7 @@ define(['jquery', 'jstree', 'ajax', 'lang', 'cacheManager'], function ($, jstree
                         'url': function (node) {
                             return treeContext.loadNodeDataUrl;
                         },
-                        'data': function (node, cb) {
+                        'data': function (node, cb) {//params to be added to the given ulr on ajay call
                             var data = {};
                             if (node.id === "#") {
                                 data.systemid = treeContext.rootNodeSystemid;
@@ -275,10 +276,41 @@ define(['jquery', 'jstree', 'ajax', 'lang', 'cacheManager'], function ($, jstree
                     moveNode(data);
                 });
 
+            $jsTree
+                .on('ready.jstree', function (e, data) {
+                    treeContext.selectNodesOnLoad(e, data);
+                });
+
             //4. init jstree draggable for lists
             $('td.treedrag.jstree-listdraggable').on('mousedown', this.listDnd);
         };
+
+
+        /**
+         * Select nodes after the tree has loaded
+         *      if treeContext.initiallySelectedNodes contains id's, select all nodes with the given id's in the tree
+         *      otherwise the last id in array treeContext.treeviewExpanders is automatically being selected
+         *
+         * @param e - event
+         * @param data - data of the event
+         */
+        this.selectNodesOnLoad = function(e, data) {
+            var treeInstance = data.instance;
+
+            /*Select nodes after the tree has loaded
+                if treeContext.initiallySelectedNodes contains id's, select all nodes with the given id's in the tree
+                otherwise the last id in array treeContext.treeviewExpanders is automatically being selected
+             */
+            if(treeContext.initiallySelectedNodes instanceof Array) {
+                treeInstance.select_node(treeContext.initiallySelectedNodes);
+            } else if(treeContext.treeviewExpanders instanceof Array) {
+                var strSelectId = "#" + treeContext.treeviewExpanders[treeContext.treeviewExpanders.length-1];
+                treeInstance.select_node(strSelectId);
+            }
+        }
     };
+
+
 
 
     /**
@@ -321,7 +353,7 @@ define(['jquery', 'jstree', 'ajax', 'lang', 'cacheManager'], function ($, jstree
      */
     kajonatree.conditionalselect.handleConditionalSelect = function (objNode, event) {
 
-        //hanlde on click events
+        //handle on click events
         if (event.type == "click") {
 
             //if node contains a_attr with href -> relaod page

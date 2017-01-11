@@ -1532,7 +1532,8 @@ The language switch surrounds the buttons
             jsTree.rootNodeSystemid = '%%rootNodeSystemid%%';
             jsTree.treeConfig = %%treeConfig%%;
             jsTree.treeId = '%%treeId%%';
-            jsTree.treeviewExpanders = [ %%treeviewExpanders%% ];
+            jsTree.treeviewExpanders = %%treeviewExpanders%%;
+            jsTree.initiallySelectedNodes = %%initiallySelectedNodes%%;
 
             jsTree.initTree();
         });

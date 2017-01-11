@@ -17,3 +17,4 @@ $lang["maps_geocode_error"]              = "The entered address couldn't be foun
 $lang["maps_geocode_hint"]               = "The marker on the map can be moved manually afterwards.";
 $lang["maps_infotext"]                   = "Info text";
 $lang["maps_preview"]                    = "Map preview";
+$lang["maps_apikey_missing"]             = "Google Maps API key is missing. Please provide it at /project/module_maps/system/config/config.php, see. https://github.com/kajona/kajonacms/blob/master/module_maps/system/config/config.php for a template.";

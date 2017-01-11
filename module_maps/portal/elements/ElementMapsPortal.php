@@ -9,6 +9,7 @@ namespace Kajona\Maps\Portal\Elements;
 
 use Kajona\Pages\Portal\ElementPortal;
 use Kajona\Pages\Portal\PortalElementInterface;
+use Kajona\System\System\Config;
 
 
 /**
@@ -17,7 +18,8 @@ use Kajona\Pages\Portal\PortalElementInterface;
  * @author jschroeter@kajona.de
  * @targetTable element_universal.content_id
  */
-class ElementMapsPortal extends ElementPortal implements PortalElementInterface {
+class ElementMapsPortal extends ElementPortal implements PortalElementInterface
+{
 
 
     /**
@@ -25,13 +27,14 @@ class ElementMapsPortal extends ElementPortal implements PortalElementInterface 
      *
      * @return string
      */
-    public function loadData() {
+    public function loadData()
+    {
 
         $strReturn = "";
 
         $strTemplate = $this->arrElementData["char3"];
         //fallback
-        if($strTemplate == "") {
+        if ($strTemplate == "") {
             $strTemplate = "maps.tpl";
         }
 
@@ -39,7 +42,7 @@ class ElementMapsPortal extends ElementPortal implements PortalElementInterface 
         $floatLng = "0.0";
 
         $arrLatLng = explode(',', $this->arrElementData["char2"]);
-        if(count($arrLatLng) == 2) {
+        if (count($arrLatLng) == 2) {
             $floatLat = $arrLatLng[0];
             $floatLng = $arrLatLng[1];
         }
@@ -49,6 +52,7 @@ class ElementMapsPortal extends ElementPortal implements PortalElementInterface 
         $this->arrElementData["lng"] = $floatLng;
         $this->arrElementData["infotext"] = str_replace(array("\r", "\r\n", "\n"), '', $this->arrElementData["text"]);
         $this->arrElementData["systemid"] = $this->getSystemid();
+        $this->arrElementData["apikey"] = Config::getInstance("module_maps")->getConfig("google_maps_apikey");
 
         $strReturn .= $this->objTemplate->fillTemplateFile($this->arrElementData, "/module_maps/".$strTemplate, "map");
 

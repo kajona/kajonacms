@@ -2478,20 +2478,14 @@ HTML;
      */
     public function getTree(SystemJSTreeConfig $objTreeConfig)
     {
-        $arrNodesToExpand = $objTreeConfig->getArrNodesToExpand();
-
         $arrTemplate = array();
         $arrTemplate["rootNodeSystemid"] = $objTreeConfig->getStrRootNodeId();
         $arrTemplate["loadNodeDataUrl"] = $objTreeConfig->getStrNodeEndpoint();
         $arrTemplate["treeId"] = "tree_".$objTreeConfig->getStrRootNodeId();
         $arrTemplate["treeConfig"] = $objTreeConfig->toJson();
-        $arrTemplate["treeviewExpanders"] = "";
-        for ($intI = 0; $intI < count($arrNodesToExpand); $intI++) {
-            $arrTemplate["treeviewExpanders"] .= "\"".$arrNodesToExpand[$intI]."\"";
-            if ($intI < count($arrNodesToExpand) - 1) {
-                $arrTemplate["treeviewExpanders"] .= ",";
-            }
-        }
+        $arrTemplate["treeviewExpanders"] = json_encode(array_values($objTreeConfig->getArrNodesToExpand()));//using array_values just in case an associative array is being returned
+        $arrTemplate["initiallySelectedNodes"] = json_encode(array_values($objTreeConfig->getArrInitiallySelectedNodes()));//using array_values just in case an associative array is being returned
+
         return $this->objTemplate->fillTemplateFile($arrTemplate, "/elements.tpl", "tree");
     }
 
