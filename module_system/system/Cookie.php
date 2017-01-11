@@ -40,7 +40,7 @@ class Cookie
             $strPath = "/".$strPath;
         }
 
-        return setcookie($strName, $strValue, $intTime, $strPath);
+        return setcookie($strName, $strValue, $intTime, $strPath, null, null, true);
     }
 
     /**
