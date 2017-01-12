@@ -301,9 +301,9 @@ define(['jquery', 'jstree', 'ajax', 'lang', 'cacheManager'], function ($, jstree
                 if treeContext.initiallySelectedNodes contains id's, select all nodes with the given id's in the tree
                 otherwise the last id in array treeContext.treeviewExpanders is automatically being selected
              */
-            if(treeContext.initiallySelectedNodes instanceof Array) {
+            if(treeContext.initiallySelectedNodes instanceof Array && treeContext.initiallySelectedNodes.length > 0) {
                 treeInstance.select_node(treeContext.initiallySelectedNodes);
-            } else if(treeContext.treeviewExpanders instanceof Array) {
+            } else if(treeContext.treeviewExpanders instanceof Array && treeContext.treeviewExpanders.length > 0) {
                 var strSelectId = "#" + treeContext.treeviewExpanders[treeContext.treeviewExpanders.length-1];
                 treeInstance.select_node(strSelectId);
             }
