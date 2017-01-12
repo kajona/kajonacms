@@ -93,6 +93,12 @@ final class Session
 
         //New session needed or using the already started one?
         if (!session_id()) {
+            $strPath = preg_replace('#http(s?)://'.getServer("HTTP_HOST").'#i', '', _webpath_);
+            if ($strPath == "" || $strPath[0] != "/") {
+                $strPath = "/".$strPath;
+            }
+
+            @session_set_cookie_params(0, $strPath, null, SystemSetting::getConfigValue("_cookies_only_https_") == "true", true);
             @session_start();
         }
 
