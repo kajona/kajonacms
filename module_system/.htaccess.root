@@ -98,11 +98,15 @@
 #php_value error_log project/log/php.log
 
 # the following directives require mod_header to be available
+
 # Enable a header to suppress IE and Chrome from sniffing some headers, see http://stackoverflow.com/questions/18337630/what-is-x-content-type-options-nosniff
 #Header set X-Content-Type-Options "nosniff"
 
 # HSTS header to have the browser rewrite non https urls to https. enable with care. see https://raymii.org/s/tutorials/HTTP_Strict_Transport_Security_for_Apache_NGINX_and_Lighttpd.html
 #Header set Strict-Transport-Security "max-age=63072000; includeSubdomains;"
+
+# Enable the IE XSS protection module by default, see https://blogs.msdn.microsoft.com/ieinternals/2011/01/31/controlling-the-xss-filter/
+#Header set X-XSS-Protection "1"
 
 ######################################## PERFORMANCE ######################################################
 # borrowed from HTML5 Boilerplate; http://html5boilerplate.com/
