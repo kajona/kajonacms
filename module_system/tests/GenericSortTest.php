@@ -4,11 +4,65 @@ namespace Kajona\System\Tests;
 
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Database;
+use Kajona\System\System\OrmDeletedhandlingEnum;
 use Kajona\System\System\OrmObjectlist;
 use Kajona\System\System\SystemAspect;
 
 class SortTest extends Testbase
 {
+
+
+    public function testSortOnLogicalDelete()
+    {
+        $objRootAspect = new SystemAspect();
+        $objRootAspect->setStrName("testroot");
+        $objRootAspect->updateObjectToDb();
+
+        /** @var SystemAspect[] $arrAspects */
+        $arrAspects = array();
+        for ($intI = 0; $intI < 5; $intI++) {
+            $objAspect = new SystemAspect();
+            $objAspect->setStrName("autotest_" . $intI);
+            $objAspect->updateObjectToDb($objRootAspect->getSystemid());
+            $arrAspects[] = $objAspect;
+        }
+
+        $arrAspects[3]->deleteObject();
+
+
+        $objOrm = new OrmObjectlist();
+        $objOrm->setObjHandleLogicalDeleted(OrmDeletedhandlingEnum::INCLUDED);
+        /** @var SystemAspect[] $arrList */
+        $arrList = $objOrm->getObjectList(SystemAspect::class, $objRootAspect->getSystemid());
+
+        $this->assertEquals(5, count($arrList));
+
+        $this->assertEquals("autotest_0", $arrList[0]->getStrName());
+        $this->assertEquals("autotest_1", $arrList[1]->getStrName());
+        $this->assertEquals("autotest_2", $arrList[2]->getStrName());
+        $this->assertEquals("autotest_4", $arrList[3]->getStrName());
+        $this->assertEquals("autotest_3", $arrList[4]->getStrName());
+
+        $this->assertEquals(1, $arrList[0]->getIntSort());
+        $this->assertEquals(2, $arrList[1]->getIntSort());
+        $this->assertEquals(3, $arrList[2]->getIntSort());
+        $this->assertEquals(4, $arrList[3]->getIntSort());
+        $this->assertEquals(-1, $arrList[4]->getIntSort());
+
+        //add another record
+        $objAspect = new SystemAspect();
+        $objAspect->setStrName("autotest_" . $intI);
+        $objAspect->updateObjectToDb($objRootAspect->getSystemid());
+        $arrAspects[] = $objAspect;
+
+        $this->assertEquals(5, $objAspect->getIntSort());
+
+        $objRootAspect->deleteObjectFromDatabase();
+
+    }
+
+
+
 
 
     function testSortOnDelete()
@@ -20,7 +74,7 @@ class SortTest extends Testbase
 
         /** @var SystemAspect[] $arrAspects */
         $arrAspects = array();
-        for ($intI = 0; $intI < 100; $intI++) {
+        for ($intI = 0; $intI < 10; $intI++) {
             $objAspect = new SystemAspect();
             $objAspect->setStrName("autotest_" . $intI);
             $objAspect->updateObjectToDb($objRootAspect->getSystemid());
@@ -28,15 +82,13 @@ class SortTest extends Testbase
         }
 
         //delete the 5th element - massive queries required
-        $intQueriesPre = Database::getInstance()->getNumber();
         $arrAspects[5]->deleteObjectFromDatabase();
 
-        $intQueriesPost = Database::getInstance()->getNumber();
 
         $objOrm = new OrmObjectlist();
         $arrChilds = $objOrm->getObjectList("Kajona\\System\\System\\SystemAspect", $objRootAspect->getSystemid());
-        $this->assertEquals(count($arrChilds), 99);
-        for ($intI = 1; $intI <= 99; $intI++) {
+        $this->assertEquals(count($arrChilds), 9);
+        for ($intI = 1; $intI <= 9; $intI++) {
             $this->assertEquals($arrChilds[$intI - 1]->getIntSort(), $intI);
         }
 
@@ -45,7 +97,7 @@ class SortTest extends Testbase
     }
 
 
-    function testTreeSortBehaviour()
+    public function testTreeSortBehaviour()
     {
 
         $objDB = Carrier::getInstance()->getObjDB();

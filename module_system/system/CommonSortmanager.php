@@ -59,6 +59,7 @@ class CommonSortmanager implements SortmanagerInterface
                      WHERE system_prev_id=?
                      AND system_id != '0'
                      AND system_deleted = 0
+                     AND system_sort > -1
                      ".$strWhere."
                      ORDER BY system_sort ASC";
         $arrSiblings = $this->objDB->getPArray($strQuery, $arrParams);
@@ -79,6 +80,7 @@ class CommonSortmanager implements SortmanagerInterface
                      WHERE system_prev_id=?
                      AND system_id != '0'
                      AND system_deleted = 0
+                     AND system_sort > -1
                      ".$strWhere."
                      ORDER BY system_sort ASC";
         $arrSiblings = $this->objDB->getPArray($strQuery, $arrParams);
@@ -96,9 +98,12 @@ class CommonSortmanager implements SortmanagerInterface
      *
      * @return mixed
      */
-    public function fixSortOnDelete($arrRestrictionModules = false)
+    public function fixSortOnDelete($intOldSort, $arrRestrictionModules = false)
     {
 
+        if ($intOldSort == -1) {
+            return;
+        }
 
         $arrParams = array();
         $arrParams[] = $this->objSource->getPrevId();
@@ -115,32 +120,28 @@ class CommonSortmanager implements SortmanagerInterface
         }
 
 
-        $strQuery = "SELECT system_id, system_sort
+        $strQuery = "SELECT system_id, system_sort, system_deleted
                      FROM "._dbprefix_."system
-                     WHERE system_prev_id=?
+                     WHERE system_prev_id =?
                      AND system_deleted = 0
+                     AND system_sort > -1
                      ".$strWhere."
                      ORDER BY system_sort ASC";
         $arrSiblings = $this->objDB->getPArray($strQuery, $arrParams);
 
         $arrIds = array();
 
-        $bitHit = false;
         foreach ($arrSiblings as $arrOneSibling) {
-
-            if ($bitHit) {
+            //see if the current record is below the old one and shift each one
+            if ($arrOneSibling["system_sort"] > $intOldSort) {
                 $arrIds[] = $arrOneSibling["system_id"];
-            }
-
-            if ($arrOneSibling["system_id"] == $this->objSource->getSystemid()) {
-                $bitHit = true;
             }
         }
 
         if (count($arrIds) > 0) {
-            $strQuery = "UPDATE "._dbprefix_."system SET system_sort = system_sort-1 where system_id IN (".implode(",", array_map(function ($strVal) {
-                    return "?";
-                }, $arrIds)).")";
+            $strQuery = "UPDATE "._dbprefix_."system SET system_sort = system_sort-1 where system_deleted = 0 AND system_sort > -1 AND system_id IN (".implode(",", array_map(function ($strVal) {
+                return "?";
+            }, $arrIds)).")";
             $this->objDB->_pQuery($strQuery, $arrIds);
         }
     }
@@ -159,8 +160,7 @@ class CommonSortmanager implements SortmanagerInterface
         $intPos = $this->objSource->getIntSort();
         if ($strDirection == "upwards") {
             $intPos--;
-        }
-        else {
+        } else {
             $intPos++;
         }
 
@@ -206,6 +206,7 @@ class CommonSortmanager implements SortmanagerInterface
                          FROM "._dbprefix_."system
                          WHERE system_prev_id=? AND system_id != '0'
                            AND system_deleted = 0
+                           AND system_sort > -1
                          ".$strWhere."
                          ORDER BY system_sort ASC, system_comment ASC";
 

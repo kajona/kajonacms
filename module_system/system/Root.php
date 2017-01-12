@@ -528,6 +528,7 @@ abstract class Root
         }
 
         $this->intRecordDeleted = 1;
+        $intOldSortId = $this->intSort;
         $this->intSort = -1;
         $bitReturn = $this->updateObjectToDb();
 
@@ -536,7 +537,7 @@ abstract class Root
         $this->objDB->flushQueryCache();
 
         if ($this->objSortManager !== null) {
-            $this->objSortManager->fixSortOnDelete();
+            $this->objSortManager->fixSortOnDelete($intOldSortId);
         }
 
         $bitReturn = $bitReturn && CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_RECORDDELETED_LOGICALLY, array($this->getSystemid(), get_class($this)));
@@ -589,7 +590,7 @@ abstract class Root
         $bitReturn = $objORM->deleteObject();
 
         if ($this->objSortManager !== null) {
-            $this->objSortManager->fixSortOnDelete();
+            $this->objSortManager->fixSortOnDelete($this->intSort);
         }
         $bitReturn = $bitReturn && $this->deleteSystemRecord($this->getSystemid());
 
@@ -1037,11 +1038,9 @@ abstract class Root
 
         //determine the correct new sort-id - append by default
         if (SystemModule::getModuleByName("system") != null && version_compare(SystemModule::getModuleByName("system")->getStrVersion(), "4.7.5", "lt")) {
-            $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ? AND system_id != '0'";
-        }
-        else {
-            $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ? AND system_id != '0' AND system_deleted = 0";
-
+            $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ? AND system_id != '0' AND system_sort > -1";
+        } else {
+            $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ? AND system_id != '0' AND system_deleted = 0 AND system_sort > -1";
         }
         $arrRow = $this->objDB->getPRow($strQuery, array($strPrevId), 0, false);
         $intSiblings = $arrRow["COUNT(*)"];
@@ -1056,8 +1055,6 @@ abstract class Root
      * @param string $strComment Comment to identify the record
      *
      * @return string The ID used/generated
-     *
-     * @todo find usages and make private
      */
     private function createSystemRecord($strPrevId, $strComment)
     {

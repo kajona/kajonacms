@@ -14,19 +14,27 @@ use Kajona\System\System\CommonSortmanager;
 class PagesSortmanager extends CommonSortmanager
 {
 
+    /**
+     * @inheritdoc
+     */
     public function setAbsolutePosition($intNewPosition, $arrRestrictionModules = false)
     {
         parent::setAbsolutePosition($intNewPosition, array(_pages_modul_id_, _pages_folder_id_));
     }
 
-    function fixSortOnDelete($arrRestrictionModules = false)
+    /**
+     * @inheritdoc
+     */
+    public function fixSortOnDelete($intOldSort, $arrRestrictionModules = false)
     {
-        parent::fixSortOnDelete(array(_pages_modul_id_, _pages_folder_id_));
+        parent::fixSortOnDelete($intOldSort, array(_pages_modul_id_, _pages_folder_id_));
     }
 
+    /**
+     * @inheritdoc
+     */
     public function fixSortOnPrevIdChange($strOldPrevid, $strNewPrevid, $arrRestrictionModules = false)
     {
         parent::fixSortOnPrevIdChange($strOldPrevid, $strNewPrevid, array(_pages_modul_id_, _pages_folder_id_));
     }
-
 }
