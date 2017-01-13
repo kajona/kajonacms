@@ -140,8 +140,8 @@ class CommonSortmanager implements SortmanagerInterface
 
         if (count($arrIds) > 0) {
             $strQuery = "UPDATE "._dbprefix_."system SET system_sort = system_sort-1 where system_deleted = 0 AND system_sort > -1 AND system_id IN (".implode(",", array_map(function ($strVal) {
-                return "?";
-            }, $arrIds)).")";
+                    return "?";
+                }, $arrIds)).")";
             $this->objDB->_pQuery($strQuery, $arrIds);
         }
     }
@@ -202,7 +202,7 @@ class CommonSortmanager implements SortmanagerInterface
         }
 
         //Load all elements on the same level, so at first get the prev id
-        $strQuery = "SELECT *
+        $strQuery = "SELECT system_id, system_sort, system_comment
                          FROM "._dbprefix_."system
                          WHERE system_prev_id=? AND system_id != '0'
                            AND system_deleted = 0
@@ -223,7 +223,14 @@ class CommonSortmanager implements SortmanagerInterface
             return;
         }
 
-        $intCurPos = $this->objSource->getIntSort();
+        $arrCurObjectRow = null;
+        foreach ($arrElements as $arrOneRow) {
+            if ($arrOneRow["system_id"] == $this->objSource->getSystemid()) {
+                $arrCurObjectRow = $arrOneRow;
+            }
+        }
+        //fetch the current sort id rather from the database then from the object
+        $intCurPos = $arrCurObjectRow["system_sort"];
 
         if ($intNewPosition == $intCurPos) {
             return;
@@ -235,8 +242,7 @@ class CommonSortmanager implements SortmanagerInterface
         $bitSortUp = false;
         if ($intNewPosition < $intCurPos) {
             $bitSortUp = true;
-        }
-        else {
+        } else {
             $bitSortDown = true;
         }
 
@@ -244,35 +250,21 @@ class CommonSortmanager implements SortmanagerInterface
         //sort up?
         if ($bitSortUp) {
             //move the record to be shifted to the wanted pos
-            $strQuery = "UPDATE "._dbprefix_."system
-                                SET system_sort=?
-                                WHERE system_id=?";
-            $this->objDB->_pQuery($strQuery, array(((int)$intNewPosition), $this->objSource->getSystemid()));
+            $this->updateRecordSort($this->objSource->getSystemid(), (int)$intNewPosition);
 
             //start at the pos to be reached and move all one down
             for ($intI = $intNewPosition; $intI < $intCurPos; $intI++) {
-
-                $strQuery = "UPDATE "._dbprefix_."system
-                            SET system_sort=?
-                            WHERE system_id=?";
-                $this->objDB->_pQuery($strQuery, array($intI + 1, $arrElements[$intI - 1]["system_id"]));
+                $this->updateRecordSort($arrElements[$intI - 1]["system_id"], $intI + 1);
             }
         }
 
         if ($bitSortDown) {
             //move the record to be shifted to the wanted pos
-            $strQuery = "UPDATE "._dbprefix_."system
-                                SET system_sort=?
-                                WHERE system_id=?";
-            $this->objDB->_pQuery($strQuery, array(((int)$intNewPosition), $this->objSource->getSystemid()));
+            $this->updateRecordSort($this->objSource->getSystemid(), (int)$intNewPosition);
 
             //start at the pos to be reached and move all one up
             for ($intI = $intCurPos + 1; $intI <= $intNewPosition; $intI++) {
-
-                $strQuery = "UPDATE "._dbprefix_."system
-                            SET system_sort= ?
-                            WHERE system_id=?";
-                $this->objDB->_pQuery($strQuery, array($intI - 1, $arrElements[$intI - 1]["system_id"]));
+                $this->updateRecordSort($arrElements[$intI - 1]["system_id"], $intI - 1);
             }
         }
 
@@ -282,4 +274,24 @@ class CommonSortmanager implements SortmanagerInterface
         $this->objSource->setIntSort($intNewPosition);
     }
 
+
+    /**
+     * Internal helper to update a single record
+     *
+     * @param $strSystemid
+     * @param $intPos
+     */
+    private function updateRecordSort($strSystemid, $intPos)
+    {
+        $strQuery = "UPDATE "._dbprefix_."system
+                            SET system_sort= ?
+                            WHERE system_id=?";
+        $this->objDB->_pQuery($strQuery, array($intPos, $strSystemid));
+
+        //update the source object if currently loaded by the objectfactory
+        $objObject = Objectfactory::getInstance()->getObjectFromCache($strSystemid);
+        if ($objObject !== null) {
+            $objObject->setIntSort($intPos);
+        }
+    }
 }

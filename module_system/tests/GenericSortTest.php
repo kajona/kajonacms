@@ -12,6 +12,116 @@ class SortTest extends Testbase
 {
 
 
+    public function testMultipleSorts()
+    {
+        $objRootAspect = new SystemAspect();
+        $objRootAspect->setStrName("testroot");
+        $objRootAspect->updateObjectToDb();
+
+        /** @var SystemAspect[] $arrAspects */
+        $arrAspects = array();
+        for ($intI = 0; $intI < 5; $intI++) {
+            $objAspect = new SystemAspect();
+            $objAspect->setStrName("autotest_" . $intI);
+            $objAspect->updateObjectToDb($objRootAspect->getSystemid());
+            $arrAspects[] = $objAspect;
+        }
+
+        $strQuery = "SELECT system_id, system_sort, system_comment FROM "._dbprefix_."system WHERE system_prev_id = ? ORDER BY system_sort ASC";
+        $arrRows = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array($objRootAspect->getSystemid()), null, null, false);
+
+        for($intI = 0; $intI < 5; $intI++) {
+            $this->assertEquals($arrAspects[$intI]->getSystemid(), $arrRows[$intI]["system_id"]);
+            $this->assertEquals($arrAspects[$intI]->getIntSort(), $arrRows[$intI]["system_sort"]);
+        }
+
+        //shift a3 to pos 2
+        $arrAspects[3]->setAbsolutePosition(2);
+        //expected: a0, a3, a1, a2, a4
+        $arrRows = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array($objRootAspect->getSystemid()), null, null, false);
+        //a1
+        $this->assertEquals($arrAspects[0]->getSystemid(), $arrRows[0]["system_id"]);
+        $this->assertEquals(1, $arrRows[0]["system_sort"]);
+        //a4
+        $this->assertEquals($arrAspects[3]->getSystemid(), $arrRows[1]["system_id"]);
+        $this->assertEquals(2, $arrRows[1]["system_sort"]);
+        //a2
+        $this->assertEquals($arrAspects[1]->getSystemid(), $arrRows[2]["system_id"]);
+        $this->assertEquals(3, $arrRows[2]["system_sort"]);
+        //a3
+        $this->assertEquals($arrAspects[2]->getSystemid(), $arrRows[3]["system_id"]);
+        $this->assertEquals(4, $arrRows[3]["system_sort"]);
+        //a5
+        $this->assertEquals($arrAspects[4]->getSystemid(), $arrRows[4]["system_id"]);
+        $this->assertEquals(5, $arrRows[4]["system_sort"]);
+
+        //shift a2 to pos 3
+        $arrAspects[2]->setAbsolutePosition(3);
+        //expected: a0, a3, a2, a1, a4
+        $arrRows = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array($objRootAspect->getSystemid()), null, null, false);
+        //a1
+        $this->assertEquals($arrAspects[0]->getSystemid(), $arrRows[0]["system_id"]);
+        $this->assertEquals(1, $arrRows[0]["system_sort"]);
+        //a4
+        $this->assertEquals($arrAspects[3]->getSystemid(), $arrRows[1]["system_id"]);
+        $this->assertEquals(2, $arrRows[1]["system_sort"]);
+        //a2
+        $this->assertEquals($arrAspects[2]->getSystemid(), $arrRows[2]["system_id"]);
+        $this->assertEquals(3, $arrRows[2]["system_sort"]);
+        //a3
+        $this->assertEquals($arrAspects[1]->getSystemid(), $arrRows[3]["system_id"]);
+        $this->assertEquals(4, $arrRows[3]["system_sort"]);
+        //a5
+        $this->assertEquals($arrAspects[4]->getSystemid(), $arrRows[4]["system_id"]);
+        $this->assertEquals(5, $arrRows[4]["system_sort"]);
+
+        //shift a4 to pos 1
+        $arrAspects[4]->setAbsolutePosition(1);
+        //expected: a4, a0, a3, a2, a1
+        $arrRows = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array($objRootAspect->getSystemid()), null, null, false);
+        //a1
+        $this->assertEquals($arrAspects[4]->getSystemid(), $arrRows[0]["system_id"]);
+        $this->assertEquals(1, $arrRows[0]["system_sort"]);
+        //a4
+        $this->assertEquals($arrAspects[0]->getSystemid(), $arrRows[1]["system_id"]);
+        $this->assertEquals(2, $arrRows[1]["system_sort"]);
+        //a2
+        $this->assertEquals($arrAspects[3]->getSystemid(), $arrRows[2]["system_id"]);
+        $this->assertEquals(3, $arrRows[2]["system_sort"]);
+        //a3
+        $this->assertEquals($arrAspects[2]->getSystemid(), $arrRows[3]["system_id"]);
+        $this->assertEquals(4, $arrRows[3]["system_sort"]);
+        //a5
+        $this->assertEquals($arrAspects[1]->getSystemid(), $arrRows[4]["system_id"]);
+        $this->assertEquals(5, $arrRows[4]["system_sort"]);
+
+
+
+        //shift a0 to pos 0
+        $arrAspects[0]->setAbsolutePosition(5);
+        //expected: a4, a3, a2, a1, a0
+        $arrRows = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array($objRootAspect->getSystemid()), null, null, false);
+        //a1
+        $this->assertEquals($arrAspects[4]->getSystemid(), $arrRows[0]["system_id"]);
+        $this->assertEquals(1, $arrRows[0]["system_sort"]);
+        //a4
+        $this->assertEquals($arrAspects[3]->getSystemid(), $arrRows[1]["system_id"]);
+        $this->assertEquals(2, $arrRows[1]["system_sort"]);
+        //a2
+        $this->assertEquals($arrAspects[2]->getSystemid(), $arrRows[2]["system_id"]);
+        $this->assertEquals(3, $arrRows[2]["system_sort"]);
+        //a3
+        $this->assertEquals($arrAspects[1]->getSystemid(), $arrRows[3]["system_id"]);
+        $this->assertEquals(4, $arrRows[3]["system_sort"]);
+        //a5
+        $this->assertEquals($arrAspects[0]->getSystemid(), $arrRows[4]["system_id"]);
+        $this->assertEquals(5, $arrRows[4]["system_sort"]);
+
+
+        $objRootAspect->deleteObjectFromDatabase();
+    }
+
+
     public function testSortOnLogicalDelete()
     {
         $objRootAspect = new SystemAspect();
