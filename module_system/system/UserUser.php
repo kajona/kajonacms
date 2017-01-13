@@ -186,6 +186,7 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
         $objTargetUser->updateObjectToDb();
         $objTargetUser->setNewRecordId($this->getSystemid());
         $this->objDB->flushQueryCache();
+        $this->objSourceUser = $objTargetUser;
         return true;
     }
 
