@@ -409,7 +409,12 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $objUser->setStrUsername($strUsername);
         $objUser->setIntAdmin(1);
         $objUser->setStrAdminlanguage($strAdminLanguage);
-        $objUser->updateObjectToDb();
+        echo ($objUser->updateObjectToDb() ? "User created " : "user creation failed").PHP_EOL;
+
+        if($objUser->getObjSourceUser() == null) {
+            var_dump($objUser);
+        }
+
         $objUser->getObjSourceUser()->setStrPass($strPassword);
         $objUser->getObjSourceUser()->setStrEmail($strEmail);
         $objUser->getObjSourceUser()->updateObjectToDb();
