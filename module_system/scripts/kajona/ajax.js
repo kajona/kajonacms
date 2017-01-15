@@ -6,6 +6,46 @@ define(['jquery', 'statusDisplay', 'workingIndicator', 'tooltip'], function ($, 
 
     return {
 
+        /**
+         * Shorthand method to load a html fragement into a node identified by the selector.
+         * Data is fetched by GET, loading indicators are triggered automatically.
+         * Scripts in the response are executed, tooltips are enabled, too.
+         * During loading, a loading container is shown and the general loading animation is enabled
+         *
+         * Possible usage:
+         * ajax.loadUrlToElement('#report_container', '/xml.php?admin=1&module=stats&action=getReport', '&plugin=general');
+         *
+         * @param strElementSelector
+         * @param strUrl
+         * @param strData
+         */
+        loadUrlToElement: function(strElementSelector, strUrl, strData, bitBlockLoadingContainer) {
+            workingIndicator.start();
+
+            if(!bitBlockLoadingContainer) {
+                $(strElementSelector).html('<div class="loadingContainer"></div>');
+            }
+
+            var target = strElementSelector;
+            $.get(KAJONA_WEBPATH+strUrl, strData)
+                .done(
+                    function(data) {
+                        debugger;
+                        $(strElementSelector).html(data);
+                        tooltip.initTooltip();
+                    }
+                )
+                .always(
+                    function(response) {
+                        workingIndicator.stop();
+                    }
+                )
+                .error(function(data) {
+                    debugger;
+                    statusDisplay.messageError("<b>Request failed!</b><br />" + data);
+                });
+        },
+
         getDataObjectFromString: function(strData, bitFirstIsSystemid) {
             //strip other params, backwards compatibility
             var arrElements = strData.split("&");
