@@ -163,7 +163,7 @@ class SystemJSTreeConfig
     /**
      * @return string
      */
-    public function getStrRootNodeId(): string
+    public function getStrRootNodeId()
     {
         return $this->strRootNodeId;
     }
