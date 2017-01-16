@@ -40,6 +40,7 @@ class MessagingPortal extends PortalController implements PortalInterface
      * Marks a message as read and returns a 1x1px transparent gif as a "read indicator"
      *
      * @return string
+     * @responseType gif
      */
     protected function actionSetRead()
     {
@@ -50,7 +51,6 @@ class MessagingPortal extends PortalController implements PortalInterface
             $objMessage->updateObjectToDb();
         }
 
-        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_GIF);
         return base64_decode("R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==");
     }
 

@@ -39,11 +39,9 @@ class ElementPortaluploadPortal extends ElementPortal implements PortalElementIn
 
         if ($this->getParam("submitPortaluploadForm") == "1") {
             $strReturn .= $this->doUpload();
-        }
-        elseif ($this->getParam("submitAjaxUpload") == "1") {
+        } elseif ($this->getParam("submitAjaxUpload") == "1") {
             $strReturn .= $this->doAjaxUpload();
-        }
-        else {
+        } else {
             $strReturn .= $this->uploadForm();
         }
 
@@ -91,8 +89,7 @@ class ElementPortaluploadPortal extends ElementPortal implements PortalElementIn
 
             $strReturn .= $this->objTemplate->fillTemplateFile($arrTemplate, "/module_portalupload/".$this->arrElementData["char1"], "portalupload_uploadform");
 
-        }
-        else {
+        } else {
             $strReturn .= $this->getLang("commons_error_permissions");
         }
 
@@ -114,8 +111,7 @@ class ElementPortaluploadPortal extends ElementPortal implements PortalElementIn
 
         if ($strUpload === true) {
             $strUpload = $this->getLang("portaluploadSuccess");
-        }
-        else {
+        } else {
             ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_FORBIDDEN);
         }
 
@@ -180,8 +176,7 @@ class ElementPortaluploadPortal extends ElementPortal implements PortalElementIn
                         //upload was successfull. try to sync the downloads-archive.
                         if ($objDownloadfolder != null && $objDownloadfolder instanceof MediamanagerFile) {
                             MediamanagerFile::syncRecursive($objDownloadfolder->getSystemid(), $objDownloadfolder->getStrFilename());
-                        }
-                        else {
+                        } else {
                             $objFilemanagerRepo->syncRepo();
                         }
 
@@ -194,27 +189,22 @@ class ElementPortaluploadPortal extends ElementPortal implements PortalElementIn
                         //reload the site to display the new file
                         if (validateSystemid($this->getParam("portaluploadDlfolder"))) {
                             $this->portalReload(Link::getLinkPortalHref($this->getPagename(), "", "mediaFolder", "uploadSuccess=1", $this->getParam("portaluploadDlfolder")));
-                        }
-                        else {
+                        } else {
                             $this->portalReload(Link::getLinkPortalHref($this->getPagename(), "", "", $this->getAction(), "uploadSuccess=1", $this->getSystemid()));
                         }
-                    }
-                    else {
+                    } else {
                         $strReturn .= $this->uploadForm($this->getLang("portaluploadCopyUploadError"));
                     }
-                }
-                else {
+                } else {
                     @unlink($arrSource["tmp_name"]);
 
                     $strReturn .= $this->uploadForm($this->getLang("portaluploadFilterError"));
                 }
-            }
-            else {
+            } else {
                 $strReturn .= $this->uploadForm($this->getLang("portaluploadNotWritableError"));
             }
 
-        }
-        else {
+        } else {
             $strReturn .= $this->getLang("commons_error_permissions");
         }
 

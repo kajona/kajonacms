@@ -562,13 +562,13 @@ JS;
      * @autoTestable
      *
      * @return string
+     * @responseType json
      */
     protected function actionGetRecentMessages()
     {
         Carrier::getInstance()->getObjSession()->setBitBlockDbUpdate(true);
         Session::getInstance()->sessionClose();
         SystemChangelog::$bitChangelogEnabled = false;
-        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
 
         $intMaxAmount = $this->getParam("limit") != "" ? $this->getParam("limit") : 5;
 

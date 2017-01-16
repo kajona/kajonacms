@@ -1284,6 +1284,7 @@ JS;
      *
      * @return string
      * @permissions view
+     * @responseType json
      */
     protected function actionGetPagesByFilter()
     {
@@ -1296,7 +1297,6 @@ JS;
                 $arrReturn[] = $objOnePage->getStrName();
             }
         }
-        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
         return json_encode($arrReturn);
     }
 
@@ -1307,6 +1307,7 @@ JS;
      * @return string
      * @since 3.3.0
      * @permissions view
+     * @responseType json
      */
     protected function actionGetChildNodes()
     {
@@ -1321,7 +1322,6 @@ JS;
         }
 
         $arrReturn = $objJsTreeLoader->getJson($arrSystemIdPath, $bitInitialLoading, $this->getParam(SystemJSTreeBuilder::STR_PARAM_LOADALLCHILDNOES) === "true");
-        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
         return $arrReturn;
     }
 

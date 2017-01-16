@@ -1639,6 +1639,7 @@ HTML;
      * Returns a list of users and/or groups matching the passed query.
      *
      * @return string
+     * @responseType json
      */
     protected function actionGetUserByFilter()
     {
@@ -1712,7 +1713,6 @@ HTML;
             }
         }
 
-        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
         return json_encode($arrReturn);
     }
 
