@@ -132,7 +132,16 @@ define(["jquery", "util"], function($, util){
 
                     html+= '<tbody>';
                     html+= '<tr data-systemid="' + arrItems[i].strSystemId + '">';
-                    html+= '    <td class="listcheckbox"><input type="checkbox" name="' + formElementName + '" data-systemid="' + arrItems[i].strSystemId + '" checked></td>';
+
+                    var value;
+                    if (arrItems[i].strValue) {
+                        value = JSON.stringify(arrItems[i].strValue);
+                        value = value.replace(/"/g, "&quot;");
+                    } else {
+                        value = 'on';
+                    }
+
+                    html+= '    <td class="listcheckbox"><input type="checkbox" name="' + formElementName + '" value="' + value + '" data-systemid="' + arrItems[i].strSystemId + '" checked></td>';
                     html+= '    <td class="listimage">' + arrItems[i].strIcon + '</td>';
                     html+= '    <td class="title">';
                     html+= '        <div class="small text-muted">' + arrItems[i].strPath + '</div>';
@@ -156,8 +165,11 @@ define(["jquery", "util"], function($, util){
                 window.close();
             } else if (parent) {
                 var context = parent.require('folderview');
-                context.dialog.hide();
-                context.dialog.setContentRaw("");
+                // in case we call setCheckboxArrayObjectListItems without dialog
+                if (context.dialog) {
+                    context.dialog.hide();
+                    context.dialog.setContentRaw("");
+                }
             }
         }
     };
