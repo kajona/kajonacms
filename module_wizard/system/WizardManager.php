@@ -238,13 +238,10 @@ class WizardManager
         $arrObjects = array();
         $arrValues = array();
         foreach ($this->arrPages as $strPageStep => $objPage) {
-            $strObject = self::getSessionModel($objPage);
-            if (!empty($strObject)) {
-                $objInstance = AdminModelserializer::unserialize($strObject, AdminModelserializer::STR_ANNOTATION_SERIALIZABLE);
-                if ($objInstance instanceof Root) {
-                    $arrObjects[$strPageStep] = $objInstance;
-                    $arrValues[get_class($objPage)] = $objInstance;
-                }
+            $objInstance = self::getSessionModel($objPage);
+            if ($objInstance instanceof Root) {
+                $arrObjects[$strPageStep] = $objInstance;
+                $arrValues[get_class($objPage)] = $objInstance;
             }
         }
 
