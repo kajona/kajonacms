@@ -25,6 +25,16 @@ abstract class AbstractController
     const STR_MODULEID_ANNOTATION = "@moduleId";
 
     /**
+     * May be used at an action method to define the return type.
+     * Please note, that the return type stated by the action is set up before the action itself is being executed,
+     * so you may change the type afterwards again.
+     * Possible values are available at @link{HttpResponsetypes}, e.g. xml, json, csv, jpeg
+     *
+     * @see HttpResponsetypes
+     */
+    const STR_RESPONSETYPE_ANNOTATION = "@responseType";
+
+    /**
      * Object containing config-data
      *
      * @inject system_config
@@ -146,14 +156,18 @@ abstract class AbstractController
             $arrAnnotationValues = $objReflection->getAnnotationValuesFromClass(self::STR_MODULE_ANNOTATION);
             if (count($arrAnnotationValues) > 0) {
                 $this->setArrModuleEntry("modul", trim($arrAnnotationValues[0]));
+                $this->setArrModuleEntry("module", trim($arrAnnotationValues[0]));
+            } else {
+                throw new Exception("controller ".get_called_class()." is missing a ".self::STR_MODULE_ANNOTATION." annotation", Exception::$level_FATALERROR);
             }
-            $this->setArrModuleEntry("module", trim($arrAnnotationValues[0]));
         }
 
         if (!isset($this->arrModule["moduleId"])) {
             $arrAnnotationValues = $objReflection->getAnnotationValuesFromClass(self::STR_MODULEID_ANNOTATION);
             if (count($arrAnnotationValues) > 0) {
                 $this->setArrModuleEntry("moduleId", constant(trim($arrAnnotationValues[0])));
+            } else {
+                throw new Exception("controller ".get_called_class()." is missing a ".self::STR_MODULEID_ANNOTATION." annotation", Exception::$level_FATALERROR);
             }
         }
 
@@ -204,6 +218,7 @@ abstract class AbstractController
         }
 
 
+
         $strPermissions = $objReflection->getMethodAnnotationValue($strMethodName, "@permissions");
         if ($strPermissions !== false) {
             //fetch the object to validate, either the module or a directly referenced object
@@ -227,6 +242,11 @@ abstract class AbstractController
                     return $this->strOutput;
                 }
             }
+        }
+
+        $strReturnType = $objReflection->getMethodAnnotationValue($strMethodName, self::STR_RESPONSETYPE_ANNOTATION);
+        if ($strReturnType !== false) {
+            ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::getTypeForString(StringUtil::toLowerCase($strReturnType)));
         }
 
         $this->strOutput = $this->$strMethodName();
