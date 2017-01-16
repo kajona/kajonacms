@@ -8,9 +8,6 @@
 
 namespace Kajona\System\System;
 
-use Kajona\System\Admin\LoginAdmin;
-use Kajona\System\Xml;
-
 
 /**
  * A common base class for AdminController and PortalController.
@@ -131,8 +128,7 @@ abstract class AbstractController
         //Setting SystemID
         if ($strSystemid == "") {
             $this->setSystemid(Carrier::getInstance()->getParam("systemid"));
-        }
-        else {
+        } else {
             $this->setSystemid($strSystemid);
         }
 
@@ -163,7 +159,6 @@ abstract class AbstractController
 
         $this->strLangBase = $this->getArrModule("modul");
     }
-
 
 
     /**
@@ -237,7 +232,6 @@ abstract class AbstractController
         $this->strOutput = $this->$strMethodName();
 
 
-
         return $this->strOutput;
     }
 
@@ -276,7 +270,7 @@ abstract class AbstractController
      * @return mixed
      * @final
      */
-    public final function getAllParams()
+    final public function getAllParams()
     {
         return Carrier::getAllParams();
     }
@@ -287,7 +281,7 @@ abstract class AbstractController
      * @return string
      * @final
      */
-    public final function getAction()
+    final public function getAction()
     {
         return (string)$this->strAction;
     }
@@ -299,7 +293,7 @@ abstract class AbstractController
      *
      * @return void
      */
-    public final function setAction($strAction)
+    final public function setAction($strAction)
     {
         $this->strAction = htmlspecialchars(trim($strAction), ENT_QUOTES, "UTF-8", false);
     }
@@ -316,13 +310,12 @@ abstract class AbstractController
      * @return bool
      * @final
      */
-    public final function setSystemid($strID)
+    final public function setSystemid($strID)
     {
         if (validateSystemid($strID)) {
             $this->strSystemid = $strID;
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -333,7 +326,7 @@ abstract class AbstractController
      * @return string
      * @final
      */
-    public final function getSystemid()
+    final public function getSystemid()
     {
         return $this->strSystemid;
     }
@@ -343,7 +336,7 @@ abstract class AbstractController
      *
      * @final
      */
-    public final function unsetSystemid()
+    final public function unsetSystemid()
     {
         $this->strSystemid = "";
     }
@@ -411,8 +404,7 @@ abstract class AbstractController
     {
         if (isset($this->arrModule[$strKey])) {
             return $this->arrModule[$strKey];
-        }
-        else {
+        } else {
             return "";
         }
     }
