@@ -30,7 +30,6 @@ define(['jquery', 'statusDisplay', 'workingIndicator', 'tooltip'], function ($, 
             $.get(KAJONA_WEBPATH+strUrl, strData)
                 .done(
                     function(data) {
-                        debugger;
                         $(strElementSelector).html(data);
                         tooltip.initTooltip();
                     }
@@ -41,7 +40,6 @@ define(['jquery', 'statusDisplay', 'workingIndicator', 'tooltip'], function ($, 
                     }
                 )
                 .error(function(data) {
-                    debugger;
                     statusDisplay.messageError("<b>Request failed!</b><br />" + data);
                 });
         },
