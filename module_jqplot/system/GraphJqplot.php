@@ -553,14 +553,14 @@ class GraphJqplot implements GraphInterface
                     '{$strCoreDirectory}/module_jqplot/scripts/kajona/jquery.jqplot.custom.css'
                 ], function() {});
                 
-            require(['jqlot.custom_helper'], function(jqplotHelper) {
+                require(['jqlot.custom_helper'], function(jqplotHelper) {
                         $.jqplot.sprintf.thousandsSeparator = '$strThousandsChar';
                         $.jqplot.sprintf.decimalMark = '$strDecChar';
 
                         var objChart_$strChartId = new jqplotHelper.jqPlotChart('$strChartId', '$strTooltipId', '$strResizeableId', '$this->bitIsResizeable', $strChartData, $strChartOptions, $strPostPlotOptions, $strDataPointObjects);
                         objChart_$strChartId.render();
                 });
-                });
+            });
         </script>";
 
         return $strReturn;
@@ -640,7 +640,7 @@ class GraphJqplot implements GraphInterface
 
             //Check if each series has exactly one data point
             foreach($arrSeriesStackedBarCharts as $objSeriesData) {
-                if(!count($objSeriesData->getArrDataPoints()) == 1) {
+                if(count($objSeriesData->getArrDataPoints()) != 1) {
                     $bitChangeMarginAndPadding = false;
                 }
             }
