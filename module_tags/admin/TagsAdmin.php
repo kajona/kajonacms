@@ -231,12 +231,12 @@ class TagsAdmin extends AdminEvensimpler implements AdminInterface
      * @return string
      * @throws Exception
      * @permissions right1
+     * @responseType xml
      */
     protected function actionAddFavorite()
     {
         $objTags = Objectfactory::getInstance()->getObject($this->getSystemid());
 
-        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_XML);
         $strError = "<message>".$this->getLang("favorite_save_error")."</message>";
         $strSuccess = "<message>".$this->getLang("favorite_save_success").": ".$objTags->getStrDisplayName()."</message>";
         $strExisting = "<message>".$this->getLang("favorite_save_remove").": ".$objTags->getStrDisplayName()."</message>";
@@ -364,6 +364,7 @@ class TagsAdmin extends AdminEvensimpler implements AdminInterface
      *
      * @return string
      * @permissions view
+     * @responseType json
      */
     protected function actionGetTagsByFilter()
     {
@@ -375,7 +376,6 @@ class TagsAdmin extends AdminEvensimpler implements AdminInterface
             $arrReturn[] = $objOneTag->getStrName();
         }
 
-        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
         return json_encode($arrReturn);
     }
 
@@ -385,6 +385,7 @@ class TagsAdmin extends AdminEvensimpler implements AdminInterface
      *
      * @return string
      * @permissions view
+     * @responseType json
      */
     protected function actionGetFavoriteTags()
     {
@@ -403,7 +404,6 @@ class TagsAdmin extends AdminEvensimpler implements AdminInterface
             );
         }
 
-        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
         return json_encode($arrReturn);
     }
 

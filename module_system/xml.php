@@ -21,8 +21,7 @@ use Kajona\System\System\SystemEventidentifier;
 
 if (issetGet("admin") && getGet("admin") == 1) {
     define("_admin_", true);
-}
-else {
+} else {
     define("_admin_", false);
 }
 

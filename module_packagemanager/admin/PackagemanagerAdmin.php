@@ -208,6 +208,7 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
      *
      * @permissions view,edit
      * @return string
+     * @responseType json
      */
     protected function actionGetUpdateIcons()
     {
@@ -254,7 +255,6 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
             }
         }
 
-        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
         return json_encode($arrReturn);
     }
 

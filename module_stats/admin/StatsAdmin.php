@@ -14,9 +14,12 @@ use Kajona\System\Admin\AdminInterface;
 use Kajona\System\Admin\Reports\AdminStatsreportsInterface;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Date;
+use Kajona\System\System\HttpResponsetypes;
 use Kajona\System\System\Link;
 use Kajona\System\System\Pluginmanager;
+use Kajona\System\System\ResponseObject;
 use Kajona\System\System\StringUtil;
+use Kajona\System\Xml;
 use ReflectionClass;
 
 
@@ -275,32 +278,13 @@ class StatsAdmin extends AdminController implements AdminInterface
      */
     private function getInlineLoadingCode($objPlugin, $strPv = "")
     {
-        $strReturn = "<script type=\"text/javascript\">
-                            require(['ajax', 'tooltip', 'statusDisplay', 'util'], function(ajax, tooltip, statusDisplay, util) {
-                                  ajax.genericAjaxCall(\"stats\", \"getReport\", \"&plugin=".$this->getActionForReport($objPlugin)."&pv=".$strPv."\", function(data, status, jqXHR) {
+        $strReturn = "<script type='text/javascript'>
+                        require(['ajax'], function(ajax) {
+                            ajax.loadUrlToElement('#report_container', '/xml.php?admin=1&module=stats&action=getReport', '&plugin=".$this->getActionForReport($objPlugin)."&pv=".$strPv."');
+                        });
+                      </script>";
 
-                                        if(status == 'success')  {
-                                            var intStart = data.indexOf(\"[CDATA[\")+7;
-                                            document.getElementById(\"report_container\").innerHTML=data.substr(
-                                              intStart, data.indexOf(\"]]>\")-intStart
-                                            );
-                                            if(data.indexOf(\"[CDATA[\") < 0) {
-                                                var intStart = data.indexOf(\"<error>\")+7;
-                                                document.getElementById(\"report_container\").innerHTML=data.substr(
-                                                  intStart, data.indexOf(\"</error>\")-intStart
-                                                );
-                                            }
-                                            //trigger embedded js-code
-                                            try { tooltip.initTooltip(); util.evalScript(data); } catch (objEx) { console.warn(objEx)};
-                                        }
-                                        else  {
-                                            statusDisplay.messageError(\"<b>Request failed!</b><br />\" + data);
-                                        }
-                                  })
-                            });
-                          </script>";
-
-        $strReturn .= "<div id=\"report_container\" ><div class=\"loadingContainer\"></div></div>";
+        $strReturn .= "<div id=\"report_container\" ></div>";
         return $strReturn;
     }
 
@@ -394,8 +378,10 @@ class StatsAdmin extends AdminController implements AdminInterface
 
 
             $strReturn .= $objPlugin->getReport();
-            $strReturn = "<content><![CDATA[".$strReturn."]]></content>";
         }
+
+        Xml::setBitSuppressXmlHeader(true);
+        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_HTML);
 
         return $strReturn;
     }
