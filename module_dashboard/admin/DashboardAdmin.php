@@ -408,6 +408,7 @@ JS;
      *
      * @return string
      * @permissions view
+     * @responseType json
      */
     protected function actionGetWidgetContent()
     {
@@ -425,8 +426,6 @@ JS;
 
             //disable the internal changelog
             SystemChangelog::$bitChangelogEnabled = false;
-
-            ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
             $strReturn = json_encode($objConcreteWidget->generateWidgetOutput());
 
         } else {
@@ -440,11 +439,10 @@ JS;
     /**
      * @return string
      * @permissions view
+     * @responseType json
      */
     protected function actionGetCalendarEvents()
     {
-
-        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
 
         $arrEvents = array();
         $arrCategories = EventRepository::getAllCategories();
@@ -490,11 +488,10 @@ JS;
     /**
      * @return string
      * @permissions view
+     * @responseType html
      */
     protected function actionTodoCategory()
     {
-        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_HTML);
-
         $strCategory = $this->getParam("category");
         if (empty($strCategory)) {
             $arrTodos = TodoRepository::getAllOpenTodos();
@@ -555,6 +552,7 @@ JS;
     /**
      * @return string
      * @permissions view
+     * @responseType json
      */
     protected function actionTreeEndpoint()
     {
@@ -570,7 +568,6 @@ JS;
         }
 
         $arrReturn = $objJsTreeLoader->getJson($arrSystemIdPath, $bitInitialLoading, $this->getParam(SystemJSTreeBuilder::STR_PARAM_LOADALLCHILDNOES) === "true");
-        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
         return $arrReturn;
     }
 }

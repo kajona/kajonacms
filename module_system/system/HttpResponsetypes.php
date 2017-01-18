@@ -12,8 +12,6 @@ namespace Kajona\System\System;
 
 /**
  * List of possible http-responsecodes. Can be returned to the client.
- *
- * @package module_system
  */
 class HttpResponsetypes
 {
@@ -46,4 +44,41 @@ class HttpResponsetypes
 
     const STR_TYPE_PHAR = "Content-type: application/phar";
 
+    /**
+     * Transforms a reponse-type string into the matching http type
+     * Used by the AbstractController class.
+     *
+     * @param $strType
+     *
+     * @return string
+     * @since 6.2
+     */
+    public static function getTypeForString($strType)
+    {
+        switch ($strType) {
+            case 'xml':
+                return self::STR_TYPE_XML;
+                break;
+            case 'json':
+                return self::STR_TYPE_JSON;
+                break;
+            case 'csv':
+                return self::STR_TYPE_CSV;
+                break;
+            case 'jpeg':
+                return self::STR_TYPE_JPEG;
+                break;
+            case 'png':
+                return self::STR_TYPE_PNG;
+                break;
+            case 'gif':
+                return self::STR_TYPE_GIF;
+                break;
+            case 'phar':
+                return self::STR_TYPE_PHAR;
+                break;
+            default:
+                return self::STR_TYPE_HTML;
+        }
+    }
 }
