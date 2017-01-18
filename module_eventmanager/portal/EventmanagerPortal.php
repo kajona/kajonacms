@@ -124,6 +124,7 @@ class EventmanagerPortal extends PortalController implements PortalInterface
      *
      * @return string
      * @permissions view
+     * @responseType json
      */
     protected function actionGetJsonEvents()
     {
@@ -149,7 +150,6 @@ class EventmanagerPortal extends PortalController implements PortalInterface
             }
         }
 
-        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
         return json_encode($arrPrintableEvents);
     }
 

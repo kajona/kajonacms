@@ -13,6 +13,7 @@ use Kajona\System\System\AdminListableInterface;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Exception;
 use Kajona\System\System\OrmComparatorEnum;
+use Kajona\System\System\OrmCondition;
 use Kajona\System\System\OrmObjectlist;
 use Kajona\System\System\OrmObjectlistOrderby;
 use Kajona\System\System\OrmObjectlistPropertyInRestriction;
@@ -270,7 +271,7 @@ class WorkflowsWorkflow extends \Kajona\System\System\Model implements \Kajona\S
 
 
         $objORM = new OrmObjectlist();
-        $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND workflows_systemid = ?", $strAffectedSystemid));
+        $objORM->addWhereRestriction(new OrmCondition("workflows_systemid = ?", $strAffectedSystemid));
 
         //1. handle param $objClass
         if ($objClass != null) {
@@ -287,12 +288,12 @@ class WorkflowsWorkflow extends \Kajona\System\System\Model implements \Kajona\S
                 $arrParams[] = $strClass;
             }
 
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND workflows_class IN (".$strINClasses.")  ", $arrParams));
+            $objORM->addWhereRestriction(new OrmCondition("workflows_class IN (".$strINClasses.")  ", $arrParams));
         }
 
         if ($bitOnlyScheduled) {
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND ( workflows_state = ? OR workflows_state = ? )", array((int)self::$INT_STATE_SCHEDULED, (int)self::$INT_STATE_NEW)));
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND ( system_date_start > ? OR system_date_start = 0 )", \Kajona\System\System\Date::getCurrentTimestamp()));
+            $objORM->addWhereRestriction(new OrmCondition("( workflows_state = ? OR workflows_state = ? )", array((int)self::$INT_STATE_SCHEDULED, (int)self::$INT_STATE_NEW)));
+            $objORM->addWhereRestriction(new OrmCondition("( system_date_start > ? OR system_date_start = 0 )", array(\Kajona\System\System\Date::getCurrentTimestamp())));
         }
 
         $objORM->addOrderBy(new OrmObjectlistOrderby("system_date_start DESC"));
@@ -319,8 +320,8 @@ class WorkflowsWorkflow extends \Kajona\System\System\Model implements \Kajona\S
         $objOrmMapper = new OrmObjectlist();
 
         if ($bitOnlyScheduled) {
-            $objOrmMapper->addWhereRestriction(new OrmObjectlistRestriction("AND ( workflows_state = ? OR workflows_state = ? )", array((int)self::$INT_STATE_SCHEDULED, (int)self::$INT_STATE_NEW)));
-            $objOrmMapper->addWhereRestriction(new OrmObjectlistRestriction("AND ( system_date_start > ? OR system_date_start = 0 )", array(\Kajona\System\System\Date::getCurrentTimestamp())));
+            $objOrmMapper->addWhereRestriction(new OrmCondition("( workflows_state = ? OR workflows_state = ? )", array((int)self::$INT_STATE_SCHEDULED, (int)self::$INT_STATE_NEW)));
+            $objOrmMapper->addWhereRestriction(new OrmCondition("( system_date_start > ? OR system_date_start = 0 )", array(\Kajona\System\System\Date::getCurrentTimestamp())));
         }
 
         $objOrmMapper->addWhereRestriction(new OrmObjectlistPropertyRestriction("strClass", OrmComparatorEnum::Equal(), $strClass));
@@ -343,8 +344,8 @@ class WorkflowsWorkflow extends \Kajona\System\System\Model implements \Kajona\S
         $objOrmMapper = new OrmObjectlist();
 
         if ($bitOnlyScheduled) {
-            $objOrmMapper->addWhereRestriction(new OrmObjectlistRestriction("AND ( workflows_state = ? OR workflows_state = ? )", array((int)self::$INT_STATE_SCHEDULED, (int)self::$INT_STATE_NEW)));
-            $objOrmMapper->addWhereRestriction(new OrmObjectlistRestriction("AND ( system_date_start > ? OR system_date_start = 0 )", array(\Kajona\System\System\Date::getCurrentTimestamp())));
+            $objOrmMapper->addWhereRestriction(new OrmCondition("( workflows_state = ? OR workflows_state = ? )", array((int)self::$INT_STATE_SCHEDULED, (int)self::$INT_STATE_NEW)));
+            $objOrmMapper->addWhereRestriction(new OrmCondition("( system_date_start > ? OR system_date_start = 0 )", array(\Kajona\System\System\Date::getCurrentTimestamp())));
         }
 
         $objOrmMapper->addWhereRestriction(new OrmObjectlistPropertyRestriction("strClass", OrmComparatorEnum::Equal(), $strClass));

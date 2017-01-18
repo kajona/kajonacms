@@ -67,7 +67,13 @@ class InstallerElementSourcecode extends InstallerBase implements InstallerInter
 		if ($arrModule["module_version"] == "5.0") {
 			$strReturn .= "Updating 5.0 to 5.1...\n";
 			$this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1");
-			$this->updateElementVersion("form", "5.1");
+			$this->updateElementVersion("sourcecode", "5.1");
+		}
+		$arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+		if ($arrModule["module_version"] == "5.1") {
+			$strReturn .= "Updating 5.1 to 6.2...\n";
+			$this->updateModuleVersion($this->objMetadata->getStrTitle(), "6.2");
+			$this->updateElementVersion("sourcecode", "6.2");
 		}
 
 		return $strReturn;

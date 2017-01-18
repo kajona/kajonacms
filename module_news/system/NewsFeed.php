@@ -14,8 +14,8 @@ use Kajona\System\System\Carrier;
 use Kajona\System\System\Model;
 use Kajona\System\System\ModelInterface;
 use Kajona\System\System\Objectfactory;
+use Kajona\System\System\OrmCondition;
 use Kajona\System\System\OrmObjectlist;
-use Kajona\System\System\OrmObjectlistRestriction;
 use Kajona\System\System\OrmRowcache;
 use Kajona\System\System\SystemSetting;
 
@@ -169,7 +169,7 @@ class NewsFeed extends Model implements ModelInterface, AdminListableInterface
     public static function getFeedByUrlName($strFeedTitle)
     {
         $objORM = new OrmObjectlist();
-        $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND news_feed_urltitle = ? ", array($strFeedTitle)));
+        $objORM->addWhereRestriction(new OrmCondition("news_feed_urltitle = ?", array($strFeedTitle)));
         return $objORM->getSingleObject(get_called_class());
     }
 

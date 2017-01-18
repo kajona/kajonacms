@@ -147,6 +147,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $arrFields["user_tel"] = array("char254", true);
         $arrFields["user_mobile"] = array("char254", true);
         $arrFields["user_date"] = array("long", true);
+        $arrFields["user_specialconfig"] = array("text", true);
 
         if(!$this->objDB->createTable("user_kajona", $arrFields, array("user_id")))
             $strReturn .= "An error occurred! ...\n";
@@ -298,6 +299,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         //3.1: nr of rows in admin
         $this->registerConstant("_admin_nr_of_rows_", 15, SystemSetting::$int_TYPE_INT, _system_modul_id_);
         $this->registerConstant("_admin_only_https_", "false", SystemSetting::$int_TYPE_BOOL, _system_modul_id_);
+        $this->registerConstant("_cookies_only_https_", "false", SystemSetting::$int_TYPE_BOOL, _system_modul_id_);
 
         //3.1: remoteloader max cachtime --> default 60 min
         $this->registerConstant("_remoteloader_max_cachetime_", 60 * 60, SystemSetting::$int_TYPE_INT, _system_modul_id_);
@@ -511,21 +513,18 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         if($arrModule["module_version"] == "4.6") {
             $strReturn .= "Updating 4.6 to 4.6.1...\n";
             $this->updateModuleVersion("", "4.6.1");
-            $this->objDB->flushQueryCache();
         }
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.6.1") {
             $strReturn .= "Updating 4.6.1 to 4.6.2...\n";
             $this->updateModuleVersion("", "4.6.2");
-            $this->objDB->flushQueryCache();
         }
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.6.2") {
             $strReturn .= "Updating 4.6.2 to 4.6.3...\n";
             $this->updateModuleVersion("", "4.6.3");
-            $this->objDB->flushQueryCache();
         }
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
@@ -563,7 +562,6 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         if($arrModule["module_version"] == "5.0" || $arrModule["module_version"] == "5.0.1") {
             $strReturn .= "Updating 5.0 to 5.1...\n";
             $this->updateModuleVersion("", "5.1");
-            $this->objDB->flushQueryCache();
         }
 
 
@@ -585,6 +583,23 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "5.1.3") {
             $strReturn .= $this->update_513_514();
+        }
+
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.1.4") {
+            $strReturn .= "Updating 5.1.4 to 6.2...\n";
+            $this->update_514_62();
+        }
+
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.1.5") {
+            $strReturn .= "Updating 5.1.5 to 6.2...\n";
+            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "6.2");
+        }
+
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "6.2") {
+            $strReturn .= $this->update_62_621();
         }
 
         return $strReturn."\n\n";
@@ -807,7 +822,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
         $strReturn .= "Registering messaging portal controller\n";
         $objModule = SystemModule::getModuleByName("messaging");
-        $objModule->setStrNamePortal("MessagingAdmin.php");
+        $objModule->setStrNamePortal("MessagingPortal.php");
         $objModule->updateObjectToDb();
 
         $strReturn .= "Removing xml controller entries...\n";
@@ -822,10 +837,10 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1.3");
         return $strReturn;
     }
+
     private function update_513_514()
     {
         $strReturn = "Updating 5.1.3 to 5.1.4...\n";
-
         $strReturn .= "Updating session table\n";
 
         //save some user metadata, if available, for future requests
@@ -842,6 +857,30 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1.4");
+        return $strReturn;
+    }
+
+    private function update_514_62()
+    {
+        $strReturn = "Updating 5.1.4 to 6.2...\n";
+
+        $strReturn .= "Updating user table\n";
+        $this->objDB->addColumn("user_kajona", "user_specialconfig", DbDatatypes::STR_TYPE_TEXT, true);
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "6.2");
+        return $strReturn;
+    }
+
+    private function update_62_621()
+    {
+        $strReturn = "Updating 6.2 to 6.2.1...\n";
+
+        $strReturn .= "Adding cookie setting\n";
+        $this->registerConstant("_cookies_only_https_", "false", SystemSetting::$int_TYPE_BOOL, _system_modul_id_);
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "6.2.1");
         return $strReturn;
     }
 }

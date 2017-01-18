@@ -492,6 +492,7 @@ class NavigationAdmin extends AdminSimple implements AdminInterface {
      * @return string
      * @since 3.3.0
      * @permissions view
+     * @responseType json
      */
     protected function actionGetChildNodes() {
 
@@ -506,7 +507,6 @@ class NavigationAdmin extends AdminSimple implements AdminInterface {
         }
 
         $arrReturn = $objJsTreeLoader->getJson($arrSystemIdPath, $bitInitialLoading, $this->getParam(SystemJSTreeBuilder::STR_PARAM_LOADALLCHILDNOES) === "true");
-        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
         return $arrReturn;
     }
 }

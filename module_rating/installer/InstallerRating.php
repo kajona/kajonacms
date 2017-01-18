@@ -151,6 +151,12 @@ class InstallerRating extends InstallerBase implements InstallerRemovableInterfa
             $this->updateModuleVersion("rating", "5.1");
         }
 
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if ($arrModule["module_version"] == "5.1") {
+            $strReturn .= "Updating to 6.2...\n";
+            $this->updateModuleVersion("rating", "6.2");
+        }
+
         return $strReturn."\n\n";
     }
 

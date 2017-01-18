@@ -15,6 +15,7 @@ use Kajona\System\Admin\AdminFormgenerator;
 use Kajona\System\Admin\Formentries\FormentryButton;
 use Kajona\System\Admin\Formentries\FormentryPlaintext;
 use Kajona\System\Admin\Formentries\FormentryTextrow;
+use Kajona\System\System\Config;
 
 
 /**
@@ -84,6 +85,11 @@ class ElementMapsAdmin extends ElementAdmin implements AdminElementInterface
     {
         $objForm = parent::getAdminForm();
 
+        if (empty(Config::getInstance("module_maps")->getConfig("google_maps_apikey"))) {
+            $objForm->addField(new FormentryPlaintext())->setStrValue($this->objToolkit->warningBox($this->getLang("maps_apikey_missing")));
+
+        }
+
 
         $objForm->addField(new FormentryButton("", "geocode_button"))->setStrLabel($this->getLang("maps_geocode_button"))->setStrEventhandler("onclick=\"lookupAddress(); return false;\"");
         $objForm->addField(new FormentryTextrow("geocode_hint"))->setStrValue($this->getLang("maps_geocode_hint"));
@@ -105,7 +111,7 @@ class ElementMapsAdmin extends ElementAdmin implements AdminElementInterface
         $strJs = "
 		<div id=\"map_canvas\" style=\"width: 640px; height: 400px;\"></div>
 
-		<script type=\"text/javascript\" src=\"http://maps.googleapis.com/maps/api/js?sensor=false\"></script>
+		<script type=\"text/javascript\" src=\"https://maps.googleapis.com/maps/api/js?key=".Config::getInstance("module_maps")->getConfig("google_maps_apikey")."\"></script>
 	    <script type=\"text/javascript\">
 			var map;
 			var infoWindow;

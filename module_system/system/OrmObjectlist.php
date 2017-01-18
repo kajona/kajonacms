@@ -263,7 +263,7 @@ class OrmObjectlist extends OrmBase
             return;
         }
 
-        $this->addWhereRestriction(new OrmObjectlistRestriction($this->getDeletedWhereRestriction(), array()));
+        $this->addWhereRestriction(new OrmCondition($this->getDeletedWhereRestriction("", ""), array()));
     }
 
 

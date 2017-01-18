@@ -1571,11 +1571,10 @@ JS;
      * Returns all properties for the given module
      *
      * @return string
+     * @responseType json
      */
     public function actionFetchProperty()
     {
-        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
-
         $strTargetModule = $this->getParam("target_module");
         $strReturn = Lang::getInstance()->getProperties($strTargetModule);
 
@@ -1588,11 +1587,10 @@ JS;
      * @return string
      * @permissions changelog
      * @throws Exception
+     * @responseType json
      */
     protected function actionChangelogPropertiesForDate()
     {
-        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
-
         $objObject = Objectfactory::getInstance()->getObject($this->getSystemid());
         $strDate = new Date($this->getParam("date"));
 
@@ -1607,7 +1605,11 @@ JS;
             foreach ($arrProps as $strPropertyName => $strValue) {
                 $strGetter = $objReflection->getGetter($strPropertyName);
                 if (!empty($strGetter)) {
-                    $arrData[$strPropertyName] = strval($objObject->renderVersionValue($strPropertyName, $objObject->$strGetter()));
+                    $strValue = $objObject->$strGetter();
+                    if (is_array($strValue)) {
+                        $strValue = implode(", ", $strValue);
+                    }
+                    $arrData[$strPropertyName] = strval($objObject->renderVersionValue($strPropertyName, $strValue));
                 }
             }
 
@@ -1625,11 +1627,10 @@ JS;
      * @permissions changelog
      * @since 5.1
      * @return string
+     * @responseType json
      */
     protected function actionChangelogChartData()
     {
-        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
-
         $objNow = new Date($this->getParam("now"));
         $objYearAgo = new Date($this->getParam("yearAgo"));
         $strSystemId = $this->getSystemid();

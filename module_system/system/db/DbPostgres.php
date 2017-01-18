@@ -137,7 +137,6 @@ class DbPostgres extends DbBase
         return $arrReturn;
     }
 
-
     /**
      * Postgres supports UPSERTS since 9.5, see http://michael.otacoo.com/postgresql-2/postgres-9-5-feature-highlight-upsert/.
      * A fallback is the base select / update method.

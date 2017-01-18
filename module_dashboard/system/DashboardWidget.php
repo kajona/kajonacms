@@ -13,8 +13,8 @@ use Kajona\Dashboard\Admin\Widgets\Adminwidget;
 use Kajona\Dashboard\Admin\Widgets\AdminwidgetInterface;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Classloader;
+use Kajona\System\System\OrmCondition;
 use Kajona\System\System\OrmObjectlist;
-use Kajona\System\System\OrmObjectlistRestriction;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemModule;
@@ -143,8 +143,8 @@ class DashboardWidget extends \Kajona\System\System\Model implements \Kajona\Sys
         }
 
         $objORM = new OrmObjectlist();
-        $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND dashboard_user = ?", array($strUserId)));
-        $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND dashboard_column = ?", array($strColumn)));
+        $objORM->addWhereRestriction(new OrmCondition("dashboard_user = ?", array($strUserId)));
+        $objORM->addWhereRestriction(new OrmCondition("dashboard_column = ?", array($strColumn)));
         return $objORM->getObjectList(get_called_class(), self::getWidgetsRootNodeForUser($strUserId, $strAspectFilter));
 
     }

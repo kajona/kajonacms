@@ -15,9 +15,9 @@ use Kajona\System\System\Carrier;
 use Kajona\System\System\Link;
 use Kajona\System\System\Logger;
 use Kajona\System\System\Objectfactory;
+use Kajona\System\System\OrmCondition;
 use Kajona\System\System\OrmObjectlist;
 use Kajona\System\System\OrmObjectlistOrderby;
-use Kajona\System\System\OrmObjectlistRestriction;
 use Kajona\System\System\SearchPortalobjectInterface;
 use Kajona\System\System\SearchResultobjectInterface;
 use Kajona\System\System\StringUtil;
@@ -507,7 +507,7 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
     {
         $objORM = new OrmObjectlist();
         if ($strFilter != "") {
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND page_name LIKE ?", $strFilter."%"));
+            $objORM->addWhereRestriction(new OrmCondition("page_name LIKE ?", $strFilter."%"));
         }
         $objORM->addOrderBy(new OrmObjectlistOrderby("page_name ASC"));
         return $objORM->getObjectList(get_called_class(), "", $intStart, $intEnd);
@@ -529,7 +529,7 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
         }
 
         $objORM = new OrmObjectlist();
-        $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND page_name = ?", $strName));
+        $objORM->addWhereRestriction(new OrmCondition("page_name = ?", $strName));
         return $objORM->getSingleObject(get_called_class());
     }
 
@@ -543,9 +543,9 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
     public function getNumberOfElementsOnPage($bitJustActive = false)
     {
         $objORM = new OrmObjectlist();
-        $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND page_element_ph_language = ?", $this->getStrLanguage()));
+        $objORM->addWhereRestriction(new OrmCondition("page_element_ph_language = ?", $this->getStrLanguage()));
         if ($bitJustActive) {
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND system_status = 1", array()));
+            $objORM->addWhereRestriction(new OrmCondition("system_status = 1"));
         }
 
         return $objORM->getObjectCount("Kajona\\Pages\\System\\PagesPageelement", $this->getSystemid());
@@ -719,7 +719,7 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
         $strName = str_replace(" ", "_", $strName);
 
         $objORM = new OrmObjectlist();
-        $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND page_name = ?", $strName));
+        $objORM->addWhereRestriction(new OrmCondition("page_name = ?", $strName));
         $objPage = $objORM->getSingleObject(get_called_class());
 
         if ($objPage !== null && !($bitAvoidSelfchek && $objPage->getSystemid() == $this->getSystemid())) {
@@ -729,7 +729,7 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
                 $strTemp = $strName."_".$intCount;
 
                 $objORM = new OrmObjectlist();
-                $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND page_name = ?", $strName));
+                $objORM->addWhereRestriction(new OrmCondition("page_name = ?", $strName));
                 $objPage = $objORM->getSingleObject(get_called_class());
 
                 $intCount++;

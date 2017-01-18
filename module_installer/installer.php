@@ -48,7 +48,7 @@ class Installer
     private $strForwardLink = "";
     private $strBackwardLink = "";
 
-    private $strVersion = "V 5.1";
+    private $strVersion = "V 6.2";
 
     /**
      * Instance of template-engine

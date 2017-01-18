@@ -198,6 +198,7 @@ class PostacommentPortal extends PortalController implements PortalInterface
      *
      * @return string
      * @permissons right1
+     * @responseType json
      */
     protected function actionSavePost()
     {
@@ -285,7 +286,6 @@ class PostacommentPortal extends PortalController implements PortalInterface
             $strXMLContent .= $this->objTemplate->fillTemplateFile($arrOnePost, "/module_postacomment/".$this->getParam("comment_template"), "postacomment_post");
         }
 
-        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
         return $strXMLContent;
     }
 

@@ -958,14 +958,14 @@ class SystemChangelog
 
         //filter by create date from
         if ($objDateFrom != null) {
-            $objRestriction = new OrmObjectlistRestriction("AND ( log.change_date >= ?  )", array($objDateFrom->getLongTimestamp()));
-            $strQueryCondition .= $objRestriction->getStrWhere()." ";
+            $objRestriction = new OrmCondition("( log.change_date >= ?)", array($objDateFrom->getLongTimestamp()));
+            $strQueryCondition .= " AND " . $objRestriction->getStrWhere()." ";
             $arrParams[] = $objDateFrom->getLongTimestamp();
         }
         //filter by create end to
         if ($objDateTo != null) {
-            $objRestriction = new OrmObjectlistRestriction("AND ( log.change_date <= ?  )", array($objDateTo->getLongTimestamp()));
-            $strQueryCondition .= $objRestriction->getStrWhere()." ";
+            $objRestriction = new OrmCondition("( log.change_date <= ?)", array($objDateTo->getLongTimestamp()));
+            $strQueryCondition .= " AND " . $objRestriction->getStrWhere()." ";
             $arrParams[] = $objDateTo->getLongTimestamp();
         }
 

@@ -13,9 +13,9 @@ use Kajona\Pages\System\PagesPage;
 use Kajona\Search\System\SearchResult;
 use Kajona\System\System\AdminListableInterface;
 use Kajona\System\System\Link;
+use Kajona\System\System\OrmCondition;
 use Kajona\System\System\OrmObjectlist;
 use Kajona\System\System\OrmObjectlistOrderby;
-use Kajona\System\System\OrmObjectlistRestriction;
 use Kajona\System\System\SearchPortalobjectInterface;
 use Kajona\System\System\SortableRatingInterface;
 use Kajona\System\System\StringUtil;
@@ -171,18 +171,18 @@ class PostacommentPost extends \Kajona\System\System\Model implements \Kajona\Sy
 
         $objORM = new OrmObjectlist();
         if ($strPagefilter != "") {
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND postacomment_page = ? ", $strPagefilter));
+            $objORM->addWhereRestriction(new OrmCondition("postacomment_page = ?", $strPagefilter));
         }
 
         if ($strSystemidfilter != "") {
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND postacomment_systemid = ? ", $strSystemidfilter));
+            $objORM->addWhereRestriction(new OrmCondition("postacomment_systemid = ?", $strSystemidfilter));
         }
 
         if ($strLanguagefilter != "") {//check against '' to remain backwards-compatible
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND (postacomment_language = ? OR postacomment_language = '')", $strLanguagefilter));
+            $objORM->addWhereRestriction(new OrmCondition("(postacomment_language = ? OR postacomment_language = '')", $strLanguagefilter));
         }
         if ($bitJustActive) {
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND system_status = ? ", 1));
+            $objORM->addWhereRestriction(new OrmCondition("system_status = ?", 1));
         }
 
         $objORM->addOrderBy(new OrmObjectlistOrderby("postacomment_page ASC"));
@@ -207,18 +207,18 @@ class PostacommentPost extends \Kajona\System\System\Model implements \Kajona\Sy
 
         $objORM = new OrmObjectlist();
         if ($strPageid != "") {
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND postacomment_page = ? ", $strPageid));
+            $objORM->addWhereRestriction(new OrmCondition("postacomment_page = ?", $strPageid));
         }
 
         if ($strSystemidfilter != "") {
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND postacomment_systemid = ? ", $strSystemidfilter));
+            $objORM->addWhereRestriction(new OrmCondition("postacomment_systemid = ?", $strSystemidfilter));
         }
 
         if ($strLanguagefilter != "") {//check against '' to remain backwards-compatible
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND (postacomment_language = ? OR postacomment_language = '')", $strLanguagefilter));
+            $objORM->addWhereRestriction(new OrmCondition("(postacomment_language = ? OR postacomment_language = '')", $strLanguagefilter));
         }
         if ($bitJustActive) {
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND system_status = ? ", 1));
+            $objORM->addWhereRestriction(new OrmCondition("system_status = ?", 1));
         }
 
 

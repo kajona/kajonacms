@@ -208,6 +208,7 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
      *
      * @permissions view,edit
      * @return string
+     * @responseType json
      */
     protected function actionGetUpdateIcons()
     {
@@ -254,7 +255,6 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
             }
         }
 
-        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
         return json_encode($arrReturn);
     }
 
@@ -470,6 +470,7 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
 
                 //reload the current request in order to flush the class-loader
                 //pass the reload header and quit to avoid other problems, e.g. due to undefined classes
+                Classloader::getInstance()->flushCache();
                 header("Location: ".$strUrlToLoad);
                 die();
             } else {
@@ -814,6 +815,7 @@ class PackagemanagerAdmin extends AdminSimple implements AdminInterface
         $arrModules = $this->getParam("pack_path");
         foreach ($arrModules as $strName => $strValue) {
             if ($strValue != "") {
+                $strName = StringUtil::replace(StringUtil::toLowerCase(_realpath_), _realpath_, $strName);
                 $strTarget = _templatepath_."/".$objPack->getStrName()."/".StringUtil::substring($strName, StringUtil::indexOf($strName, "/default/") + 9);
                 $objFilesystem->fileCopy($strName, $strTarget);
             }

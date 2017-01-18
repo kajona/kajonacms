@@ -20,6 +20,12 @@ namespace Kajona\System\System;
  */
 class GraphColorpalettes {
 
+    const STR_COLOR_GREEN = "#4E9A08";
+    const STR_COLOR_YELLOW = "#F47902";
+    const STR_COLOR_RED = "#EE2929";
+    const STR_COLOR_GREY = "#9A9897";
+    const STR_COLOR_BLUE = "#2f7ed8";
+
 
     public static $arrDefaultColorPalette           = array("#BCE02E", "#E0642E", "#E0D62E", "#2E97E0", "#B02EE0", "#E02E75", "#5CE02E", "#E0B02E", "#527C94", "#99993d", "#ff0000");
 

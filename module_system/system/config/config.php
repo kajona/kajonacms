@@ -50,7 +50,8 @@
                                                                        //e.g. by extending the Kajona-class, set the name of the class here.
 
     $config['https_header']         = "HTTPS";                         //Http-header used to validate if the current connection is encrypted by https.
-                                                                       //If your application server uses another value, set it here
+                                                                       //If your application server uses another value, set it here. If you want to validate multiple headers, pass an array,
+                                                                       //e.g. array("HTTPS", "HTTPS_FRONTEND")
 
     $config['https_header_value']   = "on";                            //If the presence of the header is not enough to validate the https status,
                                                                        //set the required value to compare against here
