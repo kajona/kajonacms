@@ -44,3 +44,4 @@ $lang["filter_all_categories"]           = "All categories";
 $lang["todo_task_col_object"]            = "Object";
 $lang["todo_task_col_category"]          = "Category";
 $lang["todo_task_col_date"]              = "Resolution date";
+$lang["todo_provider_category"]              = "Category";
