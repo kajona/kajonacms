@@ -80,6 +80,23 @@ class Objectfactory
         return null;
     }
 
+    /**
+     * Returns an object from the cache if given, otherwise null
+     *
+     * @param string $strSystemid
+     *
+     * @return null|Model|ModelInterface
+     */
+    public function getObjectFromCache($strSystemid)
+    {
+
+        if (isset($this->arrObjectCache[$strSystemid])) {
+            return $this->arrObjectCache[$strSystemid];
+        }
+
+        return null;
+    }
+
 
     /**
      * Get the class name for a system-id.
@@ -99,8 +116,7 @@ class Objectfactory
         $arrCacheRow = OrmRowcache::getCachedInitRow($strSystemid);
         if ($arrCacheRow != null && isset($arrCacheRow["system_class"])) {
             $strClass = $arrCacheRow["system_class"];
-        }
-        else {
+        } else {
             $strQuery = "SELECT * FROM "._dbprefix_."system where system_id = ?";
             $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strSystemid));
             if (isset($arrRow["system_class"])) {

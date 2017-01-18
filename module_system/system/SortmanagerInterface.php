@@ -33,18 +33,19 @@ interface SortmanagerInterface {
      *
      * @return void
      */
-    function fixSortOnPrevIdChange($strOldPrevid, $strNewPrevid, $arrRestrictionModules = false);
+    public function fixSortOnPrevIdChange($strOldPrevid, $strNewPrevid, $arrRestrictionModules = false);
 
 
     /**
      * Fixes the sort-id of siblings when deleting a record
      * The method is called right before deleting the record itself!
      *
+     * @param $intOldSort
      * @param bool|array $arrRestrictionModules If an array of module-ids is passed, the determination of siblings will be limited to the module-records matching one of the module-ids
      *
      * @return mixed
      */
-    function fixSortOnDelete($arrRestrictionModules = false);
+    public function fixSortOnDelete($intOldSort, $arrRestrictionModules = false);
 
     /**
      * Sets the Position of a SystemRecord in the currect level one position upwards or downwards
@@ -53,7 +54,7 @@ interface SortmanagerInterface {
      * @return void
      * @deprecated
      */
-    function setPosition($strDirection = "upwards");
+    public function setPosition($strDirection = "upwards");
 
 
     /**
@@ -64,5 +65,5 @@ interface SortmanagerInterface {
      *
      * @return void
      */
-    function setAbsolutePosition($intNewPosition, $arrRestrictionModules = false);
+    public function setAbsolutePosition($intNewPosition, $arrRestrictionModules = false);
 }
