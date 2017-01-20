@@ -1,14 +1,7 @@
 {
-  "bootstrap": "../../core/module_system/bootstrap.php",
+  "bootstrap": "../../../core/module_system/bootstrap.php",
   "path": "benchmarks",
   "time_unit": "milliseconds",
-  "reports": {
-    "test_default": {
-      "extends": "default",
-      "title": "test_standard",
-      "description": "Description postgres_standard"
-    }
-  },
   "outputs": {
     "csv_output": {
       "extends": "csv",
