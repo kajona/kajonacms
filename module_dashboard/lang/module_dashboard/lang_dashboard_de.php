@@ -43,3 +43,4 @@ $lang["filter_all_categories"]           = "Alle Kategorien";
 $lang["todo_task_col_object"]            = "Objekt";
 $lang["todo_task_col_category"]          = "Kategorie";
 $lang["todo_task_col_date"]              = "Fälligkeitsdatum";
+$lang["todo_provider_category"]              = "Kategorie";
