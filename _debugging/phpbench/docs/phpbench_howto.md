@@ -43,7 +43,11 @@ The following is a simple benchmark class:
 After having created you benchmark class open your command line interface and jump to **__debugging/phpbench** folder.
 Within this folder execute use the given *phpbench.bat* (or phpbench for unix) to run the *run* command of phpbench (be sure that you have executed `composer install` before running the benchmark).
 
-`phpbench run /folder/to/SomeBenchmark.php --report=default --dump-file=some_benchmark.xml`
+`phpbench run <module>/tests/benchmarks/SomeBenchmark.php --report=default --dump-file=some_benchmark.xml`
+
+e.g.
+ 
+`phpbench run ../../../core/module_system/tests/benchmarks/CompareDateBench.php --report=default --dump-file=some_benchmark.xml`
 
 This command executes all benchmark methods within the defined benchmark class (so all methods prefixed with *bench*).
 The result of the benchmark is being displayed directly in the command line interface.
