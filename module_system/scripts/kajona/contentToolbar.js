@@ -1,26 +1,28 @@
 
+/**
+ * @module contentToolbar
+ * @exports contentToolbar
+ */
 
 define(['jquery'], function ($) {
 
+    var $objToolbarContainer = $(".contentToolbar");
+    var $objToolbarList = $(".contentToolbar ul");
 
+    return /** @alias module:contentToolbar */ {
 
-    return {
-
-        Entry : {
-            strContent : '',
-            strIdentifier : '',
-            bitActive : false
+        Entry : function (strContent){
+            this.strContent = strContent;
+            this.strIdentifier = '';
+            this.bitActive = false;
         },
 
         registerContentToolbarEntry: function(objEntry) {
 
             if (objEntry.strContent != "") {
 
-
-                var $objToolbar = $(".contentToolbar .navbar-nav");
-
-                if($objToolbar.hasClass('hidden')) {
-                    $objToolbar.removeClass('hidden');
+                if($objToolbarContainer.hasClass('hidden')) {
+                    $objToolbarContainer.removeClass('hidden');
                 }
 
                 var strIdentifier = "";
@@ -33,10 +35,9 @@ define(['jquery'], function ($) {
                     strClass += ' active ';
                 }
 
-                $objToolbar.append('<li '+strIdentifier+' class="'+strClass+'">'+strContent+'</li>');
+                $objToolbarList.append('<li '+strIdentifier+' class="'+strClass+'">'+objEntry.strContent+'</li>');
             }
         },
-
 
         registerContentToolbarEntries: function(arrEntries) {
             if (arrEntries) {
@@ -44,6 +45,21 @@ define(['jquery'], function ($) {
                     this.registerContentToolbarEntry(objEntry);
                 });
             }
+        },
+
+        removeEntry : function(strIdentifier) {
+            if($('#'+strIdentifier)) {
+                $('#'+strIdentifier).remove();
+            }
+
+            if($objToolbarList.children().length == 0) {
+                this.resetBar();
+            }
+        },
+
+        resetBar : function() {
+            $objToolbarList.empty();
+            $objToolbarContainer.addClass('hidden');
         }
 
     }
