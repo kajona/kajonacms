@@ -917,8 +917,8 @@ class SystemChangelog
 
         if (!empty($arrNewValues)) {
             if (count($arrNewValues) > 1) {
-                $objRestriction = new OrmObjectlistInRestriction("change_newvalue", $arrNewValues);
-                $strQuery .= " ".$objRestriction->getStrWhere();
+                $objRestriction = new OrmInCondition("change_newvalue", $arrNewValues);
+                $strQuery .= " AND " . $objRestriction->getStrWhere();
                 $arrParameters = array_merge($arrParameters, $objRestriction->getArrParams());
             } else {
                 $strQuery .= " AND change_newvalue = ?";
@@ -927,8 +927,8 @@ class SystemChangelog
         }
 
         if ($arrAllowedSystemIds !== null) {
-            $objRestriction = new OrmObjectlistInRestriction("change_systemid", $arrAllowedSystemIds);
-            $strQuery .= " ".$objRestriction->getStrWhere();
+            $objRestriction = new OrmInCondition("change_systemid", $arrAllowedSystemIds);
+            $strQuery .= " AND " .$objRestriction->getStrWhere();
             $arrParameters = array_merge($arrParameters, $objRestriction->getArrParams());
         }
 
@@ -952,8 +952,8 @@ class SystemChangelog
         $arrParams = array($strClass, $strProperty);
 
         //system id filter
-        $objRestriction = new OrmObjectlistInRestriction("log.change_systemid", $arrAllowedSystemIds);
-        $strQueryCondition = $objRestriction->getStrWhere();
+        $objRestriction = new OrmInCondition("log.change_systemid", $arrAllowedSystemIds);
+        $strQueryCondition = " AND " . $objRestriction->getStrWhere();
         $arrParams = array_merge($arrParams, $objRestriction->getArrParams());
 
         //filter by create date from
