@@ -112,9 +112,8 @@ class AdminFormgeneratorFilter extends AdminFormgenerator
             "icon_folderOpen",
             "icon_folderClosed",
             $this->getBitInitiallyVisible());
-        $strReturn = $objToolkit->getFieldset($arrFolder[1], $arrFolder[0]);
 
-        return $strReturn;
+        return $objToolkit->getContentToolbar(array($arrFolder[1])).$arrFolder[0];
     }
 
     /**
