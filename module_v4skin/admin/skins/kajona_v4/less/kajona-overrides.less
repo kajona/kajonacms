@@ -937,17 +937,7 @@ footer {
     }
 
     .contentTopbar {
-        padding-top: 25px;
-
-        .actionToolbar {
-            margin: 9px 0;
-            line-height: 36px;
-            .opacity(50);
-
-            &:hover {
-                .opacity(100);
-            }
-        }
+        padding-top: 35px;
     }
 
     form {
@@ -1110,6 +1100,7 @@ footer {
 
     .contentToolbar {
         min-height: 0;
+        margin-bottom: 5px;
 
         .navbar-inner {
 
@@ -1134,7 +1125,18 @@ footer {
 
             }
 
+            .actionToolbar {
+                display: inline-block;
+                padding: 5px 5px 5px 7px;
 
+                span {
+                .opacity(50);
+
+                &:hover {
+                    .opacity(100);
+                }
+                }
+            }
         }
     }
 
