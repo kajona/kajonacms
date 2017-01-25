@@ -27,16 +27,15 @@ echo "scanning system-table...\n";
 echo "traversing internal tree structure...\n\n";
 
 
-if(getGet("doFix") == "")
+if (getGet("doFix") == "") {
     echo "Auto-fixing is DISABLED. To enable the automatic fixing, click <a href='debug.php?debugfile=".basename(__FILE__)."&doFix=true'>here.</a>\nEnable it with care and only if you understand and verified the operations to be made.\n";
-else
+} else {
     echo "Auto-fixing is ENABLED. To disable the automatic fixing, click <a href='debug.php?debugfile=".basename(__FILE__)."'>here</a>\n";
+}
 
 echo "\nroot-record / 0\n";
 
 validateSingleLevelSort("0");
-
-
 
 
 echo "\n\n";
@@ -45,83 +44,88 @@ echo "| (c) www.kajona.de                                                       
 echo "+-------------------------------------------------------------------------------+\n";
 
 
-function validateSingleLevelSort($strParentId) {
+function validateSingleLevelSort($strParentId)
+{
     $objCommon = new SystemCommon($strParentId);
 
-    if($objCommon->getIntModuleNr() == _pages_modul_id_ || $objCommon->getIntModuleNr() == _pages_folder_id_) {
+    if ($objCommon->getIntModuleNr() == 10 || $objCommon->getIntModuleNr() == 14) {
         $strQuery = "SELECT system_id
                          FROM "._dbprefix_."system
                          WHERE system_prev_id=? AND system_id != '0'
                            AND system_module_nr IN (?, ?)
+                           AND system_deleted != 1
                          ORDER BY system_sort ASC, system_comment ASC";
 
-        $arrNodesRaw = \Kajona\System\System\Carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strParentId, _pages_modul_id_, _pages_folder_id_));
+        $arrNodesRaw = \Kajona\System\System\Carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strParentId, 10, 14));
         $arrNodes = array();
-        foreach($arrNodesRaw as $arrOneRow)
+        foreach ($arrNodesRaw as $arrOneRow) {
             $arrNodes[] = $arrOneRow["system_id"];
-    }
-    else {
+        }
+    } else {
         $arrNodes = $objCommon->getChildNodesAsIdArray($strParentId);
     }
 
     echo "<div style='padding-left: 25px;'>";
-    for($intI = 1; $intI <= count($arrNodes); $intI++) {
 
-        $objCurNode = Objectfactory::getInstance()->getObject($arrNodes[$intI-1]);
-        if($objCurNode == null) {
-            $objCommon = new SystemCommon($arrNodes[$intI-1]);
-            $strCurLevel = "<span style='color: red'>error loading node for: ".$intI." @ ".$arrNodes[$intI-1]." - ".$objCommon->getStrRecordClass()."</span>";
+    $intExpected = 0;
+    foreach ($arrNodes as $strOneId) {
+        $objCurNode = Objectfactory::getInstance()->getObject($strOneId);
+        if ($objCurNode == null) {
+            $strCurLevel = "<span style='color: red'>error loading node for: ".$strOneId."</span>";
             echo "<div>".$strCurLevel."</div>";
         }
 
         $strCurLevel = $objCurNode->getSystemid()." - ".$objCurNode->getIntSort()." - ".$objCurNode->getStrRecordClass()." - ".$objCurNode->getStrRecordComment();
 
-        if($intI != $objCurNode->getIntSort()) {
-            $strCurLevel = "<span style='color: red'>expected: ".$intI.", got ".$objCurNode->getIntSort()." @ ".$strCurLevel."</span>";
 
-            if(getGet("doFix") != "") {
-                $strCurLevel .= "\nSetting new sort-id to ".$intI."\n";
+        if ($objCurNode->getIntSort() != -1 && ++$intExpected != $objCurNode->getIntSort()) {
+            $strCurLevel = "<span style='color: red'>expected: ".$intExpected.", got ".$objCurNode->getIntSort()." @ ".$strCurLevel."</span>";
+
+            if (getGet("doFix") != "") {
+                $strCurLevel .= "\nSetting new sort-id to ".$intExpected."\n";
                 $strQuery = "UPDATE "._dbprefix_."system SET system_sort = ? WHERE system_id = ? ";
-                \Kajona\System\System\Carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($intI, $objCurNode->getSystemid()));
+                \Kajona\System\System\Carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($intExpected, $objCurNode->getSystemid()));
             }
-        }
-        else
+        } else {
             $strCurLevel = "<span style='color: green'>".$strCurLevel."</span>";
+        }
 
         echo "<div>".$strCurLevel."</div>";
 
-        if($objCurNode instanceof PagesPage) {
+        if ($objCurNode instanceof PagesPage) {
             validateSinglePage($objCurNode);
         }
         validateSingleLevelSort($objCurNode->getSystemid());
     }
     echo "</div>";
+    ob_flush();
+    flush();
 }
 
 
-function validateSinglePage(PagesPage $objPage) {
+function validateSinglePage(PagesPage $objPage)
+{
     $arrElements = PagesPageelement::getAllElementsOnPage($objPage->getSystemid());
 
     $intI = 0;
     $strPrevPlaceholder = "";
     $strPrevLanguage = "";
-    foreach($arrElements as $objOneElement) {
-
+    foreach ($arrElements as $objOneElement) {
         $strCurLevel = $objOneElement->getSystemid()." - ".$objOneElement->getIntSort()." - ".$objOneElement->getStrRecordClass()." - ".$objOneElement->getStrDisplayName()." - ".$objOneElement->getStrPlaceholder();
 
-        if($strPrevPlaceholder != $objOneElement->getStrPlaceholder() || $strPrevLanguage != $objOneElement->getStrLanguage())
+        if ($strPrevPlaceholder != $objOneElement->getStrPlaceholder() || $strPrevLanguage != $objOneElement->getStrLanguage()) {
             $intI = 1;
+        }
 
-        if($objOneElement->getIntSort() != $intI) {
+        if ($objOneElement->getIntSort() != $intI) {
             $strCurLevel = "<span style='color: red'>expected: ".$intI.", got ".$objOneElement->getIntSort()." @ ".$strCurLevel."</span>";
 
-            if(getGet("doFix") != "") {
+            if (getGet("doFix") != "") {
                 $strCurLevel .= "\nSetting new sort-id to ".$intI."\n";
                 $strQuery = "UPDATE "._dbprefix_."system SET system_sort = ? WHERE system_id = ? ";
                 \Kajona\System\System\Carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($intI, $objOneElement->getSystemid()));
             }
-        }
-        else {
+        } else {
             $strCurLevel = "<span style='color: green'>".$strCurLevel."</span>";
         }
 

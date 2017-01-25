@@ -237,6 +237,7 @@ define(['jquery', 'jstree', 'ajax', 'lang', 'cacheManager'], function ($, jstree
                 'dnd': {
                     'check_while_dragging': true
                 },
+                'checkbox': {},
                 'types': {},
                 'contextmenu': {},
                 'conditionalselect': kajonatree.conditionalselect.handleConditionalSelect,
@@ -247,6 +248,7 @@ define(['jquery', 'jstree', 'ajax', 'lang', 'cacheManager'], function ($, jstree
             /* Extend Js Tree Object due to jsTreeConfig*/
             if (this.treeConfig.checkbox) {
                 jsTreeObj.plugins.push('checkbox');
+                jsTreeObj.checkbox.three_state = false;//disable three state checkboxes by default
             }
             if (this.treeConfig.dnd) {
                 jsTreeObj.plugins.push('dnd');
@@ -304,7 +306,7 @@ define(['jquery', 'jstree', 'ajax', 'lang', 'cacheManager'], function ($, jstree
             if(treeContext.initiallySelectedNodes instanceof Array && treeContext.initiallySelectedNodes.length > 0) {
                 treeInstance.select_node(treeContext.initiallySelectedNodes);
             } else if(treeContext.treeviewExpanders instanceof Array && treeContext.treeviewExpanders.length > 0) {
-                var strSelectId = "#" + treeContext.treeviewExpanders[treeContext.treeviewExpanders.length-1];
+                var strSelectId = treeContext.treeviewExpanders[treeContext.treeviewExpanders.length-1];
                 treeInstance.select_node(strSelectId);
             }
         }

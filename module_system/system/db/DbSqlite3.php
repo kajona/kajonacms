@@ -262,7 +262,7 @@ class DbSqlite3 extends DbBase
                     $strQuery .= " UNION SELECT ".implode(", ", $arrTemp);
                 }
 
-                $arrParams = array_merge($arrParams, $arrValueSets[$intI]);
+                $arrParams = array_merge($arrParams, array_values($arrValueSets[$intI]));
             }
 
             return $objDb->_pQuery($strQuery, $arrParams);

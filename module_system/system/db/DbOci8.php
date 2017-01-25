@@ -112,7 +112,7 @@ class DbOci8 extends DbBase
 
         $strQuery = "INSERT ALL ";
         foreach ($arrValueSets as $arrOneSet) {
-            $arrParams = array_merge($arrParams, $arrOneSet);
+            $arrParams = array_merge($arrParams, array_values($arrOneSet));
 
             $strQuery .= " INTO ".$this->encloseTableName($strTable)." ".$strColumnNames." VALUES ".$strPlaceholder." ";
         }
