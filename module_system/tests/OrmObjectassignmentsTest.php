@@ -254,6 +254,34 @@ class OrmObjectassignmentsTest extends TestbaseObject
 
     }
 
+    public function testObjectassignmentOnCopy()
+    {
+        $objDB = Carrier::getInstance()->getObjDB();
+
+        /** @var OrmObjectlistTestclass $objTestobject */
+        $objTestobject = $this->getObject("testobject");
+        $arrAspects = array($this->getObject("aspect1"), $this->getObject("aspect2"));
+
+        $objTestobject->setArrObject1($arrAspects);
+        $objTestobject->updateObjectToDb();
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
+        $this->assertEquals(2, $arrRow["COUNT(*)"]);
+        $strOldSystemid = $objTestobject->getSystemid();
+
+        $objTestobject = new OrmObjectlistTestclass($objTestobject->getSystemid());
+
+        $objTestobject->copyObject();
+
+        $this->assertNotEquals($strOldSystemid, $objTestobject->getSystemid());
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
+        $this->assertEquals(2, $arrRow["COUNT(*)"]);
+
+        $objTestobject = new OrmObjectlistTestclass($objTestobject->getSystemid());
+
+        $this->assertEquals(2, count($objTestobject->getArrObject1()));
+
+    }
+
     public function testObjectassignmentsOnNonSavedObjects()
     {
 
