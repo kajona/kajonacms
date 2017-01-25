@@ -48,6 +48,11 @@ class WizardManager
     protected $objToolkit;
 
     /**
+     * @var string
+     */
+    protected $strNamespace;
+
+    /**
      * WizardManager constructor.
      *
      * @param Database $objDatabase
@@ -71,6 +76,14 @@ class WizardManager
     }
 
     /**
+     * @param string $strNamespace
+     */
+    public function setNamespace($strNamespace)
+    {
+        $this->strNamespace = $strNamespace;
+    }
+
+    /**
      * @param string $strUrl
      * @param \Closure $objOnRedirect
      * @param \Closure $objOnComplete
@@ -91,7 +104,7 @@ class WizardManager
         /** @var WizardPageInterface $objPage */
         $objPage = $this->arrPages[$strStep];
 
-        $objInstance = self::getSessionModel($objPage);
+        $objInstance = self::getSessionModel($this->strNamespace, $objPage);
         if ($objInstance === null) {
             $objInstance = $objPage->newObjectInstance();
         }
@@ -122,7 +135,7 @@ class WizardManager
 
                 // save in session
                 $arrData = AdminModelserializer::serialize($objInstance, AdminModelserializer::STR_ANNOTATION_SERIALIZABLE);
-                $this->objSession->setSession(self::getSessionKey($objPage), $arrData);
+                $this->objSession->setSession(self::getSessionKey($this->strNamespace, $objPage), $arrData);
 
                 // if we are at the last step we call each page to persist the entries
                 if ($strStep == $this->getLastStep()) {
@@ -238,7 +251,7 @@ class WizardManager
         $arrObjects = array();
         $arrValues = array();
         foreach ($this->arrPages as $strPageStep => $objPage) {
-            $objInstance = self::getSessionModel($objPage);
+            $objInstance = self::getSessionModel($this->strNamespace, $objPage);
             if ($objInstance instanceof Root) {
                 $arrObjects[$strPageStep] = $objInstance;
                 $arrValues[get_class($objPage)] = $objInstance;
@@ -256,7 +269,7 @@ class WizardManager
     protected function deleteSessionObjects()
     {
         foreach ($this->arrPages as $strPageStep => $objPage) {
-            $this->objSession->sessionUnset(self::getSessionKey($objPage));
+            $this->objSession->sessionUnset(self::getSessionKey($this->strNamespace, $objPage));
         }
     }
 
@@ -276,12 +289,13 @@ class WizardManager
     }
 
     /**
+     * @param string $strNamespace
      * @param string|WizardPageInterface $strModelClass
      * @return \Kajona\System\System\ModelInterface|null
      */
-    public static function getSessionModel($strModelClass)
+    public static function getSessionModel($strNamespace, $strModelClass)
     {
-        $strSessionKey = self::getSessionKey($strModelClass);
+        $strSessionKey = self::getSessionKey($strNamespace, $strModelClass);
         $strObject = Session::getInstance()->getSession($strSessionKey);
         if (!empty($strObject)) {
             return AdminModelserializer::unserialize($strObject, AdminModelserializer::STR_ANNOTATION_SERIALIZABLE);
@@ -291,10 +305,11 @@ class WizardManager
     }
 
     /**
+     * @param string $strNamespace
      * @param string $strModelClass
      * @return string
      */
-    protected static function getSessionKey($strModelClass)
+    protected static function getSessionKey($strNamespace, $strModelClass)
     {
         if ($strModelClass instanceof WizardPageInterface) {
             $strModelClass = get_class($strModelClass->newObjectInstance());
@@ -303,6 +318,6 @@ class WizardManager
             throw new \InvalidArgumentException("Model class must be either a page or string");
         }
 
-        return self::SESSION_NAMESPACE.substr(md5($strModelClass), 0, 8);
+        return self::SESSION_NAMESPACE.$strNamespace.substr(md5($strModelClass), 0, 8);
     }
 }
