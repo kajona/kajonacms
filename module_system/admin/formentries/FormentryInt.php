@@ -38,6 +38,8 @@ class FormentryInt extends FormentryBase implements FormentryPrintableInterface
         if(Carrier::getInstance()->issetParam($this->getStrEntryName())) {
             parent::setStrValue($this->getRawValue());
         }
+
+        return $this;
     }
 
     /**

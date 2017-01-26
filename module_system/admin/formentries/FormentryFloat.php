@@ -39,6 +39,8 @@ class FormentryFloat extends FormentryBase implements FormentryPrintableInterfac
         if(Carrier::getInstance()->issetParam($this->getStrEntryName())) {
             parent::setStrValue($this->getRawValue());
         }
+
+        return $this;
     }
 
     /**
