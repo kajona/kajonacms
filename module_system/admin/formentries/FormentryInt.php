@@ -36,7 +36,7 @@ class FormentryInt extends FormentryBase implements FormentryPrintableInterface
 
         //check if value comes from ui by checking if param exist. If param exists try to convert the value to a raw value
         if(Carrier::getInstance()->issetParam($this->getStrEntryName())) {
-            parent::setStrValue($this->getRawValue());
+            parent::setStrValue($this->getRawValue($this->getStrValue()));
         }
 
         return $this;
@@ -56,7 +56,7 @@ class FormentryInt extends FormentryBase implements FormentryPrintableInterface
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
         }
 
-        $strValue = $this->getStrUIValue();
+        $strValue = $this->getStrUIValue($this->getStrValue());
         $strReturn .= $objToolkit->formInputText($this->getStrEntryName(), $this->getStrLabel(), $strValue, "inputText", "", $this->getBitReadonly());
 
         return $strReturn;
@@ -70,17 +70,19 @@ class FormentryInt extends FormentryBase implements FormentryPrintableInterface
      */
     public function getValueAsText()
     {
-        return $this->getStrUIValue();
+        return $this->getStrUIValue($this->getStrValue());
     }
 
     /**
      * Converts the value of the formentry to a integer representation (raw value)
      *
+     * @param mixed $strInputValue
+     *
      * @return int|float|null
      */
-    public function getRawValue()
+    public static function getRawValue($strInputValue)
     {
-        $strFieldValue = $this->getStrValue();
+        $strFieldValue = $strInputValue;
 
         $strSyleThousand = Carrier::getInstance()->getObjLang()->getLang("numberStyleThousands", "system");
         $strStyleDecimal = Carrier::getInstance()->getObjLang()->getLang("numberStyleDecimal", "system");
@@ -88,9 +90,14 @@ class FormentryInt extends FormentryBase implements FormentryPrintableInterface
         $strValue = StringUtil::replace($strSyleThousand, "", $strFieldValue);//remove first thousand separator
         $strValue = StringUtil::replace(array(",", $strStyleDecimal), ".", $strValue);//replace decimal with decimal point for db
 
-        //in case given string is not integer or an empty string just return value as is
+        //in case given $strValue is not numeric, an empty string just return value as is
         if (!is_numeric($strValue) || $strValue === "") {
             return $strFieldValue;
+        }
+
+        //if $strValue contains a "." (then it is a float) - so return the float inout value
+        if(StringUtil::indexOf($strValue, ".")) {
+            return $strValue;
         }
 
         $intValue = $strValue;
@@ -108,14 +115,21 @@ class FormentryInt extends FormentryBase implements FormentryPrintableInterface
     /**
      * Converts the value of the formentry to UI representation
      *
+     * @param mixed $strInputValue
+     *
      * @return string
      */
-    public function getStrUIValue()
+    public static function getStrUIValue($strInputValue)
     {
-        $strValue = $this->getStrValue();
+        $strValue = $strInputValue;
 
         if (!is_numeric($strValue)) {
             return $strValue;
+        }
+
+        //if $strValue contains a "." (then it is a float) - so return the float input value
+        if(StringUtil::indexOf($strValue, ".")) {
+            return numberFormat($strValue, 2);
         }
 
         return numberFormat($strValue, 0);

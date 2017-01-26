@@ -107,18 +107,35 @@ class FormEntryFloatIntTest extends Testbase
             $this->assertEquals($strExpectedOutput, $strValueAsText);
         }
 
+        //check invalid inputs
+        $arrTestValues = array();
+        $arrTestValues["2{$strStyleDecimal}00"] = "2.00";
+        $arrTestValues["2{$strStyleThousand}000{$strStyleThousand}000{$strStyleThousand}000{$strStyleThousand}000{$strStyleDecimal}00"] = "2000000000000.00";
+        $arrTestValues["1{$strStyleThousand}000{$strStyleDecimal}00"] = "1000.00";
+        $arrTestValues["10{$strStyleThousand}000{$strStyleDecimal}00"] = "10000.00";
+        $arrTestValues["100{$strStyleThousand}000{$strStyleThousand}000{$strStyleDecimal}00"] = "100000000.00";
+        $arrTestValues["1{$strStyleThousand}0{$strStyleThousand}0{$strStyleThousand}000{$strStyleThousand}000{$strStyleDecimal}23"] = "100000000.23";
+        foreach ($arrTestValues as $strInputValue => $strExpectedValue) {
+            Carrier::getInstance()->setParam("name_maxvverlnachmassnahmen", $strInputValue);
+            $objFormEntryInt = new FormentryInt("name", "maxvverlnachmassnahmen", $objSourceObject);
+            $this->assertEquals($strExpectedValue, $objFormEntryInt->getStrValue());
+        }
+
+
         //check input
         $arrTestValues = array();
-        $arrTestValues["2{$strStyleDecimal}00"] = "2";
-        $arrTestValues["2{$strStyleThousand}000{$strStyleThousand}000{$strStyleThousand}000{$strStyleThousand}000{$strStyleDecimal}00"] = "2000000000000";
-        $arrTestValues["1{$strStyleThousand}000{$strStyleDecimal}00"] = "1000";
-        $arrTestValues["10{$strStyleThousand}000{$strStyleDecimal}00"] = "10000";
+        $arrTestValues["2"] = "2";
+        $arrTestValues["2{$strStyleThousand}000{$strStyleThousand}000{$strStyleThousand}000{$strStyleThousand}000"] = "2000000000000";
+        $arrTestValues["1{$strStyleThousand}000"] = "1000";
+        $arrTestValues["10{$strStyleThousand}000"] = "10000";
         $arrTestValues["100{$strStyleThousand}000{$strStyleThousand}000"] = "100000000";
-        $arrTestValues["1{$strStyleThousand}0{$strStyleThousand}0{$strStyleThousand}000{$strStyleThousand}000{$strStyleDecimal}23"] = "100000000";
+        $arrTestValues["1{$strStyleThousand}0{$strStyleThousand}0{$strStyleThousand}000{$strStyleThousand}000"] = "100000000";
         foreach ($arrTestValues as $strInputValue => $strExpectedDBValue) {
             Carrier::getInstance()->setParam("name_maxvverlnachmassnahmen", $strInputValue);
             $objFormEntryInt = new FormentryInt("name", "maxvverlnachmassnahmen", $objSourceObject);
             $objFormEntryInt->setValueToObject();
+
+            $this->assertTrue($objFormEntryInt->validateValue());
             $this->assertEquals($strExpectedDBValue, $objSourceObject->getIntMaxvVerlNachMassnahmen());
         }
     }

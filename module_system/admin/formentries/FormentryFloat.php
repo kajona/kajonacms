@@ -37,7 +37,7 @@ class FormentryFloat extends FormentryBase implements FormentryPrintableInterfac
 
         //check if value comes from ui by checking if param exist. If param exists try to convert the value to a raw value
         if(Carrier::getInstance()->issetParam($this->getStrEntryName())) {
-            parent::setStrValue($this->getRawValue());
+            parent::setStrValue($this->getRawValue($this->getStrValue()));
         }
 
         return $this;
@@ -57,7 +57,7 @@ class FormentryFloat extends FormentryBase implements FormentryPrintableInterfac
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
         }
 
-        $strValue = $this->getStrUIValue();
+        $strValue = $this->getStrUIValue($this->getStrValue());
         $strReturn .= $objToolkit->formInputText($this->getStrEntryName(), $this->getStrLabel(), $strValue, "inputText", "", $this->getBitReadonly());
 
         return $strReturn;
@@ -71,17 +71,19 @@ class FormentryFloat extends FormentryBase implements FormentryPrintableInterfac
      */
     public function getValueAsText()
     {
-        return $this->getStrUIValue();
+        return $this->getStrUIValue($this->getStrValue());
     }
 
     /**
      * Converts the value of the formentry to a float representation (raw value)
      *
+     * @param mixed $strInputValue
+     *
      * @return float|null
      */
-    public function getRawValue()
+    public static function getRawValue($strInputValue)
     {
-        $strFieldValue = $this->getStrValue();
+        $strFieldValue = $strInputValue;
 
         $strSyleThousand = Carrier::getInstance()->getObjLang()->getLang("numberStyleThousands", "system");
         $strStyleDecimal = Carrier::getInstance()->getObjLang()->getLang("numberStyleDecimal", "system");
@@ -101,11 +103,13 @@ class FormentryFloat extends FormentryBase implements FormentryPrintableInterfac
     /**
      * Converts the value of the formentry to UI representation
      *
+     * @param mixed $strInputValue
+     *
      * @return mixed
      */
-    public function getStrUIValue()
+    public static function getStrUIValue($strInputValue)
     {
-        $strValue = $this->getStrValue();
+        $strValue = $strInputValue;
 
         if (!is_numeric($strValue)) {
             return $strValue;
