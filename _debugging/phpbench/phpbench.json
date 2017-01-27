@@ -1,0 +1,15 @@
+{
+  "bootstrap": "../../../core/module_system/bootstrap.php",
+  "path": "benchmarks",
+  "time_unit": "milliseconds",
+  "outputs": {
+    "csv_output": {
+      "extends": "csv",
+      "file": "report.csv"
+    },
+    "html_output": {
+      "extends": "html",
+      "file": "report.html"
+    }
+  }
+}

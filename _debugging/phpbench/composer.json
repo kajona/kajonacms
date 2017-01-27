@@ -1,0 +1,11 @@
+{
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://buildpackages.kajona.de:5443"
+    }
+  ],
+  "require": {
+    "phpbench/phpbench": "0.13.0"
+  }
+}
