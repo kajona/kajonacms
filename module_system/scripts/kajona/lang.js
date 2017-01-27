@@ -1,11 +1,16 @@
+/**
+ * (c) 2013-2017 by Kajona, www.kajona.de
+ * Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
+ */
 
 /**
  * Subsystem for all messaging related tasks. Queries the backend for the number of unread messages, ...
- * @type {Object}
+ *
+ * @module lang
  */
-define(['jquery', 'ajax', 'cacheManager'], function ($, ajax, cacheManager) {
+define('lang', ['jquery', 'ajax', 'cacheManager'], function ($, ajax, cacheManager) {
 
-
+    /** @exports lang */
     var lang = {};
 
     /**

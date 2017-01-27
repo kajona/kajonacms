@@ -1,11 +1,18 @@
+/**
+ * (c) 2013-2017 by Kajona, www.kajona.de
+ * Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
+ */
 
 /**
  * Functions to execute system tasks
+ *
+ * @module systemTask
  */
-define(["jquery", "ajax", "util", "statusDisplay", "dialog"], function($, ajax, util, statusDisplay, Dialog){
+define("systemTask", ["jquery", "ajax", "util", "statusDisplay", "dialog"], function($, ajax, util, statusDisplay, Dialog){
 
     jsDialog_0 = new Dialog('jsDialog_0', 0);
 
+    /** @exports systemTask */
     var systemTask = {
         executeTask : function(strTaskname, strAdditionalParam, bitNoContentReset) {
             if(bitNoContentReset == null || bitNoContentReset == undefined) {
