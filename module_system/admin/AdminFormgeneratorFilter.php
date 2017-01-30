@@ -106,15 +106,20 @@ class AdminFormgeneratorFilter extends AdminFormgenerator
             }
         }
 
-        //, ($bitFilterActive ? $objLang->getLang("commons_filter_active", "system") : "")
+        return self::renderToolbarEntry($strReturn, $bitFilterActive, $this->getBitInitiallyVisible());
+    }
 
-        /* Render folder toggle*/
+    public static function renderToolbarEntry($strFilter, $bitFilterActive, $bitInitiallyVisible = false)
+    {
+        $objLang = Carrier::getInstance()->getObjLang();
+
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         $arrFolder = $objToolkit->getLayoutFolderPic(
-            $strReturn,
+            $strFilter,
             $bitFilterActive ? $objLang->getLang("commons_filter_active", "system") : $objLang->getLang("filter_show_hide", "system"),
             "icon_folderOpen",
             $bitFilterActive ? "icon_filter" : "icon_folderClosed",
-            $this->getBitInitiallyVisible()
+            $bitInitiallyVisible
         );
 
         return $objToolkit->getContentToolbar([$arrFolder[1]]) . $arrFolder[0];

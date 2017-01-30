@@ -1,9 +1,10 @@
 
 /**
+ * A module to handle the global toolbar. The toolbar is made out of Entry instances, new entries may be added, old ones removed.
+ * The toolbar takes care of the general visibility, empty bars will be hidden.
+ *
  * @module contentToolbar
- * @exports contentToolbar
  */
-
 define(['jquery'], function ($) {
 
     var $objToolbarContainer = $(".contentToolbar");
@@ -11,12 +12,23 @@ define(['jquery'], function ($) {
 
     return /** @alias module:contentToolbar */ {
 
-        Entry : function (strContent){
+        /**
+         * The object representing a single toolbar entry
+         * @param strContent
+         * @param strIdentifier
+         * @constructor
+         */
+        Entry : function (strContent, strIdentifier){
             this.strContent = strContent;
-            this.strIdentifier = '';
+            this.strIdentifier = strIdentifier;
             this.bitActive = false;
         },
 
+        /**
+         * Adds a new entry to the toolbar
+         *
+         * @param objEntry {Entry}
+         */
         registerContentToolbarEntry: function(objEntry) {
 
             if (objEntry.strContent != "") {
@@ -39,6 +51,10 @@ define(['jquery'], function ($) {
             }
         },
 
+        /**
+         * Adds a list of entries
+         * @param arrEntries {Entry[]}
+         */
         registerContentToolbarEntries: function(arrEntries) {
             if (arrEntries) {
                 $(arrEntries).each(function(index, objEntry) {
@@ -47,6 +63,10 @@ define(['jquery'], function ($) {
             }
         },
 
+        /**
+         * Removes a sinvle entry
+         * @param strIdentifier
+         */
         removeEntry : function(strIdentifier) {
             if($('#'+strIdentifier)) {
                 $('#'+strIdentifier).remove();
@@ -57,6 +77,9 @@ define(['jquery'], function ($) {
             }
         },
 
+        /**
+         * Resets the whole bar and hides it
+         */
         resetBar : function() {
             $objToolbarList.empty();
             $objToolbarContainer.addClass('hidden');

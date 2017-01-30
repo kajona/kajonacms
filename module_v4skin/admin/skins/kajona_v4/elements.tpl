@@ -1296,7 +1296,7 @@ Toolbar, prominent in the layout. Rendered to switch between action.
 </contentToolbar_wrapper>
 
 <contentToolbar_entry>
-    contentToolbar.registerContentToolbarEntry(new contentToolbar.Entry('%%entry%%'));
+    contentToolbar.registerContentToolbarEntry(new contentToolbar.Entry('%%entry%%', '%%identifier%%'));
 </contentToolbar_entry>
 
 <contentToolbar_entry_active>
