@@ -106,12 +106,14 @@ class AdminFormgeneratorFilter extends AdminFormgenerator
             }
         }
 
+        //, ($bitFilterActive ? $objLang->getLang("commons_filter_active", "system") : "")
+
         /* Render folder toggle*/
         $arrFolder = $objToolkit->getLayoutFolderPic(
             $strReturn,
-            $objLang->getLang("filter_show_hide", "system") . ($bitFilterActive ? $objLang->getLang("commons_filter_active", "system") : ""),
+            $bitFilterActive ? $objLang->getLang("commons_filter_active", "system") : $objLang->getLang("filter_show_hide", "system"),
             "icon_folderOpen",
-            "icon_folderClosed",
+            $bitFilterActive ? "icon_filter" : "icon_folderClosed",
             $this->getBitInitiallyVisible()
         );
 
