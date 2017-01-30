@@ -928,8 +928,10 @@ class SystemChangelog
 
         if ($arrAllowedSystemIds !== null) {
             $objRestriction = new OrmInCondition("change_systemid", $arrAllowedSystemIds);
-            $strQuery .= " AND " .$objRestriction->getStrWhere();
-            $arrParameters = array_merge($arrParameters, $objRestriction->getArrParams());
+            if($objRestriction->getStrWhere() !== "") {
+                $strQuery .= " AND " . $objRestriction->getStrWhere();
+                $arrParameters = array_merge($arrParameters, $objRestriction->getArrParams());
+            }
         }
 
         $arrRow = Carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParameters, 0, 1);
@@ -950,11 +952,14 @@ class SystemChangelog
     public static function getNewValuesForDateRange($strClass, $strProperty, Date $objDateFrom = null, Date $objDateTo = null, array $arrAllowedSystemIds = array())
     {
         $arrParams = array($strClass, $strProperty);
+        $strQueryCondition = "";
 
         //system id filter
         $objRestriction = new OrmInCondition("log.change_systemid", $arrAllowedSystemIds);
-        $strQueryCondition = " AND " . $objRestriction->getStrWhere();
-        $arrParams = array_merge($arrParams, $objRestriction->getArrParams());
+        if($objRestriction->getStrWhere() !== "") {
+            $strQueryCondition .= " AND " . $objRestriction->getStrWhere();
+            $arrParams = array_merge($arrParams, $objRestriction->getArrParams());
+        }
 
         //filter by create date from
         if ($objDateFrom != null) {
