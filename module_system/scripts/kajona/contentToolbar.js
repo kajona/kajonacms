@@ -16,12 +16,13 @@ define(['jquery'], function ($) {
          * The object representing a single toolbar entry
          * @param strContent
          * @param strIdentifier
+         * @param bitActive
          * @constructor
          */
-        Entry : function (strContent, strIdentifier){
+        Entry : function (strContent, strIdentifier, bitActive){
             this.strContent = strContent;
             this.strIdentifier = strIdentifier;
-            this.bitActive = false;
+            this.bitActive = bitActive != undefined && bitActive != '' ? bitActive : false;
         },
 
         /**

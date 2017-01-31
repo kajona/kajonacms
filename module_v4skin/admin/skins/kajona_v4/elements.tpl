@@ -1288,22 +1288,12 @@ The following sections are used to display the path-navigations, e.g. used by th
 
 Toolbar, prominent in the layout. Rendered to switch between action.
 <contentToolbar_wrapper>
-    <script type="text/javascript">
-        require(['contentToolbar'], function(contentToolbar) {
-            %%entries%%
-        });
-    </script>
+    <script type="text/javascript"> require(['contentToolbar'], function(contentToolbar) { %%entries%% }); </script>
 </contentToolbar_wrapper>
 
 <contentToolbar_entry>
-    contentToolbar.registerContentToolbarEntry(new contentToolbar.Entry('%%entry%%', '%%identifier%%'));
+    contentToolbar.registerContentToolbarEntry(new contentToolbar.Entry('%%entry%%', '%%identifier%%', %%active%%));
 </contentToolbar_entry>
-
-<contentToolbar_entry_active>
-    var objEntry = new contentToolbar.Entry('%%entry%%');
-    objEntry.bitActive = true;
-    contentToolbar.registerContentToolbarEntry(objEntry);
-</contentToolbar_entry_active>
 
 
 Toolbar for the current record, rendered to quick-access the actions of the current record.

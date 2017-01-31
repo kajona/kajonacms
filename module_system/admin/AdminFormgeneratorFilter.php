@@ -122,7 +122,7 @@ class AdminFormgeneratorFilter extends AdminFormgenerator
             $bitInitiallyVisible
         );
 
-        return $objToolkit->getContentToolbar([$arrFolder[1]]) . $arrFolder[0];
+        return $objToolkit->addToContentToolbar($arrFolder[1]) . $arrFolder[0];
     }
 
     /**
