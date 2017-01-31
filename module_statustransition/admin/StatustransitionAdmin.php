@@ -14,10 +14,12 @@ use Kajona\Statustransition\System\StatustransitionFlowAssignment;
 use Kajona\Statustransition\System\StatustransitionFlowAssignmentFilter;
 use Kajona\Statustransition\System\StatustransitionFlowChoiceInterface;
 use Kajona\Statustransition\System\StatustransitionFlowStep;
+use Kajona\Statustransition\System\StatustransitionFlowStepFilter;
 use Kajona\Statustransition\System\StatustransitionGraphWriter;
 use Kajona\System\Admin\AdminEvensimpler;
 use Kajona\System\Admin\AdminInterface;
 use Kajona\System\System\AdminskinHelper;
+use Kajona\System\System\ArraySectionIterator;
 use Kajona\System\System\Database;
 use Kajona\System\System\Link;
 use Kajona\System\System\Model;
@@ -131,8 +133,15 @@ class StatustransitionAdmin extends AdminEvensimpler implements AdminInterface
         $this->setCurObjectClassName(StatustransitionFlowStep::class);
 
         $objFlow = $this->objFactory->getObject($this->getParam("systemid"));
-        
-        $strList = parent::actionList();
+
+        /* Create list */
+        $objFilter = StatustransitionFlowStepFilter::getOrCreateFromSession();
+        $objArraySectionIterator = new ArraySectionIterator(StatustransitionFlowStep::getObjectCountFiltered($objFilter, $this->getSystemid()));
+        $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+        $objArraySectionIterator->setArraySection(StatustransitionFlowStep::getObjectListFiltered($objFilter, $this->getSystemid(), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+
+        /* Render list and filter */
+        $strList = $this->renderList($objArraySectionIterator, true, "list".$this->getStrCurObjectTypeName());
         $strGraph = StatustransitionGraphWriter::write($objFlow);
 
         $strHtml = "<div class='row'>";

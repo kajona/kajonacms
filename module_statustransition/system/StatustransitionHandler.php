@@ -51,7 +51,7 @@ abstract class StatustransitionHandler
      * Handles a status transition
      *
      * @param integer $intOldStatus
-     * @param integer $strTransitionKey
+     * @param string $strTransitionKey
      * @param Model $objObject
      * @return boolean - true if transition is executed, false if not
      * @throws \Kajona\System\System\Exception
@@ -80,8 +80,7 @@ abstract class StatustransitionHandler
                         // execute the transition actions
                         $objTransition->executeTransitionActions($intOldStatus, $intNewStatus, $objObject);
                     }
-                }
-                else {
+                } else {
                     return false;
                 }
             }

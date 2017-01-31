@@ -20,6 +20,7 @@ use Kajona\System\System\Objectfactory;
  * @module statustransition
  * @moduleId _statustransition_module_id_
  * @formGenerator Kajona\Statustransition\Admin\StatustransitionStepFormgenerator
+ * @sortManager Kajona\System\System\CommonSortmanager
  */
 class StatustransitionFlowStep extends Model implements ModelInterface, AdminListableInterface
 {
