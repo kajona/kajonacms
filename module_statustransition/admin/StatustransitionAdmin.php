@@ -142,8 +142,8 @@ class StatustransitionAdmin extends AdminEvensimpler implements AdminInterface
 
         $strHtml .= <<<HTML
 <script type="text/javascript">
-    $(document).ready(function(){
-        KAJONA.admin.loader.loadFile(["/core/module_statustransition/admin/scripts/mermaid/mermaid.min.js", "/core/module_statustransition/admin/scripts/mermaid/mermaid.forest.css"], function(){
+    require(['mermaid', 'loader'], function(mermaid, loader){
+        loader.loadFile(["/core/module_statustransition/scripts/mermaid/mermaid.forest.css"], function(){
             mermaid.init(undefined, $("#flow-graph"));
         });
     });
@@ -287,7 +287,7 @@ HTML;
 
             $strAction = "";
             $strAction .= $this->objToolkit->listButton(
-                "<a href=\"#\" title=\"".$this->getLang("prozess_uebernehmen")."\" rel=\"tooltip\" onClick=\"KAJONA.v4skin.setObjectListItems(
+                "<a href=\"#\" title=\"".$this->getLang("prozess_uebernehmen")."\" rel=\"tooltip\" onClick=\"require('v4skin').setObjectListItems(
                     '".$strFormElement."', [{strSystemId: '".$objStep->getSystemid()."', strDisplayName: '".addslashes($objStep->getStrName())."', strIcon:'".addslashes(getImageAdmin("icon_treeLeaf", "", true))."'}], null, '".addslashes(getImageAdmin("icon_delete", "", true))."'); parent.KAJONA.admin.folderview.dialog.hide();\">"
                 .AdminskinHelper::getAdminImage("icon_accept") . "</a>"
             );
