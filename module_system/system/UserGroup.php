@@ -237,7 +237,7 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface
 
 
         if (array_key_exists($strGroupId, $arrIds)) {
-            if (validateSystemid($arrIds[$strGroupId])) {
+            if (!empty($arrIds[$strGroupId])) {
                 return $arrIds[$strGroupId];
             } else {
                 return null;
