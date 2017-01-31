@@ -54,4 +54,11 @@ required parameters to go into the next state.
 
 [status_flow]: ./status_flow.png
 
+## Database
+
+It is also possible to create a status transition workflow through the UI. To use such a workflow
+in your module you simply have to implement the following steps:
+
+* The model has to implement the `StatustransitionFlowChoiceInterface` interface
+* The controller needs to use the `StatustransitionControllerTrait` trait
 
