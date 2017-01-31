@@ -134,15 +134,16 @@ Currently, there are two modes: with and without a description.
 <generallist_desc>
     <tbody class="generalListSet %%cssaddon%%">
         <tr data-systemid="%%listitemid%%" data-deleted="%%deleted%%">
-            <td rowspan="2" class="treedrag"></td>
-            <td rowspan="2" class="listsorthandle"></td>
-            <td rowspan="2" class="listcheckbox">%%checkbox%%</td>
-            <td rowspan="2" class="listimage">%%image%%</td>
+            <td class="treedrag"></td>
+            <td class="listsorthandle"></td>
+            <td class="listcheckbox">%%checkbox%%</td>
+            <td class="listimage">%%image%%</td>
             <td class="title">%%title%%</td>
             <td class="center">%%center%%</td>
             <td class="actions">%%actions%%</td>
         </tr>
         <tr>
+            <td colspan="4" class="description"></td>
             <td colspan="3" class="description">%%description%%</td>
         </tr>
     </tbody>

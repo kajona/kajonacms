@@ -127,7 +127,7 @@ abstract class DbBase implements DbDriverInterface
 
         foreach ($arrValueSets as $arrOneSet) {
             $arrPlaceholderSets[] = $strPlaceholder;
-            $arrParams = array_merge($arrParams, $arrOneSet);
+            $arrParams = array_merge($arrParams, array_values($arrOneSet));
         }
 
         $strQuery = "INSERT INTO ".$this->encloseTableName($strTable)." (".implode(",", $arrSafeColumns).") VALUES ".implode(",", $arrPlaceholderSets);

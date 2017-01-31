@@ -40,12 +40,10 @@ class JsonapiAdmin extends AdminEvensimpler implements AdminInterface
     /**
      * Handles the incoming request. Catches all exceptions so that we return
      * a clean json response with a fitting status code if an error occured
-     *
+     * @responseType json
      */
     protected function actionDispatch()
     {
-        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
-
         try {
             ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_OK);
 

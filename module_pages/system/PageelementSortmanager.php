@@ -6,7 +6,6 @@
 
 namespace Kajona\Pages\System;
 
-use Kajona\System\System\CacheManager;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\CommonSortmanager;
 use Kajona\System\System\Logger;
@@ -30,7 +29,7 @@ class PageelementSortmanager extends CommonSortmanager
      * @see PagesPageelement::deleteObjectInternal()
      * @return mixed|void
      */
-    function fixSortOnDelete($arrRestrictionModules = false)
+    public function fixSortOnDelete($intOldSort, $arrRestrictionModules = false)
     {
         return;
     }
@@ -79,8 +78,7 @@ class PageelementSortmanager extends CommonSortmanager
         $bitSortUp = false;
         if ($intNewPosition < $intCurPos) {
             $bitSortUp = true;
-        }
-        else {
+        } else {
             $bitSortDown = true;
         }
 
@@ -95,7 +93,6 @@ class PageelementSortmanager extends CommonSortmanager
 
             //start at the pos to be reached and move all one down
             for ($intI = $intNewPosition; $intI < $intCurPos; $intI++) {
-
                 //break for errors created on version pre 4.0
                 if ($this->objSource->getSystemid() == $arrElements[$intI - 1]["system_id"]) {
                     continue;
@@ -117,7 +114,6 @@ class PageelementSortmanager extends CommonSortmanager
 
             //start at the pos to be reached and move all one up
             for ($intI = $intCurPos + 1; $intI <= $intNewPosition; $intI++) {
-
                 //break for errors created on version pre 4.0
                 if ($this->objSource->getSystemid() == $arrElements[$intI - 1]["system_id"]) {
                     continue;
@@ -146,8 +142,7 @@ class PageelementSortmanager extends CommonSortmanager
             if ($arrOneElement["system_id"] == $this->objSource->getSystemid()) {
                 if ($strMode == "up") {
                     $this->setAbsolutePosition($arrOneElement["system_sort"] - 1);
-                }
-                else {
+                } else {
                     $this->setAbsolutePosition($arrOneElement["system_sort"] + 1);
                 }
 

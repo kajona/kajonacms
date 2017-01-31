@@ -103,6 +103,10 @@ Der Platzhaltername kann hier beliebig gewählt werden. Ihm folgt ein Unterstric
 z.B. `%%mastermainnavi_navigation%%`
 Diese Platzhalter verhalten sich genau wie die vorher erwähnten Seitenelement-Platzhalter. Allerdings werden diese auf der Master-Seite angelegt. Dies ist sehr hilfreich für Seitenelemente, die auf jeder Seite erscheinen sollen, wie beispielsweise ein Navigationselement. Diese Master-Seitenelement-Platzhalter müssen sowohl in den Seitentemplates als auch im Mastertemplate (master.tpl) definiert werden.
 
+
+> Achtung! Für den Namen eines Blobks oder Blocks dürfen nur die Buchstaben a-z (in Groß- und Kleinschreibung), Ziffern sowie Bindestriche und einfache Leerzeichen verwendet werden. Alle anderen Zeichen können zu Problemen beim Verarbeiten des Templates führen.
+
+
 Zusätzlich gibt es den Platzhalter `%%kajona_head%%` welcher den im Portal benötigten JavaScript-Code enthält und die Konstante `_ webpath _` welche die aktuelle URL zur Kajona-Installation enthält. Die Konstante `_system_browser_cachebuster _` sollte allen Referenzen zu JavaScript- und CSS-Dateien angehängt werden. Dadurch kann Kajona im Fall eines Updates die Webbrowser zwingen, die JavaScript- und CSS-Dateien erneut herunter zu laden statt die veralteten Dateien aus dem Browsercache zu verwenden. 
 
 

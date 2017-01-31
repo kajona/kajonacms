@@ -105,7 +105,7 @@ class TodoJstreeNodeLoader implements JStreeNodeLoaderInterface
     {
         $objNode = new SystemJSTreeNode();
         $objNode->setStrId(generateSystemid());
-        $objNode->setStrText($this->objToolkit->getTooltipText("Kategorien", "Kategorien"));
+        $objNode->setStrText($this->objToolkit->getTooltipText(Carrier::getInstance()->getObjLang()->getLang("todo_provider_category", "dashboard"), Carrier::getInstance()->getObjLang()->getLang("todo_provider_category", "dashboard")));
         $objNode->setStrType("navigationpoint");
         $objNode->addAAttrAttr(
             SystemJSTreeNode::STR_NODE_AATTR_HREF,
