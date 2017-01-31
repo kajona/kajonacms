@@ -15,6 +15,7 @@ use Kajona\System\System\Date;
 use Kajona\System\System\Model;
 use Kajona\System\System\OrmBase;
 use Kajona\System\System\Reflection;
+use Kajona\System\System\StringUtil;
 use PHPUnit_Framework_TestCase;
 
 
@@ -148,8 +149,8 @@ abstract class Testbase extends PHPUnit_Framework_TestCase
                             if ($strFieldType == "text" || $strFieldType == "textarea") {
                                 $objMethodValue = $strPropName."_".$objObject->getStrSystemid();
 
-                                if (uniStrlen($objMethodValue) > 10) {
-                                    $objMethodValue = uniStrTrim($objMethodValue, 10, "");
+                                if (StringUtil::length($objMethodValue) > 10) {
+                                    $objMethodValue = StringUtil::truncate($objMethodValue, 10, "");
                                 }
                             }
                         }

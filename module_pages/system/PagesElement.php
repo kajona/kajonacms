@@ -18,8 +18,8 @@ use Kajona\System\System\AdminListableInterface;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Classloader;
 use Kajona\System\System\Exception;
+use Kajona\System\System\OrmCondition;
 use Kajona\System\System\OrmObjectlist;
-use Kajona\System\System\OrmObjectlistRestriction;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\TemplateBlockContainer;
 
@@ -97,27 +97,6 @@ class PagesElement extends \Kajona\System\System\Model implements \Kajona\System
      * @tableColumnDatatype char20
      */
     private $strVersion = "";
-
-    /**
-     * @var string
-     * @tableColumn element.element_config1
-     * @tableColumnDatatype char254
-     */
-    private $strConfigVal1 = "";
-
-    /**
-     * @var string
-     * @tableColumn element.element_config2
-     * @tableColumnDatatype char254
-     */
-    private $strConfigVal2 = "";
-
-    /**
-     * @var string
-     * @tableColumn element.element_config3
-     * @tableColumnDatatype char254
-     */
-    private $strConfigVal3 = "";
 
     /**
      * @return bool
@@ -227,7 +206,7 @@ class PagesElement extends \Kajona\System\System\Model implements \Kajona\System
     public static function getElement($strName)
     {
         $objORM = new OrmObjectlist();
-        $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND element_name = ?", array($strName)));
+        $objORM->addWhereRestriction(new OrmCondition("element_name = ?", array($strName)));
         return $objORM->getSingleObject(get_called_class());
     }
 
@@ -438,58 +417,5 @@ class PagesElement extends \Kajona\System\System\Model implements \Kajona\System
         $this->strVersion = $strVersion;
     }
 
-    /**
-     * @param string $strConfigVal1
-     *
-     * @return void
-     */
-    public function setStrConfigVal1($strConfigVal1)
-    {
-        $this->strConfigVal1 = $strConfigVal1;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStrConfigVal1()
-    {
-        return $this->strConfigVal1;
-    }
-
-    /**
-     * @param string $strConfigVal2
-     *
-     * @return void
-     */
-    public function setStrConfigVal2($strConfigVal2)
-    {
-        $this->strConfigVal2 = $strConfigVal2;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStrConfigVal2()
-    {
-        return $this->strConfigVal2;
-    }
-
-    /**
-     * @param string $strConfigVal3
-     *
-     * @return void
-     */
-    public function setStrConfigVal3($strConfigVal3)
-    {
-        $this->strConfigVal3 = $strConfigVal3;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStrConfigVal3()
-    {
-        return $this->strConfigVal3;
-    }
 
 }

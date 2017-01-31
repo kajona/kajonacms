@@ -17,6 +17,7 @@ else {
 
 // -- Loader pre-configuration -----------------------------------------------------------------------------------------
 if (!defined("_xmlLoader_")) {
+    /** @depreacted use ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML()) instead */
     define("_xmlLoader_", false);
 }
 
@@ -78,24 +79,28 @@ function rawIncludeError($strFileMissed)
 function defineWebPath()
 {
     require_once __DIR__."/system/Config.php";
-    $strHeaderName = \Kajona\System\System\Config::readPlainConfigsFromFilesystem("https_header");
     $strHeaderValue = strtolower(\Kajona\System\System\Config::readPlainConfigsFromFilesystem("https_header_value"));
+    $arrHeaderNames = \Kajona\System\System\Config::readPlainConfigsFromFilesystem("https_header");
+    if (!is_array($arrHeaderNames)) {
+        $arrHeaderNames = array($arrHeaderNames);
+    }
+
+    $bitIsHttps = false;
+    foreach ($arrHeaderNames as $strOneName) {
+        if (isset($_SERVER[$strOneName]) && (strtolower($_SERVER[$strOneName]) == $strHeaderValue)) {
+            $bitIsHttps = true;
+            break;
+        }
+    }
 
     if (!defined("_webpath_")) {
         if (strpos($_SERVER['SCRIPT_FILENAME'], "/debug/")) {
             //Determine the current path on the web
-            $strWeb = dirname(
-                (isset($_SERVER[$strHeaderName]) && (strtolower($_SERVER[$strHeaderName]) == $strHeaderValue) ? "https://" : "http://").
-                $_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']
-            );
+            $strWeb = dirname(($bitIsHttps ? "https://" : "http://").$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']);
             define("_webpath_", saveUrlEncode(substr_replace($strWeb, "", strrpos($strWeb, "/"))));
-        }
-        else {
+        } else {
             //Determine the current path on the web
-            $strWeb = dirname(
-                (isset($_SERVER[$strHeaderName]) && (strtolower($_SERVER[$strHeaderName]) == $strHeaderValue) ? "https://" : "http://").
-                (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : "localhost").$_SERVER['SCRIPT_NAME']
-            );
+            $strWeb = dirname(($bitIsHttps ? "https://" : "http://").(isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : "localhost").$_SERVER['SCRIPT_NAME']);
             define("_webpath_", saveUrlEncode($strWeb));
         }
     }

@@ -66,7 +66,7 @@ class Zip
     public function addFile($strSourceFile, $strTargetFile = "")
     {
 
-        $strSourceFile = uniStrReplace(_realpath_, "", $strSourceFile);
+        $strSourceFile = StringUtil::replace(_realpath_, "", $strSourceFile);
 
         if ($strTargetFile == "") {
             $strTargetFile = $strSourceFile;
@@ -141,7 +141,7 @@ class Zip
     {
 
         if ($strFilename[0] == "/") {
-            $strFilename = uniSubstr($strFilename, 1);
+            $strFilename = StringUtil::substring($strFilename, 1);
         }
 
         $this->objArchive->open(_realpath_.$strSourceArchive);

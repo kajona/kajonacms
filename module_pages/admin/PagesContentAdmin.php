@@ -20,6 +20,7 @@ use Kajona\System\System\AdminListableInterface;
 use Kajona\System\System\AdminskinHelper;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Classloader;
+use Kajona\System\System\Date;
 use Kajona\System\System\Exception;
 use Kajona\System\System\HttpStatuscodes;
 use Kajona\System\System\LanguagesLanguage;
@@ -28,9 +29,11 @@ use Kajona\System\System\Lockmanager;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\OrmBase;
 use Kajona\System\System\Reflection;
+use Kajona\System\System\RequestEntrypointEnum;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\ResponseObject;
 use Kajona\System\System\ServiceProvider;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\Template;
 use Kajona\System\System\TemplateBlockContainer;
@@ -57,7 +60,7 @@ class PagesContentAdmin extends AdminSimple implements AdminInterface
     {
         parent::__construct();
 
-        if (_xmlLoader_) {
+        if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML())) {
             $this->setArrModuleEntry("modul", "pages_content");
         }
 
@@ -102,23 +105,21 @@ class PagesContentAdmin extends AdminSimple implements AdminInterface
             $objElement = null;
             if ($this->getParam("action") == "edit") {
                 $objElement = new PagesPageelement($this->getSystemid());
-            }
-            elseif ($this->getParam("action") == "new") {
+            } elseif ($this->getParam("action") == "new") {
                 $strPlaceholderElement = $this->getParam("element");
                 $objElement = PagesElement::getElement($strPlaceholderElement);
             }
 
             //and finally create the object
             $strFilename = $this->objResourceLoader->getPathForFile("/admin/elements/".$objElement->getStrClassAdmin());
-            $objElement = $this->objClassLoader->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin");
+            $objElement = $this->objClassLoader->getInstanceFromFilename($strFilename, ElementAdmin::class);
 
             //and finally create the object
             if ($objElement != null) {
                 $strTextname = $this->objLang->stringToPlaceholder("quickhelp_".$objElement->getArrModule("name"));
                 $strText = $this->objLang->getLang($strTextname, $objElement->getArrModule("modul"));
             }
-        }
-        else {
+        } else {
             $strTextname = $this->objLang->stringToPlaceholder("quickhelp_".$this->getAction());
             $strText = $this->getLang($strTextname);
         }
@@ -180,8 +181,7 @@ class PagesContentAdmin extends AdminSimple implements AdminInterface
         //parse the whole template
         try {
             $objParsedBlocks = $this->objTemplate->parsePageTemplate("/module_pages/".$objPage->getStrTemplate(), $objPage->getStrName() == "master" ? Template::INT_ELEMENT_MODE_MASTER : Template::INT_ELEMENT_MODE_REGULAR);
-        }
-        catch(TemplateBlocksParserException $objEx) {
+        } catch (TemplateBlocksParserException $objEx) {
             $objParsedBlocks = new TemplateBlockContainer(TemplateKajonaSections::ROOT, "", "", "", "");
 
             $strPath = $strName = Resourceloader::getInstance()->getTemplate("/module_pages/".$objPage->getStrTemplate(), false);
@@ -206,7 +206,6 @@ class PagesContentAdmin extends AdminSimple implements AdminInterface
         $strBlocks = "";
         //loop the blocks found on the template
         foreach ($objParsedBlocks->getArrBlocks() as $objOneBlocks) {
-
             $arrGhostBlock = array();
 
             $strCurBlocks = "";
@@ -217,14 +216,12 @@ class PagesContentAdmin extends AdminSimple implements AdminInterface
             //process existing blocks, try to find the matching blocks element on the page
             /** @var PagesPageelement $objOneBlocksOnPage */
             foreach ($arrBlocksOnPage as $objOneBlocksOnPage) {
-
-                if(!array_key_exists($objOneBlocksOnPage->getSystemid(), $arrGhostBlocks)) {
+                if (!array_key_exists($objOneBlocksOnPage->getSystemid(), $arrGhostBlocks)) {
                     $arrGhostBlocks[$objOneBlocksOnPage->getSystemid()] = $objOneBlocksOnPage;
                 }
 
                 //success: found a blocks element named like the blocks element from the database
                 if ($objOneBlocksOnPage->getStrName() == $objOneBlocks->getStrName()) {
-
                     $arrGhostBlocks[$objOneBlocksOnPage->getSystemid()] = false;
 
                     $strNewBlocksSystemid = $objOneBlocksOnPage->getSystemid();
@@ -233,8 +230,7 @@ class PagesContentAdmin extends AdminSimple implements AdminInterface
                     $arrSubBlock = PagesPageelement::getElementsOnPage($objOneBlocksOnPage->getSystemid(), false, $this->getLanguageToWorkOn());
 
                     foreach ($arrSubBlock as $objOneBlockOnPage) {
-
-                        if(!array_key_exists($objOneBlockOnPage->getSystemid(), $arrGhostBlock)) {
+                        if (!array_key_exists($objOneBlockOnPage->getSystemid(), $arrGhostBlock)) {
                             $arrGhostBlock[$objOneBlockOnPage->getSystemid()] = $objOneBlockOnPage;
                         }
 
@@ -251,7 +247,6 @@ class PagesContentAdmin extends AdminSimple implements AdminInterface
                         }
 
                         if ($strExistingBlock != "") {
-
                             $strActions = $this->getActionIcons($objOneBlockOnPage);
 
                             $strCurBlocks .= $this->objToolkit->getFieldset(
@@ -273,7 +268,7 @@ class PagesContentAdmin extends AdminSimple implements AdminInterface
             $arrGhostBlock = array_filter($arrGhostBlock, function ($objElement) {
                 return $objElement !== false;
             });
-            if(count($arrGhostBlock) > 0) {
+            if (count($arrGhostBlock) > 0) {
                 //render ghosts
                 $strCurBlocks .= $this->renderGhostElementList($arrGhostBlock);
             }
@@ -281,11 +276,11 @@ class PagesContentAdmin extends AdminSimple implements AdminInterface
             $strBlocks .= $this->objToolkit->getFieldset($objOneBlocks->getStrName(), $strCurBlocks.$strNewBlocks, "fieldset blocks");
 
         }
-        
+
         $arrGhostBlocks = array_filter($arrGhostBlocks, function ($objElement) {
             return $objElement !== false;
         });
-        if(count($arrGhostBlocks) > 0) {
+        if (count($arrGhostBlocks) > 0) {
             //render ghosts
             $strBlocks .= $this->renderGhostElementList($arrGhostBlocks);
         }
@@ -293,23 +288,19 @@ class PagesContentAdmin extends AdminSimple implements AdminInterface
 
         $strElements = $this->renderElementPlaceholderList($objParsedBlocks->getArrPlaceholder(), $arrPageelementsOnPage);
 
-        if($strBlocks != "" && $strElements != "") {
+        if ($strBlocks != "" && $strElements != "") {
             $arrTabs[$this->getLang("pages_content_tab_blocks")] = $strBlocks;
             $arrTabs[$this->getLang("pages_content_tab_elements")] = $strElements;
             $strReturn .= $this->objToolkit->getTabbedContent($arrTabs);
-        }
-        else {
+        } else {
             $strReturn .= $strBlocks.$strElements;
         }
 
-        $strCore = Resourceloader::getInstance()->getCorePathForModule("module_pages");
-
         $strReturn .= <<<HTML
             <script type="text/javascript">
-                KAJONA.admin.loader.loadFile('{$strCore}/module_pages/admin/scripts/pages.js', function() {
-                    KAJONA.admin.pages.initBlockSort();
-                });
-
+            require(['pages'], function (pages) {
+                pages.initBlockSort();
+            });
             </script>
 HTML;
 
@@ -325,7 +316,7 @@ HTML;
         $strNewElementLink = "";
         $strBlockName = $objBlock->getStrName();
 
-        if(count($arrNotPresent) == 0) {
+        if (count($arrNotPresent) == 0) {
             $strNewElementLink = Link::getLinkAdmin(
                 "pages_content",
                 "newBlock",
@@ -334,11 +325,9 @@ HTML;
                 $this->getLang("element_anlegen"),
                 "icon_new"
             );
-        }
-        else {
+        } else {
             $strBlockName .= " <i class='fa fa-exclamation-triangle'></i> ".$this->getLang("element_in_block_missing").implode(", ", $arrNotPresent)."";
         }
-
 
 
         //So, the Row for a new element: element is repeatable or not yet created
@@ -366,7 +355,6 @@ HTML;
         if (is_array($arrElementsOnTemplate) && count($arrElementsOnTemplate) > 0) {
             //Iterate over every single placeholder provided by the template
             foreach ($arrElementsOnTemplate as $arrOneElementOnTemplate) {
-
                 $strOutputAtPlaceholder = "";
                 //Do we have one or more elements already in db at this placeholder?
                 $bitHit = false;
@@ -395,12 +383,10 @@ HTML;
 
                 //Check, if one of the elements in the placeholder is allowed to be used multiple times
                 foreach ($arrOneElementOnTemplate["elementlist"] as $arrSingleElementOnTemplateplaceholder) {
-
                     //Loading all Elements installed on the system ("RAW"-Elements)
                     /** @var PagesElement $objOnePossibleElementInSystem */
                     foreach (PagesElement::getObjectListFiltered() as $objOnePossibleElementInSystem) {
                         if ($objOnePossibleElementInSystem->getStrName() == $arrSingleElementOnTemplateplaceholder["element"]) {
-
                             $strNewElementLink = Link::getLinkAdmin(
                                 "pages_content",
                                 "new",
@@ -414,8 +400,7 @@ HTML;
                                 //So, the Row for a new element: element is repeatable or not yet created
                                 $strActions = $this->objToolkit->listButton($strNewElementLink);
                                 $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $objOnePossibleElementInSystem->getStrDisplayName(), "", $strActions, ($bitRenderCompact ? $arrOneElementOnTemplate["placeholder"] : ""));
-                            }
-                            else {
+                            } else {
                                 //element not repeatable.
                                 //Is there already one element installed? if not, then it IS allowed to create a new one
                                 $bitOneInstalled = false;
@@ -434,7 +419,7 @@ HTML;
                     }
                 }
 
-                if ((int)uniStrlen($strOutputAtPlaceholder) > 0) {
+                if ((int)StringUtil::length($strOutputAtPlaceholder) > 0) {
                     $arrSinglePlaceholder = explode("_", $arrOneElementOnTemplate["placeholder"]);
                     if (count($arrSinglePlaceholder) == 2 && !$bitRenderCompact) {
                         $strOutputAtPlaceholder .= $this->objToolkit->formHeadline($arrSinglePlaceholder[0]);
@@ -445,8 +430,7 @@ HTML;
                         $strReturn .= $this->objToolkit->listHeader();
                         $strReturn .= $strOutputAtPlaceholder;
                         $strReturn .= $this->objToolkit->listFooter();
-                    }
-                    else {
+                    } else {
                         $strListId = generateSystemid();
                         $strReturn .= $this->objToolkit->dragableListHeader($strListId, true);
                         $strReturn .= $strOutputAtPlaceholder;
@@ -457,8 +441,7 @@ HTML;
 
             }
 
-        }
-        else {
+        } else {
             $strReturn .= $this->getLang("element_liste_leer");
         }
 
@@ -468,7 +451,7 @@ HTML;
             $strReturn .= $this->renderGhostElementList($arrElementsOnPage);
         }
 
-        if($strReturn != "") {
+        if ($strReturn != "") {
             $strReturn .= $this->objToolkit->getTableOfContents("h2");
         }
 
@@ -477,6 +460,8 @@ HTML;
 
     /**
      * @param PagesPageelement[] $arrEntries
+     *
+     * @return string
      */
     private function renderGhostElementList(array $arrEntries)
     {
@@ -491,10 +476,6 @@ HTML;
 
             //Put all Output together
             $strPlaceholder = $objOneElement->getStrPlaceholder();
-
-//            if($strPlaceholder == "block") {
-//                $strPlaceholder = $objOneElement->getStrName();
-//            }
 
             $strReturn .= $this->objToolkit->genericAdminList("", $objOneElement->getStrDisplayName()." ".$this->getLang("placeholder").$strPlaceholder, "", $strActions);
         }
@@ -539,9 +520,7 @@ HTML;
                 if ($objOneIterable->rightDelete() && !$bitParentIsBlock) {
                     $strActions .= $this->objToolkit->listButton(AdminskinHelper::getAdminImage("icon_deleteLocked", $this->getLang("ds_gesperrt")));
                 }
-            }
-            else {
-
+            } else {
                 if ($objOneIterable->rightEdit() && !$objOneIterable->getConcreteAdminInstance() instanceof ElementBlockAdmin) {
                     $strActions .= $this->objToolkit->listButton(Link::getLinkAdmin("pages_content", "edit", "&systemid=".$objOneIterable->getSystemid(), "", $this->getLang("element_bearbeiten"), "icon_edit"));
                 }
@@ -551,14 +530,14 @@ HTML;
             }
 
             if (!$bitParentIsBlock) {
+                if(!$objOneIterable->getConcreteAdminInstance() instanceof ElementBlockAdmin)
                 //The Icons to sort the list and to copy the element
                 $strActions .= $this->objToolkit->listButton(Link::getLinkAdminDialog("pages_content", "copyElement", "&systemid=".$objOneIterable->getSystemid(), "", $this->getLang("element_copy"), "icon_copy"));
                 //The status-icons
                 $strActions .= $this->objToolkit->listStatusButton($objOneIterable->getSystemid());
             }
 
-        }
-        elseif ($objOneIterable instanceof PagesElement) {
+        } elseif ($objOneIterable instanceof PagesElement) {
             $objAdminInstance = SystemModule::getModuleByName("pages")->getAdminInstanceOfConcreteModule();
             if ($objAdminInstance != null && $objAdminInstance instanceof AdminSimple) {
                 return $objAdminInstance->getActionIcons($objOneIterable);
@@ -577,8 +556,6 @@ HTML;
         $strLanguage = $this->getLanguageToWorkOn();
 
         if ($strBlocks != "" && $strBlock != "") {
-
-
             if (validateSystemid($strBlocks) && validateSystemid($strBlock)) {
                 //fetch the matching elements
                 $objBlocks = new PagesPageelement($strBlocks);
@@ -633,7 +610,7 @@ HTML;
                                 $strPlaceholder = $arrOnePlaceholder["placeholder"];
 
                                 //validate if the passed element really exists
-                                if(PagesElement::getElement($arrElementList["element"]) == null) {
+                                if (PagesElement::getElement($arrElementList["element"]) == null) {
                                     throw new Exception("Element of type ".$arrElementList["element"]." is not installed", Exception::$level_ERROR);
                                 }
 
@@ -665,7 +642,6 @@ HTML;
 
 
             if ($this->getParam("peClose") == "1") {
-
                 //generate the elements' output
                 $objBlockElement = new PagesPageelement($objBlockElement->getSystemid());
                 $objPortalElement = $objBlockElement->getConcretePortalInstance();
@@ -684,8 +660,7 @@ JS;
                 Carrier::getInstance()->setParam("peClose", null);
                 return "<script type='text/javascript'>{$strReturn}</script>";
 
-            }
-            else {
+            } else {
                 $this->adminReload(Link::getLinkAdminHref("pages_content", "list", "&systemid=".$strPageId));
             }
 
@@ -762,8 +737,7 @@ JS;
             }
             $strReturn .= $objPageElement->actionEdit("edit");
 
-        }
-        else {
+        } else {
             $strReturn .= $this->objToolkit->warningBox($this->getLang("ds_gesperrt"));
         }
 
@@ -786,8 +760,6 @@ JS;
         $strNewPrevId = $strPageId;
 
         if ($strBlocks != "" && $strBlock != "") {
-
-
             if (validateSystemid($strBlocks) && validateSystemid($strBlock)) {
                 //fetch the matching elements
                 $objBlocks = new PagesPageelement($strBlocks);
@@ -845,7 +817,6 @@ JS;
         //The element itself just knows the edit mode, so in case of new, we have to create a dummy element - before
         //passing control to the element
         if ($this->getParam("mode") == "new") {
-
             //Using the passed placeholder-param to load the element and get the table
             $strPlaceholder = $this->getParam("placeholder");
             //Split up the placeholder
@@ -866,8 +837,7 @@ JS;
                 Carrier::getInstance()->setParam("peClose", "");
                 $strReturn .= $this->actionNew(true);
                 return $strReturn;
-            }
-            elseif (!$objElement->validateForm()) {
+            } elseif (!$objElement->validateForm()) {
                 Carrier::getInstance()->setParam("peClose", "");
                 $strReturn .= $this->actionNew(true);
                 return $strReturn;
@@ -923,8 +893,7 @@ JS;
                 Carrier::getInstance()->setParam("peClose", "");
                 $strReturn .= $this->actionEdit(true);
                 return $strReturn;
-            }
-            elseif (!$objElement->validateForm()) {
+            } elseif (!$objElement->validateForm()) {
                 Carrier::getInstance()->setParam("peClose", "");
                 $strReturn .= $this->actionEdit(true);
                 return $strReturn;
@@ -956,23 +925,21 @@ JS;
                 $objElementData->setStrPlaceholder($this->getParam("placeholder"));
             }
 
-            $objStartDate = new \Kajona\System\System\Date("0");
-            $objEndDate = new \Kajona\System\System\Date("0");
+            $objStartDate = new Date("0");
+            $objEndDate = new Date("0");
             $objStartDate->generateDateFromParams("start", $this->getAllParams());
             $objEndDate->generateDateFromParams("end", $this->getAllParams());
 
 
             if ($objStartDate->getIntYear() == "0000") {
                 $objElementData->setObjStartDate(null);
-            }
-            else {
+            } else {
                 $objElementData->setObjStartDate($objStartDate);
             }
 
             if ($objEndDate->getIntYear() == "0000") {
                 $objElementData->setObjEndDate(null);
-            }
-            else {
+            } else {
                 $objElementData->setObjEndDate($objEndDate);
             }
 
@@ -990,7 +957,6 @@ JS;
             $this->flushCompletePagesCache();
 
             if ($this->getParam("peClose") == "1") {
-
                 //generate the elements' output
                 $objPortalElement = $objElementData->getConcretePortalInstance();
                 $strElementContent = $objPortalElement->getRenderedElementOutput(true);
@@ -1012,8 +978,7 @@ JS;
 
             $this->adminReload(Link::getLinkAdminHref("pages_content", "list", "&systemid=".$strPageSystemid));
 
-        }
-        else {
+        } else {
             $strReturn = $this->objToolkit->warningBox($this->getLang("ds_gesperrt"));
         }
         return $strReturn;
@@ -1056,12 +1021,10 @@ JS;
                 }
 
                 $this->adminReload(Link::getLinkAdminHref("pages_content", "list", "systemid=".$objPage->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
-            }
-            else {
+            } else {
                 $strReturn .= $this->objToolkit->warningBox($this->getLang("ds_gesperrt"));
             }
-        }
-        else {
+        } else {
             $strReturn = $this->getLang("commons_error_permissions");
         }
 
@@ -1076,7 +1039,6 @@ JS;
      * @throws Exception
      * @return string , "" in case of success
      * @permissions delete
-     * @xml
      */
     protected function actionDeleteElementFinalXML()
     {
@@ -1116,27 +1078,28 @@ JS;
         $this->setArrModuleEntry("template", "/folderview.tpl");
 
         $objSourceElement = new PagesPageelement($this->getSystemid());
-        if ($objSourceElement->rightEdit($this->getSystemid())) {
-
+        if ($objSourceElement->rightEdit()) {
             $objLang = null;
             if ($this->getParam("copyElement_language") != "") {
                 $objLang = new LanguagesLanguage($this->getParam("copyElement_language"));
-            }
-            else {
+            } else {
                 $objLang = LanguagesLanguage::getLanguageByName($this->getLanguageToWorkOn());
             }
 
             $objPage = null;
             if ($this->getParam("copyElement_page") != "") {
                 $objPage = PagesPage::getPageByName($this->getParam("copyElement_page"));
-                if ($objPage == null) {
-                    throw new Exception("failed to load page ".$this->getParam("copyElement_page"), Exception::$level_ERROR);
+                if ($objPage != null) {
+                    $objPage->setStrLanguage($objLang->getStrName());
+                    $objPage->initObject();
                 }
-                $objPage->setStrLanguage($objLang->getStrName());
-                $objPage->initObject();
             }
-            else {
-                $objPage = new PagesPage($objSourceElement->getPrevId());
+
+            if ($objPage == null) {
+                $objPage = Objectfactory::getInstance()->getObject($objSourceElement->getPrevId());
+                while (!$objPage instanceof PagesPage) {
+                    $objPage = Objectfactory::getInstance()->getObject($objPage->getPrevId());
+                }
             }
 
             //form header
@@ -1171,14 +1134,12 @@ JS;
             $arrPlaceholdersDD = array();
 
             foreach ($arrPlaceholders as $arrSinglePlaceholder) {
-
                 foreach ($arrSinglePlaceholder["elementlist"] as $arrSinglePlaceholderlist) {
                     if ($objSourceElement->getStrElement() == $arrSinglePlaceholderlist["element"]) {
                         if ($objSourceElement->getIntRepeat() == 1) {
                             //repeatable, ok in every case
                             $arrPlaceholdersDD[$arrSinglePlaceholder["placeholder"]] = $arrSinglePlaceholder["placeholder"];
-                        }
-                        else {
+                        } else {
                             //not repeatable - element already existing at placeholder?
                             $arrElementsOnPage = PagesPageelement::getElementsOnPage($objPage->getSystemid(), false, $objLang->getStrName());
                             //loop in order to find same element-types - other elements may be possible due to piped placeholders, too
@@ -1203,8 +1164,7 @@ JS;
             if (count($arrPlaceholdersDD) == 0) {
                 $strReturn .= $this->objToolkit->formTextRow($this->getLang("copyElement_err_placeholder"));
                 $bitCopyingAllowed = false;
-            }
-            else {
+            } else {
                 $strReturn .= $this->objToolkit->formInputDropdown("copyElement_placeholder", $arrPlaceholdersDD, $this->getLang("copyElement_placeholder"));
             }
             $strReturn .= $this->objToolkit->formTextRow($this->getLang("copyElement_template")." ".$strTemplate);
@@ -1228,7 +1188,9 @@ JS;
 
                         };
 
-	                    KAJONA.admin.copyElement_page.bind('autocompleteselect', reloadForm);
+	                    $('#copyElement_page').bind('change', reloadForm);
+	                    $('#copyElement_page').bind('blur', reloadForm);
+	                    $('#copyElement_page').bind('autocompleteselect', reloadForm);
 
 	                    var languageField = document.getElementById('copyElement_language');
 	                    languageField.onchange = reloadForm;
@@ -1249,15 +1211,13 @@ JS;
                     $strReturn = "";
 
                     $this->adminReload(Link::getLinkAdminHref("pages_content", "list", "systemid=".$objNewElement->getPrevId()."&blockAction=1&peClose=1"));
-                }
-                else {
+                } else {
                     throw new Exception("Error copying the pageelement ".$objSourceElement->getSystemid(), Exception::$level_ERROR);
                 }
 
             }
 
-        }
-        else {
+        } else {
             $strReturn = $this->getLang("commons_error_permissions");
         }
         return $strReturn;
@@ -1318,7 +1278,6 @@ JS;
      * - placeholder
      *
      * @permissions edit
-     * @xml
      * @return string
      */
     protected function actionMoveElement()
@@ -1328,21 +1287,18 @@ JS;
         /** @var $objObject PagesPageelement */
         $objObject = Objectfactory::getInstance()->getObject($this->getSystemid());
         if ($objObject instanceof PagesPageelement && $objObject->rightEdit()) {
-
             $strPageSystemid = $objObject->getPrevId();
             $objLockmanager = new Lockmanager($objObject->getSystemid());
 
             $strPlaceholder = $this->getParam("placeholder");
             $arrParts = explode("_", $strPlaceholder);
 
-            if (uniStrpos($arrParts[1], $objObject->getStrElement()) !== false) {
-
+            if (StringUtil::indexOf($arrParts[1], $objObject->getStrElement()) !== false) {
                 if (!$objLockmanager->isLocked()) {
                     $objLockmanager->lockRecord();
                 }
 
                 if ($objLockmanager->isLockedByCurrentUser()) {
-
                     //ph_placeholder
                     $objObject->setStrPlaceholder($strPlaceholder);
 
@@ -1360,16 +1316,14 @@ JS;
                     $this->flushCompletePagesCache();
 
                     $strReturn = "<message><success>element update succeeded</success></message>";
-                }
-                else {
+                } else {
                     ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
                     $strReturn = "<message><error>element not allowed for target placeholder</error></message>";
 
                 }
             }
 
-        }
-        else {
+        } else {
             ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
             $strReturn = "<message><error>".$this->getLang("ds_gesperrt").".".$this->getLang("commons_error_permissions")."</error></message>";
         }
@@ -1378,7 +1332,6 @@ JS;
 
 
     /**
-     * @xml
      * @permissions edit
      * @return string
      */
@@ -1391,7 +1344,6 @@ JS;
         if ($objObject->rightEdit()) {
             //differ between two modes - page-elements or regular objects
             if ($objObject instanceof PagesPageelement) {
-
                 $strPageSystemid = $objObject->getPrevId();
                 $objLockmanager = new Lockmanager($objObject->getSystemid());
 
@@ -1415,7 +1367,6 @@ JS;
 
                     //see if we could set the param to the element
                     if ($this->getParam("property") != "") {
-
                         $strProperty = null;
 
                         //try to fetch the matching setter
@@ -1446,8 +1397,7 @@ JS;
                         $strSetter = $objReflection->getSetter($strProperty);
                         if ($strSetter != null) {
                             $objElement->{$strSetter}($this->getParam("value"));
-                        }
-                        else {
+                        } else {
                             $arrElementData[$this->getParam("property")] = $this->getParam("value");
                             $objElement->setArrParamData($arrElementData);
                         }
@@ -1473,8 +1423,7 @@ JS;
 
                     $strReturn = "<message><success>element update succeeded</success></message>";
                 }
-            }
-            else {
+            } else {
                 //any other object - try to find the matching property and write the value
                 if ($this->getParam("property") == "") {
                     ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_BADREQUEST);
@@ -1495,8 +1444,7 @@ JS;
                 $strReturn = "<message><success>object update succeeded</success></message>";
 
             }
-        }
-        else {
+        } else {
             ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
             $strReturn = "<message><error>".$this->getLang("ds_gesperrt").".".$this->getLang("commons_error_permissions")."</error></message>";
         }

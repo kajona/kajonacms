@@ -21,8 +21,7 @@ use Kajona\System\System\SystemEventidentifier;
 
 if (issetGet("admin") && getGet("admin") == 1) {
     define("_admin_", true);
-}
-else {
+} else {
     define("_admin_", false);
 }
 
@@ -67,7 +66,7 @@ class Xml
         $this->objResponse->setObjEntrypoint(RequestEntrypointEnum::XML());
 
         //only allowed with a module definition. if not given skip, so that there's no exception thrown
-        if(empty($strModule)) {
+        if (empty($strModule)) {
             ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_BADREQUEST);
             $this->objResponse->setStrContent("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<error>module missing</error>");
             return;

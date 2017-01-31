@@ -20,6 +20,7 @@ use Kajona\System\System\OrmObjectlist;
 use Kajona\System\System\OrmRowcache;
 use Kajona\System\System\SearchPortalobjectInterface;
 use Kajona\System\System\SortableRatingInterface;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\VersionableInterface;
 
@@ -71,7 +72,7 @@ class FaqsFaq extends \Kajona\System\System\Model implements \Kajona\System\Syst
     /**
      * @var FaqsCategory[]
      * @objectList faqs_member (source="faqsmem_faq", target="faqsmem_category")
-     * @fieldType Kajona\System\Admin\Formentries\FormentryCheckboxarray
+     * @fieldType Kajona\System\Admin\Formentries\FormentryCheckboxarrayObjectList
      * @versionable
      */
     private $arrCats = array();
@@ -164,7 +165,7 @@ class FaqsFaq extends \Kajona\System\System\Model implements \Kajona\System\Syst
      */
     public function getStrDisplayName()
     {
-        return uniSubstr($this->getStrQuestion(), 0, 200);
+        return StringUtil::substring($this->getStrQuestion(), 0, 200);
     }
 
 

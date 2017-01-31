@@ -8,7 +8,6 @@
 
 namespace Kajona\System\System;
 
-
 /**
  * A objectlist restriction may be used to create where restrictions for the objectList and objectCount queries.
  * Pass them using a syntax like "AND x = ?", don't add "WHERE", this is done by the mapper.
@@ -33,7 +32,7 @@ class OrmObjectlistRestriction
      *
      * @deprecated use OrmCondition instead
      */
-    function __construct($strWhere, $arrParams = array())
+    public function __construct($strWhere, $arrParams = array())
     {
 
         if (!is_array($arrParams)) {
@@ -103,13 +102,14 @@ class OrmObjectlistRestriction
      *
      * @return string
      */
-    public static function getOrderByRestrictionsAsString($arrOrderByRestrictions) {
+    public static function getOrderByRestrictionsAsString($arrOrderByRestrictions)
+    {
         $strOrderBy = "";
         $arrOrderByStr = array();
-        foreach($arrOrderByRestrictions as $objOrderBy) {
+        foreach ($arrOrderByRestrictions as $objOrderBy) {
             $arrOrderByStr[] = $objOrderBy->getStrOrderBy();
         }
-        if(count($arrOrderByStr) > 0) {
+        if (count($arrOrderByStr) > 0) {
             $strOrderBy .= " ORDER BY ".implode(", ", $arrOrderByStr);
         }
 

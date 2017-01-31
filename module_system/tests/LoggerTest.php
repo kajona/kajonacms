@@ -5,6 +5,7 @@ namespace Kajona\System\Tests;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Filesystem;
 use Kajona\System\System\Logger;
+use Kajona\System\System\StringUtil;
 
 class LoggerTest extends Testbase
 {
@@ -24,7 +25,7 @@ class LoggerTest extends Testbase
 
         $this->assertFileExists(_realpath_ . _projectpath_ . "/log/test.log");
 
-        $this->assertTrue(uniStripos($objLogger->getLogFileContent(), "test log row 1") !== false);
+        $this->assertTrue(StringUtil::indexOf($objLogger->getLogFileContent(), "test log row 1", false) !== false);
 
 
         $objFilesystem = new Filesystem();
@@ -46,9 +47,9 @@ class LoggerTest extends Testbase
         $objLogger->addLogRow("test log row 1", Logger::$levelError);
 
         $this->assertFileExists(_realpath_ . _projectpath_ . "/log/test_logger_normal.log");
-        $this->assertTrue(uniStripos($objLogger->getLogFileContent(), 'test log row 3') === false);
-        $this->assertTrue(uniStripos($objLogger->getLogFileContent(), 'test log row 2') !== false);
-        $this->assertTrue(uniStripos($objLogger->getLogFileContent(), 'test log row 1') !== false);
+        $this->assertTrue(StringUtil::indexOf($objLogger->getLogFileContent(), 'test log row 3', false) === false);
+        $this->assertTrue(StringUtil::indexOf($objLogger->getLogFileContent(), 'test log row 2', false) !== false);
+        $this->assertTrue(StringUtil::indexOf($objLogger->getLogFileContent(), 'test log row 1', false) !== false);
     }
 
     public function testCustomLogLevel()
@@ -66,9 +67,9 @@ class LoggerTest extends Testbase
         $objLogger->addLogRow("test log row 1", Logger::$levelError);
 
         $this->assertFileExists(_realpath_ . _projectpath_ . "/log/test_logger_custom.log");
-        $this->assertTrue(uniStripos($objLogger->getLogFileContent(), 'test log row 3') === false);
-        $this->assertTrue(uniStripos($objLogger->getLogFileContent(), 'test log row 2') === false);
-        $this->assertTrue(uniStripos($objLogger->getLogFileContent(), 'test log row 1') !== false);
+        $this->assertTrue(StringUtil::indexOf($objLogger->getLogFileContent(), 'test log row 3', false) === false);
+        $this->assertTrue(StringUtil::indexOf($objLogger->getLogFileContent(), 'test log row 2', false) === false);
+        $this->assertTrue(StringUtil::indexOf($objLogger->getLogFileContent(), 'test log row 1', false) !== false);
     }
 
 }

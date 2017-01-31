@@ -12,9 +12,9 @@ namespace Kajona\Workflows\Event;
 use Kajona\System\System\CoreEventdispatcher;
 use Kajona\System\System\GenericeventListenerInterface;
 use Kajona\System\System\OrmBase;
+use Kajona\System\System\OrmCondition;
 use Kajona\System\System\OrmDeletedhandlingEnum;
 use Kajona\System\System\OrmObjectlist;
-use Kajona\System\System\OrmObjectlistRestriction;
 use Kajona\System\System\SystemEventidentifier;
 use Kajona\Workflows\System\WorkflowsWorkflow;
 
@@ -48,7 +48,7 @@ class WorkflowsRecorddeletedlistener implements GenericeventListenerInterface
 
         $objORM = new OrmObjectlist();
         $objORM->setObjHandleLogicalDeleted(OrmDeletedhandlingEnum::INCLUDED);
-        $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND workflows_systemid = ?", $strSystemid));
+        $objORM->addWhereRestriction(new OrmCondition("workflows_systemid = ?", $strSystemid));
         if ($objORM->getObjectCount("Kajona\\Workflows\\System\\WorkflowsWorkflow") == 0) {
             return true;
         }

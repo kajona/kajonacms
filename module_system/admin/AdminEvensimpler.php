@@ -16,6 +16,7 @@ use Kajona\System\System\Link;
 use Kajona\System\System\Model;
 use Kajona\System\System\ModelInterface;
 use Kajona\System\System\Reflection;
+use Kajona\System\System\StringUtil;
 use ReflectionMethod;
 
 
@@ -116,8 +117,8 @@ abstract class AdminEvensimpler extends AdminSimple
                 $arrAnnotations = $objReflection->getAnnotationsWithValueFromClass($strClassName);
 
                 foreach($arrAnnotations as $strProperty) {
-                    if(uniStrpos($strProperty, $strAnnotationPrefix) === 0) {
-                        return $strAction.uniSubstr($strProperty, uniStrlen($strAnnotationPrefix));
+                    if(StringUtil::indexOf($strProperty, $strAnnotationPrefix) === 0) {
+                        return $strAction.StringUtil::substring($strProperty, StringUtil::length($strAnnotationPrefix));
                     }
                 }
             }
@@ -140,9 +141,9 @@ abstract class AdminEvensimpler extends AdminSimple
     private function autoMatchAction($strAutoMatchAction, $strAnnotation, &$strActionName)
     {
 
-        if(uniStrpos($strActionName, $strAutoMatchAction) === 0) {
+        if(StringUtil::indexOf($strActionName, $strAutoMatchAction) === 0) {
             // Set name of current list object
-            $this->setStrCurObjectTypeName(uniStrReplace($strAutoMatchAction, "", $strActionName));
+            $this->setStrCurObjectTypeName(StringUtil::replace($strAutoMatchAction, "", $strActionName));
             $strActionName = $strAutoMatchAction;
 
             $objReflection = new Reflection($this);
@@ -231,7 +232,7 @@ abstract class AdminEvensimpler extends AdminSimple
             throw new Exception("given object with system id {$this->getSystemid()} does not exist", Exception::$level_ERROR);
         }
 
-        $strObjectTypeName = uniSubstr($this->getActionNameForClass("edit", $objInstance), 4);
+        $strObjectTypeName = StringUtil::substring($this->getActionNameForClass("edit", $objInstance), 4);
         if($strObjectTypeName != "") {
             $strType = get_class($objInstance);
             $this->setCurObjectClassName($strType);

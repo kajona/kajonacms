@@ -23,8 +23,8 @@ use Kajona\System\System\Model;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\ResponseObject;
 use Kajona\System\System\Session;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemChangelog;
-use Kajona\System\System\UserUser;
 
 
 /**
@@ -97,7 +97,7 @@ class MessagingAdmin extends AdminEvensimpler implements AdminInterface
             var param2 = 'messageprovidertype='+messageProviderType; //messageprovide type
             var postBody = param1+'&'+param2;
 
-            KAJONA.admin.ajax.genericAjaxCall("messaging", "saveConfigAjax", "&"+postBody, KAJONA.admin.ajax.regularCallback);
+            require('ajax').genericAjaxCall("messaging", "saveConfigAjax", "&"+postBody, require('ajax').regularCallback);
 
             if(inputId.indexOf("_enabled") > 0 ) {
                 $("#"+inputId).closest("tr").find("div.checkbox input:not(.blockEnable)").slice(1).bootstrapSwitch("disabled", state);
@@ -115,7 +115,7 @@ JS;
             $bitAlwaysEnabled = $objOneProvider instanceof MessageproviderExtendedInterface && $objOneProvider->isAlwaysActive();
             $bitAlwaysMail = $objOneProvider instanceof MessageproviderExtendedInterface && $objOneProvider->isAlwaysByMail();
 
-            $strClassname = uniStrReplace("\\", "-", get_class($objOneProvider));
+            $strClassname = StringUtil::replace("\\", "-", get_class($objOneProvider));
 
             $arrRows[] = array(
                 $objOneProvider->getStrName(),
@@ -188,7 +188,7 @@ JS;
 
         foreach ($arrMessageproviders as $objOneProvider) {
 
-            $strClassname = uniStrReplace("\\", "", get_class($objOneProvider));
+            $strClassname = StringUtil::replace("\\", "", get_class($objOneProvider));
 
             $objConfig = MessagingConfig::getConfigForUserAndProvider($this->objSession->getUserID(), $objOneProvider);
             $objConfig->setBitBymail($this->getParam($strClassname."_bymail") != "");
@@ -205,7 +205,6 @@ JS;
      * This method stores only one value message for one messageprovider (either "_bymail" or "_enabled").
      *
      * @permissions edit
-     * @xml
      *
      * @return string
      */
@@ -218,7 +217,7 @@ JS;
         foreach ($arrMessageproviders as $objOneProvider) {
             $objConfig = MessagingConfig::getConfigForUserAndProvider($this->objSession->getUserID(), $objOneProvider);
 
-            $strClassname = uniStrReplace("\\", "-", get_class($objOneProvider));
+            $strClassname = StringUtil::replace("\\", "-", get_class($objOneProvider));
 
             //only update the message provider which is set in the param "messageprovidertype"
             if ($this->getParam("messageprovidertype") == $strClassname) {
@@ -377,7 +376,6 @@ JS;
      * Marks a single message as read
      *
      * @return string
-     * @xml
      * @permissions view
      */
     protected function actionSetRead()
@@ -397,7 +395,6 @@ JS;
      * Marks a single message as unread
      *
      * @return string
-     * @xml
      * @permissions view
      */
     protected function actionSetUnread()
@@ -462,7 +459,7 @@ JS;
 
         return $this->objToolkit->warningBox($this->getLang("message_sent_success")).
         $this->objToolkit->formHeader("").
-        $this->objToolkit->formInputSubmit($this->getLang("commons_ok"), "", "onclick=parent.KAJONA.admin.folderview.dialog.hide();").
+        $this->objToolkit->formInputSubmit($this->getLang("commons_ok"), "", "onclick=parent.require('folderview').dialog.hide();").
         $this->objToolkit->formClose();
     }
 
@@ -545,7 +542,6 @@ JS;
      *
      * @permissions view
      * @autoTestable
-     * @xml
      *
      * @deprecated
      *
@@ -563,17 +559,16 @@ JS;
      * The structure is returned in an json-format.
      *
      * @permissions view
-     * @xml
      * @autoTestable
      *
      * @return string
+     * @responseType json
      */
     protected function actionGetRecentMessages()
     {
         Carrier::getInstance()->getObjSession()->setBitBlockDbUpdate(true);
         Session::getInstance()->sessionClose();
         SystemChangelog::$bitChangelogEnabled = false;
-        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
 
         $intMaxAmount = $this->getParam("limit") != "" ? $this->getParam("limit") : 5;
 

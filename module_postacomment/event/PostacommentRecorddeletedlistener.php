@@ -11,9 +11,9 @@ namespace Kajona\Postacomment\Event;
 
 use Kajona\System\System\CoreEventdispatcher;
 use Kajona\System\System\GenericeventListenerInterface;
+use Kajona\System\System\OrmCondition;
 use Kajona\System\System\OrmDeletedhandlingEnum;
 use Kajona\System\System\OrmObjectlist;
-use Kajona\System\System\OrmObjectlistRestriction;
 use Kajona\System\System\SystemEventidentifier;
 use Kajona\System\System\SystemModule;
 
@@ -54,7 +54,7 @@ class PostacommentRecorddeletedlistener implements GenericeventListenerInterface
 
         $objOrm = new OrmObjectlist();
         $objOrm->setObjHandleLogicalDeleted(OrmDeletedhandlingEnum::INCLUDED);
-        $objOrm->addWhereRestriction(new OrmObjectlistRestriction(" AND (postacomment_page = ? OR  postacomment_systemid = ? ) ", array($strSystemid, $strSystemid)));
+        $objOrm->addWhereRestriction(new OrmCondition("(postacomment_page = ? OR  postacomment_systemid = ? )", array($strSystemid, $strSystemid)));
         $arrComments = $objOrm->getObjectList("Kajona\\Postacomment\\System\\PostacommentPost");
 
         foreach ($arrComments as $objPost) {

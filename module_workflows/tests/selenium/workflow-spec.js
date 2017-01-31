@@ -10,9 +10,9 @@ describe('module_workflows', function() {
 
     it('test list', function() {
 
-        SeleniumUtil.gotToUrl('index.php?admin=1&module=workflows&action=list');
-
-        expect(browser.driver.findElement(by.id('moduleTitle')).getText()).toEqual('Workflows');
+        SeleniumUtil.gotToUrl('index.php?admin=1&module=workflows&action=list').then(function() {
+            expect(browser.driver.findElement(by.id('moduleTitle')).getText()).toEqual('Workflows');
+        });
     });
 
 });

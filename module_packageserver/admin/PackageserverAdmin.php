@@ -196,7 +196,6 @@ class PackageserverAdmin extends MediamanagerAdmin implements AdminInterface
      * Copies the metadata.xml content into the files properties.
      *
      * @permissions edit
-     * @xml
      * @return string
      */
     protected function actionUpdateDataFromMetadata()

@@ -10,6 +10,7 @@ use Kajona\System\Admin\FormentryPrintableInterface;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Date;
 use Kajona\System\System\Reflection;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\Validators\DateValidator;
 
 
@@ -103,7 +104,7 @@ class FormentryDate extends FormentryBase implements FormentryPrintableInterface
         $objReflection = new Reflection($this->getObjSourceObject());
         $strSetter = $objReflection->getSetter($this->getStrSourceProperty());
 
-        if ($strSetter !== null && uniStrtolower(uniSubstr($strSetter, 0, 6)) == "setobj" && !$this->getStrValue() instanceof Date && $this->getStrValue() > 0) {
+        if ($strSetter !== null && StringUtil::toLowerCase(StringUtil::substring($strSetter, 0, 6)) == "setobj" && !$this->getStrValue() instanceof Date && $this->getStrValue() > 0) {
             $this->setStrValue(new Date($this->getStrValue()));
         }
 

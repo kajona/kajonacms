@@ -31,7 +31,7 @@ class LanguagesAdmin extends AdminSimple implements AdminInterface
 {
 
     private static $arrLanguageSwitchEntries = null;
-    private static $strOnChangeHandler = "KAJONA.admin.switchLanguage(this.value);";
+    private static $strOnChangeHandler = "require('switchLanguage').change(this.value);";
     private static $strActiveKey = "";
 
 

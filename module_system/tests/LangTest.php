@@ -3,6 +3,7 @@
 namespace Kajona\System\Tests;
 
 use Kajona\System\System\Lang;
+use Kajona\System\System\StringUtil;
 
 class LangTest extends Testbase
 {
@@ -42,7 +43,7 @@ class LangTest extends Testbase
         for ($intI = 0; $intI <= 100; $intI++) {
             $strProperty = $strPropertyRaw;
             foreach ($arrParameters as $intKey => $strParameter) {
-                $strProperty = uniStrReplace("{" . $intKey . "}", $strParameter, $strProperty);
+                $strProperty = StringUtil::replace("{" . $intKey . "}", $strParameter, $strProperty);
             }
             $this->assertEquals($strProperty, "lorem lorem ipsum ipsum dolor dolor sit sit amet amet lorem");
         }
@@ -53,7 +54,7 @@ class LangTest extends Testbase
 
         $intStart = microtime(true);
         for ($intI = 0; $intI <= 100; $intI++) {
-            $strProperty = uniStrReplace(array_map(function ($i) {
+            $strProperty = StringUtil::replace(array_map(function ($i) {
                 return "{" . $i . "}";
             }, array_keys($arrParameters)), $arrParameters, $strPropertyRaw);
             $this->assertEquals($strProperty, "lorem lorem ipsum ipsum dolor dolor sit sit amet amet lorem");

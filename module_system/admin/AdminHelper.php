@@ -8,8 +8,12 @@
 
 namespace Kajona\System\Admin;
 
+use Kajona\System\System\BootstrapCache;
 use Kajona\System\System\Carrier;
+use Kajona\System\System\Classloader;
 use Kajona\System\System\Link;
+use Kajona\System\System\Resourceloader;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemModule;
 
@@ -171,6 +175,49 @@ class AdminHelper
             }
         }
 
+    }
+
+    /**
+     * Method which generates the global requirejs config
+     *
+     * @return string
+     */
+    public function generateRequireJsConfig()
+    {
+        $arrRequireConf = BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_REQUIREJS);
+        if (empty($arrRequireConf)) {
+            //base config
+            $arrRequireConf = array(
+                "baseUrl" => '_webpath_',
+                "paths" => array(),
+                "shim" => array(),
+            );
+
+            foreach (Classloader::getInstance()->getArrModules() as $strFolder => $strModule) {
+                $strJsonFile = Resourceloader::getInstance()->getAbsolutePathForModule($strModule)."/scripts/provides.json";
+                if (is_file($strJsonFile)) {
+                    $arrProvidesJs = json_decode(file_get_contents($strJsonFile), true);
+                    $strBasePath = StringUtil::substring(Resourceloader::getInstance()->getWebPathForModule($strModule), 1)."/scripts/";
+
+
+                    if (isset($arrProvidesJs["paths"]) && is_array($arrProvidesJs["paths"])) {
+                        foreach ($arrProvidesJs["paths"] as $strUniqueName => $strPath) {
+                            $arrRequireConf["paths"][$strUniqueName] = $strBasePath . $strPath;
+                        }
+                    }
+
+                    if (isset($arrProvidesJs["shim"]) && is_array($arrProvidesJs["shim"])) {
+                        foreach ($arrProvidesJs["shim"] as $strUniqueName => $strValue) {
+                            $arrRequireConf["shim"][$strUniqueName] = $strValue;
+                        }
+                    }
+                }
+            }
+
+            BootstrapCache::getInstance()->updateCache(BootstrapCache::CACHE_REQUIREJS, $arrRequireConf);
+        }
+
+        return json_encode($arrRequireConf);
     }
 
 }

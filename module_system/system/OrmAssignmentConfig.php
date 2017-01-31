@@ -37,7 +37,7 @@ class OrmAssignmentConfig
      * @param $strProperty
      *
      * @return OrmAssignmentConfig
-     * @throws class_orm_exception
+     * @throws OrmException
      */
     public static function getConfigForProperty($objObject, $strProperty)
     {
@@ -49,7 +49,7 @@ class OrmAssignmentConfig
         $arrTypeFilter = isset($arrPropertyParams["type"]) ? $arrPropertyParams["type"] : null;
 
         if (!isset($arrPropertyParams["source"]) || !isset($arrPropertyParams["target"]) || empty($strTable)) {
-            throw new class_orm_exception("@objectList annoation for ".$strProperty."@".get_class($objObject)." is malformed", class_orm_exception::$level_FATALERROR);
+            throw new OrmException("@objectList annoation for ".$strProperty."@".get_class($objObject)." is malformed", OrmException::$level_FATALERROR);
         }
 
         return new OrmAssignmentConfig($strTable, $arrPropertyParams["source"], $arrPropertyParams["target"], $arrTypeFilter);

@@ -7,14 +7,14 @@
 namespace Kajona\Dashboard\System;
 
 use Kajona\System\System\Carrier;
-use Kajona\System\System\InterfaceJStreeNodeLoader;
+use Kajona\System\System\JStreeNodeLoaderInterface;
 use Kajona\System\System\SystemJSTreeNode;
 
 /**
  * @package module_prozessverwaltung
  * @author christoph.kappestein@artemeon.de
  */
-class TodoJstreeNodeLoader implements InterfaceJStreeNodeLoader
+class TodoJstreeNodeLoader implements JStreeNodeLoaderInterface
 {
     private $objToolkit = null;
 
@@ -61,7 +61,7 @@ class TodoJstreeNodeLoader implements InterfaceJStreeNodeLoader
                 );
                 $objNode->addAAttrAttr(
                     "onclick",
-                    "KAJONA.admin.dashboard.todo.loadCategory($strJsonKey,'')"
+                    "require('dashboard').todo.loadCategory($strJsonKey,'')"
                 );
                 $objNode->addStateAttr(
                     SystemJSTreeNode::STR_NODE_STATE_OPENED,
@@ -84,7 +84,7 @@ class TodoJstreeNodeLoader implements InterfaceJStreeNodeLoader
             );
             $objNode->addAAttrAttr(
                 "onclick",
-                "KAJONA.admin.dashboard.todo.loadCategory($strKeysJson,'')"
+                "require('dashboard').todo.loadCategory($strKeysJson,'')"
             );
             $objNode->addStateAttr(
                 SystemJSTreeNode::STR_NODE_STATE_OPENED,
@@ -105,7 +105,7 @@ class TodoJstreeNodeLoader implements InterfaceJStreeNodeLoader
     {
         $objNode = new SystemJSTreeNode();
         $objNode->setStrId(generateSystemid());
-        $objNode->setStrText($this->objToolkit->getTooltipText("Kategorien", "Kategorien"));
+        $objNode->setStrText($this->objToolkit->getTooltipText(Carrier::getInstance()->getObjLang()->getLang("todo_provider_category", "dashboard"), Carrier::getInstance()->getObjLang()->getLang("todo_provider_category", "dashboard")));
         $objNode->setStrType("navigationpoint");
         $objNode->addAAttrAttr(
             SystemJSTreeNode::STR_NODE_AATTR_HREF,
@@ -113,7 +113,7 @@ class TodoJstreeNodeLoader implements InterfaceJStreeNodeLoader
         );
         $objNode->addAAttrAttr(
             "onclick",
-            "KAJONA.admin.dashboard.todo.loadCategory('','')"
+            "require('dashboard').todo.loadCategory('','')"
         );
 
         return $objNode;

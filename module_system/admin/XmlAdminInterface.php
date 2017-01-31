@@ -14,6 +14,7 @@ use Kajona\System\System\XmlInterface;
  * Ensures, that all needed methods are being implemented
  *
  * @package module_system
+ * @deprecated this interface is no longer used up from kajona 5.1, controlles keep actions of all types
  */
 interface XmlAdminInterface extends XmlInterface  {
 

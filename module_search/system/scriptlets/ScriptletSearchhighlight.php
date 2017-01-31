@@ -8,6 +8,7 @@ namespace Kajona\Search\System\Scriptlets;
 
 use Kajona\System\System\Carrier;
 use Kajona\System\System\ScriptletInterface;
+use Kajona\System\System\StringUtil;
 
 
 /**
@@ -42,9 +43,9 @@ JS;
 
             $strJS = "<script type='text/javascript'>".$strJS."</script><style type='text/css'>.searchHighlight { background-color: #ffff00;}</style>\n";
 
-            $intBodyClose = uniStripos($strContent, "</body>");
+            $intBodyClose = StringUtil::indexOf($strContent, "</body>", false);
             if ($intBodyClose !== false) {
-                $strContent = uniSubstr($strContent, 0, $intBodyClose).$strJS.uniSubstr($strContent, $intBodyClose);
+                $strContent = StringUtil::substring($strContent, 0, $intBodyClose).$strJS.StringUtil::substring($strContent, $intBodyClose);
             }
 
         }

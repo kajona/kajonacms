@@ -7,7 +7,8 @@
     <meta name="robots" content="noindex, nofollow" />
     <meta name="generator" content="Kajona, www.kajona.de" />
 
-    <link rel="stylesheet" href="_webpath_/[webpath,module_system]/admin/scripts/jqueryui/css/smoothness/jquery-ui.custom.css?_system_browser_cachebuster_" type="text/css" />
+    <link rel="stylesheet" href="_webpath_/[webpath,module_system]/scripts/jqueryui/css/smoothness/jquery-ui.custom.css?_system_browser_cachebuster_" type="text/css" />
+    <link rel="stylesheet" href="_webpath_/[webpath,module_system]/scripts/qtip2/jquery.qtip.min.css?_system_browser_cachebuster_" type="text/css" />
 
     <!-- KAJONA_BUILD_LESS_START -->
     <link href="_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/less/bootstrap.less?_system_browser_cachebuster_" rel="stylesheet/less">
@@ -15,16 +16,13 @@
     <script src="_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/less/less.min.js"></script>
     <!-- KAJONA_BUILD_LESS_END -->
 
-    <script src="_webpath_/[webpath,module_system]/admin/scripts/jquery/jquery.min.js?_system_browser_cachebuster_"></script>
-    <script src="_webpath_/[webpath,module_system]/admin/scripts/jqueryui/jquery-ui.custom.min.js?_system_browser_cachebuster_"></script>
+    <script src="_webpath_/[webpath,module_system]/scripts/jquery/jquery.min.js?_system_browser_cachebuster_"></script>
     %%head%%
-    <script src="_webpath_/[webpath,module_system]/system/scripts/loader.js?_system_browser_cachebuster_"></script>
-    <script src="_webpath_/[webpath,module_system]/admin/scripts/kajona.js?_system_browser_cachebuster_"></script>
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-    <script src="_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/js/html5.js?_system_browser_cachebuster_"></script>
-    <![endif]-->
+    <script type="text/javascript">var searchExtendText = '[lang,search_details,search]';</script>
+    <script src="_webpath_/[webpath,module_system]/scripts/requirejs/require.js?_system_browser_cachebuster_"></script>
+    <script type="text/javascript">
+        require(['app'], function() {});
+    </script>
 
     <link rel="shortcut icon" href="_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/img/favicon.png">
 </head>
@@ -186,23 +184,6 @@
         </div>
     </div>
 </div>
-
-
-<script src="_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/js/jquery.ui.touch-punch.min.js?_system_browser_cachebuster_"></script>
-<script src="_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/js/bootstrap.min.js?_system_browser_cachebuster_"></script>
-
-<script type="text/javascript">var searchExtendText = '[lang,search_details,search]';</script>
-<script src="_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/js/v4skin.js?_system_browser_cachebuster_"></script>
-
-<script type="text/javascript">
-    KAJONA.admin.loader.loadFile("_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/js/kajona_dialog.js", function() {
-        KAJONA.admin.folderview.dialog = new KAJONA.admin.ModalDialog('folderviewDialog', 0);
-        jsDialog_0 = new KAJONA.admin.ModalDialog('jsDialog_0', 0);
-        jsDialog_1 = new KAJONA.admin.ModalDialog('jsDialog_1', 1);
-        jsDialog_2 = new KAJONA.admin.ModalDialog('jsDialog_2', 2);
-        jsDialog_3 = new KAJONA.admin.ModalDialog('jsDialog_3', 3);
-    }, true);
-</script>
 
 <div id="jsStatusBox" class="" style="display: none; position: absolute;"><div class="jsStatusBoxHeader">Status-Info</div><div id="jsStatusBoxContent" class="jsStatusBoxContent"></div></div>
 

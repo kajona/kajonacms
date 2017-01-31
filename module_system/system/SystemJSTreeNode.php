@@ -43,30 +43,37 @@ class SystemJSTreeNode implements JsonSerializable
     const STR_NODE_STATE_SELECTED = "selected";
 
 
+    /** @var string */
     private $strId = null;
 
+    /** @var string */
     private $strText = null;
 
+    /** @var string */
     private $strType = null;
 
     /**
-     * @var null|boolean|SystemJSTreeNode[]
+     * @var SystemJSTreeNode[]|boolean
      */
-    private $arrChildren = null;
+    private $arrChildren = null;//value is boolean if node has children and children are not loaded
 
+    /** @var array  */
     private $arrData = array(
         self::STR_NODE_DATA_RIGHTEDIT => false
     );
 
+    /** @var array */
     private $arrAAttr = null;
 
+    /** @var array */
     private $arrLiAttr = null;
 
+    /** @var array */
     private $arrState = null;
 
 
     /**
-     * @return null
+     * @return string
      */
     public function getStrId()
     {
@@ -74,7 +81,7 @@ class SystemJSTreeNode implements JsonSerializable
     }
 
     /**
-     * @param null $strId
+     * @param string $strId
      */
     public function setStrId($strId)
     {
@@ -83,7 +90,7 @@ class SystemJSTreeNode implements JsonSerializable
     }
 
     /**
-     * @return null
+     * @return string
      */
     public function getStrText()
     {
@@ -91,7 +98,7 @@ class SystemJSTreeNode implements JsonSerializable
     }
 
     /**
-     * @param null $strText
+     * @param string $strText
      */
     public function setStrText($strText)
     {
@@ -100,7 +107,7 @@ class SystemJSTreeNode implements JsonSerializable
     }
 
     /**
-     * @return null
+     * @return string
      */
     public function getStrType()
     {
@@ -108,7 +115,7 @@ class SystemJSTreeNode implements JsonSerializable
     }
 
     /**
-     * @param null $strType
+     * @param string $strType
      */
     public function setStrType($strType)
     {
@@ -125,7 +132,7 @@ class SystemJSTreeNode implements JsonSerializable
     }
 
     /**
-     * @param array|boolean $arrChildren
+     * @param SystemJSTreeNode[]|boolean $arrChildren
      */
     public function setArrChildren($arrChildren)
     {
@@ -142,7 +149,11 @@ class SystemJSTreeNode implements JsonSerializable
     }
 
     /**
-     * @param null $arrData
+     * Adds a new data attribute with the given name and value
+     *
+     * @param $strAttributeName
+     * @param $strAttributeValue
+     * @return $this
      */
     public function addDataAttr($strAttributeName, $strAttributeValue)
     {
@@ -154,7 +165,7 @@ class SystemJSTreeNode implements JsonSerializable
     }
 
     /**
-     * @return array|null
+     * @return array
      */
     public function getArrAAttr()
     {
@@ -162,7 +173,11 @@ class SystemJSTreeNode implements JsonSerializable
     }
 
     /**
-     * @param null $arrAttr
+     * Adds a new aattr attribute with the given name and value
+     *
+     * @param $strAttributeName
+     * @param $strAttributeValue
+     * @return $this
      */
     public function addAAttrAttr($strAttributeName, $strAttributeValue)
     {
@@ -174,7 +189,7 @@ class SystemJSTreeNode implements JsonSerializable
     }
 
     /**
-     * @return array|null
+     * @return array
      */
     public function getArrLiAttr()
     {
@@ -182,7 +197,11 @@ class SystemJSTreeNode implements JsonSerializable
     }
 
     /**
-     * @param null $arrAttr
+     * Adds a new li attribute with the given name and value
+     *
+     * @param $strAttributeName
+     * @param $strAttributeValue
+     * @return $this
      */
     public function addLiAttrAttr($strAttributeName, $strAttributeValue)
     {
@@ -194,7 +213,7 @@ class SystemJSTreeNode implements JsonSerializable
     }
 
     /**
-     * @return array|null
+     * @return array
      */
     public function getArrState()
     {
@@ -202,7 +221,11 @@ class SystemJSTreeNode implements JsonSerializable
     }
 
     /**
-     * @param null $arrState
+     * Adds a new state attribute with the given name and value
+     *
+     * @param $strAttributeName
+     * @param $strAttributeValue
+     * @return $this
      */
     public function addStateAttr($strAttributeName, $strAttributeValue)
     {
@@ -232,6 +255,11 @@ class SystemJSTreeNode implements JsonSerializable
         );
     }
 
+    /**
+     * Returns the node as array which can be serialzed to json
+     *
+     * @return array
+     */
     public function jsonSerialize()
     {
         return $this->getArrNode();

@@ -140,7 +140,7 @@ class Link
         }
 
         if (!$bitEncodedAmpersand) {
-            $strLink = uniStrReplace("&amp;", "&", $strLink);
+            $strLink = StringUtil::replace("&amp;", "&", $strLink);
         }
 
         return $strLink;
@@ -202,7 +202,7 @@ class Link
         }
 
         if (!$bitEncodedAmpersand) {
-            $strLink = uniStrReplace("&amp;", "&", $strLink);
+            $strLink = StringUtil::replace("&amp;", "&", $strLink);
         }
 
         return $strLink;
@@ -230,7 +230,7 @@ class Link
         $strLink = "";
         //if($strParams != "")
         //    $strParams = str_replace("&", "&amp;", $strParams);
-        $strTitle = addslashes(uniStrReplace(array("\n", "\r"), array(), strip_tags(nl2br($strTitle))));
+        $strTitle = addslashes(StringUtil::replace(array("\n", "\r"), array(), strip_tags(nl2br($strTitle))));
 
         if ($bitPortalEditor && $intHeight == "500") {
             $intHeight = 690;
@@ -281,15 +281,13 @@ class Link
      * @param bool $bitTooltip
      * @param bool $bitPortalEditor
      * @param bool|string $strOnClick
-     * @param null|int $intWidth
-     * @param null|int $intHeight
      *
      * @return string
      */
-    public static function getLinkAdminDialog($strModule, $strAction, $strParams = "", $strText = "", $strAlt = "", $strImage = "", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false, $strOnClick = "", $intWidth = null, $intHeight = null)
+    public static function getLinkAdminDialog($strModule, $strAction, $strParams = "", $strText = "", $strAlt = "", $strImage = "", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false, $strOnClick = "")
     {
         $strLink = "";
-        $strTitle = addslashes(uniStrReplace(array("\n", "\r"), array(), strip_tags(nl2br($strTitle))));
+        $strTitle = addslashes(StringUtil::replace(array("\n", "\r"), array(), strip_tags(nl2br($strTitle))));
 
         if ($bitPortalEditor) {
             $strParams .= "&pe=1";
@@ -300,14 +298,8 @@ class Link
         $strAction = urlencode($strAction);
 
         if ($strOnClick == "") {
-            if ($intWidth !== null && $intHeight !== null) {
-                $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".Link::getLinkAdminHref($strModule, $strAction, $strParams)."'); KAJONA.admin.folderview.dialog.setTitle('".$strTitle."'); ".
-                    "KAJONA.admin.folderview.dialog.init('".$intWidth."', '".$intHeight."'); return false;";
-            }
-            else {
-                $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".Link::getLinkAdminHref($strModule, $strAction, $strParams)."'); KAJONA.admin.folderview.dialog.setTitle('".$strTitle."'); ".
-                    "KAJONA.admin.folderview.dialog.init(); return false;";
-            }
+            $strLink = Link::getLinkAdminHref($strModule, $strAction, $strParams);
+            $strOnClick = "require('dialogHelper').showIframeDialog('{$strLink}', '{$strTitle}'); return false;";
         }
 
 
@@ -404,10 +396,10 @@ class Link
 
         // any anchors set to the page?
         $strAnchor = "";
-        if (uniStrpos($strPageI, "#") !== false) {
+        if (StringUtil::indexOf($strPageI, "#") !== false) {
             //get anchor, remove anchor from link
-            $strAnchor = urlencode(uniSubstr($strPageI, uniStrpos($strPageI, "#") + 1));
-            $strPageI = uniSubstr($strPageI, 0, uniStrpos($strPageI, "#"));
+            $strAnchor = urlencode(StringUtil::substring($strPageI, StringUtil::indexOf($strPageI, "#") + 1));
+            $strPageI = StringUtil::substring($strPageI, 0, StringUtil::indexOf($strPageI, "#"));
         }
 
         //urlencoding
@@ -439,12 +431,12 @@ class Link
                     }
 
                     $strAddKeys = $objPage->getStrSeostring().($strSeoAddon != "" && $objPage->getStrSeostring() != "" ? "-" : "").urlSafeString($strSeoAddon);
-                    if (uniStrlen($strAddKeys) > 0 && uniStrlen($strAddKeys) <= 2) {
+                    if (StringUtil::length($strAddKeys) > 0 && StringUtil::length($strAddKeys) <= 2) {
                         $strAddKeys .= "__";
                     }
 
                     //trim string
-                    $strAddKeys = uniStrTrim($strAddKeys, 100, "");
+                    $strAddKeys = StringUtil::truncate($strAddKeys, 100, "");
 
                     if ($strLanguage != "") {
                         $strHref .= $strLanguage."/";
@@ -548,7 +540,7 @@ class Link
      */
     private static function parseParamsString($strParams, &$strSystemid = "")
     {
-        $strParams = uniStrReplace("&amp;", "&", $strParams);
+        $strParams = StringUtil::replace("&amp;", "&", $strParams);
 
         //if given, remove first ampersand from params
         if (substr($strParams, 0, 1) == "&") {

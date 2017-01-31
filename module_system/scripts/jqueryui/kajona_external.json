@@ -1,0 +1,7 @@
+{
+    "name" : "jquery-ui",
+    "version" : "1.12.1",
+    "source" : "http://jqueryui.com",
+    "license" : "MIT license",
+    "licenseurl" : "https://jquery.org/license/"
+}

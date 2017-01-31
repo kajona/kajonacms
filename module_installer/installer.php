@@ -15,6 +15,7 @@ use Kajona\System\System\Carrier;
 use Kajona\System\System\Classloader;
 use Kajona\System\System\Cookie;
 use Kajona\System\System\CoreEventdispatcher;
+use Kajona\System\System\DbConnectionParams;
 use Kajona\System\System\Exception;
 use Kajona\System\System\HttpResponsetypes;
 use Kajona\System\System\Lang;
@@ -47,7 +48,7 @@ class Installer
     private $strForwardLink = "";
     private $strBackwardLink = "";
 
-    private $strVersion = "V 5.1";
+    private $strVersion = "V 6.2";
 
     /**
      * Instance of template-engine
@@ -269,15 +270,7 @@ class Installer
 
 
             //try to validate the data passed
-            $bitCxCheck = Carrier::getInstance()->getObjDB()->validateDbCxData(
-                $_POST["driver"],
-                $_POST["hostname"],
-                $_POST["username"],
-                $_POST["password"],
-                $_POST["dbname"],
-                $_POST["port"]
-            );
-
+            $bitCxCheck = Carrier::getInstance()->getObjDB()->validateDbCxData($_POST["driver"], new DbConnectionParams($_POST["hostname"], $_POST["username"], $_POST["password"], $_POST["dbname"], $_POST["port"]));
 
             if ($bitCxCheck) {
                 $strFileContent = "<?php\n";
@@ -466,6 +459,7 @@ class Installer
             ),
             "/module_installer/installer.tpl", "modeselect_content"
         );
+        $this->strOutput .= $this->objTemplates->fillTemplateFile(array(), "/module_installer/installer.tpl", "autoinstall_cli");
 
         $this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php?step=loginData");
     }
@@ -741,8 +735,8 @@ class Installer
                 $objSamplecontent = SamplecontentInstallerHelper::getSamplecontentInstallerForPackage($objOneMetadata);
 
                 if ($objSamplecontent != null && !$objSamplecontent->isInstalled()) {
-                    SamplecontentInstallerHelper::install($objSamplecontent);
-                    return json_encode(array("module" => $_POST["module"], "status" => "success"));
+                    $strReturn = SamplecontentInstallerHelper::install($objSamplecontent);
+                    return json_encode(array("module" => $_POST["module"], "status" => "success", "log" => $strReturn));
                 }
             }
         }
@@ -785,8 +779,8 @@ class Installer
                 $objHandler = $objManager->getPackageManagerForPath($objOneMetadata->getStrPath());
 
                 if ($objHandler->isInstallable()) {
-                    $objHandler->installOrUpdate();
-                    return json_encode(array("module" => $_POST["module"], "status" => "success"));
+                    $strReturn = $objHandler->installOrUpdate();
+                    return json_encode(array("module" => $_POST["module"], "status" => "success", "log" => $strReturn));
                 }
             }
         }

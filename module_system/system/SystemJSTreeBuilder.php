@@ -3,15 +3,13 @@
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2016 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                                *
 ********************************************************************************************************/
 
 
 namespace Kajona\System\System;
 
 /**
- * Base class for the tree nodes based on a class of type InterfaceJStreeNodeLoader.
+ * Base class for the tree nodes based on a class of type JStreeNodeLoaderInterface.
  * This class actually retrieves the nodes for a tree based on the given JsTreeNodeLoader
  *
  * @package module_system
@@ -26,15 +24,15 @@ class SystemJSTreeBuilder
     const STR_PARAM_INITIALTOGGLING = "jstree_initialtoggling";
     const STR_PARAM_LOADALLCHILDNOES = "jstree_loadallchildnodes";
 
-
+    /** @var JStreeNodeLoaderInterface|null  */
     private $objNodeLoader = null;
 
     /**
      * SystemJSTreeBuilder constructor.
      *
-     * @param InterfaceJStreeNodeLoader $objNodeGetter
+     * @param JStreeNodeLoaderInterface $objNodeGetter
      */
-    public function __construct(InterfaceJStreeNodeLoader $objNodeGetter)
+    public function __construct(JStreeNodeLoaderInterface $objNodeGetter)
     {
         $this->objNodeLoader = $objNodeGetter;
     }

@@ -26,9 +26,6 @@
      -->
 
     <!-- setting windows specific properties-->
-    <condition property="yuicompressor" value="yuicompressor-2.4.7.jar" else="yuicompressor-2.4.8.jar"> <!--using 2.4.7 for windows because of a bug 2.4.8 for windows-->
-        <os family="windows" />
-    </condition>
     <condition property="script-suffix" value=".bat" else="">
         <os family="windows" />
     </condition>
@@ -101,7 +98,7 @@
     <target name="buildSqliteFull" depends="
 		    								init,
 					    					buildProject, installProjectSqlite,
-					    					lint,phpunit,jasmine,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox,
+					    					lint,phpunit,jasmine,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,
 					    					buildAllInOneZip, buildFullZip" />
 
     <target name="buildMysql" depends="
@@ -270,9 +267,9 @@
         <mkdir  dir="${basedir}${buildPath}/api"/>
         <mkdir  dir="${basedir}${buildPath}/logs"/>
         <mkdir  dir="${basedir}${buildPath}/coverage"/>
-        <mkdir  dir="${basedir}${buildPath}/code-browser"/>
+        <!--<mkdir  dir="${basedir}${buildPath}/code-browser"/>-->
         <mkdir  dir="${basedir}${buildPath}/pdepend"/>
-        <mkdir  dir="${basedir}${buildPath}/phpdox"/>
+        <!--<mkdir  dir="${basedir}${buildPath}/phpdox"/>-->
         <mkdir  dir="${basedir}${buildPath}/composerbuild"/>
 
     </target>
@@ -479,6 +476,7 @@
             <fileset dir="${basedir}${tempPath}" includes="**/less-full.js"/>
             <fileset dir="${basedir}${tempPath}" includes="**/*.odt"/>
             <fileset dir="${basedir}${tempPath}" includes="**/core*/*/tests/**"/>
+            <fileset dir="${basedir}${tempPath}" includes="**/core*/*/scripts/spec/**"/>
             <fileset dir="${basedir}${tempPath}" includes="**/setupproject.php"/>
             <fileset dir="${basedir}${tempPath}" includes="**/V4toV5Migration.php"/>
             <fileset dir="${basedir}${tempPath}" includes="**/.git"/>
@@ -496,7 +494,7 @@
 
 
 
-    <target name="compressCss" description="Minifies the css files using the yui compressor">
+    <target name="compressCss" description="Minifies the css files using the cleancss compressor">
         <echo>Compressing css files</echo>
 
         <copy todir="${basedir}${tempPath}">
@@ -506,12 +504,9 @@
             <globmapper from="*.css" to="*-full.css"/>
         </copy>
 
-        <apply executable="java" parallel="false" dest="${basedir}${tempPath}" verbose="true" force="true" failonerror="true">
+        <apply executable="${basedir}${jsPath}/node_modules/.bin/cleancss${script-suffix-cmd}" parallel="false" dest="${basedir}${tempPath}" verbose="false" failonerror="true">
             <fileset dir="${basedir}${tempPath}" includes="**/*-full.css"/>
-            <arg line="-jar"/>
-            <arg path="${yuicompressor}"/>
-            <arg line="--charset utf-8"/>
-            <arg line="-o"/>
+            <arg line="--output"/>
             <mapper type="glob" from="*-full.css" to="*.css"/>
             <targetfile/>
             <srcfile/>
@@ -519,7 +514,7 @@
     </target>
 
 
-    <target name="compressJs" description="Minifies the js files using the yui compressor">
+    <target name="compressJs" description="Minifies the js files using the uglifyjs compressor">
         <echo>Compressing js files</echo>
 
         <copy todir="${basedir}${tempPath}"> <!-- add verbose="true" to see the list of applied files -->
@@ -529,19 +524,19 @@
                 <exclude name="**/jquery*.js" />
                 <exclude name="**/ckeditor/**/*.js" />
                 <exclude name="core*/module_*/tests/**/*.js" />
+                <exclude name="core*/*/scripts/spec/*.js" />
             </fileset>
             <globmapper from="*.js" to="*-full.js"/>
         </copy>
 
-        <apply executable="java" parallel="false" dest="${basedir}${tempPath}" verbose="true" force="true" failonerror="true">
+        <apply executable="${basedir}${jsPath}/node_modules/.bin/uglifyjs${script-suffix-cmd}" parallel="false" dest="${basedir}${tempPath}" verbose="false" failonerror="true">
             <fileset dir="${basedir}${tempPath}" includes="**/*-full.js"/>
-            <arg line="-jar"/>
-            <arg path="${yuicompressor}"/>
-            <arg line="--charset utf-8"/>
-            <arg line="-o"/>
+            <srcfile/>
+            <arg line="--compress"/>
+            <arg line="--mangle"/>
+            <arg line="--output"/>
             <mapper type="glob" from="*-full.js" to="*.js"/>
             <targetfile/>
-            <srcfile/>
         </apply>
     </target>
 
@@ -636,6 +631,8 @@
 
     <!-- executes javascript jasmine tests -->
     <target name="jasmine">
+
+        <!--currently disabled due to requirejs migration-->
         <exec dir="${basedir}${jsPath}" executable="${path.node}" failonerror="on">
             <arg line="./node_modules/jasmine/bin/jasmine.js"/>
         </exec>

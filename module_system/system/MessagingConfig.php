@@ -113,8 +113,8 @@ class MessagingConfig extends Model implements ModelInterface
     public static function getConfigForUserAndProvider($strUserid, MessageproviderInterface $objProvider)
     {
         $objORM = new OrmObjectlist();
-        $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND config_user = ?", $strUserid));
-        $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND config_provider = ?", get_class($objProvider)));
+        $objORM->addWhereRestriction(new OrmCondition("config_user = ?", $strUserid));
+        $objORM->addWhereRestriction(new OrmCondition("config_provider = ?", get_class($objProvider)));
         $objConfig = $objORM->getSingleObject(get_called_class());
 
         if ($objConfig === null) {

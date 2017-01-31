@@ -35,10 +35,10 @@ class TemplateBlocksParser
         while (preg_match("/<".$strBlockDefinition."([\ a-zA-Z0-9=']*)(.*) ".TemplateKajonaSections::ATTR_NAME."=(\"|\')([\-\ a-zA-Z0-9]*)(\"|\')(.*)>/i", $strTemplate, $arrMatches) > 0) {
 
             $strPattern = $arrMatches[0];
-            $intStart = uniStrpos($strTemplate, $strPattern);
+            $intStart = StringUtil::indexOf($strTemplate, $strPattern);
 
-            $intEnd = uniStrpos($strTemplate, "</".$strBlockDefinition.">");
-            $intEnd += uniStrlen("</".$strBlockDefinition.">");
+            $intEnd = StringUtil::indexOf($strTemplate, "</".$strBlockDefinition.">");
+            $intEnd += StringUtil::length("</".$strBlockDefinition.">");
 
 
             if ($intStart !== false && $intEnd !== false) {
@@ -57,12 +57,12 @@ class TemplateBlocksParser
                     }
 
                     //delete substring before and after
-                    $strTemplateSection = uniSubstr($strTemplate, $intStart, $intEnd);
+                    $strTemplateSection = StringUtil::substring($strTemplate, $intStart, $intEnd);
 
-                    $strContent = uniSubstr($strTemplateSection, uniStrlen($arrMatches[0]), uniStrlen("</".$strBlockDefinition.">") * -1);
+                    $strContent = StringUtil::substring($strTemplateSection, StringUtil::length($arrMatches[0]), StringUtil::length("</".$strBlockDefinition.">") * -1);
                     $arrBlocks[$arrMatches[4]] = new TemplateBlockContainer($strBlockDefinition, $arrMatches[4], $arrMatches[0], $strContent, $strTemplateSection);
 
-                    $strTemplate = uniStrReplace($strTemplateSection, "", $strTemplate);
+                    $strTemplate = StringUtil::replace($strTemplateSection, "", $strTemplate);
                 }
             }
             else {
@@ -87,7 +87,7 @@ class TemplateBlocksParser
         foreach ($arrBlocks as $strBlockName => $strContent) {
             if (isset($arrBlocksOnTemplate[$strBlockName])) {
                 $objCurBlock = $arrBlocksOnTemplate[$strBlockName];
-                $strTemplate = uniStrReplace($objCurBlock->getStrFullSection(), $strContent, $strTemplate);
+                $strTemplate = StringUtil::replace($objCurBlock->getStrFullSection(), $strContent, $strTemplate);
             }
 
         }

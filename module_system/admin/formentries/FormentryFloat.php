@@ -8,6 +8,7 @@ namespace Kajona\System\Admin\Formentries;
 
 use Kajona\System\Admin\FormentryPrintableInterface;
 use Kajona\System\System\Carrier;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\Validators\NumericValidator;
 
 
@@ -40,7 +41,7 @@ class FormentryFloat extends FormentryBase implements FormentryPrintableInterfac
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
 
-        $strValue = uniStrReplace(".", Carrier::getInstance()->getObjLang()->getLang("numberStyleDecimal", "system"), $this->getStrValue());
+        $strValue = StringUtil::replace(".", Carrier::getInstance()->getObjLang()->getLang("numberStyleDecimal", "system"), $this->getStrValue());
         $strReturn .= $objToolkit->formInputText($this->getStrEntryName(), $this->getStrLabel(), $strValue, "inputText", "", $this->getBitReadonly());
 
         return $strReturn;
@@ -74,7 +75,7 @@ class FormentryFloat extends FormentryBase implements FormentryPrintableInterfac
 
 
     private function convertValueToFloat() {
-        $strValue = $strValue = uniStrReplace(array(",", Carrier::getInstance()->getObjLang()->getLang("numberStyleDecimal", "system")), ".", $this->getStrValue());
+        $strValue = $strValue = StringUtil::replace(array(",", Carrier::getInstance()->getObjLang()->getLang("numberStyleDecimal", "system")), ".", $this->getStrValue());
         $this->setStrValue($strValue);
     }
 }

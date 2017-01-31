@@ -10,7 +10,6 @@ namespace Kajona\System\System;
 
 use Kajona\System\System\Imageplugins\ImageOperationInterface;
 
-
 /**
  * Class to manipulate and output images.
  *
@@ -544,7 +543,7 @@ class Image2
         $strCacheId = self::buildCacheId("init", $arrayValues);
 
         foreach ($this->arrOperations as $objOperation) {
-            $strOpCacheName = "_".uniSubstr(get_class($objOperation), 12);
+            $strOpCacheName = "_".StringUtil::substring(get_class($objOperation), 12);
             $strOpCacheValues = $objOperation->getCacheIdValues();
             $strCacheId .= self::buildCacheId($strOpCacheName, $strOpCacheValues);
         }

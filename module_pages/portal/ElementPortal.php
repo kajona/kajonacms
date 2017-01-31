@@ -17,6 +17,7 @@ use Kajona\Pages\System\PagesPortaleditorActionEnum;
 use Kajona\Pages\System\PagesPortaleditorPlaceholderAction;
 use Kajona\Pages\System\PagesPortaleditorSystemidAction;
 use Kajona\System\Portal\PortalController;
+use Kajona\System\System\ActionNotFoundException;
 use Kajona\System\System\CacheManager;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Exception;
@@ -103,8 +104,7 @@ abstract class ElementPortal extends PortalController
     						FROM ".$this->getTable()."
     						WHERE content_id = ? ";
             return Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strSystemid));
-        }
-        else {
+        } else {
             return array();
         }
 
@@ -125,19 +125,26 @@ abstract class ElementPortal extends PortalController
         $this->arrElementData = array_merge($this->getElementContent($this->objElementData->getSystemid()), $this->arrElementData);
 
         //wrap all in a try catch block
+        $strOldAction = $this->getParam("action");
         try {
-            $strReturn = $this->loadData();
-        }
-        catch (Exception $objEx) {
-            //FIXME: error handling is currently disabled
+            try {
+                $strReturn = $this->loadData();
+            } catch (ActionNotFoundException $objEx) {
+                //maybe we need another action, by default the "list" one
+                $this->setParam("action", "list");
+                $strReturn = $this->loadData();
+                $this->setParam("action", $strOldAction);
+            }
+        } catch (Exception $objEx) {
+            $this->setParam("action", $strOldAction);
             //An error occurred during content generation. redirect to error page
-            //$objEx->processException();
-            //if available, show the error-page. on debugging-environments, the exception processing already die()d the process.
-//            if ($this->getPagename() != SystemSetting::getConfigValue("_pages_errorpage_")) {
-//                $this->portalReload(Link::getLinkPortalHref(SystemSetting::getConfigValue("_pages_errorpage_")));
-//            }
+            //if available, show the error-page.
+            if (!empty(SystemSetting::getConfigValue("_pages_errorpage_")) && $this->getPagename() != SystemSetting::getConfigValue("_pages_errorpage_")) {
+                $this->portalReload(Link::getLinkPortalHref(SystemSetting::getConfigValue("_pages_errorpage_")));
+                return "";
+            }
 
-            $strReturn = $objEx->getMessage();
+            $strReturn = Exception::renderException($objEx);
         }
 
         //add an anchor to jump to, but exclude navigation-elements

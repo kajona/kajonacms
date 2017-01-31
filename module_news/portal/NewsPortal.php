@@ -10,6 +10,7 @@
 namespace Kajona\News\Portal;
 
 use Kajona\News\System\NewsCategory;
+use Kajona\News\System\NewsFeed;
 use Kajona\News\System\NewsNews;
 use Kajona\Pages\Portal\PagesPortalController;
 use Kajona\Pages\Portal\PagesPortaleditor;
@@ -23,6 +24,8 @@ use Kajona\System\Portal\PortalInterface;
 use Kajona\System\System\ArraySectionIterator;
 use Kajona\System\System\Link;
 use Kajona\System\System\Objectfactory;
+use Kajona\System\System\Rssfeed;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\TemplateMapper;
 
@@ -132,7 +135,7 @@ class NewsPortal extends PortalController implements PortalInterface
                 $objMapper->addPlaceholder("news_text", $objOneNews->getStrText());
 
                 //reset more link? -> no text, no image and no redirect page
-                if (uniStrlen(htmlStripTags($objOneNews->getStrText())) == 0 && uniStrlen($objOneNews->getStrImage()) == 0 && ($objOneNews->getIntRedirectEnabled() == "0" || $objOneNews->getStrRedirectPage() == "")) {
+                if (StringUtil::length(htmlStripTags($objOneNews->getStrText())) == 0 && StringUtil::length($objOneNews->getStrImage()) == 0 && ($objOneNews->getIntRedirectEnabled() == "0" || $objOneNews->getStrRedirectPage() == "")) {
                     $objMapper->addPlaceholder("news_more_link", "");
                 }
 
@@ -205,7 +208,6 @@ class NewsPortal extends PortalController implements PortalInterface
         /** @var $objNews NewsNews */
         $objNews = Objectfactory::getInstance()->getObject($this->getSystemid());
         if ($objNews != null && $objNews instanceof NewsNews && $objNews->rightView() && $objNews->getIntRecordStatus() == "1") {
-
             //see if we should generate a redirect instead
             if ($objNews->getIntRedirectEnabled() == "1" && $objNews->getStrRedirectPage() != "") {
                 $this->portalReload(Link::getLinkPortalHref($objNews->getStrRedirectPage()));
@@ -306,7 +308,6 @@ class NewsPortal extends PortalController implements PortalInterface
     private function loadPostacomments($strNewsSystemid, $strTemplateSection)
     {
         if ($this->isPostacommentOnTemplate($this->arrElementData["news_template"], $strTemplateSection)) {
-
             $objPacModule = SystemModule::getModuleByName("postacomment");
 
             $arrReturn = array();
@@ -346,4 +347,79 @@ class NewsPortal extends PortalController implements PortalInterface
         $strTemplateID = $this->objTemplate->readTemplate("/module_news/".$strTemplate, $strSection);
         return $this->objTemplate->containsPlaceholder($strTemplateID, "news_commentlist") || $this->objTemplate->containsPlaceholder($strTemplateID, "news_nrofcomments");
     }
+
+
+    /**
+     * This method loads all data to needed for a newsfeed
+     *
+     * @return string
+     */
+    protected function actionNewsFeed()
+    {
+        $strReturn = "";
+
+        //if no sysid was given, try to load from feedname
+        $objNewsfeed = null;
+        if ($this->getParam("feedTitle") != "") {
+            $objNewsfeed = NewsFeed::getFeedByUrlName($this->getParam("feedTitle"));
+        }
+
+        if ($objNewsfeed != null) {
+            //and load all news belonging to the selected category
+            if ($objNewsfeed->getStrCat() != "0") {
+                $arrNews = NewsFeed::getNewsList($objNewsfeed->getStrCat(), $objNewsfeed->getIntAmount());
+            } else {
+                $arrNews = NewsFeed::getNewsList("", $objNewsfeed->getIntAmount());
+            }
+
+            $strReturn .= $this->createNewsfeedXML($objNewsfeed->getStrTitle(), $objNewsfeed->getStrLink(), $objNewsfeed->getStrDesc(), $objNewsfeed->getStrPage(), $arrNews);
+
+            //and count the request
+            $objNewsfeed->incrementNewsCounter();
+        } else {
+            $strReturn .= $this->createNewsfeedXML("", "", "", "", array());
+        }
+
+
+        return $strReturn;
+    }
+
+    /**
+     * Responsible for creating the xml-feed
+     *
+     * @param string $strTitle
+     * @param string $strLink
+     * @param string $strDesc
+     * @param string $strPage
+     * @param NewsNews[] $arrNews
+     *
+     * @return string
+     */
+    private function createNewsfeedXML($strTitle, $strLink, $strDesc, $strPage, $arrNews)
+    {
+        $objFeed = new Rssfeed();
+        $objFeed->setStrTitle($strTitle);
+        $objFeed->setStrLink($strLink);
+        $objFeed->setStrDesc($strDesc);
+
+        foreach ($arrNews as $objOneNews) {
+            if ($objOneNews->rightView()) {
+                $objDate = $objOneNews->getObjStartDate();
+                if ($objDate == null) {
+                    $objDate = new \Kajona\System\System\Date();
+                }
+
+                $objFeed->addElement(
+                    $objOneNews->getStrTitle(),
+                    Link::getLinkPortalHref($strPage, "", "newsDetail", "", $objOneNews->getSystemid(), "", $objOneNews->getStrTitle()),
+                    $objOneNews->getSystemid(),
+                    $objOneNews->getStrIntro(),
+                    mktime($objDate->getIntHour(), $objDate->getIntMin(), $objDate->getIntSec(), $objDate->getIntMonth(), $objDate->getIntDay(), $objDate->getIntYear())
+                );
+            }
+        }
+
+        return $objFeed->generateFeed();
+    }
+
 }

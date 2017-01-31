@@ -25,6 +25,16 @@ abstract class AbstractController
     const STR_MODULEID_ANNOTATION = "@moduleId";
 
     /**
+     * May be used at an action method to define the return type.
+     * Please note, that the return type stated by the action is set up before the action itself is being executed,
+     * so you may change the type afterwards again.
+     * Possible values are available at @link{HttpResponsetypes}, e.g. xml, json, csv, jpeg
+     *
+     * @see HttpResponsetypes
+     */
+    const STR_RESPONSETYPE_ANNOTATION = "@responseType";
+
+    /**
      * Object containing config-data
      *
      * @inject system_config
@@ -55,6 +65,18 @@ abstract class AbstractController
      * @var Lang
      */
     protected $objLang;
+
+    /**
+     * @inject system_object_factory
+     * @var Objectfactory
+     */
+    protected $objFactory;
+
+    /**
+     * @inject system_rights
+     * @var Rights
+     */
+    protected $objRights;
 
     /**
      * Instance of the current modules' definition
@@ -116,8 +138,7 @@ abstract class AbstractController
         //Setting SystemID
         if ($strSystemid == "") {
             $this->setSystemid(Carrier::getInstance()->getParam("systemid"));
-        }
-        else {
+        } else {
             $this->setSystemid($strSystemid);
         }
 
@@ -135,18 +156,103 @@ abstract class AbstractController
             $arrAnnotationValues = $objReflection->getAnnotationValuesFromClass(self::STR_MODULE_ANNOTATION);
             if (count($arrAnnotationValues) > 0) {
                 $this->setArrModuleEntry("modul", trim($arrAnnotationValues[0]));
+                $this->setArrModuleEntry("module", trim($arrAnnotationValues[0]));
+            } else {
+                throw new Exception("controller ".get_called_class()." is missing a ".self::STR_MODULE_ANNOTATION." annotation", Exception::$level_FATALERROR);
             }
-            $this->setArrModuleEntry("module", trim($arrAnnotationValues[0]));
         }
 
         if (!isset($this->arrModule["moduleId"])) {
             $arrAnnotationValues = $objReflection->getAnnotationValuesFromClass(self::STR_MODULEID_ANNOTATION);
             if (count($arrAnnotationValues) > 0) {
                 $this->setArrModuleEntry("moduleId", constant(trim($arrAnnotationValues[0])));
+            } else {
+                throw new Exception("controller ".get_called_class()." is missing a ".self::STR_MODULEID_ANNOTATION." annotation", Exception::$level_FATALERROR);
             }
         }
 
         $this->strLangBase = $this->getArrModule("modul");
+    }
+
+
+    /**
+     * This method triggers the internal processing.
+     * It may be overridden if required, e.g. to implement your own action-handling.
+     * By default, the method to be called is set up out of the action-param passed.
+     * Example: The action requested is named "newPage". Therefore, the framework tries to
+     * call actionNewPage(). If now method matching the schema is found, nothing is done.
+     * <b> Please note that this is different from the admin-handling! </b> In the case of admin-classes,
+     * an exception is thrown. But since there could be many modules on a single page, not each module
+     * may be triggered.
+     * Since Kajona 4.0, the check on declarative permissions via annotations is supported.
+     * Therefore the list of permissions, named after the "permissions" annotation are validated against
+     * the module currently loaded.
+     *
+     *
+     * @param string $strAction
+     *
+     * @see Rights::validatePermissionString
+     * @throws Exception
+     * @return string
+     * @since 3.4
+     */
+    public function action($strAction = "")
+    {
+
+        if ($strAction != "") {
+            $this->setAction($strAction);
+        }
+
+        $strAction = $this->getAction();
+
+        //search for the matching method - build method name
+        $strMethodName = "action".StringUtil::toUpperCase($strAction[0]).StringUtil::substring($strAction, 1);
+        $objReflection = new Reflection(get_class($this));
+
+        if (!method_exists($this, $strMethodName)) {
+            //and quit. nothing to do here, method not existing
+            $this->strOutput = Carrier::getInstance()->getObjToolkit("admin")->warningBox("called method ".$strMethodName." not existing for class ".get_called_class());
+            $objException = new ActionNotFoundException("called method ".$strMethodName." not existing for class ".get_called_class(), Exception::$level_ERROR);
+            $this->strOutput = Exception::renderException($objException);
+            throw $objException;
+        }
+
+
+
+        $strPermissions = $objReflection->getMethodAnnotationValue($strMethodName, "@permissions");
+        if ($strPermissions !== false) {
+            //fetch the object to validate, either the module or a directly referenced object
+            if (validateSystemid($this->getSystemid()) && $this->objFactory->getObject($this->getSystemid()) != null) {
+                $objObjectToCheck = $this->objFactory->getObject($this->getSystemid());
+            } else {
+                $objObjectToCheck = $this->getObjModule();
+            }
+
+            if (!$this->objRights->validatePermissionString($strPermissions, $objObjectToCheck)) {
+                ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
+                $this->strOutput = Carrier::getInstance()->getObjToolkit("admin")->warningBox($this->getLang("commons_error_permissions"));
+                $objException = new AuthenticationException("you are not authorized/authenticated to call this action", Exception::$level_ERROR);
+
+                if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML())) {
+                    throw $objException;
+                } else {
+                    //todo: throw exception, too?
+                    $objException->setIntDebuglevel(0);
+                    $objException->processException();
+                    return $this->strOutput;
+                }
+            }
+        }
+
+        $strReturnType = $objReflection->getMethodAnnotationValue($strMethodName, self::STR_RESPONSETYPE_ANNOTATION);
+        if ($strReturnType !== false) {
+            ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::getTypeForString(StringUtil::toLowerCase($strReturnType)));
+        }
+
+        $this->strOutput = $this->$strMethodName();
+
+
+        return $this->strOutput;
     }
 
 
@@ -184,7 +290,7 @@ abstract class AbstractController
      * @return mixed
      * @final
      */
-    public final function getAllParams()
+    final public function getAllParams()
     {
         return Carrier::getAllParams();
     }
@@ -195,7 +301,7 @@ abstract class AbstractController
      * @return string
      * @final
      */
-    public final function getAction()
+    final public function getAction()
     {
         return (string)$this->strAction;
     }
@@ -207,7 +313,7 @@ abstract class AbstractController
      *
      * @return void
      */
-    public final function setAction($strAction)
+    final public function setAction($strAction)
     {
         $this->strAction = htmlspecialchars(trim($strAction), ENT_QUOTES, "UTF-8", false);
     }
@@ -224,13 +330,12 @@ abstract class AbstractController
      * @return bool
      * @final
      */
-    public final function setSystemid($strID)
+    final public function setSystemid($strID)
     {
         if (validateSystemid($strID)) {
             $this->strSystemid = $strID;
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -241,7 +346,7 @@ abstract class AbstractController
      * @return string
      * @final
      */
-    public final function getSystemid()
+    final public function getSystemid()
     {
         return $this->strSystemid;
     }
@@ -251,7 +356,7 @@ abstract class AbstractController
      *
      * @final
      */
-    public final function unsetSystemid()
+    final public function unsetSystemid()
     {
         $this->strSystemid = "";
     }
@@ -319,8 +424,7 @@ abstract class AbstractController
     {
         if (isset($this->arrModule[$strKey])) {
             return $this->arrModule[$strKey];
-        }
-        else {
+        } else {
             return "";
         }
     }

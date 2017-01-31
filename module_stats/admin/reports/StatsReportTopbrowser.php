@@ -13,10 +13,8 @@ use Kajona\System\Admin\ToolkitAdmin;
 use Kajona\System\System\Database;
 use Kajona\System\System\GraphFactory;
 use Kajona\System\System\Lang;
-use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Session;
 use Kajona\System\System\SystemSetting;
-use Kajona\System\System\UserUser;
 
 /**
  * This plugin creates a view common numbers, such as "user online" oder "total pagehits"
@@ -126,7 +124,7 @@ class StatsReportTopbrowser implements AdminStatsreportsInterface
         $intItemsPerPage = $objUser != null ? $objUser->getIntItemsPerPage() : SystemSetting::getConfigValue("_admin_nr_of_rows_");
         foreach ($arrStats as $strName => $arrOneStat) {
             //Escape?
-            if ($intI >= $objUser->$intItemsPerPage()) {
+            if ($intI >= $intItemsPerPage) {
                 break;
             }
 
@@ -176,8 +174,7 @@ class StatsReportTopbrowser implements AdminStatsreportsInterface
 
             if (!isset($arrReturn[$strInfo])) {
                 $arrReturn[$strInfo] = $arrRow["anzahl"];
-            }
-            else {
+            } else {
                 $arrReturn[$strInfo] += $arrRow["anzahl"];
             }
         }
@@ -214,8 +211,7 @@ class StatsReportTopbrowser implements AdminStatsreportsInterface
                 $arrKeyValues[$strName] = $floatPercentage;
                 $arrValues[] = $floatPercentage;
                 $arrLabels[] = $strName;
-            }
-            else {
+            } else {
                 break;
             }
         }

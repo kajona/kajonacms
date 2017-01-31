@@ -291,6 +291,25 @@ When it comes to saving the properties to the database, all values are checked f
 
 The OR object-update mapper processes the annotation and skips the internal escaping routine for this single property.
 
+##ORM 1:n relations
+Many objects make use of other objects, thus creating relations between objects.
+Therefore the or mapper is able to handle properties holding an array of target-objects:
+
+	/**
+	 * @objectList object2another (source="source_id", target="target_id")
+	 */
+	 private $arrAssignedObjects = array();
+
+In the example above, the orm schemamanager would create a mapping-table named `object2another` containing the columns `source_id` and `target_id`. Whenever
+ an the source-object (the object holding the `arrAssignedObjects` property) is either saved or initialized, the assigned objects are processed, too:
+ 
+* object update: the assigned objects (or rather their ids) are added to the mapping-table. If an assigned object is not yet persited to the database, an updateObjectToDb() is 
+trigger on the assigned object before. Objects being removed, so no longer present in the assignment-array will be removed from the mapping table.
+* object init: the list of assigned objects is prepared on load of the source-object, too. To avoid performance issues with large lists of object-assignemts, the target-objects
+re fetched at first access, only. This means the whole relation is handled as a lazy-loaded list. This is achieved by a custom `ArrayObject` implementation (see https://github.com/kajona/kajonacms/blob/master/module_system/system/OrmAssignmentArray.php).
+
+> Heads ups! While the assignment-array is compatible with most array-based php-functions, there are some special cases like array_map requireing an explicit cast to `Array` before passing the assignment array to the function. 
+
 ##ORM Schema Manager
 
 Since a single object comes with all relevant metadata in form of annotations, the schema manager is able to generate the CREATE TABLE statement on the fly.

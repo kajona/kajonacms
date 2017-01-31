@@ -24,7 +24,7 @@ class SeleniumUtil {
      */
     static getBaseUrl() {
         return browser.baseUrl;
-    }
+    };
 
     /**
      *
@@ -33,7 +33,7 @@ class SeleniumUtil {
      */
     static gotToUrl(strUrl) {
         return SeleniumUtil.getWebDriver().get(SeleniumUtil.getBaseUrl()+"/"+strUrl);
-    }
+    };
 
     /**
      * Gets the current webdriver instance
@@ -42,7 +42,41 @@ class SeleniumUtil {
      */
     static getWebDriver() {
         return browser.driver;
-    }
+    };
+
+    /**
+     * If user is logged in, this method logs out the user
+     * If user is not logged in, this method logs in the user
+     *
+     * @param strUserName
+     * @param strPassword
+     *
+     * @returns {webdriver.promise.Promise<void>}
+     */
+    static loginOrLogout(strUserName, strPassword) {
+
+        var SeleniumUtil = this;
+        var Constants = requireHelper('/pageobject/Constants');
+        var LoginPage = requireHelper('/pageobject/LoginPage.js');
+        var AdminLandingPage = requireHelper('/pageobject/AdminLandingPage.js');
+
+        //check if user is not logged in -> if yes log in
+        return LoginPage.getPage().then(function (loginPage) {
+            return SeleniumUtil.getWebDriver().isElementPresent(By.xpath(Constants.LOGINPAGE_XPATH_CONTAINER)).then(function(bitLoginContainerIsPresent) {
+
+                //if login containe ris present => login
+                if(bitLoginContainerIsPresent) {
+                    return loginPage.login(strUserName, strPassword);
+                }
+
+                //else logout user
+                let page = AdminLandingPage.getPage();
+                return page.then(function (adminlandingPage) {
+                    return adminlandingPage.topMenu.logout();
+                });
+            });
+        });
+    };
 }
 
 module.exports = SeleniumUtil;

@@ -85,7 +85,6 @@ class OrmSchemamanager extends OrmBase {
      * @param string $strClass
      *
      * @return array
-     * @throws class_orm_exception
      * @throws OrmException
      */
     private function collectTableDefinitions($strClass) {
@@ -102,7 +101,7 @@ class OrmSchemamanager extends OrmBase {
             $arrTable = explode(".", $strValue);
 
             if(count($arrTable) != 2)
-                throw new class_orm_exception("Target table for ".$strClass." is not in table.primaryColumn format", class_orm_exception::$level_ERROR);
+                throw new OrmException("Target table for ".$strClass." is not in table.primaryColumn format", OrmException::$level_ERROR);
 
             $objTable = new OrmSchemamanagerTable($arrTable[0]);
             if(count($arrTxSafe) == 1)
@@ -121,7 +120,7 @@ class OrmSchemamanager extends OrmBase {
                 $strTargetDataType = DbDatatypes::STR_TYPE_CHAR254;
 
             if(!in_array($strTargetDataType, self::$arrColumnDataTypes))
-                throw new class_orm_exception("Datatype ".$strTargetDataType." is unknown (".$strProperty."@".$strClass.")", class_orm_exception::$level_ERROR);
+                throw new OrmException("Datatype ".$strTargetDataType." is unknown (".$strProperty."@".$strClass.")", OrmException::$level_ERROR);
 
             $arrColumn = explode(".", $strTableColumn);
 

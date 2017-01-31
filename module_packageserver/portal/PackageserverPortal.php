@@ -12,8 +12,7 @@ use Kajona\Packageserver\System\PackageserverLog;
 use Kajona\System\Portal\PortalController;
 use Kajona\System\Portal\PortalInterface;
 use Kajona\System\System\Exception;
-use Kajona\System\System\HttpResponsetypes;
-use Kajona\System\System\ResponseObject;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemSetting;
 
 /**
@@ -37,7 +36,7 @@ class PackageserverPortal extends PortalController implements PortalInterface
      *
      * @return string|json
      * @permissions view
-     * @xml
+     * @responseType json
      */
     protected function actionList()
     {
@@ -46,7 +45,7 @@ class PackageserverPortal extends PortalController implements PortalInterface
 
 
         $strRepoId = SystemSetting::getConfigValue("_packageserver_repo_v4_id_");
-        if($this->getParam("protocolversion") >= 5) {
+        if ($this->getParam("protocolversion") >= 5) {
             $strRepoId = SystemSetting::getConfigValue("_packageserver_repo_v5_id_");
         }
 
@@ -58,7 +57,6 @@ class PackageserverPortal extends PortalController implements PortalInterface
         $strNameFilter = trim($this->getParam("title")) != "" ? trim($this->getParam("title")) : false;
 
         if ($this->isValidPagingParameter($intStart) && $this->isValidPagingParameter($intEnd)) {
-
             if ($intEnd >= $intStart) {
                 $intNrOfFiles = $this->getAllPackagesCount($strRepoId, $strTypeFilter, $strNameFilter);
                 $arrDBFiles = $this->getAllPackages($strRepoId, $strTypeFilter, $intStart, $intEnd, $strNameFilter);
@@ -71,9 +69,7 @@ class PackageserverPortal extends PortalController implements PortalInterface
                 $objManager = new PackagemanagerManager();
 
                 foreach ($arrDBFiles as $objOneFile) {
-
                     try {
-
                         $objMetadata = $objManager->getPackageManagerForPath($objOneFile->getStrFilename());
                         $arrPackages[] = array(
                             "systemid"    => $objOneFile->getSystemid(),
@@ -83,14 +79,12 @@ class PackageserverPortal extends PortalController implements PortalInterface
                             "type"        => $objMetadata->getObjMetadata()->getStrType()
                         );
 
-                    }
-                    catch (Exception $objEx) {
+                    } catch (Exception $objEx) {
 
                     }
                 }
 
                 PackageserverLog::generateDlLog($strNameFilter !== false ? $strNameFilter : "", isset($_SERVER["REMOTE_ADDR"]) ? $_SERVER["REMOTE_ADDR"] : "::1", urldecode($this->getParam("domain")));
-                ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
             }
         }
 
@@ -107,8 +101,7 @@ class PackageserverPortal extends PortalController implements PortalInterface
     {
         if ($strParam === null || trim($strParam) === "") {
             return $objDefaultValue;
-        }
-        elseif (!is_numeric($strParam)) {
+        } elseif (!is_numeric($strParam)) {
             // type filter has unknown value
             return $objDefaultValue;
         }
@@ -156,47 +149,43 @@ class PackageserverPortal extends PortalController implements PortalInterface
 
         foreach ($arrSubfiles as $objOneFile) {
             if ($objOneFile->getIntType() == MediamanagerFile::$INT_TYPE_FILE) {
-
                 $bitAdd = true;
-                
+
                 //filename based check if the file should be included
                 if ($strNameFilter !== false) {
                     $intStart = null;
                     $intEnd = null;
-                    if (uniStrpos($strNameFilter, ",") !== false) {
+                    if (StringUtil::indexOf($strNameFilter, ",") !== false) {
                         if (!in_array($objOneFile->getStrName(), explode(",", $strNameFilter))) {
                             $bitAdd = false;
                         }
-                    }
-                    elseif (uniSubstr($objOneFile->getStrName(), 0, uniStrlen($strNameFilter)) != $strNameFilter) {
+                    } elseif (StringUtil::substring($objOneFile->getStrName(), 0, StringUtil::length($strNameFilter)) != $strNameFilter) {
                         $bitAdd = false;
                     }
                 }
-                
+
                 //validate against the category
-                if($strCategoryFilter !== false) {
+                if ($strCategoryFilter !== false) {
                     try {
                         $objManager = new PackagemanagerManager();
                         $objMetadata = $objManager->getPackageManagerForPath($objOneFile->getStrFilename());
-                        if($objMetadata->getObjMetadata()->getStrType() != $strCategoryFilter) {
+                        if ($objMetadata->getObjMetadata()->getStrType() != $strCategoryFilter) {
                             $bitAdd = false;
                         }
-                    }
-                    catch (Exception $objEx) {
+                    } catch (Exception $objEx) {
 
                     }
                 }
 
-                if($bitAdd) {
+                if ($bitAdd) {
                     $arrReturn[] = $objOneFile;
                 }
-            }
-            else {
+            } else {
                 $arrReturn = array_merge($arrReturn, $this->getAllPackages($objOneFile->getSystemid(), $strCategoryFilter, $intStart, $intEnd, $strNameFilter));
             }
         }
 
-        if(empty($arrReturn)) {
+        if (empty($arrReturn)) {
             return array();
         }
 

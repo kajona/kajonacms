@@ -8,7 +8,6 @@
 namespace Kajona\Navigation\System;
 
 use Kajona\Pages\Portal\ElementPortal;
-use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
@@ -18,8 +17,8 @@ use Kajona\System\System\LanguagesLanguage;
 use Kajona\System\System\Model;
 use Kajona\System\System\ModelInterface;
 use Kajona\System\System\Objectfactory;
+use Kajona\System\System\OrmCondition;
 use Kajona\System\System\OrmObjectlist;
-use Kajona\System\System\OrmObjectlistRestriction;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\StringUtil;
 
@@ -53,7 +52,7 @@ class NavigationPoint extends Model implements ModelInterface, AdminListableInte
      * @var string
      * @tableColumn navigation.navigation_page_e
      * @tableColumnDatatype char254
-     * @fieldType objecttags
+     * @fieldType Kajona\System\Admin\Formentries\FormentryFile
      * @fieldLabel navigation_page_e
      *
      * @addSearchIndex
@@ -64,7 +63,7 @@ class NavigationPoint extends Model implements ModelInterface, AdminListableInte
      * @var string
      * @tableColumn navigation.navigation_page_i
      * @tableColumnDatatype char254
-     * @fieldType page
+     * @fieldType Kajona\System\Admin\Formentries\FormentryPage
      * @fieldLabel navigation_page_i
      *
      * @addSearchIndex
@@ -190,7 +189,7 @@ class NavigationPoint extends Model implements ModelInterface, AdminListableInte
     {
         $objOrm = new OrmObjectlist();
         if ($bitJustActive) {
-            $objOrm->addWhereRestriction(new OrmObjectlistRestriction(" AND system_status = 1 ", array()));
+            $objOrm->addWhereRestriction(new OrmCondition("system_status = 1"));
         }
         return $objOrm->getObjectList(get_called_class(), $strSystemid, $intStart, $intEnd);
     }
@@ -250,8 +249,8 @@ class NavigationPoint extends Model implements ModelInterface, AdminListableInte
     public static function loadPagePoint($strPagename)
     {
         $objOrm = new OrmObjectlist();
-        $objOrm->addWhereRestriction(new OrmObjectlistRestriction(" AND system_status = 1 ", array()));
-        $objOrm->addWhereRestriction(new OrmObjectlistRestriction(" AND navigation_page_i = ? ", array($strPagename)));
+        $objOrm->addWhereRestriction(new OrmCondition("system_status = 1"));
+        $objOrm->addWhereRestriction(new OrmCondition("navigation_page_i = ?", array($strPagename)));
         return $objOrm->getObjectList(get_called_class());
     }
 
@@ -298,8 +297,8 @@ class NavigationPoint extends Model implements ModelInterface, AdminListableInte
 
                     //if in alias mode, then check what type of target is requested
                     if ($objOneEntry->getIntType() == PagesPage::$INT_TYPE_ALIAS) {
-                        $strAlias = uniStrtolower($objOneEntry->getStrAlias());
-                        if (uniStrpos($strAlias, "http") !== false) {
+                        $strAlias = StringUtil::toLowerCase($objOneEntry->getStrAlias());
+                        if (StringUtil::indexOf($strAlias, "http") !== false) {
                             $objPoint->setStrPageE($objOneEntry->getStrAlias());
                         }
                         else {
@@ -390,7 +389,7 @@ class NavigationPoint extends Model implements ModelInterface, AdminListableInte
      */
     public function getStrPageI()
     {
-        return uniStrtolower($this->strPageI);
+        return StringUtil::toLowerCase($this->strPageI);
     }
 
     /**
@@ -464,7 +463,7 @@ class NavigationPoint extends Model implements ModelInterface, AdminListableInte
      */
     public function setStrImage($strImage)
     {
-        $strImage = uniStrReplace(_webpath_, "", $strImage);
+        $strImage = StringUtil::replace(_webpath_, "", $strImage);
         $this->strImage = $strImage;
     }
 

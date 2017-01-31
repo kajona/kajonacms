@@ -19,6 +19,7 @@ use Kajona\System\Portal\PortalController;
 use Kajona\System\Portal\PortalInterface;
 use Kajona\System\System\Link;
 use Kajona\System\System\Objectfactory;
+use Kajona\System\System\StringUtil;
 
 /**
  * Portal-part of the navigation. Creates the different navigation-views as sitemap or tree.
@@ -178,7 +179,7 @@ class NavigationPortal extends PortalController implements PortalInterface
 
                 //current point active?
                 $bitActive = false;
-                if (uniStripos($strStack, $arrOneChild["node"]->getSystemid()) !== false) {
+                if (StringUtil::indexOf($strStack, $arrOneChild["node"]->getSystemid(), false) !== false) {
                     $bitActive = true;
                 }
 
@@ -195,7 +196,7 @@ class NavigationPortal extends PortalController implements PortalInterface
 
                 //And load all points below
                 $strChilds = "";
-                if (uniStrpos($strCurrentPoint, "level".($intLevel + 1)) !== false) {
+                if (StringUtil::indexOf($strCurrentPoint, "level".($intLevel + 1)) !== false) {
                     $strChilds = $this->sitemapRecursive($intLevel + 1, $arrOneChild, $strStack);
                 }
 
@@ -210,7 +211,7 @@ class NavigationPortal extends PortalController implements PortalInterface
 
         //wrap into the wrapper-section
         $strWrappedLevel = $this->objTemplate->fillTemplateFile(array("level".$intLevel => $strReturn), "/module_navigation/".$this->arrElementData["navigation_template"], "level_".$intLevel."_wrapper");
-        if (uniStrlen($strWrappedLevel) > 0) {
+        if (StringUtil::length($strWrappedLevel) > 0) {
             $strReturn = $strWrappedLevel;
         }
 
@@ -250,7 +251,7 @@ class NavigationPortal extends PortalController implements PortalInterface
         $strStack = "";
         //search the deepest stack
         foreach ($arrStacks as $strOneStack) {
-            if (uniStrlen($strOneStack) > uniStrlen($strStack)) {
+            if (StringUtil::length($strOneStack) > StringUtil::length($strStack)) {
                 $strStack = $strOneStack;
             }
         }

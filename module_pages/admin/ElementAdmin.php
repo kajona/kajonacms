@@ -29,6 +29,7 @@ use Kajona\System\System\OrmRowcache;
 use Kajona\System\System\Reflection;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\SearchPortalobjectInterface;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\ValidatorInterface;
 
@@ -391,7 +392,7 @@ abstract class ElementAdmin extends AdminController implements SearchPortalobjec
             return new $strName();
         }
 
-        if (uniStrpos($strName, "class_") === false) {
+        if (StringUtil::indexOf($strName, "class_") === false) {
             $strName = "class_".$strName."_validator";
         }
 
@@ -646,7 +647,7 @@ abstract class ElementAdmin extends AdminController implements SearchPortalobjec
      */
     public function getElementDescription()
     {
-        $strName = uniSubstr(get_class($this), uniStrlen("class_"), -6);//TODO class name parsing
+        $strName = StringUtil::substring(get_class($this), StringUtil::length("class_"), -6);//TODO class name parsing
         $strDesc = $this->getLang($strName."_description");
         if ($strDesc == "!".$strName."_description!") {
             $strDesc = "";

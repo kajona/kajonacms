@@ -9,6 +9,7 @@
 
 namespace Kajona\News\Installer;
 
+use Kajona\News\Admin\Elements\ElementNewsAdmin;
 use Kajona\News\System\NewsCategory;
 use Kajona\News\System\NewsFeed;
 use Kajona\News\System\NewsNews;
@@ -35,13 +36,13 @@ class InstallerNews extends InstallerBase implements InstallerRemovableInterface
         $objManager = new OrmSchemamanager();
 
         $strReturn .= "Installing table news_category...\n";
-        $objManager->createTable("Kajona\\News\\System\\NewsCategory");
+        $objManager->createTable(NewsCategory::class);
 
         $strReturn .= "Installing table news...\n";
-        $objManager->createTable("Kajona\\News\\System\\NewsNews");
+        $objManager->createTable(NewsNews::class);
 
         $strReturn .= "Installing table news_feed...\n";
-        $objManager->createTable("Kajona\\News\\System\\NewsFeed");
+        $objManager->createTable(NewsFeed::class);
 
         //register the module
         $this->registerModule(
@@ -49,13 +50,11 @@ class InstallerNews extends InstallerBase implements InstallerRemovableInterface
             _news_module_id_,
             "NewsPortal.php",
             "NewsAdmin.php",
-            $this->objMetadata->getStrVersion(),
-            true,
-            "NewsPortalXml.php"
+            $this->objMetadata->getStrVersion()
         );
 
         $strReturn .= "Installing news-element table...\n";
-        $objManager->createTable("Kajona\\News\\Admin\\Elements\\ElementNewsAdmin");
+        $objManager->createTable(ElementNewsAdmin::class);
 
 
         //Register the element
@@ -209,6 +208,13 @@ class InstallerNews extends InstallerBase implements InstallerRemovableInterface
             $strReturn .= "Updating to 5.1...\n";
             $this->updateModuleVersion("news", "5.1");
             $this->updateElementVersion("news", "5.1");
+        }
+
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if ($arrModule["module_version"] == "5.1") {
+            $strReturn .= "Updating to 6.2...\n";
+            $this->updateModuleVersion("news", "6.2");
+            $this->updateElementVersion("news", "6.2");
         }
 
         return $strReturn."\n\n";

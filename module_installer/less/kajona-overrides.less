@@ -258,10 +258,27 @@ body {
             }
         }
     }
-
-
 }
 
+
+#installer-cli {
+    border: 1px solid @grayDarker;
+    position: fixed;
+    right: 5px;
+    bottom: 5px;
+    height: 200px;
+    width: 500px;
+    .opacity(0.8);
+
+    pre {
+        height: 200px;
+        width: 500px;
+    }
+
+    &.hide {
+        bottom: -250px;
+    }
+}
 
 #loginContainer_title {
     margin-top: 2px;

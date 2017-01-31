@@ -1,6 +1,8 @@
 <?php
 namespace Kajona\Debugging\Debug;
 
+use Kajona\System\System\StringUtil;
+
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
 echo "+-------------------------------------------------------------------------------+\n";
@@ -55,11 +57,11 @@ function getTotalUniquePackagesererSystems() {
 
     $intI = 0;
     foreach(\Kajona\System\System\Carrier::getInstance()->getObjDB()->getPArray($strQuery, array()) as $arrOneRow) {
-        if(uniStrpos($arrOneRow["log_hostname"], "localhost/") === false
-            && uniStrpos($arrOneRow["log_hostname"], "kajona.de") === false
-            && uniStrpos($arrOneRow["log_hostname"], "kajonabase") === false
-            && uniStrpos($arrOneRow["log_hostname"], "aquarium") === false
-            && uniStrpos($arrOneRow["log_hostname"], "stb400s") === false
+        if(StringUtil::indexOf($arrOneRow["log_hostname"], "localhost/") === false
+            && StringUtil::indexOf($arrOneRow["log_hostname"], "kajona.de") === false
+            && StringUtil::indexOf($arrOneRow["log_hostname"], "kajonabase") === false
+            && StringUtil::indexOf($arrOneRow["log_hostname"], "aquarium") === false
+            && StringUtil::indexOf($arrOneRow["log_hostname"], "stb400s") === false
             && $arrOneRow["log_hostname"] != ""
         ) {
             echo sprintf("%4d", $arrOneRow["ANZ"])." => ".$arrOneRow["log_hostname"]."<br />";

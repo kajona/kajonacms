@@ -516,7 +516,7 @@ class GraphJqplot implements GraphInterface
         if($this->isBitDownloadLink()) {
             $strImage = AdminskinHelper::getAdminImage("icon_downloads", Lang::getInstance()->getLang("commons_save_as_image", "system"));
 
-            $strReturn .= "<a style=\"display:none; cursor: pointer; \" id=\"{$strImageExportId}\" onclick=\"KAJONA.admin.jqplotHelper.exportAsImage('{$strChartId}')\"'>
+            $strReturn .= "<a style=\"display:none; cursor: pointer; \" id=\"{$strImageExportId}\" onclick=\"require('jqlot.custom_helper').exportAsImage('{$strChartId}')\"'>
                                    {$strImage}
                                </a>";
         }
@@ -546,41 +546,21 @@ class GraphJqplot implements GraphInterface
         //5. Init Chart
         $strCoreDirectory = Resourceloader::getInstance()->getCorePathForModule("module_jqplot");
         $strReturn .= "<script type='text/javascript'>
-                KAJONA.admin.loader.loadFile([
-                '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/excanvas.js',
-                '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.js',
-                '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.css'], function() {
-                    KAJONA.admin.loader.loadFile([
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.logAxisRenderer.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.barRenderer.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.categoryAxisRenderer.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.canvasTextRenderer.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.canvasAxisTickRenderer.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.canvasAxisLabelRenderer.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.pointLabels.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.cursor.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.dateAxisRenderer.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.enhancedLegendRenderer.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.enhancedPieLegendRenderer.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.pieRenderer.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.highlighter.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.canvasOverlay.js',
-
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom_helper.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom.css',
-
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/filesaver/Blob.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/filesaver/canvas-toBlob.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/filesaver/FileSaver.js'
-
-                    ], function() {
+            require(['jqplot', 'loader'], function(jqplot, loader) {
+                
+                loader.loadFile([
+                    '{$strCoreDirectory}/module_jqplot/scripts/jqplot/jquery.jqplot.css',
+                    '{$strCoreDirectory}/module_jqplot/scripts/kajona/jquery.jqplot.custom.css'
+                ], function() {});
+                
+                require(['jqlot.custom_helper'], function(jqplotHelper) {
                         $.jqplot.sprintf.thousandsSeparator = '$strThousandsChar';
                         $.jqplot.sprintf.decimalMark = '$strDecChar';
 
-                        var objChart_$strChartId = new KAJONA.admin.jqplotHelper.jqPlotChart('$strChartId', '$strTooltipId', '$strResizeableId', '$this->bitIsResizeable', $strChartData, $strChartOptions, $strPostPlotOptions, $strDataPointObjects);
+                        var objChart_$strChartId = new jqplotHelper.jqPlotChart('$strChartId', '$strTooltipId', '$strResizeableId', '$this->bitIsResizeable', $strChartData, $strChartOptions, $strPostPlotOptions, $strDataPointObjects);
                         objChart_$strChartId.render();
-                    });
                 });
+            });
         </script>";
 
         return $strReturn;
@@ -660,7 +640,7 @@ class GraphJqplot implements GraphInterface
 
             //Check if each series has exactly one data point
             foreach($arrSeriesStackedBarCharts as $objSeriesData) {
-                if(!count($objSeriesData->getArrDataPoints()) == 1) {
+                if(count($objSeriesData->getArrDataPoints()) != 1) {
                     $bitChangeMarginAndPadding = false;
                 }
             }

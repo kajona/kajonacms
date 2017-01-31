@@ -32,7 +32,7 @@ class PackagemanagerPharModuleGenerator implements PackagemanagerPharGeneratorIn
      */
     public function generatePhar($strSourceDir, $strTargetPath)
     {
-        if(Config::getInstance()->getPhpIni("phar.readonly") == 1) {
+        if (Config::getInstance()->getPhpIni("phar.readonly") == 1) {
             ini_set("phar.readonly", "0");
         }
 

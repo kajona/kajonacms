@@ -8,6 +8,7 @@ namespace Kajona\System\Admin\Formentries;
 
 use Kajona\System\Admin\FormentryInterface;
 use Kajona\System\System\Carrier;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\Validators\TextValidator;
 
 
@@ -43,7 +44,7 @@ class FormentryImage extends FormentryBase implements FormentryInterface {
     }
 
     public function getStrValue() {
-        return uniStrReplace(_webpath_, "", parent::getStrValue());
+        return StringUtil::replace(_webpath_, "", parent::getStrValue());
     }
 
 }

@@ -18,7 +18,6 @@ use Kajona\System\System\InstallerBase;
 use Kajona\System\System\InstallerInterface;
 use Kajona\System\System\InstallerRemovableInterface;
 use Kajona\System\System\Logger;
-use Kajona\System\System\PharModule;
 use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemSetting;
 use Phar;
@@ -47,7 +46,7 @@ class PackagemanagerPackagemanagerPharmodule extends PackagemanagerPackagemanage
 
         $strTarget = $this->objMetadata->getStrTarget();
         if ($strTarget == "") {
-            $strTarget = uniStrtolower($this->objMetadata->getStrType()."_".createFilename($this->objMetadata->getStrTitle(), true)).".phar";
+            $strTarget = StringUtil::toLowerCase($this->objMetadata->getStrType()."_".createFilename($this->objMetadata->getStrTitle(), true)).".phar";
         }
 
         $arrModules = array_flip(Classloader::getInstance()->getArrModules());
@@ -115,7 +114,7 @@ class PackagemanagerPackagemanagerPharmodule extends PackagemanagerPackagemanage
             return "";
         }
 
-        if (uniStrpos($this->getObjMetadata()->getStrPath(), "core") === false) {
+        if (StringUtil::indexOf($this->getObjMetadata()->getStrPath(), "core") === false) {
             throw new Exception("Current module not located in a core directory.", Exception::$level_ERROR);
         }
 
@@ -201,7 +200,7 @@ class PackagemanagerPackagemanagerPharmodule extends PackagemanagerPackagemanage
         $objPhar = new Phar(_realpath_.$objMetadata->getStrPath());
         $arrReturn = array();
         foreach (new RecursiveIteratorIterator($objPhar) as $objFile) {
-            if (strpos($objFile->getPathname(), "/installer/") !== false && uniSubstr($objFile->getPathname(), -4) === ".php") {
+            if (strpos($objFile->getPathname(), "/installer/") !== false && StringUtil::substring($objFile->getPathname(), -4) === ".php") {
                 /** @var $objInstaller InstallerInterface */
                 $objInstaller = Classloader::getInstance()->getInstanceFromFilename($objFile->getPathname());
                 $arrReturn[] = $objInstaller;

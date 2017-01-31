@@ -10,6 +10,7 @@ namespace Kajona\System\System\Imageplugins;
 
 use Kajona\System\System\Image2;
 use Kajona\System\System\Resourceloader;
+use Kajona\System\System\StringUtil;
 
 
 /**
@@ -52,7 +53,7 @@ class ImageText extends ImageAbstractOperation {
         $strFontPath = Resourceloader::getInstance()->getPathForFile("/system/fonts/" . $this->strFont);
 
         //if within a phar, we need to move on to the extract-folder
-        if(uniStrpos($strFontPath, ".phar") !== false) {
+        if(StringUtil::indexOf($strFontPath, ".phar") !== false) {
             $arrMatches = array();
             if(preg_match("#/core(.*)/(([a-zA-Z_]*)\.phar)#i", $strFontPath, $arrMatches)) {
                 $strFontPath = _realpath_.Resourceloader::getInstance()->getWebPathForModule($arrMatches[3])."/system/fonts/" . $this->strFont;

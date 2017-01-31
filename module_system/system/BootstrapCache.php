@@ -32,6 +32,7 @@ class BootstrapCache
     const CACHE_OBJECTS = "objects";
     const CACHE_SERVICES = "services";
     const CACHE_MODULEIDS = "moduleids";
+    const CACHE_REQUIREJS = "requirejs";
 
 
     /**
@@ -58,6 +59,7 @@ class BootstrapCache
             self::CACHE_OBJECTS,
             self::CACHE_SERVICES,
             self::CACHE_MODULEIDS,
+            self::CACHE_REQUIREJS,
         );
     }
 

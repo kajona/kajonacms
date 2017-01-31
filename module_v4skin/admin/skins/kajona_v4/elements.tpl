@@ -23,32 +23,34 @@ templates!
     </ul>
 </div>
 <script type="text/javascript">
-$(function() {
-    $('.grid > ul.sortable').sortable( {
-        items: 'li[data-systemid!=""]',
-        handle: 'div.thumbnail',
-        cursor: 'move',
-        start: function(event, ui) {
-            oldPos = ui.item.index()
-        },
-        stop: function(event, ui) {
-            if(oldPos != ui.item.index()) {
+require(["jquery", "ajax", "util"], function($, ajax, util) {
+    $(function() {
+        $('.grid > ul.sortable').sortable( {
+            items: 'li[data-systemid!=""]',
+            handle: 'div.thumbnail',
+            cursor: 'move',
+            start: function(event, ui) {
+                oldPos = ui.item.index()
+            },
+            stop: function(event, ui) {
+                if(oldPos != ui.item.index()) {
 
-                //calc the page-offset
-                var intCurPage = $(this).parent(".grid").attr("data-kajona-pagenum");
-                var intElementsPerPage = $(this).parent(".grid").attr("data-kajona-elementsperpage");
+                    //calc the page-offset
+                    var intCurPage = $(this).parent(".grid").attr("data-kajona-pagenum");
+                    var intElementsPerPage = $(this).parent(".grid").attr("data-kajona-elementsperpage");
 
-                var intPagingOffset = 0;
-                if(intCurPage > 1 && intElementsPerPage > 0)
-                    intPagingOffset = (intCurPage*intElementsPerPage)-intElementsPerPage;
+                    var intPagingOffset = 0;
+                    if(intCurPage > 1 && intElementsPerPage > 0)
+                        intPagingOffset = (intCurPage*intElementsPerPage)-intElementsPerPage;
 
-                KAJONA.admin.ajax.setAbsolutePosition(ui.item.data('systemid'), ui.item.index()+1+intPagingOffset);
-            }
-            oldPos = 0;
-        },
-        delay: KAJONA.util.isTouchDevice() ? 500 : 0
+                    ajax.setAbsolutePosition(ui.item.data('systemid'), ui.item.index()+1+intPagingOffset);
+                }
+                oldPos = 0;
+            },
+            delay: util.isTouchDevice() ? 500 : 0
+        });
+        $('.grid > ul.sortable > li[data-systemid!=""] > div.thumbnail ').css("cursor", "move");
     });
-    $('.grid > ul.sortable > li[data-systemid!=""] > div.thumbnail ').css("cursor", "move");
 });
 </script>
 </grid_footer>
@@ -83,123 +85,13 @@ background using the ajaxHelper.
 Loads the script-helper and adds the table to the drag-n-dropable tables getting parsed later
 <dragable_list_header>
 <script type="text/javascript">
-    $(function() {
 
-        var bitMoveToTree = false;
-        %%jsInject%%
+require(['listSortable'], function(sortManager) {
+    sortManager.init('%%listid%%', '%%targetModule%%', %%bitMoveToTree%%);
+}) ;
 
-        var oldPos = null;
 
-        $('#%%listid%%_prev').sortable({
-            over: function(event, ui) {
-                $(ui.placeholder).hide();
-            },
-            receive: function(event, ui) {
-                $(ui.placeholder).hide();
-                var intCurPage = $("#%%listid%%").attr("data-kajona-pagenum");
-                var intElementsPerPage = $("#%%listid%%").attr("data-kajona-elementsperpage");
-
-                if(intCurPage > 1) {
-                    KAJONA.admin.ajax.setAbsolutePosition(ui.item.find('tr').data('systemid'), (intElementsPerPage*(intCurPage-1)), null, function(data, status, jqXHR) {
-                        if(status == 'success') {
-                            location.reload();
-                        }
-                        else {
-                            KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b>")
-                        }
-                    }, '%%targetModule%%');
-                }
-                else {
-                    ui.sender.sortable("cancel");
-                }
-            }
-        });
-
-        $('#%%listid%%_next').sortable({
-            over: function(event, ui) {
-                $(ui.placeholder).hide();
-            },
-            receive: function(event, ui) {
-                $(ui.placeholder).hide();
-                var intCurPage = $("#%%listid%%").attr("data-kajona-pagenum");
-                var intElementsPerPage = $("#%%listid%%").attr("data-kajona-elementsperpage");
-                var intOnPage = $('#%%listid%% tbody:has(tr[data-systemid!=""])').length + 1;
-
-                if(intOnPage == intElementsPerPage) {
-                    KAJONA.admin.ajax.setAbsolutePosition(ui.item.find('tr').data('systemid'), (intElementsPerPage*intCurPage+1), null, function(data, status, jqXHR) {
-                        if(status == 'success') {
-                            location.reload();
-                        }
-                        else {
-                            KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b>")
-                        }
-                    }, '%%targetModule%%');
-                }
-                else {
-                    ui.sender.sortable("cancel");
-                }
-            }
-        });
-
-        $('#%%listid%%').sortable({
-            items: 'tbody:has(tr[data-systemid!=""])',
-            handle: 'td.listsorthandle',
-            cursor: 'move',
-            forcePlaceholderSize: true,
-            forceHelperSize: true,
-            placeholder: 'group_move_placeholder',
-            connectWith: '.divPageTarget',
-            start: function(event, ui) {
-
-                if($("#%%listid%%").attr("data-kajona-pagenum") > 1)
-                    $('#%%listid%%_prev').css("display", "block");
-
-                if($('#%%listid%% tbody:has(tr[data-systemid!=""])').length == $("#%%listid%%").attr("data-kajona-elementsperpage"))
-                    $('#%%listid%%_next').css("display", "block");
-
-                oldPos = ui.item.index();
-            },
-            stop: function(event, ui) {
-                if(oldPos != ui.item.index() && !ui.item.parent().is('div') ) {
-                    var intOffset = 1;
-                    //see, if there are nodes not being sortable - would lead to another offset
-                    $('#%%listid%% > tbody').each(function(index) {
-                        if($(this).find('tr').data('systemid') == "")
-                            intOffset--;
-                        if($(this).find('tr').data('systemid') == ui.item.find('tr').data('systemid'))
-                            return false;
-                    });
-
-                    //calc the page-offset
-                    var intCurPage = $("#%%listid%%").attr("data-kajona-pagenum");
-                    var intElementsPerPage = $("#%%listid%%").attr("data-kajona-elementsperpage");
-
-                    var intPagingOffset = 0;
-                    if(intCurPage > 1 && intElementsPerPage > 0)
-                        intPagingOffset = (intCurPage*intElementsPerPage)-intElementsPerPage;
-
-                    KAJONA.admin.ajax.setAbsolutePosition(ui.item.find('tr').data('systemid'), ui.item.index()+intOffset+intPagingOffset, null, null, '%%targetModule%%');
-                }
-                oldPos = 0;
-                $('div.divPageTarget').css("display", "none");
-            },
-            delay: KAJONA.util.isTouchDevice() ? 500 : 0
-        });
-
-        $('#%%listid%% > tbody:has(tr[data-systemid!=""][data-deleted=""]) > tr').each(function(index) {
-            $(this).find("td.listsorthandle").css('cursor', 'move').append("<i class='fa fa-arrows-v'></i>");
-            KAJONA.admin.tooltip.addTooltip($(this).find("td.listsorthandle"), "[lang,commons_sort_vertical,system]");
-
-            if(bitMoveToTree) {
-                $(this).find("td.treedrag").css('cursor', 'move')
-                        .addClass("jstree-listdraggable").append("<i class='fa fa-arrows-h' data-systemid='"+$(this).data("systemid")+"'></i>");
-                KAJONA.admin.tooltip.addTooltip($(this).find("td.treedrag"), "[lang,commons_sort_totree,system]");
-            }
-        });
-    });
 </script>
-<style>.group_move_placeholder { display: table-row; } </style>
-
 <div id='%%listid%%_prev' class='alert alert-info divPageTarget'>[lang,commons_list_sort_prev,system]</div>
 <table id="%%listid%%" class="table admintable table-striped-tbody" data-kajona-pagenum="%%curPage%%" data-kajona-elementsperpage="%%elementsPerPage%%">
 
@@ -221,7 +113,7 @@ It is responsible for rendering the different admin-lists.
 Currently, there are two modes: with and without a description.
 
 <generallist_checkbox>
-    <input type="checkbox" name="kj_cb_%%systemid%%" id="kj_cb_%%systemid%%" onchange="KAJONA.admin.lists.updateToolbar();">
+    <input type="checkbox" name="kj_cb_%%systemid%%" id="kj_cb_%%systemid%%" onchange="require('lists').updateToolbar();">
 </generallist_checkbox>
 
 <generallist>
@@ -242,15 +134,16 @@ Currently, there are two modes: with and without a description.
 <generallist_desc>
     <tbody class="generalListSet %%cssaddon%%">
         <tr data-systemid="%%listitemid%%" data-deleted="%%deleted%%">
-            <td rowspan="2" class="treedrag"></td>
-            <td rowspan="2" class="listsorthandle"></td>
-            <td rowspan="2" class="listcheckbox">%%checkbox%%</td>
-            <td rowspan="2" class="listimage">%%image%%</td>
+            <td class="treedrag"></td>
+            <td class="listsorthandle"></td>
+            <td class="listcheckbox">%%checkbox%%</td>
+            <td class="listimage">%%image%%</td>
             <td class="title">%%title%%</td>
             <td class="center">%%center%%</td>
             <td class="actions">%%actions%%</td>
         </tr>
         <tr>
+            <td colspan="4" class="description"></td>
             <td colspan="3" class="description">%%description%%</td>
         </tr>
     </tbody>
@@ -273,11 +166,13 @@ Currently, there are two modes: with and without a description.
     </div>
 </div>
 <script type="text/javascript">
-    $("#kj_cb_batchActionSwitch").on('click', function() { KAJONA.admin.lists.toggleAllFields(); KAJONA.admin.lists.updateToolbar(); });
-    KAJONA.admin.lists.strConfirm = '[lang,commons_batchaction_confirm,pages]';
-    KAJONA.admin.lists.strDialogTitle = '[lang,commons_batchaction_title,pages]';
-    KAJONA.admin.lists.strDialogStart = '[lang,commons_start,pages]';
-    KAJONA.admin.lists.updateToolbar();
+    require(["jquery", "lists"], function($, lists) {
+        $("#kj_cb_batchActionSwitch").on('click', function() { lists.toggleAllFields(); lists.updateToolbar(); });
+        lists.strConfirm = '[lang,commons_batchaction_confirm,pages]';
+        lists.strDialogTitle = '[lang,commons_batchaction_title,pages]';
+        lists.strDialogStart = '[lang,commons_start,pages]';
+        lists.updateToolbar();
+    });
 </script>
 </batchactions_wrapper>
 
@@ -303,7 +198,7 @@ data list footer. at the bottom of the datatable
 <datalist_footer>
     </table>
     <script type="text/javascript">
-        KAJONA.admin.loader.loadFile("/core/module_v4skin/admin/skins/kajona_v4/js/jquery.floatThead.min.js", function() {
+        require(["jquery-floatThread"], function() {
             $('table.kajona-data-table:not(.kajona-data-table-ignore-floatthread)').floatThead({
                 scrollingTop: $("body.dialogBody").size() > 0 ? 0 : 70,
                 useAbsolutePositioning: true
@@ -318,7 +213,7 @@ One Column in a row (header record) - the header, the content, the footer
 </datalist_column_head_header>
 
 <datalist_column_head>
-    <th class="%%class%%">%%value%%</th>
+    <th class="%%class%%" %%addons%%>%%value%%</th>
 </datalist_column_head>
 
 <datalist_column_head_footer>
@@ -363,7 +258,15 @@ To avoid side-effects, no line-break in this case -> not needed by default, but 
 
 <form_start>
 <form name="%%name%%" id="%%name%%" method="%%method%%" action="%%action%%" enctype="%%enctype%%" onsubmit="%%onsubmit%%" class="form-horizontal">
-    <script type="text/javascript">$(function() { KAJONA.admin.forms.initForm('%%name%%');  KAJONA.admin.forms.changeLabel = '[lang,commons_form_entry_changed,system]';   KAJONA.admin.forms.changeConfirmation = '[lang,commons_form_entry_changed_conf,system]'; } );</script>
+    <script type="text/javascript">
+        require(["forms"], function(forms) {
+            $(function() {
+                forms.initForm('%%name%%');
+                forms.changeLabel = '[lang,commons_form_entry_changed,system]';
+                forms.changeConfirmation = '[lang,commons_form_entry_changed_conf,system]';
+            });
+        });
+    </script>
 </form_start>
 
 <form_close>
@@ -474,7 +377,7 @@ Checkbox
 Toggle_On_Off (using bootstrap-switch.org)
 <input_on_off_switch>
     <script type="text/javascript">
-        KAJONA.admin.loader.loadFile("/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-switch.min.js", function() {
+        require(["bootstrap-switch"], function(){
             window.setTimeout(function() {
                 var divId = '%%name%%';
                 divId = '#' + divId.replace( /(:|\.|\[|\])/g, "\\$1" );
@@ -603,108 +506,85 @@ Upload-Field for multiple files with progress bar
     </div>
 
 <script type="text/javascript">
-
-    KAJONA.admin.loader.loadFile([
-        "/core/module_mediamanager/admin/scripts/jquery-fileupload/css/jquery.fileupload.css",
-        "/core/module_mediamanager/admin/scripts/jquery-fileupload/css/jquery.fileupload-ui.css",
-        "/core/module_mediamanager/admin/scripts/jquery-fileupload/js/load-image.min.js",
-        "/core/module_mediamanager/admin/scripts/jquery-fileupload/js/canvas-to-blob.min.js",
-        "/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.iframe-transport.js",
-        "/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload.js"
-    ], function() {
-        KAJONA.admin.loader.loadFile([
-            "/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload-process.js"
-        ], function() {
-            KAJONA.admin.loader.loadFile([
-                "/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload-image.js",
-                "/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload-audio.js",
-                "/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload-video.js",
-                "/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload-validate.js"
-            ], function() {
-                KAJONA.admin.loader.loadFile([
-                    "/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload-ui.js"
-                ], function() {
-
-                    var filesToUpload = 0;
-                    $('#%%name%%').fileupload({
-                        url: '_webpath_/xml.php?admin=1&module=mediamanager&action=fileUpload',
-                        dataType: 'json',
-                        dropZone: $('#drop-%%uploadId%%'),
-                        autoUpload: false,
-                        paramName : '%%name%%',
-                        filesContainer: $('#files-%%uploadId%%'),
-                        formData: [
-                            {name: 'systemid', value: '%%mediamanagerRepoId%%'},
-                            {name: 'inputElement', value : '%%name%%'},
-                            {name: 'jsonResponse', value : 'true'}
-                        ],
-                        messages: {
-                            maxNumberOfFiles: 'Maximum number of files exceeded',
-                            acceptFileTypes: "[lang,upload_fehler_filter,mediamanager]",
-                            maxFileSize: "[lang,upload_multiple_errorFilesize,mediamanager]",
-                            minFileSize: 'File is too small'
-                        },
-                        maxFileSize: %%maxFileSize%%,
-                        acceptFileTypes: %%acceptFileTypes%%,
-                        uploadTemplateId: null,
-                        downloadTemplateId: null,
-                        uploadTemplate: function (o) {
-                            var rows = $();
-                            $.each(o.files, function (index, file) {
-                                var row = $('<tbody class="template-upload fade"><tr>' +
-                                        '<td><span class="preview"></span></td>' +
-                                        '<td><p class="name"></p>' +
-                                        '<div class="error"></div>' +
-                                        '</td>' +
-                                        '<td><p class="size"></p>' +
-                                        '<div class="progress"><div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div></div>' +
-                                        '</td>' +
-                                        '<td>' +
-                                        (!index && !o.options.autoUpload ?
-                                                '<button class="btn start " disabled style="display: none;">Start</button>' : '') +
-                                        (!index ? '<button class="btn cancel ">[lang,upload_multiple_cancel,mediamanager]</button>' : '') +
-                                        '</td>' +
-                                        '</tr></tbody>');
-                                row.find('.name').text(file.name);
-                                row.find('.size').text(o.formatFileSize(file.size));
-                                if (file.error) {
-                                    row.find('.error').text(file.error);
-                                }
-                                rows = rows.add(row);
-                            });
-                            return rows;
+    require(['tmpl'], function() {
+        require(['jquery', 'jquery.iframe-transport', 'jquery.fileupload', 'jquery.fileupload-process', 'jquery.fileupload-ui'], function($) {
+            var filesToUpload = 0;
+            $('#%%name%%').fileupload({
+                url: '_webpath_/xml.php?admin=1&module=mediamanager&action=fileUpload',
+                dataType: 'json',
+                dropZone: $('#drop-%%uploadId%%'),
+                autoUpload: false,
+                paramName : '%%name%%',
+                filesContainer: $('#files-%%uploadId%%'),
+                formData: [
+                    {name: 'systemid', value: '%%mediamanagerRepoId%%'},
+                    {name: 'inputElement', value : '%%name%%'},
+                    {name: 'jsonResponse', value : 'true'}
+                ],
+                messages: {
+                    maxNumberOfFiles: 'Maximum number of files exceeded',
+                    acceptFileTypes: "[lang,upload_fehler_filter,mediamanager]",
+                    maxFileSize: "[lang,upload_multiple_errorFilesize,mediamanager]",
+                    minFileSize: 'File is too small'
+                },
+                maxFileSize: %%maxFileSize%%,
+                acceptFileTypes: %%acceptFileTypes%%,
+                uploadTemplateId: null,
+                downloadTemplateId: null,
+                uploadTemplate: function (o) {
+                    var rows = $();
+                    $.each(o.files, function (index, file) {
+                        var row = $('<tbody class="template-upload fade"><tr>' +
+                                    '<td><span class="preview"></span></td>' +
+                                    '<td><p class="name"></p>' +
+                                    '<div class="error"></div>' +
+                                    '</td>' +
+                                    '<td><p class="size"></p>' +
+                                    '<div class="progress"><div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div></div>' +
+                                    '</td>' +
+                                    '<td>' +
+                                    (!index && !o.options.autoUpload ?
+                                            '<button class="btn start " disabled style="display: none;">Start</button>' : '') +
+                                    (!index ? '<button class="btn cancel ">[lang,upload_multiple_cancel,mediamanager]</button>' : '') +
+                                    '</td>' +
+                                    '</tr></tbody>');
+                        row.find('.name').text(file.name);
+                        row.find('.size').text(o.formatFileSize(file.size));
+                        if (file.error) {
+                            row.find('.error').text(file.error);
                         }
-                    })
-                    .bind('fileuploadadded', function (e, data) {
-                        $(this).find('.fileupload-buttonbar button.start').css('display', '');
-                        $(this).find('.fileupload-buttonbar button.cancel').css('display', '');
-                        $(this).find('.fileupload-progress').css('display', '');
-                        filesToUpload++;
-                    })
-                    .bind('fileuploadfail', function (e, data) {
-                        filesToUpload--;
-                        $(this).trigger('kajonahideelements');
-                    })
-                    .bind('fileuploaddone', function (e, data) {
-                        filesToUpload--;
-                        $(this).trigger('kajonahideelements');
-                    })
-                    .bind('fileuploadstop', function (e) {
-                        $(this).trigger('kajonahideelements');
-                        document.location.reload();
-                    })
-                    .bind('kajonahideelements', function() {
-                        if(filesToUpload == 0) {
-                            $(this).find('.fileupload-buttonbar button.start').css('display', 'none');
-                            $(this).find('.fileupload-buttonbar button.cancel').css('display', 'none');
-                            $(this).find('.fileupload-progress').css('display', 'none');
-                        }
+                        rows = rows.add(row);
                     });
-                });
+                    return rows;
+                }
+            })
+            .bind('fileuploadadded', function (e, data) {
+                $(this).find('.fileupload-buttonbar button.start').css('display', '');
+                $(this).find('.fileupload-buttonbar button.cancel').css('display', '');
+                $(this).find('.fileupload-progress').css('display', '');
+                filesToUpload++;
+            })
+            .bind('fileuploadfail', function (e, data) {
+                filesToUpload--;
+                $(this).trigger('kajonahideelements');
+            })
+            .bind('fileuploaddone', function (e, data) {
+                filesToUpload--;
+                $(this).trigger('kajonahideelements');
+            })
+            .bind('fileuploadstop', function (e) {
+                $(this).trigger('kajonahideelements');
+                document.location.reload();
+            })
+            .bind('kajonahideelements', function() {
+                if(filesToUpload == 0) {
+                    $(this).find('.fileupload-buttonbar button.start').css('display', 'none');
+                    $(this).find('.fileupload-buttonbar button.cancel').css('display', 'none');
+                    $(this).find('.fileupload-progress').css('display', 'none');
+                }
             });
         });
     });
-
 </script>
 
 
@@ -741,24 +621,24 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
                 <input id="%%calendarId%%" name="%%calendarId%%" class="form-control %%class%%" size="16" type="text" value="%%valuePlain%%" %%readonly%%>
             </div>
             <script>
-                KAJONA.admin.loader.loadFile(["/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-datepicker.js"], function() {
-                    var arrSecondFiles = ["/core/module_v4skin/admin/skins/kajona_v4/js/locales/bootstrap-datepicker.%%calendarLang%%.js"];
-                    if('%%calendarLang%%' == 'en')
-                        arrSecondFiles = [];
-                    KAJONA.admin.loader.loadFile(arrSecondFiles, function() {
+                require(["bootstrap-datepicker"], function() {
+                    require(["bootstrap-datepicker-%%calendarLang%%", "util"], function(datepicker, util){
                         $('#%%calendarId%%').datepicker({
-                            format: KAJONA.util.transformDateFormat('%%dateFormat%%', "bootstrap-datepicker"),
+                            format: util.transformDateFormat('%%dateFormat%%', "bootstrap-datepicker"),
                             weekStart: 1,
                             autoclose: true,
                             language: '%%calendarLang%%',
-                            todayHighlight: true
+                            todayHighlight: true,
+                            container: '#content',
+                            todayBtn: "linked",
+                            daysOfWeekHighlighted: "0,6",
+                            calendarWeeks: true
                         });
 
                         if($('#%%calendarId%%').is(':focus')) {
                             $('#%%calendarId%%').blur();
                             $('#%%calendarId%%').focus();
                         }
-
                     });
                 });
             </script>
@@ -791,21 +671,24 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
         <div class="col-sm-1">
         </div>
         <script>
-            KAJONA.admin.loader.loadFile(["/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-datepicker.js"], function() {
-                KAJONA.admin.loader.loadFile(["/core/module_v4skin/admin/skins/kajona_v4/js/locales/bootstrap-datepicker.%%calendarLang%%.js"], function() {
+            require(["bootstrap-datepicker"], function() {
+                require(["bootstrap-datepicker-%%calendarLang%%", "util"], function(datepicker, util){
                     $('#%%calendarId%%').datepicker({
-                        format: KAJONA.util.transformDateFormat('%%dateFormat%%', "bootstrap-datepicker"),
+                        format: util.transformDateFormat('%%dateFormat%%', "bootstrap-datepicker"),
                         weekStart: 1,
                         autoclose: true,
                         language: '%%calendarLang%%',
-                        todayHighlight: true
+                        todayHighlight: true,
+                        container: '#content',
+                        todayBtn: "linked",
+                        daysOfWeekHighlighted: "0,6",
+                        calendarWeeks: true
                     });
 
                     if($('#%%calendarId%%').is(':focus')) {
                         $('#%%calendarId%%').blur();
                         $('#%%calendarId%%').focus();
                     }
-
                 });
             });
         </script>
@@ -858,13 +741,11 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
         </div>
     </div>
     <script type="text/javascript">
-        KAJONA.admin.loader.loadFile(["/core/module_system/admin/scripts/jquerytag/jquery.caret.min.js"], function(){
-            KAJONA.admin.loader.loadFile("/core/module_system/admin/scripts/jquerytag/jquery.tag-editor.min.js", function(){
-                $("#%%name%%").tagEditor({
-                    initialTags: %%values%%,
-                    forceLowercase: false,
-                    onChange: %%onChange%%
-                });
+        require(["jquery", "jquerytageditor"], function($){
+            $("#%%name%%").tagEditor({
+                initialTags: %%values%%,
+                forceLowercase: false,
+                onChange: %%onChange%%
             });
         });
     </script>
@@ -880,67 +761,66 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
         </div>
     </div>
     <script type="text/javascript">
-        KAJONA.admin.loader.loadFile(["/core/module_system/admin/scripts/jquerytag/jquery.caret.min.js"], function(){
-            KAJONA.admin.loader.loadFile("/core/module_system/admin/scripts/jquerytag/jquery.tag-editor.min.js", function(){
-                var objConfig = new KAJONA.v4skin.defaultAutoComplete();
+        require(["jquery", "jquerytageditor", "v4skin"], function($, tagEditor, v4skin){
+            var objConfig = new v4skin.defaultAutoComplete();
 
-                objConfig.search = function(event, ui) {
-                    if (event.target.value.length < 2) {
-                        event.stopPropagation();
-                        return false;
+            objConfig.search = function(event, ui) {
+                if (event.target.value.length < 2) {
+                    event.stopPropagation();
+                    return false;
+                }
+                $(this).closest('ul.tag-editor').parent().find('.loading-feedback').html('<i class="fa fa-spinner fa-spin"></i>');
+            };
+            objConfig.response = function(event, ui) {
+                $(this).closest('ul.tag-editor').parent().find('.loading-feedback').html('');
+            };
+            objConfig.select = function(event, ui) {
+                var found = false;
+                $("#%%name%%-list").find('input').each(function(){
+                    if ($(this).val() == ui.item.systemid) {
+                        found = true;
                     }
-                    $(this).closest('ul.tag-editor').parent().find('.loading-feedback').html('<i class="fa fa-spinner fa-spin"></i>');
+                });
+                if (!found) {
+                    $("#%%name%%-list").append('<input type="hidden" name="%%name%%_id[]" value="' + ui.item.systemid + '" data-title="' + ui.item.title + '" />');
+                }
+            };
+            objConfig.create = function(event, ui) {
+                $(this).data('ui-autocomplete')._renderItem = function(ul, item){
+                    return $('<li></li>')
+                        .data('ui-autocomplete-item', item)
+                        .append('<div class=\'ui-autocomplete-item\'>' + item.icon + item.title + '</div>')
+                        .appendTo(ul);
                 };
-                objConfig.response = function(event, ui) {
-                    $(this).closest('ul.tag-editor').parent().find('.loading-feedback').html('');
-                };
-                objConfig.select = function(event, ui) {
-                    var found = false;
-                    $("#%%name%%-list").find('input').each(function(){
-                        if ($(this).val() == ui.item.systemid) {
-                            found = true;
-                        }
-                    });
-                    if (!found) {
-                        $("#%%name%%-list").append('<input type="hidden" name="%%name%%_id[]" value="' + ui.item.systemid + '" data-title="' + ui.item.title + '" />');
-                    }
-                };
-                objConfig.create = function(event, ui) {
-                    $(this).data('ui-autocomplete')._renderItem = function(ul, item){
-                        return $('<li></li>')
-                                .data('ui-autocomplete-item', item)
-                                .append('<a class=\'ui-autocomplete-item\'>' + item.icon + item.title + '</a>')
-                                .appendTo(ul);
-                    };
-                };
+            };
 
-                objConfig.source = function(request, response) {
-                    $.ajax({
-                        url: '%%source%%',
-                        type: 'POST',
-                        dataType: 'json',
-                        data: {
-                            filter: request.term
-                        },
-                        success: function(resp) {
-                            if (resp) {
-                                // replace commas
-                                for (var i = 0; i < resp.length; i++) {
-                                    resp[i].title = resp[i].title.replace(/\,/g, '');
-                                    resp[i].value = resp[i].value.replace(/\,/g, '');
-                                }
+            objConfig.source = function(request, response) {
+                $.ajax({
+                    url: '%%source%%',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        filter: request.term
+                    },
+                    success: function(resp) {
+                        if (resp) {
+                            // replace commas
+                            for (var i = 0; i < resp.length; i++) {
+                                resp[i].title = resp[i].title.replace(/\,/g, '');
+                                resp[i].value = resp[i].value.replace(/\,/g, '');
                             }
-                            response.call(this, resp);
                         }
-                    });
-                };
+                        response.call(this, resp);
+                    }
+                });
+            };
 
-                var $objInput = $("#%%name%%");
-                $objInput.tagEditor({
-                            initialTags: %%values%%,
-                        forceLowercase: false,
-                        autocomplete: objConfig,
-                        beforeTagSave: function(field, editor, tags, tag, val){
+            var $objInput = $("#%%name%%");
+            $objInput.tagEditor({
+                initialTags: %%values%%,
+                forceLowercase: false,
+                autocomplete: objConfig,
+                beforeTagSave: function(field, editor, tags, tag, val){
                     var found = false;
                     $("#%%name%%-list").find('input').each(function(){
                         if ($(this).data('title') == val) {
@@ -959,12 +839,11 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
                     });
                 }
             });
-                $objInput.parent().find('ul.tag-editor').after("<span class='form-control-feedback loading-feedback' style='right: 15px;'><i class='fa fa-keyboard-o'></i></span>");
+            $objInput.parent().find('ul.tag-editor').after("<span class='form-control-feedback loading-feedback' style='right: 15px;'><i class='fa fa-keyboard-o'></i></span>");
 
-                if($objInput.hasClass('mandatoryFormElement')) {
-                    $objInput.parent().find('ul.tag-editor').addClass('mandatoryFormElement');
-                }
-            });
+            if($objInput.hasClass('mandatoryFormElement')) {
+                $objInput.parent().find('ul.tag-editor').addClass('mandatoryFormElement');
+            }
         });
     </script>
 </input_objecttags>
@@ -1069,9 +948,11 @@ A list of checkbox for object elements
     </div>
 
     <script type='text/javascript'>
-        $("input:checkbox[name='checkAll_%%name%%']").on('change', function() {
-            var checkBoxes = $("input:checkbox[name^='%%name%%']");
-            checkBoxes.prop('checked', $("input:checkbox[name='checkAll_%%name%%']").prop('checked'));
+        require(["jquery"], function($) {
+            $("input:checkbox[name='checkAll_%%name%%']").on('change', function() {
+                var checkBoxes = $("input:checkbox[name^='%%name%%']");
+                checkBoxes.prop('checked', $("input:checkbox[name='checkAll_%%name%%']").prop('checked'));
+            });
         });
     </script>
 </input_checkboxarrayobjectlist>
@@ -1118,23 +999,25 @@ A fieldset to structure logical sections
     <iframe src="%%iframesrc%%" id="%%iframeid%%" class="seamless" width="100%" height="100%" frameborder="0" seamless ></iframe>
 
     <script type='text/javascript'>
-        $(document).ready(function(){
-            var frame = $('iframe#%%iframeid%%');
-            frame.load(function() {
-                $('.tab-content.fullHeight iframe').each(function() {
+        require(["jquery"], function($) {
+            $(document).ready(function(){
+                var frame = $('iframe#%%iframeid%%');
+                frame.load(function() {
+                    $('.tab-content.fullHeight iframe').each(function() {
 
-                    var frame = document.getElementById('%%iframeid%%');
-                    innerDoc = (frame.contentDocument) ?
-                        frame.contentDocument : frame.contentWindow.document;
+                        var frame = document.getElementById('%%iframeid%%');
+                        innerDoc = (frame.contentDocument) ?
+                            frame.contentDocument : frame.contentWindow.document;
 
-                    var intHeight = (innerDoc.body.scrollHeight + 10);
+                        var intHeight = (innerDoc.body.scrollHeight + 10);
 
-                    if($(this).height() < intHeight) {
-                        $(this).height(intHeight);
-                    }
+                        if($(this).height() < intHeight) {
+                            $(this).height(intHeight);
+                        }
+                    });
                 });
-            });
 
+            });
         });
     </script>
 </iframe_container>
@@ -1177,9 +1060,11 @@ Needed Elements: %%error%%, %%form%%
 	if (navigator.cookieEnabled == false) {
 	    document.getElementById("loginError").innerHTML = "%%loginCookiesInfo%%";
 	}
-    if($('#loginError > p').html() == "")
-        $('#loginError').remove();
-
+    require(["jquery"], function($) {
+        if ($('#loginError > p').html() == "") {
+            $('#loginError').remove();
+        }
+    });
 </script>
 <noscript><div class="alert alert-danger">%%loginJsInfo%%</div></noscript>
 </login_form>
@@ -1213,30 +1098,31 @@ Part to display the login status, user is logged in
     </ul>
 </div>
 <script type="text/javascript">
+    require(['jquery', 'v4skin'], function($, v4skin){
+        if(%%renderMessages%%) {
+            $(function() {
+                v4skin.messaging.properties = {
+                    notification_title : '[lang,messaging_notification_title,messaging]',
+                    notification_body : '[lang,messaging_notification_body,messaging]',
+                    show_all : '[lang,action_show_all,messaging]'
+                };
+                v4skin.messaging.pollMessages()
+            });
+        }
+        else {
+            $('#messagingShortlist').closest("li").hide();
+        }
 
-    if(%%renderMessages%%) {
-        $(function() {
-            KAJONA.v4skin.properties.messaging = {
-                notification_title : '[lang,messaging_notification_title,messaging]',
-                notification_body : '[lang,messaging_notification_body,messaging]',
-                show_all : '[lang,action_show_all,messaging]'
-            };
-            KAJONA.v4skin.messaging.pollMessages()
-        });
-    }
-    else {
-        $('#messagingShortlist').closest("li").hide();
-    }
-
-    if(%%renderTags%%) {
-        $(function() {
-            KAJONA.v4skin.properties.tags.show_all = '[lang,action_show_all,tags]';
-            KAJONA.v4skin.initTagMenu();
-        });
-    }
-    else {
-        $('#tagsSubemenu').closest("li").hide();
-    }
+        if(%%renderTags%%) {
+            $(function() {
+                v4skin.properties.tags.show_all = '[lang,action_show_all,tags]';
+                v4skin.initTagMenu();
+            });
+        }
+        else {
+            $('#tagsSubemenu').closest("li").hide();
+        }
+    });
 </script>
 </logout_form>
 
@@ -1251,8 +1137,10 @@ Shown, wherever the attention of the user is needed
 Renders a toc navigation
 <toc_navigation>
     <script type="text/javascript">
-        $(document).ready(function(){
-            KAJONA.admin.renderTocNavigation("%%selector%%");
+        require(['jquery', 'toc'], function($, toc) {
+            $(document).ready(function(){
+                toc.render("%%selector%%");
+            });
         });
     </script>
 </toc_navigation>
@@ -1285,7 +1173,7 @@ The following sections specify the layout of the rights-mgmt
 <rights_form_header>
     <div>
         %%desc%% %%record%% <br />
-        <a href="javascript:KAJONA.admin.permissions.toggleEmtpyRows('[lang,permissions_toggle_visible,system]', '[lang,permissions_toggle_hidden,system]', '#rightsForm tr');" id="rowToggleLink" class="rowsVisible">[lang,permissions_toggle_visible,system]</a><br /><br />
+        <a href="javascript:require('permissions').toggleEmtpyRows('[lang,permissions_toggle_visible,system]', '[lang,permissions_toggle_hidden,system]', '#rightsForm tr');" id="rowToggleLink" class="rowsVisible">[lang,permissions_toggle_visible,system]</a><br /><br />
     </div>
     <div id="responseContainer">
     </div>
@@ -1311,7 +1199,7 @@ The following sections specify the layout of the rights-mgmt
         %%rows%%
     </table>
     <script type="text/javascript">
-        KAJONA.admin.loader.loadFile("/core/module_v4skin/admin/skins/kajona_v4/js/jquery.floatThead.min.js", function() {
+        require(["jquery-floatThread"], function() {
             $('table.kajona-data-table').floatThead({
                 scrollingTop: $("body.dialogBody").size() > 0 ? 0 : 70,
                 useAbsolutePositioning: true
@@ -1344,7 +1232,7 @@ The following sections specify the layout of the rights-mgmt
     <div class="col-sm-6">
         <div class="checkbox">
             <label>
-                    <input name="%%name%%" type="checkbox" id="%%name%%" value="1" onclick="this.blur();" onchange="KAJONA.admin.permissions.checkRightMatrix();" %%checked%% />
+                    <input name="%%name%%" type="checkbox" id="%%name%%" value="1" onclick="this.blur();" onchange="require('permissions').checkRightMatrix();" %%checked%% />
                 %%title%%
             </label>
         </div>
@@ -1520,14 +1408,15 @@ A button for the active language
 The language switch surrounds the buttons
 <language_switch>
     <select id="languageChooser" onchange="%%onchangehandler%%">%%languagebuttons%%</select>
+    <script type="text/javascript">require(['switchLanguage']);</script>
 </language_switch>
 
 ---------------------------------------------------------------------------------------------------------
 -- QUICK HELP -------------------------------------------------------------------------------------------
 
 <quickhelp>
-    <script>
-        $(function () {
+    <script type="text/javascript">
+        require(['jquery', 'bootstrap'], function() {
             $('#quickhelp').popover({
                 title: '%%title%%',
                 content: '%%text%%',
@@ -1591,6 +1480,7 @@ The language switch surrounds the buttons
         <h2 class="">%%widget_name%%</h2>
         <div class="adminwidgetactions pull-right">%%widget_edit%% %%widget_delete%%</div>
         <div class="additionalNameContent">%%widget_name_additional_content%%</div>
+        <div class="contentSeparator"></div>
         <div class="content loadingContainer">
             %%widget_content%%
         </div>
@@ -1620,8 +1510,8 @@ The language switch surrounds the buttons
 <dashboard_wrapper>
     <div class="row dashBoard">%%entries%%</div>
     <script type="text/javascript">
-        KAJONA.admin.loader.loadFile('/core/module_dashboard/admin/scripts/dashboard.js', function() {
-            KAJONA.admin.dashboard.init();
+        require(['dashboard'], function(dashboard){
+            dashboard.init();
         });
     </script>
 </dashboard_wrapper>
@@ -1632,21 +1522,19 @@ The language switch surrounds the buttons
 <tree>
     <div id="%%treeId%%" class="treeDiv"></div>
     <script type="text/javascript">
-        KAJONA.admin.loader.loadFile([
-            "/core/module_system/admin/scripts/jstree3/dist/jstree.min.js",
-            "/core/module_system/admin/scripts/jstree3/dist/themes/default/style.min.css",
-            "/core/module_system/admin/scripts/jstree3/kajonatree.js",
-            "/core/module_system/system/scripts/lang.js"
-        ], function() {
+        require(["tree", "loader"], function(tree, loader){
 
-            KAJONA.kajonatree.toggleInitial('%%treeId%%');
+            loader.loadFile(["/core/module_system/scripts/jstree3/dist/themes/default/style.min.css"]);
 
-            var jsTree = new KAJONA.kajonatree.jstree();
+            tree.toggleInitial('%%treeId%%');
+
+            var jsTree = new tree.jstree();
             jsTree.loadNodeDataUrl = "%%loadNodeDataUrl%%";
             jsTree.rootNodeSystemid = '%%rootNodeSystemid%%';
             jsTree.treeConfig = %%treeConfig%%;
             jsTree.treeId = '%%treeId%%';
-            jsTree.treeviewExpanders = [ %%treeviewExpanders%% ];
+            jsTree.treeviewExpanders = %%treeviewExpanders%%;
+            jsTree.initiallySelectedNodes = %%initiallySelectedNodes%%;
 
             jsTree.initTree();
         });
@@ -1661,7 +1549,7 @@ The language switch surrounds the buttons
             </div>
         </div>
         <div class="col-md-8 treeViewContent" data-kajona-treeid="%%treeId%%">
-            <div class=""><a href="#" onclick="KAJONA.kajonatree.toggleTreeView('%%treeId%%');" title="[lang,treeviewtoggle,system]" rel="tooltip"><i class="fa fa-bars"></i></a></div>
+            <div class=""><a href="#" onclick="require('tree').toggleTreeView('%%treeId%%');" title="[lang,treeviewtoggle,system]" rel="tooltip"><i class="fa fa-bars"></i></a></div>
             %%sideContent%%
         </div>
     </div>
@@ -1674,20 +1562,28 @@ otherwise the JavaScript will fail!
     <div id="tagsLoading_%%targetSystemid%%" class="loadingContainer"></div>
     <div id="tagsWrapper_%%targetSystemid%%"></div>
     <script type="text/javascript">
-        KAJONA.admin.loader.loadFile('/core/module_tags/admin/scripts/tags.js', function() {
-            KAJONA.admin.tags.reloadTagList('%%targetSystemid%%', '%%attribute%%');
+        require(["tags"], function(tags) {
+            tags.reloadTagList('%%targetSystemid%%', '%%attribute%%');
         });
     </script>
 </tags_wrapper>
 
 <tags_tag>
     <span class="label label-default">%%tagname%%</span>
-    <script type="text/javascript">KAJONA.admin.tooltip.addTooltip('#icon_%%strTagId%%');</script>
+    <script type="text/javascript">
+        require(["tooltip"], function(tooltip) {
+            tooltip.addTooltip('#icon_%%strTagId%%');
+        });
+    </script>
 </tags_tag>
 
 <tags_tag_delete>
-    <span class="label label-default taglabel">%%tagname%% <a href="javascript:KAJONA.admin.tags.removeTag('%%strTagId%%', '%%strTargetSystemid%%', '%%strAttribute%%');"> %%strDelete%%</a> %%strFavorite%%</span>
-    <script type="text/javascript">KAJONA.admin.tooltip.addTooltip($(".taglabel [rel='tooltip']"));</script>
+    <span class="label label-default taglabel">%%tagname%% <a href="javascript:require('tags').removeTag('%%strTagId%%', '%%strTargetSystemid%%', '%%strAttribute%%');"> %%strDelete%%</a> %%strFavorite%%</span>
+    <script type="text/javascript">
+        require(["tooltip"], function(tooltip) {
+            tooltip.addTooltip($(".taglabel [rel='tooltip']"));
+        });
+    </script>
 </tags_tag_delete>
 
 
@@ -1788,7 +1684,7 @@ It containes a list of aspects and provides the possibility to switch the differ
 </calendar_entry>
 
 <calendar_event>
-    <div class="%%class%%" id="event_%%systemid%%" onmouseover="KAJONA.admin.dashboardCalendar.eventMouseOver('%%highlightid%%')" onmouseout="KAJONA.admin.dashboardCalendar.eventMouseOut('%%highlightid%%')">
+    <div class="%%class%%" id="event_%%systemid%%" onmouseover="require('dashboardCalendar').eventMouseOver('%%highlightid%%')" onmouseout="require('dashboardCalendar').eventMouseOut('%%highlightid%%')">
         %%content%%
     </div>
 </calendar_event>
@@ -1796,14 +1692,16 @@ It containes a list of aspects and provides the possibility to switch the differ
 ---------------------------------------------------------------------------------------------------------
 -- MENU -------------------------------------------------------------------------------------------------
 <contextmenu_wrapper>
-    <div class="dropdown-menu generalContextMenu" role="menu">
+    <div class="dropdown-menu generalContextMenu %%ddclass%%" role="menu">
         <ul>
             %%entries%%
         </ul>
     </div>
     <script type="text/javascript">
-        $('.dropdown-menu .dropdown-submenu a').click(function (e) {
-            e.stopPropagation();
+        require(['jquery'], function($) {
+            $('.dropdown-menu .dropdown-submenu a').click(function (e) {
+                e.stopPropagation();
+            });
         });
     </script>
 </contextmenu_wrapper>
@@ -1931,29 +1829,25 @@ It containes a list of aspects and provides the possibility to switch the differ
 </sitemap_divider_entry>
 
 <changelog_heatmap>
-    <div class="chart-navigation pull-left"><a href="#" onclick="KAJONA.admin.changelog.loadPrevYear();return false;"><i class="kj-icon fa fa-arrow-left"></i></a></div>
-    <div class="chart-navigation pull-right"><a href="#" onclick="KAJONA.admin.changelog.loadNextYear();return false;"><i class="kj-icon fa fa-arrow-right"></i></a></div>
+    <div class="chart-navigation pull-left"><a href="#" onclick="require('changelog').loadPrevYear();return false;"><i class="kj-icon fa fa-arrow-left"></i></a></div>
+    <div class="chart-navigation pull-right"><a href="#" onclick="require('changelog').loadNextYear();return false;"><i class="kj-icon fa fa-arrow-right"></i></a></div>
     <div id='changelogTimeline' style='text-align:center;'></div>
 
     <script type="text/javascript">
-        KAJONA.admin.loader.loadFile([
-            '/core/module_system/admin/scripts/moment/moment.min.js',
-            '/core/module_system/admin/scripts/d3/d3.min.js',
-            '/core/module_system/admin/scripts/d3/calendar-heatmap.js',
-            '/core/module_system/admin/scripts/d3/calendar-heatmap.css'], function() {
+        require(['changelog', 'moment', 'loader', 'util'], function(changelog, moment, loader, util){
+            loader.loadFile(['/core/module_system/scripts/d3/calendar-heatmap.css']);
 
-            KAJONA.admin.changelog.lang = %%strLang%%;
-            KAJONA.admin.changelog.systemId = "%%strSystemId%%";
-            KAJONA.admin.changelog.format = KAJONA.util.transformDateFormat('%%strDateFormat%%', "momentjs");
-            KAJONA.admin.changelog.now = moment().endOf('day').toDate();
-            KAJONA.admin.changelog.yearAgo = moment().startOf('day').subtract(1, 'year').toDate();
-            KAJONA.admin.changelog.selectColumn("right");
-            KAJONA.admin.changelog.loadChartData();
+            changelog.lang = %%strLang%%;
+            changelog.systemId = "%%strSystemId%%";
+            changelog.format = util.transformDateFormat('%%strDateFormat%%', "momentjs");
+            changelog.now = moment().endOf('day').toDate();
+            changelog.yearAgo = moment().startOf('day').subtract(1, 'year').toDate();
+            changelog.selectColumn("right");
+            changelog.loadChartData();
 
-            KAJONA.admin.changelog.loadDate("%%strSystemId%%", "%%strLeftDate%%", "left", function(){
-                KAJONA.admin.changelog.loadDate("%%strSystemId%%", "%%strRightDate%%", "right", KAJONA.admin.changelog.compareTable);
+            changelog.loadDate("%%strSystemId%%", "%%strLeftDate%%", "left", function(){
+                changelog.loadDate("%%strSystemId%%", "%%strRightDate%%", "right", changelog.compareTable);
             });
-
         });
     </script>
 </changelog_heatmap>

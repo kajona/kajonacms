@@ -10,12 +10,16 @@
 namespace Kajona\Postacomment\Installer;
 
 use Kajona\Pages\System\PagesElement;
+use Kajona\Pages\System\PagesPage;
 use Kajona\Postacomment\System\PostacommentPost;
 use Kajona\System\System\Carrier;
+use Kajona\System\System\Classloader;
+use Kajona\System\System\Filesystem;
 use Kajona\System\System\InstallerBase;
 use Kajona\System\System\InstallerRemovableInterface;
 use Kajona\System\System\OrmSchemamanager;
 use Kajona\System\System\SystemAspect;
+use Kajona\System\System\SystemCommon;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\SystemSetting;
 
@@ -32,7 +36,7 @@ class InstallerPostacomment extends InstallerBase implements InstallerRemovableI
 		$strReturn = "";
         $objManager = new OrmSchemamanager();
 		$strReturn .= "Installing table postacomment...\n";
-        $objManager->createTable("Kajona\\Postacomment\\System\\PostacommentPost");
+        $objManager->createTable(PostacommentPost::class);
 
 		//register the module
 		$strSystemID = $this->registerModule(
@@ -40,9 +44,8 @@ class InstallerPostacomment extends InstallerBase implements InstallerRemovableI
 		    _postacomment_modul_id_,
 		    "PostacommentPortal.php",
 		    "PostacommentAdmin.php",
-            $this->objMetadata->getStrVersion(),
-		    true,
-		    "PostacommentPortalXml.php");
+            $this->objMetadata->getStrVersion()
+        );
 
 		//modify default rights to allow guests to post
 		$strReturn .= "Modifying modules' rights node...\n";
@@ -74,6 +77,9 @@ class InstallerPostacomment extends InstallerBase implements InstallerRemovableI
             $objModule->setStrAspect(SystemAspect::getAspectByName("content")->getSystemid());
             $objModule->updateObjectToDb();
         }
+
+        $strReturn .= "Creating moderated setting...\n";
+        $this->registerConstant("_postacomment_post_moderated_", "false", SystemSetting::$int_TYPE_BOOL, _postacomment_modul_id_);
 
 		return $strReturn;
 
@@ -152,21 +158,21 @@ class InstallerPostacomment extends InstallerBase implements InstallerRemovableI
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.6") {
-            $strReturn = "Updating to 4.7...\n";
+            $strReturn .= "Updating to 4.7...\n";
             $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7");
             $this->updateElementVersion($this->objMetadata->getStrTitle(), "4.7");
         }
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.7") {
-            $strReturn = "Updating to 4.7.1...\n";
+            $strReturn .= "Updating to 4.7.1...\n";
             $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7.1");
             $this->updateElementVersion($this->objMetadata->getStrTitle(), "4.7.1");
         }
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.7.1") {
-            $strReturn = "Updating to 5.0...\n";
+            $strReturn .= "Updating to 5.0...\n";
             $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.0");
             $this->updateElementVersion($this->objMetadata->getStrTitle(), "5.0");
         }
@@ -177,8 +183,109 @@ class InstallerPostacomment extends InstallerBase implements InstallerRemovableI
             $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1");
             $this->updateElementVersion($this->objMetadata->getStrTitle(), "5.1");
         }
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.1") {
+            $strReturn .= $this->update_51_to_511();
+        }
+
+
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.1.1") {
+            $strReturn = "Updating to 6.2...\n";
+            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "6.2");
+            $this->updateElementVersion($this->objMetadata->getStrTitle(), "6.2");
+        }
 
         return $strReturn."\n\n";
+	}
+
+
+    private function update_51_to_511()
+    {
+        $strReturn = "Updating to 5.1.1...\n";
+        $strReturn .= "Creating moderated setting...\n";
+        $this->registerConstant("_postacomment_post_moderated_", "false", SystemSetting::$int_TYPE_BOOL, _postacomment_modul_id_);
+
+        if(in_array(_dbprefix_."guestbook_post", $this->objDB->getTables())) {
+
+            //find all guestbook elements and the matching books in order to duplicate the entries
+            foreach ($this->objDB->getPArray("SELECT * FROM "._dbprefix_."element_guestbook, "._dbprefix_."system, "._dbprefix_."page_element WHERE content_id = page_element_id AND content_id = system_id", array()) as $arrOneElement) {
+                $strPostParentId = $arrOneElement["guestbook_id"];
+                $strTargetLang = $arrOneElement["page_element_ph_language"];
+                $strTargetPageId = null;
+
+                $strSysQuery = "SELECT * FROM "._dbprefix_."system WHERE system_id = ?";
+                $arrSysRecord = $this->objDB->getPRow($strSysQuery, array($arrOneElement["system_prev_id"]));
+                while ($arrSysRecord["system_id"] != "0") {
+                    if ($arrSysRecord["system_class"] == PagesPage::class) {
+                        $strTargetPageId = $arrSysRecord["system_id"];
+                        break;
+                    }
+
+                    $arrSysRecord = $this->objDB->getPRow($strSysQuery, array($arrSysRecord["system_prev_id"]));
+                }
+
+
+                if (validateSystemid($strTargetPageId) && validateSystemid($strPostParentId)) {
+                    //all set up, lets start to copy the records
+                    foreach ($this->objDB->getPArray("SELECT * FROM "._dbprefix_."system, "._dbprefix_."guestbook_post WHERE system_id = guestbook_post_id AND system_prev_id = ?", array($strPostParentId)) as $arrOnePost) {
+                        $strReturn .= "Moving guestbook entry ".$arrOnePost["system_id"]." to pac...\n";
+
+                        $objPostacomment = new PostacommentPost();
+                        $objPostacomment->setStrTitle(trim($arrOnePost["guestbook_post_name"]." ".$arrOnePost["guestbook_post_page"]));
+                        $objPostacomment->setStrComment($arrOnePost["guestbook_post_text"]);
+                        $objPostacomment->setStrUsername($arrOnePost["guestbook_post_name"]);
+                        $objPostacomment->setIntDate($arrOnePost["guestbook_post_date"]);
+                        $objPostacomment->setStrAssignedPage($strTargetPageId);
+                        $objPostacomment->setStrAssignedLanguage($strTargetLang);
+
+                        $objPostacomment->updateObjectToDb();
+                    }
+                }
+            }
+
+            $strReturn .= "Shifting page-elements...\n";
+            foreach ($this->objDB->getPArray("SELECT * FROM "._dbprefix_."element_guestbook", array()) as $arrOneRow) {
+                $this->objDB->_pQuery("INSERT INTO "._dbprefix_."element_universal (content_id, char1) VALUES (?, ?)", array($arrOneRow["content_id"], 'postacomment_ajax.tpl'));
+            }
+
+            $strReturn .= "Updating element classes...\n";
+            $objElement = PagesElement::getElement("guestbook");
+            $objElement->setStrClassAdmin("ElementPostacommentAdmin.php");
+            $objElement->setStrClassPortal("ElementPostacommentPortal.php");
+            $objElement->updateObjectToDb();
+
+            $strReturn .= "Removing entries...\n";
+            $objCommons = new SystemCommon();
+            foreach ($this->objDB->getPArray("SELECT * FROM "._dbprefix_."guestbook_post", array()) as $arrOneRow) {
+                $objCommons->deleteSystemRecord($arrOneRow["guestbook_post_id"]);
+            }
+
+            foreach ($this->objDB->getPArray("SELECT * FROM "._dbprefix_."guestbook_book", array()) as $arrOneRow) {
+                $objCommons->deleteSystemRecord($arrOneRow["guestbook_id"]);
+            }
+
+            $this->objDB->_pQuery("DROP TABLE "._dbprefix_."guestbook_post", array());
+            $this->objDB->_pQuery("DROP TABLE "._dbprefix_."guestbook_book", array());
+            $this->objDB->_pQuery("DROP TABLE "._dbprefix_."element_guestbook", array());
+
+            $objModule = SystemModule::getModuleByName("guestbook");
+            $objModule->deleteObjectFromDatabase();
+
+            $strReturn .= "Cleaning filesystem...\n";
+            $objFilesystem = new Filesystem();
+            if(is_file(_realpath_."/core/module_guestbook.phar")) {
+                $objFilesystem->fileDelete("/core/module_guestbook.phar");
+            } elseif (is_dir(_realpath_."/core/module_guestbook")) {
+                $objFilesystem->folderDeleteRecursive("/core/module_guestbook");
+            }
+            Classloader::getInstance()->flushCache();
+        }
+
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1.1");
+        $this->updateElementVersion($this->objMetadata->getStrTitle(), "5.1.1");
+
+        return $strReturn;
 	}
 
 

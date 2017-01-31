@@ -8,6 +8,7 @@ namespace Kajona\Debugging\Debug;
 
 use Kajona\System\System\Filesystem;
 use Kajona\System\System\Resourceloader;
+use Kajona\System\System\StringUtil;
 use Kajona\System\Tests\Testbase;
 use ReflectionClass;
 
@@ -64,7 +65,7 @@ if(issetPost("dotest")) {
         include_once $strSearched;
         $arrClasses = get_php_classes(file_get_contents($strSearched));
         foreach($arrClasses as $strClassName) {
-            if(uniStripos($strClassName, "test") !== false) {
+            if(StringUtil::indexOf($strClassName, "test", false) !== false) {
                 $objTest = new $strClassName();
                 if($objTest instanceof Testbase) {
                     echo " invoking kajonaTestTrigger() on instance of ".$strClassName."\n\n\n\n";
@@ -233,7 +234,7 @@ class PHPUnit_Framework_TestCase {
         $arrMethods = $objReflection->getMethods();
 
         foreach($arrMethods as $objOneMethod) {
-            if(uniStrpos($objOneMethod->getName(), "test") !== false) {
+            if(StringUtil::indexOf($objOneMethod->getName(), "test") !== false) {
                 echo "calling ".$objOneMethod->getName()."...\n";
                 $objOneMethod->invoke($this);
             }

@@ -73,14 +73,14 @@ class TemplatePlaceholderParser
         $intCounter = 0;
         foreach ($arrTemp[0] as $strPlacehoder) {
 
-            if (uniStrpos($strPlacehoder, "master") !== false && $intMode == Template::INT_ELEMENT_MODE_REGULAR) {
+            if (StringUtil::indexOf($strPlacehoder, "master") !== false && $intMode == Template::INT_ELEMENT_MODE_REGULAR) {
                 continue;
             }
 
-            $strTemp = uniSubstr($strPlacehoder, 2, -2);
+            $strTemp = StringUtil::substring($strPlacehoder, 2, -2);
             $arrTemp = explode("_", $strTemp);
             //are there any pipes?
-            if (uniStrpos($arrTemp[1], "|") !== false) {
+            if (StringUtil::indexOf($arrTemp[1], "|") !== false) {
                 $arrElementTypes = explode("|", $arrTemp[1]);
                 $intCount2 = 0;
                 $arrReturn[$intCounter]["placeholder"] = $strTemp;

@@ -9,6 +9,7 @@
 namespace Kajona\Mediamanager\System;
 
 use Kajona\System\System\AdminListableInterface;
+use Kajona\System\System\StringUtil;
 
 
 /**
@@ -144,7 +145,7 @@ class MediamanagerRepo extends \Kajona\System\System\Model implements \Kajona\Sy
 
     public function setStrPath($strPath)
     {
-        if (uniStrpos(uniSubstr($strPath, 0, 7), "files") === false) {
+        if (StringUtil::indexOf(StringUtil::substring($strPath, 0, 7), "files") === false) {
             $strPath = "/files".$strPath;
         }
 

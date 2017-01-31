@@ -8,7 +8,12 @@
 
 namespace Kajona\System\System;
 
-
+/**
+ * The response object stores all relevant metadata of the http-response, including headers and the http-status code.
+ *
+ * @package Kajona\System\System
+ * @author sidler@mulchprod.de
+ */
 class ResponseObject
 {
 
@@ -33,6 +38,7 @@ class ResponseObject
      */
     private function __construct()
     {
+        $this->objEntryPoint = RequestEntrypointEnum::INDEX();
         $this->strStatusCode = HttpStatuscodes::SC_OK;
         $this->strResponseType = HttpResponsetypes::STR_TYPE_HTML;
     }
@@ -51,13 +57,13 @@ class ResponseObject
 
 
     /**
-     *
+     * Sends all headers to the client
      */
     public function sendHeaders()
     {
         if ($this->strRedirectUrl != "") {
             $this->strStatusCode = HttpStatuscodes::SC_REDIRECT;
-            $this->arrAdditionalHeaders[] = "Location: ".uniStrReplace("&amp;", "&", $this->strRedirectUrl);
+            $this->arrAdditionalHeaders[] = "Location: ".StringUtil::replace("&amp;", "&", $this->strRedirectUrl);
         }
 
         header($this->getStrStatusCode());
@@ -66,6 +72,41 @@ class ResponseObject
         foreach ($this->arrAdditionalHeaders as $strOneHeader) {
             header($strOneHeader);
         }
+    }
+
+    /**
+     * Sends headers to the client, to allow conditionalGets
+     *
+     * @param string $strChecksum Checksum of the content. Must be unique for one state.
+     */
+    public function sendConditionalGetHeader($strChecksum)
+    {
+        $this->addHeader("ETag: ".$strChecksum);
+        $this->addHeader("Cache-Control: max-age=86400, must-revalidate");
+    }
+
+    /**
+     * Checks, if the browser sent the same checksum as provided. If so,
+     * a http 304 is sent to the browser
+     *
+     * @param $strChecksum
+     *
+     * @return bool
+     */
+    public function processConditionalGetHeaders($strChecksum)
+    {
+        if (issetServer("HTTP_IF_NONE_MATCH")) {
+            if (getServer("HTTP_IF_NONE_MATCH") == $strChecksum) {
+                //strike. no further actions needed.
+                ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_NOT_MODIFIED);
+                ResponseObject::getInstance()->addHeader("ETag: ".$strChecksum);
+                ResponseObject::getInstance()->addHeader("Cache-Control: max-age=86400, must-revalidate");
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
 

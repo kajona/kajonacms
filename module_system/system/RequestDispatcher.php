@@ -10,8 +10,7 @@
 namespace Kajona\System\System;
 
 use Kajona\System\Admin\LoginAdmin;
-use Kajona\System\Admin\LoginAdminXml;
-
+use Kajona\System\Xml;
 
 /**
  * The request-dispatcher is called by all external request-entries and acts as a controller.
@@ -45,8 +44,6 @@ class RequestDispatcher
      * Standard constructor
      *
      * @param ResponseObject $objResponse
-     *
-     * @return RequestDispatcher
      */
     public function __construct(ResponseObject $objResponse, \Kajona\System\System\ObjectBuilder $objBuilder)
     {
@@ -64,7 +61,6 @@ class RequestDispatcher
      * @param string $strAction
      * @param string $strLanguageParam
      *
-     * @return string
      */
     public function processRequest($bitAdmin, $strModule, $strAction, $strLanguageParam)
     {
@@ -74,8 +70,7 @@ class RequestDispatcher
         if ($bitAdmin) {
             $strReturn = $this->processAdminRequest($strModule, $strAction, $strLanguageParam);
             $strReturn = $this->callScriptlets($strReturn, ScriptletInterface::BIT_CONTEXT_ADMIN);
-        }
-        else {
+        } else {
             $strReturn = $this->processPortalRequest($strModule, $strAction, $strLanguageParam);
             $strReturn = $this->callScriptlets($strReturn, ScriptletInterface::BIT_CONTEXT_PORTAL_PAGE);
         }
@@ -83,7 +78,6 @@ class RequestDispatcher
 
         $strReturn = $this->cleanupOutput($strReturn);
         $strReturn = $this->getDebugInfo($strReturn);
-        $this->sendConditionalGetHeaders($strReturn);
 
         $this->objResponse->setStrContent($strReturn);
 
@@ -110,23 +104,29 @@ class RequestDispatcher
         //validate https status
         if (SystemSetting::getConfigValue("_admin_only_https_") == "true") {
             //check which headers to compare
-            $strHeaderName = Carrier::getInstance()->getObjConfig()->getConfig("https_header");
+            $arrHeaderNames = Carrier::getInstance()->getObjConfig()->getConfig("https_header");
+            if (!is_array($arrHeaderNames)) {
+                $arrHeaderNames = array($arrHeaderNames);
+            }
             $strHeaderValue = strtolower(Carrier::getInstance()->getObjConfig()->getConfig("https_header_value"));
 
-            //header itself given?
-            if (!issetServer($strHeaderName)) {
+            $bitRedirectRequired = true;
+            foreach ($arrHeaderNames as $strSingleName) {
+                if (issetServer($strSingleName) && $strHeaderValue == strtolower(getServer($strSingleName))) {
+                    $bitRedirectRequired = false;
+                    break;
+                }
+            }
+
+            if ($bitRedirectRequired) {
                 //reload to https
-                ResponseObject::getInstance()->setStrRedirectUrl(uniStrReplace("http:", "https:", _xmlLoader_ === true ? _xmlpath_ : _indexpath_)."?".getServer("QUERY_STRING"));
+                ResponseObject::getInstance()->setStrRedirectUrl(
+                    StringUtil::replace("http:", "https:", ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML()) ? _xmlpath_ : _indexpath_)."?".getServer("QUERY_STRING")
+                );
                 ResponseObject::getInstance()->sendHeaders();
                 die("Reloading using https...");
             }
-            //value of header correct?
-            elseif ($strHeaderValue != "" && $strHeaderValue != strtolower(getServer($strHeaderName))) {
-                //reload to https
-                ResponseObject::getInstance()->setStrRedirectUrl(uniStrReplace("http:", "https:", _xmlLoader_ === true ? _xmlpath_ : _indexpath_)."?".getServer("QUERY_STRING"));
-                ResponseObject::getInstance()->sendHeaders();
-                die("Reloading using https...");
-            }
+
         }
 
         //process language-param
@@ -142,7 +142,6 @@ class RequestDispatcher
                 //try to load the module
                 $objModuleRequested = SystemModule::getModuleByName($strModule);
                 if ($objModuleRequested != null) {
-
                     //see if there is data from a previous, failed request
                     if (Carrier::getInstance()->getObjSession()->getSession(LoginAdmin::SESSION_LOAD_FROM_PARAMS) === "true") {
                         foreach (Carrier::getInstance()->getObjSession()->getSession(LoginAdmin::SESSION_PARAMS) as $strOneKey => $strOneVal) {
@@ -154,57 +153,42 @@ class RequestDispatcher
                     }
 
 
-                    if (_xmlLoader_) {
-                        if ($objModuleRequested->getStrXmlNameAdmin() != "") {
-                            $objConcreteModule = $objModuleRequested->getAdminInstanceOfConcreteModule("", true);
-                            $strReturn = $objConcreteModule->action($strAction);
-                        }
-                        else {
-                            //xml-loader not defined, try to use the regular dispatcher
-                            $objConcreteModule = $objModuleRequested->getAdminInstanceOfConcreteModule();
-                            $strReturn = $objConcreteModule->action($strAction);
-                        }
-                    }
-                    else {
-
-                        //fill the history array to track actions
+                    //fill the history array to track actions
+                    if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::INDEX()) && empty(Carrier::getInstance()->getParam("folderview"))) {
                         $objHistory = new History();
                         //Writing to the history
-                        if (Carrier::getInstance()->getParam("folderview") == "") {
-                            $objHistory->setAdminHistory();
-                        }
+                        $objHistory->setAdminHistory();
+                    }
 
-                        $objConcreteModule = $objModuleRequested->getAdminInstanceOfConcreteModule();
+                    $objConcreteModule = $objModuleRequested->getAdminInstanceOfConcreteModule();
 
-                        if (Carrier::getInstance()->getParam("blockAction") != "1") {
+                    if (Carrier::getInstance()->getParam("blockAction") != "1") {
+                        try {
                             $objConcreteModule->action();
+                            $strReturn = $objConcreteModule->getModuleOutput();
+                        } catch (ActionNotFoundException $objEx) {
                             $strReturn = $objConcreteModule->getModuleOutput();
                         }
 
-                        //React, if admin was opened by the portaleditor
-                        if (Carrier::getInstance()->getParam("peClose") == "1") {
-
-                            if(getGet("peRefreshPage") != "") {
-                                $strReloadUrl = xssSafeString(getGet("peRefreshPage"));
-                                $strReturn = "<html><head></head><body><script type='text/javascript'>if(window.opener) { window.opener.location = '".$strReloadUrl."'; window.close(); } else { parent.location = '".$strReloadUrl."'; }</script></body></html>";
-                            }
-                            else {
-                                $strReturn = "<html><head></head><body><script type='text/javascript'>if(window.opener) { window.opener.location.reload(); window.close(); } else { parent.location.reload(); }</script></body></html>";
-                            }
-                        }
-
                     }
 
-                }
-                else {
+                    //React, if admin was opened by the portaleditor
+                    if (Carrier::getInstance()->getParam("peClose") == "1") {
+                        if (getGet("peRefreshPage") != "") {
+                            $strReloadUrl = xssSafeString(getGet("peRefreshPage"));
+                            $strReturn = "<html><head></head><body><script type='text/javascript'>if(window.opener) { window.opener.location = '".$strReloadUrl."'; window.close(); } else { parent.location = '".$strReloadUrl."'; }</script></body></html>";
+                        } else {
+                            $strReturn = "<html><head></head><body><script type='text/javascript'>if(window.opener) { window.opener.location.reload(); window.close(); } else { parent.location.reload(); }</script></body></html>";
+                        }
+                    }
+
+                } else {
                     throw new Exception("Requested module ".$strModule." not existing", Exception::$level_FATALERROR);
                 }
-            }
-            else {
+            } else {
                 throw new Exception("Sorry, but you don't have the needed permissions to access the admin-area", Exception::$level_FATALERROR);
             }
-        }
-        else {
+        } else {
             $bitLogin = true;
 
             if ($strModule != "login") {
@@ -213,21 +197,22 @@ class RequestDispatcher
         }
 
         if ($bitLogin) {
-            if (_xmlLoader_) {
-                $objLogin = $this->objBuilder->factory(LoginAdminXml::class);
-                $strReturn = $objLogin->action($strAction);
+            //skip in case of xml requests
+            if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML())) {
+                ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
+                ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_XML);
+                Xml::setBitSuppressXmlHeader(true);
+                return Exception::renderException(new ActionNotFoundException("you are not authorized/authenticated to call this action", Exception::$level_FATALERROR));
             }
-            else {
 
-                if (count(Carrier::getInstance()->getObjDB()->getTables()) == 0 && file_exists(_realpath_."installer.php")) {
-                    ResponseObject::getInstance()->setStrRedirectUrl(_webpath_."/installer.php");
-                    return "";
-                }
-
-                $objLogin = $this->objBuilder->factory(LoginAdmin::class);
-                $objLogin->action($strAction);
-                $strReturn = $objLogin->getModuleOutput();
+            if (count(Carrier::getInstance()->getObjDB()->getTables()) == 0 && file_exists(_realpath_."installer.php")) {
+                ResponseObject::getInstance()->setStrRedirectUrl(_webpath_."/installer.php");
+                return "";
             }
+
+            $objLogin = $this->objBuilder->factory(LoginAdmin::class);
+            $objLogin->action($strAction);
+            $strReturn = $objLogin->getModuleOutput();
 
         }
 
@@ -260,34 +245,28 @@ class RequestDispatcher
         //Load the portal parts
         $objModule = SystemModule::getModuleByName($strModule);
         if ($objModule != null) {
-
-            if (_xmlLoader_) {
-                if ($objModule->getStrXmlNamePortal() != "") {
-                    $objModuleRequested = $objModule->getPortalInstanceOfConcreteModule(null, true);
-                    $strReturn = $objModuleRequested->action($strAction);
-                }
-                else {
-                    $objModuleRequested = $objModule->getPortalInstanceOfConcreteModule();
-                    $strReturn = $objModuleRequested->action($strAction);
-                }
+            if ($strModule == "pages") {
+                $strAction = "";
             }
-            else {
-                if ($strModule == "pages") {
-                    $strAction = "";
-                }
 
-                //fill the history array to track actions
+            //fill the history array to track actions
+            if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::INDEX())) {
                 $objHistory = new History();
                 $objHistory->setPortalHistory();
-
-                $objModuleRequested = $objModule->getPortalInstanceOfConcreteModule();
-                $strReturn = $objModuleRequested->action($strAction);
             }
 
-        }
-        else {
+            $objModuleRequested = $objModule->getPortalInstanceOfConcreteModule();
 
-            if (_xmlLoader_ === false) {
+            //catch problems on top level
+            try {
+                $strReturn = $objModuleRequested->action($strAction);
+            } catch (ActionNotFoundException $objException) {
+                $strReturn = Exception::renderException($objException);
+            }
+
+
+        } else {
+            if (!ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML())) {
                 if (count(Carrier::getInstance()->getObjDB()->getTables()) == 0 && file_exists(_realpath_."installer.php")) {
                     ResponseObject::getInstance()->setStrRedirectUrl(_webpath_."/installer.php");
                     return "";
@@ -333,32 +312,6 @@ class RequestDispatcher
         return $objScriptlet->processString($strContent, $intContext);
     }
 
-
-    /**
-     * Sends conditional get headers and tries to match sent ones.
-     *
-     * @param string $strContent
-     *
-     * @return void
-     */
-    private function sendConditionalGetHeaders($strContent)
-    {
-
-        //check headers, maybe execution could be terminated right here
-        //yes, this doesn't save us from generating the page, but the traffic towards the client can be reduced
-        if (checkConditionalGetHeaders(md5($_SERVER["REQUEST_URI"].$this->objSession->getSessionId().$strContent))) {
-            ResponseObject::getInstance()->sendHeaders();
-            flush();
-            die();
-        }
-
-        //send headers if not an ie
-        if (strpos(getServer("HTTP_USER_AGENT"), "IE") === false) {
-            setConditionalGetHeaders(md5($_SERVER["REQUEST_URI"].$this->objSession->getSessionId().$strContent));
-        }
-    }
-
-
     /**
      * Generates debugging-infos, but only in non-xml mode
      *
@@ -394,17 +347,15 @@ class RequestDispatcher
                 $strDebug .= "<b>Classes Loaded:</b> ".Classloader::getInstance()->getIntNumberOfClassesLoaded()." ";
             }
 
-            if (_xmlLoader_ === true) {
+            if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML())) {
                 ResponseObject::getInstance()->addHeader("Kajona Debug: ".$strDebug);
-            }
-            else {
+            } else {
                 $strDebug = "<pre style='z-index: 2000000; position: fixed; background-color: white; width: 100%; top: 0; font-size: 10px; padding: 0; margin: 0;'>Kajona Debug: ".$strDebug."</pre>";
 
-                $intBodyPos = uniStrpos($strReturn, "</body>");
+                $intBodyPos = StringUtil::indexOf($strReturn, "</body>");
                 if ($intBodyPos !== false) {
-                    $strReturn = uniSubstr($strReturn, 0, $intBodyPos).$strDebug.uniSubstr($strReturn, $intBodyPos);
-                }
-                else {
+                    $strReturn = StringUtil::substring($strReturn, 0, $intBodyPos).$strDebug.StringUtil::substring($strReturn, $intBodyPos);
+                } else {
                     $strReturn = $strDebug.$strReturn;
                 }
             }

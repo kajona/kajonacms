@@ -15,6 +15,7 @@ use Kajona\System\System\Classloader;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\OrmRowcache;
 use Kajona\System\System\Resourceloader;
+use Kajona\System\System\StringUtil;
 use ReflectionClass;
 
 
@@ -197,8 +198,8 @@ class WorkflowsHandler extends \Kajona\System\System\Model implements \Kajona\Sy
         foreach ($arrWorkflows as $objOneWorkflow) {
 
             $strClassname = $objOneWorkflow->getStrHandlerClass();
-            if (uniStrrpos($objOneWorkflow->getStrHandlerClass(), "\\") > 0) {
-                $strClassname = uniSubstr($objOneWorkflow->getStrHandlerClass(), uniStrrpos($objOneWorkflow->getStrHandlerClass(), "\\") + 1);
+            if (StringUtil::lastIndexOf($objOneWorkflow->getStrHandlerClass(), "\\") > 0) {
+                $strClassname = StringUtil::substring($objOneWorkflow->getStrHandlerClass(), StringUtil::lastIndexOf($objOneWorkflow->getStrHandlerClass(), "\\") + 1);
             }
 
             if (!in_array($strClassname.".php", $arrFiles)) {
@@ -216,12 +217,12 @@ class WorkflowsHandler extends \Kajona\System\System\Model implements \Kajona\Sy
     {
 
         $strClassname = $this->getStrHandlerClass();
-        if (uniStrrpos($this->getStrHandlerClass(), "\\") > 0) {
-            $strClassname = uniSubstr($this->getStrHandlerClass(), uniStrrpos($this->getStrHandlerClass(), "\\") + 1);
+        if (StringUtil::lastIndexOf($this->getStrHandlerClass(), "\\") > 0) {
+            $strClassname = StringUtil::substring($this->getStrHandlerClass(), StringUtil::lastIndexOf($this->getStrHandlerClass(), "\\") + 1);
         }
 
         if ($this->getStrHandlerClass() != "" && Resourceloader::getInstance()->getPathForFile("/system/workflows/".$strClassname.".php") !== false) {
-            $strClassname = uniStrReplace(".php", "", $this->getStrHandlerClass());
+            $strClassname = StringUtil::replace(".php", "", $this->getStrHandlerClass());
             $objReflection = new ReflectionClass($strClassname);
 
             if (!$objReflection->isAbstract()) {

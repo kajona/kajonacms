@@ -9,7 +9,6 @@
 
 namespace Kajona\System\System;
 
-
 /**
  * Wrapper to access the last urls the current user / session called.
  * In prior versions, this was handled by AdminController and PortalController.
@@ -64,12 +63,12 @@ class History
         $strQueryString = getServer("QUERY_STRING");
 
         //Clean querystring of empty actions
-        if (uniSubstr($strQueryString, -8) == "&action=") {
+        if (StringUtil::substring($strQueryString, -8) == "&action=") {
             $strQueryString = substr_replace($strQueryString, "", -8);
         }
 
         //Just do s.th., if not in the rights-mgmt
-        if (uniStrpos($strQueryString, "module=right") !== false) {
+        if (StringUtil::indexOf($strQueryString, "module=right") !== false) {
             return;
         }
 

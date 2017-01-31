@@ -3,8 +3,6 @@
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2016 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                           *
 ********************************************************************************************************/
 
 namespace Kajona\System\Event;
@@ -13,7 +11,6 @@ use Kajona\System\System\CoreEventdispatcher;
 use Kajona\System\System\GenericeventListenerInterface;
 use Kajona\System\System\SystemChangelog;
 use Kajona\System\System\SystemEventidentifier;
-
 
 /**
  * Creates changelog entries after sending content to the browser
@@ -24,7 +21,8 @@ use Kajona\System\System\SystemEventidentifier;
  * @since 4.6
  *
  */
-class SystemChangelogAftercontentsendlistener implements GenericeventListenerInterface {
+class SystemChangelogAftercontentsendlistener implements GenericeventListenerInterface
+{
 
 
     /**
@@ -39,7 +37,8 @@ class SystemChangelogAftercontentsendlistener implements GenericeventListenerInt
      *
      * @return bool
      */
-    public function handleEvent($strEventName, array $arrArguments) {
+    public function handleEvent($strEventName, array $arrArguments)
+    {
         $objChangelog = new SystemChangelog();
         return $objChangelog->processCachedInserts();
     }
@@ -47,9 +46,12 @@ class SystemChangelogAftercontentsendlistener implements GenericeventListenerInt
 
     /**
      * Internal init to register the event listener, called on file-inclusion, e.g. by the class-loader
+     *
      * @return void
      */
-    public static function staticConstruct() {
+    public static function staticConstruct()
+    {
     }
 }
+
 CoreEventdispatcher::getInstance()->removeAndAddListener(SystemEventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, new SystemChangelogAftercontentsendlistener());

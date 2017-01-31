@@ -69,17 +69,17 @@ Naturally, webbased software comes with a bunch of statical resources such as ja
 
 But - of the path of the files change, how to load them? Whats the right place to load a js-file from, would it be:
 
-	/core/module_pages/admin/scripts/pages.js
+	/core/module_pages/scripts/kajona/pages.js
 	
 or
 
-	/files/extract/module_pages/admin/scripts/pages.js
+	/files/extract/module_pages/scripts/kajona/pages.js
 		
-For most cases, the matching path is resolved internally and automatically using the Kajona-Loader:
+For most cases, the matching path is resolved internally and automatically using the requirejs-loader:
 
 	<script type="text/javascript">
-    KAJONA.admin.loader.loadFile('/core/module_pages/admin/scripts/pages.js', function() {
-	    KAJONA.admin.pages.initBlockSort();
+	require(['pages], function(pages) {
+	    pages.initBlockSort();
     });
 	</script>
 
@@ -90,7 +90,7 @@ This means, just include everything as you would when developing a new module, s
 
 When working in templates, you may make use of the [webpath-scriptlet](https://github.com/kajona/kajonacms/blob/master/module_system/system/scriptlets/ScriptletWebpath.php), resolving everything automatically, too:
  
-    <link rel="stylesheet" href="_webpath_/[webpath,module_system]/admin/scripts/jqueryui/css/smoothness/jquery-ui.custom.css?_system_browser_cachebuster_" type="text/css" />
+    <link rel="stylesheet" href="_webpath_/[webpath,module_system]/scripts/jqueryui/css/smoothness/jquery-ui.custom.css?_system_browser_cachebuster_" type="text/css" />
     
 If you want to resolve a modules' location directly in PHP, the ```Resourceloader```is yours:
 

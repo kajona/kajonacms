@@ -6,11 +6,11 @@
 
 namespace Kajona\System\Admin\Formentries;
 
-use Kajona\System\Admin\AdminFormgenerator;
 use Kajona\System\Admin\FormentryPrintableInterface;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Link;
 use Kajona\System\System\Reflection;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\Validators\TextValidator;
 
 
@@ -114,7 +114,7 @@ class FormentryDropdown extends FormentryBase implements FormentryPrintableInter
         if ($strDDValues !== null && $strDDValues != "") {
             $arrDDValues = array();
             foreach (explode(",", $strDDValues) as $strOneKeyVal) {
-                $strOneKeyVal = uniSubstr(trim($strOneKeyVal), 1, -1);
+                $strOneKeyVal = StringUtil::substring(trim($strOneKeyVal), 1, -1);
                 $arrOneKeyValue = explode("=>", $strOneKeyVal);
 
                 $strKey = trim($arrOneKeyValue[0]) == "" ? " " : trim($arrOneKeyValue[0]);

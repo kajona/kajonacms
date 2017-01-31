@@ -91,8 +91,7 @@ class PagesPortalController extends PortalController implements PortalInterface
         //TODO: merge with data from master-page, load blocks and blocks automatically within a single, complex join
         if (PagesPortaleditor::isActive()) {
             self::$arrElementsOnPage = PagesPageelement::getElementsOnPage($objPageData->getSystemid(), false, $this->getStrPortalLanguage(), true);
-        }
-        else {
+        } else {
             self::$arrElementsOnPage = PagesPageelement::getElementsOnPage($objPageData->getSystemid(), true, $this->getStrPortalLanguage(), true);
         }
 
@@ -103,9 +102,15 @@ class PagesPortalController extends PortalController implements PortalInterface
             list($strPageCacheHashSum, $intPageCacheTime) = $this->getPageCacheValues(self::$arrElementsOnPage);
             /** @var CacheManager $objCache */
             $objCache = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER);
-            $strPageContent = $objCache->getValue($strPageCacheHashSum);
-            if ($strPageContent !== false) {
-                return $strPageContent;
+
+            if ($objCache->containsValue($strPageCacheHashSum)) {
+                if (ResponseObject::getInstance()->processConditionalGetHeaders($strPageCacheHashSum)) {
+                    return "";
+                } else {
+                    //and add conditional get heaers
+                    ResponseObject::getInstance()->sendConditionalGetHeader($strPageCacheHashSum);
+                    return $objCache->getValue($strPageCacheHashSum);
+                }
             }
         }
 
@@ -113,8 +118,7 @@ class PagesPortalController extends PortalController implements PortalInterface
         //load the merged placeholder-list
         try {
             $objPlaceholders = $this->objTemplate->parsePageTemplate("/module_pages/".$objPageData->getStrTemplate(), Template::INT_ELEMENT_MODE_MASTER);
-        }
-        catch(TemplateBlocksParserException $objEx) {
+        } catch(TemplateBlocksParserException $objEx) {
             Logger::getInstance(Logger::SYSTEMLOG)->addLogRow($objEx->getMessage(). " @ /module_pages/".$objPageData->getStrTemplate(), Logger::$levelError);
             $objPageData = clone $this->getPageData(true);
             $objPlaceholders = $this->objTemplate->parsePageTemplate("/module_pages/".$objPageData->getStrTemplate(), Template::INT_ELEMENT_MODE_MASTER);
@@ -284,16 +288,16 @@ class PagesPortalController extends PortalController implements PortalInterface
         $strHeader .= "For more information about Kajona see http://www.kajona.de\n";
         $strHeader .= "-->\n";
 
-        $intBodyPos = uniStripos($strPageContent, "</head>");
-        $intPosXml = uniStripos($strPageContent, "<?xml");
+        $intBodyPos = StringUtil::indexOf($strPageContent, "</head>", false);
+        $intPosXml = StringUtil::indexOf($strPageContent, "<?xml", false);
         if ($intBodyPos !== false) {
             $intBodyPos += 0;
-            $strPageContent = uniSubstr($strPageContent, 0, $intBodyPos).$strHeader.uniSubstr($strPageContent, $intBodyPos);
+            $strPageContent = StringUtil::substring($strPageContent, 0, $intBodyPos).$strHeader.StringUtil::substring($strPageContent, $intBodyPos);
         }
         elseif ($intPosXml !== false) {
-            $intBodyPos = uniStripos($strPageContent, "?>");
+            $intBodyPos = StringUtil::indexOf($strPageContent, "?>", false);
             $intBodyPos += 2;
-            $strPageContent = uniSubstr($strPageContent, 0, $intBodyPos).$strHeader.uniSubstr($strPageContent, $intBodyPos);
+            $strPageContent = StringUtil::substring($strPageContent, 0, $intBodyPos).$strHeader.StringUtil::substring($strPageContent, $intBodyPos);
         }
         else {
             $strPageContent = $strHeader.$strPageContent;
@@ -304,6 +308,8 @@ class PagesPortalController extends PortalController implements PortalInterface
             /** @var CacheManager $objCache */
             $objCache = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER);
             $objCache->addValue($strPageCacheHashSum, $strPageContent, $intPageCacheTime);
+            //and add conditional get heaers
+            ResponseObject::getInstance()->sendConditionalGetHeader($strPageCacheHashSum);
         }
 
         return $strPageContent;
@@ -448,8 +454,10 @@ class PagesPortalController extends PortalController implements PortalInterface
             $strElementHash .= $objElementInstance->getCacheHashSum();
 
             $intElementCachetime = $objElementInstance->getCachetimeInSeconds();
-            if ($intCachetime === null || $intElementCachetime < $intCachetime) {
-                $intCachetime = $intElementCachetime;
+            if($intElementCachetime !== null) {
+                if ($intCachetime === null || $intElementCachetime < $intCachetime) {
+                    $intCachetime = $intElementCachetime;
+                }
             }
 
         }
@@ -465,6 +473,10 @@ class PagesPortalController extends PortalController implements PortalInterface
             $this->getParam("systemid").
             $this->getParam("highlight")
         );
+
+        if($intCachetime === null) {
+            $intCachetime = 0;
+        }
 
         return array($strHash, $intCachetime);
     }

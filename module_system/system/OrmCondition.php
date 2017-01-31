@@ -22,13 +22,6 @@ class OrmCondition extends OrmObjectlistRestriction implements OrmConditionInter
     const STR_CONDITION_AND = "AND";
     const STR_CONDITION_OR = "OR";
 
-    /**
-     * OrmCondition constructor.
-     */
-    function __construct($strWhere, $arrParams = array())
-    {
-        parent::__construct($strWhere, $arrParams);
-    }
 
     /**
      * @param string $strWhere
@@ -51,58 +44,54 @@ class OrmCondition extends OrmObjectlistRestriction implements OrmConditionInter
      * @param $strValue
      * @param $strTableColumn
      * @param OrmComparatorEnum|null $objFilterCompareOperator
-     * @param string $strCondition
      *
      * @return OrmCondition|null
-     * @throws OrmException
-     *
      */
-    public final static function getORMConditionForValue($strValue, $strTableColumn, OrmComparatorEnum $objFilterCompareOperator = null)
+    final public static function getORMConditionForValue($strValue, $strTableColumn, OrmComparatorEnum $objFilterCompareOperator = null)
     {
 
-        if(is_string($strValue)) {
-            if(validateSystemid($strValue)) {
+        if (is_string($strValue)) {
+            if (validateSystemid($strValue)) {
                 $strCompareOperator = $objFilterCompareOperator === null ? OrmComparatorEnum::Equal : $objFilterCompareOperator->getEnumAsSqlString();
                 return new OrmCondition("$strTableColumn $strCompareOperator ?", array($strValue));
-            }
-            else {
+            } else {
                 $strCompareOperator = $objFilterCompareOperator === null ? OrmComparatorEnum::Like : $objFilterCompareOperator->getEnumAsSqlString();
-                return new OrmCondition("$strTableColumn $strCompareOperator ?", array("%".$strValue."%"));
+                if ($strCompareOperator === OrmComparatorEnum::Like) {
+                    return new OrmCondition("$strTableColumn $strCompareOperator ?", array("%".$strValue."%"));
+                } else {
+                    return new OrmCondition("$strTableColumn $strCompareOperator ?", array($strValue));
+                }
             }
-        }
-        elseif(is_int($strValue) || is_float($strValue)) {
-            $strCompareOperator = $objFilterCompareOperator === null ? OrmComparatorEnum::Equal: $objFilterCompareOperator->getEnumAsSqlString();
+        } elseif (is_int($strValue) || is_float($strValue)) {
+            $strCompareOperator = $objFilterCompareOperator === null ? OrmComparatorEnum::Equal : $objFilterCompareOperator->getEnumAsSqlString();
             return new OrmCondition("$strTableColumn $strCompareOperator ?", array($strValue));
-        }
-        elseif(is_bool($strValue)) {
+        } elseif (is_bool($strValue)) {
             $strCompareOperator = $objFilterCompareOperator === null ? OrmComparatorEnum::Equal : $objFilterCompareOperator->getEnumAsSqlString();
             return new OrmCondition("$strTableColumn $strCompareOperator ?", $strValue ? array(1) : array(0));
-        }
-        elseif(is_array($strValue)) {
+        } elseif (is_array($strValue)) {
             $strCompareOperator = $objFilterCompareOperator === null ? OrmInCondition::STR_CONDITION_IN : $objFilterCompareOperator->getEnumAsSqlString();
 
-            if($objFilterCompareOperator !== null) {
-                if($objFilterCompareOperator->equals(OrmComparatorEnum::InOrEmpty())) {
+            if ($objFilterCompareOperator !== null) {
+                if ($objFilterCompareOperator->equals(OrmComparatorEnum::InOrEmpty())) {
                     return new OrmInOrEmptyCondition($strTableColumn, $strValue, OrmInCondition::STR_CONDITION_IN);
                 }
-                if($objFilterCompareOperator->equals(OrmComparatorEnum::NotInOrEmpty())) {
+                if ($objFilterCompareOperator->equals(OrmComparatorEnum::NotInOrEmpty())) {
                     return new OrmInOrEmptyCondition($strTableColumn, $strValue, OrmInCondition::STR_CONDITION_NOTIN);
                 }
             }
 
             return new OrmInCondition($strTableColumn, $strValue, $strCompareOperator);
-        }
-        elseif($strValue instanceof Date) {
+        } elseif ($strValue instanceof Date) {
             $strValue = clone $strValue;
             $strCompareOperator = $objFilterCompareOperator === null ? OrmComparatorEnum::Equal : $objFilterCompareOperator->getEnumAsSqlString();
 
-            if($objFilterCompareOperator !== null) {
-                if($objFilterCompareOperator->equals(OrmComparatorEnum::GreaterThen())
+            if ($objFilterCompareOperator !== null) {
+                if ($objFilterCompareOperator->equals(OrmComparatorEnum::GreaterThen())
                     || $objFilterCompareOperator->equals(OrmComparatorEnum::GreaterThenEquals())
                 ) {
                     $strValue->setBeginningOfDay();
                 }
-                if($objFilterCompareOperator->equals(OrmComparatorEnum::LessThen())
+                if ($objFilterCompareOperator->equals(OrmComparatorEnum::LessThen())
                     || $objFilterCompareOperator->equals(OrmComparatorEnum::LessThenEquals())
                 ) {
                     $strValue->setEndOfDay();

@@ -126,7 +126,7 @@ class PackagemanagerMetadata implements AdminListableInterface
      */
     public function autoInit($strPath)
     {
-        if (uniSubstr($strPath, -4) == ".zip") {
+        if (StringUtil::substring($strPath, -4) == ".zip") {
             $this->initFromPackage($strPath);
         }
         elseif (PharModule::isPhar($strPath)) {
@@ -282,7 +282,7 @@ class PackagemanagerMetadata implements AdminListableInterface
                         if (isset($arrOneImage["attributes"]["path"])) {
                             $strImage = $arrOneImage["attributes"]["path"];
 
-                            if (in_array(uniStrtolower(uniSubstr($strImage, -4)), array(".jpg", ".jpeg", ".gif", ".png"))) {
+                            if (in_array(StringUtil::toLowerCase(StringUtil::substring($strImage, -4)), array(".jpg", ".jpeg", ".gif", ".png"))) {
                                 $this->arrScreenshots[] = $strImage;
                             }
                         }

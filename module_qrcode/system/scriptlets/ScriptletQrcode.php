@@ -8,6 +8,7 @@ namespace Kajona\Qrcode\System\Scriptlets;
 
 use Kajona\Qrcode\System\Qrcode;
 use Kajona\System\System\ScriptletInterface;
+use Kajona\System\System\StringUtil;
 
 
 /**
@@ -50,7 +51,7 @@ class ScriptletQrcode implements ScriptletInterface
             $objQrCode->setIntSize($intSize);
             $strImage = $objQrCode->getImageForString($arrTemp[1][$intKey]);
 
-            $strContent = uniStrReplace(
+            $strContent = StringUtil::replace(
                 $strSearchString,
                 _webpath_ . "/" . $strImage,
                 $strContent

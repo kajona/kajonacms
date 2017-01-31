@@ -60,7 +60,7 @@ You only have to follow a few steps in order to build a Kajona project out of th
  xml.php
 ```
 
-_!!! Have a look at the end of the results: If you see some red lines (composer messages) the setupproject could NOT run the composer commands successfully! Please run the commands manually from the command line or a terminal window._
+> Have a look at the end of the results: If you see some red lines (composer messages) the setupproject could NOT run the composer commands successfully! Please run the commands manually from the command line or a terminal window.
 
 Done! All you have to do is to fire up your browser, opening the file ```kajona/installer.php``` and the installer will guide you through the process.
 Whenever you make changes to s.th. below /core, don't forget to create a pull-request with all those changes - and be sure to earn the glory!

@@ -24,10 +24,13 @@ function stopProcess($name)
                 exec(sprintf('tasklist /FI "PID eq %d"', $pid), $output, $exitCode);
                 $content = implode("\n", $output);
 
-                if (strpos($content, $pid) !== false) {
+                if (strpos($content, $pid."") !== false) {
                     // if the pid exists try to kill it
+                    echo 'Kill process ' . $pid . "\n";
+
                     $output = array();
                     exec(sprintf('taskkill /F /T /PID %d', $pid), $output, $exitCode);
+                    echo "Exit code kill process: ".$exitCode ."\n";
                 }
             } else {
                 // check whether pid exists
@@ -35,10 +38,13 @@ function stopProcess($name)
                 exec(sprintf('ps -p %d', $pid), $output, $exitCode);
                 $content = implode("\n", $output);
 
-                if (strpos($content, $pid) !== false) {
+                if (strpos($content, $pid."") !== false) {
                     // if the pid exists try to kill it
+                    echo 'Kill process ' . $pid . "\n";
+
                     $output = array();
                     exec(sprintf('kill -9 %d', $pid), $output, $exitCode);
+                    echo "Exit code kill process: ".$exitCode ."\n";
                 }
             }
             //delete the file after kill

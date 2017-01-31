@@ -33,7 +33,7 @@ class InstallerTags extends InstallerBase implements InstallerRemovableInterface
 
 		//tags_tag --------------------------------------------------------------------------------------
 		$strReturn .= "Installing table tags_tag...\n";
-        $objManager->createTable("Kajona\\Tags\\System\\TagsTag");
+        $objManager->createTable(TagsTag::class);
 
 		$strReturn .= "Installing table tags_member...\n";
         $arrFields = array();
@@ -47,7 +47,7 @@ class InstallerTags extends InstallerBase implements InstallerRemovableInterface
 			$strReturn .= "An error occurred! ...\n";
 
         $strReturn .= "Installing table tags_favorite...\n";
-        $objManager->createTable("Kajona\\Tags\\System\\TagsFavorite");
+        $objManager->createTable(TagsFavorite::class);
 
 		//register the module
 		$this->registerModule(
@@ -55,10 +55,7 @@ class InstallerTags extends InstallerBase implements InstallerRemovableInterface
             _tags_modul_id_,
             "",
             "TagsAdmin.php",
-            $this->objMetadata->getStrVersion(),
-            true,
-            "",
-            "TagsAdminXml.php"
+            $this->objMetadata->getStrVersion()
         );
 
 		$strReturn .= "Registering system-constants...\n";
@@ -154,7 +151,7 @@ class InstallerTags extends InstallerBase implements InstallerRemovableInterface
         //delete the tables
         foreach(array("tags_tag", "tags_member", "tags_favorite") as $strOneTable) {
             $strReturn .= "Dropping table ".$strOneTable."...\n";
-            if(!$this->objDB->_pQuery("DROP TABLE ".$this->objDB->encloseTableName(_dbprefix_.$strOneTable)."", array())) {
+            if(!$this->objDB->_pQuery("DROP TABLE ".$this->objDB->encloseTableName(_dbprefix_.$strOneTable), array())) {
                 $strReturn .= "Error deleting table, aborting.\n";
                 return false;
             }
@@ -176,7 +173,6 @@ class InstallerTags extends InstallerBase implements InstallerRemovableInterface
             $strReturn .= "Updating to 4.7...\n";
             $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7");
             $this->updateElementVersion($this->objMetadata->getStrTitle(), "4.7");
-            $this->objDB->flushQueryCache();
         }
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
@@ -184,7 +180,6 @@ class InstallerTags extends InstallerBase implements InstallerRemovableInterface
             $strReturn .= "Updating to 5.0...\n";
             $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.0");
             $this->updateElementVersion($this->objMetadata->getStrTitle(), "5.0");
-            $this->objDB->flushQueryCache();
         }
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
@@ -192,7 +187,13 @@ class InstallerTags extends InstallerBase implements InstallerRemovableInterface
             $strReturn .= "Updating to 5.1...\n";
             $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1");
             $this->updateElementVersion($this->objMetadata->getStrTitle(), "5.1");
-            $this->objDB->flushQueryCache();
+        }
+
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.1") {
+            $strReturn .= "Updating to 6.2...\n";
+            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "6.2");
+            $this->updateElementVersion($this->objMetadata->getStrTitle(), "6.2");
         }
 
         return $strReturn."\n\n";

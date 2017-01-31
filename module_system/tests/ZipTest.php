@@ -4,6 +4,7 @@ namespace Kajona\System\Tests;
 
 use Kajona\System\System\Filesystem;
 use Kajona\System\System\Resourceloader;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\Zip;
 
 class ZipTest extends Testbase
@@ -101,7 +102,7 @@ class ZipTest extends Testbase
         $this->assertFileExists(_realpath_ . "files/cache/test.zip", __FILE__ . " checkFileExists");
 
         $strContent = $objZip->getFileFromArchive("/files/cache/test.zip", Resourceloader::getInstance()->getCorePathForModule("module_system") . "/module_system/metadata.xml");
-        $this->assertTrue(uniStrpos($strContent, "xsi:noNamespaceSchemaLocation=\"https://apidocs.kajona.de/xsd/package.xsd\"") !== false);
+        $this->assertTrue(StringUtil::indexOf($strContent, "xsi:noNamespaceSchemaLocation=\"https://apidocs.kajona.de/xsd/package.xsd\"") !== false);
 
         $this->assertTrue($objFileSystem->fileDelete("/files/cache/test.zip"), __FILE__ . " deleteFile");
         $this->assertFileNotExists(_realpath_ . "files/cache/test.zip", __FILE__ . " checkFileNotExists");

@@ -1,0 +1,35 @@
+{
+  "paths": {
+    "bootstrap": "bootstrap/bootstrap.min",
+    "bootstrap-datepicker": "bootstrap/bootstrap-datepicker",
+    "bootstrap-datepicker-de": "bootstrap/locales/bootstrap-datepicker.de",
+    "bootstrap-datepicker-en": "bootstrap/locales/bootstrap-datepicker.en",
+    "bootstrap-datepicker-pt": "bootstrap/locales/bootstrap-datepicker.pt",
+    "bootstrap-datepicker-ru": "bootstrap/locales/bootstrap-datepicker.ru",
+    "bootstrap-datepicker-bg": "bootstrap/locales/bootstrap-datepicker.bg",
+    "bootstrap-datepicker-sv": "bootstrap/locales/bootstrap-datepicker.sv",
+    "bootstrap-switch": "bootstrap/bootstrap-switch.min",
+    "html5": "html5/html5",
+    "jquery-floatThread": "jquery/jquery.floatThead.min",
+    "jquery-touchPunch": "jquery/jquery.ui.touch-punch.min",
+
+    "dialog": "kajona/dialog",
+    "dialogHelper": "kajona/dialogHelper",
+    "v4skin": "kajona/v4skin",
+    "listSortable" : "kajona/listSortable"
+  },
+  "shim": {
+    "bootstrap" : {
+      "deps": ["jquery"]
+    },
+    "jquery-floatThread" : {
+      "deps": ["jquery"]
+    },
+    "jquery-touchPunch" : {
+      "deps": ["jquery-ui"]
+    },
+    "bootstrap-switch" : {
+      "deps": ["bootstrap"]
+    }
+  }
+}

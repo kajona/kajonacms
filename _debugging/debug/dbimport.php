@@ -7,6 +7,7 @@
 namespace Kajona\Debugging\Debug;
 
 use Kajona\System\System\Filesystem;
+use Kajona\System\System\StringUtil;
 
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
@@ -43,11 +44,11 @@ else {
             $arrDetails = $objFilesystem->getFileDetails(_projectpath_."/dbdumps/".$strOneFile);
 
             $strTimestamp = "";
-            if(uniStrpos($strOneFile, "_") !== false)
-                $strTimestamp = uniSubstr($strOneFile, uniStrrpos($strOneFile, "_")+1, (uniStrpos($strOneFile, ".")-uniStrrpos($strOneFile, "_")));
+            if(StringUtil::indexOf($strOneFile, "_") !== false)
+                $strTimestamp = StringUtil::substring($strOneFile, StringUtil::lastIndexOf($strOneFile, "_")+1, (StringUtil::indexOf($strOneFile, ".")-StringUtil::lastIndexOf($strOneFile, "_")));
 
             
-            if(uniStrlen($strTimestamp) > 9 && is_numeric($strTimestamp))
+            if(StringUtil::length($strTimestamp) > 9 && is_numeric($strTimestamp))
                 //if the timestamp is the last part of the filename, we can use $strTimestamp
                 $strFileInfo = $strOneFile
                     ." (".bytesToString($arrDetails['filesize']).")"

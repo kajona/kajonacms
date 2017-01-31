@@ -1,0 +1,26 @@
+{
+  "paths": {
+    "mediamanager": "kajona/mediamanager",
+    "imageeditor": "kajona/imageeditor",
+
+    "tmpl": "jquery-fileupload/js/tmpl.min",
+    "load-image": "jquery-fileupload/js/load-image",
+    "load-image-exif": "jquery-fileupload/js/load-image-exif",
+    "load-image-exif-map": "jquery-fileupload/js/load-image-exif-map",
+    "load-image-meta": "jquery-fileupload/js/load-image-meta",
+    "load-image-orientation": "jquery-fileupload/js/load-image-orientation",
+    "canvas-to-blob": "jquery-fileupload/js/canvas-to-blob.min",
+
+    "jquery.iframe-transport": "jquery-fileupload/js/jquery.iframe-transport",
+    "jquery.fileupload-ui": "jquery-fileupload/js/jquery.fileupload-ui",
+    "jquery.fileupload-image": "jquery-fileupload/js/jquery.fileupload-image",
+    "jquery.fileupload-audio": "jquery-fileupload/js/jquery.fileupload-audio",
+    "jquery.fileupload-video": "jquery-fileupload/js/jquery.fileupload-video",
+    "jquery.fileupload-validate": "jquery-fileupload/js/jquery.fileupload-validate",
+    "jquery.fileupload-process": "jquery-fileupload/js/jquery.fileupload-process",
+    "jquery.fileupload": "jquery-fileupload/js/jquery.fileupload",
+    "jquery.ui.widget": "jquery-fileupload/js/jquery.ui.widget",
+
+    "jcrop": "jcrop/jquery.Jcrop"
+  }
+}

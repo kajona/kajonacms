@@ -9,6 +9,7 @@ namespace Kajona\System\Admin\Formentries;
 use Kajona\System\Admin\FormentryPrintableInterface;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Reflection;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\Validators\TextValidator;
 
 
@@ -65,7 +66,7 @@ class FormentryDependentdropdown extends FormentryBase implements FormentryPrint
         $arrProperties = $objReflection->getPropertiesWithAnnotation(self::STR_VALUE_ANNOTATION);
         $strSourceProperty = null;
         foreach($arrProperties as $strPropertyName => $strValue) {
-            if(uniSubstr(uniStrtolower($strPropertyName), (uniStrlen($this->getStrSourceProperty()))*-1) == $this->getStrSourceProperty())
+            if(StringUtil::substring(StringUtil::toLowerCase($strPropertyName), (StringUtil::length($this->getStrSourceProperty()))*-1) == $this->getStrSourceProperty())
                 $strSourceProperty = $strPropertyName;
         }
 

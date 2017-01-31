@@ -8,6 +8,7 @@
 ********************************************************************************************************/
 namespace Kajona\Debugging\Debug;
 
+use Kajona\System\System\StringUtil;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RecursiveRegexIterator;
@@ -27,7 +28,7 @@ $arrExternals = array();
 foreach($objRegex as $arrOne) {
     $objContent = json_decode(file_get_contents($arrOne[0]));
 
-    $strSimplePath = uniStrReplace(_realpath_, "", $arrOne[0]);
+    $strSimplePath = StringUtil::replace(_realpath_, "", $arrOne[0]);
 
     if(is_array($objContent)) {
         foreach($objContent as $objOneExternal) {

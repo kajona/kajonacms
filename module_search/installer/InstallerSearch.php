@@ -11,6 +11,7 @@ namespace Kajona\Search\Installer;
 
 use Kajona\Packagemanager\System\PackagemanagerManager;
 use Kajona\Pages\System\PagesElement;
+use Kajona\Search\Admin\Elements\ElementSearchAdmin;
 use Kajona\Search\System\SearchIndexwriter;
 use Kajona\Search\System\SearchSearch;
 use Kajona\System\System\Carrier;
@@ -42,7 +43,8 @@ class InstallerSearch extends InstallerBase implements InstallerRemovableInterfa
 
         //Table for search
         $strReturn .= "Installing table search_search...\n";
-        $objManager->createTable("Kajona\\Search\\System\\SearchSearch");
+        $objManager->createTable(SearchSearch::class
+        );
 
         //Table for search log entry
         $strReturn .= "Installing search-log table...\n";
@@ -72,11 +74,11 @@ class InstallerSearch extends InstallerBase implements InstallerRemovableInterfa
         $strReturn .= "Installing search-element table...\n";
         $objPackageManager = new PackagemanagerManager();
         if($objPackageManager->getPackage("pages") !== null)
-            $objManager->createTable("Kajona\\Search\\Admin\\Elements\\ElementSearchAdmin");
+            $objManager->createTable(ElementSearchAdmin::class);
 
 		$strReturn .= "Registering module...\n";
 		//register the module
-		$this->registerModule("search", _search_module_id_, "SearchPortal.php", "SearchAdmin.php", $this->objMetadata->getStrVersion() , true, "SearchPortalXml.php");
+		$this->registerModule("search", _search_module_id_, "SearchPortal.php", "SearchAdmin.php", $this->objMetadata->getStrVersion());
 
         $strReturn .= "Registering config-values...\n";
         $this->registerConstant("_search_deferred_indexer_", "false", SystemSetting::$int_TYPE_BOOL, _search_module_id_);
@@ -159,7 +161,7 @@ class InstallerSearch extends InstallerBase implements InstallerRemovableInterfa
         //delete the tables
         foreach(array("search_search", "search_log", "element_search", "search_ix_document", "search_ix_content") as $strOneTable) {
             $strReturn .= "Dropping table ".$strOneTable."...\n";
-            if(!$this->objDB->_pQuery("DROP TABLE ".$this->objDB->encloseTableName(_dbprefix_.$strOneTable)."", array())) {
+            if(!$this->objDB->_pQuery("DROP TABLE ".$this->objDB->encloseTableName(_dbprefix_.$strOneTable), array())) {
                 $strReturn .= "Error deleting table, aborting.\n";
                 return false;
             }
@@ -200,6 +202,13 @@ class InstallerSearch extends InstallerBase implements InstallerRemovableInterfa
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "5.0") {
             $strReturn .= $this->update_50_51();
+        }
+
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.1") {
+            $strReturn .= "Updating to 6.2...\n";
+            $this->updateModuleVersion("search", "6.2");
+            $this->updateElementVersion("search", "6.2");
         }
 
         if($this->bitIndexRebuild) {

@@ -28,19 +28,18 @@ class OrmInCondition extends OrmCondition
     protected $strInCondition = self::STR_CONDITION_IN;
 
 
-
-    function __construct($strColumnName, array $arrParams, $strInCondition = self::STR_CONDITION_IN)
+    public function __construct($strColumnName, array $arrParams, $strInCondition = self::STR_CONDITION_IN)
     {
+        $this->arrParams = $arrParams;
         $this->setStrInCondition($strInCondition);
 
-        $this->arrParams = $arrParams;
         $this->strColumnName = $strColumnName;
     }
 
     /**
      * @param array $arrParams
      *
-     * @throws class_orm_exception
+     * @throws OrmException
      */
     public function setArrParams($arrParams)
     {
@@ -51,7 +50,7 @@ class OrmInCondition extends OrmCondition
     /**
      * @param string $strWhere
      *
-     * @throws class_orm_exception
+     * @throws OrmException
      */
     public function setStrWhere($strWhere)
     {
@@ -62,7 +61,7 @@ class OrmInCondition extends OrmCondition
      * Here comes the magic, generation a where restriction out of the passed property name and the comparator
      *
      * @return string
-     * @throws class_orm_exception
+     * @throws OrmException
      */
     public function getStrWhere()
     {
@@ -91,8 +90,7 @@ class OrmInCondition extends OrmCondition
                 if (count($arrParts) > 0) {
                     return "(".implode(" OR ", $arrParts).")";
                 }
-            }
-            else {
+            } else {
                 $arrParamsPlaceholder = array_map(function ($objParameter) {
                     return "?";
                 }, $this->arrParams);
@@ -117,10 +115,12 @@ class OrmInCondition extends OrmCondition
 
     /**
      * @param string $strInCondition
+     *
+     * @throws OrmException
      */
     public function setStrInCondition($strInCondition)
     {
-        if($strInCondition !== self::STR_CONDITION_IN && $strInCondition !== self::STR_CONDITION_NOTIN) {
+        if ($strInCondition !== self::STR_CONDITION_IN && $strInCondition !== self::STR_CONDITION_NOTIN) {
             throw new OrmException(Exception::$level_FATALERROR, "strInCondition must have value IN or NOT IN. Current value is ".$strInCondition);
         }
 

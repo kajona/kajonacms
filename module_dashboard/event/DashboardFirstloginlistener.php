@@ -9,8 +9,9 @@
 
 namespace Kajona\Dashboard\Event;
 
-use Kajona\Dashboard\Admin\Widgets\AdminwidgetInterface;
-use Kajona\Dashboard\System\DashboardWidget;
+use Kajona\Dashboard\Service\DashboardInitializerService;
+use Kajona\Dashboard\System\ServiceProvider;
+use Kajona\System\System\Carrier;
 use Kajona\System\System\CoreEventdispatcher;
 use Kajona\System\System\GenericeventListenerInterface;
 use Kajona\System\System\SystemEventidentifier;
@@ -38,17 +39,10 @@ class DashboardFirstloginlistener implements GenericeventListenerInterface
     {
         list($strUserid) = $arrArguments;
 
-        $bitReturn = true;
-
-        //get all widgets and call them in order
-        $arrWidgets = DashboardWidget::getListOfWidgetsAvailable();
-        foreach ($arrWidgets as $strOneWidgetClass) {
-            /** @var $objInstance AdminwidgetInterface */
-            $objInstance = new $strOneWidgetClass();
-            $objInstance->onFistLogin($strUserid);
-        }
-
-        return $bitReturn;
+        //Fetch the service to init the new dashboard
+        /** @var DashboardInitializerService $objService */
+        $objService = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_DASHBOARD_INITIALIZER);
+        return $objService->createInitialDashboard($strUserid);
     }
 
 
@@ -65,5 +59,3 @@ class DashboardFirstloginlistener implements GenericeventListenerInterface
 }
 
 DashboardFirstloginlistener::staticConstruct();
-
-

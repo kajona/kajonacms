@@ -18,6 +18,7 @@ use Kajona\System\System\Link;
 use Kajona\System\System\Lockmanager;
 use Kajona\System\System\Model;
 use Kajona\System\System\ModelInterface;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemSetting;
 use Kajona\System\System\VersionableInterface;
 
@@ -69,7 +70,7 @@ abstract class AdminSimple extends AdminController
      */
     protected function getContentActionToolbar()
     {
-        if (uniStrpos($this->getAction(), "list") !== false || uniStrpos($this->getAction(), "new") !== false || uniStrpos($this->getAction(), "save") !== false) {
+        if (StringUtil::indexOf($this->getAction(), "list") !== false || StringUtil::indexOf($this->getAction(), "new") !== false || StringUtil::indexOf($this->getAction(), "save") !== false) {
             return "";
         }
 
@@ -131,7 +132,7 @@ abstract class AdminSimple extends AdminController
 
             $strTargetUrl = urldecode($this->getParam("reloadUrl"));
 
-            if ($strTargetUrl == "" || uniStrpos($strTargetUrl, $this->getSystemid()) !== false) {
+            if ($strTargetUrl == "" || StringUtil::indexOf($strTargetUrl, $this->getSystemid()) !== false) {
 
                 $strTargetUrl = "admin=1&module=".$this->getArrModule("modul");
 
@@ -139,8 +140,8 @@ abstract class AdminSimple extends AdminController
                 while ($this->getHistory($intI) !== null) {
                     $strTargetUrl = $this->getHistory($intI++);
 
-                    if (uniStrpos($strTargetUrl, $this->getSystemid()) === false) {
-                        if (uniStrpos($strTargetUrl, "admin=1") === false) {
+                    if (StringUtil::indexOf($strTargetUrl, $this->getSystemid()) === false) {
+                        if (StringUtil::indexOf($strTargetUrl, "admin=1") === false) {
                             $strTargetUrl = "admin=1&module=".$this->getArrModule("modul");
                         }
 
@@ -576,12 +577,12 @@ abstract class AdminSimple extends AdminController
 
             //sanitize critical chars
             $strDialogTitle = $objListEntry->getStrDisplayName();
-            $strDialogTitle = addslashes(uniStrReplace(array("\n", "\r"), array(), strip_tags(nl2br($strDialogTitle))));
+            $strDialogTitle = addslashes(StringUtil::replace(array("\n", "\r"), array(), strip_tags(nl2br($strDialogTitle))));
 
 
             //the tag list is more complex and wrapped by a js-logic to load the tags by ajax afterwards
             // @codingStandardsIgnoreStart
-            $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".Link::getLinkAdminHref("tags", "genericTagForm", "&systemid=".$objListEntry->getSystemid())."'); KAJONA.admin.folderview.dialog.setTitle('".$strDialogTitle."'); KAJONA.admin.folderview.dialog.init(); return false;";
+            $strOnClick = "require('folderview').dialog.setContentIFrame('".Link::getLinkAdminHref("tags", "genericTagForm", "&systemid=".$objListEntry->getSystemid())."'); require('folderview').dialog.setTitle('".$strDialogTitle."'); require('folderview').dialog.init(); return false;";
             $strLink = "<a href=\"#\" onclick=\"".$strOnClick."\" title=\"".$this->getLang("commons_edit_tags")."\" rel=\"tagtooltip\" data-systemid=\"".$objListEntry->getSystemid()."\">".AdminskinHelper::getAdminImage("icon_tag", $this->getLang("commons_edit_tags"), true)."</a>";
             // @codingStandardsIgnoreEnd
             return $this->objToolkit->listButton($strLink);
@@ -605,7 +606,7 @@ abstract class AdminSimple extends AdminController
         }
 
         if ($objListEntry->rightEdit() && $this->strPeAddon == "") {
-            $strQuestion = $this->getLang("commons_copy_record_question", "system", array(addslashes(strip_tags($objListEntry->getStrDisplayName()))));
+            $strQuestion = $this->getLang("commons_copy_record_question", "system", array(StringUtil::jsSafeString($objListEntry->getStrDisplayName())));
             $strHref = Link::getLinkAdminHref($objListEntry->getArrModule("modul"), $this->getActionNameForClass("copyObject", $objListEntry), "&systemid=".$objListEntry->getSystemid().$this->strPeAddon);
 
             //create the list-button and the js code to show the dialog
@@ -702,8 +703,8 @@ abstract class AdminSimple extends AdminController
             //search for a title attribute
             $arrMatches = array();
             if (preg_match('/<a.*?title=(["\'])(.*?)\1.*$/i', $strOneAction, $arrMatches)) {
-                if (uniSubstr($strOneAction, -11) == "</a></span>") {
-                    $strOneAction = uniSubstr($strOneAction, 0, -11).$arrMatches[2]."</a></span>";
+                if (StringUtil::substring($strOneAction, -11) == "</a></span>") {
+                    $strOneAction = StringUtil::substring($strOneAction, 0, -11).$arrMatches[2]."</a></span>";
                 }
                 else {
                     $strOneAction .= $arrMatches[2];

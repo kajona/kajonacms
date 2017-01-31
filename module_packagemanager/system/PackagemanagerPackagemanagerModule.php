@@ -17,6 +17,8 @@ use Kajona\System\System\Filesystem;
 use Kajona\System\System\InstallerInterface;
 use Kajona\System\System\InstallerRemovableInterface;
 use Kajona\System\System\Logger;
+use Kajona\System\System\SamplecontentInstallerInterface;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\SystemSetting;
 
@@ -121,7 +123,7 @@ class PackagemanagerPackagemanagerModule implements PackagemanagerPackagemanager
             return "";
         }
 
-        if (uniStrpos($this->getObjMetadata()->getStrPath(), "core") === false) {
+        if (StringUtil::indexOf($this->getObjMetadata()->getStrPath(), "core") === false) {
             throw new Exception("Current module not located in a core directory.", Exception::$level_ERROR);
         }
 
@@ -195,7 +197,7 @@ class PackagemanagerPackagemanagerModule implements PackagemanagerPackagemanager
                     $arrModules = Classloader::getInstance()->getArrModules();
                     $objMetadata = null;
                     foreach ($arrModules as $strPath => $strOneFolder) {
-                        if (uniStrpos($strOneFolder, $strOneModule) !== false) {
+                        if (StringUtil::indexOf($strOneFolder, $strOneModule) !== false) {
                             $objMetadata = new PackagemanagerMetadata();
                             $objMetadata->autoInit("/".$strPath);
 
@@ -273,7 +275,7 @@ class PackagemanagerPackagemanagerModule implements PackagemanagerPackagemanager
 
         $strTarget = $this->objMetadata->getStrTarget();
         if ($strTarget == "") {
-            $strTarget = uniStrtolower($this->objMetadata->getStrType()."_".createFilename($this->objMetadata->getStrTitle(), true))."";
+            $strTarget = StringUtil::toLowerCase($this->objMetadata->getStrType()."_".createFilename($this->objMetadata->getStrTitle(), true))."";
         }
 
         $arrModules = array_flip(Classloader::getInstance()->getArrModules());
@@ -305,6 +307,10 @@ class PackagemanagerPackagemanagerModule implements PackagemanagerPackagemanager
         //scan installers in order to query them on their removable status
         $bitIsRemovable = true;
         foreach ($this->getInstaller($this->getObjMetadata()) as $objOneInstaller) {
+            if($objOneInstaller instanceof SamplecontentInstallerInterface) {
+                continue;
+            }
+
             if (!$objOneInstaller instanceof InstallerRemovableInterface) {
                 $bitIsRemovable = false;
                 break;

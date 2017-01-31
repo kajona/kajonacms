@@ -21,6 +21,7 @@ use Kajona\System\System\OrmBase;
 use Kajona\System\System\OrmDeletedhandlingEnum;
 use Kajona\System\System\Reflection;
 use Kajona\System\System\Resourceloader;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemSetting;
 use Kajona\System\System\UserGroup;
 use Kajona\System\System\Zip;
@@ -65,7 +66,7 @@ class PackagemanagerManager
 
         if ($strFilterText != "") {
             $arrReturn = array_filter($arrReturn, function ($objOneMetadata) use ($strFilterText) {
-                return uniStrpos($objOneMetadata->getStrTitle(), $strFilterText) !== false;
+                return StringUtil::indexOf($objOneMetadata->getStrTitle(), $strFilterText) !== false;
             });
         }
 

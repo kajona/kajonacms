@@ -5,9 +5,10 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                           *
 ********************************************************************************************************/
-namespace Kajona\V4Skin\Admin\Skins\Kajona_V4;
+namespace Kajona\V4skin\Admin\Skins\Kajona_V4;
 
 use Kajona\System\Admin\AdminskinImageresolverInterface;
+use Kajona\System\System\StringUtil;
 
 /**
  * @author sidler@mulchprod.de
@@ -29,7 +30,7 @@ class AdminskinImageresolver implements AdminskinImageresolverInterface {
      */
     public function getImage($strName, $strAlt = "", $bitBlockTooltip = false, $strEntryId = "") {
 
-        $strName = uniStrReplace(".png", "", $strName);
+        $strName = StringUtil::replace(".png", "", $strName);
 
         $strFA = $this->getFASomeImage($strName, ($bitBlockTooltip ? "" : $strAlt));
         if($strFA != null)
@@ -48,7 +49,7 @@ class AdminskinImageresolver implements AdminskinImageresolverInterface {
      */
     private function getFASomeImage($strImage, $strTooltip) {
 
-        $strName = uniStrReplace(array(".png", ".gif"), "", $strImage);
+        $strName = StringUtil::replace(array(".png", ".gif"), "", $strImage);
         if(isset(self::$arrFAImages[$strName] )) {
             if($strTooltip == "")
                 return self::$arrFAImages[$strName];
@@ -99,6 +100,24 @@ class AdminskinImageresolver implements AdminskinImageresolverInterface {
         "icon_externalBrowser"             => "<i class='kj-icon fa fa-search'></i>",
         "icon_favorite"                    => "<i class='kj-icon fa fa-bookmark'></i>",
         "icon_favoriteDisabled"            => "<i class='kj-icon fa fa-bookmark-o'></i>",
+        "icon_flag_black"                  => "<i class='kj-icon fa fa-flag-o' style='color: #000000'></i>",
+        "icon_flag_black_filled"           => "<i class='kj-icon fa fa-flag' style='color: #000000'></i>",
+        "icon_flag_blue"                   => "<i class='kj-icon fa fa-flag-o' style='color: #0040b3'></i>",
+        "icon_flag_blue_filled"            => "<i class='kj-icon fa fa-flag' style='color: #0040b3'></i>",
+        "icon_flag_brown"                  => "<i class='kj-icon fa fa-flag-o' style='color: #d47a0b'></i>",
+        "icon_flag_brown_filled"           => "<i class='kj-icon fa fa-flag' style='color: #d47a0b'></i>",
+        "icon_flag_green"                  => "<i class='kj-icon fa fa-flag-o' style='color: #0e8500'></i>",
+        "icon_flag_green_filled"           => "<i class='kj-icon fa fa-flag' style='color: #0e8500'></i>",
+        "icon_flag_grey"                   => "<i class='kj-icon fa fa-flag-o' style='color: #aeaeae'></i>",
+        "icon_flag_grey_filled"            => "<i class='kj-icon fa fa-flag' style='color: #aeaeae'></i>",
+        "icon_flag_orange"                 => "<i class='kj-icon fa fa-flag-o' style='color: #ff5600'></i>",
+        "icon_flag_orange_filled"          => "<i class='kj-icon fa fa-flag' style='color: #ff5600'></i>",
+        "icon_flag_purple"                 => "<i class='kj-icon fa fa-flag-o' style='color: #e23bff'></i>",
+        "icon_flag_purple_filled"          => "<i class='kj-icon fa fa-flag' style='color: #e23bff'></i>",
+        "icon_flag_red"                    => "<i class='kj-icon fa fa-flag-o' style='color: #d42f00'></i>",
+        "icon_flag_red_filled"             => "<i class='kj-icon fa fa-flag' style='color: #d42f00'></i>",
+        "icon_flag_yellow"                 => "<i class='kj-icon fa fa-flag-o' style='color: #ffe211'></i>",
+        "icon_flag_yellow_filled"          => "<i class='kj-icon fa fa-flag' style='color: #ffe211'></i>",
         "icon_folderActionLevelup"         => "<span class='kj-icon fa-stack'><i class='fa fa-folder-open-o'></i><i class='fa fa-arrow-circle-up fa-stack-1x kj-stack' ></i></span>",
         "icon_folderActionOpen"            => "<span class='kj-icon fa-stack'><i class='fa fa-folder-open-o'></i><i class='fa fa-search fa-stack-1x kj-stack' ></i></span>",
         "icon_folderClosed"                => "<i class='kj-icon fa fa-folder-o'></i>",
@@ -119,6 +138,7 @@ class AdminskinImageresolver implements AdminskinImageresolverInterface {
         "icon_mailDisabled"                => "<span class='kj-icon fa-stack'><i class='fa fa-envelope-o'></i><i class='fa fa-ban fa-stack-1x kj-stack' style='color: red'></i></span>",
         "icon_mailNew"                     => "<i class='kj-icon fa fa-envelope'></i>",
         "icon_module"                      => "<i class='kj-icon fa fa-hdd-o'></i>",
+        "icon_move"                        => "<i class='kj-icon fa fa-arrows'></i>",
         "icon_movie"                       => "<i class='kj-icon fa fa-film'></i>",
         "icon_new"                         => "<i class='kj-icon fa fa-plus-circle'></i>",
         "icon_new_alias"                   => "<span class='kj-icon fa-stack'><i class='fa fa-plus-circle'></i><i class='fa fa-link fa-stack-1x kj-stack'></i></span>",
@@ -136,6 +156,7 @@ class AdminskinImageresolver implements AdminskinImageresolverInterface {
         "icon_rss"                         => "<i class='kj-icon fa fa-rss'></i>",
         "icon_sitemap"                     => "<i class='kj-icon fa fa-sitemap'></i>",
         "icon_sound"                       => "<i class='kj-icon fa fa-music'></i>",
+        "icon_submenu"                     => "<i class='kj-icon fa fa-chevron-down'></i>",
         "icon_sync"                        => "<i class='kj-icon fa fa-refresh'></i>",
         "icon_systemtask"                  => "<i class='kj-icon fa fa-tasks'></i>",
         "icon_tag"                         => "<i class='kj-icon fa fa-tag'></i>",

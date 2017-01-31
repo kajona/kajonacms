@@ -1,0 +1,48 @@
+{
+  "paths": {
+    "app": "app",
+
+    "jquery": "jquery/jquery.min",
+    "jquery-ui": "jqueryui/jquery-ui.custom.min",
+    "jquerycaret": "jquerytag/jquery.caret.min",
+    "jquerytageditor": "jquerytag/jquery.tag-editor.min",
+    "d3": "d3/d3.min",
+    "calendar-heatmap": "d3/calendar-heatmap",
+    "jstree": "jstree3/dist/jstree.min",
+    "moment": "moment/moment.min",
+    "qtip": "qtip2/jquery.qtip.min",
+    "domReady": "requirejs/domReady",
+
+    "ajax": "kajona/ajax",
+    "cacheManager": "kajona/cacheManager",
+    "changelog": "kajona/changelog",
+    "dashboardCalendar": "kajona/dashboardCalendar",
+    "desktopNotification": "kajona/desktopNotification",
+    "folderview": "kajona/folderview",
+    "forms": "kajona/forms",
+    "lang": "kajona/lang",
+    "lists": "kajona/lists",
+    "loader": "kajona/loader",
+    "messaging": "kajona/messaging",
+    "permissions": "kajona/permissions",
+    "statusDisplay": "kajona/statusDisplay",
+    "switchLanguage": "kajona/switchLanguage",
+    "systemTask": "kajona/systemTask",
+    "toc": "kajona/toc",
+    "tooltip": "kajona/tooltip",
+    "tree": "kajona/tree",
+    "util": "kajona/util",
+    "workingIndicator": "kajona/workingIndicator"
+  },
+  "shim": {
+    "jquery-ui" : {
+      "deps": ["jquery"]
+    },
+    "jquerycaret" : {
+      "deps": ["jquery"]
+    },
+    "jquerytageditor" : {
+      "deps": ["jquery", "jquerycaret"]
+    }
+  }
+}

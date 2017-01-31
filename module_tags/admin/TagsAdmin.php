@@ -14,9 +14,16 @@ use Kajona\System\Admin\AdminInterface;
 use Kajona\System\Admin\AdminSimple;
 use Kajona\System\System\AdminskinHelper;
 use Kajona\System\System\ArraySectionIterator;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Exception;
+use Kajona\System\System\HttpResponsetypes;
 use Kajona\System\System\Link;
+use Kajona\System\System\Model;
 use Kajona\System\System\ModelInterface;
-use Kajona\System\System\Resourceloader;
+use Kajona\System\System\Objectfactory;
+use Kajona\System\System\ResponseObject;
+use Kajona\System\System\Session;
+use Kajona\System\System\SystemChangelog;
 use Kajona\System\System\SystemModule;
 use Kajona\Tags\System\TagsFavorite;
 use Kajona\Tags\System\TagsTag;
@@ -55,7 +62,7 @@ class TagsAdmin extends AdminEvensimpler implements AdminInterface
         return "";
     }
 
-    protected function renderAdditionalActions(\Kajona\System\System\Model $objListEntry)
+    protected function renderAdditionalActions(Model $objListEntry)
     {
         if ($objListEntry instanceof TagsTag) {
             $arrButtons = array();
@@ -71,34 +78,33 @@ class TagsAdmin extends AdminEvensimpler implements AdminInterface
             );
 
             if ($objListEntry->rightRight1()) {
-
-                $strJs = "<script type='text/javascript'>KAJONA.admin.loader.loadFile('".Resourceloader::getInstance()->getCorePathForModule("module_tags")."/module_tags/admin/scripts/tags.js', function() {
-                    KAJONA.admin.tags.createFavoriteEnabledIcon = '".addslashes(AdminskinHelper::getAdminImage("icon_favorite", $this->getLang("tag_favorite_remove")))."';
-                    KAJONA.admin.tags.createFavoriteDisabledIcon = '".addslashes(AdminskinHelper::getAdminImage("icon_favoriteDisabled", $this->getLang("tag_favorite_add")))."';
+                $strJs = "<script type='text/javascript'>
+                require(['tags'], function(tags) {
+                    tags.createFavoriteEnabledIcon = '".addslashes(AdminskinHelper::getAdminImage("icon_favorite", $this->getLang("tag_favorite_remove")))."';
+                    tags.createFavoriteDisabledIcon = '".addslashes(AdminskinHelper::getAdminImage("icon_favoriteDisabled", $this->getLang("tag_favorite_add")))."';
                 });</script>";
 
                 $strImage = TagsFavorite::getAllFavoritesForUserAndTag($this->objSession->getUserID(), $objListEntry->getSystemid()) != null ?
                     AdminskinHelper::getAdminImage("icon_favorite", $this->getLang("tag_favorite_remove")) :
                     AdminskinHelper::getAdminImage("icon_favoriteDisabled", $this->getLang("tag_favorite_add"));
 
-                $arrButtons[] = $strJs.$this->objToolkit->listButton("<a href=\"#\" onclick=\"KAJONA.admin.tags.createFavorite('".$objListEntry->getSystemid()."', this); return false;\">".$strImage."</a>");
+                $arrButtons[] = $strJs.$this->objToolkit->listButton("<a href=\"#\" onclick=\"require('tags').createFavorite('".$objListEntry->getSystemid()."', this); return false;\">".$strImage."</a>");
             }
 
             return $arrButtons;
 
-        }
-        else {
+        } else {
             return array();
         }
     }
 
 
     /**
-     * @param \Kajona\System\System\ModelInterface|\Kajona\System\System\Model $objListEntry
+     * @param ModelInterface|Model $objListEntry
      *
      * @return string
      */
-    protected function renderDeleteAction(\Kajona\System\System\ModelInterface $objListEntry)
+    protected function renderDeleteAction(ModelInterface $objListEntry)
     {
         if ($objListEntry instanceof TagsFavorite) {
             if ($objListEntry->rightDelete()) {
@@ -108,8 +114,7 @@ class TagsAdmin extends AdminEvensimpler implements AdminInterface
                     Link::getLinkAdminHref($objListEntry->getArrModule("modul"), "delete", "&systemid=".$objListEntry->getSystemid())
                 );
             }
-        }
-        else {
+        } else {
             return parent::renderDeleteAction($objListEntry);
         }
 
@@ -181,7 +186,7 @@ class TagsAdmin extends AdminEvensimpler implements AdminInterface
         $strTagsWrapperId = generateSystemid();
 
         $strTagContent .= $this->objToolkit->formHeader(
-            Link::getLinkAdminHref($this->getArrModule("modul"), "saveTags"), "", "", "KAJONA.admin.tags.saveTag(document.getElementById('tagname').value+'', '".$strTargetSystemid."', '".$strAttribute."');return false;"
+            Link::getLinkAdminHref($this->getArrModule("modul"), "saveTags"), "", "", "require('tags').saveTag(document.getElementById('tagname').value+'', '".$strTargetSystemid."', '".$strAttribute."');return false;"
         );
         $strTagContent .= $this->objToolkit->formTextRow($this->getLang("tag_name_hint"));
         $strTagContent .= $this->objToolkit->formInputTagSelector("tagname", $this->getLang("form_tags_name"));
@@ -213,12 +218,193 @@ class TagsAdmin extends AdminEvensimpler implements AdminInterface
      */
     protected function actionListFavorites()
     {
-
         $objArraySectionIterator = new ArraySectionIterator(TagsFavorite::getNumberOfFavoritesForUser($this->objSession->getUserID()));
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(TagsFavorite::getAllFavoritesForUser($this->objSession->getUserID(), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
         return $this->renderList($objArraySectionIterator);
+    }
+
+
+
+    /**
+     * @return string
+     * @throws Exception
+     * @permissions right1
+     * @responseType xml
+     */
+    protected function actionAddFavorite()
+    {
+        $objTags = Objectfactory::getInstance()->getObject($this->getSystemid());
+
+        $strError = "<message>".$this->getLang("favorite_save_error")."</message>";
+        $strSuccess = "<message>".$this->getLang("favorite_save_success").": ".$objTags->getStrDisplayName()."</message>";
+        $strExisting = "<message>".$this->getLang("favorite_save_remove").": ".$objTags->getStrDisplayName()."</message>";
+
+        //already added before?
+        if (count(TagsFavorite::getAllFavoritesForUserAndTag($this->objSession->getUserID(), $this->getSystemid())) > 0) {
+            $arrFavorites = TagsFavorite::getAllFavoritesForUserAndTag($this->objSession->getUserID(), $this->getSystemid());
+            foreach ($arrFavorites as $objOneFavorite) {
+                $objOneFavorite->deleteObjectFromDatabase();
+            }
+
+            return $strExisting;
+        }
+
+        $objFavorite = new TagsFavorite();
+        $objFavorite->setStrUserId($this->objSession->getUserID());
+        $objFavorite->setStrTagId($objTags->getSystemid());
+
+        if (!$objFavorite->updateObjectToDb()) {
+            return $strError;
+        } else {
+            return $strSuccess;
+        }
+    }
+
+
+    /**
+     * Creates a new tag (if not already existing) and assigns the tag to the passed system-record
+     *
+     * @return string
+     * @permissions view
+     */
+    protected function actionSaveTag()
+    {
+        $strReturn = "";
+        $strSystemid = $this->getParam("systemid");
+        $strAttribute = $this->getParam("attribute");
+        $arrTags = explode(",", $this->getParam("tagname"));
+
+        $bitError = false;
+        foreach ($arrTags as $strOneTag) {
+            if (trim($strOneTag) == "") {
+                continue;
+            }
+
+            //load the tag itself
+            $objTag = TagsTag::getTagByName($strOneTag);
+            if ($objTag == null) {
+                $objTag = new TagsTag();
+                $objTag->setStrName($strOneTag);
+                $objTag->updateObjectToDb();
+            }
+
+            //add the connection itself
+            if (!$objTag->assignToSystemrecord($strSystemid, $strAttribute)) {
+                $bitError = true;
+            }
+
+            Carrier::getInstance()->getObjDB()->flushQueryCache();
+        }
+
+        if (!$bitError) {
+            $strReturn .= "<success>assignment succeeded</success>";
+        } else {
+            $strReturn .= "<error>assignment failed</error>";
+        }
+
+        return $strReturn;
+    }
+
+    /**
+     * Loads the list of tags assigned to the passed system-record and renders them using the toolkit.
+     *
+     * @return string
+     * @permissions view
+     */
+    protected function actionTagList()
+    {
+        $strReturn = "";
+        $strSystemid = $this->getSystemid();
+        $strAttribute = $this->getParam("attribute");
+        $bitDelete = $this->getParam("delete") != "false";
+
+        $arrTags = TagsTag::getTagsForSystemid($strSystemid, $strAttribute);
+
+        $strReturn .= " <tags>";
+        foreach ($arrTags as $objOneTag) {
+            $strReturn .= $this->objToolkit->getTagEntry($objOneTag, $strSystemid, $strAttribute);
+        }
+
+        $strReturn .= "</tags>";
+
+        return $strReturn;
+    }
+
+    /**
+     * Removes a tag from the the system-record passed.
+     * Please be aware of the fact, that this only deletes the assignment, not the tag itself.
+     *
+     * @return string
+     * @permissions view
+     */
+    protected function actionRemoveTag()
+    {
+        $strReturn = "";
+        $strTargetSystemid = $this->getParam("targetid");
+        $strAttribute = $this->getParam("attribute");
+
+        //load the tag itself
+        $objTag = new TagsTag($this->getSystemid());
+
+        //add the connection itself
+        if ($objTag->removeFromSystemrecord($strTargetSystemid, $strAttribute != '' ? $strAttribute : null)) {
+            $strReturn .= "<success>assignment removed</success>";
+        } else {
+            $strReturn .= "<error>assignment removal failed</error>";
+        }
+
+        return $strReturn;
+    }
+
+    /**
+     * Generates the list of tags matching the passed filter-criteria.
+     * Returned structure is json based.
+     *
+     * @return string
+     * @permissions view
+     * @responseType json
+     */
+    protected function actionGetTagsByFilter()
+    {
+        $arrReturn = array();
+        $strFilter = $this->getParam("filter");
+
+        $arrTags = TagsTag::getTagsByFilter($strFilter);
+        foreach ($arrTags as $objOneTag) {
+            $arrReturn[] = $objOneTag->getStrName();
+        }
+
+        return json_encode($arrReturn);
+    }
+
+    /**
+     * Generates the list of favorite tags for the current user.
+     * Returned structure is json based.
+     *
+     * @return string
+     * @permissions view
+     * @responseType json
+     */
+    protected function actionGetFavoriteTags()
+    {
+        Session::getInstance()->sessionClose();
+        Carrier::getInstance()->getObjSession()->setBitBlockDbUpdate(true);
+        SystemChangelog::$bitChangelogEnabled = false;
+        $arrReturn = array();
+
+        $arrFavorites = TagsFavorite::getAllFavoritesForUser(Carrier::getInstance()->getObjSession()->getUserID(), 0, 10);
+
+        foreach ($arrFavorites as $objOneFavorite) {
+            $arrReturn[] = array(
+                "name"    => $objOneFavorite->getStrDisplayName(),
+                "onclick" => "location.href='".Link::getLinkAdminHref("tags", "showAssignedRecords", "&systemid=".$objOneFavorite->getMappedTagSystemid(), false)."'",
+                "url"     => Link::getLinkAdminHref("tags", "showAssignedRecords", "&systemid=".$objOneFavorite->getMappedTagSystemid(), false)
+            );
+        }
+
+        return json_encode($arrReturn);
     }
 
 }

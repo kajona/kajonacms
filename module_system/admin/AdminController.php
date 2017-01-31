@@ -21,9 +21,11 @@ use Kajona\System\System\LanguagesLanguage;
 use Kajona\System\System\Link;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Reflection;
+use Kajona\System\System\RequestEntrypointEnum;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\ResponseObject;
 use Kajona\System\System\Rights;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\SystemSetting;
@@ -67,12 +69,6 @@ abstract class AdminController extends AbstractController
     protected $objBuilder;
 
     /**
-     * @inject system_rights
-     * @var Rights
-     */
-    protected $objRights;
-
-    /**
      * @inject system_resource_loader
      * @var Resourceloader
      */
@@ -84,11 +80,7 @@ abstract class AdminController extends AbstractController
      */
     protected $objClassLoader;
 
-    /**
-     * @inject system_object_factory
-     * @var Objectfactory
-     */
-    protected $objFactory;
+
 
     /**
      * Constructor
@@ -194,12 +186,15 @@ abstract class AdminController extends AbstractController
      * @final
      * @todo could be moved to a general admin-skin helper
      */
-    public final function getModuleOutput()
+    final public function getModuleOutput()
     {
-
         //skip rendering everything if we just want to redirect...
         if ($this->strOutput == "" && ResponseObject::getInstance()->getStrRedirectUrl() != "") {
             return "";
+        }
+
+        if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML())) {
+            return $this->strOutput;
         }
 
 
@@ -218,11 +213,12 @@ abstract class AdminController extends AbstractController
             $this->arrOutput["login"] = $this->getOutputLogin();
             $this->arrOutput["quickhelp"] = $this->getQuickHelp();
         }
+        $objAdminHelper = new AdminHelper();
         $this->arrOutput["languageswitch"] = (SystemModule::getModuleByName("languages") != null ? SystemModule::getModuleByName("languages")->getAdminInstanceOfConcreteModule()->getLanguageSwitch() : "");
         $this->arrOutput["module_id"] = $this->getArrModule("moduleId");
         $this->arrOutput["webpathTitle"] = urldecode(str_replace(array("http://", "https://"), array("", ""), _webpath_));
-        $this->arrOutput["head"] = "<script type=\"text/javascript\">KAJONA_DEBUG = ".$this->objConfig->getDebug("debuglevel")."; KAJONA_WEBPATH = '"._webpath_."'; KAJONA_BROWSER_CACHEBUSTER = ".SystemSetting::getConfigValue("_system_browser_cachebuster_")."; KAJONA_LANGUAGE = '".Carrier::getInstance()->getObjLang()->getStrTextLanguage()."';</script>";
-        $this->arrOutput["head"] .= "<script type=\"text/javascript\">KAJONA_PHARMAP = ".json_encode(array_values(Classloader::getInstance()->getArrPharModules())).";</script>";
+        $this->arrOutput["head"] = "<script type=\"text/javascript\">KAJONA_DEBUG = ".$this->objConfig->getDebug("debuglevel")."; KAJONA_WEBPATH = '"._webpath_."'; KAJONA_BROWSER_CACHEBUSTER = ".SystemSetting::getConfigValue("_system_browser_cachebuster_")."; KAJONA_LANGUAGE = '".Carrier::getInstance()->getObjSession()->getAdminLanguage()."';KAJONA_PHARMAP = ".json_encode(array_values(Classloader::getInstance()->getArrPharModules()))."; var require = {$objAdminHelper->generateRequireJsConfig()};</script>";
+        $this->arrOutput["requirejs_conf"] = $objAdminHelper->generateRequireJsConfig();
 
         //see if there are any hooks to be called
         $this->onRenderOutput($this->arrOutput);
@@ -235,6 +231,8 @@ abstract class AdminController extends AbstractController
         }
         return $this->objTemplate->fillTemplateFile($this->arrOutput, $strTemplate);
     }
+
+
 
     /**
      * Hook-method to modify some parts of the rendered content right before rendered into the template.
@@ -258,7 +256,7 @@ abstract class AdminController extends AbstractController
      */
     private function validateAndUpdateCurrentAspect()
     {
-        if (_xmlLoader_ === true || $this->getArrModule("template") == "/folderview.tpl") {
+        if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML()) || $this->getArrModule("template") == "/folderview.tpl") {
             return;
         }
 
@@ -382,110 +380,6 @@ abstract class AdminController extends AbstractController
         $objLogin = $this->objBuilder->factory("Kajona\\System\\Admin\\LoginAdmin");
         return $objLogin->getLoginStatus();
     }
-
-    /**
-     * This method triggers the internal processing.
-     * It may be overridden if required, e.g. to implement your own action-handling.
-     * By default, the method to be called is set up out of the action-param passed.
-     * Example: The action requested is names "newPage". Therefore, the framework tries to
-     * call actionNewPage(). If no method matching the schema is found, an exception is being thrown.
-     * The actions' output is saved back to self::strOutput and, is returned in addition.
-     * Returning the content is only implemented to remain backwards compatible with older implementations.
-     * Since Kajona 4.0, the check on declarative permissions via annotations is supported.
-     * Therefore the list of permissions, named after the "permissions" annotation are validated against
-     * the module currently loaded.
-     *
-     * @param string $strAction
-     *
-     * @see Rights::validatePermissionString
-     *
-     * @throws Exception
-     * @return string
-     * @since 3.4
-     */
-    public function action($strAction = "")
-    {
-
-        if ($strAction != "") {
-            $this->setAction($strAction);
-        }
-
-        $strAction = $this->getAction();
-
-        //search for the matching method - build method name
-        $strMethodName = "action".uniStrtoupper($strAction[0]).uniSubstr($strAction, 1);
-
-        if (method_exists($this, $strMethodName)) {
-
-            //validate the permissions required to call this method, the xml-part is validated afterwards
-            $objAnnotations = new Reflection(get_class($this));
-
-            $strPermissions = $objAnnotations->getMethodAnnotationValue($strMethodName, "@permissions");
-            if ($strPermissions !== false) {
-
-                if (validateSystemid($this->getSystemid()) && $this->objFactory->getObject($this->getSystemid()) != null) {
-                    $objObjectToCheck = $this->objFactory->getObject($this->getSystemid());
-                }
-                else {
-                    $objObjectToCheck = $this->getObjModule();
-                }
-
-                if (!$this->objRights->validatePermissionString($strPermissions, $objObjectToCheck)) {
-                    ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
-                    $this->strOutput = $this->objToolkit->warningBox($this->getLang("commons_error_permissions"));
-                    $objException = new Exception("you are not authorized/authenticated to call this action", Exception::$level_ERROR);
-
-                    if (_xmlLoader_) {
-                        throw $objException;
-                    }
-                    else {
-                        $objException->setIntDebuglevel(0);
-                        $objException->processException();
-                        return $this->strOutput;
-                    }
-                }
-            }
-
-
-            //validate the loading channel - xml or regular
-            if (_xmlLoader_ === true) {
-                //check it the method is allowed for xml-requests
-
-                if (!$objAnnotations->hasMethodAnnotation($strMethodName, "@xml") && !$this instanceof XmlAdminInterface) {
-                    throw new Exception("called method ".$strMethodName." not allowed for xml-requests", Exception::$level_FATALERROR);
-                }
-
-                if ($this->getArrModule("modul") != $this->getParam("module") && ($this->getParam("module") != "messaging")) {
-                    ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
-                    throw new Exception("you are not authorized/authenticated to call this action", Exception::$level_FATALERROR);
-                }
-            }
-
-            $this->strOutput = $this->$strMethodName();
-        }
-        else {
-            $objReflection = new ReflectionClass($this);
-            //if the pe was requested and the current module is a login-module, there are insufficient permissions given
-            if ($this->getArrModule("template") == "/login.tpl" && $this->getParam("pe") != "") {
-                throw new Exception("You have to be logged in to use the portal editor!!!", Exception::$level_ERROR);
-            }
-
-            if ($this instanceof LoginAdminXml) {
-                ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
-                ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_XML);
-                Xml::setBitSuppressXmlHeader(true);
-                return Exception::renderException(new Exception("you are not authorized/authenticated to call this action", Exception::$level_FATALERROR));
-            }
-
-            $this->strOutput = $this->objToolkit->warningBox("called method ".$strMethodName." not existing for class ".$objReflection->getName());
-            $objException = new Exception("called method ".$strMethodName." not existing for class ".$objReflection->getName(), Exception::$level_ERROR);
-            $objException->setIntDebuglevel(0);
-            $objException->processException();
-        }
-
-        return $this->strOutput;
-    }
-
 
     /**
      * Use this method to reload a specific url.

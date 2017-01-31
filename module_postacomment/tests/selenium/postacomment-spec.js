@@ -9,9 +9,11 @@ describe('module_postacomment', function() {
     });
 
     it('test list', function() {
-        SeleniumUtil.gotToUrl('index.php?admin=1&module=postacomment&action=list');
+        SeleniumUtil.gotToUrl('index.php?admin=1&module=postacomment&action=list').then(function() {
+            expect(browser.driver.findElement(by.id('moduleTitle')).getText()).toEqual('Kommentare');
+        });
 
-        expect(browser.driver.findElement(by.id('moduleTitle')).getText()).toEqual('Kommentare');
+
     });
 
 });

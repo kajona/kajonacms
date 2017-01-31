@@ -255,6 +255,8 @@ footer {
 
                 li {
                     padding: 2px 15px 2px 12px;
+                    color: @text-color;
+                    font-style: italic;
 
                     a {
                         font-style: normal;
@@ -262,6 +264,7 @@ footer {
                         display: block;
                         text-align: right;
                     }
+
 
                     &.divider {
                         background-color: @white;
@@ -450,17 +453,23 @@ footer {
     .box-shadow(0 5px 10px rgba(0,0,0,.2));
 
     li, li.ui-menu-item {
-        a {
+        div {
             cursor: pointer;
             padding: 3px;
             display: block;
             font-size: @font-size-base - 1;
             border-radius: 0;
             color: @link-color;
+            font-family: @font-family-base;
 
             &:hover {
                 text-decoration: none;
                 border-radius: 0;
+            }
+
+            .smaller {
+                font-size: @font-size-base - 2;
+                padding-top: 0;
             }
 
         }
@@ -472,7 +481,7 @@ footer {
     }
 
 
-    .ui-state-focus {
+    .ui-state-active {
         color: @white;
         text-decoration: none;
         background-color: @dropdown-link-active-bg;
@@ -481,7 +490,7 @@ footer {
         border-color: @dropdown-link-active-bg;
     }
 
-    .ui-state-focus h4 {
+    .ui-state-active h4 {
         color: @white;
         border-radius: 0;
     }
@@ -1035,6 +1044,15 @@ footer {
             }
         }
 
+        .inputContainer {
+            min-height: @input-height-base;
+            background-color: @input-bg;
+            border: 1px solid @gray-darker;
+
+            .admintable {
+                background-color: @white;
+            }
+        }
 
     }
 
@@ -1087,96 +1105,6 @@ footer {
 			.transition(all linear .2s);
 		}
 
-	}
-
-
-
-	table.calendar {
-		border: 1px solid #efefef;
-		border-collapse: collapse;
-		width: 100%;
-
-		.mouseOver {
-			border: 1px solid #AF0A0A;
-			border-left-width: 2px;
-			border-right-width: 2px;
-			color: #000000;
-			margin: 2px 0 !important;
-			.box-shadow(3px #888);
-		}
-
-
-		td {
-			border: 1px solid @gray-light;
-			vertical-align: top;
-
-			&.calendarDateToday {
-				background-color: lighten(@kajona-brand-color, 40%);
-			}
-
-			&.calendarEntry div.calendarHeader,
-			&.calendarEntryOutOfRange div.calendarHeader,
-			&.calendarEntryBlocked div.calendarHeader {
-				background-color: #efefef;
-				text-align: right;
-				padding: 0 2px;
-				margin: 2px;
-			}
-
-			&.calendarEntryOutOfRange div.calendarHeader {
-                color: lighten(@text-color, 20%);
-			}
-
-			&.calendarEntryBlocked div.calendarHeader {
-                background-color: darken(@gray-light, 10%);
-			}
-		}
-
-	}
-
-	table.calendarPager {
-		border-collapse: collapse;
-		width: 100%;
-		margin-bottom: 5px;
-	}
-
-	div.calendarLegend {
-		margin: 10px 0 4px 0 ;
-		line-height: 26px;
-
-		div.calendarLegendEntry {
-			padding: 2px 3px !important;
-			display: inline;
-			margin: 3px !important;
-		}
-	}
-
-	div.calendarEvent {
-        #calendar > .event(#DEDF45);
-
-		&.calendarNews {
-            #calendar > .event(#077ff9);
-		}
-	}
-
-	#calendarFilter {
-		margin: 10px 0 4px 0 ;
-
-		label {
-			float: none !important;
-			display: inline !important;
-		}
-
-		div {
-			padding: 2px 3px !important;
-			display: inline;
-			margin: 3px !important;
-			white-space: nowrap;
-		}
-
-        input {
-            margin-right:4px;
-        }
 	}
 
 
@@ -1389,35 +1317,67 @@ footer {
             }
 
             .dbEntry {
+
+                h2 {
+                    margin: 0 0 5px 0;
+                }
+
+                div.contentSeparator {
+                    z-index: 298;
+                    height: 8px;
+                    position: relative;
+
+                    background-image: linear-gradient(to top, rgba(234, 234, 234, 0.02), rgba(245, 245, 245, 0.99));
+
+                    //background-image: -webkit-linear-gradient(top, rgba(255,255,255,0.001) 0%, #fff 5%, #fff 100%);
+
+                }
+
                 .adminwidgetactions {
                     display: inline;
-                    margin-top: -35px;
+                    margin-top: -27px;
                 }
 
                 .additionalNameContent {
                     font-size: @font-size-small - 1;
-                    margin-top: -@font-size-small;
+                    margin-top: -6px;
                 }
 
                 .content {
-                    margin-top: 5px;
+                    margin-top: -8px;
+                    padding-top: 8px;
+                    max-height: 500px;
+
+                    &.loaded {
+                        overflow-x: auto;
+                    }
                 }
 
                 &.sortActive {
-                    .opacity(0.8);
+                    .opacity(0.7);
                 }
             }
 
-            .dashboardPlaceholder {
-                background-image: repeating-linear-gradient(-45deg, transparent, transparent 8px, rgba(0,0,0,.05) 8px, rgba(0,0,0,.05) 16px);
-                min-height: 100px;
-                border: 3px dotted @gray;
-            }
+
 
         }
     }
 
+    /* general dnd placeholder */
+    .dndPlaceholder {
+        background-image: repeating-linear-gradient(-45deg, transparent, transparent 8px, rgba(0,0,0,.05) 8px, rgba(0,0,0,.05) 16px);
+        min-height: 100px;
+        outline: 3px dotted @gray;
 
+        &.table {
+            display: table-row-group;
+
+        }
+    }
+
+    .text-muted {
+        color: lighten(@text-color, 25%);
+    }
 
 }
 
@@ -1451,13 +1411,6 @@ table.form-control {
          padding: 7px;
      }
 }
-
-.form-control-static {
-    padding: 4px;
-}
-
-
-
 
 .mainnavi-container {
   padding-left:0;
@@ -1657,16 +1610,17 @@ table.form-control {
     background: none repeat 0% 0%;
     margin-top: 0;
 
-    -moz-animation: fa-spin 2s infinite linear;
-    -o-animation: fa-spin 2s infinite linear;
-    -webkit-animation: fa-spin 2s infinite linear;
-    animation: fa-spin 2s infinite linear;
+
 
     &:before {
         font-size: @font-size-base + 10;
         content: @fa-var-spinner;
         color: @kajona-brand-color;
+        display: block;
         font-family: fontawesome;
+        -moz-animation: fa-spin 2s infinite linear;
+        -o-animation: fa-spin 2s infinite linear;
+        -webkit-animation: fa-spin 2s infinite linear;
         animation: fa-spin 2s infinite linear;
     }
 }
@@ -1766,6 +1720,10 @@ table.form-control {
     &.jstree-default {
 
         .jstree-hovered {
+            background: lighten(@kajona-brand-color, 40%) !important;
+        }
+
+        .jstree-clicked {
             background: lighten(@kajona-brand-color, 40%) !important;
         }
     }
@@ -1922,4 +1880,11 @@ body.login {
 
 .day-cell {
     cursor: pointer;
+}
+
+
+
+/* bootstrap-datepicker */
+.datepicker table tr td.highlighted {
+    background: lighten(@kajona-brand-color, 40%);
 }

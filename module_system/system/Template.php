@@ -356,7 +356,7 @@ class Template
     public function deleteBlocksFromTemplate($strTemplateContent, $strBlockDefinition = TemplateKajonaSections::BLOCKS)
     {
         foreach($this->objBlocksParser->readBlocks($strTemplateContent, $strBlockDefinition) as $objOneContainer) {
-            $strTemplateContent = uniStrReplace($objOneContainer->getStrFullSection(), "", $strTemplateContent);
+            $strTemplateContent = StringUtil::replace($objOneContainer->getStrFullSection(), "", $strTemplateContent);
         }
         return $strTemplateContent;
     }

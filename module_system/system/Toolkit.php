@@ -153,14 +153,14 @@ class Toolkit
 
         //Determing the type
         $strType = "";
-        if (uniStrpos($strFilename, ".") !== false) {
-            $strType = uniSubstr($strFilename, uniStrrpos($strFilename, ".") + 1);
+        if (StringUtil::indexOf($strFilename, ".") !== false) {
+            $strType = StringUtil::substring($strFilename, StringUtil::lastIndexOf($strFilename, ".") + 1);
         }
         else {
             $strType = $strFilename;
         }
 
-        $strType = uniStrtolower($strType);
+        $strType = StringUtil::toLowerCase($strType);
 
         //Known Type?
         if (isset($arrMime[$strType])) {

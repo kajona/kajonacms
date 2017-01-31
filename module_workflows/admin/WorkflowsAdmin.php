@@ -17,6 +17,7 @@ use Kajona\System\System\AdminskinHelper;
 use Kajona\System\System\ArraySectionIterator;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Link;
+use Kajona\System\System\Model;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\UserGroup;
 use Kajona\System\System\UserUser;
@@ -334,12 +335,12 @@ class WorkflowsAdmin extends AdminSimple implements AdminInterface
     }
 
     /**
-     * @param \Kajona\System\System\Model $objListEntry
+     * @param Model $objListEntry
      * @param bool $bitDialog
      *
      * @return string
      */
-    protected function renderEditAction(\Kajona\System\System\Model $objListEntry, $bitDialog = false)
+    protected function renderEditAction(Model $objListEntry, $bitDialog = false)
     {
         if ($objListEntry instanceof WorkflowsHandler) {
             return $this->objToolkit->listButton(Link::getLinkAdmin($this->getArrModule("modul"), "editHandler", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("action_edit_handler"), "icon_edit"));
@@ -377,13 +378,13 @@ class WorkflowsAdmin extends AdminSimple implements AdminInterface
     }
 
     /**
-     * @param \Kajona\System\System\Model $objListEntry
+     * @param Model $objListEntry
      * @param string $strAltActive tooltip text for the icon if record is active
      * @param string $strAltInactive tooltip text for the icon if record is inactive
      *
      * @return string
      */
-    protected function renderStatusAction(\Kajona\System\System\Model $objListEntry, $strAltActive = "", $strAltInactive = "")
+    protected function renderStatusAction(Model $objListEntry, $strAltActive = "", $strAltInactive = "")
     {
         if ($objListEntry instanceof WorkflowsHandler) {
             return "";
@@ -408,11 +409,11 @@ class WorkflowsAdmin extends AdminSimple implements AdminInterface
     }
 
     /**
-     * @param \Kajona\System\System\Model $objListEntry
+     * @param Model $objListEntry
      *
      * @return string
      */
-    protected function renderPermissionsAction(\Kajona\System\System\Model $objListEntry)
+    protected function renderPermissionsAction(Model $objListEntry)
     {
         if ($objListEntry instanceof WorkflowsHandler) {
             return "";
@@ -421,11 +422,11 @@ class WorkflowsAdmin extends AdminSimple implements AdminInterface
     }
 
     /**
-     * @param \Kajona\System\System\Model $objListEntry
+     * @param Model $objListEntry
      *
      * @return string
      */
-    protected function renderTagAction(\Kajona\System\System\Model $objListEntry)
+    protected function renderTagAction(Model $objListEntry)
     {
         if ($objListEntry instanceof WorkflowsHandler) {
             return "";
@@ -434,25 +435,30 @@ class WorkflowsAdmin extends AdminSimple implements AdminInterface
     }
 
     /**
-     * @param \Kajona\System\System\Model $objListEntry
+     * @param Model $objListEntry
      *
      * @return string
      */
-    protected function renderCopyAction(\Kajona\System\System\Model $objListEntry)
+    protected function renderCopyAction(Model $objListEntry)
     {
         return "";
     }
 
     /**
-     * @param \Kajona\System\System\Model $objListEntry
+     * @param Model $objListEntry
      *
      * @return array
      */
-    protected function renderAdditionalActions(\Kajona\System\System\Model $objListEntry)
+    protected function renderAdditionalActions(Model $objListEntry)
     {
         if ($objListEntry instanceof WorkflowsHandler) {
             return array(
-                $this->objToolkit->listButton(Link::getLinkAdmin($this->getArrModule("modul"), "instantiateHandler", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("action_instantiate_handler"), "icon_workflowTrigger"))
+                $this->objToolkit->listConfirmationButton(
+                    $this->getLang("handler_instatiate", array($objListEntry->getStrDisplayName())),
+                    Link::getLinkAdminHref($this->getArrModule("modul"), "startInstance", "&systemid=".$objListEntry->getSystemid()),
+                    "icon_workflowTrigger",
+                    $this->getLang("action_instantiate_handler")
+                )
             );
         }
         if ($objListEntry instanceof WorkflowsWorkflow) {
@@ -482,11 +488,11 @@ class WorkflowsAdmin extends AdminSimple implements AdminInterface
     }
 
     /**
-     * @param \Kajona\System\System\Model $objListEntry
+     * @param Model $objListEntry
      *
      * @return string
      */
-    protected function renderChangeHistoryAction(\Kajona\System\System\Model $objListEntry)
+    protected function renderChangeHistoryAction(Model $objListEntry)
     {
         if ($objListEntry instanceof WorkflowsHandler) {
             return "";
@@ -594,27 +600,7 @@ class WorkflowsAdmin extends AdminSimple implements AdminInterface
         }
     }
 
-    /**
-     * @return string
-     * @permissions right1
-     */
-    protected function actionInstantiateHandler()
-    {
-        $strReturn = "";
 
-        $objHandler = new WorkflowsHandler($this->getSystemid());
-        $strReturn .= $this->objToolkit->formHeadline($objHandler->getObjInstanceOfHandler()->getStrName()." (".$objHandler->getStrHandlerClass().")");
-        $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->getArrModule("modul"), "startInstance"));
-        $strReturn .= $this->objToolkit->formTextRow($this->getLang("instance_systemid_hint"));
-        $strReturn .= $this->objToolkit->formInputText("instance_systemid", $this->getLang("instance_systemid"));
-        $strReturn .= $this->objToolkit->formTextRow($this->getLang("instance_responsible_hint"));
-        $strReturn .= $this->objToolkit->formInputUserSelector("instance_responsible", $this->getLang("instance_responsible"));
-        $strReturn .= $this->objToolkit->formInputHidden("instance_responsible_id", "");
-        $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-        $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
-
-        return $strReturn;
-    }
 
     /**
      * @return string
@@ -627,8 +613,6 @@ class WorkflowsAdmin extends AdminSimple implements AdminInterface
         $objHandler = new WorkflowsHandler($this->getSystemid());
         $objWorkflow = new WorkflowsWorkflow();
         $objWorkflow->setStrClass($objHandler->getStrHandlerClass());
-        $objWorkflow->setStrAffectedSystemid($this->getParam("instance_systemid"));
-        $objWorkflow->setStrResponsible($this->getParam("instance_responsible_id"));
         $objWorkflow->updateObjectToDb();
         $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list"));
 

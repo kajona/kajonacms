@@ -8,13 +8,12 @@
 
 namespace Kajona\System\System;
 
-
 /**
  * A orm condition to to store several orm conditions.
  * They will connected via given condition connect.
  * e.g.
- *  ( (<restricion_1>) AND (<restricion_2>) AND (<restricion_3>) )
- *  ( (<restricion_1>) OR (<restricion_2>) OR (<restricion_3>) )
+ *  ( (<restriction_1>) AND (<restriction_2>) AND (<restriction_3>) )
+ *  ( (<restriction_1>) OR (<restriction_2>) OR (<restriction_3>) )
  *
  * @package Kajona\System\System
  * @author stefan.meyer1@yahoo.de
@@ -36,7 +35,7 @@ class OrmCompositeCondition extends OrmCondition
      * OrmCompositeCondition constructor.
      *
      * @param OrmCondition[] $arrConditions
-     * @param string $strConditionConnect
+     * @param array|string|\string[] $strConditionConnect
      */
     public function __construct(array $arrConditions = array(), $strConditionConnect = self::STR_CONDITION_AND)
     {
@@ -55,10 +54,13 @@ class OrmCompositeCondition extends OrmCondition
 
     /**
      * @param string $strConditionConnect
+     *
+     * @return $this
+     * @throws OrmException
      */
     public function setStrConditionConnect($strConditionConnect)
     {
-        if($strConditionConnect !== self::STR_CONDITION_AND && $strConditionConnect !== self::STR_CONDITION_OR) {
+        if ($strConditionConnect !== self::STR_CONDITION_AND && $strConditionConnect !== self::STR_CONDITION_OR) {
             throw new OrmException("strConditionConnect must have value AND or OR. Current value is ".$strConditionConnect, Exception::$level_FATALERROR);
         }
 
@@ -80,26 +82,25 @@ class OrmCompositeCondition extends OrmCondition
     public function getStrWhere()
     {
         $arrWhere = array();
-        foreach($this->arrConditions as $objCondition) {
-            if(!($objCondition instanceof OrmCondition)) {
+        foreach ($this->arrConditions as $objCondition) {
+            if (!($objCondition instanceof OrmCondition)) {
                 throw new OrmException("no valid OrmCondition instance: ".get_class($objCondition), Exception::$level_FATALERROR);
             }
 
             //only add if where is not empty
             $strWhere = $objCondition->getStrWhere();
-            if($strWhere != "") {
+            if ($strWhere != "") {
                 $arrWhere[] = $objCondition->getStrWhere();
             }
         }
 
         $strWhere = "";
-        if(count($arrWhere) > 0) {
+        if (count($arrWhere) > 0) {
             $strWhere = implode(") ".$this->strConditionConnect." (", $arrWhere);
 
-            if(count($arrWhere) == 1) {
+            if (count($arrWhere) == 1) {
                 $strWhere = "(".$strWhere.")";
-            }
-            else {
+            } else {
                 $strWhere = "( (".$strWhere.") )";
             }
         }
@@ -110,14 +111,14 @@ class OrmCompositeCondition extends OrmCondition
     public function getArrParams()
     {
         $arrParams = array();
-        foreach($this->arrConditions as $objCondition) {
-            if(!($objCondition instanceof OrmCondition)) {
+        foreach ($this->arrConditions as $objCondition) {
+            if (!($objCondition instanceof OrmCondition)) {
                 throw new OrmException("no valid OrmCondition instance: ".get_class($objCondition), Exception::$level_FATALERROR);
             }
 
             //only add if where is not empty
             $strWhere = $objCondition->getStrWhere();
-            if($strWhere != "") {
+            if ($strWhere != "") {
                 $arrParams = array_merge($arrParams, $objCondition->getArrParams());
             }
         }

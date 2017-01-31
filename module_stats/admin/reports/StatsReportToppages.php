@@ -12,10 +12,8 @@ use Kajona\System\Admin\ToolkitAdmin;
 use Kajona\System\System\Database;
 use Kajona\System\System\GraphFactory;
 use Kajona\System\System\Lang;
-use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Session;
 use Kajona\System\System\SystemSetting;
-use Kajona\System\System\UserUser;
 
 /**
  * This plugin creates a view common numbers, such as "user online" oder "total pagehits"

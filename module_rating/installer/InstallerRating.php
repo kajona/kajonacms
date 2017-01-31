@@ -32,7 +32,7 @@ class InstallerRating extends InstallerBase implements InstallerRemovableInterfa
         $objManager = new OrmSchemamanager();
 
         $strReturn .= "Installing table rating...\n";
-        $objManager->createTable("Kajona\\Rating\\System\\RatingRate");
+        $objManager->createTable(RatingRate::class);
 
         $strReturn .= "Installing table rating_history...\n";
 
@@ -55,8 +55,7 @@ class InstallerRating extends InstallerBase implements InstallerRemovableInterfa
             "RatingPortal.php",
             "",
             $this->objMetadata->getStrVersion(),
-            false,
-            "RatingPortalXml.php"
+            false
         );
 
         $strReturn .= "Module registered. Module-ID: ".$strSystemID." \n";
@@ -150,6 +149,12 @@ class InstallerRating extends InstallerBase implements InstallerRemovableInterfa
         if ($arrModule["module_version"] == "5.0") {
             $strReturn .= "Updating to 5.1...\n";
             $this->updateModuleVersion("rating", "5.1");
+        }
+
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if ($arrModule["module_version"] == "5.1") {
+            $strReturn .= "Updating to 6.2...\n";
+            $this->updateModuleVersion("rating", "6.2");
         }
 
         return $strReturn."\n\n";

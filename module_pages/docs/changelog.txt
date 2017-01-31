@@ -1,5 +1,8 @@
 Module Pages
 
+V5.0.2 --------------------------------------------------------------------------------------------------
+BUG: pages | FormentryTemplate.php -> the dropdown rendered a templates path from the core package, even if it was overwritten in /project
+
 V5.0.1 --------------------------------------------------------------------------------------------------
 BUG: module_pages | PagesContent -> the backend and the portal-editor both allowed to create blocks containing elements not existing, causing an exception afterwards (thx to Gerriet)
 

@@ -12,13 +12,12 @@ namespace Kajona\Search\Admin\Reports;
 use Kajona\System\Admin\Reports\AdminStatsreportsInterface;
 use Kajona\System\Admin\ToolkitAdmin;
 use Kajona\System\System\ArraySectionIterator;
+use Kajona\System\System\Carrier;
 use Kajona\System\System\Database;
 use Kajona\System\System\GraphFactory;
 use Kajona\System\System\Lang;
-use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Session;
 use Kajona\System\System\SystemSetting;
-use Kajona\System\System\UserUser;
 
 /**
  * This plugin shows the list of queries performed by the local searchengine
@@ -118,7 +117,7 @@ class StatsReportSearchqueries implements AdminStatsreportsInterface
 
         //showing a list using the pageview
         $objArraySectionIterator = new ArraySectionIterator($this->getTopQueriesCount());
-        $objArraySectionIterator->setPageNumber((int)(getGet("pv") != "" ? getGet("pv") : 1));
+        $objArraySectionIterator->setPageNumber((int)Carrier::getInstance()->getParam("pv"));
         $objArraySectionIterator->setArraySection($this->getTopQueries($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
         $intI = 0;
@@ -142,7 +141,7 @@ class StatsReportSearchqueries implements AdminStatsreportsInterface
         $arrHeader[2] = $this->objLang->getLang("header_amount", "search");
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrLogs);
 
-        $strReturn .= $this->objToolkit->getPageview($objArraySectionIterator, "stats", uniStrReplace("class_stats_report_", "", get_class($this)));
+        $strReturn .= $this->objToolkit->getPageview($objArraySectionIterator, "stats", "statsreportsearchqueries");
 
         return $strReturn;
     }
@@ -182,8 +181,7 @@ class StatsReportSearchqueries implements AdminStatsreportsInterface
             $arrReturn[] = $objGraph->renderGraph();
 
             return $arrReturn;
-        }
-        else {
+        } else {
             return "";
         }
     }

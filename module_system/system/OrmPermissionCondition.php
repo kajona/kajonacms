@@ -30,7 +30,7 @@ class OrmPermissionCondition extends OrmCondition
      * @param array|null $arrUserGroupIds
      * @param null $strColumn - optional, set if different column is being used
      */
-    function __construct($strPermission, array $arrUserGroupIds = null, $strColumn = null)
+    public function __construct($strPermission, array $arrUserGroupIds = null, $strColumn = null)
     {
         parent::__construct("", array());
 

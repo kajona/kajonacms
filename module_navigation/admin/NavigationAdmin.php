@@ -24,6 +24,7 @@ use Kajona\System\System\HttpResponsetypes;
 use Kajona\System\System\Link;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\ResponseObject;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemJSTreeBuilder;
 use Kajona\System\System\SystemJSTreeConfig;
 use Kajona\System\System\SystemModule;
@@ -338,8 +339,8 @@ class NavigationAdmin extends AdminSimple implements AdminInterface {
         $objForm->updateSourceObject();
 
         $strExternalLink = $objPoint->getStrPageE();
-        $strExternalLink = uniStrReplace(_indexpath_, "_indexpath_", $strExternalLink);
-        $strExternalLink = uniStrReplace(_webpath_, "_webpath_", $strExternalLink);
+        $strExternalLink = StringUtil::replace(_indexpath_, "_indexpath_", $strExternalLink);
+        $strExternalLink = StringUtil::replace(_webpath_, "_webpath_", $strExternalLink);
         $objPoint->setStrPageE($strExternalLink);
 
         if($this->getParam("mode") == "new")
@@ -410,7 +411,7 @@ class NavigationAdmin extends AdminSimple implements AdminInterface {
         }
         else {
             $strAction = $this->objToolkit->listButton(
-                "<a href=\"#\" title=\"".$this->getLang("navigation_point_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$this->getParam("form_element")."', ''],['".$this->getParam("form_element")."_id', '".$this->getSystemid()."']]);\">".getImageAdmin("icon_accept")."</a>"
+                "<a href=\"#\" title=\"".$this->getLang("navigation_point_accept")."\" rel=\"tooltip\" onclick=\"require('folderview').selectCallback([['".$this->getParam("form_element")."', ''],['".$this->getParam("form_element")."_id', '".$this->getSystemid()."']]);\">".getImageAdmin("icon_accept")."</a>"
             );
             $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), ".", getImageAdmin("icon_treeLeaf"), $strAction);
         }
@@ -429,7 +430,7 @@ class NavigationAdmin extends AdminSimple implements AdminInterface {
                         )
                     );
                     $strAction .= $this->objToolkit->listButton(
-                        "<a href=\"#\" title=\"".$this->getLang("navigation_point_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$this->getParam("form_element")."', '".$objSinglePoint->getStrName()."'],['".$this->getParam("form_element")."_id', '".$objSinglePoint->getSystemid()."']]);\">".getImageAdmin("icon_accept")."</a>"
+                        "<a href=\"#\" title=\"".$this->getLang("navigation_point_accept")."\" rel=\"tooltip\" onclick=\"require('folderview').selectCallback([['".$this->getParam("form_element")."', '".$objSinglePoint->getStrName()."'],['".$this->getParam("form_element")."_id', '".$objSinglePoint->getSystemid()."']]);\">".getImageAdmin("icon_accept")."</a>"
                     );
                     $strReturn .= $this->objToolkit->simpleAdminList($objSinglePoint, $strAction);
                 }
@@ -490,8 +491,8 @@ class NavigationAdmin extends AdminSimple implements AdminInterface {
      *
      * @return string
      * @since 3.3.0
-     * @xml
      * @permissions view
+     * @responseType json
      */
     protected function actionGetChildNodes() {
 
@@ -506,7 +507,6 @@ class NavigationAdmin extends AdminSimple implements AdminInterface {
         }
 
         $arrReturn = $objJsTreeLoader->getJson($arrSystemIdPath, $bitInitialLoading, $this->getParam(SystemJSTreeBuilder::STR_PARAM_LOADALLCHILDNOES) === "true");
-        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
         return $arrReturn;
     }
 }

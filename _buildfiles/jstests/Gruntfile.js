@@ -7,7 +7,7 @@ module.exports = function(grunt) {
       },
       build: {
         src: [
-          '../../core*/module_*/admin/scripts/*.js'
+          '../../core*/module_*/scripts/*.js'
         ],
         dest: 'kajona.min.js'
       }
@@ -18,11 +18,11 @@ module.exports = function(grunt) {
 	  },
 	  dist: {
 	    src: [
-          '../../core/module_system/admin/scripts/jquery/jquery.min.js',
-          '../../core/module_system/admin/scripts/jquerytag/jquery.tag-editor.min.js',
-          '../../core/module_system/admin/scripts/jqueryui/jquery-ui.custom.min.js',
-          '../../core/module_system/admin/scripts/jstree/jquery.jstree.js',
-          '../../core/module_system/admin/scripts/qtip2/jquery.qtip.min.js',
+          '../../core/module_system/scripts/jquery/jquery.min.js',
+          '../../core/module_system/scripts/jquerytag/jquery.tag-editor.min.js',
+          '../../core/module_system/scripts/jqueryui/jquery-ui.custom.min.js',
+          '../../core/module_system/scripts/jstree3/dist/jstree.min.js',
+          '../../core/module_system/scripts/qtip2/jquery.qtip.min.js',
           '../../kajona.min.js'
         ],
 	    dest: './kajona.all.js'
@@ -32,7 +32,6 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-concat-css');
 
   grunt.registerTask('default', ['uglify', 'concat']);
 

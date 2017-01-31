@@ -8,6 +8,7 @@ use Kajona\System\System\Model;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Reflection;
 use Kajona\System\System\Resourceloader;
+use Kajona\System\System\StringUtil;
 use ReflectionClass;
 
 class GeneralModelTest extends Testbase
@@ -34,7 +35,7 @@ class GeneralModelTest extends Testbase
 
                 //block from autotesting?
                 if ($objAnnotations->hasClassAnnotation("@blockFromAutosave")) {
-                    echo "skipping class " . uniSubstr($strOneFile, 0, -4) . " due to @blockFromAutosave annotation" . "\n";
+                    echo "skipping class " . StringUtil::substring($strOneFile, 0, -4) . " due to @blockFromAutosave annotation" . "\n";
                     return;
                 }
 

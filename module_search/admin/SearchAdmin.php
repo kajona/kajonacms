@@ -26,6 +26,7 @@ use Kajona\System\System\Model;
 use Kajona\System\System\ModelInterface;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\ResponseObject;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemModule;
 
 
@@ -187,7 +188,7 @@ class SearchAdmin extends AdminSimple implements AdminInterface
         // Search Form
         $objForm = $this->getSearchAdminForm($objSearch);
 
-        $objForm->setStrOnSubmit('KAJONA.admin.search.triggerFullSearch(); return false;');
+        $objForm->setStrOnSubmit('require(\'search\').triggerFullSearch(); return false;');
         $strReturn .= $objForm->renderForm(Link::getLinkAdminHref($this->getArrModule("modul"), "search"), AdminFormgenerator::BIT_BUTTON_SUBMIT);
 
 
@@ -195,10 +196,9 @@ class SearchAdmin extends AdminSimple implements AdminInterface
         $strReturn .= "
 
         <script type=\"text/javascript\">
-        KAJONA.admin.loader.loadFile('{$strCore}/module_search/admin/scripts/search.js', function() {
-            KAJONA.admin.search.triggerFullSearch();
+        require(['search'], function(search) {
+            search.triggerFullSearch();
         });
-
 
         </script>";
         $strReturn .= "<div id=\"search_container\" ></div>";
@@ -211,7 +211,6 @@ class SearchAdmin extends AdminSimple implements AdminInterface
      * Decoupled rendering of search results
      *
      * @permissions view
-     * @xml
      */
     public function actionRenderSearch()
     {
@@ -314,7 +313,6 @@ class SearchAdmin extends AdminSimple implements AdminInterface
      *
      * @return string
      * @permissions view
-     * @xml
      */
     protected function actionSearchXml()
     {
@@ -404,7 +402,7 @@ class SearchAdmin extends AdminSimple implements AdminInterface
             $arrItem["systemid"] = $objOneResult->getStrSystemid();
             $arrItem["icon"] = AdminskinHelper::getAdminImage($strIcon, "", true);
             $arrItem["score"] = $objOneResult->getStrSystemid();
-            $arrItem["description"] = uniStrTrim($objOneResult->getObjObject()->getStrDisplayName(), 200);
+            $arrItem["description"] = StringUtil::truncate($objOneResult->getObjObject()->getStrDisplayName(), 200);
             $arrItem["link"] = html_entity_decode($strLink);
 
             $arrItems[] = $arrItem;
@@ -459,7 +457,7 @@ class SearchAdmin extends AdminSimple implements AdminInterface
                 ."            <systemid>".$objOneResult->getStrSystemid()."</systemid>\n"
                 ."            <icon>".xmlSafeString($strIcon)."</icon>\n"
                 ."            <score>".$objOneResult->getIntHits()."</score>\n"
-                ."            <description>".xmlSafeString(uniStrTrim($objOneResult->getObjObject()->getStrDisplayName(), 200))."</description>\n"
+                ."            <description>".xmlSafeString(StringUtil::truncate($objOneResult->getObjObject()->getStrDisplayName(), 200))."</description>\n"
                 ."            <link>".xmlSafeString($strLink)."</link>\n"
                 ."        </item>\n";
         }

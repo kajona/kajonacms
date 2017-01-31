@@ -6,7 +6,6 @@
 
 namespace Kajona\System\System;
 
-use Kajona\System\Admin\AdminFormgenerator;
 use Kajona\System\Admin\AdminFormgeneratorFilter;
 use ReflectionClass;
 
@@ -78,7 +77,9 @@ abstract class FilterBase
 
     /**
      * Method for setting default values.
-     * Must be called manually. Not being called on creation.
+     *
+     * Being called on filter reset or if filter is not in session yet.
+     * May also be called manually.
      */
     public function configureDefaultValues()
     {
@@ -104,17 +105,18 @@ abstract class FilterBase
 
     /**
      * Returns the module name.
-     * The module name is being retrieved via the class annotation @ module
+     * The module name is being retrieved via the class annotation @module
      *
      * @param $strKey
      *
      * @return mixed
+     * @throws Exception
      */
     public function getArrModule($strKey = "")
     {
         $objReflection = new Reflection($this);
         $arrAnnotationValues = $objReflection->getAnnotationValuesFromClass(AbstractController::STR_MODULE_ANNOTATION);
-        if(count($arrAnnotationValues) > 0) {
+        if (count($arrAnnotationValues) > 0) {
             return trim($arrAnnotationValues[0]);
         }
 
@@ -139,31 +141,28 @@ abstract class FilterBase
          * Check if filter form was submitted.
          * If not try to get filter from session
          */
-        if(Carrier::getInstance()->getParam($objFilter->getFullParamName(AdminFormgeneratorFilter::STR_FORM_PARAM_FILTER)) != "") {
+        if (Carrier::getInstance()->getParam($objFilter->getFullParamName(AdminFormgeneratorFilter::STR_FORM_PARAM_FILTER)) != "") {
             $objFilter->setBitFilterUpdated(true);
 
             /*
              * In case filter was reset reset, remove from session
              */
-            if(Carrier::getInstance()->getParam(AdminFormgeneratorFilter::STR_FORM_PARAM_RESET) != "") {
+            if (Carrier::getInstance()->getParam(AdminFormgeneratorFilter::STR_FORM_PARAM_RESET) != "") {
                 Session::getInstance()->sessionUnset($strFilterId);
 
                 //if filter was reset, set default values
                 $objFilter->configureDefaultValues();
-            }
-            else {
+            } else {
                 //If no reset was triggered -> Update filter with params which have been set
                 $objFilter->updateFilterPropertiesFromParams();
             }
-        }
-        else {
+        } else {
             /*
              * Get objFilter from Session
              */
-            if(Session::getInstance()->sessionIsset($strFilterId)) {
+            if (Session::getInstance()->sessionIsset($strFilterId)) {
                 $objFilter = Session::getInstance()->getSession($strFilterId);
-            }
-            else {
+            } else {
                 //in case filter is not in session yet -> set default values
                 $objFilter->configureDefaultValues();
             }
@@ -197,9 +196,9 @@ abstract class FilterBase
         $arrParams = Carrier::getAllParams();
 
         //set param vlaues to filter object
-        foreach($arrProperties as $strPropertyName => $strColumnName) {
+        foreach ($arrProperties as $strPropertyName => $strColumnName) {
             $strSetter = $objReflection->getSetter($strPropertyName);
-            if($strSetter === null) {
+            if ($strSetter === null) {
                 throw new Exception("unable to find setter for property ".$strPropertyName."@".get_class($this), Exception::$level_ERROR);
             }
 
@@ -208,7 +207,7 @@ abstract class FilterBase
             $strPropertyWithoutPrefix = $this->getFullParamName($strPropertyWithoutPrefix);
 
             //set values to filter object
-            if(array_key_exists($strPropertyWithoutPrefix, $arrParams)) {
+            if (array_key_exists($strPropertyWithoutPrefix, $arrParams)) {
                 $strValueToSet = $this->convertParamValue($strPropertyWithoutPrefix, $arrParams);
                 $this->$strSetter($strValueToSet);
             }
@@ -232,17 +231,17 @@ abstract class FilterBase
         $strValue = $arrParams[$strParamName] == "" ? null : $arrParams[$strParamName];
 
         //check if _id param exists, if yes take that one
-        if(array_key_exists($strParamName."_id", $arrParams)) {
+        if (array_key_exists($strParamName."_id", $arrParams)) {
             $strValue = $arrParams[$strParamName."_id"] == "" ? null : $arrParams[$strParamName."_id"];
         }
 
         //if no value is set, return null
-        if($strValue === null) {
+        if ($strValue === null) {
             return $strValue;
         }
 
         //if paramname contains the word "date" -> convert to date
-        if(StringUtil::indexOf($strParamName, "date") !== false) {
+        if (StringUtil::indexOf($strParamName, "date") !== false) {
             $objDate = new Date();
             $objDate->generateDateFromParams($strParamName, $arrParams);
             return $objDate;
@@ -265,19 +264,19 @@ abstract class FilterBase
         $arrProperties = $objReflection->getPropertiesWithAnnotation(OrmBase::STR_ANNOTATION_TABLECOLUMN);
         $arrPropertiesFilterComparator = $objReflection->getPropertiesWithAnnotation(self::STR_ANNOTATION_FILTER_COMPARE_OPERATOR);
 
-        foreach($arrProperties as $strAttributeName => $strTableColumn) {
+        foreach ($arrProperties as $strAttributeName => $strTableColumn) {
             $strGetter = $objReflection->getGetter($strAttributeName);
 
             $enumFilterCompareOperator = null;
-            if(array_key_exists($strAttributeName, $arrPropertiesFilterComparator)) {
+            if (array_key_exists($strAttributeName, $arrPropertiesFilterComparator)) {
                 $enumFilterCompareOperator = $this->getFilterCompareOperator($arrPropertiesFilterComparator[$strAttributeName]);
             }
 
-            if($strGetter !== null) {
+            if ($strGetter !== null) {
                 $strValue = $this->$strGetter();
-                if($strValue !== null && $strValue !== "") {
+                if ($strValue !== null && $strValue !== "") {
                     $objRestriction = $this->getSingleOrmCondition($strAttributeName, $strValue, $strTableColumn, $enumFilterCompareOperator);
-                    if($objRestriction !== null) {
+                    if ($objRestriction !== null) {
                         $arrConditions[] = $objRestriction;
                     }
                 }
@@ -285,7 +284,7 @@ abstract class FilterBase
         }
 
         /*Handle additional conditions*/
-        foreach($this->arrAdditionalConditions as $objCondition) {
+        foreach ($this->arrAdditionalConditions as $objCondition) {
             $arrConditions[] = $objCondition;
         }
 
@@ -318,7 +317,7 @@ abstract class FilterBase
     {
         /*Add configured conditions*/
         $arrConditions = $this->getOrmConditions();
-        foreach($arrConditions as $objCondition) {
+        foreach ($arrConditions as $objCondition) {
             $objORM->addWhereRestriction($objCondition);
         }
     }
@@ -333,7 +332,7 @@ abstract class FilterBase
     private function getFilterCompareOperator($strFilterCompareType)
     {
 
-        switch($strFilterCompareType) {
+        switch ($strFilterCompareType) {
             case self::STR_COMPAREOPERATOR_EQ:
                 return OrmComparatorEnum::Equal();
             case self::STR_COMPAREOPERATOR_GT:

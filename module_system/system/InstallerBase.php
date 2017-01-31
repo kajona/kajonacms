@@ -34,14 +34,14 @@ abstract class InstallerBase extends Root implements InstallerInterface {
         //try to fetch the current dir
 
         $strClassname = get_class($this);
-        $intStrps = uniStrrpos($strClassname, "\\");
+        $intStrps = StringUtil::lastIndexOf($strClassname, "\\");
         if($intStrps !== false) {
-            $strClassname = uniSubstr($strClassname, $intStrps+1);
+            $strClassname = StringUtil::substring($strClassname, $intStrps+1);
         }
         $strDir = Resourceloader::getInstance()->getPathForFile("/installer/".$strClassname.".php");
         $strDir = dirname(_realpath_.$strDir);
         $this->objMetadata = new PackagemanagerMetadata();
-        $this->objMetadata->autoInit(uniStrReplace(array("/installer", _realpath_), array("", ""), $strDir));
+        $this->objMetadata->autoInit(StringUtil::replace(array("/installer", _realpath_), array("", ""), $strDir));
         parent::__construct();
     }
 
@@ -85,11 +85,11 @@ abstract class InstallerBase extends Root implements InstallerInterface {
 	 * @param string $strFileAdmin
 	 * @param string $strVersion
 	 * @param bool $bitNavi
-	 * @param string $strXmlPortal
-	 * @param string $strXmlAdmin
+	 * @internal string $strXmlPortal
+	 * @internal string $strXmlAdmin
 	 * @return string the new SystemID of the record
 	 */
-	protected function registerModule($strName, $intModuleNr, $strFilePortal, $strFileAdmin, $strVersion, $bitNavi, $strXmlPortal = "", $strXmlAdmin = "") {
+	protected function registerModule($strName, $intModuleNr, $strFilePortal, $strFileAdmin, $strVersion, $bitNavi = true, $strXmlPortal = "", $strXmlAdmin = "") {
 
         $this->objDB->flushQueryCache();
 
@@ -103,8 +103,6 @@ abstract class InstallerBase extends Root implements InstallerInterface {
         $objModule->setStrNameAdmin($strFileAdmin);
         $objModule->setStrVersion($strVersion);
         $objModule->setIntNavigation($bitNavi ? 1 : 0);
-        $objModule->setStrXmlNamePortal($strXmlPortal);
-        $objModule->setStrXmlNameAdmin($strXmlAdmin);
         $objModule->setIntDate(time());
         $objModule->setIntModuleNr($intModuleNr);
         $objModule->setArrModuleEntry("moduleId", $intModuleNr);

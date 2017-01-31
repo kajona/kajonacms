@@ -5,13 +5,13 @@
         >
     <title>packageserver</title>
     <description>The packageserver is used to provide the server-part of the kajona packages-system. It is based on the mediamanager and servers the packages to clients. Therefore, a new remoteprovider should be added to the clients in order to access the new package-server.</description>
-    <version>5.1</version>
+    <version>6.2</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="system" version="5.1" />
-        <module name="mediamanager" version="5.1" />
-        <module name="packagemanager" version="5.1" />
+        <module name="system" version="6.2" />
+        <module name="mediamanager" version="6.2" />
+        <module name="packagemanager" version="6.2" />
     </requiredModules>
 </package>

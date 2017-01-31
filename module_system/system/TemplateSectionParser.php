@@ -26,17 +26,17 @@ class TemplateSectionParser
         $intStart = false;
         if (preg_match("/<".$strSection."([\ a-zA-Z0-9\-='\"])*>/i", $strTemplate, $arrMatches) > 0) {
             $strPattern = $arrMatches[0];
-            $intStart = uniStrpos($strTemplate, $strPattern);
+            $intStart = StringUtil::indexOf($strTemplate, $strPattern);
 
             if (!$bitKeepSectionTag) {
-                $intStart += uniStrlen($strPattern);
+                $intStart += StringUtil::length($strPattern);
             }
         }
 
         //find closing tag
-        $intEnd = uniStrpos($strTemplate, "</".$strSection.">");
+        $intEnd = StringUtil::indexOf($strTemplate, "</".$strSection.">");
         if ($bitKeepSectionTag) {
-            $intEnd += uniStrlen("</".$strSection.">");
+            $intEnd += StringUtil::length("</".$strSection.">");
         }
 
 
@@ -48,7 +48,7 @@ class TemplateSectionParser
             }
             else {
                 //delete substring before and after
-                $strTemplate = uniSubstr($strTemplate, $intStart, $intEnd);
+                $strTemplate = StringUtil::substring($strTemplate, $intStart, $intEnd);
             }
         }
         else {
@@ -84,7 +84,7 @@ class TemplateSectionParser
     {
         do {
             $strFullSection = $this->readSection($strTemplate, $strSection, true);
-            $strTemplate = uniStrReplace($strFullSection, "", $strTemplate);
+            $strTemplate = StringUtil::replace($strFullSection, "", $strTemplate);
         } while ($strFullSection != "" && $strFullSection != null);
 
         return $strTemplate;

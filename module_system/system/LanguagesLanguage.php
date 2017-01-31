@@ -247,15 +247,15 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
             //try to load the default language
             //maybe the user sent a wanted language
             $strUserLanguages = str_replace(";", ",", getServer("HTTP_ACCEPT_LANGUAGE"));
-            if(uniStrlen($strUserLanguages) > 0) {
+            if(StringUtil::length($strUserLanguages) > 0) {
                 $arrLanguages = explode(",", $strUserLanguages);
                 //check, if one of the requested languages is available on our system
                 foreach($arrLanguages as $strOneLanguage) {
                     if(!preg_match("#q\=[0-9]\.[0-9]#i", $strOneLanguage)) {
                         //search language
                         $objORM = new OrmObjectlist();
-                        $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND system_status = 1", array()));
-                        $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND language_name = ?", array($strOneLanguage)));
+                        $objORM->addWhereRestriction(new OrmCondition("system_status = 1"));
+                        $objORM->addWhereRestriction(new OrmCondition("language_name = ?", array($strOneLanguage)));
                         /** @var LanguagesLanguage $objLang */
                         $objLang = $objORM->getSingleObject(get_called_class());
 
@@ -271,8 +271,8 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
             }
 
             $objORM = new OrmObjectlist();
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND system_status = 1", array()));
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND language_default = 1", array()));
+            $objORM->addWhereRestriction(new OrmCondition("system_status = 1"));
+            $objORM->addWhereRestriction(new OrmCondition("language_default = 1"));
             /** @var LanguagesLanguage $objLang */
             $objLang = $objORM->getSingleObject(get_called_class());
 
@@ -285,7 +285,7 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
             }
             else {
                 $objORM = new OrmObjectlist();
-                $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND system_status = 1", array()));
+                $objORM->addWhereRestriction(new OrmCondition("system_status = 1"));
                 /** @var LanguagesLanguage $objLang */
                 $objLang = $objORM->getSingleObject(get_called_class());
 
@@ -320,7 +320,7 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
         else {
 
             $objORM = new OrmObjectlist();
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND language_default = 1", array()));
+            $objORM->addWhereRestriction(new OrmCondition("language_default = 1"));
             /** @var LanguagesLanguage $objLang */
             $objLang = $objORM->getSingleObject(get_called_class());
 
@@ -358,8 +358,8 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
     public static function getDefaultLanguage()
     {
         $objORM = new OrmObjectlist();
-        $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND system_status = 1", array()));
-        $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND language_default = 1", array()));
+        $objORM->addWhereRestriction(new OrmCondition("system_status = 1"));
+        $objORM->addWhereRestriction(new OrmCondition("language_default = 1"));
         /** @var LanguagesLanguage $objLang */
         return $objORM->getSingleObject(get_called_class());
     }

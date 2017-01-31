@@ -15,11 +15,12 @@ use Kajona\System\System\Carrier;
 use Kajona\System\System\Link;
 use Kajona\System\System\Logger;
 use Kajona\System\System\Objectfactory;
+use Kajona\System\System\OrmCondition;
 use Kajona\System\System\OrmObjectlist;
 use Kajona\System\System\OrmObjectlistOrderby;
-use Kajona\System\System\OrmObjectlistRestriction;
 use Kajona\System\System\SearchPortalobjectInterface;
 use Kajona\System\System\SearchResultobjectInterface;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemChangelog;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\SystemSetting;
@@ -251,7 +252,7 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
     public function getStrAdditionalInfo()
     {
         if ($this->getIntType() == self::$INT_TYPE_ALIAS) {
-            return "-> ".uniStrTrim($this->getStrAlias(), 20);
+            return "-> ".StringUtil::truncate($this->getStrAlias(), 20);
         }
         else {
             return $this->getStrName();
@@ -506,7 +507,7 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
     {
         $objORM = new OrmObjectlist();
         if ($strFilter != "") {
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND page_name LIKE ?", $strFilter."%"));
+            $objORM->addWhereRestriction(new OrmCondition("page_name LIKE ?", $strFilter."%"));
         }
         $objORM->addOrderBy(new OrmObjectlistOrderby("page_name ASC"));
         return $objORM->getObjectList(get_called_class(), "", $intStart, $intEnd);
@@ -523,12 +524,12 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
     public static function getPageByName($strName)
     {
         //strip possible anchors
-        if (uniStrpos($strName, "#") !== false) {
-            $strName = uniSubstr($strName, 0, uniStrpos($strName, "#"));
+        if (StringUtil::indexOf($strName, "#") !== false) {
+            $strName = StringUtil::substring($strName, 0, StringUtil::indexOf($strName, "#"));
         }
 
         $objORM = new OrmObjectlist();
-        $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND page_name = ?", $strName));
+        $objORM->addWhereRestriction(new OrmCondition("page_name = ?", $strName));
         return $objORM->getSingleObject(get_called_class());
     }
 
@@ -542,9 +543,9 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
     public function getNumberOfElementsOnPage($bitJustActive = false)
     {
         $objORM = new OrmObjectlist();
-        $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND page_element_ph_language = ?", $this->getStrLanguage()));
+        $objORM->addWhereRestriction(new OrmCondition("page_element_ph_language = ?", $this->getStrLanguage()));
         if ($bitJustActive) {
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND system_status = 1", array()));
+            $objORM->addWhereRestriction(new OrmCondition("system_status = 1"));
         }
 
         return $objORM->getObjectCount("Kajona\\Pages\\System\\PagesPageelement", $this->getSystemid());
@@ -718,7 +719,7 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
         $strName = str_replace(" ", "_", $strName);
 
         $objORM = new OrmObjectlist();
-        $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND page_name = ?", $strName));
+        $objORM->addWhereRestriction(new OrmCondition("page_name = ?", $strName));
         $objPage = $objORM->getSingleObject(get_called_class());
 
         if ($objPage !== null && !($bitAvoidSelfchek && $objPage->getSystemid() == $this->getSystemid())) {
@@ -728,7 +729,7 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
                 $strTemp = $strName."_".$intCount;
 
                 $objORM = new OrmObjectlist();
-                $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND page_name = ?", $strName));
+                $objORM->addWhereRestriction(new OrmCondition("page_name = ?", $strName));
                 $objPage = $objORM->getSingleObject(get_called_class());
 
                 $intCount++;
@@ -849,7 +850,7 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
     public function setStrName($strName)
     {
         //make a valid pagename
-        $strName = uniStrtolower(urlSafeString($strName));
+        $strName = StringUtil::toLowerCase(urlSafeString($strName));
 
         $this->strName = $strName;
     }

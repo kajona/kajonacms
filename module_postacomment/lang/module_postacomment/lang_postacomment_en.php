@@ -10,6 +10,8 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
+$lang["_postacomment_post_moderated_"]   = "Comments moderated";
+$lang["_postacomment_post_moderated_hint"]   = "New comments are inactive and require moderation";
 $lang["form_message_label"]              = "Message";
 $lang["form_name_label"]                 = "Name";
 $lang["form_postacomment_username"]      = "Name";

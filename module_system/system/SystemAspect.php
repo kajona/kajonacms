@@ -25,7 +25,8 @@ namespace Kajona\System\System;
  *
  * @sortManager Kajona\System\System\CommonSortmanager
  */
-class SystemAspect extends Model implements ModelInterface, AdminListableInterface {
+class SystemAspect extends Model implements ModelInterface, AdminListableInterface
+{
 
     /**
      * @var string
@@ -33,6 +34,7 @@ class SystemAspect extends Model implements ModelInterface, AdminListableInterfa
      * @tableColumnDatatype char254
      * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldMandatory
+     * @fieldLabel form_aspect_name
      *
      * @addSearchIndex
      */
@@ -44,12 +46,22 @@ class SystemAspect extends Model implements ModelInterface, AdminListableInterfa
      * @tableColumnDatatype int
      * @fieldType Kajona\System\Admin\Formentries\FormentryYesno
      * @fieldMandatory
+     * @fieldLabel form_aspect_default
      */
     private $bitDefault = 0;
 
     private static $STR_SESSION_ASPECT_KEY = "STR_SESSION_ASPECT_KEY";
     private static $STR_SESSION_ASPECT_OBJECT = "STR_SESSION_ASPECT_OBJECT";
 
+    public function rightEdit()
+    {
+        return parent::rightEdit() && parent::rightRight5();
+    }
+
+    public function rightDelete()
+    {
+        return parent::rightDelete() && parent::rightRight5();
+    }
 
 
     /**
@@ -57,13 +69,15 @@ class SystemAspect extends Model implements ModelInterface, AdminListableInterfa
      *
      * @return string
      */
-    public function getStrDisplayName() {
+    public function getStrDisplayName()
+    {
         //try to load the name from the lang-files
         $strLabel = $this->getLang("aspect_".$this->getStrName(), "system");
-        if($strLabel != "!aspect_".$this->getStrName()."!")
+        if ($strLabel != "!aspect_".$this->getStrName()."!") {
             return $strLabel;
-        else
+        } else {
             return $this->getStrName();
+        }
     }
 
     /**
@@ -73,7 +87,8 @@ class SystemAspect extends Model implements ModelInterface, AdminListableInterfa
      *
      * @return string the name of the icon, not yet wrapped by getImageAdmin()
      */
-    public function getStrIcon() {
+    public function getStrIcon()
+    {
         return "icon_aspect";
     }
 
@@ -82,7 +97,8 @@ class SystemAspect extends Model implements ModelInterface, AdminListableInterfa
      *
      * @return string
      */
-    public function getStrAdditionalInfo() {
+    public function getStrAdditionalInfo()
+    {
         return $this->getBitDefault() == 1 ? " (".$this->getLang("aspect_isDefault", "system").")" : "";
     }
 
@@ -91,7 +107,8 @@ class SystemAspect extends Model implements ModelInterface, AdminListableInterfa
      *
      * @return string
      */
-    public function getStrLongDescription() {
+    public function getStrLongDescription()
+    {
         return "";
     }
 
@@ -100,15 +117,17 @@ class SystemAspect extends Model implements ModelInterface, AdminListableInterfa
      *
      * @return bool
      */
-    protected function updateStateToDb() {
+    protected function updateStateToDb()
+    {
 
         //if no other aspect exists, we have a new default aspect
-        if(SystemAspect::getObjectCountFiltered() == 0) {
+        if (SystemAspect::getObjectCountFiltered() == 0) {
             $this->setBitDefault(1);
         }
 
-        if($this->getBitDefault() == 1)
+        if ($this->getBitDefault() == 1) {
             self::resetDefaultAspect();
+        }
 
         return parent::updateStateToDb();
     }
@@ -120,7 +139,8 @@ class SystemAspect extends Model implements ModelInterface, AdminListableInterfa
      * @return SystemAspect[]
      * @static
      */
-    public static function getActiveObjectList() {
+    public static function getActiveObjectList()
+    {
         $objOrm = new OrmObjectlist();
         $objOrm->addWhereRestriction(new OrmObjectlistSystemstatusRestriction(OrmComparatorEnum::NotEqual(), 0));
         return $objOrm->getObjectList(__CLASS__, "");
@@ -132,7 +152,8 @@ class SystemAspect extends Model implements ModelInterface, AdminListableInterfa
      *
      * @return int
      */
-    public static function getActiveObjectCount() {
+    public static function getActiveObjectCount()
+    {
         $objOrm = new OrmObjectlist();
         $objOrm->addWhereRestriction(new OrmObjectlistSystemstatusRestriction(OrmComparatorEnum::NotEqual(), 0));
         return $objOrm->getObjectCount(__CLASS__);
@@ -145,7 +166,8 @@ class SystemAspect extends Model implements ModelInterface, AdminListableInterfa
      *
      * @return bool
      */
-    public static function resetDefaultAspect() {
+    public static function resetDefaultAspect()
+    {
         $strQuery = "UPDATE "._dbprefix_."aspects
                      SET aspect_default = 0";
         return Carrier::getInstance()->getObjDB()->_pQuery($strQuery, array());
@@ -159,22 +181,24 @@ class SystemAspect extends Model implements ModelInterface, AdminListableInterfa
      *
      * @return SystemAspect null if no aspect is set up
      */
-    public static function getDefaultAspect($bitIgnorePermissions = false) {
+    public static function getDefaultAspect($bitIgnorePermissions = false)
+    {
         $objORM = new OrmObjectlist();
-        $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND system_status = 1", array()));
-        $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND aspect_default = 1", array()));
+        $objORM->addWhereRestriction(new OrmCondition("system_status = 1"));
+        $objORM->addWhereRestriction(new OrmCondition("aspect_default = 1"));
         /** @var SystemAspect $objAspect */
         $objAspect = $objORM->getSingleObject(get_called_class());
 
-        if($objAspect != null  && ($bitIgnorePermissions || $objAspect->rightView())) {
+        if ($objAspect != null && ($bitIgnorePermissions || $objAspect->rightView())) {
             return $objAspect;
-        }
-        else {
+        } else {
             $arrAspects = SystemAspect::getActiveObjectList();
-            if(count($arrAspects) > 0) {
-                foreach($arrAspects as $objOneAspect)
-                    if($objOneAspect->rightView())
+            if (count($arrAspects) > 0) {
+                foreach ($arrAspects as $objOneAspect) {
+                    if ($objOneAspect->rightView()) {
                         return $objOneAspect;
+                    }
+                }
             }
 
             return null;
@@ -188,9 +212,10 @@ class SystemAspect extends Model implements ModelInterface, AdminListableInterfa
      *
      * @return SystemAspect or null if not found
      */
-    public static function getAspectByName($strName) {
+    public static function getAspectByName($strName)
+    {
         $objORM = new OrmObjectlist();
-        $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND aspect_name = ?", array($strName)));
+        $objORM->addWhereRestriction(new OrmCondition("aspect_name = ?", array($strName)));
         return $objORM->getSingleObject(get_called_class());
     }
 
@@ -203,19 +228,19 @@ class SystemAspect extends Model implements ModelInterface, AdminListableInterfa
      *
      * @return SystemAspect null if no aspect is set up
      */
-    public static function getCurrentAspect() {
+    public static function getCurrentAspect()
+    {
 
         //process params maybe existing
-        if(defined("_admin_") && _admin_ && Carrier::getInstance()->getParam("aspect") != "" && validateSystemid(Carrier::getInstance()->getParam("aspect"))) {
+        if (defined("_admin_") && _admin_ && Carrier::getInstance()->getParam("aspect") != "" && validateSystemid(Carrier::getInstance()->getParam("aspect"))) {
             self::setCurrentAspectId(Carrier::getInstance()->getParam("aspect"));
         }
 
         //aspect registered in session?
-        if(validateSystemid(Carrier::getInstance()->getObjSession()->getSession(SystemAspect::$STR_SESSION_ASPECT_KEY))) {
-            if(Carrier::getInstance()->getObjSession()->getSession(SystemAspect::$STR_SESSION_ASPECT_OBJECT, Session::$intScopeRequest) !== false) {
+        if (validateSystemid(Carrier::getInstance()->getObjSession()->getSession(SystemAspect::$STR_SESSION_ASPECT_KEY))) {
+            if (Carrier::getInstance()->getObjSession()->getSession(SystemAspect::$STR_SESSION_ASPECT_OBJECT, Session::$intScopeRequest) !== false) {
                 return Carrier::getInstance()->getObjSession()->getSession(SystemAspect::$STR_SESSION_ASPECT_OBJECT, Session::$intScopeRequest);
-            }
-            else {
+            } else {
                 $objAspect = new SystemAspect(Carrier::getInstance()->getObjSession()->getSession(SystemAspect::$STR_SESSION_ASPECT_KEY));
                 Carrier::getInstance()->getObjSession()->setSession(SystemAspect::$STR_SESSION_ASPECT_OBJECT, $objAspect, Session::$intScopeRequest);
                 return $objAspect;
@@ -223,8 +248,9 @@ class SystemAspect extends Model implements ModelInterface, AdminListableInterfa
         }
 
         $objAspect = SystemAspect::getDefaultAspect();
-        if($objAspect != null)
+        if ($objAspect != null) {
             self::setCurrentAspectId($objAspect->getSystemid());
+        }
         return $objAspect;
     }
 
@@ -234,22 +260,26 @@ class SystemAspect extends Model implements ModelInterface, AdminListableInterfa
      *
      * @return string
      */
-    public static function getCurrentAspectId() {
+    public static function getCurrentAspectId()
+    {
         $objAspect = SystemAspect::getCurrentAspect();
-        if($objAspect != null)
+        if ($objAspect != null) {
             return $objAspect->getSystemid();
-        else
+        } else {
             return "";
+        }
     }
 
     /**
      * Saves an aspect id as the current active one - but only if the previous one was changed
      *
      * @param string $strAspectId
+     *
      * @return void
      */
-    public static function setCurrentAspectId($strAspectId) {
-        if(validateSystemid($strAspectId) && $strAspectId != Carrier::getInstance()->getObjSession()->getSession(SystemAspect::$STR_SESSION_ASPECT_KEY)) {
+    public static function setCurrentAspectId($strAspectId)
+    {
+        if (validateSystemid($strAspectId) && $strAspectId != Carrier::getInstance()->getObjSession()->getSession(SystemAspect::$STR_SESSION_ASPECT_KEY)) {
             Carrier::getInstance()->getObjSession()->setSession(SystemAspect::$STR_SESSION_ASPECT_KEY, $strAspectId);
             Carrier::getInstance()->getObjSession()->setSession(SystemAspect::$STR_SESSION_ASPECT_OBJECT, new SystemAspect($strAspectId), Session::$intScopeRequest);
         }
@@ -258,31 +288,37 @@ class SystemAspect extends Model implements ModelInterface, AdminListableInterfa
 
     /**
      * @param string $strName
+     *
      * @return void
      */
-    public function setStrName($strName) {
+    public function setStrName($strName)
+    {
         $this->strName = $strName;
     }
 
     /**
      * @param string $bitDefault
+     *
      * @return void
      */
-    public function setBitDefault($bitDefault) {
+    public function setBitDefault($bitDefault)
+    {
         $this->bitDefault = $bitDefault;
     }
 
     /**
      * @return string
      */
-    public function getStrName() {
+    public function getStrName()
+    {
         return $this->strName;
     }
 
     /**
      * @return bool
      */
-    public function getBitDefault() {
+    public function getBitDefault()
+    {
         return $this->bitDefault;
     }
 

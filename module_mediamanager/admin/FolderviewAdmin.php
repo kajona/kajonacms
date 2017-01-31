@@ -60,7 +60,7 @@ class FolderviewAdmin extends AdminController implements AdminInterface
         $strReturn = "";
 
         if ($this->getParam("CKEditorFuncNum") != "") {
-            $strReturn .= "<script type=\"text/javascript\">window.opener.KAJONA.admin.folderview.selectCallbackCKEditorFuncNum = ".(int)$this->getParam("CKEditorFuncNum").";</script>";
+            $strReturn .= "<script type=\"text/javascript\">window.opener.require('folderview').selectCallbackCKEditorFuncNum = ".(int)$this->getParam("CKEditorFuncNum").";</script>";
         }
 
         $strReturn .= $this->objToolkit->listHeader();

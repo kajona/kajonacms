@@ -61,6 +61,7 @@ $lang["commons_list_new"]                = "Neuen Datensatz anlegen";
 $lang["commons_list_sort_next"]          = "Auf nächste Seite verschieben";
 $lang["commons_list_sort_prev"]          = "Auf vorherige Seite verschieben";
 $lang["commons_locked"]                  = "Datensatz ist gesperrt";
+$lang["commons_move"]                    = "Verschieben";
 $lang["commons_module_permissions"]      = "Modul-Rechte";
 $lang["commons_name"]                    = "Name";
 $lang["commons_next"]                    = "weiter";

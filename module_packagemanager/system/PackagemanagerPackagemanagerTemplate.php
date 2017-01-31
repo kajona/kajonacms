@@ -16,6 +16,7 @@ use Kajona\System\System\OrmBase;
 use Kajona\System\System\OrmDeletedhandlingEnum;
 use Kajona\System\System\PharModule;
 use Kajona\System\System\PharModuleExtractor;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemSetting;
 
 
@@ -192,7 +193,7 @@ class PackagemanagerPackagemanagerTemplate implements PackagemanagerPackagemanag
     {
         $strTarget = $this->objMetadata->getStrTarget();
         if ($strTarget == "") {
-            $strTarget = uniStrtolower(createFilename($this->objMetadata->getStrTitle(), true));
+            $strTarget = StringUtil::toLowerCase(createFilename($this->objMetadata->getStrTitle(), true));
         }
 
         return "/templates/".$strTarget;

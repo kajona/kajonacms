@@ -8,6 +8,7 @@
 
 namespace Kajona\System\System\Validators;
 
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\ValidatorInterface;
 
 
@@ -36,7 +37,7 @@ class TextValidator implements ValidatorInterface {
         $intMin = 1;
         $intMax = 0;//todo does not makes sense here as the else part will never be reached?extract intMax to class variable?
 
-        $intLen = uniStrlen($objValue);
+        $intLen = StringUtil::length($objValue);
         if($intMax == 0) {
             if($intLen >= $intMin)
                 return true;

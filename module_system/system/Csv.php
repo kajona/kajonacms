@@ -9,7 +9,6 @@
 
 namespace Kajona\System\System;
 
-
 /**
  * Csv, used to access data stored in csv-files.
  * This class can either be used to write to csv-files or to read from csv-files
@@ -99,7 +98,7 @@ class Csv
 
             $strRow = $objFilesystem->readLineFromFile();
             while ($strRow !== false) {
-                if (uniStrlen($strRow) > 0) {
+                if (StringUtil::length($strRow) > 0) {
                     $arrOneRow = explode($this->strDelimiter, $strRow);
                     $arrCSVRow = array();
                     foreach ($arrHeader as $intKey => $strHeader) {
@@ -107,13 +106,13 @@ class Csv
                         //include the mapping specified
                         //add an encloser?
                         if ($this->strTextEncloser != null) {
-                            $strHeader = uniStrReplace($this->strTextEncloser, "", trim($strHeader));
+                            $strHeader = StringUtil::replace($this->strTextEncloser, "", trim($strHeader));
                         }
                         $strRowKey = $this->arrMapping[$strHeader];
                         $strValue = $arrOneRow[$intKey];
                         //remove an encloser?
                         if ($this->strTextEncloser != null) {
-                            $strValue = uniStrReplace($this->strTextEncloser, "", trim($strValue));
+                            $strValue = StringUtil::replace($this->strTextEncloser, "", trim($strValue));
                         }
                         $arrCSVRow[$strRowKey] = $strValue;
                     }
@@ -179,7 +178,7 @@ class Csv
                     $strRow .= $strTagetCol.$this->strDelimiter;
                 }
                 //remove last delimiter, eol
-                $strRow = uniSubstr($strRow, 0, (uniStrlen($this->strDelimiter)) * -1);
+                $strRow = StringUtil::substring($strRow, 0, (StringUtil::length($this->strDelimiter)) * -1);
                 //add a linebreak
                 $strRow .= "\n";
                 //write header to file
@@ -198,7 +197,7 @@ class Csv
                     if (isset($arrOneRow[$strSourceCol])) {
                         $strEntry = $arrOneRow[$strSourceCol];
                         //escape the delimiter maybe occuring in the text
-                        $strEntry = uniStrReplace($this->strDelimiter, "\\".$this->strDelimiter, $strEntry);
+                        $strEntry = StringUtil::replace($this->strDelimiter, "\\".$this->strDelimiter, $strEntry);
                         //add enclosers?
                         if ($this->strTextEncloser != null) {
                             $strEntry = $this->strTextEncloser.$strEntry.$this->strTextEncloser;
@@ -211,7 +210,7 @@ class Csv
                     $strRow .= $strEntry.$this->strDelimiter;
                 }
                 //remove last delimiter, eol
-                $strRow = uniSubstr($strRow, 0, (uniStrlen($this->strDelimiter)) * -1);
+                $strRow = StringUtil::substring($strRow, 0, (StringUtil::length($this->strDelimiter)) * -1);
                 //add linebreak
                 $strRow .= "\n";
                 //and write to file
@@ -281,8 +280,8 @@ class Csv
     public function setStrFilename($strFilename)
     {
         //replace realpath?
-        if (uniStrpos($strFilename, _realpath_) !== false) {
-            $strFilename = uniStrReplace(_realpath_, "", $strFilename);
+        if (StringUtil::indexOf($strFilename, _realpath_) !== false) {
+            $strFilename = StringUtil::replace(_realpath_, "", $strFilename);
         }
         $this->strFilename = $strFilename;
     }

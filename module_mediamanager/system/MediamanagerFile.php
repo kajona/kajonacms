@@ -16,10 +16,10 @@ use Kajona\System\System\LanguagesLanguage;
 use Kajona\System\System\Link;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\OrmComparatorEnum;
+use Kajona\System\System\OrmCondition;
 use Kajona\System\System\OrmObjectlist;
 use Kajona\System\System\OrmObjectlistOrderby;
 use Kajona\System\System\OrmObjectlistPropertyRestriction;
-use Kajona\System\System\OrmObjectlistRestriction;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\SearchPortalobjectInterface;
 use Kajona\System\System\StringUtil;
@@ -437,15 +437,15 @@ class MediamanagerFile extends \Kajona\System\System\Model implements \Kajona\Sy
 
         $objORM = new OrmObjectlist();
         if ($intTypeFilter !== false) {
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND file_type = ? ", array($intTypeFilter)));
+            $objORM->addWhereRestriction(new OrmCondition("file_type = ?", array($intTypeFilter)));
         }
 
         if ($bitActiveOnly) {
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND system_status = 1 ", array()));
+            $objORM->addWhereRestriction(new OrmCondition("system_status = 1"));
         }
 
         if ($bitOnlyPackages) {
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND (file_ispackage = 1 OR file_type= ? ) ", array(self::$INT_TYPE_FOLDER)));
+            $objORM->addWhereRestriction(new OrmCondition("(file_ispackage = 1 OR file_type= ? )", array(self::$INT_TYPE_FOLDER)));
         }
 
         return $objORM->getObjectList(get_called_class(), $strPrevID, $intStart, $intEnd);
@@ -468,15 +468,15 @@ class MediamanagerFile extends \Kajona\System\System\Model implements \Kajona\Sy
 
         $objORM = new OrmObjectlist();
         if ($intTypeFilter !== false) {
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND file_type = ? ", array($intTypeFilter)));
+            $objORM->addWhereRestriction(new OrmCondition("file_type = ?", array($intTypeFilter)));
         }
 
         if ($bitActiveOnly) {
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND system_status = 1 ", array()));
+            $objORM->addWhereRestriction(new OrmCondition("system_status = 1"));
         }
 
         if ($bitOnlyPackages) {
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND (file_ispackage = 1 OR file_type= ? ) ", array(self::$INT_TYPE_FOLDER)));
+            $objORM->addWhereRestriction(new OrmCondition("(file_ispackage = 1 OR file_type= ? )", array(self::$INT_TYPE_FOLDER)));
         }
 
         return $objORM->getObjectCount(get_called_class(), $strPrevID);
@@ -498,29 +498,29 @@ class MediamanagerFile extends \Kajona\System\System\Model implements \Kajona\Sy
 
         $objORM = new OrmObjectlist();
         if ($bitActiveOnly) {
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND system_status = 1 ", array()));
+            $objORM->addWhereRestriction(new OrmCondition("system_status = 1"));
         }
         if ($strCategoryFilter !== false) {
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND file_cat = ? ", array($strCategoryFilter)));
+            $objORM->addWhereRestriction(new OrmCondition("file_cat = ?", array($strCategoryFilter)));
         }
 
         if ($strNameFilter !== false) {
             $arrParams = array();
-            if (uniStrpos($strNameFilter, ",") !== false) {
+            if (StringUtil::indexOf($strNameFilter, ",") !== false) {
                 $arrWhere = array();
                 foreach (explode(",", $strNameFilter) as $strOneLike) {
                     $arrWhere[] = " file_name = ?";
                     $arrParams[] = trim($strOneLike);
                 }
 
-                $strWhere = "AND ( ".implode(" OR ", $arrWhere)." )";
+                $strWhere = "( ".implode(" OR ", $arrWhere)." )";
             }
             else {
                 $arrParams[] = $strNameFilter."%";
-                $strWhere = "AND file_name LIKE ?";
+                $strWhere = "file_name LIKE ?";
             }
 
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction($strWhere, $arrParams));
+            $objORM->addWhereRestriction(new OrmCondition($strWhere, $arrParams));
         }
         $objORM->addWhereRestriction(new OrmObjectlistPropertyRestriction("bitIspackage", OrmComparatorEnum::Equal(), 1));
         $objORM->addOrderBy(new OrmObjectlistOrderby("file_name ASC"));
@@ -543,29 +543,29 @@ class MediamanagerFile extends \Kajona\System\System\Model implements \Kajona\Sy
         $objORM = new OrmObjectlist();
 
         if ($bitActiveOnly) {
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND system_status = 1 ", array()));
+            $objORM->addWhereRestriction(new OrmCondition("system_status = 1"));
         }
         if ($strCategoryFilter !== false) {
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND file_cat = ? ", array($strCategoryFilter)));
+            $objORM->addWhereRestriction(new OrmCondition("file_cat = ? ", array($strCategoryFilter)));
         }
 
         if ($strNameFilter !== false) {
             $arrParams = array();
-            if (uniStrpos($strNameFilter, ",") !== false) {
+            if (StringUtil::indexOf($strNameFilter, ",") !== false) {
                 $arrWhere = array();
                 foreach (explode(",", $strNameFilter) as $strOneLike) {
                     $arrWhere[] = " file_name = ?";
                     $arrParams[] = trim($strOneLike);
                 }
 
-                $strWhere = "AND ( ".implode(" OR ", $arrWhere)." )";
+                $strWhere = "( ".implode(" OR ", $arrWhere)." )";
             }
             else {
                 $arrParams[] = $strNameFilter."%";
-                $strWhere = "AND file_name LIKE ?";
+                $strWhere = "file_name LIKE ?";
             }
 
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction($strWhere, $arrParams));
+            $objORM->addWhereRestriction(new OrmCondition($strWhere, $arrParams));
         }
         $objORM->addWhereRestriction(new OrmObjectlistPropertyRestriction("bitIspackage", OrmComparatorEnum::Equal(), 1));
         return $objORM->getObjectCount(get_called_class());
@@ -600,7 +600,7 @@ class MediamanagerFile extends \Kajona\System\System\Model implements \Kajona\Sy
     {
 
         $objORM = new OrmObjectlist();
-        $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND file_filename = ?", array($strPath)));
+        $objORM->addWhereRestriction(new OrmCondition("file_filename = ?", array($strPath)));
         $arrFiles = $objORM->getObjectList(get_called_class());
 
         foreach ($arrFiles as $objFile) {
@@ -684,7 +684,7 @@ class MediamanagerFile extends \Kajona\System\System\Model implements \Kajona\Sy
                 //File or folder
                 if ($objOneFileDB->getintType() == self::$INT_TYPE_FILE) {
                     //compare
-                    if ($objOneFileDB->getStrFilename() == str_replace(_realpath_, "", $arrOneFileFilesystem["filepath"])) {
+                    if ($objOneFileDB->getStrFilename() == str_replace(_realpath_, "/", $arrOneFileFilesystem["filepath"])) {
                         //And unset from both arrays
                         unset($arrFilesystem["files"][$intKeyFS]);
                         unset($arrObjDB[$intKeyDB]);
@@ -711,7 +711,7 @@ class MediamanagerFile extends \Kajona\System\System\Model implements \Kajona\Sy
 
         //the remaining records from the database have to be deleted!
         if (count($arrObjDB) > 0) {
-
+            Carrier::getInstance()->setParam("mediamanagerDeleteFileFromFilesystem", false);
             foreach ($arrObjDB as $objOneFileDB) {
                 $objOneFileDB->deleteObjectFromDatabase();
                 $arrReturn["delete"]++;
@@ -721,7 +721,7 @@ class MediamanagerFile extends \Kajona\System\System\Model implements \Kajona\Sy
         //the remaining records from the filesystem have to be added
         foreach ($arrFilesystem["files"] as $arrOneFileFilesystem) {
             $strFileName = $arrOneFileFilesystem["filename"];
-            $strFileFilename = str_replace(_realpath_, "", $arrOneFileFilesystem["filepath"]);
+            $strFileFilename = str_replace(_realpath_, "/", $arrOneFileFilesystem["filepath"]);
             $objFile = new MediamanagerFile();
             $objFile->setStrFilename($strFileFilename);
             $objFile->setStrName($strFileName);

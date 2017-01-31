@@ -11,6 +11,7 @@ namespace Kajona\Pages\Admin\Elements;
 
 use Kajona\Pages\Admin\AdminElementInterface;
 use Kajona\Pages\Admin\ElementAdmin;
+use Kajona\System\System\StringUtil;
 
 
 /**
@@ -59,7 +60,7 @@ class ElementRichtextAdmin extends ElementAdmin implements AdminElementInterface
         $this->loadElementData();
 
         if ($this->getStrText() != "") {
-            return uniStrTrim(htmlStripTags($this->getStrText()), 120);
+            return StringUtil::truncate(htmlStripTags($this->getStrText()), 120);
         }
         else {
             return parent::getContentTitle();

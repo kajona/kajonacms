@@ -13,6 +13,7 @@ use Kajona\System\System\Config;
 use Kajona\System\System\DbDatatypes;
 use Kajona\System\System\InstallerBase;
 use Kajona\System\System\InstallerRemovableInterface;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\UserGroup;
 use Kajona\System\System\UserUser;
@@ -72,7 +73,7 @@ class InstallerLdap extends InstallerBase implements InstallerRemovableInterface
      */
     public function isRemovable()
     {
-        return uniStrpos(Config::getInstance()->getConfig("loginproviders"), "ldap") === false;
+        return StringUtil::indexOf(Config::getInstance()->getConfig("loginproviders"), "ldap") === false;
     }
 
     /**
@@ -166,6 +167,12 @@ class InstallerLdap extends InstallerBase implements InstallerRemovableInterface
         if ($arrModule["module_version"] == "5.0") {
             $strReturn .= "Updating to 5.1...\n";
             $this->updateModuleVersion("ldap", "5.1");
+        }
+
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if ($arrModule["module_version"] == "5.1") {
+            $strReturn .= "Updating to 6.2...\n";
+            $this->updateModuleVersion("ldap", "6.2");
         }
 
         return $strReturn."\n\n";

@@ -145,7 +145,7 @@ class ElementBlockPortal extends ElementPortal implements PortalElementInterface
             }
         }
 
-        return $intCachetime !== null ? $intCachetime : 0;
+        return $intCachetime;
     }
 
 
@@ -164,9 +164,9 @@ class ElementBlockPortal extends ElementPortal implements PortalElementInterface
         $objLanguages = new LanguagesLanguage();
         $strAdminLangParam = $objLanguages->getPortalLanguage();
 
-        PagesPortaleditor::getInstance()->registerAction(
-            new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::COPY(), Link::getLinkAdminHref("pages_content", "copyElement", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
-        );
+//        PagesPortaleditor::getInstance()->registerAction(
+//            new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::COPY(), Link::getLinkAdminHref("pages_content", "copyElement", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
+//        );
         PagesPortaleditor::getInstance()->registerAction(
             new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::DELETE(), Link::getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
         );

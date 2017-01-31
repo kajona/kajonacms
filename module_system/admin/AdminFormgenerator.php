@@ -18,10 +18,9 @@ use Kajona\System\System\Exception;
 use Kajona\System\System\Lang;
 use Kajona\System\System\Model;
 use Kajona\System\System\ModelInterface;
-use Kajona\System\System\Objectfactory;
 use Kajona\System\System\Reflection;
-use Kajona\System\System\ReflectionEnum;
 use Kajona\System\System\Resourceloader;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\UserUser;
 use Kajona\System\System\ValidatorInterface;
 use Kajona\System\System\Validators\ObjectvalidatorBase;
@@ -133,7 +132,7 @@ class AdminFormgenerator
         $this->strFormname = $strFormname;
         $this->objSourceobject = $objSourceobject;
 
-        $this->strOnSubmit = "$(this).on('submit', function() { return false; }); $(window).off('unload'); KAJONA.admin.forms.animateSubmit(this); return true;";
+        $this->strOnSubmit = "$(this).on('submit', function() { return false; }); $(window).off('unload'); require('forms').animateSubmit(this); return true;";
         $this->objLang = Lang::getInstance();
     }
 
@@ -149,6 +148,17 @@ class AdminFormgenerator
             if ($objOneField->getObjSourceObject() != null) {
                 $objOneField->setValueToObject();
             }
+        }
+    }
+
+    /**
+     * Updates the internal value of each field. This can be used in case the form comes from a
+     * cache and the request parameters have changed during the request
+     */
+    public final function readValues()
+    {
+        foreach ($this->arrFields as $objOneField) {
+            $objOneField->readValue();
         }
     }
 
@@ -405,10 +415,8 @@ class AdminFormgenerator
                 $this->objSourceobject->getLockManager()->lockRecord();
 
                 //register a new unlock-handler
-                // KAJONA.admin.ajax.genericAjaxCall('system', 'unlockRecord', '".$this->objSourceobject->getSystemid()."');
                 $strReturn .= "<script type='text/javascript'>
                         $(window).on('unload', function() { $.ajax({url: KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=unlockRecord&systemid=" . $this->objSourceobject->getSystemid() . "', async:false}) ; });
-//                        $('#{$strGeneratedFormname}').on('submit', function() { $(window).off('unload'); return true;});
                     </script>";
             }
         }
@@ -599,7 +607,7 @@ class AdminFormgenerator
 
         //backslash given?
         //the V5 way: namespaces
-        if (uniStrpos($strName, "\\") !== false) {
+        if (StringUtil::indexOf($strName, "\\") !== false) {
             $strClassname = $strName;
         } else {
             //backwards support for v4
@@ -638,7 +646,7 @@ class AdminFormgenerator
             return new $strClassname();
         }
 
-        if (uniStrpos($strClassname, "class_") === false) {
+        if (StringUtil::indexOf($strClassname, "class_") === false) {
             $strClassname = "class_" . $strClassname . "_validator";
         }
 

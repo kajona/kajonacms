@@ -13,17 +13,15 @@ namespace Kajona\System;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\CoreEventdispatcher;
 use Kajona\System\System\HttpResponsetypes;
-use Kajona\System\System\HttpStatuscodes;
 use Kajona\System\System\RequestDispatcher;
 use Kajona\System\System\RequestEntrypointEnum;
 use Kajona\System\System\ResponseObject;
 use Kajona\System\System\ServiceProvider;
 use Kajona\System\System\SystemEventidentifier;
 
-if(Carrier::getInstance()->getParam("admin") == 1) {
+if (Carrier::getInstance()->getParam("admin") == 1) {
     define("_admin_", true);
-}
-else {
+} else {
     define("_admin_", false);
 }
 
@@ -35,7 +33,8 @@ define("_autotesting_", false);
  *
  * @package module_system
  */
-class Index {
+class Index
+{
 
     /**
      * @var ResponseObject
@@ -49,13 +48,14 @@ class Index {
 
     /**
      * Triggers the processing of the current request
+     *
      * @return void
      */
-    public function processRequest() {
-
+    public function processRequest()
+    {
         $strModule = Carrier::getInstance()->getParam("module");
-        if($strModule == "") {
-            $strModule = _admin_ ?  "dashboard" : "pages";
+        if ($strModule == "") {
+            $strModule = _admin_ ? "dashboard" : "pages";
         }
 
         $strAction = Carrier::getInstance()->getParam("action");
@@ -63,7 +63,6 @@ class Index {
 
         $this->objResponse = ResponseObject::getInstance();
         $this->objResponse->setStrResponseType(HttpResponsetypes::STR_TYPE_HTML);
-        $this->objResponse->setStrStatusCode(HttpStatuscodes::SC_OK);
         $this->objResponse->setObjEntrypoint(RequestEntrypointEnum::INDEX());
 
         $this->objBuilder = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_OBJECT_BUILDER);

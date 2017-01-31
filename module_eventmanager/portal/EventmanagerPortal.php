@@ -19,8 +19,8 @@ use Kajona\System\System\Mail;
 use Kajona\System\System\ResponseObject;
 use Kajona\System\System\Rssfeed;
 use Kajona\System\System\ScriptletHelper;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\TemplateMapper;
-use Kajona\System\System\UserUser;
 use Kajona\System\System\Validators\EmailValidator;
 use Kajona\System\System\Validators\TextValidator;
 
@@ -122,9 +122,9 @@ class EventmanagerPortal extends PortalController implements PortalInterface
      * Returns all eventes in json-format.
      * Expects the params start & end.
      *
-     * @xml
      * @return string
      * @permissions view
+     * @responseType json
      */
     protected function actionGetJsonEvents()
     {
@@ -145,12 +145,11 @@ class EventmanagerPortal extends PortalController implements PortalInterface
                 $arrSingleEvent["title"] = $objOneEvent->getStrTitle();
                 $arrSingleEvent["start"] = $objOneEvent->getObjStartDate()->getTimeInOldStyle();
                 $arrSingleEvent["end"] = $objOneEvent->getObjEndDate() != null ? $objOneEvent->getObjEndDate()->getTimeInOldStyle() : "";
-                $arrSingleEvent["url"] = uniStrReplace("&amp;", "&", Link::getLinkPortalHref($this->getParam("page"), "", "eventDetails", "", $objOneEvent->getSystemid(), "", $objOneEvent->getStrTitle()));
+                $arrSingleEvent["url"] = StringUtil::replace("&amp;", "&", Link::getLinkPortalHref($this->getParam("page"), "", "eventDetails", "", $objOneEvent->getSystemid(), "", $objOneEvent->getStrTitle()));
                 $arrPrintableEvents[] = $arrSingleEvent;
             }
         }
 
-        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
         return json_encode($arrPrintableEvents);
     }
 
@@ -159,7 +158,6 @@ class EventmanagerPortal extends PortalController implements PortalInterface
      * Expecets the param pagename for rendering the detail-links
      *
      * @permissions view
-     * @xml
      * @return string
      */
     protected function actionEventRssFeed()

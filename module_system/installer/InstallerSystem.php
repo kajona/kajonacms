@@ -10,6 +10,7 @@
 namespace Kajona\System\Installer;
 
 use Kajona\System\System\Carrier;
+use Kajona\System\System\Classloader;
 use Kajona\System\System\Date;
 use Kajona\System\System\DbDatatypes;
 use Kajona\System\System\Filesystem;
@@ -22,6 +23,7 @@ use Kajona\System\System\OrmBase;
 use Kajona\System\System\OrmSchemamanager;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\Rights;
+use Kajona\System\System\Session;
 use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemChangelog;
 use Kajona\System\System\SystemCommon;
@@ -30,7 +32,6 @@ use Kajona\System\System\SystemPwchangehistory;
 use Kajona\System\System\SystemSetting;
 use Kajona\System\System\UserGroup;
 use Kajona\System\System\UserUser;
-use PHPCodeBrowser\File;
 
 /**
  * Installer for the system-module
@@ -146,6 +147,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $arrFields["user_tel"] = array("char254", true);
         $arrFields["user_mobile"] = array("char254", true);
         $arrFields["user_date"] = array("long", true);
+        $arrFields["user_specialconfig"] = array("text", true);
 
         if(!$this->objDB->createTable("user_kajona", $arrFields, array("user_id")))
             $strReturn .= "An error occurred! ...\n";
@@ -197,14 +199,13 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $arrFields = array();
         $arrFields["session_id"] = array("char20", false);
         $arrFields["session_phpid"] = array("char254", true);
-        $arrFields["session_userid"] = array("char20", true);
-        $arrFields["session_groupids"] = array("text", true);
         $arrFields["session_releasetime"] = array("int", true);
         $arrFields["session_loginstatus"] = array("char254", true);
         $arrFields["session_loginprovider"] = array("char20", true);
         $arrFields["session_lasturl"] = array("text", true);
+        $arrFields["session_userid"] = array("char20", true);
 
-        if(!$this->objDB->createTable("session", $arrFields, array("session_id"), array("session_phpid", "session_releasetime", "session_userid")))
+        if(!$this->objDB->createTable("session", $arrFields, array("session_id"), array("session_phpid", "session_releasetime")))
             $strReturn .= "An error occurred! ...\n";
 
         // caching --------------------------------------------------------------------------------------
@@ -256,15 +257,15 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         //Now we have to register module by module
 
         //The Systemkernel
-        $this->registerModule("system", _system_modul_id_, "", "SystemAdmin.php", $this->objMetadata->getStrVersion(), true, "", "SystemAdminXml.php");
+        $this->registerModule("system", _system_modul_id_, "", "SystemAdmin.php", $this->objMetadata->getStrVersion());
         //The Rightsmodule
         $this->registerModule("right", _system_modul_id_, "", "RightAdmin.php", $this->objMetadata->getStrVersion(), false);
         //The Usermodule
-        $this->registerModule("user", _user_modul_id_, "", "UserAdmin.php", $this->objMetadata->getStrVersion(), true);
+        $this->registerModule("user", _user_modul_id_, "", "UserAdmin.php", $this->objMetadata->getStrVersion());
         //languages
-        $this->registerModule("languages", _languages_modul_id_, "", "LanguagesAdmin.php", $this->objMetadata->getStrVersion(), true);
+        $this->registerModule("languages", _languages_modul_id_, "", "LanguagesAdmin.php", $this->objMetadata->getStrVersion());
         //messaging
-        $this->registerModule("messaging", _messaging_module_id_, "", "MessagingAdmin.php", $this->objMetadata->getStrVersion(), true);
+        $this->registerModule("messaging", _messaging_module_id_, "MessagingPortal.php", "MessagingAdmin.php", $this->objMetadata->getStrVersion());
 
 
         //Registering a few constants
@@ -298,6 +299,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         //3.1: nr of rows in admin
         $this->registerConstant("_admin_nr_of_rows_", 15, SystemSetting::$int_TYPE_INT, _system_modul_id_);
         $this->registerConstant("_admin_only_https_", "false", SystemSetting::$int_TYPE_BOOL, _system_modul_id_);
+        $this->registerConstant("_cookies_only_https_", "false", SystemSetting::$int_TYPE_BOOL, _system_modul_id_);
 
         //3.1: remoteloader max cachtime --> default 60 min
         $this->registerConstant("_remoteloader_max_cachetime_", 60 * 60, SystemSetting::$int_TYPE_INT, _system_modul_id_);
@@ -511,21 +513,18 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         if($arrModule["module_version"] == "4.6") {
             $strReturn .= "Updating 4.6 to 4.6.1...\n";
             $this->updateModuleVersion("", "4.6.1");
-            $this->objDB->flushQueryCache();
         }
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.6.1") {
             $strReturn .= "Updating 4.6.1 to 4.6.2...\n";
             $this->updateModuleVersion("", "4.6.2");
-            $this->objDB->flushQueryCache();
         }
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.6.2") {
             $strReturn .= "Updating 4.6.2 to 4.6.3...\n";
             $this->updateModuleVersion("", "4.6.3");
-            $this->objDB->flushQueryCache();
         }
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
@@ -563,7 +562,6 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         if($arrModule["module_version"] == "5.0" || $arrModule["module_version"] == "5.0.1") {
             $strReturn .= "Updating 5.0 to 5.1...\n";
             $this->updateModuleVersion("", "5.1");
-            $this->objDB->flushQueryCache();
         }
 
 
@@ -575,6 +573,33 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "5.1.1") {
             $strReturn .= $this->update_511_512();
+        }
+
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.1.2") {
+            $strReturn .= $this->update_512_513();
+        }
+
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.1.3") {
+            $strReturn .= $this->update_513_514();
+        }
+
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.1.4") {
+            $strReturn .= "Updating 5.1.4 to 6.2...\n";
+            $this->update_514_62();
+        }
+
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "5.1.5") {
+            $strReturn .= "Updating 5.1.5 to 6.2...\n";
+            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "6.2");
+        }
+
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "6.2") {
+            $strReturn .= $this->update_62_621();
         }
 
         return $strReturn."\n\n";
@@ -767,6 +792,15 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
     {
         $strReturn = "Updating 5.1.1 to 5.1.2...\n";
 
+        $strReturn .= "Checking postacomment / guestbook cross-dependencies...\n";
+        if(SystemModule::getModuleByName("guestbook") !== null && SystemModule::getModuleByName("postacomment") === null) {
+            $strReturn .= "ERROR\n";
+            $strReturn .= "Module guestbook is replaced by module postacomment.\n";
+            $strReturn .= "Please install module postacomment in order to avoid a loss of guestbook data.\n";
+            $strReturn .= "Aborting update sequence.\n";
+            return $strReturn;
+        }
+
         $strReturn .= "Removing legacy samplecontent module...\n";
 
         $objFilesystem = new Filesystem();
@@ -779,6 +813,74 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1.2");
+        return $strReturn;
+    }
+
+    private function update_512_513()
+    {
+        $strReturn = "Updating 5.1.2 to 5.1.3...\n";
+
+        $strReturn .= "Registering messaging portal controller\n";
+        $objModule = SystemModule::getModuleByName("messaging");
+        $objModule->setStrNamePortal("MessagingPortal.php");
+        $objModule->updateObjectToDb();
+
+        $strReturn .= "Removing xml controller entries...\n";
+
+        $this->objDB->removeColumn("system_module", "module_xmlfilenameportal");
+        $this->objDB->removeColumn("system_module", "module_xmlfilenameadmin");
+
+        Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBSTATEMENTS | Carrier::INT_CACHE_TYPE_DBQUERIES | Carrier::INT_CACHE_TYPE_MODULES | Carrier::INT_CACHE_TYPE_DBTABLES);
+        Classloader::getInstance()->flushCache();
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1.3");
+        return $strReturn;
+    }
+
+    private function update_513_514()
+    {
+        $strReturn = "Updating 5.1.3 to 5.1.4...\n";
+        $strReturn .= "Updating session table\n";
+
+        //save some user metadata, if available, for future requests
+        $objUser = Session::getInstance()->getUser();
+        if ($objUser !== null) {
+            $strGroups = implode(",", $objUser->getArrGroupIds());
+            Session::getInstance()->setSession(Session::STR_SESSION_USERID, $objUser->getSystemid());
+            Session::getInstance()->setSession(Session::STR_SESSION_GROUPIDS, $strGroups);
+            Session::getInstance()->setSession(Session::STR_SESSION_ISADMIN, $objUser->getIntAdmin());
+        }
+
+        //remove columns
+        $this->objDB->removeColumn("session", "session_groupids");
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.1.4");
+        return $strReturn;
+    }
+
+    private function update_514_62()
+    {
+        $strReturn = "Updating 5.1.4 to 6.2...\n";
+
+        $strReturn .= "Updating user table\n";
+        $this->objDB->addColumn("user_kajona", "user_specialconfig", DbDatatypes::STR_TYPE_TEXT, true);
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "6.2");
+        return $strReturn;
+    }
+
+    private function update_62_621()
+    {
+        $strReturn = "Updating 6.2 to 6.2.1...\n";
+
+        $strReturn .= "Adding cookie setting\n";
+        $this->registerConstant("_cookies_only_https_", "false", SystemSetting::$int_TYPE_BOOL, _system_modul_id_);
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "6.2.1");
         return $strReturn;
     }
 }

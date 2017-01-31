@@ -841,10 +841,12 @@ class PagesAdminController extends AdminSimple implements AdminInterface
 
         //ticket #931: no hierarchical drag n drop for folders
         $strJS = <<<JS
-            $(function() {
-                $("table.admintable i.fa-folder-o").closest("tr").find("td.treedrag i").remove();
-                $("table.admintable i.fa-folder-o").closest("tr").find("td.treedrag").css("cursor", "auto");
-                $("table.admintable i.fa-folder-o").closest("tr").find("td.treedrag").removeClass("jstree-draggable");
+            require(["jquery"], function($){
+                $(function() {
+                    $("table.admintable i.fa-folder-o").closest("tr").find("td.treedrag i").remove();
+                    $("table.admintable i.fa-folder-o").closest("tr").find("td.treedrag").css("cursor", "auto");
+                    $("table.admintable i.fa-folder-o").closest("tr").find("td.treedrag").removeClass("jstree-draggable");
+                });
             });
 JS;
 
@@ -1076,7 +1078,7 @@ JS;
         $this->setArrModuleEntry("template", "/folderview.tpl");
 
         if ($this->getParam("CKEditorFuncNum") != "") {
-            $strReturn .= "<script type=\"text/javascript\">window.opener.KAJONA.admin.folderview.selectCallbackCKEditorFuncNum = ".(int)$this->getParam("CKEditorFuncNum").";</script>";
+            $strReturn .= "<script type=\"text/javascript\">window.opener.require('folderview').selectCallbackCKEditorFuncNum = ".(int)$this->getParam("CKEditorFuncNum").";</script>";
         }
 
         //param init
@@ -1108,7 +1110,7 @@ JS;
 
         $strReturn .= $this->objToolkit->formHeader("");
         $strAction = $this->objToolkit->listButton(
-            "<a href=\"#\" title=\"".$this->getLang("select_page")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."', '"._indexpath_."?page='+$('#quickselect').val()]]);\">".AdminskinHelper::getAdminImage("icon_accept")."</a>"
+            "<a href=\"#\" title=\"".$this->getLang("select_page")."\" rel=\"tooltip\" onclick=\"require('folderview').selectCallback([['".$strElement."', '"._indexpath_."?page='+$('#quickselect').val()]]);\">".AdminskinHelper::getAdminImage("icon_accept")."</a>"
         );
         $strReturn .= $this->objToolkit->formInputPageSelector("quickselect", $this->getLang("folderview_quickselect"), "", "", false, false, $strAction);
         $strReturn .= $this->objToolkit->formClose(false);
@@ -1122,7 +1124,7 @@ JS;
             );
             if ($strSystemid == $this->getObjModule()->getSystemid() && (!$bitPages || $bitFolder)) {
                 $strAction .= $this->objToolkit->listButton(
-                    "<a href=\"#\" title=\"".$this->getLang("commons_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."_id', '".$this->getObjModule()->getSystemid()."'], ['".$strElement."', '']]);\">".AdminskinHelper::getAdminImage("icon_accept")
+                    "<a href=\"#\" title=\"".$this->getLang("commons_accept")."\" rel=\"tooltip\" onclick=\"require('folderview').selectCallback([['".$strElement."_id', '".$this->getObjModule()->getSystemid()."'], ['".$strElement."', '']]);\">".AdminskinHelper::getAdminImage("icon_accept")
                 );
             }
 
@@ -1156,7 +1158,7 @@ JS;
                         )
                     );
                     $strAction .= $this->objToolkit->listButton(
-                        "<a href=\"#\" title=\"".$this->getLang("commons_accept")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."_id', '".$objSingleFolder->getSystemid()."'], ['".$strElement."', '".$objSingleFolder->getStrName()."']]); \">".AdminskinHelper::getAdminImage("icon_accept")
+                        "<a href=\"#\" title=\"".$this->getLang("commons_accept")."\" rel=\"tooltip\" onclick=\"require('folderview').selectCallback([['".$strElement."_id', '".$objSingleFolder->getSystemid()."'], ['".$strElement."', '".$objSingleFolder->getStrName()."']]); \">".AdminskinHelper::getAdminImage("icon_accept")
                     );
                     $strReturn .= $this->objToolkit->simpleAdminList($objSingleFolder, $strAction);
                 }
@@ -1201,7 +1203,7 @@ JS;
                         }
                         if ($bitPageAliases) {
                             $strAction .= $this->objToolkit->listButton(
-                                "<a href=\"#\" title=\"".$this->getLang("select_page")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."_id', '".$objSinglePage->getSystemid()."'],['".$strElement."', '".$arrSinglePage["name2"]."']]);\">".AdminskinHelper::getAdminImage("icon_accept")."</a>"
+                                "<a href=\"#\" title=\"".$this->getLang("select_page")."\" rel=\"tooltip\" onclick=\"require('folderview').selectCallback([['".$strElement."_id', '".$objSinglePage->getSystemid()."'],['".$strElement."', '".$arrSinglePage["name2"]."']]);\">".AdminskinHelper::getAdminImage("icon_accept")."</a>"
                             );
                         }
 
@@ -1236,7 +1238,7 @@ JS;
                             );
                         }
                         $strAction .= $this->objToolkit->listButton(
-                            "<a href=\"#\" title=\"".$this->getLang("select_page")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."_id', '".$objSinglePage->getSystemid()."'],['".$strElement."', '".$arrSinglePage["name2"]."']]);\">".AdminskinHelper::getAdminImage("icon_accept")."</a>"
+                            "<a href=\"#\" title=\"".$this->getLang("select_page")."\" rel=\"tooltip\" onclick=\"require('folderview').selectCallback([['".$strElement."_id', '".$objSinglePage->getSystemid()."'],['".$strElement."', '".$arrSinglePage["name2"]."']]);\">".AdminskinHelper::getAdminImage("icon_accept")."</a>"
                         );
                         $strReturn .= $this->objToolkit->simpleAdminList($objSinglePage, $strAction);
 
@@ -1265,7 +1267,7 @@ JS;
                     }
 
                     $strAction = $this->objToolkit->listButton(
-                        "<a href=\"#\" title=\"".$this->getLang("seite_uebernehmen")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."', '".$arrSinglePage["name2"]."']]);\">".AdminskinHelper::getAdminImage("icon_accept")."</a>"
+                        "<a href=\"#\" title=\"".$this->getLang("seite_uebernehmen")."\" rel=\"tooltip\" onclick=\"require('folderview').selectCallback([['".$strElement."', '".$arrSinglePage["name2"]."']]);\">".AdminskinHelper::getAdminImage("icon_accept")."</a>"
                     );
                     $strReturn .= $this->objToolkit->simpleAdminList($objOnePageelement, $strAction);
                 }
@@ -1280,9 +1282,9 @@ JS;
      * Creates a list of sites reduced to match the filter passed.
      * Used e.g. by the page-selector.
      *
-     * @xml
      * @return string
      * @permissions view
+     * @responseType json
      */
     protected function actionGetPagesByFilter()
     {
@@ -1295,7 +1297,6 @@ JS;
                 $arrReturn[] = $objOnePage->getStrName();
             }
         }
-        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
         return json_encode($arrReturn);
     }
 
@@ -1305,8 +1306,8 @@ JS;
      *
      * @return string
      * @since 3.3.0
-     * @xml
      * @permissions view
+     * @responseType json
      */
     protected function actionGetChildNodes()
     {
@@ -1321,7 +1322,6 @@ JS;
         }
 
         $arrReturn = $objJsTreeLoader->getJson($arrSystemIdPath, $bitInitialLoading, $this->getParam(SystemJSTreeBuilder::STR_PARAM_LOADALLCHILDNOES) === "true");
-        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
         return $arrReturn;
     }
 

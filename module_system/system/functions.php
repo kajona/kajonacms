@@ -12,9 +12,7 @@ require_once (__DIR__."/StringUtil.php");
 use Kajona\System\System\AdminskinHelper;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Date;
-use Kajona\System\System\HttpStatuscodes;
 use Kajona\System\System\Link;
-use Kajona\System\System\ResponseObject;
 use Kajona\System\System\StringUtil;
 use Kajona\System\System\Validators\EmailValidator;
 use Kajona\System\System\Validators\NumericValidator;
@@ -417,7 +415,7 @@ function phpSizeToBytes($strBytes)
 {
     $intReturn = 0;
 
-    $strBytes = uniStrtolower($strBytes);
+    $strBytes = StringUtil::toLowerCase($strBytes);
 
     if (strpos($strBytes, "m") !== false) {
         $intReturn = str_replace("m", "", $strBytes);
@@ -505,7 +503,7 @@ function dateToString($objDate, $bitLong = true, $strFormat = "")
     $strReturn = "";
 
     //if the $objDate is a string, convert it to date object
-    if ($objDate != null && !$objDate instanceof Date && uniEreg("([0-9]){14}", $objDate)) {
+    if ($objDate != null && !$objDate instanceof Date && StringUtil::matches($objDate, "([0-9]){14}")) {
         $objDate = new Date($objDate);
     }
 
@@ -514,10 +512,10 @@ function dateToString($objDate, $bitLong = true, $strFormat = "")
         //convert to a current date
         if ($strFormat == "") {
             if ($bitLong) {
-                $strReturn = uniStrtolower(Carrier::getInstance()->getObjLang()->getLang("dateStyleLong", "system"));
+                $strReturn = StringUtil::toLowerCase(Carrier::getInstance()->getObjLang()->getLang("dateStyleLong", "system"));
             }
             else {
-                $strReturn = uniStrtolower(Carrier::getInstance()->getObjLang()->getLang("dateStyleShort", "system"));
+                $strReturn = StringUtil::toLowerCase(Carrier::getInstance()->getObjLang()->getLang("dateStyleShort", "system"));
             }
         }
         else {
@@ -525,12 +523,12 @@ function dateToString($objDate, $bitLong = true, $strFormat = "")
         }
 
         //"d.m.Y H:i:s";
-        $strReturn = uniStrReplace("d", $objDate->getIntDay(), $strReturn);
-        $strReturn = uniStrReplace("m", $objDate->getIntMonth(), $strReturn);
-        $strReturn = uniStrReplace("y", $objDate->getIntYear(), $strReturn);
-        $strReturn = uniStrReplace("h", $objDate->getIntHour(), $strReturn);
-        $strReturn = uniStrReplace("i", $objDate->getIntMin(), $strReturn);
-        $strReturn = uniStrReplace("s", $objDate->getIntSec(), $strReturn);
+        $strReturn = StringUtil::replace("d", $objDate->getIntDay(), $strReturn);
+        $strReturn = StringUtil::replace("m", $objDate->getIntMonth(), $strReturn);
+        $strReturn = StringUtil::replace("y", $objDate->getIntYear(), $strReturn);
+        $strReturn = StringUtil::replace("h", $objDate->getIntHour(), $strReturn);
+        $strReturn = StringUtil::replace("i", $objDate->getIntMin(), $strReturn);
+        $strReturn = StringUtil::replace("s", $objDate->getIntSec(), $strReturn);
 
     }
     return $strReturn;
@@ -591,7 +589,7 @@ function rgb2hex($arrRGB)
         }
 
         $strHexVal = dechex($intColor);
-        if (uniStrlen($strHexVal) == 1) {
+        if (StringUtil::length($strHexVal) == 1) {
             $strHexVal = '0'.$strHexVal;
         }
         $strHex .= $strHexVal;
@@ -776,9 +774,9 @@ function htmlStripTags($strHtml, $strAllowTags = "")
 function processWysiwygHtmlContent($strHtmlContent)
 {
     //replace the webpath to remain flexible
-    $strHtmlContent = uniStrReplace(_webpath_, "_webpath_", $strHtmlContent);
+    $strHtmlContent = StringUtil::replace(_webpath_, "_webpath_", $strHtmlContent);
 
-    $strHtmlContent = uniStrReplace("%%", "\%\%", $strHtmlContent);
+    $strHtmlContent = StringUtil::replace("%%", "\%\%", $strHtmlContent);
 
     //synchronize the width/height style-values set via WYSIWYG editor for on-the-fly images
     $arrImages = "";
@@ -792,7 +790,7 @@ function processWysiwygHtmlContent($strHtmlContent)
         $strScalingParams = $strNewWidth >= $strNewHeight ? "&amp;maxWidth=".$strNewWidth : "&amp;maxHeight=".$strNewHeight;
 
         $strReplace = "image.php?image=".$arrImages[1][$i].$strScalingParams."\" ".$arrImages[3][$i]."width: ".$strNewWidth."px; height: ".$strNewHeight."px;";
-        $strHtmlContent = uniStrReplace($strSearch, $strReplace, $strHtmlContent);
+        $strHtmlContent = StringUtil::replace($strSearch, $strReplace, $strHtmlContent);
     }
 
     return $strHtmlContent;
@@ -860,13 +858,14 @@ function xssSafeString($strText) {
  * Removes traversals like ../ from the passed string
  *
  * @param string $strFilename
+ * @todo move to class Filesystem
  *
  * @return string
  */
 function removeDirectoryTraversals($strFilename)
 {
     $strFilename = urldecode($strFilename);
-    $strFilename = uniStrReplace("..", "", $strFilename);
+    $strFilename = StringUtil::replace("..", "", $strFilename);
     return $strFilename;
 //    return uniStrReplace("//", "/", $strFilename); //FIXME: should stay in place but breaks "phar:///". 
 }
@@ -876,22 +875,23 @@ function removeDirectoryTraversals($strFilename)
  *
  * @param string $strName
  * @param bool $bitFolder
+ * @todo move to class Filesystem
  *
  * @return string
  */
 function createFilename($strName, $bitFolder = false)
 {
-    $strName = uniStrtolower($strName);
+    $strName = StringUtil::toLowerCase($strName);
 
     if (!$bitFolder) {
-        $strEnding = uniSubstr($strName, (uniStrrpos($strName, ".") + 1));
+        $strEnding = StringUtil::substring($strName, (StringUtil::lastIndexOf($strName, ".") + 1));
     }
     else {
         $strEnding = "";
     }
 
     if (!$bitFolder) {
-        $strReturn = uniSubstr($strName, 0, (uniStrrpos($strName, ".")));
+        $strReturn = StringUtil::substring($strName, 0, (StringUtil::lastIndexOf($strName, ".")));
     }
     else {
         $strReturn = $strName;
@@ -901,11 +901,11 @@ function createFilename($strName, $bitFolder = false)
     $arrSearch = array(" ", ".", ":", "ä", "ö", "ü", "/", "ß", "!");
     $arrReplace = array("_", "_", "_", "ae", "oe", "ue", "_", "ss", "_");
 
-    $strReturn = uniStrReplace($arrSearch, $arrReplace, $strReturn);
+    $strReturn = StringUtil::replace($arrSearch, $arrReplace, $strReturn);
 
     //and the ending
     if (!$bitFolder) {
-        $strEnding = uniStrReplace($arrSearch, $arrReplace, $strEnding);
+        $strEnding = StringUtil::replace($arrSearch, $arrReplace, $strEnding);
     }
 
     //remove all other special characters
@@ -932,7 +932,7 @@ function createFilename($strName, $bitFolder = false)
  */
 function getFileExtension($strPath)
 {
-    return uniStrtolower(uniSubstr($strPath, uniStrrpos($strPath, ".")));
+    return StringUtil::toLowerCase(StringUtil::substring($strPath, StringUtil::lastIndexOf($strPath, ".")));
 }
 
 /**
@@ -967,6 +967,7 @@ function checkNumber($intNumber)
  * Validates, if the passed Param represents a valid folder in the filesystem
  *
  * @param string $strPath
+ * @todo move to Filesystem
  *
  * @return bool
  */
@@ -1219,43 +1220,6 @@ function uniStrReplace($mixedSearch, $mixedReplace, $strSubject, $bitUnicodesafe
 function uniStrTrim($strString, $intLength, $strAdd = "…")
 {
     return StringUtil::truncate($strString, $intLength, $strAdd);
-}
-
-/**
- * Sends headers to the client, to allow conditionalGets
- *
- * @param string $strChecksum Checksum of the content. Must be unique for one state.
- */
-function setConditionalGetHeaders($strChecksum)
-{
-    ResponseObject::getInstance()->addHeader("ETag: ".$strChecksum);
-    ResponseObject::getInstance()->addHeader("Cache-Control: max-age=86400, must-revalidate");
-
-}
-
-
-/**
- * Checks, if the browser sent the same checksum as provided. If so,
- * a http 304 is sent to the browser
- *
- * @param string $strChecksum
- *
- * @return bool
- */
-function checkConditionalGetHeaders($strChecksum)
-{
-    if (issetServer("HTTP_IF_NONE_MATCH")) {
-        if (getServer("HTTP_IF_NONE_MATCH") == $strChecksum) {
-            //strike. no further actions needed.
-            ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_NOT_MODIFIED);
-            ResponseObject::getInstance()->addHeader("ETag: ".$strChecksum);
-            ResponseObject::getInstance()->addHeader("Cache-Control: max-age=86400, must-revalidate");
-
-            return true;
-        }
-    }
-
-    return false;
 }
 
 /**

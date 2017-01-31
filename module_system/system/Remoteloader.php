@@ -246,17 +246,17 @@ class Remoteloader
                 $objSocket->close();
 
                 $strReturn = trim($strReturn);
-                if (uniStrpos($strReturn, "\r\n\r\n") !== false) {
-                    $strReturn = trim(uniSubstr($strReturn, uniStrpos($strReturn, "\r\n\r\n")));
+                if (StringUtil::indexOf($strReturn, "\r\n\r\n") !== false) {
+                    $strReturn = trim(StringUtil::substring($strReturn, StringUtil::indexOf($strReturn, "\r\n\r\n")));
                 }
 
-                if (uniStrpos($strReturn, "<") !== false) {
-                    $strReturn = trim(uniSubstr($strReturn, uniStrpos($strReturn, "<")));
+                if (StringUtil::indexOf($strReturn, "<") !== false) {
+                    $strReturn = trim(StringUtil::substring($strReturn, StringUtil::indexOf($strReturn, "<")));
                 }
 
                 //and, if given, remove the last 0
-                if (uniSubstr($strReturn, -1) == "0") {
-                    $strReturn = uniSubstr($strReturn, 0, -1);
+                if (StringUtil::substring($strReturn, -1) == "0") {
+                    $strReturn = StringUtil::substring($strReturn, 0, -1);
                 }
 
             }
@@ -330,8 +330,8 @@ class Remoteloader
                 }
 
                 //and, if given, remove the last 0
-                if (uniSubstr($strReturn, -1) == "0") {
-                    $strReturn = uniSubstr($strReturn, 0, -1);
+                if (StringUtil::substring($strReturn, -1) == "0") {
+                    $strReturn = StringUtil::substring($strReturn, 0, -1);
                 }
 
             }

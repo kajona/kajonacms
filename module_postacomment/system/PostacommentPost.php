@@ -13,11 +13,13 @@ use Kajona\Pages\System\PagesPage;
 use Kajona\Search\System\SearchResult;
 use Kajona\System\System\AdminListableInterface;
 use Kajona\System\System\Link;
+use Kajona\System\System\OrmCondition;
 use Kajona\System\System\OrmObjectlist;
 use Kajona\System\System\OrmObjectlistOrderby;
-use Kajona\System\System\OrmObjectlistRestriction;
 use Kajona\System\System\SearchPortalobjectInterface;
 use Kajona\System\System\SortableRatingInterface;
+use Kajona\System\System\StringUtil;
+use Kajona\System\System\SystemSetting;
 
 
 /**
@@ -137,7 +139,18 @@ class PostacommentPost extends \Kajona\System\System\Model implements \Kajona\Sy
      */
     public function getStrLongDescription()
     {
-        return uniStrTrim($this->strComment, 120);
+        return StringUtil::truncate($this->strComment, 120);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function onInsertToDb()
+    {
+        if (SystemSetting::getConfigValue("_postacomment_post_moderated_") == "true") {
+            $this->setIntRecordStatus(0);
+        }
+        return parent::onInsertToDb();
     }
 
 
@@ -158,25 +171,25 @@ class PostacommentPost extends \Kajona\System\System\Model implements \Kajona\Sy
 
         $objORM = new OrmObjectlist();
         if ($strPagefilter != "") {
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND postacomment_page = ? ", $strPagefilter));
+            $objORM->addWhereRestriction(new OrmCondition("postacomment_page = ?", $strPagefilter));
         }
 
         if ($strSystemidfilter != "") {
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND postacomment_systemid = ? ", $strSystemidfilter));
+            $objORM->addWhereRestriction(new OrmCondition("postacomment_systemid = ?", $strSystemidfilter));
         }
 
         if ($strLanguagefilter != "") {//check against '' to remain backwards-compatible
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND (postacomment_language = ? OR postacomment_language = '')", $strLanguagefilter));
+            $objORM->addWhereRestriction(new OrmCondition("(postacomment_language = ? OR postacomment_language = '')", $strLanguagefilter));
         }
         if ($bitJustActive) {
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND system_status = ? ", 1));
+            $objORM->addWhereRestriction(new OrmCondition("system_status = ?", 1));
         }
 
         $objORM->addOrderBy(new OrmObjectlistOrderby("postacomment_page ASC"));
         $objORM->addOrderBy(new OrmObjectlistOrderby("postacomment_language ASC"));
         $objORM->addOrderBy(new OrmObjectlistOrderby("postacomment_date DESC"));
 
-        return $objORM->getObjectList(get_called_class(), "", $intStart, $intEnd);
+        return $objORM->getObjectList(PostacommentPost::class, "", $intStart, $intEnd);
     }
 
     /**
@@ -194,22 +207,22 @@ class PostacommentPost extends \Kajona\System\System\Model implements \Kajona\Sy
 
         $objORM = new OrmObjectlist();
         if ($strPageid != "") {
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND postacomment_page = ? ", $strPageid));
+            $objORM->addWhereRestriction(new OrmCondition("postacomment_page = ?", $strPageid));
         }
 
         if ($strSystemidfilter != "") {
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND postacomment_systemid = ? ", $strSystemidfilter));
+            $objORM->addWhereRestriction(new OrmCondition("postacomment_systemid = ?", $strSystemidfilter));
         }
 
         if ($strLanguagefilter != "") {//check against '' to remain backwards-compatible
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND (postacomment_language = ? OR postacomment_language = '')", $strLanguagefilter));
+            $objORM->addWhereRestriction(new OrmCondition("(postacomment_language = ? OR postacomment_language = '')", $strLanguagefilter));
         }
         if ($bitJustActive) {
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND system_status = ? ", 1));
+            $objORM->addWhereRestriction(new OrmCondition("system_status = ?", 1));
         }
 
 
-        return $objORM->getObjectCount(get_called_class());
+        return $objORM->getObjectCount(PostacommentPost::class);
     }
 
     /**

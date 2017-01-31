@@ -13,6 +13,7 @@ use Kajona\Pages\Portal\ElementPortal;
 use Kajona\Pages\Portal\PortalElementInterface;
 use Kajona\System\System\Date;
 use Kajona\System\System\Remoteloader;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\XmlParser;
 
 
@@ -47,13 +48,13 @@ class ElementRssfeedPortal extends ElementPortal implements PortalElementInterfa
         try {
             $objRemoteloader = new Remoteloader();
 
-            if (uniStrtolower(uniSubstr($this->arrElementData["char2"], 0, 8)) == "https://") {
+            if (StringUtil::toLowerCase(StringUtil::substring($this->arrElementData["char2"], 0, 8)) == "https://") {
                 $objRemoteloader->setStrProtocolHeader("https://");
             }
 
-            $this->arrElementData["char2"] = uniStrReplace("&amp;", "&", $this->arrElementData["char2"]);
+            $this->arrElementData["char2"] = StringUtil::replace("&amp;", "&", $this->arrElementData["char2"]);
 
-            $objRemoteloader->setStrHost(uniStrReplace(array("http://", "https://"), "", $this->arrElementData["char2"]));
+            $objRemoteloader->setStrHost(StringUtil::replace(array("http://", "https://"), "", $this->arrElementData["char2"]));
             $objRemoteloader->setIntPort(0);
             $strFeed = $objRemoteloader->getRemoteContent();
         }
@@ -63,7 +64,7 @@ class ElementRssfeedPortal extends ElementPortal implements PortalElementInterfa
 
         $strContent = "";
         $arrTemplate = array();
-        if (uniStrlen($strFeed) == 0) {
+        if (StringUtil::length($strFeed) == 0) {
             $strContent = $this->getLang("rssfeed_errorloading");
         }
         else {

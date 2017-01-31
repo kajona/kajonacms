@@ -8,7 +8,6 @@
 
 namespace Kajona\System\System;
 
-
 /**
  * A orm condition may be used to create where conditions for the objectList and objectCount queries.
  * This condition creates an IN statement e.g. "AND <columnname> IN (<parameters>)"
@@ -19,6 +18,9 @@ namespace Kajona\System\System;
  */
 class OrmPropertyInCondition extends OrmInCondition
 {
+    /**
+     * @inheritdoc
+     */
     public function __construct($strProperty, array $arrParams, $strInCondition = self::STR_CONDITION_IN)
     {
         parent::__construct($strProperty, $arrParams, $strInCondition);
@@ -43,5 +45,4 @@ class OrmPropertyInCondition extends OrmInCondition
 
         return $this->getInStatement($strPropertyValue);
     }
-
 }

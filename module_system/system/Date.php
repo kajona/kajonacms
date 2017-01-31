@@ -92,7 +92,7 @@ class Date
      */
     public function isSameDay(Date $objDateToCompare)
     {
-        return uniSubstr($objDateToCompare->getLongTimestamp(), 0, 8) == uniSubstr($this->getLongTimestamp(), 0, 8);
+        return StringUtil::substring($objDateToCompare->getLongTimestamp(), 0, 8) == StringUtil::substring($this->getLongTimestamp(), 0, 8);
     }
 
     /**
@@ -194,7 +194,7 @@ class Date
 
     private function validateDate()
     {
-        if (!uniEreg("([0-9]){14}", $this->getLongTimestamp()) || $this->getLongTimestamp() < 0) {
+        if (!StringUtil::matches($this->getLongTimestamp(), "([0-9]){14}") || $this->getLongTimestamp() < 0) {
             echo $this->__toString()."\n";
             if (function_exists("debug_backtrace")) {
                 $arrStack = debug_backtrace();
@@ -457,10 +457,10 @@ class Date
             return $this;
         }
 
-        if (uniStrlen($intYear) == 2) {
+        if (StringUtil::length($intYear) == 2) {
             $intYear = "20".$intYear;
         }
-        if (uniStrlen($intYear) == 1) {
+        if (StringUtil::length($intYear) == 1) {
             $intYear = "200".$intYear;
         }
 
@@ -651,7 +651,7 @@ class Date
      */
     public function setLongTimestamp($longTimestamp)
     {
-        if (uniEreg("([0-9]){14}", $longTimestamp)) {
+        if (StringUtil::matches($longTimestamp, "([0-9]){14}")) {
             $this->longTimestamp = $longTimestamp;
         }
         return $this;

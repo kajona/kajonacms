@@ -16,8 +16,8 @@
 
     <link rel="stylesheet" href="_webpath_/[webpath,module_installer]/fonts/fontawesome/css/font-awesome.min.css">
 
-    <script src="_webpath_/[webpath,module_system]/admin/scripts/jquery/jquery.min.js"></script>
-    <script src="_webpath_/[webpath,module_system]/admin/scripts/jqueryui/jquery-ui.custom.min.js"></script>
+    <script src="_webpath_/[webpath,module_system]/scripts/jquery/jquery.min.js"></script>
+    <script src="_webpath_/[webpath,module_system]/scripts/jqueryui/jquery-ui.custom.min.js"></script>
 
 </head>
 
@@ -258,23 +258,32 @@ function switchDriver() {
             $(objButton).on('click', function() {return false;} );
             $(objButton).attr('disabled', 'disabled');
             $('#statusinfo').removeClass('hidden');
+            $('#installer-cli').removeClass('hide');
             triggerNextInstaller();
         }
 
         function triggerNextInstaller() {
             $.post(
                 '_webpath_/installer.php',
-                { step : 'getNextAutoInstall'},
-                function(data) {
-                    if(data == '' || data == null) {
-                        triggerNextSamplecontent();
-                        return;
-                    }
-
-                    $('tr[data-package="'+data+'"] td.spinner-module').html('<i class="fa fa-spinner fa-spin"></i>');
-                    triggerModuleInstaller(data);
+                { step : 'getNextAutoInstall'}
+            ).done(function(data) {
+                if(data == '' || data == null) {
+                    triggerNextSamplecontent();
+                    return;
                 }
-            );
+
+                $('tr[data-package="'+data+'"] td.spinner-module').html('<i class="fa fa-spinner fa-spin"></i>');
+                triggerModuleInstaller(data);
+            })
+            .fail(function(data) {
+                //$('tr[data-package="'+strModule+'"]').removeClass('info').addClass('danger');
+                //$('tr[data-package="'+strModule+'"] td.spinner-module').html('<i class="fa fa-times"></i>');
+            })
+            .always(function(data) {
+                $('#installer-cli pre').append(data.log ? data.log : data.responseText);
+                $("#installer-cli pre").animate({ scrollTop: $('#installer-cli pre').prop("scrollHeight")}, 100);
+            });
+
         }
 
 
@@ -284,40 +293,52 @@ function switchDriver() {
 
             $.post(
                 '_webpath_/installer.php',
-                { step : 'triggerNextAutoInstall', module: strModule},
-                function(data) {
-
-                    if(data.status == 'success') {
-                        $('tr[data-package="'+data.module+'"]').removeClass('info');
-                        $('tr[data-package="'+data.module+'"] td.spinner-module').html('<i class="fa fa-check"></i>');
-                        triggerNextInstaller();
-                    }
-                    else {
-                        $('tr[data-package="'+data.module+'"]').removeClass('info').addClass('danger');
-                        $('tr[data-package="'+data.module+'"] td.spinner-module').html('<i class="fa fa-times"></i>');
-                    }
-
+                { step : 'triggerNextAutoInstall', module: strModule}
+            )
+            .done(function(data) {
+                if(data.status == 'success') {
+                    $('tr[data-package="'+data.module+'"]').removeClass('info');
+                    $('tr[data-package="'+data.module+'"] td.spinner-module').html('<i class="fa fa-check"></i>');
+                    $('#installer-cli pre').append(data.log ? data.log : data.responseText);
+                    $("#installer-cli pre").animate({ scrollTop: $('#installer-cli pre').prop("scrollHeight")}, 100);
+                    triggerNextInstaller();
                 }
-            );
+            })
+            .fail(function(data) {
+                $('tr[data-package="'+strModule+'"]').removeClass('info').addClass('danger');
+                $('tr[data-package="'+strModule+'"] td.spinner-module').html('<i class="fa fa-times"></i>');
+            })
+            .always(function(data) {
+                $('#installer-cli pre').append(data.log ? data.log : data.responseText ? data.responseText : data );
+                $("#installer-cli pre").animate({ scrollTop: $('#installer-cli pre').prop("scrollHeight")}, 100);
+            });
         }
 
 
         function triggerNextSamplecontent() {
             $.post(
                 '_webpath_/installer.php',
-                { step : 'getNextAutoSamplecontent'},
-                function(data) {
-                    if(data == '' || data == null) {
-                        $('#statusinfo').addClass('hidden');
-                        document.location = '_webpath_/installer.php?step=finish';
-                        return;
-                    }
+                { step : 'getNextAutoSamplecontent'}
+            )
+            .done(function(data) {
 
-                    $('tr[data-package="'+data.module+'"] td.spinner-samplecontent').html('<i class="fa fa-spinner fa-spin"></i>');
-                    triggerAutoSamplecontent(data.module);
-
+                if(data == '' || data == null) {
+                    $('#statusinfo').addClass('hidden');
+                    document.location = '_webpath_/installer.php?step=finish';
+                    return;
                 }
-            );
+
+                $('tr[data-package="'+data.module+'"] td.spinner-samplecontent').html('<i class="fa fa-spinner fa-spin"></i>');
+                triggerAutoSamplecontent(data.module);
+            })
+            .fail(function(data) {
+                $('tr[data-package="'+strModule+'"]').removeClass('info').addClass('danger');
+                $('tr[data-package="'+strModule+'"] td.spinner-module').html('<i class="fa fa-times"></i>');
+            })
+            .always(function(data) {
+                $('#installer-cli pre').append(data.log ? data.log : data.responseText ? data.responseText : data );
+                $("#installer-cli pre").animate({ scrollTop: $('#installer-cli pre').prop("scrollHeight")}, 100);
+            });
         }
 
 
@@ -326,22 +347,32 @@ function switchDriver() {
             $('tr[data-package="'+strModule+'"]').addClass('info');
             $.post(
                 '_webpath_/installer.php',
-                { step : 'triggerNextAutoSamplecontent', module: strModule},
-                function(data) {
-                    if(data.status == 'success') {
-                        $('tr[data-package="'+data.module+'"]').removeClass('info');
-                        $('tr[data-package="'+data.module+'"] td.spinner-samplecontent').html('<i class="fa fa-check"></i>');
-                        triggerNextSamplecontent();
-                    }
-                    else {
-                        $('tr[data-package="'+data.module+'"]').removeClass('info').addClass('danger');
-                        console.log('installation failed ');
-                        $('tr[data-package="'+data.module+'"] td.spinner-samplecontent').html('<i class="fa fa-times"></i>');
-
-                    }
+                { step : 'triggerNextAutoSamplecontent', module: strModule}
+            )
+            .done(function(data) {
+                if(data.status == 'success') {
+                    $('tr[data-package="'+data.module+'"]').removeClass('info');
+                    $('tr[data-package="'+data.module+'"] td.spinner-samplecontent').html('<i class="fa fa-check"></i>');
+                    $('#installer-cli pre').append(data.log);
+                    $("#installer-cli pre").animate({ scrollTop: $('#installer-cli pre').prop("scrollHeight")}, 100);
+                    triggerNextSamplecontent();
+                }
+                else {
+                    $('tr[data-package="'+data.module+'"]').removeClass('info').addClass('danger');
+                    console.log('installation failed ');
+                    $('tr[data-package="'+data.module+'"] td.spinner-samplecontent').html('<i class="fa fa-times"></i>');
 
                 }
-            );
+            })
+            .fail(function(data) {
+                $('tr[data-package="'+strModule+'"]').removeClass('info').addClass('danger');
+                $('tr[data-package="'+strModule+'"] td.spinner-samplecontent').html('<i class="fa fa-times"></i>');
+            })
+            .always(function(data) {
+                $('#installer-cli pre').append(data.log ? data.log : data.responseText ? data.responseText : data );
+                $("#installer-cli pre").animate({ scrollTop: $('#installer-cli pre').prop("scrollHeight")}, 100);
+            });
+
         }
 
     </script>
@@ -356,6 +387,12 @@ function switchDriver() {
         <td class="text-muted">%%packagehint%%</td>
     </tr>
 </autoinstall_row>
+
+<autoinstall_cli>
+    <div id="installer-cli" class="hide">
+        <pre></pre>
+    </div>
+</autoinstall_cli>
 
 
 

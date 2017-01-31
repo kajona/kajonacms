@@ -17,6 +17,7 @@ use Kajona\System\System\HttpStatuscodes;
 use Kajona\System\System\Link;
 use Kajona\System\System\Objectfactory;
 use Kajona\System\System\ResponseObject;
+use Kajona\System\System\StringUtil;
 
 
 /**
@@ -38,11 +39,9 @@ class ElementPortaluploadPortal extends ElementPortal implements PortalElementIn
 
         if ($this->getParam("submitPortaluploadForm") == "1") {
             $strReturn .= $this->doUpload();
-        }
-        elseif ($this->getParam("submitAjaxUpload") == "1") {
+        } elseif ($this->getParam("submitAjaxUpload") == "1") {
             $strReturn .= $this->doAjaxUpload();
-        }
-        else {
+        } else {
             $strReturn .= $this->uploadForm();
         }
 
@@ -80,7 +79,7 @@ class ElementPortaluploadPortal extends ElementPortal implements PortalElementIn
 
             $arrTemplate["formErrors"] = $formErrors;
 
-            $strAllowedFileRegex = uniStrReplace(array(".", ","), array("", "|"), $objFilemanagerRepo->getStrUploadFilter());
+            $strAllowedFileRegex = StringUtil::replace(array(".", ","), array("", "|"), $objFilemanagerRepo->getStrUploadFilter());
 
             $arrTemplate["formAction"] = Link::getLinkPortalHref($this->getPagename(), "", $this->getAction(), "", $strDlFolderId);
             $arrTemplate["maxFileSize"] = \Kajona\System\System\Carrier::getInstance()->getObjConfig()->getPhpMaxUploadSize();
@@ -90,8 +89,7 @@ class ElementPortaluploadPortal extends ElementPortal implements PortalElementIn
 
             $strReturn .= $this->objTemplate->fillTemplateFile($arrTemplate, "/module_portalupload/".$this->arrElementData["char1"], "portalupload_uploadform");
 
-        }
-        else {
+        } else {
             $strReturn .= $this->getLang("commons_error_permissions");
         }
 
@@ -113,8 +111,7 @@ class ElementPortaluploadPortal extends ElementPortal implements PortalElementIn
 
         if ($strUpload === true) {
             $strUpload = $this->getLang("portaluploadSuccess");
-        }
-        else {
+        } else {
             ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_FORBIDDEN);
         }
 
@@ -172,15 +169,14 @@ class ElementPortaluploadPortal extends ElementPortal implements PortalElementIn
 
                 //Check file for correct filters
                 $arrAllowed = explode(",", $objFilemanagerRepo->getStrUploadFilter());
-                $strSuffix = uniStrtolower(uniSubstr($arrSource["name"], uniStrrpos($arrSource["name"], ".")));
+                $strSuffix = StringUtil::toLowerCase(StringUtil::substring($arrSource["name"], StringUtil::lastIndexOf($arrSource["name"], ".")));
                 if ($objFilemanagerRepo->getStrUploadFilter() == "" || in_array($strSuffix, $arrAllowed)) {
                     if ($objFilesystem->copyUpload($strTarget, $arrSource["tmp_name"])) {
 
                         //upload was successfull. try to sync the downloads-archive.
                         if ($objDownloadfolder != null && $objDownloadfolder instanceof MediamanagerFile) {
                             MediamanagerFile::syncRecursive($objDownloadfolder->getSystemid(), $objDownloadfolder->getStrFilename());
-                        }
-                        else {
+                        } else {
                             $objFilemanagerRepo->syncRepo();
                         }
 
@@ -193,27 +189,22 @@ class ElementPortaluploadPortal extends ElementPortal implements PortalElementIn
                         //reload the site to display the new file
                         if (validateSystemid($this->getParam("portaluploadDlfolder"))) {
                             $this->portalReload(Link::getLinkPortalHref($this->getPagename(), "", "mediaFolder", "uploadSuccess=1", $this->getParam("portaluploadDlfolder")));
-                        }
-                        else {
+                        } else {
                             $this->portalReload(Link::getLinkPortalHref($this->getPagename(), "", "", $this->getAction(), "uploadSuccess=1", $this->getSystemid()));
                         }
-                    }
-                    else {
+                    } else {
                         $strReturn .= $this->uploadForm($this->getLang("portaluploadCopyUploadError"));
                     }
-                }
-                else {
+                } else {
                     @unlink($arrSource["tmp_name"]);
 
                     $strReturn .= $this->uploadForm($this->getLang("portaluploadFilterError"));
                 }
-            }
-            else {
+            } else {
                 $strReturn .= $this->uploadForm($this->getLang("portaluploadNotWritableError"));
             }
 
-        }
-        else {
+        } else {
             $strReturn .= $this->getLang("commons_error_permissions");
         }
 

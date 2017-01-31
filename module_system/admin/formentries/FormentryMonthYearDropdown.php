@@ -8,6 +8,7 @@ namespace Kajona\System\Admin\Formentries;
 
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Date;
+use Kajona\System\System\StringUtil;
 
 
 /**
@@ -101,8 +102,8 @@ class FormentryMonthYearDropdown extends FormentryDate
 
         if($this->getBitMandatory()) {
             $strReturn .= "<script type='text/javascript'>
-                $(document).ready(function () {
-                    KAJONA.admin.forms.renderMandatoryFields([[ '".$this->getStrEntryName().self::MONTH_SUFFIX."', '' ], ['".$this->getStrEntryName().self::YEAR_SUFFIX."' ,  '' ]]); 
+                require(['forms'], function(forms) {
+                    forms.renderMandatoryFields([[ '".$this->getStrEntryName().self::MONTH_SUFFIX."', '' ], ['".$this->getStrEntryName().self::YEAR_SUFFIX."' ,  '' ]]); 
                 });
             </script>";
         }
@@ -125,7 +126,7 @@ class FormentryMonthYearDropdown extends FormentryDate
     private static function getArrMonths()
     {
         $strMonthNames = Carrier::getInstance()->getObjLang()->getLang("toolsetCalendarMonth", "system");
-        $strMonthNames = uniStrReplace("\"", "", $strMonthNames);
+        $strMonthNames = StringUtil::replace("\"", "", $strMonthNames);
         $arrMonthNames = explode(",", $strMonthNames);
 
         $arrDropDownMonth = array();

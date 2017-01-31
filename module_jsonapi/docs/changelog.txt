@@ -1,4 +1,7 @@
 Module JSONApi
 
+V5.1 ----------------------------------------------------------------------------------------------------
+NEW: module_jsonapi -> use object filter, added form validation and add parameter to return the form for a model
+
 V4.7 ----------------------------------------------------------------------------------------------------
 NEW: module_jsonapi -> a new module to provide get/put/post/delete access to all business objects using a rest interface

@@ -8,6 +8,7 @@
 
 namespace Kajona\System\System\Validators;
 
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\ValidatorInterface;
 
 
@@ -37,7 +38,7 @@ class TwocharsValidator implements ValidatorInterface
             return false;
         }
 
-        return uniStrlen($objValue) === 2;
+        return StringUtil::length($objValue) === 2;
     }
 
 }

@@ -13,6 +13,7 @@ use Kajona\System\System\Carrier;
 use Kajona\System\System\Classloader;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\SamplecontentInstallerInterface;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemModule;
 
 class SamplecontentInstallerHelper
@@ -30,7 +31,7 @@ class SamplecontentInstallerHelper
 
             //See if a legacy class was stored in the file
             if ($objInstance == null) {
-                $strClass = uniSubstr($strFilename, 0, -4);
+                $strClass = StringUtil::substring($strFilename, 0, -4);
                 $strClass = "class_".$strClass;
 
                 if (in_array($strClass, get_declared_classes())) {
@@ -49,15 +50,15 @@ class SamplecontentInstallerHelper
         $arrInstaller = array();
         foreach ($arrTempInstaller as $objInstaller) {
             if ($objInstaller !== null) {
-                $arrInstaller[uniStrReplace("class_", "", get_class($objInstaller))] = $objInstaller;
+                $arrInstaller[StringUtil::replace("class_", "", get_class($objInstaller))] = $objInstaller;
             }
         }
 
 
         uksort($arrInstaller, function ($strA, $strB) {
 
-            $strNameA = uniStrrpos($strA, "\\") !== false ? uniSubstr($strA, uniStrrpos($strA, "\\") + 1) : $strA;
-            $strNameB = uniStrrpos($strB, "\\") !== false ? uniSubstr($strB, uniStrrpos($strB, "\\") + 1) : $strB;
+            $strNameA = StringUtil::lastIndexOf($strA, "\\") !== false ? StringUtil::substring($strA, StringUtil::lastIndexOf($strA, "\\") + 1) : $strA;
+            $strNameB = StringUtil::lastIndexOf($strB, "\\") !== false ? StringUtil::substring($strB, StringUtil::lastIndexOf($strB, "\\") + 1) : $strB;
 
             return strcmp(strtolower($strNameA), strtolower($strNameB));
         });
@@ -80,7 +81,7 @@ class SamplecontentInstallerHelper
     {
         $arrTempInstaller = Resourceloader::getInstance()->getFolderContent("/installer", array(".php"));
         foreach($arrTempInstaller as $strPath => $strFilename) {
-            if(uniStrpos($strPath, $objPackage->getStrPath()) !== false) {
+            if(StringUtil::indexOf($strPath, $objPackage->getStrPath()) !== false) {
 
                 /** @var SamplecontentInstallerInterface $objInstance */
                 $objInstance = Classloader::getInstance()->getInstanceFromFilename($strPath, null, "Kajona\\System\\System\\SamplecontentInstallerInterface");

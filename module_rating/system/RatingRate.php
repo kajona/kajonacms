@@ -7,13 +7,13 @@
 
 namespace Kajona\Rating\System;
 
-use Kajona\System\System\CacheManager;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Cookie;
 use Kajona\System\System\Logger;
+use Kajona\System\System\OrmCondition;
 use Kajona\System\System\OrmObjectlist;
-use Kajona\System\System\OrmObjectlistRestriction;
 use Kajona\System\System\ServiceProvider;
+use Kajona\System\System\StringUtil;
 
 
 /**
@@ -147,7 +147,7 @@ class RatingRate extends \Kajona\System\System\Model implements \Kajona\System\S
             $objCookie = new Cookie();
             if ($objCookie->getCookie(RatingRate::RATING_COOKIE) != "") {
                 $strRatingCookie = $objCookie->getCookie(RatingRate::RATING_COOKIE);
-                if (uniStrpos($strRatingCookie, $this->getSystemid()) !== false) {
+                if (StringUtil::indexOf($strRatingCookie, $this->getSystemid()) !== false) {
                     $bitReturn = false;
                 }
             }
@@ -172,9 +172,9 @@ class RatingRate extends \Kajona\System\System\Model implements \Kajona\System\S
     public static function getRating($strSystemid, $strChecksum = "")
     {
         $objORM = new OrmObjectlist();
-        $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND rating_systemid = ?", $strSystemid));
+        $objORM->addWhereRestriction(new OrmCondition("rating_systemid = ?", $strSystemid));
         if ($strChecksum != "") {
-            $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND rating_checksum = ?", $strChecksum));
+            $objORM->addWhereRestriction(new OrmCondition("rating_checksum = ?", $strChecksum));
         }
 
         return $objORM->getSingleObject(get_called_class());

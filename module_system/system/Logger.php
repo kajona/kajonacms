@@ -160,7 +160,7 @@ final class Logger
             $strSessid .= " (".Carrier::getInstance()->getObjSession()->getUsername().")";
         }
 
-        $strMessage = uniStrReplace(array("\r", "\n"), array(" ", " "), $strMessage);
+        $strMessage = StringUtil::replace(array("\r", "\n"), array(" ", " "), $strMessage);
 
         $strFileInfo = "";
         $arrStack = debug_backtrace();

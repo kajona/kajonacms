@@ -235,7 +235,7 @@ class OrmObjectlist extends OrmBase
                     }
 
                     //get order
-                    $strOrder = (uniStrtoupper($strAnnotation) == "DESC" ? "DESC" : "ASC");
+                    $strOrder = (StringUtil::toUpperCase($strAnnotation) == "DESC" ? "DESC" : "ASC");
 
                     //get column
                     if ($strColumn != "") {
@@ -263,7 +263,7 @@ class OrmObjectlist extends OrmBase
             return;
         }
 
-        $this->addWhereRestriction(new OrmObjectlistRestriction($this->getDeletedWhereRestriction(), array()));
+        $this->addWhereRestriction(new OrmCondition($this->getDeletedWhereRestriction("", ""), array()));
     }
 
 

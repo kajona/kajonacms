@@ -8,6 +8,7 @@ namespace Kajona\System\System\Scriptlets;
 
 use Kajona\System\System\Carrier;
 use Kajona\System\System\ScriptletInterface;
+use Kajona\System\System\StringUtil;
 
 
 /**
@@ -41,7 +42,7 @@ class ScriptletLang implements ScriptletInterface
         preg_match_all("#\[lang,([A-Za-z0-9_]+),([0-9A-Za-z_]+)\]#i", $strContent, $arrTemp);
 
         foreach ($arrTemp[0] as $intKey => $strSearchString) {
-            $strContent = uniStrReplace($strSearchString, $objLang->getLang($arrTemp[1][$intKey], $arrTemp[2][$intKey]), $strContent);
+            $strContent = StringUtil::replace($strSearchString, $objLang->getLang($arrTemp[1][$intKey], $arrTemp[2][$intKey]), $strContent);
         }
 
         return $strContent;
