@@ -217,6 +217,45 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface
         return $objFactory->getGroupByName($strName);
     }
 
+    /**
+     * Returns the short-id for a single group, cached lookups are supported.
+     * If the cache is filled, the id is fetched without an instantiation.
+     *
+     * @param string $strGroupId
+     * @return int|null
+     */
+    public static function getShortIdForGroupId(string $strGroupId)
+    {
+        //build the map, cached by the cache manager. on cache-miss rebuilding.
+        /** @var CacheManager $objCache */
+        $objCache = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER);
+        $strCacheKey = __CLASS__."group2id";
+        $arrIds = $objCache->getValue($strCacheKey);
+        if ($arrIds === false) {
+            $arrIds = array();
+        }
+
+
+        if (array_key_exists($strGroupId, $arrIds)) {
+            if (validateSystemid($arrIds[$strGroupId])) {
+                return $arrIds[$strGroupId];
+            } else {
+                return null;
+            }
+        }
+
+        //not found in cache
+        /** @var UserGroup $objGroup */
+        $objGroup = Objectfactory::getInstance()->getObject($strGroupId);
+        if ($objGroup instanceof UserGroup) {
+            $intId = $objGroup->getIntShortId();
+            $arrIds[$strGroupId] = $intId;
+            $objCache->addValue($strCacheKey, $arrIds, 0);
+            return $intId;
+        }
+
+        return null;
+    }
 
     public function getStrSubsystem()
     {

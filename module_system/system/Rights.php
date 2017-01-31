@@ -108,16 +108,16 @@ class Rights
         //Splitting up the rights
         $arrParams = array();
         $arrParams[] = (int)$arrRights[self::$STR_RIGHT_INHERIT];
-        $arrParams[] = $arrRights[self::$STR_RIGHT_VIEW];
-        $arrParams[] = $arrRights[self::$STR_RIGHT_EDIT];
-        $arrParams[] = $arrRights[self::$STR_RIGHT_DELETE];
-        $arrParams[] = $arrRights[self::$STR_RIGHT_RIGHT];
-        $arrParams[] = $arrRights[self::$STR_RIGHT_RIGHT1];
-        $arrParams[] = $arrRights[self::$STR_RIGHT_RIGHT2];
-        $arrParams[] = $arrRights[self::$STR_RIGHT_RIGHT3];
-        $arrParams[] = $arrRights[self::$STR_RIGHT_RIGHT4];
-        $arrParams[] = $arrRights[self::$STR_RIGHT_RIGHT5];
-        $arrParams[] = $arrRights[self::$STR_RIGHT_CHANGELOG];
+        $arrParams[] = ",". $arrRights[self::$STR_RIGHT_VIEW].",";
+        $arrParams[] = ",". $arrRights[self::$STR_RIGHT_EDIT].",";
+        $arrParams[] = ",". $arrRights[self::$STR_RIGHT_DELETE].",";
+        $arrParams[] = ",". $arrRights[self::$STR_RIGHT_RIGHT].",";
+        $arrParams[] = ",". $arrRights[self::$STR_RIGHT_RIGHT1].",";
+        $arrParams[] = ",". $arrRights[self::$STR_RIGHT_RIGHT2].",";
+        $arrParams[] = ",". $arrRights[self::$STR_RIGHT_RIGHT3].",";
+        $arrParams[] = ",". $arrRights[self::$STR_RIGHT_RIGHT4].",";
+        $arrParams[] = ",". $arrRights[self::$STR_RIGHT_RIGHT5].",";
+        $arrParams[] = ",". $arrRights[self::$STR_RIGHT_CHANGELOG].",";
         $arrParams[] = $strSystemid;
 
         $strQuery = "UPDATE "._dbprefix_."system_right
@@ -219,7 +219,7 @@ class Rights
             $arrRights[self::$STR_RIGHT_INHERIT] = 1;
         }
 
-        $bitReturn &= $this->writeSingleRecord($strSystemid, $arrRights);
+        $bitReturn = $bitReturn && $this->writeSingleRecord($strSystemid, $arrRights);
 
         //load all child records in order to update them, too.
         $arrChilds = $this->getChildNodes($strSystemid);
@@ -231,7 +231,7 @@ class Rights
                 if ($arrChildRights[self::$STR_RIGHT_INHERIT] == 1) {
                     $arrChildRights = $arrRights;
                     $arrChildRights[self::$STR_RIGHT_INHERIT] = 1;
-                    $bitReturn &= $this->setRightsRecursive($arrChildRights, $strOneChildId);
+                    $bitReturn = $bitReturn && $this->setRightsRecursive($arrChildRights, $strOneChildId);
                 }
             }
         }
@@ -298,6 +298,7 @@ class Rights
 
     /**
      * Looks up the rights for a given SystemID and going up the tree if needed (inheritance!)
+     * The array contains short-ids, no systemids!
      *
      * @param string $strSystemid
      *
@@ -374,15 +375,15 @@ class Rights
         }
 
         //Exploding the array
-        $arrReturn[self::$STR_RIGHT_VIEW] = explode(",", $arrRow[self::$STR_RIGHT_VIEW]);
-        $arrReturn[self::$STR_RIGHT_EDIT] = explode(",", $arrRow[self::$STR_RIGHT_EDIT]);
-        $arrReturn[self::$STR_RIGHT_DELETE] = explode(",", $arrRow[self::$STR_RIGHT_DELETE]);
-        $arrReturn[self::$STR_RIGHT_RIGHT] = explode(",", $arrRow[self::$STR_RIGHT_RIGHT]);
-        $arrReturn[self::$STR_RIGHT_RIGHT1] = explode(",", $arrRow[self::$STR_RIGHT_RIGHT1]);
-        $arrReturn[self::$STR_RIGHT_RIGHT2] = explode(",", $arrRow[self::$STR_RIGHT_RIGHT2]);
-        $arrReturn[self::$STR_RIGHT_RIGHT3] = explode(",", $arrRow[self::$STR_RIGHT_RIGHT3]);
-        $arrReturn[self::$STR_RIGHT_RIGHT4] = explode(",", $arrRow[self::$STR_RIGHT_RIGHT4]);
-        $arrReturn[self::$STR_RIGHT_RIGHT5] = explode(",", $arrRow[self::$STR_RIGHT_RIGHT5]);
+        $arrReturn[self::$STR_RIGHT_VIEW]       = explode(",", $arrRow[self::$STR_RIGHT_VIEW]);
+        $arrReturn[self::$STR_RIGHT_EDIT]       = explode(",", $arrRow[self::$STR_RIGHT_EDIT]);
+        $arrReturn[self::$STR_RIGHT_DELETE]     = explode(",", $arrRow[self::$STR_RIGHT_DELETE]);
+        $arrReturn[self::$STR_RIGHT_RIGHT]      = explode(",", $arrRow[self::$STR_RIGHT_RIGHT]);
+        $arrReturn[self::$STR_RIGHT_RIGHT1]     = explode(",", $arrRow[self::$STR_RIGHT_RIGHT1]);
+        $arrReturn[self::$STR_RIGHT_RIGHT2]     = explode(",", $arrRow[self::$STR_RIGHT_RIGHT2]);
+        $arrReturn[self::$STR_RIGHT_RIGHT3]     = explode(",", $arrRow[self::$STR_RIGHT_RIGHT3]);
+        $arrReturn[self::$STR_RIGHT_RIGHT4]     = explode(",", $arrRow[self::$STR_RIGHT_RIGHT4]);
+        $arrReturn[self::$STR_RIGHT_RIGHT5]     = explode(",", $arrRow[self::$STR_RIGHT_RIGHT5]);
         $arrReturn[self::$STR_RIGHT_CHANGELOG] = explode(",", $arrRow[self::$STR_RIGHT_CHANGELOG]);
 
         $arrReturn[self::$STR_RIGHT_INHERIT] = (int)$arrRow[self::$STR_RIGHT_INHERIT];
@@ -596,8 +597,11 @@ class Rights
             return true;
         }
 
+        //map the groupid on a short id
+        $intShortId = UserGroup::getShortIdForGroupId($strGroupId);
+
         $arrRights = $this->getArrayRights($strSystemid, $strPermission);
-        return in_array($strGroupId, $arrRights[$strPermission]);
+        return in_array($intShortId, $arrRights[$strPermission]);
     }
 
     /**
@@ -643,22 +647,25 @@ class Rights
         //rights not given, add now, disabling inheritance
         $arrRights[self::$STR_RIGHT_INHERIT] = 0;
 
+        //map the groupid on a short id
+        $intShortId = UserGroup::getShortIdForGroupId($strGroupId);
+
         //add the group to the row
-        if (!in_array($strGroupId, $arrRights[$strRight])) {
-            $arrRights[$strRight][] = $strGroupId;
+        if (!in_array($intShortId, $arrRights[$strRight])) {
+            $arrRights[$strRight][] = $intShortId;
         }
 
         //build a one-dim array
-        $arrRights[self::$STR_RIGHT_VIEW] = implode(",", $arrRights[self::$STR_RIGHT_VIEW]);
-        $arrRights[self::$STR_RIGHT_EDIT] = implode(",", $arrRights[self::$STR_RIGHT_EDIT]);
-        $arrRights[self::$STR_RIGHT_DELETE] = implode(",", $arrRights[self::$STR_RIGHT_DELETE]);
-        $arrRights[self::$STR_RIGHT_RIGHT] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT]);
-        $arrRights[self::$STR_RIGHT_RIGHT1] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT1]);
-        $arrRights[self::$STR_RIGHT_RIGHT2] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT2]);
-        $arrRights[self::$STR_RIGHT_RIGHT3] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT3]);
-        $arrRights[self::$STR_RIGHT_RIGHT4] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT4]);
-        $arrRights[self::$STR_RIGHT_RIGHT5] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT5]);
-        $arrRights[self::$STR_RIGHT_CHANGELOG] = implode(",", $arrRights[self::$STR_RIGHT_CHANGELOG]);
+        $arrRights[self::$STR_RIGHT_VIEW]       =implode(",", $arrRights[self::$STR_RIGHT_VIEW]);
+        $arrRights[self::$STR_RIGHT_EDIT]       =implode(",", $arrRights[self::$STR_RIGHT_EDIT]);
+        $arrRights[self::$STR_RIGHT_DELETE]     =implode(",", $arrRights[self::$STR_RIGHT_DELETE]);
+        $arrRights[self::$STR_RIGHT_RIGHT]      =implode(",", $arrRights[self::$STR_RIGHT_RIGHT]);
+        $arrRights[self::$STR_RIGHT_RIGHT1]     =implode(",", $arrRights[self::$STR_RIGHT_RIGHT1]);
+        $arrRights[self::$STR_RIGHT_RIGHT2]     =implode(",", $arrRights[self::$STR_RIGHT_RIGHT2]);
+        $arrRights[self::$STR_RIGHT_RIGHT3]     =implode(",", $arrRights[self::$STR_RIGHT_RIGHT3]);
+        $arrRights[self::$STR_RIGHT_RIGHT4]     =implode(",", $arrRights[self::$STR_RIGHT_RIGHT4]);
+        $arrRights[self::$STR_RIGHT_RIGHT5]     =implode(",", $arrRights[self::$STR_RIGHT_RIGHT5]);
+        $arrRights[self::$STR_RIGHT_CHANGELOG]  =implode(",", $arrRights[self::$STR_RIGHT_CHANGELOG]);
 
 
         //and save the row
@@ -688,26 +695,29 @@ class Rights
         //rights not given, add now, disabling inheritance
         $arrRights[self::$STR_RIGHT_INHERIT] = 0;
 
+        //map the groupid on a short id
+        $intShortId = UserGroup::getShortIdForGroupId($strGroupId);
+
         //remove the group
-        if (in_array($strGroupId, $arrRights[$strRight])) {
+        if (in_array($intShortId, $arrRights[$strRight])) {
             foreach ($arrRights[$strRight] as $intKey => $strSingleGroup) {
-                if ($strSingleGroup == $strGroupId) {
+                if ($strSingleGroup == $intShortId) {
                     unset($arrRights[$strRight][$intKey]);
                 }
             }
         }
 
         //build a one-dim array
-        $arrRights[self::$STR_RIGHT_VIEW] = implode(",", $arrRights[self::$STR_RIGHT_VIEW]);
-        $arrRights[self::$STR_RIGHT_EDIT] = implode(",", $arrRights[self::$STR_RIGHT_EDIT]);
-        $arrRights[self::$STR_RIGHT_DELETE] = implode(",", $arrRights[self::$STR_RIGHT_DELETE]);
-        $arrRights[self::$STR_RIGHT_RIGHT] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT]);
-        $arrRights[self::$STR_RIGHT_RIGHT1] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT1]);
-        $arrRights[self::$STR_RIGHT_RIGHT2] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT2]);
-        $arrRights[self::$STR_RIGHT_RIGHT3] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT3]);
-        $arrRights[self::$STR_RIGHT_RIGHT4] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT4]);
-        $arrRights[self::$STR_RIGHT_RIGHT5] = implode(",", $arrRights[self::$STR_RIGHT_RIGHT5]);
-        $arrRights[self::$STR_RIGHT_CHANGELOG] = implode(",", $arrRights[self::$STR_RIGHT_CHANGELOG]);
+        $arrRights[self::$STR_RIGHT_VIEW]       =implode(",", $arrRights[self::$STR_RIGHT_VIEW]);
+        $arrRights[self::$STR_RIGHT_EDIT]       =implode(",", $arrRights[self::$STR_RIGHT_EDIT]);
+        $arrRights[self::$STR_RIGHT_DELETE]     =implode(",", $arrRights[self::$STR_RIGHT_DELETE]);
+        $arrRights[self::$STR_RIGHT_RIGHT]      =implode(",", $arrRights[self::$STR_RIGHT_RIGHT]);
+        $arrRights[self::$STR_RIGHT_RIGHT1]     =implode(",", $arrRights[self::$STR_RIGHT_RIGHT1]);
+        $arrRights[self::$STR_RIGHT_RIGHT2]     =implode(",", $arrRights[self::$STR_RIGHT_RIGHT2]);
+        $arrRights[self::$STR_RIGHT_RIGHT3]     =implode(",", $arrRights[self::$STR_RIGHT_RIGHT3]);
+        $arrRights[self::$STR_RIGHT_RIGHT4]     =implode(",", $arrRights[self::$STR_RIGHT_RIGHT4]);
+        $arrRights[self::$STR_RIGHT_RIGHT5]     =implode(",", $arrRights[self::$STR_RIGHT_RIGHT5]);
+        $arrRights[self::$STR_RIGHT_CHANGELOG]  =implode(",", $arrRights[self::$STR_RIGHT_CHANGELOG]);
 
         //and save the row
         $bitReturn = $this->setRights($arrRights, $strSystemid);
