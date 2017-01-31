@@ -55,7 +55,7 @@ final class Session
 
     const STR_SESSION_USERID = "STR_SESSION_USERID";
     const STR_SESSION_GROUPIDS = "STR_SESSION_GROUPIDS";
-//TODO    const STR_SESSION_GROUPIDS_SHORT = "STR_SESSION_GROUPIDS_SHORT";
+    const STR_SESSION_GROUPIDS_SHORT = "STR_SESSION_GROUPIDS_SHORT";
     const STR_SESSION_ISADMIN = "STR_SESSION_ISADMIN";
 
 
@@ -492,7 +492,7 @@ final class Session
                 $this->setSession(self::STR_SESSION_USERID, $objTargetUser->getSystemid());
 
                 $this->setSession(self::STR_SESSION_GROUPIDS, implode(",", $objTargetUser->getArrGroupIds()));
-//TODO                $this->setSession(self::STR_SESSION_GROUPIDS_SHORT, implode(",", $objTargetUser->getArrShortGroupIds()));
+                $this->setSession(self::STR_SESSION_GROUPIDS_SHORT, implode(",", $objTargetUser->getArrShortGroupIds()));
                 $this->getObjInternalSession()->updateObjectToDb();
                 $this->objUser = $objTargetUser;
 
@@ -521,7 +521,7 @@ final class Session
             //save some metadata to the php-session
             $this->setSession(self::STR_SESSION_USERID, $objUser->getSystemid());
             $this->setSession(self::STR_SESSION_GROUPIDS, implode(",", $objUser->getArrGroupIds()));
-//TODO            $this->setSession(self::STR_SESSION_GROUPIDS_SHORT, implode(",", $objUser->getArrShortGroupIds()));
+            $this->setSession(self::STR_SESSION_GROUPIDS_SHORT, implode(",", $objUser->getArrShortGroupIds()));
             $this->setSession(self::STR_SESSION_ISADMIN, $objUser->getIntAdmin());
 
             $this->getObjInternalSession()->updateObjectToDb();
@@ -669,6 +669,21 @@ final class Session
     public function getGroupIdsAsArray()
     {
         return explode(",", $this->getGroupIdsAsString());
+    }
+
+    /**
+     * Returns the short ids of groups the user is member in as an array
+     *
+     * @return array
+     */
+    public function getShortGroupIdsAsArray()
+    {
+        if ($this->getObjInternalSession() != null) {
+            $strGroupids = $this->getSession(self::STR_SESSION_GROUPIDS_SHORT);
+        } else {
+            $strGroupids = UserGroup::getShortIdForGroupId(SystemSetting::getConfigValue("_guests_group_id_"));
+        }
+        return explode(",", $strGroupids);
     }
 
     /**

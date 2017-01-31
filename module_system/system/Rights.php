@@ -363,6 +363,7 @@ class Rights
      * @param string $strPermissionFilter may be used to return only the set for a given permission, this reduces the number of explodes
      *
      * @return mixed
+     * @todo check usages, currently returning short ids
      */
     public function getArrayRights(string $strSystemid, string $strPermissionFilter = ""): array
     {

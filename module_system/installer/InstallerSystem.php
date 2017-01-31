@@ -334,7 +334,9 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
         //Systemid of guest-user & admin group
         $strGuestID = $objGuestGroup->getSystemid();
+        $intGuestShortId = $objGuestGroup->getIntShortId();
         $strAdminID = $objAdminGroup->getSystemid();
+        $intAdminShortid = $objAdminGroup->getIntShortId();
         $this->registerConstant("_guests_group_id_", $strGuestID, SystemSetting::$int_TYPE_STRING, _user_modul_id_);
         $this->registerConstant("_admins_group_id_", $strAdminID, SystemSetting::$int_TYPE_STRING, _user_modul_id_);
 
@@ -352,8 +354,8 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
 
         //BUT: We have to modify the right-record of the root node, too
-        $strGroupsAll = $strGuestID.",".$strAdminID;
-        $strGroupsAdmin = $strAdminID;
+        $strGroupsAll = ",".$intGuestShortId.",".$intAdminShortid.",";
+        $strGroupsAdmin = ",".$intAdminShortid.",";
 
         $strQuery = "INSERT INTO "._dbprefix_."system_right
             (right_id, right_inherit, right_view, right_edit, right_delete, right_right, right_right1, right_right2, right_right3, right_right4, right_right5, right_changelog) VALUES
