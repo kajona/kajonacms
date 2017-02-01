@@ -36,7 +36,7 @@ class FormentryInt extends FormentryBase implements FormentryPrintableInterface
 
         //check if value comes from ui by checking if param exist. If param exists try to convert the value to a raw value
         if(Carrier::getInstance()->issetParam($this->getStrEntryName())) {
-            parent::setStrValue($this->getRawValue($this->getStrValue()));
+            parent::setStrValue(self::getRawValue($this->getStrValue()));
         }
 
         return $this;
@@ -56,7 +56,7 @@ class FormentryInt extends FormentryBase implements FormentryPrintableInterface
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
         }
 
-        $strValue = $this->getStrUIValue($this->getStrValue());
+        $strValue = self::getStrUIValue($this->getStrValue());
         $strReturn .= $objToolkit->formInputText($this->getStrEntryName(), $this->getStrLabel(), $strValue, "inputText", "", $this->getBitReadonly());
 
         return $strReturn;
@@ -70,7 +70,7 @@ class FormentryInt extends FormentryBase implements FormentryPrintableInterface
      */
     public function getValueAsText()
     {
-        return $this->getStrUIValue($this->getStrValue());
+        return self::getStrUIValue($this->getStrValue());
     }
 
     /**

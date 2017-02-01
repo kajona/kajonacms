@@ -37,7 +37,7 @@ class FormentryFloat extends FormentryBase implements FormentryPrintableInterfac
 
         //check if value comes from ui by checking if param exist. If param exists try to convert the value to a raw value
         if(Carrier::getInstance()->issetParam($this->getStrEntryName())) {
-            parent::setStrValue($this->getRawValue($this->getStrValue()));
+            parent::setStrValue(self::getRawValue($this->getStrValue()));
         }
 
         return $this;
@@ -57,7 +57,7 @@ class FormentryFloat extends FormentryBase implements FormentryPrintableInterfac
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
         }
 
-        $strValue = $this->getStrUIValue($this->getStrValue());
+        $strValue = self::getStrUIValue($this->getStrValue());
         $strReturn .= $objToolkit->formInputText($this->getStrEntryName(), $this->getStrLabel(), $strValue, "inputText", "", $this->getBitReadonly());
 
         return $strReturn;
@@ -71,7 +71,7 @@ class FormentryFloat extends FormentryBase implements FormentryPrintableInterfac
      */
     public function getValueAsText()
     {
-        return $this->getStrUIValue($this->getStrValue());
+        return self::getStrUIValue($this->getStrValue());
     }
 
     /**
