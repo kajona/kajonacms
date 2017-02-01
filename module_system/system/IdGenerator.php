@@ -34,7 +34,7 @@ class IdGenerator extends Model implements ModelInterface
      * @tableColumn idgenerator.generator_count
      * @tableColumnDatatype int
      */
-    private $intCount = "";
+    private $intCount = 0;
 
     /**
      * Generates an id for an specific key. Creates a new entry if the key does not exist

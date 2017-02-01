@@ -261,13 +261,12 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface
     {
         /** @var CacheManager $objCache */
         $objCache = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER);
-        $strCacheKey = __CLASS__."group2id";
+        $strCacheKey = __CLASS__."id2group";
         $arrIds = $objCache->getValue($strCacheKey);
         if ($arrIds === false) {
             $arrIds = array();
         }
 
-        $arrIds = array_flip($arrIds);
         if (array_key_exists($intShortid, $arrIds)) {
             return $arrIds[$intShortid];
         }
@@ -281,7 +280,7 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface
             $arrIds[$intShortid] = null;
         }
 
-        $objCache->addValue($strCacheKey, array_flip($arrIds), 0);
+        $objCache->addValue($strCacheKey, $arrIds, 0);
         return $arrIds[$intShortid];
     }
 
