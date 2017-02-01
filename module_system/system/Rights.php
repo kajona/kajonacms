@@ -356,16 +356,15 @@ class Rights
 
 
     /**
-     * Returns a 2-dimensional Array containing the groups and the assigned rights.
+     * Returns a 2-dimensional Array containing the short group ids and the assigned rights.
      *
      * @param string $strSystemid
      *
      * @param string $strPermissionFilter may be used to return only the set for a given permission, this reduces the number of explodes
      *
      * @return mixed
-     * @todo check usages, currently returning short ids
      */
-    public function getArrayRights(string $strSystemid, string $strPermissionFilter = ""): array
+    private function getArrayRightsShortIds(string $strSystemid, string $strPermissionFilter = ""): array
     {
         $arrReturn = array();
 
@@ -385,9 +384,43 @@ class Rights
         $arrReturn[self::$STR_RIGHT_RIGHT3]     = explode(",", $arrRow[self::$STR_RIGHT_RIGHT3]);
         $arrReturn[self::$STR_RIGHT_RIGHT4]     = explode(",", $arrRow[self::$STR_RIGHT_RIGHT4]);
         $arrReturn[self::$STR_RIGHT_RIGHT5]     = explode(",", $arrRow[self::$STR_RIGHT_RIGHT5]);
-        $arrReturn[self::$STR_RIGHT_CHANGELOG] = explode(",", $arrRow[self::$STR_RIGHT_CHANGELOG]);
+        $arrReturn[self::$STR_RIGHT_CHANGELOG]  = explode(",", $arrRow[self::$STR_RIGHT_CHANGELOG]);
 
         $arrReturn[self::$STR_RIGHT_INHERIT] = (int)$arrRow[self::$STR_RIGHT_INHERIT];
+
+        return $arrReturn;
+    }
+
+
+    /**
+     * Returns a 2-dimensional Array containing the group ids and the assigned rights.
+     *
+     * @param string $strSystemid
+     *
+     * @param string $strPermissionFilter may be used to return only the set for a given permission, this reduces the number of explodes
+     *
+     * @return mixed
+     */
+    public function getArrayRights(string $strSystemid, string $strPermissionFilter = ""): array
+    {
+        $arrReturn = $this->getArrayRightsShortIds($strSystemid, $strPermissionFilter);
+
+        //convert short to long ids
+        foreach ($arrReturn as $strPermission => $arrGroups) {
+            if ($strPermission == self::$STR_RIGHT_INHERIT) {
+                continue;
+            }
+
+            $arrConverted = array();
+            foreach ($arrGroups as $intOneShortId) {
+                if (empty($intOneShortId)) {
+                    continue;
+                }
+                $arrConverted[] = UserGroup::getGroupIdForShortId((int)$intOneShortId);
+            }
+
+            $arrReturn[$strPermission] = $arrConverted;
+        }
 
         return $arrReturn;
     }
@@ -601,7 +634,7 @@ class Rights
         //map the groupid on a short id
         $intShortId = UserGroup::getShortIdForGroupId($strGroupId);
 
-        $arrRights = $this->getArrayRights($strSystemid, $strPermission);
+        $arrRights = $this->getArrayRightsShortIds($strSystemid, $strPermission);
         return in_array($intShortId, $arrRights[$strPermission]);
     }
 
@@ -643,7 +676,7 @@ class Rights
         $this->flushRightsCache();
 
         //Load the current rights
-        $arrRights = $this->getArrayRights($strSystemid);
+        $arrRights = $this->getArrayRightsShortIds($strSystemid);
 
         //rights not given, add now, disabling inheritance
         $arrRights[self::$STR_RIGHT_INHERIT] = 0;
@@ -691,7 +724,7 @@ class Rights
         Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBQUERIES | Carrier::INT_CACHE_TYPE_ORMCACHE);
 
         //Load the current rights
-        $arrRights = $this->getArrayRights($strSystemid);
+        $arrRights = $this->getArrayRightsShortIds($strSystemid);
 
         //rights not given, add now, disabling inheritance
         $arrRights[self::$STR_RIGHT_INHERIT] = 0;

@@ -235,26 +235,54 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface
             $arrIds = array();
         }
 
-
         if (array_key_exists($strGroupId, $arrIds)) {
-            if (!empty($arrIds[$strGroupId])) {
-                return $arrIds[$strGroupId];
-            } else {
-                return null;
-            }
+            return $arrIds[$strGroupId];
         }
 
-        //not found in cache
-        /** @var UserGroup $objGroup */
-        $objGroup = Objectfactory::getInstance()->getObject($strGroupId);
-        if ($objGroup instanceof UserGroup) {
-            $intId = $objGroup->getIntShortId();
-            $arrIds[$strGroupId] = $intId;
-            $objCache->addValue($strCacheKey, $arrIds, 0);
-            return $intId;
+        //not found in cache, refill
+        foreach (Carrier::getInstance()->getObjDB()->getPArray("SELECT group_id, group_short_id FROM "._dbprefix_."user_group", array()) as $arrOneRow) {
+            $arrIds[$arrOneRow["group_id"]] = $arrOneRow["group_short_id"];
         }
 
-        return null;
+        if (!array_key_exists($strGroupId, $arrIds)) {
+            $arrIds[$strGroupId] = null;
+        }
+        $objCache->addValue($strCacheKey, $arrIds, 0);
+        return $arrIds[$strGroupId];
+    }
+
+    /**
+     * Returns the systemid for a groups short-id
+     *
+     * @param int $intShortid
+     * @return mixed
+     */
+    public static function getGroupIdForShortId(int $intShortid)
+    {
+        /** @var CacheManager $objCache */
+        $objCache = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER);
+        $strCacheKey = __CLASS__."group2id";
+        $arrIds = $objCache->getValue($strCacheKey);
+        if ($arrIds === false) {
+            $arrIds = array();
+        }
+
+        $arrIds = array_flip($arrIds);
+        if (array_key_exists($intShortid, $arrIds)) {
+            return $arrIds[$intShortid];
+        }
+
+        //fill the cache completely
+        foreach (Carrier::getInstance()->getObjDB()->getPArray("SELECT group_id, group_short_id FROM "._dbprefix_."user_group", array()) as $arrOneRow) {
+            $arrIds[$arrOneRow["group_short_id"]] = $arrOneRow["group_id"];
+        }
+
+        if (!array_key_exists($intShortid, $arrIds)) {
+            $arrIds[$intShortid] = null;
+        }
+
+        $objCache->addValue($strCacheKey, array_flip($arrIds), 0);
+        return $arrIds[$intShortid];
     }
 
     public function getStrSubsystem()
