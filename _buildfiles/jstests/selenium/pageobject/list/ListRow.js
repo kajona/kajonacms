@@ -3,8 +3,8 @@
 /**
  * require statements
  */
-var BasePage = requireHelper('/pageobject/base/BasePage.js');
-var Constants = requireHelper('/pageobject/Constants.js');
+let BasePage = requireHelper('/pageobject/base/BasePage.js');
+let Constants = requireHelper('/pageobject/Constants.js');
 
 
 /**
@@ -21,6 +21,17 @@ class ListRow extends BasePage {
 
         this._elementRow = elementRow;
     }
+
+
+    /**
+     * Returns all action icons of the row
+     *
+     * @return {webdriver.promise.Promise<WebElement[]>}
+     */
+    getArrActionIcons() {
+        return this._elementRow.findElements(By.css(Constants.LIST_CSS_ACTIONICON));
+    }
+
 }
 
 /** @type {ListRow} */

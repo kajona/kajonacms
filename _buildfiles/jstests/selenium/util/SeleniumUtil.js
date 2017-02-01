@@ -77,6 +77,14 @@ class SeleniumUtil {
             });
         });
     };
+
+    /**
+     *
+     */
+    static switchToModalDialog() {
+        browser.driver.wait(protractor.until.elementLocated(By.id('folderviewDialog_iframe')), 5000);
+        browser.driver.switchTo().frame(browser.driver.findElement(by.id('folderviewDialog_iframe')));
+    }
 }
 
 module.exports = SeleniumUtil;

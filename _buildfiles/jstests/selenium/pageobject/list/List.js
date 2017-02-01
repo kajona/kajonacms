@@ -3,11 +3,11 @@
 /**
  * require statements
  */
-var MainContent = requireHelper('/pageobject/MainContent.js');
-var ListRow = requireHelper('/pageobject/list/ListRow.js');
-var ListBatchActionRow = requireHelper('/pageobject/list/ListBatchActionRow.js');
-var ListPagination = requireHelper('/pageobject/list/ListPagination.js');
-var Constants = requireHelper('/pageobject/Constants.js');
+let MainContent = requireHelper('/pageobject/MainContent.js');
+let ListRow = requireHelper('/pageobject/list/ListRow.js');
+let ListBatchActionRow = requireHelper('/pageobject/list/ListBatchActionRow.js');
+let ListPagination = requireHelper('/pageobject/list/ListPagination.js');
+let Constants = requireHelper('/pageobject/Constants.js');
 
 /**
  *
@@ -17,7 +17,7 @@ class List extends MainContent {
     constructor() {
         super();
 
-        /** @type {Promise<ListRow[]>} */
+        /** @type {webdriver.promise.Promise<ListRow[]>} */
         this._arrListRows = this._createListRows();
 
         /** @type {ListBatchActionRow} */
@@ -54,7 +54,7 @@ class List extends MainContent {
 
     /**
      *
-     * @returns {ListRow[]}
+     * @returns {webdriver.promise.Promise<ListRow[]>}
      */
     getArrListRows() {
         return this._arrListRows;
@@ -71,7 +71,7 @@ class List extends MainContent {
 
     /**
      *
-     * @returns {Promise<ListRow[]>}
+     * @returns {webdriver.promise.Promise<ListRow[]>}
      */
     _createListRows() {
         return this.elementsListRows.then(function(arrElemRows) {

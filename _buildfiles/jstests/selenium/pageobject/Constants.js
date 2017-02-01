@@ -53,6 +53,8 @@ class Constants {
     static get LIST_CSS_ROWS() { return "tbody > tr:not([data-systemid='batchActionSwitch'])";}
     static get LIST_CSS_BATCHACTIONROW() { return "tbody > tr[data-systemid='batchActionSwitch']";}
 
+    //ListRow
+    static get LIST_CSS_ACTIONICON() { return "td.actions span.listButton";}
 
     //ListPagination
     static get LISTPAGINATION_CSS_PAGINATION() { return ".pager";}

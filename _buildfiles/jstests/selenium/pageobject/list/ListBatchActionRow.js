@@ -3,8 +3,8 @@
 /**
  * require statements
  */
-var BasePage = requireHelper('/pageobject/base/BasePage.js');
-var Constants = requireHelper('/pageobject/Constants.js');
+let BasePage = requireHelper('/pageobject/base/BasePage.js');
+let Constants = requireHelper('/pageobject/Constants.js');
 
 /**
  *
@@ -25,6 +25,11 @@ class ListBatchActionRow extends BasePage {
         return this._elementList.findElement(By.css(Constants.LIST_CSS_BATCHACTIONROW));
     }
 
+    /**
+     * Presses the (+) Button at the end of a list
+     *
+     * @returns {webdriver.promise.Promise<void>|!webdriver.promise.Promise.<void>}
+     */
     createObject() {
         return this.elementBatchActionRow.findElement(By.css("td.actions a")).click();
     }
