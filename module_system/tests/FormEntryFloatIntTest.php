@@ -27,6 +27,9 @@ class FormEntryFloatIntTest extends Testbase
 
     protected function tearDown()
     {
+        //unset params array
+        $this->unsetParam("name_maxvverlnachmassnahmen");
+        $this->unsetParam("name_eintrittswrvormassnahmen");
         Lang::getInstance()->setStrTextLanguage($this->strLang);
     }
 
@@ -35,9 +38,6 @@ class FormEntryFloatIntTest extends Testbase
      */
     public function testFormentryFloat($strLang)
     {
-        //unset params array
-        $this->unsetParam("name_eintrittswrvormassnahmen");
-
         Lang::getInstance()->setStrTextLanguage($strLang);
 
         $objSourceObject = new FormentryTestModel();
@@ -81,10 +81,6 @@ class FormEntryFloatIntTest extends Testbase
      */
     public function testFormentryInt($strLang)
     {
-        //unset params array
-        $this->unsetParam("name_maxvverlnachmassnahmen");
-
-
         Lang::getInstance()->setStrTextLanguage($strLang);
 
         $objSourceObject = new FormentryTestModel();
