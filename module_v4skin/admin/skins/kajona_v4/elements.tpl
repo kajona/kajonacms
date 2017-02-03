@@ -1335,6 +1335,7 @@ Toolbar, prominent in the layout. Rendered to switch between action.
 Toolbar for the current record, rendered to quick-access the actions of the current record.
 <contentActionToolbar_wrapper>
 <div class="actionToolbar pull-right">%%content%%</div>
+<script type="text/javascript"> require(['contentToolbar'], function(contentToolbar) { contentToolbar.showBar(); }); </script>
 </contentActionToolbar_wrapper>
 
 ---------------------------------------------------------------------------------------------------------
