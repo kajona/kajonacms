@@ -14,6 +14,7 @@
     "domReady": "requirejs/domReady",
 
     "ajax": "kajona/ajax",
+    "breadcrumb": "kajona/breadcrumb",
     "cacheManager": "kajona/cacheManager",
     "contentToolbar": "kajona/contentToolbar",
     "changelog": "kajona/changelog",

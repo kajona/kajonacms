@@ -86,7 +86,10 @@
 
             <div class="row pathNaviContainer">
                 <div class="col-md-12">
-                    %%path%%
+                    <ul class="breadcrumb">
+                        <li class='pathentry home'>%%path_home%%</li>
+                    </ul>
+                    <div id="quickhelp" class=" pull-right" style=" "><i class="fa fa-question-circle"></i></div>
                 </div>
             </div>
 

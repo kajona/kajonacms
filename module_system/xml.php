@@ -72,7 +72,7 @@ class Xml
             return;
         }
 
-        if (Carrier::getInstance()->getParam("asHtml") == 1) {
+        if (Carrier::getInstance()->getParam("contentFill") == 1) {
             $this->objResponse->setStrResponseType(HttpResponsetypes::STR_TYPE_HTML);
         }
 

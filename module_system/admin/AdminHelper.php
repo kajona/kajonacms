@@ -43,6 +43,23 @@ class AdminHelper
      */
     public static function getAdminPathNavi($arrPathEntries, $strSourceModule = "")
     {
+        return Carrier::getInstance()->getObjToolkit("admin")->getPathNavigation($arrPathEntries);
+    }
+
+    /**
+     * Adds a menu-button to the second entry of the path-array. The menu renders the list of all modules installed,
+     * including a quick-jump link.
+     *
+     *
+     * @param array $arrPathEntries
+     * @param string $strSourceModule
+     *
+     * @static
+     * @internal param array $arrModuleActions
+     * @return string
+     */
+    public static function getAdminPathNaviHome()
+    {
         //modify some of the entries
         $arrMenuEntries = array();
         $arrModules = SystemModule::getModulesInNaviAsArray();
@@ -93,8 +110,7 @@ class AdminHelper
                     <span class='dropdown moduleSwitch'><a href='#' data-toggle='dropdown' class='moduleSwitchLink' role='button'><i class='fa fa-home'></i></a>
                     ".Carrier::getInstance()->getObjToolkit("admin")->registerMenu($strModuleMenuId, $arrMenuEntries)."</span>";
 
-        array_unshift($arrPathEntries, $strModuleSwitcher);
-        return Carrier::getInstance()->getObjToolkit("admin")->getPathNavigation($arrPathEntries);
+        return $strModuleSwitcher;
 
     }
 

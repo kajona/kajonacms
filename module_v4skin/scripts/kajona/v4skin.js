@@ -1,49 +1,5 @@
 
-define(['jquery', 'bootstrap', 'jquery-ui', 'workingIndicator', 'tooltip', 'statusDisplay', 'messaging', 'ajax', 'util'], function ($, bootstrap, jqueryui, workingIndicator, tooltip, statusDisplay, messaging, ajax, util) {
-
-    var breadcrumb = {
-
-        updatePathNavigationEllipsis : function() {
-
-            var $arrPathLIs = $(".pathNaviContainer  .breadcrumb  li.pathentry");
-            var $objBreadcrumb = $(".pathNaviContainer  .breadcrumb");
-
-            //first run: get the number of entries and a first styling
-            var intEntries = ($arrPathLIs.length);
-            var intWidth = $objBreadcrumb.width();
-            var intMaxWidth = Math.ceil(intWidth/intEntries);
-
-            $arrPathLIs.css("max-width", intMaxWidth);
-
-            //second run: calc the remaining x-space
-            var intTotalUnused = this.getUnusedSpace(intMaxWidth);
-
-            if(intTotalUnused > intMaxWidth) {
-                intMaxWidth = Math.ceil(intWidth/ (intEntries - (Math.floor(intTotalUnused / intMaxWidth)) ));
-                $arrPathLIs.css("max-width", intMaxWidth);
-            }
-
-        },
-
-        getUnusedSpace : function(intMaxWidth) {
-            var intTotalUnused = 0;
-            $(".pathNaviContainer  .breadcrumb  li.pathentry").each(function() {
-                var $li = $(this);
-                if($li.width() < intMaxWidth) {
-                    intTotalUnused += (intMaxWidth - $li.width());
-                }
-            });
-
-            return intTotalUnused;
-        },
-
-        appendLinkToPathNavigation : function(strLinkContent) {
-            var link = $("<li class='pathentry'></li>").append(strLinkContent+"&nbsp;");
-            $("div.pathNaviContainer  ul.breadcrumb").append(link);
-            this.updatePathNavigationEllipsis();
-        }
-
-    };
+define(['jquery', 'bootstrap', 'jquery-ui', 'workingIndicator', 'tooltip', 'statusDisplay', 'messaging', 'ajax', 'util', 'breadcrumb'], function ($, bootstrap, jqueryui, workingIndicator, tooltip, statusDisplay, messaging, ajax, util, breadcrumb) {
 
     var msg = {
 
@@ -182,15 +138,15 @@ define(['jquery', 'bootstrap', 'jquery-ui', 'workingIndicator', 'tooltip', 'stat
 
     });
 
-    breadcrumb.updatePathNavigationEllipsis();
+    breadcrumb.updateEllipsis();
     $(window).on("resize", function() {
-        breadcrumb.updatePathNavigationEllipsis();
+        breadcrumb.updateEllipsis();
     });
 
     //register desktop notifications for messaging
     //util.desktopNotification.grantPermissions();
 
-    //init offacnvas menu
+    //init offacanvas menu
     $('[data-toggle="offcanvas"]').click(function () {
         $('.row-offcanvas').toggleClass('active')
     });

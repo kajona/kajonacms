@@ -194,7 +194,12 @@ abstract class AdminController extends AbstractController
         }
 
         if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::XML())) {
-            return $this->strOutput;
+            //fetch addtional content
+            $strReturn = $this->strOutput;
+            if ($this->getParam("contentFill") == "1") {
+                $strReturn .= $this->objToolkit->getPathNavigation($this->getArrOutputNaviEntries());
+            }
+            return $strReturn;
         }
 
 
@@ -203,7 +208,7 @@ abstract class AdminController extends AbstractController
         //Calling the content-setter, including a default dialog
         $this->arrOutput["content"] = $this->strOutput;
         if ($this->getArrModule("template") != "/folderview.tpl") {
-            $this->arrOutput["path"] = AdminHelper::getAdminPathNavi($this->getArrOutputNaviEntries(), $this->getArrModule("modul"));
+            $this->arrOutput["path_home"] = AdminHelper::getAdminPathNaviHome();
             $this->arrOutput["moduleSitemap"] = $this->objToolkit->getAdminSitemap($this->getArrModule("modul"));
             $this->arrOutput["moduletitle"] = $this->getOutputModuleTitle();
             $this->arrOutput["actionTitle"] = $this->getOutputActionTitle();

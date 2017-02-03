@@ -2018,9 +2018,9 @@ HTML;
     {
         $strRows = "";
         foreach ($arrEntries as $strOneEntry) {
-            $strRows .= $this->objTemplate->fillTemplateFile(array("pathlink" => $strOneEntry), "/elements.tpl", "path_entry");
+            $strRows .= $this->objTemplate->fillTemplateFile(array("pathlink" => addslashes($strOneEntry)), "/elements.tpl", "path_entry");
         }
-        return $this->objTemplate->fillTemplateFile(array("pathnavi" => $strRows), "/elements.tpl", "path_container");
+        return $strRows;
     }
 
     // --- Content Toolbar ----------------------------------------------------------------------------------
