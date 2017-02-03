@@ -2069,6 +2069,9 @@ HTML;
      */
     public function getContentActionToolbar($strContent)
     {
+        if (empty($strContent)) {
+            return "";
+        }
         return $this->objTemplate->fillTemplateFile(array("content" => $strContent), "/elements.tpl", "contentActionToolbar_wrapper");
     }
 
