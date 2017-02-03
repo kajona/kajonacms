@@ -23,11 +23,11 @@
 		<label for="form_captcha">[lang,commons_captcha,elements]</label>
 
 		<div class="row">
-			<div class="col-xs-3">
+			<div class="col-3 col-xs-3">
 				<input type="text" name="form_captcha" id="form_captcha" class="form-control" autocomplete="off" />
 				<small class="text-muted"><a href="#" onclick="KAJONA.portal.loadCaptcha('contact', 180); return false;">[lang,commons_captcha_reload,elements]</a></small>
 			</div>
-			<div class="col-xs-6">
+			<div class="col-6 col-xs-6">
 				<span id="kajonaCaptcha_contact"><script type="text/javascript">KAJONA.portal.loadCaptcha('contact', 180);</script></span>
 			</div>
 		</div>

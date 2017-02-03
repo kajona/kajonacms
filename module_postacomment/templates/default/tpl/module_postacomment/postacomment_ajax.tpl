@@ -36,7 +36,7 @@
 
 <!-- available placeholders: comment_systemid -->
 <postacomment_new_button>
-    <div id="postaCommentButton_%%comment_systemid%%"><a href="#" class="btn btn-primary-outline" onclick="KAJONA.portal.loader.loadFile('/templates/default/js/postacomment.js'); KAJONA.util.fold('postaCommentForm_%%comment_systemid%%', function() {KAJONA.portal.loadCaptcha('%%comment_systemid%%', 180);}); return false;">[lang,postacomment_write_new,postacomment]</a></div>
+    <div id="postaCommentButton_%%comment_systemid%%"><a href="#" class="btn btn-outline-primary" onclick="KAJONA.portal.loader.loadFile('/templates/default/js/postacomment.js'); KAJONA.util.fold('postaCommentForm_%%comment_systemid%%', function() {KAJONA.portal.loadCaptcha('%%comment_systemid%%', 180);}); return false;">[lang,postacomment_write_new,postacomment]</a></div>
 </postacomment_new_button>
 
 <!-- available placeholders: formaction, comment_name, comment_subject, comment_message, comment_template, comment_systemid, comment_page, error_fields -->
@@ -63,11 +63,11 @@
                 <label for="kajonaCaptcha_%%comment_systemid%%">[lang,commons_captcha,elements]</label>
 
                 <div class="row">
-                    <div class="col-xs-3">
+                    <div class="col-3 col-xs-3">
                         <input type="text" name="form_captcha" id="form_captcha_%%comment_systemid%%" class="form-control" autocomplete="off" />
                         <small class="text-muted"><a href="#" onclick="KAJONA.portal.loadCaptcha('%%comment_systemid%%', 180); return false;">[lang,commons_captcha_reload,elements]</a></small>
                     </div>
-                    <div class="col-xs-6">
+                    <div class="col-6 col-xs-6">
                         <span id="kajonaCaptcha_%%comment_systemid%%"><script type="text/javascript">KAJONA.portal.loadCaptcha('%%comment_systemid%%', 180);</script></span>
                     </div>
                 </div>
@@ -108,7 +108,7 @@
 
 <!-- available placeholders: strTitle -->
 <categories_category>
-    <span class="label label-default">%%strTitle%%</span>
+    <span class="badge badge-default">%%strTitle%%</span>
 </categories_category>
 
 <!-- available placeholders: categories -->

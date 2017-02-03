@@ -55,7 +55,7 @@
 <folderlist>
 
     <div class="col-sm-4">
-        <div class="card">
+        <div class="card mb-2">
             <div class="card-block">
                 <div><a href="%%folder_href%%" data-kajona-editable="%%folder_id%%#strName#plain">%%folder_name%%</a></div>
                 <div data-kajona-editable="%%folder_id%%#strDescription">%%folder_description%%</div>
@@ -67,7 +67,7 @@
 
 <folderlist_preview>
     <div class="col-sm-4">
-        <div class="card">
+        <div class="card mb-2">
             <a href="%%folder_href%%"><img src="[img,%%folder_preview_image_src%%,220,220,fixed]" class="card-img-top" alt="%%folder_name%%" /></a>
             <div class="card-block">
                 <div data-kajona-editable="%%folder_id%%#strName#plain">%%folder_name%%</div>
@@ -92,8 +92,8 @@
 -->
 <filelist_file>
     <div class="col-sm-4">
-        <div class="card">
-            <a href="%%image_detail_src%%" title="%%file_name%% %%file_subtitle%%" class="fancybox-thumb" rel="fancybox-thumb"><img src="[img,%%file_filename%%,220,220,fixed]" class="card-img-top" alt="%%file_subtitle%%" /></a>
+        <div class="card mb-2">
+            <a><img src="[img,%%file_filename%%,220,220,fixed]" class="card-img-top" alt="%%file_subtitle%%"></a>
             <div class="card-block">
                 <div data-kajona-editable="%%file_id%%#strName#plain">%%file_name%%</div>
             </div>

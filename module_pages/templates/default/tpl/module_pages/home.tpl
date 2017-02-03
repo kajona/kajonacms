@@ -28,7 +28,7 @@
 </head>
 <body>
 
-<nav class="navbar navbar-full navbar-light bg-faded">
+<nav class="navbar navbar-toggleable-md navbar-light bg-faded">
     <a class="navbar-brand" href="#">Kajona CMS</a>
     %%masterportalnavi_navigation%%
     %%mastersearch_search%%

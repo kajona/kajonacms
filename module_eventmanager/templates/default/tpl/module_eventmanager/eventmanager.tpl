@@ -83,7 +83,7 @@
         <table class="table table-striped">
             %%events%%
         </table>
-        <p><a href="%%rssurl%%" class="btn btn-info-outline"><i class="fa fa-rss"></i> [lang,rssfeed,eventmanager]</a></p>
+        <p><a href="%%rssurl%%" class="btn btn-outline-info"><i class="fa fa-rss"></i> [lang,rssfeed,eventmanager]</a></p>
     </div>
 </event_list>
 
@@ -126,12 +126,12 @@
 
 <!-- available placeholders: strTitle, strDescription, intLocation, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, registerLinkHref, intMaximumParticipants -->
 <event_details_registerlink>
-    <a href="%%registerLinkHref%%" class="btn btn-info-outline">[lang,registerlink,eventmanager]</a>
+    <a href="%%registerLinkHref%%" class="btn btn-outline-info">[lang,registerlink,eventmanager]</a>
 </event_details_registerlink>
 
 <!-- available placeholders: strTitle, strDescription, strLocation, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, registerLinkHref, intMaximumParticipants -->
 <event_details_updatelink>
-<a href="%%registerLinkHref%%" class="btn btn-info-outline">[lang,updatelink,eventmanager]</a>
+<a href="%%registerLinkHref%%" class="btn btn-outline-info">[lang,updatelink,eventmanager]</a>
 </event_details_updatelink>
 
 <!-- available placeholders: strTitle, strLocation, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, formaction -->
