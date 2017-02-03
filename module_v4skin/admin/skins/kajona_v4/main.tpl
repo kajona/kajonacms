@@ -17,6 +17,7 @@
     <!-- KAJONA_BUILD_LESS_END -->
 
     <script src="_webpath_/[webpath,module_system]/scripts/jquery/jquery.min.js?_system_browser_cachebuster_"></script>
+    <script src="_webpath_/[webpath,module_system]/scripts/routie/routie.min.js?_system_browser_cachebuster_"></script>
     %%head%%
     <script type="text/javascript">var searchExtendText = '[lang,search_details,search]';</script>
     <script src="_webpath_/[webpath,module_system]/scripts/requirejs/require.js?_system_browser_cachebuster_"></script>
@@ -99,7 +100,8 @@
                 </div>
             </div>
 
-            %%content%%
+            <div id="moduleOutput"></div>
+
         </div>
     </div>
 

@@ -40,6 +40,9 @@ define(['jquery', 'statusDisplay', 'workingIndicator', 'tooltip'], function ($, 
                     }
                 )
                 .error(function(data) {
+
+                    //maybe it was xml, so strip
+
                     statusDisplay.messageError("<b>Request failed!</b><br />" + data);
                 });
         },

@@ -79,7 +79,7 @@ class Link
      */
     public static function getLinkAdmin($strModule, $strAction, $strParams = "", $strText = "", $strAlt = "", $strImage = "", $bitTooltip = true, $strCss = "")
     {
-        $strHref = "href=\"".Link::getLinkAdminHref($strModule, $strAction, $strParams)."\"";
+        $strHref = "href=\"".Link::getLinkAdminHref($strModule, $strAction, $strParams, true, true)."\"";
         return self::getLinkAdminManual($strHref, $strText, $strAlt, $strImage, "", "", $bitTooltip, $strCss);
     }
 
@@ -94,7 +94,7 @@ class Link
      *
      * @return string
      */
-    public static function getLinkAdminHref($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = true)
+    public static function getLinkAdminHref($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = true, $bitHashUrl = false)
     {
 
         //systemid in params?
@@ -104,6 +104,31 @@ class Link
         //urlencoding
         $strModule = urlencode($strModule);
         $strAction = urlencode($strAction);
+
+
+
+        if ($bitHashUrl) {
+
+            //scheme: /admin/module.action.systemid
+            if ($strModule != "" && $strAction == "" && $strSystemid == "") {
+                $strLink = "#/".$strModule."";
+            } elseif ($strModule != "" && $strAction != "" && $strSystemid == "") {
+                $strLink = "#/".$strModule."/".$strAction."";
+            } else {
+                $strLink = "#/".$strModule."/".$strAction."/".$strSystemid."";
+            }
+
+            if (count($arrParams) > 0) {
+                $strLink .= "?".implode("&amp;", $arrParams);
+            }
+
+            if (!$bitEncodedAmpersand) {
+                $strLink = StringUtil::replace("&amp;", "&", $strLink);
+            }
+
+            return $strLink;
+        }
+
 
         //rewriting enabled?
         if (SystemSetting::getConfigValue("_system_mod_rewrite_") == "true") {
