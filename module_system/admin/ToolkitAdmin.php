@@ -2038,12 +2038,26 @@ HTML;
         $strRows = "";
         foreach ($arrEntries as $intI => $strOneEntry) {
             if ($intI == $intActiveEntry) {
-                $strRows .= $this->objTemplate->fillTemplateFile(array("entry" => $strOneEntry), "/elements.tpl", "contentToolbar_entry_active");
+                $strRows .= $this->objTemplate->fillTemplateFile(array("entry" => addslashes($strOneEntry), "active" => 'true'), "/elements.tpl", "contentToolbar_entry");
             } else {
-                $strRows .= $this->objTemplate->fillTemplateFile(array("entry" => $strOneEntry), "/elements.tpl", "contentToolbar_entry");
+                $strRows .= $this->objTemplate->fillTemplateFile(array("entry" => addslashes($strOneEntry), "active" => 'false'), "/elements.tpl", "contentToolbar_entry");
             }
         }
         return $this->objTemplate->fillTemplateFile(array("entries" => $strRows), "/elements.tpl", "contentToolbar_wrapper");
+    }
+
+
+    /**
+     * Adds a new entry to the current toolbar
+     *
+     * @param $strButton
+     * @param $strIdentifier
+     * @return string
+     */
+    public function addToContentToolbar($strButton, $strIdentifier = '', $bitActive = false)
+    {
+        $strEntry = $this->objTemplate->fillTemplateFile(array("entry" => addslashes($strButton), "identifier" => $strIdentifier, "active" => $bitActive ? 'true' : 'false'), "/elements.tpl", "contentToolbar_entry");
+        return $this->objTemplate->fillTemplateFile(array("entries" => $strEntry), "/elements.tpl", "contentToolbar_wrapper");
     }
 
     /**

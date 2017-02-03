@@ -100,6 +100,7 @@ class AdminskinImageresolver implements AdminskinImageresolverInterface {
         "icon_externalBrowser"             => "<i class='kj-icon fa fa-search'></i>",
         "icon_favorite"                    => "<i class='kj-icon fa fa-bookmark'></i>",
         "icon_favoriteDisabled"            => "<i class='kj-icon fa fa-bookmark-o'></i>",
+        "icon_filter"                      => "<i class='kj-icon fa fa-filter'></i>",
         "icon_flag_black"                  => "<i class='kj-icon fa fa-flag-o' style='color: #000000'></i>",
         "icon_flag_black_filled"           => "<i class='kj-icon fa fa-flag' style='color: #000000'></i>",
         "icon_flag_blue"                   => "<i class='kj-icon fa fa-flag-o' style='color: #0040b3'></i>",
