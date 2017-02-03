@@ -108,16 +108,16 @@ class Rights
         //Splitting up the rights
         $arrParams = array();
         $arrParams[] = (int)$arrRights[self::$STR_RIGHT_INHERIT];
-        $arrParams[] = ",". $arrRights[self::$STR_RIGHT_VIEW].",";
-        $arrParams[] = ",". $arrRights[self::$STR_RIGHT_EDIT].",";
-        $arrParams[] = ",". $arrRights[self::$STR_RIGHT_DELETE].",";
-        $arrParams[] = ",". $arrRights[self::$STR_RIGHT_RIGHT].",";
-        $arrParams[] = ",". $arrRights[self::$STR_RIGHT_RIGHT1].",";
-        $arrParams[] = ",". $arrRights[self::$STR_RIGHT_RIGHT2].",";
-        $arrParams[] = ",". $arrRights[self::$STR_RIGHT_RIGHT3].",";
-        $arrParams[] = ",". $arrRights[self::$STR_RIGHT_RIGHT4].",";
-        $arrParams[] = ",". $arrRights[self::$STR_RIGHT_RIGHT5].",";
-        $arrParams[] = ",". $arrRights[self::$STR_RIGHT_CHANGELOG].",";
+        $arrParams[] = ",". trim($arrRights[self::$STR_RIGHT_VIEW], ",").",";
+        $arrParams[] = ",". trim($arrRights[self::$STR_RIGHT_EDIT], ",").",";
+        $arrParams[] = ",". trim($arrRights[self::$STR_RIGHT_DELETE], ",").",";
+        $arrParams[] = ",". trim($arrRights[self::$STR_RIGHT_RIGHT], ",").",";
+        $arrParams[] = ",". trim($arrRights[self::$STR_RIGHT_RIGHT1], ",").",";
+        $arrParams[] = ",". trim($arrRights[self::$STR_RIGHT_RIGHT2], ",").",";
+        $arrParams[] = ",". trim($arrRights[self::$STR_RIGHT_RIGHT3], ",").",";
+        $arrParams[] = ",". trim($arrRights[self::$STR_RIGHT_RIGHT4], ",").",";
+        $arrParams[] = ",". trim($arrRights[self::$STR_RIGHT_RIGHT5], ",").",";
+        $arrParams[] = ",". trim($arrRights[self::$STR_RIGHT_CHANGELOG], ",").",";
         $arrParams[] = $strSystemid;
 
         $strQuery = "UPDATE "._dbprefix_."system_right
@@ -633,6 +633,9 @@ class Rights
 
         //map the groupid on a short id
         $intShortId = UserGroup::getShortIdForGroupId($strGroupId);
+        if (empty($intShortId)) {
+            return false;
+        }
 
         $arrRights = $this->getArrayRightsShortIds($strSystemid, $strPermission);
         return in_array($intShortId, $arrRights[$strPermission]);
