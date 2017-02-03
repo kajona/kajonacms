@@ -100,7 +100,7 @@
                 </div>
             </div>
 
-            <div id="moduleOutput"></div>
+            <div id="moduleOutput">%%content%%</div>
 
         </div>
     </div>

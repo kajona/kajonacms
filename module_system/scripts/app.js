@@ -1,5 +1,6 @@
 
-require(['jquery', 'jquery-ui', 'jquery-touchPunch', 'bootstrap', 'v4skin', 'loader', 'dialog', 'folderview', 'lists', 'dialogHelper', 'ajax', 'contentToolbar'], function(jquery, jqueryui, touch, bootstrap, v4skin, loader, Dialog, folderview, lists, dialogHelper, ajax, contentToolbar) {
+require(['jquery', 'jquery-ui', 'jquery-touchPunch', 'bootstrap', 'v4skin', 'loader', 'dialog', 'folderview', 'lists', 'dialogHelper', 'ajax', 'contentToolbar', 'tooltip'],
+    function(jquery, jqueryui, touch, bootstrap, v4skin, loader, Dialog, folderview, lists, dialogHelper, ajax, contentToolbar, tooltip) {
 
     //backwards compatibility
     if (typeof KAJONA == "undefined") {
@@ -34,9 +35,15 @@ require(['jquery', 'jquery-ui', 'jquery-touchPunch', 'bootstrap', 'v4skin', 'loa
     routie('*', function(url) {
         console.log('processing url '+url);
 
+        if(url.trim() === '') {
+            return;
+        }
+
         if(url[0] = "/") {
             url = url.substr(1);
         }
+
+
 
         //split to get module, action and params
         var strParams = '';
@@ -60,6 +67,7 @@ require(['jquery', 'jquery-ui', 'jquery-touchPunch', 'bootstrap', 'v4skin', 'loa
         console.log('Loading url '+strUrlToLoad);
 
         contentToolbar.resetBar();
+        tooltip.removeTooltip($('*[rel=tooltip]'));
 
         ajax.loadUrlToElement('#moduleOutput', strUrlToLoad, 'asHtml=1');
 
