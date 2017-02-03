@@ -308,6 +308,17 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
     }
 
     /**
+     * Returns an array of short group-ids the current user is assigned to
+     *
+     * @return array string
+     */
+    public function getArrShortGroupIds()
+    {
+        $this->loadSourceObject();
+        return $this->objSourceUser->getShortGroupIdsForUser();
+    }
+
+    /**
      * @return string
      */
     public function getStrEmail()
