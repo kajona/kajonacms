@@ -84,7 +84,15 @@ define(['jquery'], function ($) {
         resetBar : function() {
             $objToolbarList.empty();
             $objToolbarContainer.addClass('hidden');
+        },
+
+        /**
+         * Enables the bar in general
+         */
+        showBar : function() {
+            $objToolbarContainer.removeClass('hidden');
         }
+
 
     }
 
