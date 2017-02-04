@@ -6,10 +6,6 @@ var SeleniumWaitHelper = requireHelper('/util/SeleniumWaitHelper.js');
 
 describe('module_messaging', function() {
 
-    beforeEach(function() {
-        browser.ignoreSynchronization = true;
-    });
-
     it('test list', function() {
         SeleniumUtil.gotToUrl('index.php?admin=1&module=messaging&action=list');
 

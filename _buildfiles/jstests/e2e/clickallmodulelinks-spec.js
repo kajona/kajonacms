@@ -5,9 +5,6 @@ var AdminLandingPage = require('../selenium/pageobject/AdminLandingPage.js');
 var SeleniumWaitHelper = require('../selenium/util/SeleniumWaitHelper.js');
 
 describe('clickallmodulelinks', function () {
-    beforeEach(function () {
-        browser.ignoreSynchronization = true;
-    });
 
     it('test clickallmodulelinks', function () {
         var loginPage = LoginPage.getPage();

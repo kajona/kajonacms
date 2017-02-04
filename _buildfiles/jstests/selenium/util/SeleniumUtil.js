@@ -62,7 +62,7 @@ class SeleniumUtil {
 
         //check if user is not logged in -> if yes log in
         return LoginPage.getPage().then(function (loginPage) {
-            return SeleniumUtil.getWebDriver().isElementPresent(By.xpath(Constants.LOGINPAGE_XPATH_CONTAINER)).then(function(bitLoginContainerIsPresent) {
+            return SeleniumUtil.getWebDriver().wait(protractor.until.elementLocated(By.xpath(Constants.LOGINPAGE_XPATH_CONTAINER))).then(function(bitLoginContainerIsPresent) {
 
                 //if login containe ris present => login
                 if(bitLoginContainerIsPresent) {
