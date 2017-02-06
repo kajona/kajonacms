@@ -3,8 +3,12 @@
 /**
  * require statements
  */
-var BasePage = requireHelper('/pageobject/base/BasePage.js');
-var Constants = requireHelper('/pageobject/Constants.js');
+const BasePage = requireHelper('/pageobject/base/BasePage.js');
+
+/** Constants */
+const CONTENTTOPBAR = by.css("div.contentTopbar");
+const CONTENTTOPBAR_TITLE = by.id("moduleTitle");
+
 
 /**
  *
@@ -23,7 +27,7 @@ class ContentTopBar extends BasePage {
      * @returns {WebElementPromise|!webdriver.WebElement}
      */
     get elemContentTopBar() {
-        return this.webDriver.findElement(By.css(Constants.CONTENTTOPBAR_CSS_CONTENTTOPBAR));
+        return this.webDriver.findElement(CONTENTTOPBAR);
     }
 
     /**
@@ -31,7 +35,7 @@ class ContentTopBar extends BasePage {
      * @returns {webdriver.promise.Promise<string>|*}
      */
     getTitle() {
-        return this.elemContentTopBar.findElement(By.id(Constants.CONTENTTOPBAR_ID_TITLE)).getText();
+        return this.elemContentTopBar.findElement(CONTENTTOPBAR_TITLE).getText();
     }
 
 

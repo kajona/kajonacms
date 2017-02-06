@@ -3,9 +3,12 @@
 /**
  * require statements
  */
-var BasePage = requireHelper('/pageobject/base/BasePage.js');
-var Constants = requireHelper('/pageobject/Constants.js');
+const BasePage = requireHelper('/pageobject/base/BasePage.js');
 
+/** Constants */
+const PAGINATION = by.xpath("following-sibling::div[@class='pager'][1]");
+const PAGELINKS = by.css("li[data-kajona-pagenum]");
+const TOTALCOUNT = by.css("li:last-child");
 
 /**
  *
@@ -28,7 +31,7 @@ class ListPagination extends BasePage {
      * @returns {WebElementPromise|!webdriver.WebElement}
      */
     get elementPagination() {
-        return this._elementList.findElement(By.xpath(Constants.LISTPAGINATION_XPATH_FIRSTPAGINATIONELEMENT));
+        return this._elementList.findElement(PAGINATION);
     }
 
     /**
@@ -36,7 +39,7 @@ class ListPagination extends BasePage {
      * @returns {webdriver.promise.Promise<WebElement[]>}
      */
     get elementPageinationLinks() {
-        return this.elementPagination.findElements(By.css(Constants.LISTPAGINATION_CSS_PAGELINKS));
+        return this.elementPagination.findElements(PAGELINKS);
     }
 
     /**
@@ -44,7 +47,7 @@ class ListPagination extends BasePage {
      * @returns {WebElementPromise}
      */
     get elementPageinationTotal() {
-        return this.elementPagination.findElement(By.css(Constants.LISTPAGINATION_CSS_TOTALCOUNT));
+        return this.elementPagination.findElement(TOTALCOUNT);
     }
 
     /**

@@ -3,11 +3,16 @@
 /**
  * require statements
  */
-let MainContent = requireHelper('/pageobject/MainContent.js');
-let ListRow = requireHelper('/pageobject/list/ListRow.js');
-let ListBatchActionRow = requireHelper('/pageobject/list/ListBatchActionRow.js');
-let ListPagination = requireHelper('/pageobject/list/ListPagination.js');
-let Constants = requireHelper('/pageobject/Constants.js');
+const MainContent = requireHelper('/pageobject/MainContent.js');
+const ListRow = requireHelper('/pageobject/list/ListRow.js');
+const ListBatchActionRow = requireHelper('/pageobject/list/ListBatchActionRow.js');
+const ListPagination = requireHelper('/pageobject/list/ListPagination.js');
+
+
+/** Constants */
+const LIST = by.css(".table.admintable");
+const LIST_ROWS = by.css("tbody > tr:not([data-systemid='batchActionSwitch'])");
+
 
 /**
  *
@@ -32,7 +37,7 @@ class List extends MainContent {
      * @returns {WebElementPromise|!webdriver.WebElement}
      */
     get elementList () {
-        return this.webDriver.findElement(By.css(Constants.LIST_CSS_ROOT));
+        return this.webDriver.findElement(LIST);
     }
 
     /**
@@ -40,7 +45,7 @@ class List extends MainContent {
      * @returns {webdriver.promise.Promise<WebElement[]>}
      */
     get elementsListRows () {
-        return this.elementList.findElements(By.css(Constants.LIST_CSS_ROWS));
+        return this.elementList.findElements(LIST_ROWS);
     }
 
     /**

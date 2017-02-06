@@ -1,11 +1,10 @@
 "use strict";
 
-/**
- * require statements
- */
-let BasePage = requireHelper('/pageobject/base/BasePage.js');
-let Constants = requireHelper('/pageobject/Constants.js');
+/** require statements */
+const BasePage = requireHelper('/pageobject/base/BasePage.js');
 
+/** Constants */
+const ACTIONICONS = by.css("td.actions span.listButton");
 
 /**
  *
@@ -29,7 +28,7 @@ class ListRow extends BasePage {
      * @return {webdriver.promise.Promise<WebElement[]>}
      */
     getArrActionIcons() {
-        return this._elementRow.findElements(By.css(Constants.LIST_CSS_ACTIONICON));
+        return this._elementRow.findElements(ACTIONICONS);
     }
 
 }

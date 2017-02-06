@@ -3,8 +3,10 @@
 /**
  * require statements
  */
-let BasePage = requireHelper('/pageobject/base/BasePage.js');
-let Constants = requireHelper('/pageobject/Constants.js');
+const BasePage = requireHelper('/pageobject/base/BasePage.js');
+
+/** Constants */
+const BATCHACTIONROW = by.css("tbody > tr[data-systemid='batchActionSwitch']");
 
 /**
  *
@@ -22,7 +24,7 @@ class ListBatchActionRow extends BasePage {
     }
 
     get elementBatchActionRow() {
-        return this._elementList.findElement(By.css(Constants.LIST_CSS_BATCHACTIONROW));
+        return this._elementList.findElement(BATCHACTIONROW);
     }
 
     /**

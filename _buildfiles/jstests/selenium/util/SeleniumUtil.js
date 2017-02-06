@@ -1,5 +1,8 @@
 "use strict";
 
+const LOGINCONTAINER = By.id("loginContainer");
+const FOLDERVIEW_IFRAME = By.id('folderviewDialog_iframe');
+
 /**
  * 
  */
@@ -55,14 +58,13 @@ class SeleniumUtil {
      */
     static loginOrLogout(strUserName, strPassword) {
 
-        var SeleniumUtil = this;
-        var Constants = requireHelper('/pageobject/Constants');
-        var LoginPage = requireHelper('/pageobject/LoginPage.js');
-        var AdminLandingPage = requireHelper('/pageobject/AdminLandingPage.js');
+        const SeleniumUtil = this;
+        const LoginPage = requireHelper('/pageobject/LoginPage.js');
+        const AdminLandingPage = requireHelper('/pageobject/AdminLandingPage.js');
 
         //check if user is not logged in -> if yes log in
         return LoginPage.getPage().then(function (loginPage) {
-            return SeleniumUtil.getWebDriver().wait(protractor.until.elementLocated(By.xpath(Constants.LOGINPAGE_XPATH_CONTAINER))).then(function(bitLoginContainerIsPresent) {
+            return SeleniumUtil.getWebDriver().wait(protractor.until.elementLocated(LOGINCONTAINER)).then(function(bitLoginContainerIsPresent) {
 
                 //if login containe ris present => login
                 if(bitLoginContainerIsPresent) {
@@ -79,11 +81,11 @@ class SeleniumUtil {
     };
 
     /**
-     *
+     * Switch to the modal dialog
      */
     static switchToModalDialog() {
-        browser.driver.wait(protractor.until.elementLocated(By.id('folderviewDialog_iframe')), 5000);
-        browser.driver.switchTo().frame(browser.driver.findElement(by.id('folderviewDialog_iframe')));
+        browser.driver.wait(protractor.until.elementLocated(FOLDERVIEW_IFRAME), 5000);
+        browser.driver.switchTo().frame(browser.driver.findElement(FOLDERVIEW_IFRAME));
     }
 }
 

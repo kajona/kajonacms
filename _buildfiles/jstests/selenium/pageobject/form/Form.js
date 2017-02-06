@@ -1,10 +1,11 @@
 "use strict";
 
-/**
- * require statements
- */
-var MainContent = requireHelper('/pageobject/MainContent.js');
-var Constants = requireHelper('/pageobject/Constants.js');
+/** require statements */
+const MainContent = requireHelper('/pageobject/MainContent.js');
+
+/** Constants */
+const FORM = by.css("form.form-horizontal");
+const SAVE_BUTTON = by.css("button[name=submitbtn]");
 
 /**
  *
@@ -17,11 +18,11 @@ class Form extends MainContent {
 
 
     get element_form() {
-        return this.element_mainContent.findElement(By.css(Constants.FORM_CSS_ROOT));
+        return this.element_mainContent.findElement(FORM);
     }
 
     get save_button() {
-        return this.element_form.findElement(By.css(Constants.FORM_CSS_SAVEBUTTON));
+        return this.element_form.findElement(SAVE_BUTTON);
     }
 }
 
