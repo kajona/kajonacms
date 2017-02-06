@@ -4,14 +4,13 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                         *
 ********************************************************************************************************/
-namespace AGP\Agp_Commons\Tests;
+namespace Kajona\System\Tests;
 
 use Kajona\System\Admin\Formentries\FormentryFloat;
 use Kajona\System\Admin\Formentries\FormentryInt;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Lang;
 use Kajona\System\System\Model;
-use Kajona\System\Tests\Testbase;
 
 class FormEntryFloatIntTest extends Testbase
 {
