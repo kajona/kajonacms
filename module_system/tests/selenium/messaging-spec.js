@@ -1,15 +1,13 @@
 "use strict";
 
-var SeleniumUtil = requireHelper('/util/SeleniumUtil.js');
-var SeleniumWaitHelper = requireHelper('/util/SeleniumWaitHelper.js');
+const SeleniumUtil = requireHelper('/util/SeleniumUtil.js');
+const SeleniumWaitHelper = requireHelper('/util/SeleniumWaitHelper.js');
 
 
 describe('module_messaging', function() {
 
     it('test list', function() {
         SeleniumUtil.gotToUrl('index.php?admin=1&module=messaging&action=list');
-
-        expect(browser.driver.findElement(by.id('moduleTitle')).getText()).toEqual('Nachrichten');
 
         element.all(by.css('.actions')).last().$('a').click();
 

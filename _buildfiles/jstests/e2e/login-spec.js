@@ -1,7 +1,7 @@
 "use strict";
 
-var SeleniumUtil = requireHelper('/util/SeleniumUtil.js');
-var LoginPage = requireHelper('/pageobject/LoginPage.js');
+const SeleniumUtil = requireHelper('/util/SeleniumUtil.js');
+const LoginPage = requireHelper('/pageobject/LoginPage.js');
 
 describe('login', function () {
 
@@ -14,9 +14,6 @@ describe('login', function () {
         LoginPage.getPage()
             .then(function (loginPage) {
                 return loginPage.login("test", "test123");
-            })
-            .then(function (landingPage) {
-                expect(landingPage.contentTopBar.getTitle()).toEqual("Übersicht");
             });
     });
 });
