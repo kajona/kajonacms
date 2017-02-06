@@ -469,7 +469,7 @@ class Database
             }
         }
         //send a warning to the logger
-        Logger::getInstance(Logger::DBLOG)->addLogRow($strErrorCode, Logger::$levelWarning);
+        Logger::getInstance(Logger::DBLOG)->addLogRow($strErrorCode, Logger::$levelWarning, true);
 
         if (Config::getInstance()->getDebug("debuglevel") > 0) {
             throw new Exception($strErrorCode, Exception::$level_ERROR);

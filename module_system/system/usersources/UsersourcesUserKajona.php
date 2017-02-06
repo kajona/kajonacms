@@ -318,7 +318,7 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
      */
     public function getGroupIdsForUser()
     {
-        $strQuery = "SELECT group_id
+        $strQuery = "SELECT group_id, group_short_id
                        FROM "._dbprefix_."user_group,
                             "._dbprefix_."user_kajona_members
                       WHERE group_member_user_kajona_id= ?
@@ -334,6 +334,29 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
 
         return $arrReturn;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getShortGroupIdsForUser()
+    {
+        $strQuery = "SELECT group_id, group_short_id
+                       FROM "._dbprefix_."user_group,
+                            "._dbprefix_."user_kajona_members
+                      WHERE group_member_user_kajona_id= ?
+                        AND group_id = group_member_group_kajona_id
+                   ORDER BY group_name ASC  ";
+
+        $arrIds = $this->objDB->getPArray($strQuery, array($this->getSystemid()));
+
+        $arrReturn = array();
+        foreach ($arrIds as $arrOneId) {
+            $arrReturn[] = $arrOneId["group_short_id"];
+        }
+
+        return $arrReturn;
+    }
+
 
     /**
      * Indicates if the current user is editable or read-only
