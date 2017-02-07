@@ -40,6 +40,7 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface
      * @tableColumn user_group.group_name
      * @tableColumnDatatype char254
      * @tableColumnIndex
+     * @listOrder ASC
      */
     private $strName = "";
 

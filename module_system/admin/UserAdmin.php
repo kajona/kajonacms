@@ -825,7 +825,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
 
         $objArraySectionIterator = new ArraySectionIterator(UserGroup::getObjectCountFiltered($objFilter));
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-        $objArraySectionIterator->setArraySection(UserGroup::getObjectListFiltered($objFilter, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+        $objArraySectionIterator->setArraySection(UserGroup::getObjectListFiltered($objFilter, "", $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
         $strReturn .= $this->renderList($objArraySectionIterator, false, "groupList");
         return $strReturn;
@@ -1468,7 +1468,7 @@ HTML;
 
             $objFilter = new UserGroupFilter();
             if(!Carrier::getInstance()->getObjSession()->isSuperAdmin()) {
-                $objFilter->setArrExcludedGroups(SystemSetting::getConfigValue("_admins_group_id_"));
+                $objFilter->setArrExcludedGroups(array(SystemSetting::getConfigValue("_admins_group_id_")));
             }
 
             //show groups
