@@ -9,10 +9,14 @@
 
 namespace Kajona\Statustransition\Admin;
 
+use Kajona\Statustransition\System\StatustransitionFlowStep;
+use Kajona\Statustransition\System\StatustransitionFlowStepTransition;
 use Kajona\System\Admin\AdminFormgenerator;
+use Kajona\System\Admin\Formentries\FormentryObjectlist;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Lang;
 use Kajona\System\System\Link;
+use Kajona\System\System\Objectfactory;
 
 /**
  * Formgenerator for a statustransition flow entry
@@ -21,7 +25,7 @@ use Kajona\System\System\Link;
  * @author christoph.kappestein@gmail.com
  * @since 5.1
  */
-class StatustransitionStepFormgenerator extends AdminFormgenerator
+class StatustransitionStepTransitionFormgenerator extends AdminFormgenerator
 {
     /**
      * @inheritDoc
@@ -29,5 +33,22 @@ class StatustransitionStepFormgenerator extends AdminFormgenerator
     public function generateFieldsFromObject()
     {
         parent::generateFieldsFromObject();
+
+        // target steps
+        $objField = $this->getField("targetstep");
+        $strSystemId = Carrier::getInstance()->getParam("systemid");
+
+        $objStep = Objectfactory::getInstance()->getObject($strSystemId);
+        if ($objStep instanceof StatustransitionFlowStepTransition) {
+            $objStep = Objectfactory::getInstance()->getObject($objStep->getPrevId());
+        }
+        if ($objStep instanceof StatustransitionFlowStep) {
+            $arrSteps = StatustransitionFlowStep::getObjectListFiltered(null, $objStep->getPrevId());
+            $arrValues = [];
+            foreach ($arrSteps as $objStep) {
+                $arrValues[$objStep->getSystemid()] = $objStep->getStrName();
+            }
+            $objField->setArrKeyValues($arrValues);
+        }
     }
 }

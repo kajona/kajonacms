@@ -7,92 +7,94 @@
 
 namespace Kajona\Statustransition\System;
 
+use Kajona\System\System\AdminListableInterface;
 use Kajona\System\System\Model;
+use Kajona\System\System\ModelInterface;
 use Kajona\System\System\Objectfactory;
 
 /**
  * StatustransitionFlowStepTransition
  *
  * @author christoph.kappestein@artemeon.de
- * @targetTable flow_step.step_id
+ * @targetTable flow_step_transition.transition_id
  * @module statustransition
  * @moduleId _statustransition_module_id_
+ * @formGenerator Kajona\Statustransition\Admin\StatustransitionStepTransitionFormgenerator
  */
-class StatustransitionFlowStepTransition extends Model
+class StatustransitionFlowStepTransition extends Model implements ModelInterface, AdminListableInterface
 {
     /**
      * @var string
+     * @tableColumn flow_step_transition.target_step
+     * @tableColumnDatatype char254
+     * @fieldType Kajona\System\Admin\Formentries\FormentryDropdown
+     * @fieldMandatory
      */
-    protected $strStep;
-
-    /**
-     * @var string
-     */
-    protected $intTargetStatus;
-
-    /**
-     * @var string
-     */
-    protected $strTransitionKey;
-
-    /**
-     * @var string
-     */
-    protected $strChoiceLabel;
+    protected $strTargetStep;
 
     /**
      * @return string
      */
-    public function getIntTargetStatus()
+    public function getStrTargetStep()
     {
-        return $this->intTargetStatus;
+        return $this->strTargetStep;
     }
 
     /**
-     * @param string $intTargetStatus
+     * @param string $strTargetStep
      */
-    public function setIntTargetStatus($intTargetStatus)
+    public function setStrTargetStep(string $strTargetStep)
     {
-        $this->intTargetStatus = $intTargetStatus;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStrTransitionKey()
-    {
-        return $this->strTransitionKey;
-    }
-
-    /**
-     * @param string $strTransitionKey
-     */
-    public function setStrTransitionKey($strTransitionKey)
-    {
-        $this->strTransitionKey = $strTransitionKey;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStrChoiceLabel()
-    {
-        return $this->strChoiceLabel;
-    }
-
-    /**
-     * @param string $strChoiceLabel
-     */
-    public function setStrChoiceLabel($strChoiceLabel)
-    {
-        $this->strChoiceLabel = $strChoiceLabel;
+        $this->strTargetStep = $strTargetStep;
     }
 
     /**
      * @return StatustransitionFlowStep
      */
-    public function getStep()
+    public function getTargetStep()
     {
-        return Objectfactory::getInstance()->getObject($this->strStep);
+        return Objectfactory::getInstance()->getObject($this->strTargetStep);
+    }
+
+    /**
+     * @return StatustransitionFlowStepTransitionAction[]
+     */
+    public function getArrActions()
+    {
+        return StatustransitionFlowStepTransitionAction::getObjectListFiltered(null, $this->getSystemid());
+    }
+
+    /**
+     * @return StatustransitionFlowStepTransitionCondition[]
+     */
+    public function getArrConditions()
+    {
+        return StatustransitionFlowStepTransitionCondition::getObjectListFiltered(null, $this->getSystemid());
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrIcon()
+    {
+        return $this->getTargetStep()->getStrIcon();
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrDisplayName()
+    {
+        return $this->getTargetStep()->getStrName();
+    }
+
+    public function getStrAdditionalInfo()
+    {
+        return "";
+    }
+
+    public function getStrLongDescription()
+    {
+        return "";
     }
 }

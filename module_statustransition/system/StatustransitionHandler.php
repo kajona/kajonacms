@@ -20,7 +20,7 @@ use Kajona\System\System\Model;
  * @author stefan.meyer@artemeon.de
  * @module statustransition
  */
-abstract class StatustransitionHandler
+abstract class StatustransitionHandler implements StatustransitionHandlerInterface
 {
     /**
      * Name of the parameter which contains the transition identifier
@@ -69,8 +69,7 @@ abstract class StatustransitionHandler
                     $intNewStatus = $objTransition->getIntTargetStatus();
 
                     if ($intNewStatus !== null && $intNewStatus != $objObject->getIntRecordStatus()) {
-
-                        //pre transition checks
+                        // pre transition checks
                         $objTransition->executeTransitionPreConditions($intOldStatus, $intNewStatus, $objObject);
 
                         // the update triggers the status change event
@@ -107,5 +106,15 @@ abstract class StatustransitionHandler
             }
         }
         return null;
+    }
+
+    /**
+     * Returns the name of extension/plugin the objects wants to contribute to.
+     *
+     * @return string
+     */
+    public static function getExtensionName()
+    {
+        return self::EXTENSION_POINT;
     }
 }

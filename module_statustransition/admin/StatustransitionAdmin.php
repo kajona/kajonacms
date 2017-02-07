@@ -10,19 +10,20 @@
 namespace Kajona\Statustransition\Admin;
 
 use Kajona\Statustransition\System\StatustransitionFlow;
-use Kajona\Statustransition\System\StatustransitionFlowAssignment;
-use Kajona\Statustransition\System\StatustransitionFlowAssignmentFilter;
-use Kajona\Statustransition\System\StatustransitionFlowChoiceInterface;
 use Kajona\Statustransition\System\StatustransitionFlowStep;
 use Kajona\Statustransition\System\StatustransitionFlowStepFilter;
+use Kajona\Statustransition\System\StatustransitionFlowStepTransition;
+use Kajona\Statustransition\System\StatustransitionFlowStepTransitionAction;
+use Kajona\Statustransition\System\StatustransitionFlowStepTransitionCondition;
 use Kajona\Statustransition\System\StatustransitionGraphWriter;
 use Kajona\System\Admin\AdminEvensimpler;
 use Kajona\System\Admin\AdminInterface;
 use Kajona\System\System\AdminskinHelper;
 use Kajona\System\System\ArraySectionIterator;
-use Kajona\System\System\Database;
 use Kajona\System\System\Link;
 use Kajona\System\System\Model;
+use Kajona\System\System\ModelInterface;
+use Kajona\System\System\Objectfactory;
 
 /**
  * Admin class to setup status transition flows
@@ -38,9 +39,17 @@ use Kajona\System\System\Model;
  * @objectEditStep Kajona\Statustransition\System\StatustransitionFlowStep
  * @objectFilterStep Kajona\Statustransition\System\StatustransitionFlowStepFilter
  *
- * @objectListAssignment Kajona\Statustransition\System\StatustransitionFlowAssignment
- * @objectNewAssignment Kajona\Statustransition\System\StatustransitionFlowAssignment
- * @objectEditAssignment Kajona\Statustransition\System\StatustransitionFlowAssignment
+ * @objectListTransition Kajona\Statustransition\System\StatustransitionFlowStepTransition
+ * @objectNewTransition Kajona\Statustransition\System\StatustransitionFlowStepTransition
+ * @objectEditTransition Kajona\Statustransition\System\StatustransitionFlowStepTransition
+ *
+ * @objectListTransitionAction Kajona\Statustransition\System\StatustransitionFlowStepTransitionAction
+ * @objectNewTransitionAction Kajona\Statustransition\System\StatustransitionFlowStepTransitionAction
+ * @objectEditTransitionAction Kajona\Statustransition\System\StatustransitionFlowStepTransitionAction
+ *
+ * @objectListTransitionCondition Kajona\Statustransition\System\StatustransitionFlowStepTransitionCondition
+ * @objectNewTransitionCondition Kajona\Statustransition\System\StatustransitionFlowStepTransitionCondition
+ * @objectEditTransitionCondition Kajona\Statustransition\System\StatustransitionFlowStepTransitionCondition
  *
  * @module statustransition
  * @moduleId _statustransition_module_id_
@@ -54,7 +63,6 @@ class StatustransitionAdmin extends AdminEvensimpler implements AdminInterface
     {
         $arrReturn = array();
         $arrReturn[] = array("view", Link::getLinkAdmin($this->getArrModule("modul"), "listFlow", "", $this->getLang("list_flow"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("view", Link::getLinkAdmin($this->getArrModule("modul"), "listAssignment", "", $this->getLang("list_assignment"), "", "", true, "adminnavi"));
         return $arrReturn;
     }
 
@@ -64,6 +72,11 @@ class StatustransitionAdmin extends AdminEvensimpler implements AdminInterface
 
         if ($objListEntry instanceof StatustransitionFlow) {
             $arrActions[] = $this->objToolkit->listButton(Link::getLinkAdmin($this->getArrModule("modul"), "listStep", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_steps"), "icon_kriterium"));
+        } elseif ($objListEntry instanceof StatustransitionFlowStep) {
+            $arrActions[] = $this->objToolkit->listButton(Link::getLinkAdmin($this->getArrModule("modul"), "listTransition", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_transitions"), "icon_project"));
+        } elseif ($objListEntry instanceof StatustransitionFlowStepTransition) {
+            $arrActions[] = $this->objToolkit->listButton(Link::getLinkAdmin($this->getArrModule("modul"), "listTransitionAction", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_transition_action"), "icon_play"));
+            $arrActions[] = $this->objToolkit->listButton(Link::getLinkAdmin($this->getArrModule("modul"), "listTransitionCondition", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_transition_condition"), "icon_table"));
         }
 
         return $arrActions;
@@ -71,7 +84,13 @@ class StatustransitionAdmin extends AdminEvensimpler implements AdminInterface
 
     public function renderTagAction(Model $objListEntry)
     {
-        if ($objListEntry instanceof StatustransitionFlowStep) {
+        if ($objListEntry instanceof StatustransitionFlow) {
+            return "";
+        } elseif ($objListEntry instanceof StatustransitionFlowStep) {
+            return "";
+        } elseif ($objListEntry instanceof StatustransitionFlowStepTransitionAction) {
+            return "";
+        } elseif ($objListEntry instanceof StatustransitionFlowStepTransitionCondition) {
             return "";
         }
 
@@ -80,7 +99,13 @@ class StatustransitionAdmin extends AdminEvensimpler implements AdminInterface
 
     public function renderPermissionsAction(Model $objListEntry)
     {
-        if ($objListEntry instanceof StatustransitionFlowStep) {
+        if ($objListEntry instanceof StatustransitionFlow) {
+            return "";
+        } elseif ($objListEntry instanceof StatustransitionFlowStep) {
+            return "";
+        } elseif ($objListEntry instanceof StatustransitionFlowStepTransitionAction) {
+            return "";
+        } elseif ($objListEntry instanceof StatustransitionFlowStepTransitionCondition) {
             return "";
         }
 
@@ -89,7 +114,9 @@ class StatustransitionAdmin extends AdminEvensimpler implements AdminInterface
 
     public function renderStatusAction(Model $objListEntry, $strAltActive = "", $strAltInactive = "")
     {
-        if ($objListEntry instanceof StatustransitionFlowStep) {
+        if ($objListEntry instanceof StatustransitionFlow) {
+            return "";
+        } elseif ($objListEntry instanceof StatustransitionFlowStep) {
             return "";
         }
 
@@ -98,26 +125,98 @@ class StatustransitionAdmin extends AdminEvensimpler implements AdminInterface
 
     public function renderCopyAction(Model $objListEntry)
     {
-        if ($objListEntry instanceof StatustransitionFlowStep) {
+        if ($objListEntry instanceof StatustransitionFlow) {
+            return "";
+        } elseif ($objListEntry instanceof StatustransitionFlowStep) {
+            return "";
+        } elseif ($objListEntry instanceof StatustransitionFlowStepTransitionAction) {
+            return "";
+        } elseif ($objListEntry instanceof StatustransitionFlowStepTransitionCondition) {
             return "";
         }
 
         return parent::renderCopyAction($objListEntry);
     }
 
+    protected function renderEditAction(Model $objListEntry, $bitDialog = false)
+    {
+        if ($objListEntry instanceof StatustransitionFlow) {
+            return "";
+        }
+
+        return parent::renderEditAction($objListEntry, $bitDialog);
+    }
+
+    protected function renderDeleteAction(ModelInterface $objListEntry)
+    {
+        if ($objListEntry instanceof StatustransitionFlow) {
+            return "";
+        }
+
+        return parent::renderDeleteAction($objListEntry);
+    }
+
+    protected function getOutputNaviEntry(ModelInterface $objInstance)
+    {
+        if ($objInstance instanceof StatustransitionFlow) {
+            return Link::getLinkAdmin("statustransition", "listStep", "&systemid=" . $objInstance->getSystemid(), $objInstance->getStrDisplayName());
+        } elseif ($objInstance instanceof StatustransitionFlowStep) {
+            return Link::getLinkAdmin("statustransition", "listTransition", "&systemid=" . $objInstance->getSystemid(), $objInstance->getStrDisplayName());
+        } elseif ($objInstance instanceof StatustransitionFlowStepTransition) {
+            return Link::getLinkAdmin("statustransition", "listTransition", "&systemid=" . $objInstance->getPrevId(), $objInstance->getStrDisplayName());
+        } elseif ($objInstance instanceof StatustransitionFlowStepTransitionAction) {
+            return Link::getLinkAdmin("statustransition", "listTransitionAction", "&systemid=" . $objInstance->getPrevId(), $objInstance->getStrDisplayName());
+        } elseif ($objInstance instanceof StatustransitionFlowStepTransitionCondition) {
+            return Link::getLinkAdmin("statustransition", "listTransitionCondition", "&systemid=" . $objInstance->getPrevId(), $objInstance->getStrDisplayName());
+        } else {
+            return null;
+        }
+    }
+
     public function getNewEntryAction($strListIdentifier, $bitDialog = false)
     {
         $strAction = parent::getNewEntryAction($strListIdentifier, $bitDialog);
+        $strSystemId = $this->getParam("systemid");
 
         if ($strListIdentifier == "liststep") {
             return $this->objToolkit->listButton(
                 Link::getLinkAdmin(
-                    $this->getArrModule("modul"), "newStep", "&systemid=".$this->getParam("systemid"),
+                    $this->getArrModule("modul"), "newStep", "&systemid=".$strSystemId,
                     $this->getLang("commons_list_new"), $this->getLang("commons_list_new"), "icon_new"
                 )
             );
-        } elseif ($strListIdentifier == "listassignment") {
+        } elseif ($strListIdentifier == "listFlow") {
             return "";
+        } elseif ($strListIdentifier == "listTransitionAction") {
+            $arrLinks = array();
+            $objFlow = $this->getFlowFromSystemId($strSystemId);
+            $arrActions = $objFlow->getHandler()->getAvailableActions();
+
+            foreach ($arrActions as $strActionClass) {
+                $objAction = new $strActionClass();
+                $arrLinks[] = $this->objToolkit->listButton(
+                    Link::getLinkAdmin(
+                        $this->getArrModule("modul"), $this->getActionNameForClass("newTransitionAction", null), "&systemid=".$this->getSystemid()."&class=".$strActionClass.$this->getStrPeAddon(), $objAction->getTitle(), "", "icon_textfield", $objAction->getTitle()
+                    )
+                );
+            }
+
+            return $arrLinks;
+        } elseif ($strListIdentifier == "listTransitionCondition") {
+            $arrLinks = array();
+            $objFlow = $this->getFlowFromSystemId($strSystemId);
+            $arrActions = $objFlow->getHandler()->getAvailableConditions();
+
+            foreach ($arrActions as $strConditionClass) {
+                $objCondition = new $strConditionClass();
+                $arrLinks[] = $this->objToolkit->listButton(
+                    Link::getLinkAdmin(
+                        $this->getArrModule("modul"), $this->getActionNameForClass("newTransitionCondition", null), "&systemid=".$this->getSystemid()."&class=".$strConditionClass.$this->getStrPeAddon(), $objCondition->getTitle(), "", "icon_textfield", $objCondition->getTitle()
+                    )
+                );
+            }
+
+            return $arrLinks;
         } else {
             return $strAction;
         }
@@ -160,110 +259,6 @@ class StatustransitionAdmin extends AdminEvensimpler implements AdminInterface
 HTML;
 
         return $strHtml;
-    }
-
-    /**
-     * @return string
-     * @permissions view
-     */
-    public function actionListAssignment()
-    {
-        $arrInstances = array_filter($this->objResourceLoader->getFolderContent("/system", array(".php"), false, null, function(&$strFile, $strPath){
-            $strFile = $this->objClassLoader->getInstanceFromFilename($strPath, null, StatustransitionFlowChoiceInterface::class);
-        }));
-
-        $arrFlows = StatustransitionFlow::getObjectListFiltered();
-        $arrSelect = array();
-        foreach ($arrFlows as $objFlow) {
-            $arrSelect[$objFlow->getStrSystemid()] = $objFlow->getStrDisplayName();
-        }
-
-        $strLink = Link::getLinkAdminHref("statustransition", "saveAssignment");
-        $strReturn = "";
-        $strReturn .= $this->objToolkit->formHeader($strLink);
-        $strReturn .= $this->objToolkit->listHeader();
-        foreach ($arrInstances as $objInstance) {
-            $strReturn .= $this->objToolkit->genericAdminList(
-                generateSystemid(),
-                get_class($objInstance),
-                AdminskinHelper::getAdminImage($objInstance->getStrIcon()),
-                ""
-            );
-
-            $arrFlows = $objInstance->getPossibleFlows();
-            foreach ($arrFlows as $strKey => $strTitle) {
-                // check whether we have a value
-                $objFilter = new StatustransitionFlowAssignmentFilter();
-                $objFilter->setStrClass(Database::getInstance()->escape(get_class($objInstance)));
-                $objFilter->setStrKey($strKey);
-                $arrAssignments = StatustransitionFlowAssignment::getObjectListFiltered($objFilter);
-                $strSelected = "";
-                if (!empty($arrAssignments)) {
-                    $strSelected = reset($arrAssignments)->getStrFlow();
-                }
-
-                $strId = md5(get_class($objInstance) . $strKey);
-                $strActions = $this->objToolkit->formInputDropdown($strId, $arrSelect, "", $strSelected);
-                $strReturn .= $this->objToolkit->genericAdminList(
-                    generateSystemid(),
-                    $strTitle,
-                    "",
-                    $strActions
-                );
-            }
-        }
-
-        $strReturn .= $this->objToolkit->listFooter();
-        $strReturn .= $this->objToolkit->formInputSubmit();
-        $strReturn .= $this->objToolkit->formClose();
-
-        return $strReturn;
-    }
-
-    /**
-     * @return string
-     * @permissions edit
-     */
-    public function actionSaveAssignment()
-    {
-        $arrInstances = array_filter($this->objResourceLoader->getFolderContent("/system", array(".php"), false, null, function(&$strFile, $strPath){
-            $strFile = $this->objClassLoader->getInstanceFromFilename($strPath, null, StatustransitionFlowChoiceInterface::class);
-        }));
-
-        $arrFlows = StatustransitionFlow::getObjectListFiltered();
-        $arrSelect = array();
-        foreach ($arrFlows as $objFlow) {
-            $arrSelect[$objFlow->getStrSystemid()] = $objFlow->getStrDisplayName();
-        }
-
-        foreach ($arrInstances as $objInstance) {
-            $arrFlows = $objInstance->getPossibleFlows();
-            foreach ($arrFlows as $strKey => $strTitle) {
-                $strId = md5(get_class($objInstance) . $strKey);
-                $strFlowId = $this->getParam($strId);
-
-                if (isset($arrSelect[$strFlowId])) {
-                    $objFilter = new StatustransitionFlowAssignmentFilter();
-                    $objFilter->setStrClass(get_class($objInstance));
-                    $objFilter->setStrKey($strKey);
-                    $arrAssignments = StatustransitionFlowAssignment::getObjectListFiltered($objFilter);
-                    if (!empty($arrAssignments)) {
-                        $objAssignment = reset($arrAssignments);
-                        $objAssignment->setStrFlow($strFlowId);
-                        $objAssignment->updateObjectToDb();
-                    } else {
-                        $objAssignment = new StatustransitionFlowAssignment();
-                        $objAssignment->setStrClass(get_class($objInstance));
-                        $objAssignment->setStrKey($strKey);
-                        $objAssignment->setStrFlow($strFlowId);
-                        $objAssignment->updateObjectToDb();
-                    }
-                }
-            }
-        }
-
-        $this->adminReload(Link::getLinkAdminHref("statustransition", "listAssignment"));
-        return "";
     }
 
     /**
@@ -313,4 +308,100 @@ HTML;
         return $strReturn;
     }
 
+    /**
+     * @return string
+     * @permissions edit
+     */
+    public function actionNewTransitionAction()
+    {
+        $this->setCurObjectClassName($this->getParam("class"));
+        $this->setStrCurObjectTypeName("TransitionAction");
+        return parent::actionNew();
+    }
+
+    /**
+     * @return string
+     * @permissions edit
+     */
+    public function actionEditTransitionAction()
+    {
+        $objAction = Objectfactory::getInstance()->getObject($this->getSystemid());
+        $this->setCurObjectClassName($objAction->getStrRecordClass());
+        $this->setStrCurObjectTypeName("TransitionAction");
+        return parent::actionEdit();
+    }
+
+    /**
+     * @return string
+     * @permissions edit
+     */
+    public function actionSaveTransitionAction()
+    {
+        $this->setCurObjectClassName($this->getParam("class"));
+        $this->setStrCurObjectTypeName("TransitionAction");
+        return parent::actionSave();
+    }
+
+    /**
+     * @return string
+     * @permissions edit
+     */
+    public function actionNewTransitionCondition()
+    {
+        $this->setCurObjectClassName($this->getParam("class"));
+        $this->setStrCurObjectTypeName("TransitionCondition");
+        return parent::actionNew();
+    }
+
+    /**
+     * @return string
+     * @permissions edit
+     */
+    public function actionEditTransitionCondition()
+    {
+        $objAction = Objectfactory::getInstance()->getObject($this->getSystemid());
+        $this->setCurObjectClassName($objAction->getStrRecordClass());
+        $this->setStrCurObjectTypeName("TransitionCondition");
+        return parent::actionEdit();
+    }
+
+    /**
+     * @return string
+     * @permissions edit
+     */
+    public function actionSaveTransitionCondition()
+    {
+        $this->setCurObjectClassName($this->getParam("class"));
+        $this->setStrCurObjectTypeName("TransitionCondition");
+        return parent::actionSave();
+    }
+
+    protected function getActionNameForClass($strAction, $objInstance)
+    {
+        if ($objInstance instanceof StatustransitionFlowStepTransitionAction) {
+            return $strAction . "TransitionAction";
+        } elseif ($objInstance instanceof StatustransitionFlowStepTransitionCondition) {
+            return $strAction . "TransitionCondition";
+        } else {
+            return parent::getActionNameForClass($strAction, $objInstance);
+        }
+    }
+
+    /**
+     * @param $strSystemId
+     * @return StatustransitionFlow|null
+     */
+    private function getFlowFromSystemId($strSystemId)
+    {
+        $objFlow = null;
+        $objObject = Objectfactory::getInstance()->getObject($strSystemId);
+        $arrSystemIds = $objObject->getPathArray();
+        foreach ($arrSystemIds as $strSystemId) {
+            $objObject = $this->objFactory->getObject($strSystemId);
+            if ($objObject instanceof StatustransitionFlow) {
+                return $objObject;
+            }
+        }
+        return null;
+    }
 }

@@ -20,8 +20,8 @@ class ServiceProvider implements ServiceProviderInterface
 
     public function register(Container $c)
     {
-        $c[self::STR_MANAGER] = function(){
-            return new StatustransitionManager();
+        $c[self::STR_MANAGER] = function($c){
+            return new StatustransitionManager($c);
         };
     }
 }

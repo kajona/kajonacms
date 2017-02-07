@@ -9,24 +9,30 @@
 
 namespace Kajona\Statustransition\Admin;
 
+use Kajona\Statustransition\System\StatustransitionFlowStep;
+use Kajona\Statustransition\System\StatustransitionFlowStepTransition;
+use Kajona\Statustransition\System\StatustransitionFlowStepTransitionCondition;
 use Kajona\System\Admin\AdminFormgenerator;
+use Kajona\System\Admin\Formentries\FormentryHidden;
+use Kajona\System\Admin\Formentries\FormentryObjectlist;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Lang;
+use Kajona\System\System\Link;
+use Kajona\System\System\Objectfactory;
 
 /**
- * Formgenerator for a statustransition flow entry
+ * StatustransitionStepTransitionConditionFormgenerator
  *
  * @package module_statustransition
  * @author christoph.kappestein@gmail.com
  * @since 5.1
  */
-class StatustransitionFormgenerator extends AdminFormgenerator
+class StatustransitionStepTransitionConditionFormgenerator extends AdminFormgenerator
 {
-    /**
-     * @inheritDoc
-     */
-    public function generateFieldsFromObject()
+    use StatustransitionStepTransitionFormgeneratorTrait;
+
+    protected function isValidSourceObject($objSource)
     {
-        parent::generateFieldsFromObject();
-
-
+        return $objSource instanceof StatustransitionFlowStepTransitionCondition;
     }
 }

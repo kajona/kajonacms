@@ -10,8 +10,10 @@
 namespace Kajona\Statustransition\Installer;
 
 use Kajona\Statustransition\System\StatustransitionFlow;
-use Kajona\Statustransition\System\StatustransitionFlowAssignment;
 use Kajona\Statustransition\System\StatustransitionFlowStep;
+use Kajona\Statustransition\System\StatustransitionFlowStepTransition;
+use Kajona\Statustransition\System\StatustransitionFlowStepTransitionAction;
+use Kajona\Statustransition\System\StatustransitionFlowStepTransitionCondition;
 use Kajona\System\System\InstallerBase;
 use Kajona\System\System\OrmSchemamanager;
 use Kajona\System\System\SystemModule;
@@ -35,8 +37,14 @@ class InstallerStatustransition extends InstallerBase
         $strReturn .= "Installing table flow_step...\n";
         $objManager->createTable(StatustransitionFlowStep::class);
 
-        $strReturn .= "Installing table flow_assignment...\n";
-        $objManager->createTable(StatustransitionFlowAssignment::class);
+        $strReturn .= "Installing table flow_step_transition...\n";
+        $objManager->createTable(StatustransitionFlowStepTransition::class);
+
+        $strReturn .= "Installing table flow_step_transition_action...\n";
+        $objManager->createTable(StatustransitionFlowStepTransitionAction::class);
+
+        $strReturn .= "Installing table flow_step_transition_condition...\n";
+        $objManager->createTable(StatustransitionFlowStepTransitionCondition::class);
 
         //register the module
         $this->registerModule(
@@ -44,10 +52,7 @@ class InstallerStatustransition extends InstallerBase
             _statustransition_module_id_,
             "",
             "StatustransitionAdmin.php",
-            $this->objMetadata->getStrVersion(),
-            true,
-            "",
-            "StatustransitionAdminXml.php"
+            $this->objMetadata->getStrVersion()
         );
 
         return $strReturn;

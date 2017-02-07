@@ -7,6 +7,7 @@
 
 namespace Kajona\Statustransition\System;
 
+use Kajona\System\Admin\AdminFormgenerator;
 use Kajona\System\System\Model;
 
 /**
@@ -21,7 +22,12 @@ use Kajona\System\System\Model;
 interface StatustransitionConditionInterface
 {
     /**
-     * Is called on a status change
+     * @return string
+     */
+    public function getTitle();
+
+    /**
+     * Validates whether it is allowed to make a statustransition
      *
      * @param integer $intOldStatus
      * @param integer $intNewStatus
@@ -29,4 +35,10 @@ interface StatustransitionConditionInterface
      * @return boolean
      */
     public function validateCondition($intOldStatus, $intNewStatus, Model $objObject);
+
+    /**
+     * @param AdminFormgenerator $objForm
+     * @return void
+     */
+    public function configureForm(AdminFormgenerator $objForm);
 }

@@ -29,7 +29,21 @@ class StatustransitionGraphWriter
             /** @var StatustransitionFlowStep $objStep */
             $arrTransitions = $objStep->getArrTransitions();
             foreach ($arrTransitions as $objTransition) {
-                $arrList[] = $objStep->getStrSystemid() . "[" . $objStep->getStrName() . "]-->" . $objTransition->getSystemid() . "[" . $objTransition->getStrName() . "];";
+                /** @var $objTransition StatustransitionFlowStepTransition */
+                $arrActions = $objTransition->getArrActions();
+                $arrActionNames = [];
+                foreach ($arrActions as $objAction) {
+                    $arrActionNames[] = $objAction->getTitle();
+                }
+                $arrConditions = $objTransition->getArrConditions();
+                $arrConditionNames = [];
+                foreach ($arrConditions as $objCondition) {
+                    $arrConditionNames[] = $objCondition->getTitle();
+                }
+                $objTargetStep = $objTransition->getTargetStep();
+                if ($objTargetStep instanceof StatustransitionFlowStep) {
+                    $arrList[] = $objStep->getStrSystemid() . "[" . $objStep->getStrName() . "]-->|" . implode(",", $arrActionNames) . "," . implode(",", $arrConditionNames) . "|" . $objTargetStep->getSystemid() . "[" . $objTargetStep->getStrName() . "];";
+                }
             }
         }
 

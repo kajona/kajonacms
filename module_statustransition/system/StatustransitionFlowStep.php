@@ -45,22 +45,6 @@ class StatustransitionFlowStep extends Model implements ModelInterface, AdminLis
     protected $strIcon;
 
     /**
-     * @var string
-     * @tableColumn flow_step.step_groupid
-     * @tableColumnDatatype char20
-     * @fieldType Kajona\System\Admin\Formentries\FormentryUser
-     * @fieldMandatory
-     **/
-    protected $strUserGroup;
-
-    /**
-     * @var string
-     * @fieldType Kajona\System\Admin\Formentries\FormentryObjectlist
-     * @objectList flow_step_transition (source="step_id", target="transition_id")
-     */
-    protected $arrTransitions;
-
-    /**
      * @return string
      */
     public function getStrName()
@@ -93,38 +77,6 @@ class StatustransitionFlowStep extends Model implements ModelInterface, AdminLis
     }
 
     /**
-     * @return string
-     */
-    public function getStrUserGroup()
-    {
-        return $this->strUserGroup;
-    }
-
-    /**
-     * @param string $strUserGroup
-     */
-    public function setStrUserGroup($strUserGroup)
-    {
-        $this->strUserGroup = $strUserGroup;
-    }
-
-    /**
-     * @return StatustransitionFlowStep[]
-     */
-    public function getArrTransitions()
-    {
-        return $this->arrTransitions;
-    }
-
-    /**
-     * @param string $arrTransitions
-     */
-    public function setArrTransitions($arrTransitions)
-    {
-        $this->arrTransitions = $arrTransitions;
-    }
-
-    /**
      * Return the status int for this step. At the moment this is simply the 0-indexed position of the step in the flow
      * This int is inserted as record status
      *
@@ -143,6 +95,11 @@ class StatustransitionFlowStep extends Model implements ModelInterface, AdminLis
         }
 
         return 0;
+    }
+
+    public function getArrTransitions()
+    {
+        return StatustransitionFlowStepTransition::getObjectListFiltered(null, $this->getSystemid());
     }
 
     /**
