@@ -917,8 +917,8 @@ class SystemChangelog
 
         if (!empty($arrNewValues)) {
             if (count($arrNewValues) > 1) {
-                $objRestriction = new OrmObjectlistInRestriction("change_newvalue", $arrNewValues);
-                $strQuery .= " ".$objRestriction->getStrWhere();
+                $objRestriction = new OrmInCondition("change_newvalue", $arrNewValues);
+                $strQuery .= " AND " . $objRestriction->getStrWhere();
                 $arrParameters = array_merge($arrParameters, $objRestriction->getArrParams());
             } else {
                 $strQuery .= " AND change_newvalue = ?";
@@ -927,9 +927,11 @@ class SystemChangelog
         }
 
         if ($arrAllowedSystemIds !== null) {
-            $objRestriction = new OrmObjectlistInRestriction("change_systemid", $arrAllowedSystemIds);
-            $strQuery .= " ".$objRestriction->getStrWhere();
-            $arrParameters = array_merge($arrParameters, $objRestriction->getArrParams());
+            $objRestriction = new OrmInCondition("change_systemid", $arrAllowedSystemIds);
+            if($objRestriction->getStrWhere() !== "") {
+                $strQuery .= " AND " . $objRestriction->getStrWhere();
+                $arrParameters = array_merge($arrParameters, $objRestriction->getArrParams());
+            }
         }
 
         $arrRow = Carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParameters, 0, 1);
@@ -950,11 +952,14 @@ class SystemChangelog
     public static function getNewValuesForDateRange($strClass, $strProperty, Date $objDateFrom = null, Date $objDateTo = null, array $arrAllowedSystemIds = array())
     {
         $arrParams = array($strClass, $strProperty);
+        $strQueryCondition = "";
 
         //system id filter
-        $objRestriction = new OrmObjectlistInRestriction("log.change_systemid", $arrAllowedSystemIds);
-        $strQueryCondition = $objRestriction->getStrWhere();
-        $arrParams = array_merge($arrParams, $objRestriction->getArrParams());
+        $objRestriction = new OrmInCondition("log.change_systemid", $arrAllowedSystemIds);
+        if($objRestriction->getStrWhere() !== "") {
+            $strQueryCondition .= " AND " . $objRestriction->getStrWhere();
+            $arrParams = array_merge($arrParams, $objRestriction->getArrParams());
+        }
 
         //filter by create date from
         if ($objDateFrom != null) {

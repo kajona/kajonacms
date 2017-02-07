@@ -150,7 +150,7 @@ class RightAdmin extends AdminController implements AdminInterface
                 $arrTemplateRow = array();
                 $arrSingleGroup = array();
                 $arrTemplateRow["group"] = $objSingleGroup->getStrName();
-                $arrSingleGroup["group_id"] = $objSingleGroup->getSystemid();
+                $arrSingleGroup["group_id"] = $objSingleGroup->getIntShortId();
 
                 //hide the superglobal admin-row from non-members
                 if ($objSingleGroup->getSystemid() == SystemSetting::getConfigValue("_admins_group_id_") && !in_array(SystemSetting::getConfigValue("_admins_group_id_"), $this->objSession->getGroupIdsAsArray())) {
@@ -328,7 +328,7 @@ class RightAdmin extends AdminController implements AdminInterface
             $intInherit = 0;
         }
 
-        $strAdminsGroupId = SystemSetting::getConfigValue("_admins_group_id_");
+        $strAdminsGroupId = UserGroup::getShortIdForGroupId(SystemSetting::getConfigValue("_admins_group_id_"));
         $strView = $strAdminsGroupId;
         $strEdit = $strAdminsGroupId;
         $strDelete = $strAdminsGroupId;

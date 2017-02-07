@@ -977,10 +977,27 @@ HTML;
         $bitPostData = false;
         if (is_array($arrSource)) {
             $strFilename = $arrSource["name"];
+
+            //handle copy n paste entries - rather conservative
+            if ($strFilename == "blob") {
+                switch ($arrSource["type"]) {
+                    case 'image/png':
+                        $strFilename = generateSystemid().".png";
+                        break;
+                    case 'image/gif':
+                        $strFilename = generateSystemid().".gif";
+                        break;
+                    case 'image/jpg':
+                        $strFilename = generateSystemid().".jpg";
+                        break;
+                }
+            }
         } else {
             $bitPostData = getPostRawData() != "";
             $strFilename = $arrSource;
         }
+
+
 
         $strTarget = $strFolder."/".createFilename($strFilename);
         $objFilesystem = new Filesystem();

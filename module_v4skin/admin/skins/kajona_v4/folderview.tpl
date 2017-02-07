@@ -33,6 +33,11 @@
 
         <!-- CONTENT CONTAINER -->
         <div id="content" class="col-md-12">
+            <div class="navbar navbar-default contentToolbar hidden">
+                <div class="navbar-inner ">
+                    <ul class="nav navbar-nav"></ul>
+                </div>
+            </div>
             %%content%%
         </div>
     </div>

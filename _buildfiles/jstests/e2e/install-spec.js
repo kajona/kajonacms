@@ -1,12 +1,8 @@
 "use strict";
 
-var SeleniumUtil = requireHelper('/util/SeleniumUtil.js');
+const SeleniumUtil = requireHelper('/util/SeleniumUtil.js');
 
 describe('installation', function() {
-
-    beforeEach(function() {
-        browser.ignoreSynchronization = true;
-    });
 
     it('test installation', function() {
         // wait max 5 minutes for the installation
@@ -48,7 +44,9 @@ describe('installation', function() {
 
         // now we must have a success message
         expect(webDriver.findElement(By.css('.alert-success')).getText()).toMatch('Herzlichen Glückwunsch!');
+    });
 
+    it('test setupSeleniumConfig.php', function() {
         // this is required so that our installation sets all needed settings i.e. turn nice urls / ssl off etc.
         SeleniumUtil.gotToUrl("setupSeleniumConfig.php");
     });

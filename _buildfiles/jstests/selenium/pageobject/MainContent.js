@@ -3,8 +3,11 @@
 /**
  * require statements
  */
-var BasePage = requireHelper('/pageobject/base/BasePage.js');
-var Constants = requireHelper('/pageobject/Constants.js');
+const BasePage = requireHelper('/pageobject/base/BasePage.js');
+
+
+/** Constants */
+const MAINCONTENT = by.css("div#content");
 
 /**
  *
@@ -20,7 +23,7 @@ class MainContent extends BasePage {
      * @returns {WebElementPromise}
      */
     get element_mainContent() {
-        return this.webDriver.findElement(By.css(Constants.MAINCONTENT_CSS_MAINCONTENT));
+        return this.webDriver.findElement(MAINCONTENT);
     }
 }
 

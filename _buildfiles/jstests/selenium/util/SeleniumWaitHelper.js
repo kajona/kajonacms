@@ -23,6 +23,8 @@ class SeleniumWaitHelper {
     }
 
     /**
+     * Returns all elements when it is present in the DOM.
+     * This is a blocking wait.
      *
      * @param {webdriver.WebDriver} webDriver
      * @param locator
@@ -37,7 +39,7 @@ class SeleniumWaitHelper {
     }
 
     /**
-     * Returns an elements when it is present in the DOM.
+     * Returns an element when it is present in the DOM.
      * This is a blocking wait.
      *
      * @param webDriver
