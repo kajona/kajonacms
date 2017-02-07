@@ -118,18 +118,19 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface
      * Returns all groups from database
      *
      * @param FilterBase $objFilter
-     * @param string $strFilter
+     * @param string $strPrevId
      * @param bool|int $intStart
      * @param bool|int $intEnd
      *
      * @return UserGroup[]
      * @static
      */
-    public static function getObjectListFiltered(FilterBase $objFilter = null, $strFilter = "", $intStart = null, $intEnd = null)
+    public static function getObjectListFiltered(FilterBase $objFilter = null, $strPrevId = "", $intStart = null, $intEnd = null)
     {
         $objOrm = new OrmObjectlist();
-        if($strFilter != "") {
-            $objOrm->addWhereRestriction(new OrmPropertyCondition("strName", OrmComparatorEnum::Like(), "%".$strFilter."%"));
+
+        if ($objFilter !== null) {
+            $objFilter->addWhereConditionToORM($objOrm);
         }
         return $objOrm->getObjectList(UserGroup::class, "", $intStart, $intEnd);
     }
@@ -139,16 +140,18 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface
      * Fetches the number of groups available
      *
      * @param FilterBase $objFilter
-     * @param string $strFilter
+     * @param string $strPrevId
      *
      * @return int
      */
-    public static function getObjectCountFiltered(FilterBase $objFilter = null, $strFilter = "")
+    public static function getObjectCountFiltered(FilterBase $objFilter = null, $strPrevId = "")
     {
         $objOrm = new OrmObjectlist();
-        if($strFilter != "") {
-            $objOrm->addWhereRestriction(new OrmPropertyCondition("strName", OrmComparatorEnum::Like(), "%".$strFilter."%"));
+
+        if ($objFilter !== null) {
+            $objFilter->addWhereConditionToORM($objOrm);
         }
+
         return $objOrm->getObjectCount(UserGroup::class);
     }
 
