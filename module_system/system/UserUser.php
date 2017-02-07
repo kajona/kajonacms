@@ -46,6 +46,7 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
      * @tableColumn user.user_username
      * @tableColumnDatatype char254
      * @tableColumnIndex
+     * @listOrder ASC
      */
     private $strUsername = "";
 
