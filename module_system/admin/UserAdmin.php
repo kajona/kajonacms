@@ -1680,6 +1680,13 @@ HTML;
                 continue;
             }
 
+            //if element is group and user is not superadmin
+            if ($objOneElement instanceof UserGroup
+                && !Carrier::getInstance()->getObjSession()->isSuperAdmin()
+                && $objOneElement->getStrSystemid() === SystemSetting::getConfigValue("_admins_group_id_")) {
+                continue;
+            }
+
             $bitUserHasRightView = true;
             if (!empty($arrCheckIds) && is_array($arrCheckIds) && $objOneElement instanceof UserUser) {
                 foreach ($arrCheckIds as $strCheckId) {
