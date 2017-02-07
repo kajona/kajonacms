@@ -27,6 +27,13 @@ interface UsersourcesUserInterface
     public function getGroupIdsForUser();
 
     /**
+     * Returns the list of short group-ids the current user is assigned to
+     *
+     * @return array
+     */
+    public function getShortGroupIdsForUser();
+
+    /**
      * Deletes the current user from the system - if possible
      *
      * @return bool

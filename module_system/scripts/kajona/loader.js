@@ -1,10 +1,16 @@
+/**
+ * (c) 2013-2017 by Kajona, www.kajona.de
+ * Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
+ */
 
 /**
  * Loader to load css files. For js use require
+ *
+ * @module loader
  */
+define("loader", ["jquery", "util"], function ($, util) {
 
-define(["jquery", "util"], function ($, util) {
-
+    /** @exports loader */
     var loader = function () {
 
         var arrCallbacks = [];

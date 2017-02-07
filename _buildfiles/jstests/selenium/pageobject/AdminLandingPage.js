@@ -3,8 +3,8 @@
 /**
  * require statements
  */
-var SeleniumUtil = requireHelper('/util/SeleniumUtil.js');
-var AdminBasePage = requireHelper('/pageobject/base/AdminBasePage.js');
+const SeleniumUtil = requireHelper('/util/SeleniumUtil.js');
+const AdminBasePage = requireHelper('/pageobject/base/AdminBasePage.js');
 
 /**
  * 

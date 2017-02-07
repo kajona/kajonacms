@@ -3,8 +3,13 @@
 /**
  * require statements
  */
-var BasePage = requireHelper('/pageobject/base/BasePage.js');
-var Constants = requireHelper('/pageobject/Constants.js');
+const BasePage = requireHelper('/pageobject/base/BasePage.js');
+
+
+
+/** Constants */
+const PATHCONTAINER = by.css("div.pathNaviContainer");
+const BREADCRUMP = by.css("ul.breadcrumb");
 
 /**
  *
@@ -23,14 +28,14 @@ class PathNavi extends BasePage {
      * @returns {WebElementPromise|!webdriver.WebElement}
      */
     get elemPathNavi() {
-        return this.webDriver.findElement(By.css(Constants.PATHNAVI_CSS_PATHCONTAINER));
+        return this.webDriver.findElement(PATHCONTAINER);
     }
 
     /**
      *
      */
     get element_breadCrumb() {
-        this.elemPathNavi.findElement(By.css(Constants.PATHNAVI_CSS_BREADCRUMP));
+        this.elemPathNavi.findElement(BREADCRUMP);
     }
 
 }

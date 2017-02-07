@@ -14,6 +14,7 @@ use Kajona\System\System\Classloader;
 use Kajona\System\System\Date;
 use Kajona\System\System\DbDatatypes;
 use Kajona\System\System\Filesystem;
+use Kajona\System\System\IdGenerator;
 use Kajona\System\System\InstallerBase;
 use Kajona\System\System\InstallerInterface;
 use Kajona\System\System\LanguagesLanguage;
@@ -254,6 +255,10 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $strReturn .= "Installing password reset history...\n";
         $objManager->createTable(SystemPwchangehistory::class);
 
+        // idgenerator
+        $strReturn .= "Installing idgenerator table...\n";
+        $objManager->createTable(IdGenerator::class);
+
         //Now we have to register module by module
 
         //The Systemkernel
@@ -329,7 +334,9 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
         //Systemid of guest-user & admin group
         $strGuestID = $objGuestGroup->getSystemid();
+        $intGuestShortId = $objGuestGroup->getIntShortId();
         $strAdminID = $objAdminGroup->getSystemid();
+        $intAdminShortid = $objAdminGroup->getIntShortId();
         $this->registerConstant("_guests_group_id_", $strGuestID, SystemSetting::$int_TYPE_STRING, _user_modul_id_);
         $this->registerConstant("_admins_group_id_", $strAdminID, SystemSetting::$int_TYPE_STRING, _user_modul_id_);
 
@@ -347,8 +354,8 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
 
         //BUT: We have to modify the right-record of the root node, too
-        $strGroupsAll = $strGuestID.",".$strAdminID;
-        $strGroupsAdmin = $strAdminID;
+        $strGroupsAll = ",".$intGuestShortId.",".$intAdminShortid.",";
+        $strGroupsAdmin = ",".$intAdminShortid.",";
 
         $strQuery = "INSERT INTO "._dbprefix_."system_right
             (right_id, right_inherit, right_view, right_edit, right_delete, right_right, right_right1, right_right2, right_right3, right_right4, right_right5, right_changelog) VALUES
@@ -587,8 +594,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "5.1.4") {
-            $strReturn .= "Updating 5.1.4 to 6.2...\n";
-            $this->update_514_62();
+            $strReturn .= $this->update_514_62();
         }
 
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
@@ -600,6 +606,11 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "6.2") {
             $strReturn .= $this->update_62_621();
+        }
+
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "6.2.1") {
+            $strReturn .= $this->update_621_622();
         }
 
         return $strReturn."\n\n";
@@ -882,5 +893,113 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "6.2.1");
         return $strReturn;
+    }
+
+
+    private function update_621_622()
+    {
+        $strReturn = "Updating 6.2.1 to 6.2.2...\n";
+
+        $strReturn .= "Registering the id generator\n";
+        // install idgenerator table
+        $objSchemamanager = new OrmSchemamanager();
+        $objSchemamanager->createTable(IdGenerator::class);
+
+        $strReturn .= "Altering group table...\n";
+        $this->objDB->addColumn("user_group", "group_short_id", DbDatatypes::STR_TYPE_INT);
+
+        $strReturn .= "Adding ids to each group\n";
+        $strQuery = "SELECT group_id FROM "._dbprefix_."user_group WHERE group_short_id < 1 OR group_short_id IS NULL";
+        foreach($this->objDB->getPArray($strQuery, array()) as $arrOneRow) {
+            $strQuery = "UPDATE "._dbprefix_."user_group set group_short_id = ? WHERE group_id = ?";
+            $this->objDB->_pQuery($strQuery, array(IdGenerator::generateNextId(UserGroup::INT_SHORTID_IDENTIFIER), $arrOneRow["group_id"]));
+        }
+
+        $strReturn .= $this->migrateUserData();
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "6.2.2");
+        return $strReturn;
+    }
+
+    /**
+     * Helper to migrate the system-id based permission table to an int based one
+     *
+     * @param null|int $intPagesize
+     * @param bool $bitEchodata
+     * @return string
+     */
+    public function migrateUserData($intPagesize = null, $bitEchodata = false) {
+
+        $strRun = "Migrating old permissions table to new table data...\n";
+
+        $arrIdToInt = array();
+        foreach ($this->objDB->getPArray("SELECT group_id, group_short_id FROM "._dbprefix_."user_group ORDER BY group_id DESC", array()) as $arrOneRow) {
+            $arrIdToInt[$arrOneRow["group_id"]] = $arrOneRow["group_short_id"];
+        }
+
+
+        $intStart = 0;
+        $intEnd = $intPagesize;
+
+        if($intPagesize !== null) {
+            $intStart = 0;
+            $intEnd = $intPagesize;
+            $arrResultSet = $this->objDB->getPArray("SELECT * FROM "._dbprefix_."system_right ORDER BY right_id DESC", array(), $intStart, $intEnd-1);
+        } else {
+            $arrResultSet = $this->objDB->getPArray("SELECT * FROM "._dbprefix_."system_right ORDER BY right_id DESC", array());
+        }
+
+        while (count($arrResultSet) > 0) {
+            $strRun .= "Fetching records ".$intStart." to ".($intEnd-1).PHP_EOL;
+            $arrInserts = array();
+
+            foreach ($arrResultSet as $arrSingleRow) {
+                $arrParams = array();
+
+                foreach (["right_changelog", "right_delete", "right_edit", "right_right", "right_right1", "right_right2", "right_right3", "right_right4", "right_right5", "right_view"] as $strOneCol) {
+                    $strNewString = ",";
+                    foreach (explode(",", $arrSingleRow[$strOneCol]) as $strOneGroup) {
+                        if (!empty($strOneGroup) && isset($arrIdToInt[$strOneGroup])) {
+                            $strNewString .= $arrIdToInt[$strOneGroup].",";
+                        } elseif (validateSystemid($strOneGroup)) {
+                            //do nothing, seems to be an old id
+                        } else {
+                            //keep migrated ones
+                            $strNewString .= $strOneGroup.",";
+                        }
+                    }
+                    $arrParams[] = $strNewString;
+                }
+
+                $strQuery = "UPDATE "._dbprefix_."system_right SET right_changelog = ?,right_delete = ?,right_edit = ?,right_right = ?,right_right1 = ?,right_right2 = ?,right_right3 = ?,right_right4 = ?,right_right5 = ?,right_view =? WHERE right_id = ?";
+                $arrParams[] = $arrSingleRow["right_id"];
+
+                $this->objDB->_pQuery($strQuery, $arrParams);
+            }
+
+
+            $strRun .= "Converted ".count($arrResultSet)." source rows ".PHP_EOL;
+
+            if ($bitEchodata) {
+               echo $strRun;
+                flush();
+                ob_flush();
+                $strRun = "";
+            }
+
+            if($intPagesize !== null) {
+                $intStart += $intPagesize;
+                $intEnd += $intPagesize;
+                $arrResultSet = $this->objDB->getPArray("SELECT * FROM "._dbprefix_."system_right ORDER BY right_id DESC", [], $intStart, $intEnd - 1);
+            }
+            else {
+                $arrResultSet = array();
+            }
+
+            $this->objDB->flushQueryCache();
+        }
+
+        return $strRun;
     }
 }

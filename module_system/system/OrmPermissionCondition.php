@@ -58,7 +58,7 @@ class OrmPermissionCondition extends OrmCondition
 
         $objCompound = new OrmCompositeCondition(array(), OrmCondition::STR_CONDITION_OR);
         foreach ($this->arrUserGroupIds as $strUserGroupId) {
-            $objCompound->addCondition(new OrmCondition("{$this->strColumn} {$strLikeOperator}  ?", array("%".$strUserGroupId."%")));
+            $objCompound->addCondition(new OrmCondition("{$this->strColumn} {$strLikeOperator}  ?", array("%,".UserGroup::getShortIdForGroupId($strUserGroupId).",%")));
         }
 
         return $objCompound;

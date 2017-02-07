@@ -1,7 +1,15 @@
+/**
+ * (c) 2013-2017 by Kajona, www.kajona.de
+ * Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
+ */
 
-//common tooltips
-define(['jquery', 'qtip'], function ($, qtip) {
-    return {
+/**
+ * Common tooltips
+ *
+ * @module tooltip
+ */
+define('tooltip', ['jquery', 'qtip'], function ($, qtip) {
+    return /** @alias module:tooltip */ {
         initTooltip : function() {
             $('*[rel=tooltip][title!=""]').qtip({
                 position: {

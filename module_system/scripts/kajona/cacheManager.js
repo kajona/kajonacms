@@ -1,7 +1,14 @@
+/**
+ * (c) 2013-2017 by Kajona, www.kajona.de
+ * Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
+ */
 
-define([], function () {
+/**
+ * @module cacheManager
+ */
+define('cacheManager', [], function () {
 
-    return {
+    return /** @alias module:cacheManager */ {
         container: {},
 
         /**

@@ -1,3 +1,7 @@
+/**
+ * (c) 2013-2017 by Kajona, www.kajona.de
+ * Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
+ */
 
 /**
  * Appends an table of contents navigation under the main navigation sidebar. The index contains all elements which
@@ -5,10 +9,12 @@
  * each element.
  *
  * bootstrap is loaded to ensure affix() is present at time of calling
+ *
+ * @module toc
  */
-define(['jquery', 'util', 'bootstrap'], function ($, util, bootstrap) {
+define("toc", ['jquery', 'util', 'bootstrap'], function ($, util, bootstrap) {
 
-    return {
+    return /** @alias module:toc */ {
         render: function(selector){
             if(!$('.sidebar-nav').length) {
                 return;
