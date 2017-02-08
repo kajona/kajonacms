@@ -732,7 +732,7 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
 </input_datetime_simple>
 
 <input_objectlist>
-    <div class="form-group">
+    <div class="form-group form-list">
         <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
 
         <div class="col-sm-6 inputText">
@@ -940,7 +940,7 @@ have a surrounding div with class "ac_container" and a div with id "%%name%%_con
 
 A list of checkbox or radio input elements
 <input_checkboxarray>
-    <div class="form-group">
+    <div class="form-group form-list">
         <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
 
         <div class="col-sm-6 inputText">
@@ -959,7 +959,7 @@ A list of checkbox or radio input elements
 
 A list of checkbox for object elements
 <input_checkboxarrayobjectlist>
-    <div class="form-group form-checkboxarraylist">
+    <div class="form-group form-checkboxarraylist form-list">
         <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
 
         <div class="col-sm-6 inputText">
