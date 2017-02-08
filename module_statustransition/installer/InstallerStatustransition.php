@@ -55,6 +55,9 @@ class InstallerStatustransition extends InstallerBase
             $this->objMetadata->getStrVersion()
         );
 
+        // sync all handler classes
+        StatustransitionFlow::syncHandler();
+
         return $strReturn;
     }
 
