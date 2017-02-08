@@ -112,6 +112,14 @@ class StatustransitionFlowStep extends Model implements ModelInterface, AdminLis
     }
 
     /**
+     * @param StatustransitionFlowStepTransition $objTransition
+     */
+    public function addTransition(StatustransitionFlowStepTransition $objTransition)
+    {
+        $objTransition->updateObjectToDb($this->getSystemid());
+    }
+
+    /**
      * @return string
      */
     public function getStrDisplayName()
