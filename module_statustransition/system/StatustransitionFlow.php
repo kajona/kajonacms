@@ -27,26 +27,32 @@ class StatustransitionFlow extends Model implements ModelInterface, AdminListabl
      * @var string
      * @tableColumn flow.flow_name
      * @tableColumnDatatype char20
-     *
-     * @fieldType Kajona\System\Admin\Formentries\FormentryText
-     * @fieldMandatory
      */
     protected $strName;
 
     /**
      * @var string
-     * @tableColumn flow.flow_class
+     * @tableColumn flow.flow_target_class
      * @tableColumnDatatype char254
-     *
-     * @fieldType Kajona\System\Admin\Formentries\FormentryText
-     * @fieldMandatory
      */
-    protected $strClass;
+    protected $strTargetClass;
+
+    /**
+     * @var string
+     * @tableColumn flow.flow_handler_class
+     * @tableColumnDatatype char254
+     */
+    protected $strHandlerClass;
 
     /**
      * @var StatustransitionHandlerInterface
      */
     private $objHandler;
+
+    /**
+     * @var array
+     */
+    private $arrStatus;
 
     /**
      * @return string
@@ -67,17 +73,33 @@ class StatustransitionFlow extends Model implements ModelInterface, AdminListabl
     /**
      * @return string
      */
-    public function getStrClass()
+    public function getStrTargetClass()
     {
-        return $this->strClass;
+        return $this->strTargetClass;
     }
 
     /**
-     * @param string $strClass
+     * @param string $strTargetClass
      */
-    public function setStrClass(string $strClass)
+    public function setStrTargetClass($strTargetClass)
     {
-        $this->strClass = $strClass;
+        $this->strTargetClass = $strTargetClass;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrHandlerClass()
+    {
+        return $this->strHandlerClass;
+    }
+
+    /**
+     * @param string $strHandlerClass
+     */
+    public function setStrHandlerClass($strHandlerClass)
+    {
+        $this->strHandlerClass = $strHandlerClass;
     }
 
     /**
@@ -95,7 +117,7 @@ class StatustransitionFlow extends Model implements ModelInterface, AdminListabl
 
     public function getStrAdditionalInfo()
     {
-        return $this->strClass;
+        return $this->getStrTargetClass();
     }
 
     public function getStrLongDescription()
@@ -112,21 +134,32 @@ class StatustransitionFlow extends Model implements ModelInterface, AdminListabl
     }
 
     /**
+     * @param int $intStatus
+     * @return StatustransitionFlowStep|null
+     */
+    public function getStepForStatus($intStatus)
+    {
+        $arrSteps = StatustransitionFlowStep::getObjectListFiltered(null, $this->getStrSystemid());
+        foreach ($arrSteps as $objStep) {
+            /** @var StatustransitionFlowStep $objStep */
+            if ($objStep->getIntStatus() == $intStatus) {
+                return $objStep;
+            }
+        }
+        return null;
+    }
+
+    /**
      * @return StatustransitionHandlerInterface
      */
     public function getHandler()
     {
         if (!$this->objHandler) {
-            $strClass = $this->getStrClass();
+            $strClass = $this->getStrHandlerClass();
             $this->objHandler = new $strClass();
         }
 
         return $this->objHandler;
-    }
-
-    public function getInitialStatus()
-    {
-        return 0;
     }
 
     /**
@@ -137,16 +170,19 @@ class StatustransitionFlow extends Model implements ModelInterface, AdminListabl
         $arrResult = self::getObjectListFiltered();
         $arrDbHandler = [];
         foreach ($arrResult as $objHandler) {
-            $arrDbHandler[$objHandler->getStrClass()] = $objHandler;
+            /** @var StatustransitionFlow $objHandler */
+            $arrDbHandler[$objHandler->getStrHandlerClass()] = $objHandler;
         }
 
         $arrFileHandler = self::getAvailableHandler();
-        foreach ($arrFileHandler as $strClass => $strTitle) {
+        foreach ($arrFileHandler as $strClass => $objHandler) {
+            /** @var StatustransitionHandlerInterface $objHandler */
             if (!isset($arrDbHandler[$strClass])) {
-                $objHandler = new StatustransitionFlow();
-                $objHandler->setStrName($strTitle);
-                $objHandler->setStrClass($strClass);
-                $objHandler->updateObjectToDb();
+                $objFlow = new StatustransitionFlow();
+                $objFlow->setStrName($objHandler->getTitle());
+                $objFlow->setStrTargetClass($objHandler->getTargetClass());
+                $objFlow->setStrHandlerClass($strClass);
+                $objFlow->updateObjectToDb();
             } else {
                 // @TODO maybe update
             }
@@ -167,7 +203,7 @@ class StatustransitionFlow extends Model implements ModelInterface, AdminListabl
         $arrHandler = array();
         foreach ($arrPlugins as $objPlugin) {
             if ($objPlugin instanceof StatustransitionHandlerInterface) {
-                $arrHandler[get_class($objPlugin)] = $objPlugin->getTitle();
+                $arrHandler[get_class($objPlugin)] = $objPlugin;
             }
         }
 
@@ -178,11 +214,12 @@ class StatustransitionFlow extends Model implements ModelInterface, AdminListabl
      * @param string $strClass
      * @return StatustransitionFlow|null
      */
-    public static function getByClass(string $strClass)
+    public static function getByModelClass(string $strClass)
     {
         $arrResult = self::getObjectListFiltered();
         foreach ($arrResult as $objHandler) {
-            if ($objHandler->getStrClass() == $strClass) {
+            /** @var StatustransitionFlow $objHandler */
+            if ($objHandler->getStrTargetClass() == $strClass) {
                 return $objHandler;
             }
         }
