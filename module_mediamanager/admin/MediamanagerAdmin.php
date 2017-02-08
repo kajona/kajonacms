@@ -287,11 +287,15 @@ class MediamanagerAdmin extends AdminEvensimpler implements AdminInterface
             if ($objOneIterable instanceof MediamanagerFile && $objOneIterable->rightView()) {
                 if ($objOneIterable->getIntType() == MediamanagerFile::$INT_TYPE_FOLDER) {
                     return $this->objToolkit->listButton(
-                        Link::getLinkAdmin($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$objOneIterable->getSystemid(), "", $this->getLang("action_open_folder"), "icon_folderActionOpen")
+                        Link::getLinkAdmin($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$objOneIterable->getSystemid()."&download=".$this->getParam("download"), "", $this->getLang("action_open_folder"), "icon_folderActionOpen")
                     );
                 } elseif ($objOneIterable->getIntType() == MediamanagerFile::$INT_TYPE_FILE) {
-                    return $this->objToolkit->listButton(
-                        "<a href=\"#\" title=\"".$this->getLang("commons_accept")."\" rel=\"tooltip\" onclick=\"require('folderview').selectCallback([['".$strTargetfield."', '".$objOneIterable->getStrFilename()."']]);\">".AdminskinHelper::getAdminImage("icon_accept")."</a>"
+                    $strValue = $objOneIterable->getStrFilename();
+                    if($this->getParam("download") == "1") {
+                        $strValue = _webpath_."/download.php?systemid=".$objOneIterable->getSystemid();
+                    }
+                    return $this->objToolkit->listButton( //TODO
+                        "<a href=\"#\" title=\"".$this->getLang("commons_accept")."\" rel=\"tooltip\" onclick=\"require('folderview').selectCallback([['".$strTargetfield."', '".$strValue."']]);\">".AdminskinHelper::getAdminImage("icon_accept")."</a>"
                     );
                 }
 
@@ -633,7 +637,7 @@ HTML;
                         Link::getLinkAdmin(
                             $this->getArrModule("modul"),
                             "folderContentFolderviewMode",
-                            "&form_element=".$strTargetfield."&systemid=".$objOneRepo->getSystemid(),
+                            "&form_element=".$strTargetfield."&systemid=".$objOneRepo->getSystemid()."&download=".$this->getParam("download"),
                             "",
                             $this->getLang("action_open_folder"),
                             "icon_folderActionOpen"
@@ -663,7 +667,7 @@ HTML;
 
             $strReturn .= $this->actionUploadFileInternal();
             $strReturn .= $this->generateNewFolderDialogCode();
-            $strReturn .= $this->renderFloatingGrid($objIterator, MediamanagerAdmin::INT_LISTTYPE_FOLDERVIEW, "&form_element=".$strTargetfield, false);
+            $strReturn .= $this->renderFloatingGrid($objIterator, MediamanagerAdmin::INT_LISTTYPE_FOLDERVIEW, "&form_element=".$strTargetfield."&download=".$this->getParam("download"), false);
         }
 
         return $strReturn;
@@ -681,7 +685,7 @@ HTML;
             $strTargetfield = xssSafeString($this->getParam("form_element"));
 
             if ($objOneIterable->getIntType() == MediamanagerFile::$INT_TYPE_FOLDER) {
-                return "onclick=\"document.location='".Link::getLinkAdminHref($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$objOneIterable->getSystemid())."'\"";
+                return "onclick=\"document.location='".Link::getLinkAdminHref($this->getArrModule("modul"), "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$objOneIterable->getSystemid())."&download=".$this->getParam("download")."'\"";
             } elseif ($objOneIterable->getIntType() == MediamanagerFile::$INT_TYPE_FILE) {
                 $strValue = $objOneIterable->getStrFilename();
                 $arrMime = $this->objToolkit->mimeType($strValue);
@@ -692,6 +696,8 @@ HTML;
 
                 if ($bitImage && $strTargetfield == "ckeditor") {
                     $strValue = _webpath_."/image.php?image=".$strValue;
+                } elseif($this->getParam("download") == "1") {
+                    $strValue = _webpath_."/download.php?systemid=".$objOneIterable->getSystemid();
                 } else {
                     $strValue = _webpath_.$strValue;
                 }
