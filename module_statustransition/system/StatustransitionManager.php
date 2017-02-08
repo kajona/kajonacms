@@ -7,10 +7,7 @@
 
 namespace Kajona\Statustransition\System;
 
-use Kajona\System\System\Database;
 use Kajona\System\System\Model;
-use Kajona\System\System\Objectfactory;
-use Kajona\System\System\Session;
 
 /**
  * @author christoph.kappestein@artemeon.de
@@ -19,82 +16,63 @@ use Kajona\System\System\Session;
 class StatustransitionManager
 {
     /**
-     * Returns the status transition handler for this object or null if no handler was attached
-     *
-     * @param Model $objObject
-     * @return StatustransitionHandler|null
+     * @var array
      */
-    public function getHandler(Model $objObject)
+    private $arrFlows;
+
+    /**
+     * StatustransitionManager constructor.
+     */
+    public function __construct()
     {
-        $objFlow = $this->getFlowForObject($objObject);
-        if ($objFlow instanceof StatustransitionFlow) {
-            $arrSteps = $objFlow->getSteps();
-            $objHandler = new StatustransitionDatabaseHandler();
-
-            foreach ($arrSteps as $intKey => $objStep) {
-                $objStatus = $objHandler->addStatus(new StatustransitionStatus($intKey, $objStep->getStrName(), $objStep->getStrIcon()));
-
-                $arrTransitions = $objStep->getArrTransitions();
-                foreach ($arrTransitions as $objTargetStatus) {
-                    /** @var StatustransitionFlowStep $objTargetStatus */
-                    $arrWorkflowActions = array();
-                    $objRightCallback = function (Model $objModel) use ($objStep) {
-                        return $objModel->rightEdit() && strpos(Session::getInstance()->getGroupIdsAsString(), $objStep->getStrUserGroup()) !== false;
-                    };
-                    $arrPreConditions = array();
-
-                    $objStatus->addTransition(
-                        new StatustransitionTransition(
-                            $objTargetStatus->getIntStatus(),
-                            $objTargetStatus->getSystemid(),
-                            $objTargetStatus->getStrName(),
-                            $arrWorkflowActions,
-                            $objRightCallback,
-                            $arrPreConditions
-                        )
-                    );
-                }
-            }
-
-            return $objHandler;
-        } else {
-            return null;
-        }
+        $this->arrFlows = [];
     }
 
     /**
-     * Returns the flow object which should be used for this model
+     * Returns all available status transition for the current step
      *
      * @param Model $objObject
-     * @return StatustransitionFlow
+     * @return StatustransitionFlowStepTransition[]
      */
-    protected function getFlowForObject(Model $objObject)
+    public function getPossibleTransitionsForModel(Model $objObject)
     {
-        if ($objObject instanceof StatustransitionFlowChoiceInterface) {
-            return $this->getConfiguredFlowByClassAndKey(get_class($objObject), $objObject->getStatusTransitionFlow());
+        $objStep = $this->getCurrentStepForModel($objObject);
+        if ($objStep instanceof StatustransitionFlowStep) {
+            return $objStep->getArrTransitions();
         }
+        return [];
+    }
 
+    /**
+     * @param Model $objObject
+     * @return StatustransitionFlowStep|null
+     */
+    public function getCurrentStepForModel(Model $objObject)
+    {
+        $objFlow = $this->getFlowForModel($objObject);
+        if ($objFlow instanceof StatustransitionFlow) {
+            return $objFlow->getStepForStatus($objObject->getIntRecordStatus());
+        }
         return null;
     }
 
     /**
-     * @param string $strClass
-     * @param string $strKey
+     * Returns the status transition handler for this object or null if no handler was attached
+     *
+     * @param Model $objObject
      * @return StatustransitionFlow|null
      */
-    protected function getConfiguredFlowByClassAndKey($strClass, $strKey)
+    public function getFlowForModel(Model $objObject)
     {
-        $objFilter = new StatustransitionFlowAssignmentFilter();
-        $objFilter->setStrClass(Database::getInstance()->escape($strClass));
-        $objFilter->setStrKey($strKey);
-
-        $arrAssignments = StatustransitionFlowAssignment::getObjectListFiltered($objFilter);
-        $objAssignment = reset($arrAssignments);
-
-        if ($objAssignment instanceof StatustransitionFlowAssignment) {
-            return Objectfactory::getInstance()->getObject($objAssignment->getStrFlow());
-        } else {
-            return null;
+        $strClass = get_class($objObject);
+        if (!isset($this->arrFlows[$strClass])) {
+            $objFlow = StatustransitionFlow::getByModelClass($strClass);
+            if ($objFlow instanceof StatustransitionFlow) {
+                $this->arrFlows[$strClass] = $objFlow;
+            } else {
+                return null;
+            }
         }
+        return $this->arrFlows[$strClass];
     }
 }
