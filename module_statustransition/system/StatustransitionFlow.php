@@ -134,6 +134,14 @@ class StatustransitionFlow extends Model implements ModelInterface, AdminListabl
     }
 
     /**
+     * @param StatustransitionFlowStep $objStep
+     */
+    public function addStep(StatustransitionFlowStep $objStep)
+    {
+        $objStep->updateObjectToDb($this->getSystemid());
+    }
+
+    /**
      * @param int $intStatus
      * @return StatustransitionFlowStep|null
      */
