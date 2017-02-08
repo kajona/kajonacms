@@ -9,6 +9,7 @@ namespace Kajona\Statustransition\System;
 
 use Kajona\System\System\Database;
 use Kajona\System\System\Exception;
+use Kajona\System\System\Logger;
 use Kajona\System\System\Model;
 
 /**
@@ -23,69 +24,55 @@ use Kajona\System\System\Model;
 abstract class StatustransitionHandler implements StatustransitionHandlerInterface
 {
     /**
-     * Name of the parameter which contains the transition identifier
-     *
-     * @var string
+     * @var StatustransitionFlow
      */
-    const STR_PARAM_TRANSITIONKEY = "transitionkey";
-
-    /**
-     * @var StatustransitionStatus[]
-     */
-    protected $arrStatus = array();
-
-    /**
-     * Adds a new status to the transition handler
-     *
-     * @param StatustransitionStatus $objStatus
-     * @return StatustransitionStatus
-     */
-    public function addStatus(StatustransitionStatus $objStatus)
-    {
-        $this->arrStatus[] = $objStatus;
-
-        return $objStatus;
-    }
+    private $objFlow;
 
     /**
      * Handles a status transition
      *
-     * @param integer $intOldStatus
-     * @param string $strTransitionKey
      * @param Model $objObject
+     * @param StatustransitionFlowStepTransition $objTransition
      * @return boolean - true if transition is executed, false if not
      * @throws \Kajona\System\System\Exception
      */
-    public function handleStatusTransition($intOldStatus, $strTransitionKey, Model $objObject)
+    public function handleStatusTransition(Model $objObject, StatustransitionFlowStepTransition $objTransition)
     {
         try {
             Database::getInstance()->transactionBegin();
 
-            $objStatus = $this->getStatus($intOldStatus);
-            if ($objStatus !== null) {
+            $intOldStatus = $objObject->getIntRecordStatus();
+            $intNewStatus = $objTransition->getTargetStep()->getIntStatus();
 
-                $objTransition = $objStatus->getTransitionByKey($strTransitionKey, $objObject);
-                if ($objTransition !== null) {
-                    $intNewStatus = $objTransition->getIntTargetStatus();
-
-                    if ($intNewStatus !== null && $intNewStatus != $objObject->getIntRecordStatus()) {
-                        // pre transition checks
-                        $objTransition->executeTransitionPreConditions($intOldStatus, $intNewStatus, $objObject);
-
-                        // the update triggers the status change event
-                        $objObject->setIntRecordStatus($intNewStatus);
-                        $objObject->updateObjectToDb();
-
-                        // execute the transition actions
-                        $objTransition->executeTransitionActions($intOldStatus, $intNewStatus, $objObject);
-                    }
-                } else {
-                    return false;
+            if ($intNewStatus != $objObject->getIntRecordStatus()) {
+                // validate handler conditions
+                $bitReturn = $this->validateStatusTransition($intOldStatus, $intNewStatus, $objObject, $objTransition);
+                if ($bitReturn === false) {
+                    throw new \RuntimeException("Condition not fulfilled");
                 }
+
+                // validate transition conditions
+                $bitReturn = $this->validateConditions($intOldStatus, $intNewStatus, $objObject, $objTransition);
+                if ($bitReturn === false) {
+                    throw new \RuntimeException("Condition not fulfilled");
+                }
+
+                // persist the new status
+                $objObject->setIntRecordStatus($intNewStatus);
+                $objObject->updateObjectToDb();
+
+                // execute handler actions
+                $this->executeStatusTransition($intOldStatus, $intNewStatus, $objObject, $objTransition);
+
+                // execute transition actions
+                $this->executeActions($intOldStatus, $intNewStatus, $objObject, $objTransition);
             }
+
             Database::getInstance()->transactionCommit();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             Database::getInstance()->transactionRollback();
+
+            Logger::getInstance(Logger::SYSTEMLOG)->addLogRow("Status-Transition error: " . $e->getMessage() . "\n" . $e->getTraceAsString(), Logger::$levelError);
             return false;
         }
 
@@ -96,16 +83,77 @@ abstract class StatustransitionHandler implements StatustransitionHandlerInterfa
      * Returns the fitting status for the provided status
      *
      * @param integer $intOldStatus
-     * @return StatustransitionStatus|null
+     * @return StatustransitionFlowStep|null
      */
     public function getStatus($intOldStatus)
     {
-        foreach ($this->arrStatus as $objStatus) {
+        $arrStatus = StatustransitionFlowStep::getObjectListFiltered(null, $this->objFlow->getSystemid());
+        foreach ($arrStatus as $objStatus) {
+            /** @var StatustransitionFlowStep $objStatus */
             if ($objStatus->getIntStatus() == $intOldStatus) {
                 return $objStatus;
             }
         }
         return null;
+    }
+
+    /**
+     * Callback method which can be overridden by a handler to validate whether a status transition is possible
+     *
+     * @return boolean
+     */
+    protected function validateStatusTransition($intOldStatus, $intNewStatus, Model $objModel, StatustransitionFlowStepTransition $objTransition)
+    {
+        return true;
+    }
+
+    /**
+     * Callback method which can be overridden by a handler to execute additional actions on a status transition
+     */
+    protected function executeStatusTransition($intOldStatus, $intNewStatus, Model $objModel, StatustransitionFlowStepTransition $objTransition)
+    {
+    }
+
+    /**
+     * @param integer $intOldStatus
+     * @param integer $intNewStatus
+     * @param Model $objModel
+     * @param StatustransitionFlowStepTransition $objTransition
+     */
+    private function validateConditions($intOldStatus, $intNewStatus, Model $objModel, StatustransitionFlowStepTransition $objTransition)
+    {
+        $bitResult = true;
+        $arrConditions = $objTransition->getArrConditions();
+        if (!empty($arrConditions)) {
+            foreach ($arrConditions as $objCondition) {
+                if ($objCondition instanceof StatustransitionConditionInterface) {
+                    $bitResult = $bitResult && $objCondition->validateCondition($intOldStatus, $intNewStatus, $objModel);
+                    if ($bitResult === false) {
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $bitResult;
+    }
+
+    /**
+     * @param integer $intOldStatus
+     * @param integer $intNewStatus
+     * @param Model $objModel
+     * @param StatustransitionFlowStepTransition $objTransition
+     */
+    private function executeActions($intOldStatus, $intNewStatus, Model $objModel, StatustransitionFlowStepTransition $objTransition)
+    {
+        $arrActions = $objTransition->getArrActions();
+        if (!empty($arrActions)) {
+            foreach ($arrActions as $objAction) {
+                if ($objAction instanceof StatustransitionActionInterface) {
+                    $objAction->executeAction($intOldStatus, $intNewStatus, $objModel);
+                }
+            }
+        }
     }
 
     /**
@@ -118,3 +166,4 @@ abstract class StatustransitionHandler implements StatustransitionHandlerInterfa
         return self::EXTENSION_POINT;
     }
 }
+

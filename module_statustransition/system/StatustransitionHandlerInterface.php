@@ -29,6 +29,11 @@ interface StatustransitionHandlerInterface extends GenericPluginInterface
     public function getTitle();
 
     /**
+     * @return string
+     */
+    public function getTargetClass();
+
+    /**
      * @return array
      */
     public function getAvailableActions();
@@ -41,11 +46,10 @@ interface StatustransitionHandlerInterface extends GenericPluginInterface
     /**
      * Handles a status transition
      *
-     * @param integer $intOldStatus
-     * @param string $strTransitionKey
      * @param Model $objObject
+     * @param StatustransitionFlowStepTransition $objTransition
      * @return boolean - true if transition is executed, false if not
      * @throws \Kajona\System\System\Exception
      */
-    public function handleStatusTransition($intOldStatus, $strTransitionKey, Model $objObject);
+    public function handleStatusTransition(Model $objObject, StatustransitionFlowStepTransition $objTransition);
 }
