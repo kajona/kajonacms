@@ -8,9 +8,9 @@
 namespace Kajona\Statustransition\System;
 
 use Kajona\System\System\AdminListableInterface;
+use Kajona\System\System\IdGenerator;
 use Kajona\System\System\Model;
 use Kajona\System\System\ModelInterface;
-use Kajona\System\System\Objectfactory;
 
 /**
  * StatustransitionFlowStep
@@ -33,6 +33,13 @@ class StatustransitionFlowStep extends Model implements ModelInterface, AdminLis
      * @listOrder ASC
      */
     protected $strName;
+
+    /**
+     * @var integer
+     * @tableColumn flow_step.step_index
+     * @tableColumnDatatype int
+     */
+    protected $intIndex;
 
     /**
      * @var string
@@ -61,6 +68,14 @@ class StatustransitionFlowStep extends Model implements ModelInterface, AdminLis
     }
 
     /**
+     * @return int
+     */
+    public function getIntIndex()
+    {
+        return $this->intIndex;
+    }
+
+    /**
      * @return string
      */
     public function getStrIcon()
@@ -77,26 +92,20 @@ class StatustransitionFlowStep extends Model implements ModelInterface, AdminLis
     }
 
     /**
-     * Return the status int for this step. At the moment this is simply the 0-indexed position of the step in the flow
-     * This int is inserted as record status
+     * Return the status int for this step
      *
      * @return int
      */
     public function getIntStatus()
     {
-        /** @var StatustransitionFlow $objFlow */
-        $objFlow = Objectfactory::getInstance()->getObject($this->getPrevId());
-        $arrSteps = $objFlow->getSteps();
-
-        foreach ($arrSteps as $intKey => $objStep) {
-            if ($this->getStrSystemid() == $objStep->getStrSystemid()) {
-                return $intKey;
-            }
-        }
-
-        return 0;
+        return $this->getIntIndex();
     }
 
+    /**
+     * Returns all available transitions
+     *
+     * @return StatustransitionFlowStepTransition[]
+     */
     public function getArrTransitions()
     {
         return StatustransitionFlowStepTransition::getObjectListFiltered(null, $this->getSystemid());
@@ -118,5 +127,15 @@ class StatustransitionFlowStep extends Model implements ModelInterface, AdminLis
     public function getStrLongDescription()
     {
         return "";
+    }
+
+    public function updateObjectToDb($strPrevId = false)
+    {
+        // set index if we create a new record
+        if (!validateSystemid($this->getSystemid())) {
+            $this->intIndex = IdGenerator::generateNextId($this->getPrevId());
+        }
+
+        return parent::updateObjectToDb($strPrevId);
     }
 }
