@@ -18,7 +18,7 @@ use Kajona\System\System\ModelInterface;
  * @targetTable flow_step_transition_action.action_id
  * @module flow
  * @moduleId _flow_module_id_
- * @formGenerator Kajona\Flow\Admin\FlowTransitionFormgenerator
+ * @formGenerator Kajona\Flow\Admin\FlowActionFormgenerator
  */
 abstract class FlowActionAbstract extends Model implements ModelInterface, AdminListableInterface, FlowActionInterface
 {
