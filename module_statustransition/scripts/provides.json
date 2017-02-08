@@ -1,6 +1,0 @@
-{
-  "paths": {
-    "mermaid": "mermaid/mermaid.min",
-    "statustransition": "kajona/statustransition"
-  }
-}
