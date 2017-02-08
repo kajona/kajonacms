@@ -41,7 +41,7 @@ abstract class FlowHandlerAbstract implements FlowHandlerInterface
             Database::getInstance()->transactionBegin();
 
             $intOldStatus = $objObject->getIntRecordStatus();
-            $intNewStatus = $objTransition->getTargetStep()->getIntStatus();
+            $intNewStatus = $objTransition->getTargetStatus()->getIntStatus();
 
             if ($intNewStatus != $objObject->getIntRecordStatus()) {
                 // validate handler conditions

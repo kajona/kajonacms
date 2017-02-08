@@ -76,6 +76,14 @@ class FlowStatus extends Model implements ModelInterface, AdminListableInterface
     }
 
     /**
+     * @param int $intIndex
+     */
+    public function setIntIndex($intIndex)
+    {
+        $this->intIndex = $intIndex;
+    }
+
+    /**
      * @return string
      */
     public function getStrIcon()

@@ -31,15 +31,19 @@ trait FlowControllerTrait
         }
 
         $objCurrentStatus = $this->objFlowManager->getCurrentStepForModel($objListEntry);
+        if ($objCurrentStatus === null) {
+            return "";
+        }
+
         $arrTransitions = $this->objFlowManager->getPossibleTransitionsForModel($objListEntry);
         if (!empty($arrTransitions)) {
             $arrMenu = array();
             foreach ($arrTransitions as $objTransition) {
                 /** @var FlowTransition $objTransition */
-                $objTargetStep = $objTransition->getTargetStep();
+                $objTargetStatus = $objTransition->getTargetStatus();
 
                 $arrMenu[] = array(
-                    "name" => AdminskinHelper::getAdminImage($objTargetStep->getStrIcon()) . " " . $objTargetStep->getStrDisplayName(),
+                    "name" => AdminskinHelper::getAdminImage($objTargetStatus->getStrIcon()) . " " . $objTargetStatus->getStrDisplayName(),
                     "link" => Link::getLinkAdminHref($this->getArrModule("modul"), "setStatus", "&systemid=" . $objListEntry->getStrSystemid() . "&transition_id=" . $objTransition->getSystemid()),
                 );
             }
@@ -52,11 +56,9 @@ trait FlowControllerTrait
                     "<span class='dropdown'><a href='#' data-toggle='dropdown' role='button'>" . $strIcon . "</a>" . $strMenu . "</span>"
                 );
             }
-
-            return $this->objToolkit->listButton(AdminskinHelper::getAdminImage($objCurrentStatus->getStrIcon(), $objCurrentStatus->getStrDisplayName()));
-        } else {
-            return parent::renderStatusAction($objListEntry, $strAltActive, $strAltInactive);
         }
+
+        return $this->objToolkit->listButton(AdminskinHelper::getAdminImage($objCurrentStatus->getStrIcon(), $objCurrentStatus->getStrDisplayName()));
     }
 
     /**
