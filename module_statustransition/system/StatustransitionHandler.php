@@ -24,7 +24,7 @@ use Kajona\System\System\Model;
 abstract class StatustransitionHandler implements StatustransitionHandlerInterface
 {
     /**
-     * @var StatustransitionFlow
+     * @var StatustransitionFlowConfig
      */
     private $objFlow;
 

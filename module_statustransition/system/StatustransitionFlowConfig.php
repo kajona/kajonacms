@@ -14,14 +14,14 @@ use Kajona\System\System\ModelInterface;
 use Kajona\System\System\Pluginmanager;
 
 /**
- * StatustransitionFlow
+ * StatustransitionFlowConfig
  *
  * @author christoph.kappestein@artemeon.de
  * @targetTable flow.flow_id
  * @module statustransition
  * @moduleId _statustransition_module_id_
  */
-class StatustransitionFlow extends Model implements ModelInterface, AdminListableInterface
+class StatustransitionFlowConfig extends Model implements ModelInterface, AdminListableInterface
 {
     /**
      * @var string
@@ -178,7 +178,7 @@ class StatustransitionFlow extends Model implements ModelInterface, AdminListabl
         $arrResult = self::getObjectListFiltered();
         $arrDbHandler = [];
         foreach ($arrResult as $objHandler) {
-            /** @var StatustransitionFlow $objHandler */
+            /** @var StatustransitionFlowConfig $objHandler */
             $arrDbHandler[$objHandler->getStrHandlerClass()] = $objHandler;
         }
 
@@ -186,7 +186,7 @@ class StatustransitionFlow extends Model implements ModelInterface, AdminListabl
         foreach ($arrFileHandler as $strClass => $objHandler) {
             /** @var StatustransitionHandlerInterface $objHandler */
             if (!isset($arrDbHandler[$strClass])) {
-                $objFlow = new StatustransitionFlow();
+                $objFlow = new StatustransitionFlowConfig();
                 $objFlow->setStrName($objHandler->getTitle());
                 $objFlow->setStrTargetClass($objHandler->getTargetClass());
                 $objFlow->setStrHandlerClass($strClass);
@@ -220,13 +220,13 @@ class StatustransitionFlow extends Model implements ModelInterface, AdminListabl
 
     /**
      * @param string $strClass
-     * @return StatustransitionFlow|null
+     * @return StatustransitionFlowConfig|null
      */
     public static function getByModelClass(string $strClass)
     {
         $arrResult = self::getObjectListFiltered();
         foreach ($arrResult as $objHandler) {
-            /** @var StatustransitionFlow $objHandler */
+            /** @var StatustransitionFlowConfig $objHandler */
             if ($objHandler->getStrTargetClass() == $strClass) {
                 return $objHandler;
             }

@@ -50,7 +50,7 @@ class StatustransitionManager
     public function getCurrentStepForModel(Model $objObject)
     {
         $objFlow = $this->getFlowForModel($objObject);
-        if ($objFlow instanceof StatustransitionFlow) {
+        if ($objFlow instanceof StatustransitionFlowConfig) {
             return $objFlow->getStepForStatus($objObject->getIntRecordStatus());
         }
         return null;
@@ -60,14 +60,14 @@ class StatustransitionManager
      * Returns the status transition handler for this object or null if no handler was attached
      *
      * @param Model $objObject
-     * @return StatustransitionFlow|null
+     * @return StatustransitionFlowConfig|null
      */
     public function getFlowForModel(Model $objObject)
     {
         $strClass = get_class($objObject);
         if (!isset($this->arrFlows[$strClass])) {
-            $objFlow = StatustransitionFlow::getByModelClass($strClass);
-            if ($objFlow instanceof StatustransitionFlow) {
+            $objFlow = StatustransitionFlowConfig::getByModelClass($strClass);
+            if ($objFlow instanceof StatustransitionFlowConfig) {
                 $this->arrFlows[$strClass] = $objFlow;
             } else {
                 return null;
