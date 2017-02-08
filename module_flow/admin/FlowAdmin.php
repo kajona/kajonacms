@@ -194,7 +194,7 @@ class FlowAdmin extends AdminEvensimpler implements AdminInterface
                 $objAction = new $strActionClass();
                 $arrLinks[] = $this->objToolkit->listButton(
                     Link::getLinkAdmin(
-                        $this->getArrModule("modul"), $this->getActionNameForClass("newTransitionAction", null), "&systemid=".$this->getSystemid()."&class=".$strActionClass.$this->getStrPeAddon(), $objAction->getTitle(), "", "icon_textfield", $objAction->getTitle()
+                        $this->getArrModule("modul"), $this->getActionNameForClass("newTransitionAction", null), "&systemid=".$this->getSystemid()."&class=".$strActionClass.$this->getStrPeAddon(), $objAction->getTitle(), $objAction->getTitle(), "icon_textfield", $objAction->getTitle()
                     )
                 );
             }
@@ -209,7 +209,7 @@ class FlowAdmin extends AdminEvensimpler implements AdminInterface
                 $objCondition = new $strConditionClass();
                 $arrLinks[] = $this->objToolkit->listButton(
                     Link::getLinkAdmin(
-                        $this->getArrModule("modul"), $this->getActionNameForClass("newTransitionCondition", null), "&systemid=".$this->getSystemid()."&class=".$strConditionClass.$this->getStrPeAddon(), $objCondition->getTitle(), "", "icon_textfield", $objCondition->getTitle()
+                        $this->getArrModule("modul"), $this->getActionNameForClass("newTransitionCondition", null), "&systemid=".$this->getSystemid()."&class=".$strConditionClass.$this->getStrPeAddon(), $objCondition->getTitle(), $objCondition->getTitle(), "icon_textfield", $objCondition->getTitle()
                     )
                 );
             }
