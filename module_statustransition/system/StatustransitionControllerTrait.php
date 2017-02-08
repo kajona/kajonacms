@@ -10,6 +10,7 @@ namespace Kajona\Statustransition\System;
 use Kajona\System\System\AdminskinHelper;
 use Kajona\System\System\Link;
 use Kajona\System\System\Model;
+use Kajona\System\System\Objectfactory;
 
 /**
  * @author christoph.kappestein@artemeon.de
@@ -29,39 +30,30 @@ trait StatustransitionControllerTrait
             return "";
         }
 
-        $objStatusTransitionHandler = $this->objStatustransitionManager->getHandler($objListEntry);
+        $objCurrentStatus = $this->objStatustransitionManager->getCurrentStepForModel($objListEntry);
+        $arrTransitions = $this->objStatustransitionManager->getPossibleTransitionsForModel($objListEntry);
+        if (!empty($arrTransitions)) {
+            $arrMenu = array();
+            foreach ($arrTransitions as $objTransition) {
+                /** @var StatustransitionFlowStepTransition $objTransition */
+                $objTargetStep = $objTransition->getTargetStep();
 
-        if ($objStatusTransitionHandler instanceof StatustransitionHandler) {
-            $objStatus = $objStatusTransitionHandler->getStatus($objListEntry->getIntRecordStatus());
-
-            if ($objStatus instanceof StatustransitionStatus) {
-                // get the available transitions for the given status and build up menu
-                $arrTransitions = $objStatus->getArrTransitions($objListEntry);
-                $arrMenu = array();
-                foreach ($arrTransitions as $strTransitionKey => $objTransition) {
-                    /** @var StatustransitionTransition $objTransition */
-
-                    $objTargetWorkflowStatus = $objStatusTransitionHandler->getStatus($objTransition->getIntTargetStatus());
-                    $arrMenu[] = array(
-                        "name" => AdminskinHelper::getAdminImage($objTargetWorkflowStatus->getStrIcon()) . " " . $objTransition->getStrChoiceLabel(),
-                        "link" => Link::getLinkAdminHref($this->getArrModule("modul"), "setStatus", "&systemid=" . $objListEntry->getStrSystemid() . "&".StatustransitionHandler::STR_PARAM_TRANSITIONKEY."=" . $strTransitionKey),
-                    );
-                }
-
-                $strTitleCurrentStatus = $objStatus->getStrTitle();
-                if ($objListEntry->rightEdit() && !empty($arrMenu)) {
-                    $strMenu = $this->objToolkit->registerMenu(generateSystemid(), $arrMenu);
-
-                    return $this->objToolkit->listButton(
-                        "<span class='dropdown'><a href='#' data-toggle='dropdown' role='button'>" . AdminskinHelper::getAdminImage($objStatus->getStrIcon(),
-                            $strTitleCurrentStatus) . "</a>" . $strMenu . "</span>"
-                    );
-                }
-
-                return $this->objToolkit->listButton(AdminskinHelper::getAdminImage($objStatus->getStrIcon(), $strTitleCurrentStatus));
-            } else {
-                return "";
+                $arrMenu[] = array(
+                    "name" => AdminskinHelper::getAdminImage($objTargetStep->getStrIcon()) . " " . $objTargetStep->getStrDisplayName(),
+                    "link" => Link::getLinkAdminHref($this->getArrModule("modul"), "setStatus", "&systemid=" . $objListEntry->getStrSystemid() . "&transition_id=" . $objTransition->getSystemid()),
+                );
             }
+
+            if ($objListEntry->rightEdit() && !empty($arrMenu)) {
+                $strMenu = $this->objToolkit->registerMenu(generateSystemid(), $arrMenu);
+                $strIcon = AdminskinHelper::getAdminImage($objCurrentStatus->getStrIcon(), $objCurrentStatus->getStrDisplayName());
+
+                return $this->objToolkit->listButton(
+                    "<span class='dropdown'><a href='#' data-toggle='dropdown' role='button'>" . $strIcon . "</a>" . $strMenu . "</span>"
+                );
+            }
+
+            return $this->objToolkit->listButton(AdminskinHelper::getAdminImage($objCurrentStatus->getStrIcon(), $objCurrentStatus->getStrDisplayName()));
         } else {
             return parent::renderStatusAction($objListEntry, $strAltActive, $strAltInactive);
         }
@@ -77,7 +69,7 @@ trait StatustransitionControllerTrait
     {
         $objObject = $this->objFactory->getObject($this->getSystemid());
         if ($objObject instanceof Model) {
-            $strTransitionKey = $this->getParam(StatustransitionHandler::STR_PARAM_TRANSITIONKEY);
+            $strTransitionId = $this->getParam("transition_id");
 
             /*
             if ($objObject->rightEdit() && $strTransitionKey == StatustransitionHandlerRiskContainer::STR_STATUS_KEY_REVIEW_TO_OPEN) {
@@ -96,11 +88,16 @@ trait StatustransitionControllerTrait
             }
             */
 
-            $objStatusTransitionHandler = $this->objStatustransitionManager->getHandler($objObject);
-            $bitReturn = $objStatusTransitionHandler->handleStatusTransition($objObject->getIntRecordStatus(), $strTransitionKey, $objObject);
+            $objFlow = $this->objStatustransitionManager->getFlowForModel($objObject);
+            $objTransition = Objectfactory::getInstance()->getObject($strTransitionId);
 
-            if ($bitReturn) {
-                $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "list", "&systemid=" . $objObject->getStrPrevId()));
+            if ($objTransition instanceof StatustransitionFlowStepTransition) {
+                $objHandler = $objFlow->getHandler();
+                $bitReturn = $objHandler->handleStatusTransition($objObject, $objTransition);
+
+                if ($bitReturn) {
+                    $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "list", "&systemid=" . $objObject->getStrPrevId()));
+                }
             }
         }
 
