@@ -46,6 +46,7 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
      * @tableColumn user.user_username
      * @tableColumnDatatype char254
      * @tableColumnIndex
+     * @listOrder ASC
      */
     private $strUsername = "";
 
@@ -305,6 +306,17 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
     {
         $this->loadSourceObject();
         return $this->objSourceUser->getGroupIdsForUser();
+    }
+
+    /**
+     * Returns an array of short group-ids the current user is assigned to
+     *
+     * @return array string
+     */
+    public function getArrShortGroupIds()
+    {
+        $this->loadSourceObject();
+        return $this->objSourceUser->getShortGroupIdsForUser();
     }
 
     /**

@@ -3,11 +3,16 @@
 /**
  * require statements
  */
-var SeleniumWaitHelper = requireHelper('/util/SeleniumWaitHelper.js');
-var SeleniumUtil = requireHelper('/util/SeleniumUtil.js');
-var BasePage = requireHelper('/pageobject/base/BasePage.js');
-var AdminLandingPage = requireHelper('/pageobject/AdminLandingPage.js');
-var Constants = requireHelper('/pageobject/Constants');
+const SeleniumWaitHelper = requireHelper('/util/SeleniumWaitHelper.js');
+const SeleniumUtil = requireHelper('/util/SeleniumUtil.js');
+const BasePage = requireHelper('/pageobject/base/BasePage.js');
+const AdminLandingPage = requireHelper('/pageobject/AdminLandingPage.js');
+
+
+/** Constants */
+const USERNAME = by.id("name");
+const PASSWORD = by.id("passwort");
+const LOGINBUTTON = by.css("button");
 
 /**
  *
@@ -23,7 +28,7 @@ class LoginPage extends BasePage {
      * @returns {WebElementPromise|!webdriver.WebElement}
      */
     get element_userName() {
-        return this.webDriver.findElement(By.xpath(Constants.LOGINPAGE_XPATH_INPUT_USERNAME));
+        return this.webDriver.findElement(USERNAME);
     }
 
     /**
@@ -31,7 +36,7 @@ class LoginPage extends BasePage {
      * @returns {WebElementPromise|!webdriver.WebElement}
      */
     get element_password() {
-        return this.webDriver.findElement(By.xpath(Constants.LOGINPAGE_XPATH_INPUT_PASSWORD));
+        return this.webDriver.findElement(PASSWORD);
     }
 
     /**
@@ -39,7 +44,7 @@ class LoginPage extends BasePage {
      * @returns {WebElementPromise|!webdriver.WebElement}
      */
     get element_loginBtn() {
-        return this.webDriver.findElement(By.xpath(Constants.LOGINPAGE_XPATH_LOGINBUTTON));
+        return this.webDriver.findElement(LOGINBUTTON);
     }
 
     /**

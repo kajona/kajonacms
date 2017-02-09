@@ -1,7 +1,14 @@
+/**
+ * (c) 2013-2017 by Kajona, www.kajona.de
+ * Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
+ */
 
-define(['jquery', 'lang'], function ($, lang) {
+/**
+ * @module lists
+ */
+define('lists', ['jquery', 'lang'], function ($, lang) {
 
-    return {
+    return /** @alias module:lists */ {
         arrSystemids : [],
         strConfirm : '',
         strCurrentUrl : '',

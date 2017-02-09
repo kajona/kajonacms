@@ -1,9 +1,14 @@
-//   (c) 2007-2016 by Kajona, www.kajona.de
-//       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
-//       $Id$
+/**
+ * (c) 2013-2017 by Kajona, www.kajona.de
+ * Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
+ */
 
-define(['jquery', 'jstree', 'ajax', 'lang', 'cacheManager'], function ($, jstree, ajax, lang, cacheManager) {
+/**
+ * @module tree
+ */
+define('tree', ['jquery', 'jstree', 'ajax', 'lang', 'cacheManager'], function ($, jstree, ajax, lang, cacheManager) {
 
+    /** @exports tree */
     var kajonatree = {
         helper: {},
         contextmenu: {},

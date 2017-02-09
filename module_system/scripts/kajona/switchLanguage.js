@@ -1,7 +1,14 @@
+/**
+ * (c) 2013-2017 by Kajona, www.kajona.de
+ * Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
+ */
 
-define([], function(){
+/**
+ * @module switchLanguage
+ */
+define('switchLanguage', [], function(){
 
-    return {
+    return /** @alias module:switchLanguage */ {
         change : function (strLanguageToLoad) {
             var url = window.location.href;
             url = url.replace(/(\?|&)language=([a-z]+)/, "");

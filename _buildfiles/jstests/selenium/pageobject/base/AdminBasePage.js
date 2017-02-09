@@ -5,12 +5,12 @@ let defaultPageObjectPath = browser.params.defaultPageObjectPath;
 /**
  * require statements
  */
-var BasePage = requireHelper('/pageobject/base/BasePage.js');
-var LeftNavigation = requireHelper('/pageobject/LeftNavigation.js');
-var MainContent = requireHelper('/pageobject/MainContent.js');
-var TopMenu = requireHelper('/pageobject/TopMenu.js');
-var ContentTopBar = requireHelper('/pageobject/ContentTopBar.js');
-var PathNavi = requireHelper('/pageobject/PathNavi.js');
+const BasePage = requireHelper('/pageobject/base/BasePage.js');
+const LeftNavigation = requireHelper('/pageobject/LeftNavigation.js');
+const MainContent = requireHelper('/pageobject/MainContent.js');
+const TopMenu = requireHelper('/pageobject/TopMenu.js');
+const ContentTopBar = requireHelper('/pageobject/ContentTopBar.js');
+const PathNavi = requireHelper('/pageobject/PathNavi.js');
 
 /**
  *

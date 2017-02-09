@@ -18,7 +18,6 @@ use Kajona\System\System\OrmObjectlist;
 use Kajona\System\System\OrmObjectlistOrderby;
 use Kajona\System\System\OrmObjectlistPropertyInRestriction;
 use Kajona\System\System\OrmObjectlistPropertyRestriction;
-use Kajona\System\System\OrmObjectlistRestriction;
 use Kajona\System\System\ServiceProvider;
 
 
@@ -453,7 +452,7 @@ class WorkflowsWorkflow extends \Kajona\System\System\Model implements \Kajona\S
      *
      * @param array $arrUsers
      *
-     * @return OrmObjectlistRestriction
+     * @return OrmCondition
      */
     private static function getUserWhereStatement($arrUsers)
     {
@@ -477,11 +476,7 @@ class WorkflowsWorkflow extends \Kajona\System\System\Model implements \Kajona\S
             $arrParams[] = "%".$strOneUser."%";
         }
 
-        if ($strWhere != "") {
-            $strWhere = "AND ( ".$strWhere." )";
-        }
-
-        return new OrmObjectlistRestriction($strWhere, $arrParams);
+        return new OrmCondition($strWhere, $arrParams);
     }
 
 

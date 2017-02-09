@@ -1,13 +1,17 @@
+/**
+ * (c) 2013-2017 by Kajona, www.kajona.de
+ * Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
+ */
 
 /**
  * Wrapper for desktop notifications.
  *
  * @see https://developer.mozilla.org/en-US/docs/WebAPI/Using_Web_Notifications
- * @type {Object}
+ * @module desktopNotification
  */
-define(['jquery'], function ($) {
+define('desktopNotification', ['jquery'], function ($) {
 
-    return {
+    return /** @alias module:desktopNotification */ {
         bitGranted : false,
 
         /**

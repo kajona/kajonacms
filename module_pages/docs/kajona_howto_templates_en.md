@@ -82,7 +82,7 @@ e.g. `%%title%%`
 They contain for example the page title or meta description.
 
 * Blocks-element
-A blocks-element is used as a container for various block elements. Those will be created lateron by the user.
+A blocks-element is used as a container for various block elements. Those will be created later on by the user.
 `<kajona-blocks kajona-name="Headline">`
 
 * Block-element
@@ -97,6 +97,8 @@ A block element is created within a blocks element and contains the real placeho
 	</kajona-blocks>
  ```
 
+
+
 * Page element placeholders in block-elements 
 `%%<placeholdername>_<elementname>%%` e.g. `%%text_headline%%`
 The placeholder name is arbitrary, followed by an underscore and the name of the page element (which need to match an existing page element).
@@ -105,6 +107,10 @@ The placeholder name is arbitrary, followed by an underscore and the name of the
 `%%master<placeholdername>_<elementname>%%` 
 e.g. `%%mastermainnavi_navigation%%`
 These placeholders behave the same as usual page element placeholders, but they have to be set on the master page. This is useful for page elements you want to show on every page, e.g. the navigations. Make sure you define the placeholders in the master-template (master.tpl) as well.
+
+
+> Heads up! The name-attribute of a blocks or block element may only be made out of character from a-z (upper and lower case allowed), numbers and the dash (-) and space ( ) characters. All other characters will lead to errors.
+
 
 In addition there is the placeholder `%%kajona_head%%` which contains some JavaScript code and the constant `_ webpath _` which contains the URL path of the current system. Also the constant `_ system_browser_cachebuster _` should be added to all references to JavaScript and CSS files, so the system can force the browser to reload all files from the server instead of loading them out of the browsers cache. 
 

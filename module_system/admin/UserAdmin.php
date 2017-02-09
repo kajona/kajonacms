@@ -21,6 +21,7 @@ use Kajona\System\System\Config;
 use Kajona\System\System\Cookie;
 use Kajona\System\System\Date;
 use Kajona\System\System\Exception;
+use Kajona\System\System\Filters\UserGroupFilter;
 use Kajona\System\System\HttpResponsetypes;
 use Kajona\System\System\LanguagesLanguage;
 use Kajona\System\System\Link;
@@ -816,9 +817,15 @@ class UserAdmin extends AdminSimple implements AdminInterface
         $strReturn .= $this->objToolkit->formInputHidden("doFilter", "1");
         $strReturn .= $this->objToolkit->formClose();
 
-        $objArraySectionIterator = new ArraySectionIterator(UserGroup::getObjectCountFiltered(null, $this->objSession->getSession($this->STR_GROUPFILTER_SESSION_KEY)));
+
+        $objFilter = new UserGroupFilter();
+        if($this->objSession->getSession($this->STR_GROUPFILTER_SESSION_KEY) != "") {
+            $objFilter->setStrName($this->objSession->getSession($this->STR_GROUPFILTER_SESSION_KEY));
+        }
+
+        $objArraySectionIterator = new ArraySectionIterator(UserGroup::getObjectCountFiltered($objFilter));
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-        $objArraySectionIterator->setArraySection(UserGroup::getObjectListFiltered(null, $this->objSession->getSession($this->STR_GROUPFILTER_SESSION_KEY), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+        $objArraySectionIterator->setArraySection(UserGroup::getObjectListFiltered($objFilter, "", $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
         $strReturn .= $this->renderList($objArraySectionIterator, false, "groupList");
         return $strReturn;
@@ -1457,12 +1464,19 @@ HTML;
         $this->setArrModuleEntry("template", "/folderview.tpl");
         $strReturn = "";
         if ($this->getSystemid() == "") {
+
+
+            $objFilter = new UserGroupFilter();
+            if(!Carrier::getInstance()->getObjSession()->isSuperAdmin()) {
+                $objFilter->setArrExcludedGroups(array(SystemSetting::getConfigValue("_admins_group_id_")));
+            }
+
             //show groups
-            $objIterator = new ArraySectionIterator(UserGroup::getObjectCountFiltered());
+            $objIterator = new ArraySectionIterator(UserGroup::getObjectCountFiltered($objFilter));
             $objIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
             $objIterator->setArraySection(
                 UserGroup::getObjectListFiltered(
-                    null,
+                    $objFilter,
                     "",
                     $objIterator->calculateStartPos(),
                     $objIterator->calculateEndPos()
@@ -1678,6 +1692,13 @@ HTML;
         $arrReturn = array();
         foreach ($arrUsers as $objOneElement) {
             if ($this->getParam("block") == "current" && $objOneElement->getSystemid() == $this->objSession->getUserID()) {
+                continue;
+            }
+
+            //if element is group and user is not superadmin
+            if ($objOneElement instanceof UserGroup
+                && !Carrier::getInstance()->getObjSession()->isSuperAdmin()
+                && $objOneElement->getStrSystemid() === SystemSetting::getConfigValue("_admins_group_id_")) {
                 continue;
             }
 

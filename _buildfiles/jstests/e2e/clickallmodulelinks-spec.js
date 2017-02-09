@@ -1,21 +1,17 @@
 "use strict";
 
-var LoginPage = require('../selenium/pageobject/LoginPage.js');
-var AdminLandingPage = require('../selenium/pageobject/AdminLandingPage.js');
-var SeleniumWaitHelper = require('../selenium/util/SeleniumWaitHelper.js');
+const LoginPage = require('../selenium/pageobject/LoginPage.js');
+const AdminLandingPage = require('../selenium/pageobject/AdminLandingPage.js');
 
 describe('clickallmodulelinks', function () {
-    beforeEach(function () {
-        browser.ignoreSynchronization = true;
-    });
 
     it('test clickallmodulelinks', function () {
-        var loginPage = LoginPage.getPage();
-        var strMenuName = "CIM";
+        const loginPage = LoginPage.getPage();
+        const strMenuName = "CIM";
 
         loginPage
             .then(function (p) {
-                return p.login("artemeonadmin", "admin0815");
+                return p.login("admin", "admin");
             })
             .then(function (adminLandingPage) {
                 adminLandingPage.leftNavigation.getNavigationModuleLinks(strMenuName).then(function (arrElements) {
@@ -36,7 +32,6 @@ describe('clickallmodulelinks', function () {
 
 
         // check whether login was successful
-        // expect(browser.driver.findElement(by.id('moduleTitle')).getText()).toEqual("Übersicht");
 
 
     });

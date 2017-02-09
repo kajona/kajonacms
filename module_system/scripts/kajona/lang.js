@@ -1,11 +1,16 @@
+/**
+ * (c) 2013-2017 by Kajona, www.kajona.de
+ * Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
+ */
 
 /**
- * Subsystem for all messaging related tasks. Queries the backend for the number of unread messages, ...
+ * language module to load properties / localized strings from the backend
  * @type {Object}
+ * @module lang
  */
-define(['jquery', 'ajax', 'cacheManager'], function ($, ajax, cacheManager) {
+define('lang', ['jquery', 'ajax', 'cacheManager'], function ($, ajax, cacheManager) {
 
-
+    /** @exports lang */
     var lang = {};
 
     /**
@@ -57,6 +62,24 @@ define(['jquery', 'ajax', 'cacheManager'], function ($, ajax, cacheManager) {
     };
 
     /**
+     * Fetches a single property and passes the value to the callback as soon as the entry was loaded from the backend
+     *
+     * @param module
+     * @param key
+     * @param callback
+     */
+    lang.fetchSingleProperty = function(module, key, callback) {
+        lang.queue.push({
+            text: key,
+            module: module,
+            params: [],
+            callback: callback
+        });
+
+        lang.fetchProperties();
+    };
+
+    /**
      * Fetches all properties for the given module and stores them in the local storage. Calls then the callback with the
      * fitting property value as argument. The callback is called directly if the property exists already in the storage.
      * The requests are triggered sequential so that we send per module only one request
@@ -105,6 +128,10 @@ define(['jquery', 'ajax', 'cacheManager'], function ($, ajax, cacheManager) {
             dataType: 'json',
             success: function(objResp) {
                 var arrData = me.queue.shift();
+                if(arrData === undefined) {
+                    me.fetchProperties(onReady);
+                    return;
+                }
 
                 cacheManager.set(arrData.module + '_' + KAJONA_LANGUAGE + '_' + KAJONA_BROWSER_CACHEBUSTER, JSON.stringify(objResp));
 

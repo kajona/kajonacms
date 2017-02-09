@@ -126,6 +126,8 @@ or
 		
 Got it? Great! Now, when looking into the details of a block, you may have noticed the weird looking placeholders, e.g. ```%%headline_plaintext%%``` or ```%%content_richtext%%```.
 
+> Heads up! The name-attribute of a blocks or block element may only be made out of character from a-z (upper and lower case allowed), numbers and the dash (-) and space ( ) characters. All other characters will lead to errors.
+
 ##Placeholders	
 
 A placeholder consists of three/four fragments: the leading and opening and closing chars, a name and an element-reference: ```%%[name]_[element]%%```

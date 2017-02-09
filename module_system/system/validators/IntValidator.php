@@ -30,7 +30,7 @@ class IntValidator implements ValidatorExtendedInterface {
      * @return bool
      */
     public function validate($objValue) {
-        return preg_match("/^-?[0-9]+$/", $objValue);
+        return preg_match("/^-?[0-9]+$/", $objValue) === 1;
     }
 
 
