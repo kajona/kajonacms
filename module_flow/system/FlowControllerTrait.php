@@ -7,6 +7,8 @@
 
 namespace Kajona\Flow\System;
 
+use Kajona\System\Admin\AdminFormgenerator;
+use Kajona\System\Admin\Formentries\FormentryHeadline;
 use Kajona\System\System\AdminskinHelper;
 use Kajona\System\System\Link;
 use Kajona\System\System\Model;
@@ -66,28 +68,44 @@ require(["jquery", "ajax"], function($, ajax){
         $objObject = $this->objFactory->getObject($this->getSystemid());
         if ($objObject instanceof Model) {
             $strTransitionId = $this->getParam("transition_id");
-
-            /*
-            if ($objObject->rightEdit() && $strTransitionKey == StatustransitionHandlerRiskContainer::STR_STATUS_KEY_REVIEW_TO_OPEN) {
-                // show form
-                $objForm = new RiskContainerRejectFormgenerator("riskcontainer", $objObject);
-                $objForm->generateFieldsFromObject();
-
-                if ($_SERVER["REQUEST_METHOD"] == "GET") {
-                    $strForm = $objForm->renderForm(Link::getLinkAdminHref($this->getArrModule("modul"), "setStatus", "&systemid=" . $objObject->getStrSystemid()));
-                    return $strForm;
-                } else {
-                    // save remark
-                    $objForm->updateSourceObject();
-                    $objObject->updateObjectToDb();
-                }
-            }
-            */
-
             $objFlow = $this->objFlowManager->getFlowForModel($objObject);
             $objTransition = Objectfactory::getInstance()->getObject($strTransitionId);
 
             if ($objTransition instanceof FlowTransition) {
+                $arrActions = $objTransition->getArrActions();
+                $objForm = new AdminFormgenerator("", null);
+                $bitInputRequired = false;
+
+                foreach ($arrActions as $objAction) {
+                    if ($objAction instanceof FlowActionUserInputInterface) {
+                        $objForm->addField(new FormentryHeadline())->setStrValue($objAction->getTitle());
+                        $objAction->configureUserInputForm($objForm);
+                        $bitInputRequired = true;
+                    }
+                }
+
+                if ($bitInputRequired) {
+                    if ($_SERVER["REQUEST_METHOD"] == "GET") {
+                        $strForm = $objForm->renderForm(Link::getLinkAdminHref($this->getArrModule("modul"), "setStatus", "&systemid=" . $objObject->getStrSystemid() . "&transition_id=" . $strTransitionId));
+                        return $strForm;
+                    } else {
+                        foreach ($arrActions as $objAction) {
+                            if ($objAction instanceof FlowActionUserInputInterface) {
+                                $objForm = new AdminFormgenerator("", null);
+                                $objAction->configureUserInputForm($objForm);
+                                $arrFields = $objForm->getArrFields();
+
+                                $arrData = [];
+                                foreach ($arrFields as $strName => $objField) {
+                                    $arrData[$strName] = $this->getParam($strName);
+                                }
+
+                                $objAction->handleUserInput($objObject, $objTransition, $arrData);
+                            }
+                        }
+                    }
+                }
+
                 $objHandler = $objFlow->getHandler();
                 $bitReturn = $objHandler->handleStatusTransition($objObject, $objTransition);
 
