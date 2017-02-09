@@ -279,29 +279,36 @@ class RightsTest extends Testbase
         $objAspect->setStrName("democase");
         $objAspect->updateObjectToDb();
 
-        $strGroupId = generateSystemid();
+
+        $objGroup = new UserGroup();
+        $strName = "name_" . generateSystemid();
+        $objGroup->setStrName($strName);
+        $objGroup->updateObjectToDb();
+        $strGroupId = $objGroup->getSystemid();
+        $strGroupShortId = $objGroup->getIntShortId();
 
         //fill caches
         SystemAspect::getObjectListFiltered();
 
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow("SELECT * FROM " . _dbprefix_ . "system_right WHERE right_id = ?", array($objAspect->getSystemid()), 0, false);
-        $this->assertTrue(!in_array($strGroupId, explode(",", $arrRow["right_view"])));
+        $this->assertTrue(!in_array($strGroupShortId, explode(",", $arrRow["right_view"])));
         $this->assertTrue(!Carrier::getInstance()->getObjRights()->checkPermissionForGroup($strGroupId, Rights::$STR_RIGHT_VIEW, $objAspect->getSystemid()));
 
         Carrier::getInstance()->getObjRights()->addGroupToRight($strGroupId, $objAspect->getSystemid(), Rights::$STR_RIGHT_VIEW);
 
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow("SELECT * FROM " . _dbprefix_ . "system_right WHERE right_id = ?", array($objAspect->getSystemid()), 0, false);
-        $this->assertTrue(in_array($strGroupId, explode(",", $arrRow["right_view"])));
+        $this->assertTrue(in_array($strGroupShortId, explode(",", $arrRow["right_view"])));
         $this->assertTrue(Carrier::getInstance()->getObjRights()->checkPermissionForGroup($strGroupId, Rights::$STR_RIGHT_VIEW, $objAspect->getSystemid()));
 
         SystemAspect::getObjectListFiltered();
 
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow("SELECT * FROM " . _dbprefix_ . "system_right WHERE right_id = ?", array($objAspect->getSystemid()), 0, false);
-        $this->assertTrue(in_array($strGroupId, explode(",", $arrRow["right_view"])));
+        $this->assertTrue(in_array($strGroupShortId, explode(",", $arrRow["right_view"])));
         $this->assertTrue(Carrier::getInstance()->getObjRights()->checkPermissionForGroup($strGroupId, Rights::$STR_RIGHT_VIEW, $objAspect->getSystemid()));
 
 
         $objAspect->deleteObjectFromDatabase();
+        $objGroup->deleteObjectFromDatabase();
     }
 
 

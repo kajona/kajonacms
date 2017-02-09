@@ -15,6 +15,7 @@
 
     "ajax": "kajona/ajax",
     "cacheManager": "kajona/cacheManager",
+    "contentToolbar": "kajona/contentToolbar",
     "changelog": "kajona/changelog",
     "dashboardCalendar": "kajona/dashboardCalendar",
     "desktopNotification": "kajona/desktopNotification",

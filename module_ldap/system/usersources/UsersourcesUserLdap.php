@@ -13,7 +13,9 @@ use Kajona\Ldap\System\Ldap;
 use Kajona\System\Admin\AdminFormgenerator;
 use Kajona\System\System\CoreEventdispatcher;
 use Kajona\System\System\Logger;
+use Kajona\System\System\Objectfactory;
 use Kajona\System\System\SystemEventidentifier;
+use Kajona\System\System\UserGroup;
 use Kajona\System\System\Usersources\UsersourcesUserInterface;
 
 
@@ -188,9 +190,23 @@ class UsersourcesUserLdap extends \Kajona\System\System\Model implements \Kajona
             }
         }
 
-
         return $arrReturn;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getShortGroupIdsForUser()
+    {
+        $arrReturn = array();
+        foreach ($this->getGroupIdsForUser() as $strOneGroupId) {
+            /** @var UserGroup $objGroup */
+            $objGroup = Objectfactory::getInstance()->getObject($strOneGroupId);
+            $arrReturn[] = $objGroup->getIntShortId();
+        }
+        return $arrReturn;
+    }
+
 
     /**
      * Hook to update the admin-form when editing / creating a single user

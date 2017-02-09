@@ -93,7 +93,7 @@ $lang["commons_validator_int_validationmessage"] = "Das Feld muss Ganzzahlen ent
 $lang["commons_validator_numeric_validationmessage"] = "Das Feld muss numerische Werte enthalten";
 $lang["commons_validator_posint_validationmessage"] = "Das Feld muss positive Ganzzahlen enthalten";
 $lang["commons_yes"]                     = "Ja";
-$lang["commons_filter_active"]            = "<span class='smaller pull-right'><i class=\"fa fa-filter\"></i> Aktiver Listen-Filter</span>";
+$lang["commons_filter_active"]            = "Aktiver Listen-Filter";
 $lang["filter_show_hide"]                = "Filter ein-/ausblenden";
 
 $lang["commons_remove_assignment"]                     = "Zuordnung löschen";

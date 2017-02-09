@@ -1,6 +1,14 @@
+/**
+ * (c) 2013-2017 by Kajona, www.kajona.de
+ * Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
+ */
 
-define(['jquery'], function ($) {
+/**
+ * @module util
+ */
+define('util', ['jquery'], function ($) {
 
+    /** @exports util */
     var util = {};
 
     /**

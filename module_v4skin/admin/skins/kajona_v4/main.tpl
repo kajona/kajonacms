@@ -91,10 +91,10 @@
 
 
             <div class="row contentTopbar clearfix hidden-print">
-                <div class="col-md-6">
-                    <h1 id="moduleTitle" class="pull-left">%%actionTitle%%</h1>%%quickhelp%%
-                </div>
-                <div class="col-md-6">
+            </div>
+            <div class="navbar navbar-default contentToolbar hidden">
+                <div class="navbar-inner ">
+                    <ul class="nav navbar-nav"></ul>
                     %%actiontoolbar%%
                 </div>
             </div>

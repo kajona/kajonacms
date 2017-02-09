@@ -3,10 +3,15 @@
 /**
  * require statements
  */
-var BasePage = requireHelper('/pageobject/base/BasePage.js');
-var Constants = requireHelper('/pageobject/Constants.js');
-var SeleniumUtil = requireHelper('/util/SeleniumUtil.js');
-var SeleniumWaitHelper = requireHelper('/util/SeleniumWaitHelper.js');
+const BasePage = requireHelper('/pageobject/base/BasePage.js');
+const SeleniumUtil = requireHelper('/util/SeleniumUtil.js');
+const SeleniumWaitHelper = requireHelper('/util/SeleniumWaitHelper.js');
+
+
+/** Constants */
+const SEARCHBOX_INPUT = by.xpath("//*[@id='globalSearchInput']");
+const USERMENU = By.xpath("//*[@class='dropdown userNotificationsDropdown']");
+const USERMENU_LOGOUT_LNK = by.xpath("//*[@class='dropdown userNotificationsDropdown']"+"/ul/li[last()]/a");
 
 /**
  *
@@ -22,7 +27,7 @@ class TopMenu extends BasePage {
      * @returns {WebElementPromise|!webdriver.WebElement}
      */
     get element_searchBox() {
-        return this.webDriver.findElement(By.xpath(Constants.TOPMENU_XPATH_SEARCHBOX_INPUT));
+        return this.webDriver.findElement(SEARCHBOX_INPUT);
     }
 
     /**
@@ -30,7 +35,7 @@ class TopMenu extends BasePage {
      * @returns {WebElementPromise|!webdriver.WebElement}
      */
     get element_lnkUserMenu() {
-        return this.webDriver.findElement(By.xpath(Constants.TOPMENU_XPATH_USERMENU));
+        return this.webDriver.findElement(USERMENU);
     }
 
     /**
@@ -38,16 +43,18 @@ class TopMenu extends BasePage {
      * @returns {WebElementPromise|!webdriver.WebElement}
      */
     get element_lnkUserMenuLogOut() {
-        return this.webDriver.findElement(By.xpath(Constants.TOPMENU_XPATH_USERMENU_LOGOUT_LNK));
+        return this.webDriver.findElement(USERMENU_LOGOUT_LNK);
     }
 
 
     /**
      *
      * @param {string} strSearchTerm
+     *
+     * @returns {WebElementPromise|!webdriver.WebElement}
      */
     search(strSearchTerm) {
-        this.element_searchBox.sendKeys(strSearchTerm);
+        return this.element_searchBox.sendKeys(strSearchTerm);
         // SeleniumWaitHelper.waitForElementUntilPresent(driver, By.xpath(Constants.TOPMENU_SEARCHBOX_LNK_SEARCHRESULTS), 10);
         // lnkShowAllSearchResults.click();
     };

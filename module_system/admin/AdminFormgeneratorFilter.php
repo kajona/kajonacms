@@ -46,7 +46,7 @@ class AdminFormgeneratorFilter extends AdminFormgenerator
      */
     public function __construct($strFormname, $objSourceobject)
     {
-        if(!$objSourceobject instanceof FilterBase) {
+        if (!$objSourceobject instanceof FilterBase) {
             throw new Exception("Source object must be an instance of FilterBase object", Exception::$level_ERROR);
         }
 
@@ -78,11 +78,11 @@ class AdminFormgeneratorFilter extends AdminFormgenerator
         $objFilter = $this->getObjSourceobject();
 
         /* Check if post request was send? */
-        if($objCarrier->getParam($this->getFormElementName(self::STR_FORM_PARAM_FILTER)) == "true") {
+        if ($objCarrier->getParam($this->getFormElementName(self::STR_FORM_PARAM_FILTER)) == "true") {
             $objCarrier->setParam("pv", "1");
 
             /* Check if filter was reset? */
-            if($objCarrier->getParam(self::STR_FORM_PARAM_RESET) != "") {
+            if ($objCarrier->getParam(self::STR_FORM_PARAM_RESET) != "") {
                 $this->resetParams();
             }
         }
@@ -100,21 +100,29 @@ class AdminFormgeneratorFilter extends AdminFormgenerator
 
         /* Display filter active/inactive */
         $bitFilterActive = false;
-        foreach($this->getArrFields() as $objOneField) {
-            if(!$objOneField instanceof FormentryHidden) {
+        foreach ($this->getArrFields() as $objOneField) {
+            if (!$objOneField instanceof FormentryHidden) {
                 $bitFilterActive = $bitFilterActive || $objOneField->getStrValue() != "";
             }
         }
 
-        /* Render folder toggle*/
-        $arrFolder = $objToolkit->getLayoutFolderPic($strReturn,
-            $objLang->getLang("filter_show_hide", "system").($bitFilterActive ? $objLang->getLang("commons_filter_active", "system") : ""),
-            "icon_folderOpen",
-            "icon_folderClosed",
-            $this->getBitInitiallyVisible());
-        $strReturn = $objToolkit->getFieldset($arrFolder[1], $arrFolder[0]);
+        return self::renderToolbarEntry($strReturn, $bitFilterActive, $this->getBitInitiallyVisible());
+    }
 
-        return $strReturn;
+    public static function renderToolbarEntry($strFilter, $bitFilterActive, $bitInitiallyVisible = false)
+    {
+        $objLang = Carrier::getInstance()->getObjLang();
+
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
+        $arrFolder = $objToolkit->getLayoutFolderPic(
+            $strFilter,
+            $bitFilterActive ? $objLang->getLang("commons_filter_active", "system") : $objLang->getLang("filter_show_hide", "system"),
+            "icon_folderOpen",
+            $bitFilterActive ? "icon_filter" : "icon_folderClosed",
+            $bitInitiallyVisible
+        );
+
+        return $objToolkit->addToContentToolbar($arrFolder[1]) . $arrFolder[0];
     }
 
     /**
@@ -132,7 +140,7 @@ class AdminFormgeneratorFilter extends AdminFormgenerator
         $arrParamsSuffix = array_keys($objFormgenerator->getArrFields());
 
         // clear params
-        foreach($arrParamsSuffix as $strSuffix) {
+        foreach ($arrParamsSuffix as $strSuffix) {
             $objCarrier->setParam($this->getFormElementName($strSuffix), null);
         }
     }
@@ -148,8 +156,8 @@ class AdminFormgeneratorFilter extends AdminFormgenerator
     {
         $strName = $strFieldName;
 
-        if($this->getStrFormname() != "") {
-            $strName = $this->getStrFormname()."_".$strFieldName;
+        if ($this->getStrFormname() != "") {
+            $strName = $this->getStrFormname() . "_" . $strFieldName;
         }
 
         return $strName;

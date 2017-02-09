@@ -732,7 +732,7 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
 </input_datetime_simple>
 
 <input_objectlist>
-    <div class="form-group">
+    <div class="form-group form-list">
         <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
 
         <div class="col-sm-6 inputText">
@@ -940,7 +940,7 @@ have a surrounding div with class "ac_container" and a div with id "%%name%%_con
 
 A list of checkbox or radio input elements
 <input_checkboxarray>
-    <div class="form-group">
+    <div class="form-group form-list">
         <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
 
         <div class="col-sm-6 inputText">
@@ -959,7 +959,7 @@ A list of checkbox or radio input elements
 
 A list of checkbox for object elements
 <input_checkboxarrayobjectlist>
-    <div class="form-group form-checkboxarraylist">
+    <div class="form-group form-checkboxarraylist form-list">
         <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
 
         <div class="col-sm-6 inputText">
@@ -1324,25 +1324,18 @@ The following sections are used to display the path-navigations, e.g. used by th
 
 Toolbar, prominent in the layout. Rendered to switch between action.
 <contentToolbar_wrapper>
-<div class="navbar navbar-default contentToolbar">
-    <div class="navbar-inner ">
-        <ul class="nav navbar-nav">%%entries%%</ul>
-    </div>
-</div>
+    <script type="text/javascript"> require(['contentToolbar'], function(contentToolbar) { %%entries%% }); </script>
 </contentToolbar_wrapper>
 
 <contentToolbar_entry>
-<li>%%entry%%</li>
+    contentToolbar.registerContentToolbarEntry(new contentToolbar.Entry('%%entry%%', '%%identifier%%', %%active%%));
 </contentToolbar_entry>
-
-<contentToolbar_entry_active>
-<li class="active">%%entry%%</li>
-</contentToolbar_entry_active>
 
 
 Toolbar for the current record, rendered to quick-access the actions of the current record.
 <contentActionToolbar_wrapper>
 <div class="actionToolbar pull-right">%%content%%</div>
+<script type="text/javascript"> require(['contentToolbar'], function(contentToolbar) { contentToolbar.showBar(); }); </script>
 </contentActionToolbar_wrapper>
 
 ---------------------------------------------------------------------------------------------------------

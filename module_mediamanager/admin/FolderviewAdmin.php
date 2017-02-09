@@ -85,7 +85,7 @@ class FolderviewAdmin extends AdminController implements AdminInterface
                 Link::getLinkAdmin(
                     "mediamanager",
                     "folderContentFolderviewMode",
-                    "&systemid=".$strRepoId."&form_element=".$this->getParam("form_element")."&bit_link=1",
+                    "&systemid=".$strRepoId."&form_element=".$this->getParam("form_element")."&bit_link=1&download=".$this->getParam("download"),
                     $this->getLang("wysiwygFilesBrowser"),
                     $this->getLang("wysiwygFilesBrowser"),
                     "icon_folderActionOpen"
@@ -100,7 +100,7 @@ class FolderviewAdmin extends AdminController implements AdminInterface
                 Link::getLinkAdmin(
                     "mediamanager",
                     "folderContentFolderviewMode",
-                    "&systemid=".$strRepoId."&form_element=".$this->getParam("form_element")."&bit_link=1",
+                    "&systemid=".$strRepoId."&form_element=".$this->getParam("form_element")."&bit_link=1&download=".$this->getParam("download"),
                     $this->getLang("wysiwygImagesBrowser"),
                     $this->getLang("wysiwygImagesBrowser"),
                     "icon_folderActionOpen"
@@ -114,7 +114,7 @@ class FolderviewAdmin extends AdminController implements AdminInterface
                 Link::getLinkAdmin(
                     "mediamanager",
                     "folderContentFolderviewMode",
-                    "&form_element=".$this->getParam("form_element")."&bit_link=1",
+                    "&form_element=".$this->getParam("form_element")."&bit_link=1&download=".$this->getParam("download"),
                     $this->getLang("wysiwygRepoBrowser"),
                     $this->getLang("wysiwygRepoBrowser"),
                     "icon_folderActionOpen"
