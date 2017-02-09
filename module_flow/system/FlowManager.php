@@ -67,6 +67,18 @@ class FlowManager
     }
 
     /**
+     * Returns the next transition which can be used if we want to automatically set the next status for the object
+     *
+     * @param Model $objObject
+     * @return FlowTransition
+     */
+    public function getNextTransitionForModel(Model $objObject)
+    {
+        $arrTransitions = $this->getPossibleTransitionsForModel($objObject);
+        return reset($arrTransitions);
+    }
+
+    /**
      * @param Model $objObject
      * @return FlowStatus|null
      */
