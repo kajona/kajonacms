@@ -49,7 +49,7 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
     private $objHandler;
 
     /**
-     * @var array
+     * @var FlowStatus[]
      */
     private $arrStatus;
 
@@ -129,7 +129,7 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
      */
     public function getArrStatus()
     {
-        return FlowStatus::getObjectListFiltered(null, $this->getStrSystemid());
+        return $this->arrStatus === null ? $this->arrStatus = FlowStatus::getObjectListFiltered(null, $this->getStrSystemid()) : $this->arrStatus;
     }
 
     /**
