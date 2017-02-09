@@ -544,7 +544,7 @@ class Link
 
 
     /**
-     * Converts the array to an urlencoded array.
+     * Converts the given array to an urlencoded array.
      *
      * Extracts the systemid out of the string|array and updates the passed reference with the
      * systemid.
@@ -599,7 +599,7 @@ class Link
                 }
             }
         }
-        $strParams = http_build_query($arrParams);
+        $strParams = http_build_query($arrParams, null, "&");
         return $strParams;
     }
 
