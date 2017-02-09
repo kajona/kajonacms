@@ -101,7 +101,7 @@ require(["jquery", "ajax"], function($, ajax){
     }
 
     /**
-     * Action to set the next status
+     * Renders the status menu
      *
      * @return string
      * @permissions edit
