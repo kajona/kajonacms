@@ -227,8 +227,6 @@ class Link
      */
     public static function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "", $strAlt = "", $strImage = "", $intWidth = "500", $intHeight = "500", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false)
     {
-        $strParams = self::sanitizeUrlParams($strParams);
-
         $strLink = "";
         //if($strParams != "")
         //    $strParams = str_replace("&", "&amp;", $strParams);
@@ -243,7 +241,12 @@ class Link
         $strAction = urlencode($strAction);
 
         if ($bitPortalEditor) {
-            $strParams .= "&pe=1";
+            if(is_string($strParams)){
+                $strParams .= "&pe=1";
+            }
+            elseif (is_array($strParams)){
+                $strParams["pe"] = "1";
+            }
         }
 
         if ($strImage != "") {
@@ -288,13 +291,16 @@ class Link
      */
     public static function getLinkAdminDialog($strModule, $strAction, $strParams = "", $strText = "", $strAlt = "", $strImage = "", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false, $strOnClick = "")
     {
-        $strParams = self::sanitizeUrlParams($strParams);
-
         $strLink = "";
         $strTitle = addslashes(StringUtil::replace(array("\n", "\r"), array(), strip_tags(nl2br($strTitle))));
 
         if ($bitPortalEditor) {
-            $strParams .= "&pe=1";
+            if(is_string($strParams)){
+                $strParams .= "&pe=1";
+            }
+            elseif (is_array($strParams)){
+                $strParams["pe"] = "1";
+            }
         }
 
         //urlencoding
@@ -376,8 +382,6 @@ class Link
     public static function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParams = "", $strSystemid = "", $strLanguage = "", $strSeoAddon = "")
     {
         $strReturn = "";
-        $strParams = self::sanitizeUrlParams($strParams);
-
         $bitInternal = true;
 
         //return "#" if neither an internal nor an external page is set
@@ -393,7 +397,12 @@ class Link
 
         //create an array out of the params
         if ($strSystemid != "") {
-            $strParams .= "&systemid=".$strSystemid;
+            if(is_string($strParams)){
+                $strParams .= "&systemid=".$strSystemid;
+            }
+            elseif (is_array($strParams)){
+                $strParams["systemid"] = $strSystemid;
+            }
             $strSystemid = "";
         }
 
