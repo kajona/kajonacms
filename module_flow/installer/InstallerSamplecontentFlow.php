@@ -20,7 +20,7 @@ class InstallerSamplecontentFlow implements SamplecontentInstallerInterface
 {
     public function isInstalled()
     {
-        return FlowConfig::getObjectCountFiltered() > 0;
+        return false;
     }
 
     public function install()
@@ -48,19 +48,19 @@ class InstallerSamplecontentFlow implements SamplecontentInstallerInterface
         $objStepD->updateObjectToDb($objFlow->getSystemid());
 
         $objStepTransition = new FlowTransition();
-        $objStepTransition->setStrTargetStep($objStepB->getSystemid());
+        $objStepTransition->setStrTargetStatus($objStepB->getSystemid());
         $objStepA->addTransition($objStepTransition);
 
         $objStepTransition = new FlowTransition();
-        $objStepTransition->setStrTargetStep($objStepC->getSystemid());
+        $objStepTransition->setStrTargetStatus($objStepC->getSystemid());
         $objStepB->addTransition($objStepTransition);
 
         $objStepTransition = new FlowTransition();
-        $objStepTransition->setStrTargetStep($objStepD->getSystemid());
+        $objStepTransition->setStrTargetStatus($objStepD->getSystemid());
         $objStepB->addTransition($objStepTransition);
 
         $objStepTransition = new FlowTransition();
-        $objStepTransition->setStrTargetStep($objStepD->getSystemid());
+        $objStepTransition->setStrTargetStatus($objStepD->getSystemid());
         $objStepC->addTransition($objStepTransition);
     }
 
