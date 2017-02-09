@@ -15,7 +15,7 @@
 define("toc", ['jquery', 'util', 'bootstrap'], function ($, util, bootstrap) {
 
 
-    arrIdMap = [];
+    var arrIdMap = [];
 
     /**
      * Internal helper to build an id for a given dom node
@@ -32,11 +32,11 @@ define("toc", ['jquery', 'util', 'bootstrap'], function ($, util, bootstrap) {
             id = $node.text().replace(/(?!\w)[\x00-\xC0]/g, "-");
             var newId = id;
             var intI = 0;
-            while(util.inArray(newId, this.arrIdMap)) {
+            while(util.inArray(newId, arrIdMap)) {
                 newId = id+"_"+(intI++);
             }
             id = newId;
-            this.arrIdMap.push(id);
+            arrIdMap.push(id);
             $node.attr('id', id);
         }
 
