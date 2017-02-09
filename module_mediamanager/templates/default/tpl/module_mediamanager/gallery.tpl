@@ -9,8 +9,8 @@
         </div>
     </div>
 
-    <nav class="text-xs-center">
-        <ul class=" pagination pagination-sm">%%link_back%% %%link_pages%% %%link_forward%%</ul>
+    <nav>
+        <ul class="pagination pagination-sm justify-content-center">%%link_back%% %%link_pages%% %%link_forward%%</ul>
     </nav>
 </list>
 
@@ -52,7 +52,7 @@ like < filelist >%%file_0%%</ filelist > -->
 <filelist_file>
     <div class="col-sm-4">
         <div class="card">
-            <a href="%%file_details_href%%" title="%%file_name%% %%file_subtitle%%" class="fancybox-thumb" rel="fancybox-thumb"><img src="[img,%%file_filename%%,220,220,fixed]" class="card-img-top" alt="%%file_subtitle%%" /></a>
+            <a href="%%file_details_href%%" title="%%file_name%% %%file_subtitle%%" class="fancybox-thumb" rel="fancybox-thumb"><img src="[img,%%file_filename%%,220,220,fixed]" class="card-img-top" alt="%%file_subtitle%%" style="width: 100%; "/></a>
             <div class="card-block">
                 <div data-kajona-editable="%%file_id%%#strName#plain">%%file_name%%</div>
             </div>
@@ -81,7 +81,7 @@ like < filelist >%%file_0%%</ filelist > -->
 
     <div class="row">
         <div class="col-sm-1"></div>
-        <div class="col-sm-10 text-xs-center">
+        <div class="col-sm-10 text-center">
             <img src="%%image_src%%" alt="%%file_name%%" class="img-fluid  center-block" />
         </div>
         <div class="col-sm-1"></div>
@@ -93,10 +93,12 @@ like < filelist >%%file_0%%</ filelist > -->
         </div>
     </div>
 
-    <div class="row text-xs-center">
+    <div class="row justify-content-center">
+        <nav>
         <ul class="pagination pagination-sm"><li class="page-item page-link">%%backlink%%</li><li class="page-item page-link">%%overview%%</li><li class="page-item page-link">%%forwardlink%%</li></ul>
+        </nav>
     </div>
-    <div class="row text-xs-center">
+    <div class="row text-center">
         <div class="col-sm-12">
             <div class="btn-group" role="group">
                 %%backlink_3%%%%backlink_2%%%%backlink_1%%%%filestrip_current%%%%forwardlink_1%%%%forwardlink_2%%%%forwardlink_3%%
@@ -117,5 +119,26 @@ like < filelist >%%file_0%%</ filelist > -->
 
 <!-- available placeholders: pathnavigation_point -->
 <pathnavigation_level>
-    <li>%%pathnavigation_point%%</li>
+    <li class="breadcrumb-item">%%pathnavigation_point%%</li>
 </pathnavigation_level>
+
+
+<!-- available placeholders: pageHref -->
+<pager_fwd>
+    <li class="page-item"><a href="%%pageHref%%" class="page-link">[lang,commons_next,system]</a></li>
+</pager_fwd>
+
+<!-- available placeholders: pageHref -->
+<pager_back>
+    <li class="page-item"><a href="%%pageHref%%" class="page-link">[lang,commons_back,system]</a></li>
+</pager_back>
+
+<!-- available placeholders: pageHref, pageNumber -->
+<pager_entry>
+    <li class="page-item"><a href="%%pageHref%%" class="page-link">[%%pageNumber%%]</a></li>
+</pager_entry>
+
+<!-- available placeholders: pageHref, pageNumber -->
+<pager_entry_active>
+    <li class="page-item active"><a href="%%pageHref%%" class="page-link">[%%pageNumber%%]</a></li>
+</pager_entry_active>
