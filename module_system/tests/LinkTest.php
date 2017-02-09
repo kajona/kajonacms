@@ -19,14 +19,18 @@ class LinkTest extends Testbase
      */
     public function testSanitizeUrlParams($arrInput, $strExpectedValue)
     {
+        $objReflection = new \ReflectionClass(Link::class);
+        $objMethod = $objReflection->getMethod("sanitizeUrlParams");
+        $objMethod->setAccessible(true);
+
         //Check value
-        $strValue = Link::sanitizeUrlParams($arrInput);
+        $strValue = $objMethod->invokeArgs(null, array($arrInput));
         $this->assertSame($strExpectedValue, $strValue);
 
         //Now check if method is called twice or three times the values are still the same
-        $strValue1 = Link::sanitizeUrlParams($arrInput);
-        $strValue2 = Link::sanitizeUrlParams($strValue1);
-        $strValue3 = Link::sanitizeUrlParams($strValue2);
+        $strValue1 = $objMethod->invokeArgs(null, array($arrInput));
+        $strValue2 = $objMethod->invokeArgs(null, array($strValue1));
+        $strValue3 = $objMethod->invokeArgs(null, array($strValue2));
 
         $this->assertSame($strExpectedValue, $strValue1);
         $this->assertSame($strExpectedValue, $strValue2);
@@ -43,16 +47,21 @@ class LinkTest extends Testbase
      */
     public function testSanitizeUrlParamsHttpBuildQuery($arrInput, $strExpectedValue)
     {
+        $objReflection = new \ReflectionClass(Link::class);
+        $objMethod = $objReflection->getMethod("sanitizeUrlParams");
+        $objMethod->setAccessible(true);
+
         //first use http_build_query
         $arrInput = http_build_query($arrInput);
 
-        $strValue = Link::sanitizeUrlParams($arrInput);
+        //Check value
+        $strValue = $objMethod->invokeArgs(null, array($arrInput));
         $this->assertSame($strExpectedValue, $strValue);
 
         //Now check if method is called twice or three times the values are still the same
-        $strValue1 = Link::sanitizeUrlParams($arrInput);
-        $strValue2 = Link::sanitizeUrlParams($strValue1);
-        $strValue3 = Link::sanitizeUrlParams($strValue2);
+        $strValue1 = $objMethod->invokeArgs(null, array($arrInput));
+        $strValue2 = $objMethod->invokeArgs(null, array($strValue1));
+        $strValue3 = $objMethod->invokeArgs(null, array($strValue2));
 
         $this->assertSame($strExpectedValue, $strValue1);
         $this->assertSame($strExpectedValue, $strValue2);

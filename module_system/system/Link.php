@@ -547,7 +547,7 @@ class Link
      *
      * @return array
      */
-    public static function sanitizeUrlParams($arrParams, &$strSystemid = "")
+    private static function sanitizeUrlParams($arrParams, &$strSystemid = "")
     {
         if($arrParams === null) {
             $arrParams = array();
@@ -592,56 +592,6 @@ class Link
         }
         $strParams = http_build_query($arrParams);
         return $strParams;
-    }
-
-    /**
-     * Internal helper to transform the passed params string into an array.
-     * Extracts the systemid out of the string and updates the passed reference with the
-     * systemid.
-     *
-     * @param string $strParams
-     * @param string &$strSystemid
-     *
-     * @return array
-     */
-    private static function sanitizeParamsString($strParams, &$strSystemid = "")
-    {
-        $strParams = StringUtil::replace("&amp;", "&", $strParams);
-
-        //if given, remove first ampersand from params
-        if (substr($strParams, 0, 1) == "&") {
-            $strParams = substr($strParams, 1);
-        }
-
-        $arrParams = explode("&", $strParams);
-        foreach ($arrParams as $strKey => &$strValue) {
-            $arrEntry = explode("=", $strValue);
-
-            if (count($arrEntry) == 2 && $arrEntry[0] == "systemid") {
-                //encoded and sanitized systemid param TODO: add cve number or other identifier
-                $strSystemid = $arrEntry[1];
-                if (!validateSystemid($strSystemid) && $strSystemid != "%systemid%") {
-                    $strSystemid = "";
-                }
-
-                unset($arrParams[$strKey]);
-            }
-            elseif ($strValue == "") {
-                unset($arrParams[$strKey]);
-            }
-
-            if (count($arrEntry) == 2) {
-                $arrEntry[1] = urlencode(urldecode($arrEntry[1]));
-            }
-            else {
-                //if more  / less then two entries, remove the param completely
-                unset($arrParams[$strKey]);
-            }
-
-            $strValue = implode("=", $arrEntry);
-        }
-
-        return $arrParams;
     }
 
     /**
