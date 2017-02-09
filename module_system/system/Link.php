@@ -68,7 +68,7 @@ class Link
      *
      * @param string $strModule
      * @param string $strAction
-     * @param string $strParams
+     * @param string|array $strParams - may be a string of params or an array
      * @param string $strText
      * @param string $strAlt
      * @param string $strImage
@@ -89,17 +89,17 @@ class Link
      *
      * @param string $strModule
      * @param string $strAction
-     * @param string $strParams
+     * @param string|array $strParams - may be a string of params or an array
      * @param bool $bitEncodedAmpersand
      *
      * @return string
      */
     public static function getLinkAdminHref($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = true)
     {
-
         //systemid in params?
         $strSystemid = "";
-        $arrParams = self::parseParamsString($strParams, $strSystemid);
+        $strParams = self::sanitizeUrlParams($strParams, $strSystemid);
+        $arrParams = explode("&", $strParams);
 
         //urlencoding
         $strModule = urlencode($strModule);
@@ -151,17 +151,17 @@ class Link
      *
      * @param string $strModule
      * @param string $strAction
-     * @param string $strParams
+     * @param string|array $strParams - may be a string of params or an array
      * @param bool $bitEncodedAmpersand
      *
      * @return mixed|string
      */
     public static function getLinkAdminXml($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = false)
     {
-
         //systemid in params?
         $strSystemid = "";
-        $arrParams = self::parseParamsString($strParams, $strSystemid);
+        $strParams = self::sanitizeUrlParams($strParams, $strSystemid);
+        $arrParams = explode("&", $strParams);
 
         //urlencoding
         $strModule = urlencode($strModule);
@@ -213,7 +213,7 @@ class Link
      *
      * @param string $strModule
      * @param string $strAction
-     * @param string $strParams
+     * @param string|array $strParams - may be a string of params or an array
      * @param string $strText
      * @param string $strAlt
      * @param string $strImage
@@ -227,6 +227,8 @@ class Link
      */
     public static function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "", $strAlt = "", $strImage = "", $intWidth = "500", $intHeight = "500", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false)
     {
+        $strParams = self::sanitizeUrlParams($strParams);
+
         $strLink = "";
         //if($strParams != "")
         //    $strParams = str_replace("&", "&amp;", $strParams);
@@ -273,7 +275,7 @@ class Link
      *
      * @param string $strModule
      * @param string $strAction
-     * @param string $strParams
+     * @param string|array $strParams - may be a string of params or an array
      * @param string $strText
      * @param string $strAlt
      * @param string $strImage
@@ -286,6 +288,8 @@ class Link
      */
     public static function getLinkAdminDialog($strModule, $strAction, $strParams = "", $strText = "", $strAlt = "", $strImage = "", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false, $strOnClick = "")
     {
+        $strParams = self::sanitizeUrlParams($strParams);
+
         $strLink = "";
         $strTitle = addslashes(StringUtil::replace(array("\n", "\r"), array(), strip_tags(nl2br($strTitle))));
 
@@ -334,7 +338,7 @@ class Link
      * @param string $strTarget
      * @param string $strText
      * @param string $strAction
-     * @param string $strParams
+     * @param string|array $strParams - may be a string of params or an array
      * @param string $strSystemid
      * @param string $strCssClass
      * @param string $strLanguage
@@ -345,7 +349,6 @@ class Link
     public static function getLinkPortal($strPageI, $strPageE, $strTarget = "_self", $strText = "", $strAction = "", $strParams = "", $strSystemid = "", $strCssClass = "", $strLanguage = "", $strSeoAddon = "")
     {
         $strReturn = "";
-
         $strHref = Link::getLinkPortalHref($strPageI, $strPageE, $strAction, $strParams, $strSystemid, $strLanguage, $strSeoAddon);
 
         if ($strTarget == "") {
@@ -363,7 +366,7 @@ class Link
      * @param string $strPageI
      * @param string $strPageE
      * @param string $strAction
-     * @param string $strParams
+     * @param string|array $strParams - may be a string of params or an array
      * @param string $strSystemid
      * @param string $strLanguage
      * @param string $strSeoAddon Only used if using mod_rewrite
@@ -373,6 +376,8 @@ class Link
     public static function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParams = "", $strSystemid = "", $strLanguage = "", $strSeoAddon = "")
     {
         $strReturn = "";
+        $strParams = self::sanitizeUrlParams($strParams);
+
         $bitInternal = true;
 
         //return "#" if neither an internal nor an external page is set
@@ -392,7 +397,8 @@ class Link
             $strSystemid = "";
         }
 
-        $arrParams = self::parseParamsString($strParams, $strSystemid);
+        $strParams = self::sanitizeUrlParams($strParams, $strSystemid);
+        $arrParams = explode("&", $strParams);
 
         // any anchors set to the page?
         $strAnchor = "";
@@ -512,7 +518,7 @@ class Link
      * @param string $strPageI
      * @param string $strPageE
      * @param string $strAction
-     * @param string $strParams
+     * @param string|array $strParams - may be a string of params or an array
      * @param string $strSystemid
      * @param string $strTitle
      * @param int|string $intWidth
@@ -529,6 +535,66 @@ class Link
 
 
     /**
+     * Converts the array to an urlencoded array.
+     *
+     * Extracts the systemid out of the string|array and updates the passed reference with the
+     * systemid.
+     *
+     * If $arrParams is null, an empty array is being returned.
+     *
+     * @param array|string $arrParams
+     * @param string &$strSystemid
+     *
+     * @return array
+     */
+    public static function sanitizeUrlParams($arrParams, &$strSystemid = "")
+    {
+        if($arrParams === null) {
+            $arrParams = array();
+        }
+
+        /*In case it is a string -> build associative array*/
+        if(is_string($arrParams)) {
+            $strParams = StringUtil::replace("&amp;", "&", $arrParams);
+
+            //if given, remove first ampersand from params
+            if (substr($strParams, 0, 1) == "&") {
+                $strParams = substr($strParams, 1);
+            }
+
+            $arrParams = [];
+            foreach(explode("&", $strParams) as $strOneSet) {
+                $arrEntry = explode("=", $strOneSet);
+                if (count($arrEntry) == 2) {
+                    $arrParams[$arrEntry[0]] = urldecode($arrEntry[1]);
+                }
+            }
+        }
+
+        /* Create string params*/
+        foreach($arrParams as $strParamKey => $strValue) {
+
+            //First convert boolean values to string representation "true", "false", then use http_build_query
+            //This is done because http_build_query converts booleans to "1"(true) or "0"(false) and not to "true", "false"
+            if (is_bool($strValue)) {
+                $arrParams[$strParamKey] = $strValue === true ? "true" : "false";
+            }
+
+            //Handle systemid param -> removes system from the array and sets reference variable $strSystemid
+            if ($strParamKey === "systemid") {
+                unset($arrParams[$strParamKey]);
+                $strSystemid = $strValue;
+
+                if (!validateSystemid($strValue) && $strValue != "%systemid%") {
+                    $strSystemid = "";
+                }
+            }
+        }
+        $strParams = http_build_query($arrParams);
+        return $strParams;
+    }
+
+    /**
      * Internal helper to transform the passed params string into an array.
      * Extracts the systemid out of the string and updates the passed reference with the
      * systemid.
@@ -538,7 +604,7 @@ class Link
      *
      * @return array
      */
-    private static function parseParamsString($strParams, &$strSystemid = "")
+    private static function sanitizeParamsString($strParams, &$strSystemid = "")
     {
         $strParams = StringUtil::replace("&amp;", "&", $strParams);
 
@@ -565,7 +631,7 @@ class Link
             }
 
             if (count($arrEntry) == 2) {
-                $arrEntry[1] = urlencode($arrEntry[1]);
+                $arrEntry[1] = urlencode(urldecode($arrEntry[1]));
             }
             else {
                 //if more  / less then two entries, remove the param completely
@@ -607,6 +673,4 @@ class Link
 
         return self::$strPortalLanguage;
     }
-
-
 }

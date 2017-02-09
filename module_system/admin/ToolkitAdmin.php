@@ -2228,7 +2228,7 @@ HTML;
      * @param ArraySectionIterator $objArraySectionIterator
      * @param string $strModule
      * @param string $strAction
-     * @param string $strLinkAdd
+     * @param string|array $strLinkAdd
      *
      * @return string the pageview code
      * @since 4.6
