@@ -85,15 +85,15 @@ require(["jquery", "ajax"], function($, ajax){
                 }
 
                 if ($bitInputRequired) {
-                    if ($_SERVER["REQUEST_METHOD"] == "GET") {
+                    if ($_SERVER["REQUEST_METHOD"] == "GET" || !$objForm->validateForm()) {
                         $strForm = $objForm->renderForm(Link::getLinkAdminHref($this->getArrModule("modul"), "setStatus", "&systemid=" . $objObject->getStrSystemid() . "&transition_id=" . $strTransitionId));
                         return $strForm;
                     } else {
                         foreach ($arrActions as $objAction) {
                             if ($objAction instanceof FlowActionUserInputInterface) {
-                                $objForm = new AdminFormgenerator("", null);
-                                $objAction->configureUserInputForm($objForm);
-                                $arrFields = $objForm->getArrFields();
+                                $objActionForm = new AdminFormgenerator("", null);
+                                $objAction->configureUserInputForm($objActionForm);
+                                $arrFields = $objActionForm->getArrFields();
 
                                 $arrData = [];
                                 foreach ($arrFields as $strName => $objField) {
