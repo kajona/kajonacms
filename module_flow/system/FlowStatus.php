@@ -8,6 +8,7 @@
 namespace Kajona\Flow\System;
 
 use Kajona\System\System\AdminListableInterface;
+use Kajona\System\System\Database;
 use Kajona\System\System\IdGenerator;
 use Kajona\System\System\Model;
 use Kajona\System\System\ModelInterface;
@@ -149,9 +150,35 @@ class FlowStatus extends Model implements ModelInterface, AdminListableInterface
     {
         // set index if we create a new record
         if (!validateSystemid($this->getSystemid())) {
-            $this->intIndex = IdGenerator::generateNextId($this->getPrevId());
+            $this->intIndex = IdGenerator::generateNextId(_flow_module_id_);
         }
 
         return parent::updateObjectToDb($strPrevId);
+    }
+
+    public function deleteObject()
+    {
+        $this->assertNoRecordsAreAssignedToThisStatus();
+
+        parent::deleteObject();
+    }
+
+    public function deleteObjectFromDatabase()
+    {
+        $this->assertNoRecordsAreAssignedToThisStatus();
+
+        parent::deleteObjectFromDatabase();
+    }
+
+    private function assertNoRecordsAreAssignedToThisStatus()
+    {
+        $intStatus = $this->getIntStatus();
+        $dbPrefix = _dbprefix_;
+        $arrRow = Database::getInstance()->getPRow("SELECT COUNT(*) AS cnt FROM {$dbPrefix}system WHERE system_status = ? AND system_deleted = 0", [$intStatus]);
+        $intCount = isset($arrRow["cnt"]) ? (int) $arrRow["cnt"] : 0;
+
+        if ($intCount > 0) {
+            throw new \RuntimeException("There are already " . $intCount . " records assigned to the status " . $intStatus);
+        }
     }
 }
