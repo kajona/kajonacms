@@ -44,8 +44,8 @@
         </div>
     </div>
 
-    <nav class="text-xs-center">
-        <ul class=" pagination pagination-sm">%%link_back%% %%link_pages%% %%link_forward%%</ul>
+    <nav>
+        <ul class=" pagination pagination-sm justify-content-center">%%link_back%% %%link_pages%% %%link_forward%%</ul>
     </nav>
 
     <div>Please note: This template makes use of the jQuery plugin "lightbox". Make sure to respect the projects <a href="http://fancyapps.com/fancybox/#license" target="_blank">licence</a>.</div>
@@ -93,7 +93,7 @@
 <filelist_file>
     <div class="col-sm-4">
         <div class="card mb-2">
-            <a><img src="[img,%%file_filename%%,220,220,fixed]" class="card-img-top" alt="%%file_subtitle%%"></a>
+            <a href="%%image_detail_src%%" title="%%file_name%% %%file_subtitle%%" class="fancybox-thumb" rel="fancybox-thumb"><img src="[img,%%file_filename%%,220,220,fixed]" class="card-img-top" alt="%%file_subtitle%%" style="width: 100%; " /></a>
             <div class="card-block">
                 <div data-kajona-editable="%%file_id%%#strName#plain">%%file_name%%</div>
             </div>
@@ -121,7 +121,7 @@
 
 <!-- available placeholders: pathnavigation_point -->
 <pathnavigation_level>
-    <li>%%pathnavigation_point%%</li>
+    <li class="breadcrumb-item">%%pathnavigation_point%%</li>
 </pathnavigation_level>
 
 
