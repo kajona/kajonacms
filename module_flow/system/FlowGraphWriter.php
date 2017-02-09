@@ -31,14 +31,20 @@ class FlowGraphWriter
             foreach ($arrTransitions as $objTransition) {
                 /** @var $objTransition FlowTransition */
                 $arrActions = $objTransition->getArrActions();
-                $arrActionNames = [];
-                foreach ($arrActions as $objAction) {
-                    $arrActionNames[] = $objAction->getTitle();
-                }
                 $arrConditions = $objTransition->getArrConditions();
                 $objTargetStatus = $objTransition->getTargetStatus();
                 if ($objTargetStatus instanceof FlowStatus) {
-                    $arrList[] = $objStatus->getStrSystemid() . "[" . $objStatus->getStrName() . "]-->" . $objTargetStatus->getSystemid() . "[" . $objTargetStatus->getStrName() . "];";
+                    if (!empty($arrConditions)) {
+                        $arrNames = [];
+                        foreach ($arrConditions as $objCondition) {
+                            $arrNames[] = $objCondition->getTitle();
+                        }
+
+                        $arrList[] = $objStatus->getStrSystemid() . "[" . $objStatus->getStrName() . "]-->" . $objTransition->getSystemid() . ";";
+                        $arrList[] = $objTransition->getStrSystemid() . "{" . implode(",", $arrNames) . "}-->" . $objTargetStatus->getSystemid() . "[" . $objTargetStatus->getStrName() . "];";
+                    } else {
+                        $arrList[] = $objStatus->getStrSystemid() . "[" . $objStatus->getStrName() . "]-->" . $objTargetStatus->getSystemid() . "[" . $objTargetStatus->getStrName() . "];";
+                    }
                 }
             }
         }
