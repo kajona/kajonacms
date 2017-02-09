@@ -70,7 +70,7 @@
 
 <!-- available placeholders: strTitle -->
 <categories_category>
-    <span class="label label-default">%%strTitle%%</span>
+    <span class="badge badge-default">%%strTitle%%</span>
 </categories_category>
 
 <!-- available placeholders: categories -->

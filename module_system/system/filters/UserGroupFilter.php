@@ -16,7 +16,7 @@ use Kajona\System\System\StringUtil;
  * @author stefan.meyer1@yahoo.de
  *
  * @module user
- * @moduleId _user_module_id_
+ * @moduleId _user_modul_id_
  */
 class UserGroupFilter extends FilterBase
 {

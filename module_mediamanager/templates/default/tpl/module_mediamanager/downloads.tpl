@@ -11,8 +11,8 @@
     </table>
 
 
-    <nav class="text-xs-center">
-        <ul class=" pagination pagination-sm">%%link_back%% %%link_pages%% %%link_forward%%</ul>
+    <nav>
+        <ul class=" pagination pagination-sm justify-content-center">%%link_back%% %%link_pages%% %%link_forward%%</ul>
     </nav>
 </list>
 
@@ -59,7 +59,7 @@
 
 <!-- available placeholders: pathnavigation_point -->
 <pathnavigation_level>
-    <li>%%pathnavigation_point%%</li>
+    <li class="breadcrumb-item">%%pathnavigation_point%%</li>
 </pathnavigation_level>
 
 

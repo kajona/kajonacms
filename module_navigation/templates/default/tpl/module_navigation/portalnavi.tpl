@@ -7,7 +7,7 @@
 
 
 <level_1_wrapper>
-    <ul class="nav navbar-nav">%%level1%%</ul>
+    <ul class="nav navbar-nav mr-auto">%%level1%%</ul>
 </level_1_wrapper>
 
 <level_1_active>
