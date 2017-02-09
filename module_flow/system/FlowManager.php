@@ -38,8 +38,31 @@ class FlowManager
     {
         $objStep = $this->getCurrentStepForModel($objObject);
         if ($objStep instanceof FlowStatus) {
-            return $objStep->getArrTransitions();
+            $intOldStatus = $objObject->getIntRecordStatus();
+            $arrTransitions = $objStep->getArrTransitions();
+            $arrResult = [];
+
+            // filter out transitions where the condition is not valid
+            foreach ($arrTransitions as $objTransition) {
+                $intNewStatus = $objTransition->getTargetStatus()->getIntStatus();
+                $arrConditions = $objTransition->getArrConditions();
+
+                $bitValid = true;
+                foreach ($arrConditions as $objCondition) {
+                    $bitValid = $objCondition->validateCondition($intOldStatus, $intNewStatus, $objObject);
+                    if ($bitValid === false) {
+                        break;
+                    }
+                }
+
+                if ($bitValid === true) {
+                    $arrResult[] = $objTransition;
+                }
+            }
+
+            return $arrResult;
         }
+
         return [];
     }
 

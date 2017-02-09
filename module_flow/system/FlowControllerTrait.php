@@ -11,6 +11,7 @@ use Kajona\System\System\AdminskinHelper;
 use Kajona\System\System\Link;
 use Kajona\System\System\Model;
 use Kajona\System\System\Objectfactory;
+use Kajona\System\Xml;
 
 /**
  * @author christoph.kappestein@artemeon.de
@@ -35,30 +36,23 @@ trait FlowControllerTrait
             return "";
         }
 
-        $arrTransitions = $this->objFlowManager->getPossibleTransitionsForModel($objListEntry);
-        if (!empty($arrTransitions)) {
-            $arrMenu = array();
-            foreach ($arrTransitions as $objTransition) {
-                /** @var FlowTransition $objTransition */
-                $objTargetStatus = $objTransition->getTargetStatus();
+        $strIcon = AdminskinHelper::getAdminImage($objCurrentStatus->getStrIcon(), $objCurrentStatus->getStrDisplayName());
+        $strMenuId = "status-menu-" . generateSystemid();
+        $strDropdownId = "status-dropdown-" . generateSystemid();
+        $strReturn = $this->objToolkit->listButton(
+            "<span class='dropdown status-dropdown' id='" . $strDropdownId . "'><a href='#' data-toggle='dropdown' role='button'>" . $strIcon . "</a><div class='dropdown-menu generalContextMenu' role='menu' id='" . $strMenuId . "'></div></span>"
+        );
 
-                $arrMenu[] = array(
-                    "name" => AdminskinHelper::getAdminImage($objTargetStatus->getStrIcon()) . " " . $objTargetStatus->getStrDisplayName(),
-                    "link" => Link::getLinkAdminHref($this->getArrModule("modul"), "setStatus", "&systemid=" . $objListEntry->getStrSystemid() . "&transition_id=" . $objTransition->getSystemid()),
-                );
-            }
+        $strParams = http_build_query(["admin" => 1, "module" => $objListEntry->getArrModule('module'), "action" => "showStatusMenu", "systemid" => $objListEntry->getSystemid()], null, "&");
+        $strReturn .= '<script type="text/javascript">
+require(["jquery", "ajax"], function($, ajax){
+    $("#' . $strDropdownId . '").on("show.bs.dropdown", function () {
+        ajax.loadUrlToElement("#' . $strMenuId . '", "/xml.php?' . $strParams . '");
+    });
+});
+</script>';
 
-            if ($objListEntry->rightEdit() && !empty($arrMenu)) {
-                $strMenu = $this->objToolkit->registerMenu(generateSystemid(), $arrMenu);
-                $strIcon = AdminskinHelper::getAdminImage($objCurrentStatus->getStrIcon(), $objCurrentStatus->getStrDisplayName());
-
-                return $this->objToolkit->listButton(
-                    "<span class='dropdown'><a href='#' data-toggle='dropdown' role='button'>" . $strIcon . "</a>" . $strMenu . "</span>"
-                );
-            }
-        }
-
-        return $this->objToolkit->listButton(AdminskinHelper::getAdminImage($objCurrentStatus->getStrIcon(), $objCurrentStatus->getStrDisplayName()));
+        return $strReturn;
     }
 
     /**
@@ -104,5 +98,48 @@ trait FlowControllerTrait
         }
 
         return "";
+    }
+
+    /**
+     * Action to set the next status
+     *
+     * @return string
+     * @permissions edit
+     * @responseType html
+     */
+    protected function actionShowStatusMenu()
+    {
+        Xml::setBitSuppressXmlHeader(true);
+
+        $objListEntry = Objectfactory::getInstance()->getObject($this->getSystemid());
+
+        if ($objListEntry->getIntRecordDeleted() == 1) {
+            return "";
+        }
+
+        $arrTransitions = $this->objFlowManager->getPossibleTransitionsForModel($objListEntry);
+        if (!empty($arrTransitions)) {
+            $arrMenu = array();
+            foreach ($arrTransitions as $objTransition) {
+                /** @var FlowTransition $objTransition */
+                $objTargetStatus = $objTransition->getTargetStatus();
+
+                $arrMenu[] = array(
+                    "name" => AdminskinHelper::getAdminImage($objTargetStatus->getStrIcon()) . " " . $objTargetStatus->getStrDisplayName(),
+                    "link" => Link::getLinkAdminHref($this->getArrModule("modul"), "setStatus", "&systemid=" . $objListEntry->getStrSystemid() . "&transition_id=" . $objTransition->getSystemid()),
+                );
+            }
+
+            if (!empty($arrMenu)) {
+                $strHtml = $this->objToolkit->registerMenu(generateSystemid(), $arrMenu);
+
+                // hack to remove the div around the ul since the div is already in the html
+                preg_match("#<ul>(.*)</ul>#ims", $strHtml, $arrMatches);
+
+                return $arrMatches[0];
+            }
+        }
+
+        return "<ul><li class='dropdown-header'>No status available</li></ul>";
     }
 }
