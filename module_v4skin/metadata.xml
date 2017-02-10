@@ -8,7 +8,7 @@
     <version>6.2</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
-    <providesInstaller>FALSE</providesInstaller>
+    <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
         <module name="system" version="6.2" />
     </requiredModules>

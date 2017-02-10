@@ -11,6 +11,7 @@ namespace Kajona\System\System;
 
 use Kajona\System\Admin\LoginAdmin;
 use Kajona\System\Xml;
+use Kajona\V4skin\Admin\SkinAdminController;
 
 /**
  * The request-dispatcher is called by all external request-entries and acts as a controller.
@@ -164,10 +165,32 @@ class RequestDispatcher
 
                     if (Carrier::getInstance()->getParam("blockAction") != "1") {
                         try {
-                            $objConcreteModule->action();
-                            $strReturn = $objConcreteModule->getModuleOutput();
+                            //process e.g. in case of post requests
+//                            if(!empty($_POST) || !ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::INDEX())) {
+                                $strReturn = $objConcreteModule->action();
+//                            } else {
+                                //pass the js loader
+//                                $arrParams = Carrier::getAllParams();
+//                                unset($arrParams["module"]);
+//                                unset($arrParams["action"]);
+//                                unset($arrParams["admin"]);
+//                                $strReturn = "<script type='text/javascript'>document.location='".Link::getLinkAdminHref($strModule, Carrier::getInstance()->getParam("action"), $arrParams, false, true)."';</script>";
+//                            }
+
+
+
+//                            $strReturn = $objConcreteModule->getModuleOutput();
                         } catch (ActionNotFoundException $objEx) {
-                            $strReturn = $objConcreteModule->getModuleOutput();
+//                            $strReturn = $objConcreteModule->getModuleOutput();
+                        }
+
+                        if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::INDEX())) {
+                            $objHelper = new SkinAdminController();
+                            if (empty(Carrier::getInstance()->getParam("folderview"))) {
+                                $strReturn = $objHelper->actionGenerateMainTemplate($strReturn);
+                            } else {
+                                $strReturn = $objHelper->actionGenerateFolderviewTemplate($strReturn);
+                            }
                         }
 
                     }

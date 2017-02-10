@@ -17,6 +17,7 @@
     <!-- KAJONA_BUILD_LESS_END -->
 
     <script src="_webpath_/[webpath,module_system]/scripts/jquery/jquery.min.js?_system_browser_cachebuster_"></script>
+    <script src="_webpath_/[webpath,module_system]/scripts/routie/routie.min.js?_system_browser_cachebuster_"></script>
     %%head%%
     <script src="_webpath_/[webpath,module_system]/scripts/requirejs/require.js?_system_browser_cachebuster_"></script>
     <script type="text/javascript">

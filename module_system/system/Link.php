@@ -129,7 +129,7 @@ class Link
                 $strLink = StringUtil::replace("&amp;", "&", $strLink);
             }
 
-            return $strLink;
+            return _webpath_."/index.php?admin=1".$strLink;
         }
 
 

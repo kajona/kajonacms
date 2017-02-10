@@ -71,7 +71,7 @@ class PagesJstreeNodeLoader implements JStreeNodeLoaderInterface
     {
         $strLink = "";
         if($objModule->rightEdit()) {
-            $strLink = Link::getLinkAdminHref("pages", "list", "", false);
+            $strLink = Link::getLinkAdminHref("pages", "list", "", false, true);
         }
 
         $objNode = new SystemJSTreeNode();
@@ -95,7 +95,7 @@ class PagesJstreeNodeLoader implements JStreeNodeLoaderInterface
     {
         $strLink = "";
         if($objSingleEntry->rightEdit()) {
-            $strLink = Link::getLinkAdminHref("pages", "list", "systemid=".$objSingleEntry->getSystemid(), false);
+            $strLink = Link::getLinkAdminHref("pages", "list", "systemid=".$objSingleEntry->getSystemid(), false, true);
         }
 
         $objNode = new SystemJSTreeNode();
@@ -125,10 +125,10 @@ class PagesJstreeNodeLoader implements JStreeNodeLoaderInterface
 
         $strLink = "";
         if($objSingleEntry->getIntType() == PagesPage::$INT_TYPE_ALIAS && Objectfactory::getInstance()->getObject($strTargetId)->rightEdit()) {
-            $strLink = Link::getLinkAdminHref("pages_content", "list", "systemid=".$strTargetId, false);
+            $strLink = Link::getLinkAdminHref("pages_content", "list", "systemid=".$strTargetId, false, true);
         }
         else if($objSingleEntry->getIntType() == PagesPage::$INT_TYPE_PAGE && $objSingleEntry->rightEdit()) {
-            $strLink = Link::getLinkAdminHref("pages_content", "list", "systemid=".$objSingleEntry->getSystemid(), false);
+            $strLink = Link::getLinkAdminHref("pages_content", "list", "systemid=".$objSingleEntry->getSystemid(), false, true);
         }
 
         $objNode = new SystemJSTreeNode();

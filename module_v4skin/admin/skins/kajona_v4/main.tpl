@@ -54,7 +54,12 @@
 
                 </div>
                 <div class="col-md-5 col-sm-6 col-xs-7 navbar-dropdown-section pull-right">
-                    <span>%%languageswitch%%</span>
+                    <span class="languageSwitchContainer">%%languageswitch%%</span>
+                    <script type="text/javascript">
+//                        require(['ajax'], function(ajax) {
+//                            ajax.loadUrlToElement(".languageSwitchContainer", '/xml.php?admin=1&module=v4skin&action=getLanguageswitch');
+//                        });
+                    </script>
                     <span class="">%%aspectChooser%%</span>
                     <a id="portaleditor" class="btn btn-default hidden-xs" href="_webpath_">
                         Portal
@@ -75,6 +80,13 @@
             <div class="sidebar-nav">
                 <div class="panel-group" id="moduleNavigation">
                     <div class="nav-header">Kajona V5</div>
+
+                    <!--<div id="navcontainer"></div>-->
+                    <!--<script type="text/javascript">-->
+                        <!--require(['ajax'], function(ajax) {-->
+                            <!--ajax.loadUrlToElement("#navcontainer", '/xml.php?admin=1&module=v4skin&action=getBackendNavi');-->
+                        <!--});-->
+                    <!--</script>-->
                     %%moduleSitemap%%
                 </div>
             </div>

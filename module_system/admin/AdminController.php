@@ -185,9 +185,12 @@ abstract class AdminController extends AbstractController
      * @return string
      * @final
      * @todo could be moved to a general admin-skin helper
+     *
+     * @deprecated
      */
     final public function getModuleOutput()
     {
+        die("getModuleOutput is no longer supported");
         //skip rendering everything if we just want to redirect...
         if ($this->strOutput == "" && ResponseObject::getInstance()->getStrRedirectUrl() != "") {
             return "";
@@ -197,33 +200,42 @@ abstract class AdminController extends AbstractController
             //fetch addtional content
             $strReturn = $this->strOutput;
             if ($this->getParam("contentFill") == "1") {
+                //TODO: wohin damit -> callback hook vom dispatcher aus
                 $strReturn .= $this->objToolkit->getPathNavigation($this->getArrOutputNaviEntries());
             }
             return $strReturn;
         }
 
+        //set a js-reloading logic to render the body
+//        $arrParams = Carrier::getAllParams();
+//        unset($arrParams["modul"]);
+//        unset($arrParams["action"]);
+//        unset($arrParams["admin"]);
+//        $strReturn = "<script type='text/javascript'>document.location='".Link::getLinkAdminHref($this->getArrModule("modul"), $this->getAction(), $arrParams, false, true)."';</script>";
 
+
+        //TODO: wohin damit -> callback hook vom dispatcher aus
         $this->validateAndUpdateCurrentAspect();
 
         //Calling the content-setter, including a default dialog
         $this->arrOutput["content"] = $this->strOutput;
         if ($this->getArrModule("template") != "/folderview.tpl") {
-            $this->arrOutput["path_home"] = AdminHelper::getAdminPathNaviHome();
-            $this->arrOutput["moduleSitemap"] = $this->objToolkit->getAdminSitemap($this->getArrModule("modul"));
-            $this->arrOutput["moduletitle"] = $this->getOutputModuleTitle();
-            $this->arrOutput["actionTitle"] = $this->getOutputActionTitle();
+            //move to separate getters
+//            $this->arrOutput["path_home"] = AdminHelper::getAdminPathNaviHome();
+//            $this->arrOutput["moduleSitemap"] = $this->objToolkit->getAdminSitemap($this->getArrModule("modul"));
+//            $this->arrOutput["moduletitle"] = $this->getOutputModuleTitle();
+//            $this->arrOutput["actionTitle"] = $this->getOutputActionTitle();
             if (SystemAspect::getActiveObjectCount() > 1) {
-                $this->arrOutput["aspectChooser"] = $this->objToolkit->getAspectChooser($this->getArrModule("modul"), $this->getAction(), $this->getSystemid());
+//                $this->arrOutput["aspectChooser"] = $this->objToolkit->getAspectChooser($this->getArrModule("modul"), $this->getAction(), $this->getSystemid());
             }
-            $this->arrOutput["login"] = $this->getOutputLogin();
-            $this->arrOutput["quickhelp"] = $this->getQuickHelp();
+//            $this->arrOutput["login"] = $this->getOutputLogin();
+//            $this->arrOutput["quickhelp"] = $this->getQuickHelp();
         }
         $objAdminHelper = new AdminHelper();
-        $this->arrOutput["languageswitch"] = (SystemModule::getModuleByName("languages") != null ? SystemModule::getModuleByName("languages")->getAdminInstanceOfConcreteModule()->getLanguageSwitch() : "");
+//        $this->arrOutput["languageswitch"] = (SystemModule::getModuleByName("languages") != null ? SystemModule::getModuleByName("languages")->getAdminInstanceOfConcreteModule()->getLanguageSwitch() : "");
         $this->arrOutput["module_id"] = $this->getArrModule("moduleId");
         $this->arrOutput["webpathTitle"] = urldecode(str_replace(array("http://", "https://"), array("", ""), _webpath_));
         $this->arrOutput["head"] = "<script type=\"text/javascript\">KAJONA_DEBUG = ".$this->objConfig->getDebug("debuglevel")."; KAJONA_WEBPATH = '"._webpath_."'; KAJONA_BROWSER_CACHEBUSTER = ".SystemSetting::getConfigValue("_system_browser_cachebuster_")."; KAJONA_LANGUAGE = '".Carrier::getInstance()->getObjSession()->getAdminLanguage()."';KAJONA_PHARMAP = ".json_encode(array_values(Classloader::getInstance()->getArrPharModules()))."; var require = {$objAdminHelper->generateRequireJsConfig()};</script>";
-        $this->arrOutput["requirejs_conf"] = $objAdminHelper->generateRequireJsConfig();
 
         //see if there are any hooks to be called
         $this->onRenderOutput($this->arrOutput);
@@ -234,7 +246,7 @@ abstract class AdminController extends AbstractController
         if ($this->getParam("peClose") == 1 || $this->getParam("pe") == 1) {
             $strTemplate = "/folderview.tpl";
         }
-        return $this->objTemplate->fillTemplateFile($this->arrOutput, $strTemplate);
+       // return $this->objTemplate->fillTemplateFile($this->arrOutput, $strTemplate);
     }
 
 
