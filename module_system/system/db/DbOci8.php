@@ -539,6 +539,15 @@ class DbOci8 extends DbBase
 
     //--- DUMP & RESTORE ------------------------------------------------------------------------------------
 
+
+    /**
+     * @inheritdoc
+     */
+    public function handlesDumpCompression()
+    {
+        return false;
+    }
+
     /**
      * Dumps the current db
      *
@@ -547,7 +556,7 @@ class DbOci8 extends DbBase
      *
      * @return bool
      */
-    public function dbExport($strFilename, $arrTables)
+    public function dbExport(&$strFilename, $arrTables)
     {
 
         $strFilename = _realpath_.$strFilename;
