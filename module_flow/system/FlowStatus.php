@@ -12,6 +12,7 @@ use Kajona\System\System\Database;
 use Kajona\System\System\IdGenerator;
 use Kajona\System\System\Model;
 use Kajona\System\System\ModelInterface;
+use Kajona\System\System\Objectfactory;
 
 /**
  * FlowStatus
@@ -136,6 +137,14 @@ class FlowStatus extends Model implements ModelInterface, AdminListableInterface
         return $this->strName;
     }
 
+    /**
+     * @return FlowConfig
+     */
+    public function getFlowConfig()
+    {
+        return Objectfactory::getInstance()->getObject($this->getPrevId());
+    }
+
     public function getStrAdditionalInfo()
     {
         return "";
@@ -172,9 +181,10 @@ class FlowStatus extends Model implements ModelInterface, AdminListableInterface
 
     private function assertNoRecordsAreAssignedToThisStatus()
     {
-        $intStatus = $this->getIntStatus();
         $dbPrefix = _dbprefix_;
-        $arrRow = Database::getInstance()->getPRow("SELECT COUNT(*) AS cnt FROM {$dbPrefix}system WHERE system_status = ? AND system_deleted = 0", [$intStatus]);
+        $strTargetClass = $this->getFlowConfig()->getStrTargetClass();
+        $intStatus = $this->getIntStatus();
+        $arrRow = Database::getInstance()->getPRow("SELECT COUNT(*) AS cnt FROM {$dbPrefix}system WHERE system_class = ? AND system_status = ?", [$strTargetClass, $intStatus]);
         $intCount = isset($arrRow["cnt"]) ? (int) $arrRow["cnt"] : 0;
 
         if ($intCount > 0) {
