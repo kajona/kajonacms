@@ -19,7 +19,7 @@ use Kajona\System\System\OrmComparatorEnum;
 use Kajona\System\System\OrmCondition;
 use Kajona\System\System\OrmObjectlist;
 use Kajona\System\System\OrmObjectlistOrderby;
-use Kajona\System\System\OrmObjectlistPropertyRestriction;
+use Kajona\System\System\OrmPropertyCondition;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\SearchPortalobjectInterface;
 use Kajona\System\System\StringUtil;
@@ -522,7 +522,7 @@ class MediamanagerFile extends \Kajona\System\System\Model implements \Kajona\Sy
 
             $objORM->addWhereRestriction(new OrmCondition($strWhere, $arrParams));
         }
-        $objORM->addWhereRestriction(new OrmObjectlistPropertyRestriction("bitIspackage", OrmComparatorEnum::Equal(), 1));
+        $objORM->addWhereRestriction(new OrmPropertyCondition("bitIspackage", OrmComparatorEnum::Equal(), 1));
         $objORM->addOrderBy(new OrmObjectlistOrderby("file_name ASC"));
         return $objORM->getObjectList(get_called_class(), "", $intStart, $intEnd);
 
@@ -567,7 +567,7 @@ class MediamanagerFile extends \Kajona\System\System\Model implements \Kajona\Sy
 
             $objORM->addWhereRestriction(new OrmCondition($strWhere, $arrParams));
         }
-        $objORM->addWhereRestriction(new OrmObjectlistPropertyRestriction("bitIspackage", OrmComparatorEnum::Equal(), 1));
+        $objORM->addWhereRestriction(new OrmPropertyCondition("bitIspackage", OrmComparatorEnum::Equal(), 1));
         return $objORM->getObjectCount(get_called_class());
     }
 

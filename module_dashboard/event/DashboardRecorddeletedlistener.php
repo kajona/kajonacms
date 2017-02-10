@@ -14,7 +14,7 @@ use Kajona\System\System\GenericeventListenerInterface;
 use Kajona\System\System\OrmComparatorEnum;
 use Kajona\System\System\OrmDeletedhandlingEnum;
 use Kajona\System\System\OrmObjectlist;
-use Kajona\System\System\OrmObjectlistPropertyRestriction;
+use Kajona\System\System\OrmPropertyCondition;
 use Kajona\System\System\SystemEventidentifier;
 
 /**
@@ -51,7 +51,7 @@ class DashboardRecorddeletedlistener implements GenericeventListenerInterface
         if ($strSourceClass == "Kajona\\System\\System\\UserUser" && validateSystemid($strSystemid)) {
 
             $objORM = new OrmObjectlist();
-            $objORM->addWhereRestriction(new OrmObjectlistPropertyRestriction("strUser", OrmComparatorEnum::Equal(), $strSystemid));
+            $objORM->addWhereRestriction(new OrmPropertyCondition("strUser", OrmComparatorEnum::Equal(), $strSystemid));
             $objORM->setObjHandleLogicalDeleted(OrmDeletedhandlingEnum::INCLUDED);
             $arrWidgets = $objORM->getObjectList("Kajona\\Dashboard\\System\\DashboardWidget");
 

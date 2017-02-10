@@ -166,7 +166,7 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
     {
 
         $objOrmList = new OrmObjectlist();
-        $objOrmList->addWhereRestriction(new OrmObjectlistPropertyRestriction("strName", OrmComparatorEnum::Equal(), $strName));
+        $objOrmList->addWhereRestriction(new OrmPropertyCondition("strName", OrmComparatorEnum::Equal(), $strName));
         $arrReturn = $objOrmList->getObjectList(__CLASS__);
         if(count($arrReturn) > 0) {
             return $arrReturn[0];
