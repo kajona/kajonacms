@@ -2,11 +2,11 @@
 
 <!-- available placeholders: action, search_term -->
 <search_form>
-    <form name="searchResultFormSmall" method="post" action="%%action%%" accept-charset="UTF-8" class="form-inline pull-xs-right">
+    <form name="searchResultFormSmall" method="post" action="%%action%%" accept-charset="UTF-8" class="form-inline ">
         <input type="text" name="searchterm" id="resultSearchtermSmall" value="%%search_term%%" class="form-control" placeholder="[lang,searchterm_label,search]"
                onkeyup="KAJONA.portal.searchSmall.queryBackend();"
                 autocomplete="off" />
-        <div id="searchResultSmall" class="card " style="display: none; position: absolute; right: 10px;  border: 1px solid #979797;  max-width: 400px; min-width: 200px;"></div>
+        <div id="searchResultSmall" class="card " style="display: none; position: absolute; z-index: 300; right: 10px; top: 50px;  border: 1px solid #979797;  max-width: 400px; min-width: 200px;"></div>
     </form>
 
     <div id="resultSetHeaderSmall" style="display: none;" >[lang,hitlist_text1,search] <span id="spanSearchtermSmall"></span> [lang,hitlist_text2,search] <span id="spanSearchamountSmall"></span> [lang,hitlist_text3,search]:</div>
