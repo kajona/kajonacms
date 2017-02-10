@@ -99,7 +99,10 @@ class Link
         //systemid in params?
         $strSystemid = "";
         $strParams = self::sanitizeUrlParams($strParams, $strSystemid);
-        $arrParams = explode("&", $strParams);
+        $arrParams = array();
+        if($strParams !== "") {
+            $arrParams = explode("&", $strParams);
+        }
 
         //urlencoding
         $strModule = urlencode($strModule);
@@ -161,7 +164,10 @@ class Link
         //systemid in params?
         $strSystemid = "";
         $strParams = self::sanitizeUrlParams($strParams, $strSystemid);
-        $arrParams = explode("&", $strParams);
+        $arrParams = array();
+        if($strParams !== "") {
+            $arrParams = explode("&", $strParams);
+        }
 
         //urlencoding
         $strModule = urlencode($strModule);
@@ -406,8 +412,12 @@ class Link
             $strSystemid = "";
         }
 
+
         $strParams = self::sanitizeUrlParams($strParams, $strSystemid);
-        $arrParams = explode("&", $strParams);
+        $arrParams = array();
+        if($strParams !== "") {
+            $arrParams = explode("&", $strParams);
+        }
 
         // any anchors set to the page?
         $strAnchor = "";
