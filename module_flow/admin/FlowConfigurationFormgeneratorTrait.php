@@ -56,9 +56,9 @@ trait FlowConfigurationFormgeneratorTrait
 
             $objType = new $strClass();
             if ($this->isValidSourceObject($objType)) {
-                $this->addField(new FormentryTextrow())
+                $this->addField(new FormentryTextrow("description"))
                     ->setStrValue($objType->getDescription());
-                $this->addField(new FormentryHeadline())
+                $this->addField(new FormentryHeadline("config_header"))
                     ->setStrValue(Lang::getInstance()->getLang("form_flow_config", "flow"));
 
                 $objType->configureForm($this);
@@ -78,6 +78,8 @@ trait FlowConfigurationFormgeneratorTrait
                 $arrParams[$strName] = $objField->getStrValue();
             }
             unset($arrParams["class"]);
+            unset($arrParams["description"]);
+            unset($arrParams["config_header"]);
 
             $objSource->setStrParams(json_encode((object) $arrParams));
         }
