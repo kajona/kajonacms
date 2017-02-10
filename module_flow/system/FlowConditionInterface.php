@@ -27,6 +27,11 @@ interface FlowConditionInterface
     public function getTitle();
 
     /**
+     * @return string
+     */
+    public function getDescription();
+
+    /**
      * Validates whether it is allowed to make a statustransition
      *
      * @param integer $intOldStatus

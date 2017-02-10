@@ -26,6 +26,11 @@ interface FlowActionInterface
     public function getTitle();
 
     /**
+     * @return string
+     */
+    public function getDescription();
+
+    /**
      * Is called on a status change
      *
      * @param integer $intOldStatus

@@ -9,8 +9,11 @@
 
 namespace Kajona\Flow\Admin;
 
+use Kajona\System\Admin\Formentries\FormentryHeadline;
 use Kajona\System\Admin\Formentries\FormentryHidden;
+use Kajona\System\Admin\Formentries\FormentryTextrow;
 use Kajona\System\System\Carrier;
+use Kajona\System\System\Lang;
 
 /**
  * FlowConfigurationFormgeneratorTrait
@@ -53,6 +56,11 @@ trait FlowConfigurationFormgeneratorTrait
 
             $objType = new $strClass();
             if ($this->isValidSourceObject($objType)) {
+                $this->addField(new FormentryTextrow())
+                    ->setStrValue($objType->getDescription());
+                $this->addField(new FormentryHeadline())
+                    ->setStrValue(Lang::getInstance()->getLang("form_flow_config", "flow"));
+
                 $objType->configureForm($this);
             }
         }

@@ -25,6 +25,8 @@ $lang["form_flow_targetstatus"] = "Ziel-Status";
 $lang["form_flow_actions"]      = "Aktionen";
 $lang["form_flow_conditions"]   = "Bedingungen";
 
+$lang["form_flow_config"]       = "Konfiguration";
+
 $lang["flow_step_icon_0"]       = "icon_flag_black";
 $lang["flow_step_icon_1"]       = "icon_flag_blue";
 $lang["flow_step_icon_2"]       = "icon_flag_brown";
