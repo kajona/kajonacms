@@ -3,11 +3,16 @@
 /**
  * require statements
  */
-var MainContent = requireHelper('/pageobject/MainContent.js');
-var ListRow = requireHelper('/pageobject/list/ListRow.js');
-var ListBatchActionRow = requireHelper('/pageobject/list/ListBatchActionRow.js');
-var ListPagination = requireHelper('/pageobject/list/ListPagination.js');
-var Constants = requireHelper('/pageobject/Constants.js');
+const MainContent = requireHelper('/pageobject/MainContent.js');
+const ListRow = requireHelper('/pageobject/list/ListRow.js');
+const ListBatchActionRow = requireHelper('/pageobject/list/ListBatchActionRow.js');
+const ListPagination = requireHelper('/pageobject/list/ListPagination.js');
+
+
+/** Constants */
+const LIST = by.css(".table.admintable");
+const LIST_ROWS = by.css("tbody > tr:not([data-systemid='batchActionSwitch'])");
+
 
 /**
  *
@@ -17,7 +22,7 @@ class List extends MainContent {
     constructor() {
         super();
 
-        /** @type {Promise<ListRow[]>} */
+        /** @type {webdriver.promise.Promise<ListRow[]>} */
         this._arrListRows = this._createListRows();
 
         /** @type {ListBatchActionRow} */
@@ -32,7 +37,7 @@ class List extends MainContent {
      * @returns {WebElementPromise|!webdriver.WebElement}
      */
     get elementList () {
-        return this.webDriver.findElement(By.css(Constants.LIST_CSS_ROOT));
+        return this.webDriver.findElement(LIST);
     }
 
     /**
@@ -40,7 +45,7 @@ class List extends MainContent {
      * @returns {webdriver.promise.Promise<WebElement[]>}
      */
     get elementsListRows () {
-        return this.elementList.findElements(By.css(Constants.LIST_CSS_ROWS));
+        return this.elementList.findElements(LIST_ROWS);
     }
 
     /**
@@ -54,7 +59,7 @@ class List extends MainContent {
 
     /**
      *
-     * @returns {ListRow[]}
+     * @returns {webdriver.promise.Promise<ListRow[]>}
      */
     getArrListRows() {
         return this._arrListRows;
@@ -71,7 +76,7 @@ class List extends MainContent {
 
     /**
      *
-     * @returns {Promise<ListRow[]>}
+     * @returns {webdriver.promise.Promise<ListRow[]>}
      */
     _createListRows() {
         return this.elementsListRows.then(function(arrElemRows) {

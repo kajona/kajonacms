@@ -1,10 +1,16 @@
+/**
+ * (c) 2013-2017 by Kajona, www.kajona.de
+ * Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
+ */
 
 /**
  * AJAX functions for connecting to the server
+ *
+ * @module ajax
  */
-define(['jquery', 'statusDisplay', 'workingIndicator', 'tooltip'], function ($, statusDisplay, workingIndicator, tooltip) {
+define('ajax', ['jquery', 'statusDisplay', 'workingIndicator', 'tooltip'], function ($, statusDisplay, workingIndicator, tooltip) {
 
-    return {
+    return /** @alias module:ajax */ {
 
         /**
          * Shorthand method to load a html fragement into a node identified by the selector.

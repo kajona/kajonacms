@@ -25,6 +25,14 @@ exports.config = {
         failOnError: true
     }],
     onPrepare: function() {
+
+        /**
+         * If you are testing against a non-angular site - set ignoreSynchronization setting to true
+         *
+         * @type {boolean}
+         */
+        browser.ignoreSynchronization = true;
+
         var basePath = __dirname + '/../../temp/kajona/core/_buildfiles/jstests/selenium';
 
         // "relativePath" - path, relative to "basePath" variable

@@ -1,3 +1,7 @@
+/**
+ * (c) 2013-2017 by Kajona, www.kajona.de
+ * Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
+ */
 
 /**
  * Appends an table of contents navigation under the main navigation sidebar. The index contains all elements which
@@ -5,10 +9,47 @@
  * each element.
  *
  * bootstrap is loaded to ensure affix() is present at time of calling
+ *
+ * @module toc
  */
-define(['jquery', 'util', 'bootstrap'], function ($, util, bootstrap) {
+define("toc", ['jquery', 'util', 'bootstrap'], function ($, util, bootstrap) {
 
-    return {
+
+    var arrIdMap = [];
+
+    /**
+     * Internal helper to build an id for a given dom node
+     *
+     * @param $node
+     * @returns {string}
+     */
+    getSecureId = function($node) {
+        var id = '';
+        if($node.attr('id')) {
+            id = $node.attr('id');
+        }
+        else {
+            id = $node.text().replace(/(?!\w)[\x00-\xC0]/g, "-");
+            var newId = id;
+            var intI = 0;
+            while(util.inArray(newId, arrIdMap)) {
+                newId = id+"_"+(intI++);
+            }
+            id = newId;
+            arrIdMap.push(id);
+            $node.attr('id', id);
+        }
+
+        return id;
+    };
+
+
+    return /** @alias module:toc */ {
+
+        /**
+         * Renders the table of contents
+         * @param selector
+         */
         render: function(selector){
             if(!$('.sidebar-nav').length) {
                 return;
@@ -21,23 +62,9 @@ define(['jquery', 'util', 'bootstrap'], function ($, util, bootstrap) {
 
             // create the navigation
             var html = '';
-            var arrIdMap = [];
-            $(selector).each(function () {
-                if($(this).attr('id')) {
-                    var id = $(this).attr('id');
-                }
-                else {
-                    var id = $(this).text().replace(/(?!\w)[\x00-\xC0]/g, "-");
-                    var newId = id;
-                    var intI = 0;
-                    while(util.inArray(newId, arrIdMap)) {
-                        newId = id+"_"+(intI++);
-                    }
 
-                    id = newId;
-                    arrIdMap.push(id);
-                    $(this).attr('id', id);
-                }
+            $(selector).each(function () {
+                var id = getSecureId($(this));
                 html += '<li><a href="#' + id + '">' + $(this).text() + '</a></li>';
             });
 
@@ -64,6 +91,14 @@ define(['jquery', 'util', 'bootstrap'], function ($, util, bootstrap) {
             });
             $('#toc-navigation').css('width', $('#moduleNavigation').width()+15);
             $('#toc-navigation').css('max-height', $(window).height()-60);
+        },
+
+        /**
+         * Removes a single entry from the toc
+         * @param id
+         */
+        removeEntry : function(id) {
+            $("a[href=#"+id+"]").parent("li").remove();
         }
     };
 

@@ -1,7 +1,7 @@
 //   (c) 2007-2016 by Kajona, www.kajona.de
 //       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
 
-define(["jquery", "jquery-ui", "ajax", "statusDisplay", "tooltip", "util"], function($, jqueryui, ajax, statusDisplay, tooltip, util)  {
+define(["jquery", "jquery-ui", "ajax", "statusDisplay", "tooltip", "util", "lang"], function($, jqueryui, ajax, statusDisplay, tooltip, util, lang)  {
 
     /**
      * Creates a new sortable list, fully featured with next / previous page drop-zones
@@ -132,12 +132,19 @@ define(["jquery", "jquery-ui", "ajax", "statusDisplay", "tooltip", "util"], func
 
             $('#'+strListId +' > tbody:has(tr[data-systemid!=""][data-deleted=""]) > tr').each(function (index) {
                 $(this).find("td.listsorthandle").css('cursor', 'move').append("<i class='fa fa-arrows-v'></i>");
-                tooltip.addTooltip($(this).find("td.listsorthandle"), "[lang,commons_sort_vertical,system]");
+
+                var self = this;
+                lang.fetchSingleProperty("commons", "commons_sort_vertical", function(strText) {
+                    tooltip.addTooltip($(self).find("td.listsorthandle"), strText);
+                });
 
                 if (bitMoveToTree) {
                     $(this).find("td.treedrag").css('cursor', 'move')
                         .addClass("jstree-listdraggable").append("<i class='fa fa-arrows-h' data-systemid='" + $(this).data("systemid") + "'></i>");
-                    tooltip.addTooltip($(this).find("td.treedrag"), "[lang,commons_sort_totree,system]");
+                    lang.fetchSingleProperty("commons", "commons_sort_totree", function(strText) {
+                        tooltip.addTooltip($(self).find("td.treedrag"), strText);
+
+                    });
                 }
             });
         }

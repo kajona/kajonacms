@@ -1,6 +1,6 @@
 "use strict";
 
-var SeleniumUtil = requireHelper('/util/SeleniumUtil.js');
+const SeleniumUtil = requireHelper('/util/SeleniumUtil.js');
 
 /**
  *

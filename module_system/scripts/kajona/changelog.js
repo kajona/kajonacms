@@ -1,6 +1,14 @@
+/**
+ * (c) 2013-2017 by Kajona, www.kajona.de
+ * Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
+ */
 
-define(['jquery', 'ajax', 'moment', 'd3', 'calendar-heatmap'], function ($, ajax, moment, d3, calHeatmap) {
+/**
+ * @module changelog
+ */
+define('changelog', ['jquery', 'ajax', 'moment', 'd3', 'calendar-heatmap'], function ($, ajax, moment, d3, calHeatmap) {
 
+    /** @exports changelog */
     var changelog = {};
 
     /**

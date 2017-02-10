@@ -350,7 +350,7 @@ abstract class AdminEvensimpler extends AdminSimple
                 "folderview" => $this->getParam("folderview"),
             );
 
-            $strFilterUrl = Link::getLinkAdminHref($this->getArrModule("module"), $this->getAction(), "&" . http_build_query($arrParams));
+            $strFilterUrl = Link::getLinkAdminHref($this->getArrModule("module"), $this->getAction(), $arrParams);
         }
 
         if ($objFilter->getBitFilterUpdated()) {

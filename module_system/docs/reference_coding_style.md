@@ -1,5 +1,7 @@
 # Coding style
 
+# PHP
+
 All classes should follow the [PSR-2] coding style.
 
 ## Naming conventions
@@ -65,39 +67,43 @@ always added.
 | 3 | protected methods | yes |
 | 4 | private methods | only required if the method is complex |
 
-## Legacy
+# Javascript
 
-If you want convert an existing module into namespaced classes you can move all legacy classes into the the /legacy 
-folder of the module. The old class can then extend the new namespaced class. Through this the old class still exists in 
-case other modules needs the class. In example if you want to refactor the class News of the News module you would 
-create a new class:
+We use an AMD loader to split up our javascript code base into multiple modules. Each module must be documented using
+the [JSDoc] syntax to document the defined functions and objects. For more information take a look at: 
+http://usejsdoc.org/howto-amd-modules.html
 
-> module_news/system/News.php
+In the following some examples how to document a module. In case you return a variable you have to use the `@exports`
+annotation:
 
-    <?php
-    
-    namespace Kajona\News\System;
-    
-    class News
-    {
-        // ...
-    }
-
-The News class contains then all logic from the old class.
-
-> module_news/legacy/class_module_news_news.php
-    
-    <?php
-    
-    use Kajona\News\System\News;
-    
     /**
-     * @deprecated 
+     * @module mymodule
      */
-    class class_module_news_news extends News
-    {
-    }
+    define('mymodule', ['dep1', 'dep2'], function (foo, bar) {
+    
+        /** @exports mymodule */
+        var obj = {};
+    
+        return obj;
+    
+    });
+
+In case you return directly an object you have to use the `@alias` annotation:
+
+    /**
+     * @module mymodule
+     */
+    define('mymodule', ['dep1', 'dep2'], function (foo, bar) {
+    
+        return /** @alias module:mymodule */ {
+            foo: function(){
+                return "bar";
+            }
+        };
+    
+    });
 
 
 [PSR-2]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md
+[JSDoc]: http://usejsdoc.org/
 

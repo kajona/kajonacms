@@ -9,17 +9,16 @@ namespace Kajona\System\Admin\Formentries;
 use Kajona\System\Admin\FormentryPrintableInterface;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\StringUtil;
-use Kajona\System\System\Validators\NumericValidator;
-
+use Kajona\System\System\Validators\IntValidator;
 
 /**
- * A simple form-element for floats, makes use of localized decimal-separators
+ * A simple form-element for integers, makes use of localized thousands-separators
  *
- * @author sidler@mulchprod.de
- * @since 4.0
+ * @author stefan.meyer1@yahoo.de
+ * @since 6.2
  * @package module_formgenerator
  */
-class FormentryFloat extends FormentryBase implements FormentryPrintableInterface
+class FormentryInt extends FormentryBase implements FormentryPrintableInterface
 {
 
 
@@ -28,7 +27,7 @@ class FormentryFloat extends FormentryBase implements FormentryPrintableInterfac
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
 
         //set the default validator
-        $this->setObjValidator(new NumericValidator());
+        $this->setObjValidator(new IntValidator());
     }
 
     public function setStrValue($strValue)
@@ -75,11 +74,11 @@ class FormentryFloat extends FormentryBase implements FormentryPrintableInterfac
     }
 
     /**
-     * Converts the value of the formentry to a float representation (raw value)
+     * Converts the value of the formentry to a integer representation (raw value)
      *
      * @param mixed $strInputValue
      *
-     * @return float|null
+     * @return int|float|null
      */
     public static function getRawValue($strInputValue)
     {
@@ -91,13 +90,26 @@ class FormentryFloat extends FormentryBase implements FormentryPrintableInterfac
         $strValue = StringUtil::replace($strSyleThousand, "", $strFieldValue);//remove first thousand separator
         $strValue = StringUtil::replace(array(",", $strStyleDecimal), ".", $strValue);//replace decimal with decimal point for db
 
-        //in case given string is not numeric or an empty string just return that value
+        //in case given $strValue is not numeric, an empty string just return value as is
         if (!is_numeric($strValue) || $strValue === "") {
             return $strFieldValue;
         }
 
-        return (float)$strValue;
+        //if $strValue contains a "." (then it is a float) - so return the float inout value
+        if(StringUtil::indexOf($strValue, ".")) {
+            return $strValue;
+        }
 
+        $intValue = $strValue;
+        //different casts on 32bit / 64bit
+        if ($intValue > PHP_INT_MAX) {
+            $intValue = (float)$intValue;
+        }
+        else {
+            $intValue = (int)$intValue;
+        }
+
+        return $intValue;
     }
 
     /**
@@ -105,7 +117,7 @@ class FormentryFloat extends FormentryBase implements FormentryPrintableInterfac
      *
      * @param mixed $strInputValue
      *
-     * @return mixed
+     * @return string
      */
     public static function getStrUIValue($strInputValue)
     {
@@ -115,6 +127,11 @@ class FormentryFloat extends FormentryBase implements FormentryPrintableInterfac
             return $strValue;
         }
 
-        return numberFormat($strValue, 2);
+        //if $strValue contains a "." (then it is a float) - so return the float input value
+        if(StringUtil::indexOf($strValue, ".")) {
+            return numberFormat($strValue, 2);
+        }
+
+        return numberFormat($strValue, 0);
     }
 }

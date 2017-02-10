@@ -1034,6 +1034,14 @@ footer {
             }
         }
 
+        &.form-list {
+            .inputContainer {
+                max-height: 350px;
+                overflow-y: scroll;
+            }
+        }
+
+
         .inputContainer {
             min-height: @input-height-base;
             background-color: @input-bg;
@@ -1382,6 +1390,11 @@ footer {
 
         &.table {
             display: table-row-group;
+
+            tr {
+                background-color: #ffffff;
+                min-height: 5px;
+            }
 
         }
     }

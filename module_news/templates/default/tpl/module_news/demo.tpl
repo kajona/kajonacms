@@ -15,7 +15,7 @@
      strSystemid, intLmTime, longCreateDate, strTitle, strImage, intHits, strIntro, strText, objDateStart, objDateEnd, objDateSpecial, objDateTimeStart, objDateTimeEnd, objDateTimeSpecial
 -->
 <news_list>
-<div class="card">
+<div class="card mb-3">
     <div class="card-header">
         <span class="pull-right">%%objDateStart%%</span>
         <h4><a href="%%news_more_link_href%%" data-kajona-editable="%%strSystemid%%#strTitle#plain">%%strTitle%%</a></h4>
@@ -34,7 +34,7 @@
     strSystemid, intLmTime, longCreateDate, strTitle, strImage, intHits, strIntro, strText, objDateStart, objDateEnd, objDateSpecial, objDateTimeStart, objDateTimeEnd, objDateTimeSpecial
 -->
 <news_list_image>
-<div class="card">
+<div class="card mb-3">
     <div class="card-header">
         <span class="pull-right">%%objDateStart%%</span>
         <h4><a href="%%news_more_link_href%%" data-kajona-editable="%%strSystemid%%#strTitle#plain">%%strTitle%%</a></h4>
@@ -111,7 +111,7 @@
 
 <!-- available placeholders: strTitle -->
 <categories_category>
-    <span class="label label-default">%%strTitle%%</span>
+    <span class="badge badge-default">%%strTitle%%</span>
 </categories_category>
 
 <!-- available placeholders: categories -->

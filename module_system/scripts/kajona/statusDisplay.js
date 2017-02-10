@@ -1,3 +1,7 @@
+/**
+ * (c) 2013-2017 by Kajona, www.kajona.de
+ * Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
+ */
 
 /**
  * General way to display a status message.
@@ -9,10 +13,12 @@
  *
  * Pass a xml-response from a Kajona server to displayXMLMessage() to start the logic
  * or use messageOK() / messageError() passing a regular string
+ *
+ * @module statusDisplay
  */
-define(['jquery'], function ($) {
+define('statusDisplay', ['jquery'], function ($) {
 
-    return {
+    return /** @alias module:statusDisplay */ {
         idOfMessageBox : "jsStatusBox",
         idOfContentBox : "jsStatusBoxContent",
         classOfMessageBox : "jsStatusBoxMessage",

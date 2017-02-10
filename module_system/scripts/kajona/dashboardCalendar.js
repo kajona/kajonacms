@@ -1,9 +1,16 @@
+/**
+ * (c) 2013-2017 by Kajona, www.kajona.de
+ * Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
+ */
 
 /**
  * Dashboard calendar functions
+ *
+ * @module dashboardCalendar
  */
-define(["jquery"], function($){
+define("dashboardCalendar", ["jquery"], function($){
 
+    /** @exports dashboardCalendar */
     var dashboardCalendar = {};
     dashboardCalendar.eventMouseOver = function(strSourceId) {
         if(strSourceId == "")

@@ -1,10 +1,16 @@
+/**
+ * (c) 2013-2017 by Kajona, www.kajona.de
+ * Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
+ */
 
 /**
  * Folderview functions
+ *
+ * @module folderview
  */
-define(["jquery"], function($){
+define("folderview", ["jquery"], function($){
 
-    return {
+    return /** @alias module:folderview */ {
         /**
          * holds a reference to the ModalDialog
          */

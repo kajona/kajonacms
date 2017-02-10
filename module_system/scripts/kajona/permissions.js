@@ -1,9 +1,16 @@
+/**
+ * (c) 2013-2017 by Kajona, www.kajona.de
+ * Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
+ */
 
 /**
- * little helper function for the system permissions matrix
+ * Little helper function for the system permissions matrix
+ *
+ * @module permissions
  */
-define(["jquery"], function($){
+define("permissions", ["jquery"], function($){
 
+    /** @exports permissions */
     var perms = {
         checkRightMatrix : function () {
             // mode 1: inheritance
