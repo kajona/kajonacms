@@ -16,8 +16,8 @@ use Kajona\System\System\OrmComparatorEnum;
 use Kajona\System\System\OrmCondition;
 use Kajona\System\System\OrmObjectlist;
 use Kajona\System\System\OrmObjectlistOrderby;
-use Kajona\System\System\OrmObjectlistPropertyInRestriction;
 use Kajona\System\System\OrmPropertyCondition;
+use Kajona\System\System\OrmPropertyInCondition;
 use Kajona\System\System\ServiceProvider;
 
 
@@ -369,7 +369,7 @@ class WorkflowsWorkflow extends \Kajona\System\System\Model implements \Kajona\S
         $objOrmMapper->addWhereRestriction(self::getUserWhereStatement($arrUserids));
 
         if (!empty($arrClasses)) {
-            $objOrmMapper->addWhereRestriction(new OrmObjectlistPropertyInRestriction("strClass", $arrClasses));
+            $objOrmMapper->addWhereRestriction(new OrmPropertyInCondition("strClass", $arrClasses));
         }
 
         return $objOrmMapper->getObjectCount(__CLASS__);
@@ -392,7 +392,7 @@ class WorkflowsWorkflow extends \Kajona\System\System\Model implements \Kajona\S
         $objOrmMapper->addWhereRestriction(self::getUserWhereStatement($arrUserids));
 
         if (!empty($arrClasses)) {
-            $objOrmMapper->addWhereRestriction(new OrmObjectlistPropertyInRestriction("strClass", $arrClasses));
+            $objOrmMapper->addWhereRestriction(new OrmPropertyInCondition("strClass", $arrClasses));
         }
 
         $objOrmMapper->addOrderBy(new OrmObjectlistOrderby("system_date_start DESC"));
