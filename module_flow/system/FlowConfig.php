@@ -170,7 +170,7 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
     }
 
     /**
-     *
+     * Reads all available handler from the file system and syncs them with the database
      */
     public static function syncHandler()
     {
