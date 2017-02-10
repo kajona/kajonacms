@@ -147,7 +147,7 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
 
         $objOrmList = new OrmObjectlist();
         if($bitJustActive) {
-            $objOrmList->addWhereRestriction(new OrmObjectlistSystemstatusRestriction(OrmComparatorEnum::NotEqual(), 0));
+            $objOrmList->addWhereRestriction(new OrmSystemstatusCondition(OrmComparatorEnum::NotEqual(), 0));
         }
 
         return $objOrmList->getObjectCount(__CLASS__);
