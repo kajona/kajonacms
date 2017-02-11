@@ -395,7 +395,7 @@ class SearchAdmin extends AdminSimple implements AdminInterface
 
             $strLink = $objOneResult->getStrPagelink();
             if ($strLink == "") {
-                $strLink = Link::getLinkAdminHref($objOneResult->getObjObject()->getArrModule("modul"), "edit", "&systemid=".$objOneResult->getStrSystemid());
+                $strLink = Link::getLinkAdminHref($objOneResult->getObjObject()->getArrModule("modul"), "edit", "&systemid=".$objOneResult->getStrSystemid(), true, true);
             }
 
             $arrItem["module"] = Carrier::getInstance()->getObjLang()->getLang("modul_titel", $objOneResult->getObjObject()->getArrModule("modul"));
@@ -449,7 +449,7 @@ class SearchAdmin extends AdminSimple implements AdminInterface
 
             $strLink = $objOneResult->getStrPagelink();
             if ($strLink == "") {
-                $strLink = Link::getLinkAdminHref($objOneResult->getObjObject()->getArrModule("modul"), "edit", "&systemid=".$objOneResult->getStrSystemid());
+                $strLink = Link::getLinkAdminHref($objOneResult->getObjObject()->getArrModule("modul"), "edit", "&systemid=".$objOneResult->getStrSystemid(), true, true);
             }
 
             $strReturn .=

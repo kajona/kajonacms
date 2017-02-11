@@ -579,7 +579,7 @@ JS;
                 "systemid" => $objOneMessage->getSystemid(),
                 "title"    => $objOneMessage->getStrDisplayName(),
                 "unread"   => $objOneMessage->getBitRead(),
-                "details"  => Link::getLinkAdminHref($objOneMessage->getArrModule("modul"), "edit", "&systemid=".$objOneMessage->getSystemid(), false)
+                "details"  => Link::getLinkAdminHref($objOneMessage->getArrModule("modul"), "edit", "&systemid=".$objOneMessage->getSystemid(), false, true)
             );
         }
 

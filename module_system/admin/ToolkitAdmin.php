@@ -2260,7 +2260,7 @@ HTML;
 
             if ($bitDisplay) {
                 $arrLinkTemplate = array();
-                $arrLinkTemplate["href"] = Link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".$intI);
+                $arrLinkTemplate["href"] = Link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".$intI, true, true);
                 $arrLinkTemplate["pageNr"] = $intI;
 
                 if ($intI == $intCurrentpage) {
@@ -2278,7 +2278,7 @@ HTML;
             $arrTemplate["linkForward"] = $this->objTemplate->fillTemplateFile(
                 array(
                     "linkText" => Carrier::getInstance()->getObjLang()->getLang("pageview_forward", "system"),
-                    "href"     => Link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage + 1))
+                    "href"     => Link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage + 1), true, true)
                 ),
                 "/elements.tpl",
                 "pageview_link_forward"
@@ -2288,7 +2288,7 @@ HTML;
             $arrTemplate["linkBackward"] = $this->objTemplate->fillTemplateFile(
                 array(
                     "linkText" => Carrier::getInstance()->getObjLang()->getLang("commons_back", "commons"),
-                    "href"     => Link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage - 1))
+                    "href"     => Link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage - 1), true, true)
                 ),
                 "/elements.tpl",
                 "pageview_link_backward"

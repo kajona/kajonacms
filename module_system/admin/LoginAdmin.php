@@ -184,10 +184,9 @@ class LoginAdmin extends AdminController implements AdminInterface
     {
         $arrTemplate = array();
         $arrTemplate["name"] = $this->objSession->getUsername();
-        $arrTemplate["profile"] = Link::getLinkAdminHref("user", "edit", "userid=".$this->objSession->getUserID());
+        $arrTemplate["profile"] = Link::getLinkAdminHref("user", "edit", "userid=".$this->objSession->getUserID(), false, true);
         $arrTemplate["logout"] = Link::getLinkAdminHref($this->getArrModule("modul"), "adminLogout");
-        $arrTemplate["dashboard"] = Link::getLinkAdminHref("dashboard");
-        $arrTemplate["sitemap"] = Link::getLinkAdminHref("dashboard", "sitemap");
+        $arrTemplate["dashboard"] = Link::getLinkAdminHref("dashboard", "", "", false, true);
         $arrTemplate["statusTitle"] = $this->getLang("login_statusTitle", "user");
         $arrTemplate["profileTitle"] = $this->getLang("login_profileTitle", "user");
         $arrTemplate["logoutTitle"] = $this->getLang("login_logoutTitle", "user");
