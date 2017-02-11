@@ -60,7 +60,7 @@ class MessagingAdmin extends AdminEvensimpler implements AdminInterface
     /**
      * @return array
      */
-    protected function getArrOutputNaviEntries()
+    public function getArrOutputNaviEntries()
     {
         $arrEntries = parent::getArrOutputNaviEntries();
         $objObject = Objectfactory::getInstance()->getObject($this->getSystemid());

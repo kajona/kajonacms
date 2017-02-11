@@ -315,7 +315,7 @@ abstract class AdminController extends AbstractController
     /**
      * @return array
      */
-    protected function getArrOutputNaviEntries()
+    public function getArrOutputNaviEntries()
     {
         $arrReturn = array(
             Link::getLinkAdmin("dashboard", "", "", $this->getLang("modul_titel", "dashboard")),

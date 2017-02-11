@@ -65,7 +65,7 @@ class DashboardAdmin extends AdminController implements AdminInterface
     /**
      * @return array
      */
-    protected function getArrOutputNaviEntries()
+    public function getArrOutputNaviEntries()
     {
         $arrReturn = parent::getArrOutputNaviEntries();
         if (isset($arrReturn[count($arrReturn) - 2])) {

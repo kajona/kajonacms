@@ -156,7 +156,7 @@ class StatsAdmin extends AdminController implements AdminInterface
      *
      * @return array
      */
-    protected function getArrOutputNaviEntries()
+    public function getArrOutputNaviEntries()
     {
         $arrPathLinks = parent::getArrOutputNaviEntries();
 

@@ -1229,7 +1229,7 @@ JS;
      *
      * @return array
      */
-    protected function getArrOutputNaviEntries()
+    public function getArrOutputNaviEntries()
     {
         $arrPath = $this->getPathArray();
 

@@ -7,6 +7,7 @@
 
 namespace Kajona\V4skin\Admin;
 
+use Kajona\System\Admin\AdminController;
 use Kajona\System\Admin\AdminEvensimpler;
 use Kajona\System\Admin\AdminHelper;
 use Kajona\System\Admin\AdminInterface;
@@ -27,6 +28,12 @@ use Kajona\System\System\SystemSetting;
  */
 class SkinAdminController extends AdminEvensimpler implements AdminInterface
 {
+
+    public function actionGetPathNavigation(AdminController $objAdminModule)
+    {
+        return Carrier::getInstance()->getObjToolkit("admin")->getPathNavigation($objAdminModule->getArrOutputNaviEntries());
+    }
+
 
     public function actionGenerateMainTemplate($strContent)
     {

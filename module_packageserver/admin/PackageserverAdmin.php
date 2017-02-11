@@ -263,7 +263,7 @@ class PackageserverAdmin extends MediamanagerAdmin implements AdminInterface
      *
      * @return array
      */
-    protected function getArrOutputNaviEntries()
+    public function getArrOutputNaviEntries()
     {
         $arrEntries = AdminController::getArrOutputNaviEntries();
 

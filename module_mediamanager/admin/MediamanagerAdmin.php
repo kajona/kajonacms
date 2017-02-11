@@ -576,7 +576,7 @@ HTML;
     /**
      * @return array
      */
-    protected function getArrOutputNaviEntries()
+    public function getArrOutputNaviEntries()
     {
         $arrEntries = parent::getArrOutputNaviEntries();
 

@@ -446,7 +446,7 @@ class NavigationAdmin extends AdminSimple implements AdminInterface {
      *
      * @return array
      */
-    protected function getArrOutputNaviEntries() {
+    public function getArrOutputNaviEntries() {
         $arrEntries = parent::getArrOutputNaviEntries();
 
         $arrPath = $this->getPathArray();

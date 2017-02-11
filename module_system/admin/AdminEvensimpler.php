@@ -465,7 +465,7 @@ abstract class AdminEvensimpler extends AdminSimple
      * @return array
      * @see AdminEvensimpler::getOutputNaviEntry()
      */
-    protected function getArrOutputNaviEntries()
+    public function getArrOutputNaviEntries()
     {
 
         $strOldAction = $this->getAction();
