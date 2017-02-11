@@ -69,7 +69,7 @@ require(['jquery', 'jquery-ui', 'jquery-touchPunch', 'bootstrap', 'v4skin', 'loa
         //split to get module, action and params
         var strParams = '';
         if( url.indexOf('?') > 0) {
-            strParams = url.substr(url.indexOf('?'));
+            strParams = url.substr(url.indexOf('?')+1);
             url = url.substr(0, url.indexOf('?'));
         }
 
@@ -83,14 +83,14 @@ require(['jquery', 'jquery-ui', 'jquery-touchPunch', 'bootstrap', 'v4skin', 'loa
             strUrlToLoad += '&systemid='+arrSections[2];
         }
 
-        strUrlToLoad += strParams;
+        strUrlToLoad += "&"+strParams;
 
-        if($('#folderviewDialog') && strUrlToLoad.indexOf('folderview') == -1) {
+        if(isStackedDialog && strUrlToLoad.indexOf('folderview') == -1) {
             strUrlToLoad += "&folderview=1";
         }
 
 
-        strUrlToLoad = strUrlToLoad.replace("&blockAction=1", '');
+        // strUrlToLoad = strUrlToLoad.replace("&blockAction=1", '');
 
         strUrlToLoad += "&contentFill=1";
 

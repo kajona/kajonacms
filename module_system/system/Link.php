@@ -122,7 +122,7 @@ class Link
             }
 
             if (count($arrParams) > 0) {
-                $strLink .= "&".implode("&amp;", $arrParams);
+                $strLink .= "?".implode("&", $arrParams);
             }
 
             if (!$bitEncodedAmpersand) {

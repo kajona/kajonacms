@@ -210,8 +210,9 @@ class RequestDispatcher
                                 //process e.g. in case of post requests
                                 $strReturn = $objConcreteModule->action();
 
-                                //if we resulted in a redirect, rewrite it to a js based on
+                                //if we resulted in a redirect, rewrite it to a js based on and force the redirect on "root" level
                                 if (ResponseObject::getInstance()->getStrRedirectUrl() != "") {
+                                    //TODO: move following to external helper
                                     $strUrl = ResponseObject::getInstance()->getStrRedirectUrl();
                                     $strUrl = StringUtil::replace(array(_indexpath_, _webpath_, "?"), "", $strUrl);
                                     $strUrl = StringUtil::replace("&amp;", "&", $strUrl);
@@ -242,21 +243,14 @@ class RequestDispatcher
                                     }
 
                                     $strRoutieRedirect = Link::getLinkAdminHref($strRedirectModule, $strRedirectAction, implode("&", $arrFragments), true, true);
-                                    $strRoutieRedirect = StringUtil::replace(_webpath_."/index.php?admin=1", "", $strRoutieRedirect);
-                                    //parse module, action, systemid and generate a hash url
-
-                                    $strReturn = "<script type='text/javascript'>
-                                        routie('{$strRoutieRedirect}');
-                                    </script>";
-                                    ResponseObject::getInstance()->setStrRedirectUrl("");
+                                    $strReturn = "";
+                                    ResponseObject::getInstance()->setStrRedirectUrl($strRoutieRedirect);
                                 }
 
 
                             } catch (ActionNotFoundException $objEx) {
                                 $strReturn = $objEx->getMessage();
                             }
-                        } else {
-//                            $strReturn = "<script type='text/javascript'>routie('/dashboard')</script>";
                         }
 
                         if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::INDEX()) && empty(Carrier::getInstance()->getParam("contentFill"))) {
