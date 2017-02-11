@@ -31,7 +31,6 @@ require(['jquery', 'jquery-ui', 'jquery-touchPunch', 'bootstrap', 'v4skin', 'loa
 
 
     //register the global router
-
     routie('*', function(url) {
         console.log('processing url '+url);
 
@@ -42,8 +41,27 @@ require(['jquery', 'jquery-ui', 'jquery-touchPunch', 'bootstrap', 'v4skin', 'loa
             url = "dashboard";
         }
 
+        // if(url.charAt(0) == "#") {
+        //     url = url.substr(1);
+        // }
         if(url.charAt(0) == "/") {
             url = url.substr(1);
+        }
+
+
+        //react on peClose statements
+        var isStackedDialog = !!(window.frameElement && window.frameElement.nodeName && window.frameElement.nodeName.toLowerCase() == 'iframe');
+        if(isStackedDialog && url.indexOf('peClose=1') != -1) {
+
+            parent.KAJONA.admin.folderview.dialog.hide();
+            console.log('parent call: '+parent.window.location.hash);
+            parent.routie.reload();
+            return;
+
+            // if(folderview.dialog) {
+            //     folderview.dialog.hide();
+            // }
+
         }
 
 
@@ -67,9 +85,12 @@ require(['jquery', 'jquery-ui', 'jquery-touchPunch', 'bootstrap', 'v4skin', 'loa
 
         strUrlToLoad += strParams;
 
-        // if($('#folderviewDialog')) {
-        //     strUrlToLoad += "&folderview=1";
-        // }
+        if($('#folderviewDialog') && strUrlToLoad.indexOf('folderview') == -1) {
+            strUrlToLoad += "&folderview=1";
+        }
+
+
+        strUrlToLoad = strUrlToLoad.replace("&blockAction=1", '');
 
         strUrlToLoad += "&contentFill=1";
 
@@ -84,5 +105,7 @@ require(['jquery', 'jquery-ui', 'jquery-touchPunch', 'bootstrap', 'v4skin', 'loa
 
 
     });
+
+
 
 });

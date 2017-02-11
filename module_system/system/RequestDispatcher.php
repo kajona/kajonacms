@@ -209,6 +209,49 @@ class RequestDispatcher
                             try {
                                 //process e.g. in case of post requests
                                 $strReturn = $objConcreteModule->action();
+
+                                //if we resulted in a redirect, rewrite it to a js based on
+                                if (ResponseObject::getInstance()->getStrRedirectUrl() != "") {
+                                    $strUrl = ResponseObject::getInstance()->getStrRedirectUrl();
+                                    $strUrl = StringUtil::replace(array(_indexpath_, _webpath_, "?"), "", $strUrl);
+                                    $strUrl = StringUtil::replace("&amp;", "&", $strUrl);
+                                    $arrFragments = explode("&", $strUrl);
+
+                                    $strRedirectModule = "";
+                                    $strRedirectAction = "";
+
+                                    foreach ($arrFragments as $intPartKey => $strOnePart) {
+                                        if ($strOnePart == "admin=1") {
+                                            unset($arrFragments[$intPartKey]);
+                                            continue;
+                                        }
+
+                                        $arrKeyValue = explode("=", $strOnePart);
+
+                                        if ($arrKeyValue[0] == "module") {
+                                            $strRedirectModule = $arrKeyValue[1];
+                                            unset($arrFragments[$intPartKey]);
+                                            continue;
+                                        }
+
+                                        if ($arrKeyValue[0] == "action") {
+                                            $strRedirectAction = $arrKeyValue[1];
+                                            unset($arrFragments[$intPartKey]);
+                                            continue;
+                                        }
+                                    }
+
+                                    $strRoutieRedirect = Link::getLinkAdminHref($strRedirectModule, $strRedirectAction, implode("&", $arrFragments), true, true);
+                                    $strRoutieRedirect = StringUtil::replace(_webpath_."/index.php?admin=1", "", $strRoutieRedirect);
+                                    //parse module, action, systemid and generate a hash url
+
+                                    $strReturn = "<script type='text/javascript'>
+                                        routie('{$strRoutieRedirect}');
+                                    </script>";
+                                    ResponseObject::getInstance()->setStrRedirectUrl("");
+                                }
+
+
                             } catch (ActionNotFoundException $objEx) {
                                 $strReturn = $objEx->getMessage();
                             }
