@@ -163,8 +163,34 @@ class RequestDispatcher
 
 
                     $strReturn = "";
-                    //try to rewrite some redirect urls
-                    if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::INDEX()) && $_SERVER['REQUEST_METHOD'] != 'POST' && !empty($strModule) && !empty($strAction) && empty(Carrier::getInstance()->getParam("contentFill"))) {
+
+                    //try to rewrite some redirect urls internally
+                    if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::INDEX()) && $_SERVER['REQUEST_METHOD'] != 'POST' && !empty($strModule) && empty(Carrier::getInstance()->getParam("contentFill"))) {
+
+                        $arrParams = Carrier::getAllParams();
+                        unset($arrParams["module"]);
+                        unset($arrParams["action"]);
+                        unset($arrParams["admin"]);
+
+                        $strUrl = Link::getLinkAdminHref($strModule, $strAction, $arrParams, false, true);
+                        $strUrl = StringUtil::replace(_webpath_."/index.php?admin=1", "", $strUrl);
+
+                        $strReturn = "<script type='text/javascript'>
+                            routie('{$strUrl}');
+                        </script>";
+
+
+
+                        $objHelper = new SkinAdminController();
+                        if (empty(Carrier::getInstance()->getParam("folderview"))) {
+                            return "<html><head></head><body><script type='text/javascript'>document.location='".Link::getLinkAdminHref($strModule, $strAction, $arrParams, false, true)."';</script></body></html>";
+//                            $strReturn = $objHelper->actionGenerateMainTemplate($strReturn);
+                        } else {
+                            $strReturn = $objHelper->actionGenerateFolderviewTemplate($strReturn);
+                        }
+                        return $strReturn;
+
+
 
 
                         $arrParams = Carrier::getAllParams();

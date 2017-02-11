@@ -36,8 +36,10 @@ require(['jquery', 'jquery-ui', 'jquery-touchPunch', 'bootstrap', 'v4skin', 'loa
         console.log('processing url '+url);
 
         if(url.trim() === '') {
+            if($('#loginContainer')) {
+                return;
+            }
             url = "dashboard";
-
         }
 
         if(url.charAt(0) == "/") {
@@ -65,13 +67,19 @@ require(['jquery', 'jquery-ui', 'jquery-touchPunch', 'bootstrap', 'v4skin', 'loa
 
         strUrlToLoad += strParams;
 
+        // if($('#folderviewDialog')) {
+        //     strUrlToLoad += "&folderview=1";
+        // }
+
+        strUrlToLoad += "&contentFill=1";
+
         console.log('Loading url '+strUrlToLoad);
 
         contentToolbar.resetBar();
         breadcrumb.resetBar();
         tooltip.removeTooltip($('*[rel=tooltip]'));
 
-        ajax.loadUrlToElement('#moduleOutput', strUrlToLoad, 'contentFill=1');
+        ajax.loadUrlToElement('#moduleOutput', strUrlToLoad);
 
 
 

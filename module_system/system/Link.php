@@ -122,7 +122,7 @@ class Link
             }
 
             if (count($arrParams) > 0) {
-                $strLink .= "?".implode("&amp;", $arrParams);
+                $strLink .= "&".implode("&amp;", $arrParams);
             }
 
             if (!$bitEncodedAmpersand) {
@@ -325,13 +325,17 @@ class Link
         $strLink = "";
         $strTitle = addslashes(StringUtil::replace(array("\n", "\r"), array(), strip_tags(nl2br($strTitle))));
 
-        if ($bitPortalEditor) {
-            if(is_string($strParams)){
+        if(is_string($strParams)){
+            if ($bitPortalEditor) {
                 $strParams .= "&pe=1";
             }
-            elseif (is_array($strParams)){
+            $strParams .= "&folderview=1";
+        }
+        elseif (is_array($strParams)){
+            if ($bitPortalEditor) {
                 $strParams["pe"] = "1";
             }
+            $strParams["folderview"] = "1";
         }
 
         //urlencoding

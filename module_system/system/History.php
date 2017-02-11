@@ -67,6 +67,8 @@ class History
             $strQueryString = substr_replace($strQueryString, "", -8);
         }
 
+        $strQueryString = StringUtil::replace("&contentFill=1", "", $strQueryString);
+
         //Just do s.th., if not in the rights-mgmt
         if (StringUtil::indexOf($strQueryString, "module=right") !== false) {
             return;

@@ -39,7 +39,7 @@
                     <ul class="nav navbar-nav"></ul>
                 </div>
             </div>
-            %%content%%
+            <div id="moduleOutput">%%content%%</div>
         </div>
     </div>
 </div>
