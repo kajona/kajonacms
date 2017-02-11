@@ -267,7 +267,7 @@ class LoginAdmin extends AdminController implements AdminInterface
                     $strModule = $objUser->getStrAdminModule();
                 }
             }
-            ResponseObject::getInstance()->setStrRedirectUrl(Link::getLinkAdminHref($strModule));
+            ResponseObject::getInstance()->setStrRedirectUrl(Link::getLinkAdminHref($strModule, "", "", true, true));
         }
     }
 

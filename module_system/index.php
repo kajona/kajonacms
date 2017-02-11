@@ -54,8 +54,8 @@ class Index
     public function processRequest()
     {
         $strModule = Carrier::getInstance()->getParam("module");
-        if ($strModule == "") {
-            $strModule = _admin_ ? "dashboard" : "pages";
+        if ($strModule == "" && !_admin_) {
+            $strModule = "pages";
         }
 
         $strAction = Carrier::getInstance()->getParam("action");

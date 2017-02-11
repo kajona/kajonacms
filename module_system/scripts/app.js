@@ -36,10 +36,11 @@ require(['jquery', 'jquery-ui', 'jquery-touchPunch', 'bootstrap', 'v4skin', 'loa
         console.log('processing url '+url);
 
         if(url.trim() === '') {
-            return;
+            url = "dashboard";
+
         }
 
-        if(url[0] = "/") {
+        if(url.charAt(0) == "/") {
             url = url.substr(1);
         }
 
@@ -54,7 +55,7 @@ require(['jquery', 'jquery-ui', 'jquery-touchPunch', 'bootstrap', 'v4skin', 'loa
 
         var arrSections = url.split("/");
 
-        var strUrlToLoad = '/xml.php?admin=1&module='+arrSections[0];
+        var strUrlToLoad = '/index.php?admin=1&module='+arrSections[0];
         if(arrSections.length >= 2) {
             strUrlToLoad += '&action='+arrSections[1];
         }

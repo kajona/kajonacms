@@ -13,14 +13,9 @@ use Kajona\System\Admin\AdminInterface;
 use Kajona\System\System\AdminskinHelper;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Classloader;
-use Kajona\System\System\Link;
-use Kajona\System\System\Model;
-use Kajona\System\System\ModelInterface;
 use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemModule;
 use Kajona\System\System\SystemSetting;
-use Kajona\Votings\System\VotingsAnswer;
-use Kajona\Votings\System\VotingsVoting;
 
 /**
  * Backend Controller to handle various, general actions / callbacks
@@ -53,7 +48,6 @@ class SkinAdminController extends AdminEvensimpler implements AdminInterface
         $arrTemplate["languageswitch"] = (SystemModule::getModuleByName("languages") != null ? SystemModule::getModuleByName("languages")->getAdminInstanceOfConcreteModule()->getLanguageSwitch() : "");
         $arrTemplate["webpathTitle"] = urldecode(str_replace(["http://", "https://"], ["", ""], _webpath_));
         $arrTemplate["head"] = "<script type=\"text/javascript\">KAJONA_DEBUG = ".$this->objConfig->getDebug("debuglevel")."; KAJONA_WEBPATH = '"._webpath_."'; KAJONA_BROWSER_CACHEBUSTER = ".SystemSetting::getConfigValue("_system_browser_cachebuster_")."; KAJONA_LANGUAGE = '".Carrier::getInstance()->getObjSession()->getAdminLanguage()."';KAJONA_PHARMAP = ".json_encode(array_values(Classloader::getInstance()->getArrPharModules()))."; var require = {$objAdminHelper->generateRequireJsConfig()};</script>";
-        $arrTemplate["requirejs_conf"] = $objAdminHelper->generateRequireJsConfig();
 
         $strTemplate = AdminskinHelper::getPathForSkin($this->objSession->getAdminSkin()).$this->getArrModule("template");
         if ($this->getParam("peClose") == 1 || $this->getParam("pe") == 1) {
@@ -69,9 +63,22 @@ class SkinAdminController extends AdminEvensimpler implements AdminInterface
         $objAdminHelper = new AdminHelper();
         $arrTemplate["webpathTitle"] = urldecode(str_replace(["http://", "https://"], ["", ""], _webpath_));
         $arrTemplate["head"] = "<script type=\"text/javascript\">KAJONA_DEBUG = ".$this->objConfig->getDebug("debuglevel")."; KAJONA_WEBPATH = '"._webpath_."'; KAJONA_BROWSER_CACHEBUSTER = ".SystemSetting::getConfigValue("_system_browser_cachebuster_")."; KAJONA_LANGUAGE = '".Carrier::getInstance()->getObjSession()->getAdminLanguage()."';KAJONA_PHARMAP = ".json_encode(array_values(Classloader::getInstance()->getArrPharModules()))."; var require = {$objAdminHelper->generateRequireJsConfig()};</script>";
-        $arrTemplate["requirejs_conf"] = $objAdminHelper->generateRequireJsConfig();
 
         $strTemplate = "/folderview.tpl";
+        return $this->objTemplate->fillTemplateFile($arrTemplate, $strTemplate);
+    }
+
+
+    public function actionGenerateLoginTemplate($strContent)
+    {
+        $arrTemplate = ["content" => $strContent];
+
+
+        $objAdminHelper = new AdminHelper();
+        $arrTemplate["webpathTitle"] = urldecode(str_replace(["http://", "https://"], ["", ""], _webpath_));
+        $arrTemplate["head"] = "<script type=\"text/javascript\">KAJONA_DEBUG = ".$this->objConfig->getDebug("debuglevel")."; KAJONA_WEBPATH = '"._webpath_."'; KAJONA_BROWSER_CACHEBUSTER = ".SystemSetting::getConfigValue("_system_browser_cachebuster_")."; KAJONA_LANGUAGE = '".Carrier::getInstance()->getObjSession()->getAdminLanguage()."';KAJONA_PHARMAP = ".json_encode(array_values(Classloader::getInstance()->getArrPharModules()))."; var require = {$objAdminHelper->generateRequireJsConfig()};</script>";
+
+        $strTemplate = "/login.tpl";
         return $this->objTemplate->fillTemplateFile($arrTemplate, $strTemplate);
     }
 

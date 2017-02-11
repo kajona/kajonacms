@@ -142,7 +142,7 @@ class RequestDispatcher
             if ($this->objSession->isAdmin()) {
                 //try to load the module
                 $objModuleRequested = SystemModule::getModuleByName($strModule);
-                if ($objModuleRequested != null) {
+                if (empty($strModule) || $objModuleRequested != null) {
                     //see if there is data from a previous, failed request
                     if (Carrier::getInstance()->getObjSession()->getSession(LoginAdmin::SESSION_LOAD_FROM_PARAMS) === "true") {
                         foreach (Carrier::getInstance()->getObjSession()->getSession(LoginAdmin::SESSION_PARAMS) as $strOneKey => $strOneVal) {
@@ -161,30 +161,36 @@ class RequestDispatcher
                         $objHistory->setAdminHistory();
                     }
 
-                    $objConcreteModule = $objModuleRequested->getAdminInstanceOfConcreteModule();
+
+                    $strReturn = "";
+                    //try to rewrite some redirect urls
+                    if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::INDEX()) && $_SERVER['REQUEST_METHOD'] != 'POST' && !empty($strModule) && !empty($strAction) && empty(Carrier::getInstance()->getParam("contentFill"))) {
+
+
+                        $arrParams = Carrier::getAllParams();
+                        unset($arrParams["module"]);
+                        unset($arrParams["action"]);
+                        unset($arrParams["admin"]);
+                        return "<html><head></head><body><script type='text/javascript'>document.location='".Link::getLinkAdminHref($strModule, $strAction, $arrParams, false, true)."';</script></body></html>";
+
+                    }
+
+
 
                     if (Carrier::getInstance()->getParam("blockAction") != "1") {
-                        try {
-                            //process e.g. in case of post requests
-//                            if(!empty($_POST) || !ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::INDEX())) {
+                        if (!empty($strModule)) {
+                            $objConcreteModule = $objModuleRequested->getAdminInstanceOfConcreteModule();
+                            try {
+                                //process e.g. in case of post requests
                                 $strReturn = $objConcreteModule->action();
-//                            } else {
-                                //pass the js loader
-//                                $arrParams = Carrier::getAllParams();
-//                                unset($arrParams["module"]);
-//                                unset($arrParams["action"]);
-//                                unset($arrParams["admin"]);
-//                                $strReturn = "<script type='text/javascript'>document.location='".Link::getLinkAdminHref($strModule, Carrier::getInstance()->getParam("action"), $arrParams, false, true)."';</script>";
-//                            }
-
-
-
-//                            $strReturn = $objConcreteModule->getModuleOutput();
-                        } catch (ActionNotFoundException $objEx) {
-//                            $strReturn = $objConcreteModule->getModuleOutput();
+                            } catch (ActionNotFoundException $objEx) {
+                                $strReturn = $objEx->getMessage();
+                            }
+                        } else {
+//                            $strReturn = "<script type='text/javascript'>routie('/dashboard')</script>";
                         }
 
-                        if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::INDEX())) {
+                        if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::INDEX()) && empty(Carrier::getInstance()->getParam("contentFill"))) {
                             $objHelper = new SkinAdminController();
                             if (empty(Carrier::getInstance()->getParam("folderview"))) {
                                 $strReturn = $objHelper->actionGenerateMainTemplate($strReturn);
@@ -233,14 +239,14 @@ class RequestDispatcher
                 return "";
             }
 
+            $objHelper = new SkinAdminController();
             $objLogin = $this->objBuilder->factory(LoginAdmin::class);
-            $objLogin->action($strAction);
-            $strReturn = $objLogin->getModuleOutput();
+            $strReturn = $objLogin->action($strAction);
+            $strReturn = $objHelper->actionGenerateLoginTemplate($strReturn);
 
         }
 
         return $strReturn;
-
     }
 
 
