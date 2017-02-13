@@ -133,8 +133,7 @@ abstract class AdminSimple extends AdminController
             $strTargetUrl = urldecode($this->getParam("reloadUrl"));
 
             if ($strTargetUrl == "" || StringUtil::indexOf($strTargetUrl, $this->getSystemid()) !== false) {
-
-                $strTargetUrl = "admin=1&module=".$this->getArrModule("modul");
+                 $strTargetUrl = "admin=1&module=".$this->getArrModule("modul");
 
                 $intI = 1;
                 while ($this->getHistory($intI) !== null) {
@@ -149,9 +148,10 @@ abstract class AdminSimple extends AdminController
                     }
                 }
 
+                $strTargetUrl = Link::plainUrlToHashUrl($strTargetUrl);
+                $strTargetUrl = StringUtil::replace(array(_indexpath_."?admin=1", ""), "", $strTargetUrl);
             }
-
-            $this->adminReload(_indexpath_."?".$strTargetUrl.($this->getParam("pe") != "" ? "&peClose=1&blockAction=1" : ""));
+            return "<script type='text/javascript'>routie('{$strTargetUrl}')</script>";
         }
         else {
             throw new Exception("error loading object ".$this->getSystemid(), Exception::$level_ERROR);
@@ -611,7 +611,7 @@ abstract class AdminSimple extends AdminController
 
             //create the list-button and the js code to show the dialog
             $strButton = Link::getLinkAdminManual(
-                "href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('".$this->getLang("dialog_copyHeader", "system")."'); jsDialog_1.setContent('".$strQuestion."', '".$this->getLang("dialog_copyButton", "system")."',  function() {jsDialog_3.init(); document.location.href= '{$strHref}';}); jsDialog_1.init(); return false;\"",
+                "href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('".$this->getLang("dialog_copyHeader", "system")."'); jsDialog_1.setContent('".$strQuestion."', '".$this->getLang("dialog_copyButton", "system")."',  function() {document.location.href= '{$strHref}';}); jsDialog_1.init(); return false;\"",
                 "",
                 $this->getLang("commons_edit_copy", "system"),
                 "icon_copy"

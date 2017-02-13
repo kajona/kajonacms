@@ -581,9 +581,44 @@ class Link
         return $strLink;
     }
 
-    public static function hashUrlToPlainUrl($strHashUrl)
+    public static function plainUrlToHashUrl($strUrl)
     {
+        $strUrl = StringUtil::replace(array(_indexpath_, _webpath_, "?"), "", $strUrl);
+        $strUrl = StringUtil::replace("&amp;", "&", $strUrl);
+        $arrFragments = explode("&", $strUrl);
 
+        $strRedirectModule = "";
+        $strRedirectAction = "";
+
+
+        foreach ($arrFragments as $intPartKey => $strOnePart) {
+            if ($strOnePart == "admin=1") {
+                unset($arrFragments[$intPartKey]);
+                continue;
+            }
+
+            $arrKeyValue = explode("=", $strOnePart);
+
+            if ($arrKeyValue[0] == "module") {
+                $strRedirectModule = $arrKeyValue[1];
+                unset($arrFragments[$intPartKey]);
+                continue;
+            }
+
+            if ($arrKeyValue[0] == "action") {
+                $strRedirectAction = $arrKeyValue[1];
+                unset($arrFragments[$intPartKey]);
+                continue;
+            }
+        }
+
+        return Link::getLinkAdminHref($strRedirectModule, $strRedirectAction, implode("&", $arrFragments), true, true);
+
+    }
+
+    public static function hashUrlToHashOnlyUrl($strUrl)
+    {
+        return StringUtil::replace(_indexpath_."?admin=1", "", $strUrl);
     }
 
 

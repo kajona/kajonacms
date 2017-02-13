@@ -1570,12 +1570,12 @@ class ToolkitAdmin extends Toolkit
         $objHistory = new History();
         $strParam = "";
         if (StringUtil::indexOf($strConfirmationLinkHref, "javascript:") === false) {
-            $strParam = "reloadUrl=".urlencode($objHistory->getAdminHistory());
-            if (StringUtil::substring($strConfirmationLinkHref, -4) == ".php" || StringUtil::substring($strConfirmationLinkHref, -5) == ".html") {
-                $strParam = "?".$strParam;
-            } else {
-                $strParam = "&".$strParam;
-            }
+            $strParam = "?reloadUrl='+encodeURIComponent(document.location.hash.substr(1))+'";
+//            if (StringUtil::substring($strConfirmationLinkHref, -4) == ".php" || StringUtil::substring($strConfirmationLinkHref, -5) == ".html") {
+//                $strParam = "?".$strParam;
+//            } else {
+//                $strParam = "&".$strParam;
+//            }
         }
 
         if ($strConfirmationButtonLabel == "") {

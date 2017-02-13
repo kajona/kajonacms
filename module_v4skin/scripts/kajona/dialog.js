@@ -27,6 +27,7 @@ define(['jquery', 'bootstrap'], function ($, bootstrap) {
                 this.unbindEvents();
 
                 $('#' + this.containerId + '_content').html(strContent);
+                var self = this;
 
                 var $confirmButton = $('#' + this.containerId + '_confirmButton');
                 $confirmButton.html(strConfirmButton);
@@ -38,6 +39,8 @@ define(['jquery', 'bootstrap'], function ($, bootstrap) {
                     $confirmButton.click(function() {
                         var objReturn = strLinkHref();
 
+                        self.hide();
+
                         if(bitUnbind) {
                             $confirmButton.unbind();
                             $confirmButton.click(function() {
@@ -45,12 +48,13 @@ define(['jquery', 'bootstrap'], function ($, bootstrap) {
                             });
                         }
 
-                        return objReturn;
+                        return objReturn != undefined ? objReturn : false;
                     });
                 }
                 else {
                     $confirmButton.click(function() {
                         window.location = strLinkHref;
+                        self.hide();
 
                         if(bitUnbind) {
                             $confirmButton.unbind();
