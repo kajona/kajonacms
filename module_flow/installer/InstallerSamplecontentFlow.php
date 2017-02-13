@@ -20,7 +20,7 @@ class InstallerSamplecontentFlow implements SamplecontentInstallerInterface
 {
     public function isInstalled()
     {
-        return false;
+        return true;
     }
 
     public function install()
