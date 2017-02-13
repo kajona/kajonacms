@@ -94,7 +94,7 @@ class Link
      *
      * @return string
      */
-    public static function getLinkAdminHref($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = true, $bitHashUrl = false)
+    public static function getLinkAdminHref($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = true, $bitHashUrl = true)
     {
         //systemid in params?
         $strSystemid = "";
@@ -579,6 +579,11 @@ class Link
         $strLink = Link::getLinkPortalHref($strPageI, $strPageE, $strAction, $strParams, $strSystemid);
         $strLink = "<a href=\"$strLink\" onclick=\"return !window.open('".$strLink."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."')\" title=\"".$strTitle."\">".$strTitle."</a>";
         return $strLink;
+    }
+
+    public static function hashUrlToPlainUrl($strHashUrl)
+    {
+
     }
 
 

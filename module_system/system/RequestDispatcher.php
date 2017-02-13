@@ -182,6 +182,7 @@ class RequestDispatcher
 
 
 
+                        return "<html><head></head><body><script type='text/javascript'>document.location='".Link::getLinkAdminHref($strModule, $strAction, $arrParams, false, true)."';</script></body></html>";
                         if (empty(Carrier::getInstance()->getParam("folderview"))) {
                             return "<html><head></head><body><script type='text/javascript'>document.location='".Link::getLinkAdminHref($strModule, $strAction, $arrParams, false, true)."';</script></body></html>";
 //                            $strReturn = $objHelper->actionGenerateMainTemplate($strReturn);
@@ -203,7 +204,9 @@ class RequestDispatcher
                                 //process e.g. in case of post requests
                                 $strReturn = $objConcreteModule->action();
                                 if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::INDEX())) {
-                                    $strReturn .= $objHelper->actionGetPathNavigation($objConcreteModule);
+                                    if ($strReturn != "") {
+                                        $strReturn .= $objHelper->actionGetPathNavigation($objConcreteModule);
+                                    }
                                 }
 
                                 //if we resulted in a redirect, rewrite it to a js based on and force the redirect on "root" level
@@ -211,53 +214,13 @@ class RequestDispatcher
                                 if (ResponseObject::getInstance()->getStrRedirectUrl() != "") {
                                     //TODO: move following to external helper
                                     $strUrl = ResponseObject::getInstance()->getStrRedirectUrl();
-                                    $strUrl = StringUtil::replace(array(_indexpath_, _webpath_, "?"), "", $strUrl);
-                                    $strUrl = StringUtil::replace("&amp;", "&", $strUrl);
-                                    $arrFragments = explode("&", $strUrl);
+                                    ResponseObject::getInstance()->setStrRedirectUrl("");
 
-                                    $strRedirectModule = "";
-                                    $strRedirectAction = "";
 
-                                    $bitFolderview = false;
-
-                                    foreach ($arrFragments as $intPartKey => $strOnePart) {
-                                        if ($strOnePart == "admin=1") {
-                                            unset($arrFragments[$intPartKey]);
-                                            continue;
-                                        }
-
-                                        if ($strOnePart == "folderview=1") {
-                                            $bitFolderview = true;
-                                        }
-
-                                        $arrKeyValue = explode("=", $strOnePart);
-
-                                        if ($arrKeyValue[0] == "module") {
-                                            $strRedirectModule = $arrKeyValue[1];
-                                            unset($arrFragments[$intPartKey]);
-                                            continue;
-                                        }
-
-                                        if ($arrKeyValue[0] == "action") {
-                                            $strRedirectAction = $arrKeyValue[1];
-                                            unset($arrFragments[$intPartKey]);
-                                            continue;
-                                        }
-                                    }
-
-                                    $strRoutieRedirect = Link::getLinkAdminHref($strRedirectModule, $strRedirectAction, implode("&", $arrFragments), true, true);
-
-                                    //different redirects depending on the context
-                                    if (!empty(Carrier::getInstance()->getParam("folderview"))) {
-                                        $strRoutieRedirect = StringUtil::replace(_webpath_."/index.php?admin=1", "", $strRoutieRedirect);
-                                        $strReturn = "<script type='text/javascript'>
-                                            routie('{$strRoutieRedirect}');
-                                        </script>";
-                                        ResponseObject::getInstance()->setStrRedirectUrl("");
-                                    } else {
-                                        $strReturn = "";
-                                        ResponseObject::getInstance()->setStrRedirectUrl($strRoutieRedirect);
-                                    }
+                                    $strRoutieRedirect = StringUtil::replace(_webpath_."/index.php?admin=1", "", $strUrl);
+                                    $strReturn = "<script type='text/javascript'>
+                                        routie('{$strRoutieRedirect}');
+                                    </script>";
 
                                 }
 
@@ -269,11 +232,7 @@ class RequestDispatcher
 
                         if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::INDEX()) && empty(Carrier::getInstance()->getParam("contentFill"))) {
                             $objHelper = new SkinAdminController();
-                            if (empty(Carrier::getInstance()->getParam("folderview"))) {
-                                $strReturn = $objHelper->actionGenerateMainTemplate($strReturn);
-                            } else {
-                                $strReturn = $objHelper->actionGenerateFolderviewTemplate($strReturn);
-                            }
+                            $strReturn = $objHelper->actionGenerateMainTemplate($strReturn);
                         }
 
                     }

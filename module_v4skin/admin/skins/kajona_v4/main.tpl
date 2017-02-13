@@ -17,7 +17,7 @@
     <!-- KAJONA_BUILD_LESS_END -->
 
     <script src="_webpath_/[webpath,module_system]/scripts/jquery/jquery.min.js?_system_browser_cachebuster_"></script>
-    <script src="_webpath_/[webpath,module_system]/scripts/routie/routie.min.js?_system_browser_cachebuster_"></script>
+    <script src="_webpath_/[webpath,module_system]/scripts/routie/routie.js?_system_browser_cachebuster_"></script>
     %%head%%
     <script type="text/javascript">var searchExtendText = '[lang,search_details,search]';</script>
     <script src="_webpath_/[webpath,module_system]/scripts/requirejs/require.js?_system_browser_cachebuster_"></script>
@@ -81,13 +81,13 @@
                 <div class="panel-group" id="moduleNavigation">
                     <div class="nav-header">Kajona V5</div>
 
-                    <!--<div id="navcontainer"></div>-->
-                    <!--<script type="text/javascript">-->
-                        <!--require(['ajax'], function(ajax) {-->
-                            <!--ajax.loadUrlToElement("#navcontainer", '/xml.php?admin=1&module=v4skin&action=getBackendNavi');-->
-                        <!--});-->
-                    <!--</script>-->
-                    %%moduleSitemap%%
+                    <div id="navcontainer"></div>
+                    <script type="text/javascript">
+                       require(['ajax'], function(ajax) {
+                            ajax.loadUrlToElement("#navcontainer", '/xml.php?admin=1&module=v4skin&action=getBackendNavi');
+                        });
+                    </script>
+                    <!--%%moduleSitemap%%-->
                 </div>
             </div>
         </div>

@@ -24,33 +24,38 @@ define('ajax', ['jquery', 'statusDisplay', 'workingIndicator', 'tooltip'], funct
          * @param strElementSelector
          * @param strUrl
          * @param strData
+         * @param bitBlockLoadingContainer
+         * @param strMethod default is GET
          */
-        loadUrlToElement: function(strElementSelector, strUrl, strData, bitBlockLoadingContainer) {
+        loadUrlToElement: function(strElementSelector, strUrl, strData, bitBlockLoadingContainer, strMethod) {
             workingIndicator.start();
 
             if(!bitBlockLoadingContainer) {
                 $(strElementSelector).html('<div class="loadingContainer"></div>');
             }
 
+            if(!strMethod) {
+                strMethod = 'GET';
+            }
+
             var target = strElementSelector;
-            $.get(KAJONA_WEBPATH+strUrl, strData)
-                .done(
-                    function(data) {
-                        $(strElementSelector).html(data);
-                        tooltip.initTooltip();
-                    }
-                )
-                .always(
-                    function(response) {
-                        workingIndicator.stop();
-                    }
-                )
-                .error(function(data) {
-
-                    //maybe it was xml, so strip
-
-                    statusDisplay.messageError("<b>Request failed!</b><br />" + data);
-                });
+            $.ajax({
+                type: strMethod,
+                url: KAJONA_WEBPATH+strUrl,
+                data: strData
+            }).done(
+                function(data) {
+                    $(strElementSelector).html(data);
+                    tooltip.initTooltip();
+                }
+            ).always(
+                function(response) {
+                    workingIndicator.stop();
+                }
+            ).error(function(data) {
+                //maybe it was xml, so strip
+                statusDisplay.messageError("<b>Request failed!</b><br />" + data);
+            });
         },
 
         getDataObjectFromString: function(strData, bitFirstIsSystemid) {

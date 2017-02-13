@@ -29,6 +29,7 @@ require(['jquery', 'jquery-ui', 'jquery-touchPunch', 'bootstrap', 'v4skin', 'loa
     jsDialog_2 = new Dialog('jsDialog_2', 2);
     jsDialog_3 = new Dialog('jsDialog_3', 3);
 
+    KAJONA.admin.forms.submittedEl = null;
 
     //register the global router
     routie('*', function(url) {
@@ -41,29 +42,18 @@ require(['jquery', 'jquery-ui', 'jquery-touchPunch', 'bootstrap', 'v4skin', 'loa
             url = "dashboard";
         }
 
-        // if(url.charAt(0) == "#") {
-        //     url = url.substr(1);
-        // }
         if(url.charAt(0) == "/") {
             url = url.substr(1);
         }
 
-
-        //react on peClose statements
+        //react on peClose statements by reloading the parent view
         var isStackedDialog = !!(window.frameElement && window.frameElement.nodeName && window.frameElement.nodeName.toLowerCase() == 'iframe');
         if(isStackedDialog && url.indexOf('peClose=1') != -1) {
-
             parent.KAJONA.admin.folderview.dialog.hide();
             console.log('parent call: '+parent.window.location.hash);
             parent.routie.reload();
             return;
-
-            // if(folderview.dialog) {
-            //     folderview.dialog.hide();
-            // }
-
         }
-
 
 
         //split to get module, action and params
@@ -89,19 +79,23 @@ require(['jquery', 'jquery-ui', 'jquery-touchPunch', 'bootstrap', 'v4skin', 'loa
             strUrlToLoad += "&folderview=1";
         }
 
-
-        // strUrlToLoad = strUrlToLoad.replace("&blockAction=1", '');
-
         strUrlToLoad += "&contentFill=1";
-
         console.log('Loading url '+strUrlToLoad);
 
         contentToolbar.resetBar();
         breadcrumb.resetBar();
         tooltip.removeTooltip($('*[rel=tooltip]'));
 
-        ajax.loadUrlToElement('#moduleOutput', strUrlToLoad);
+        //split between post and get
+        if(KAJONA.admin.forms.submittedEl != null) {
+            var data = $(KAJONA.admin.forms.submittedEl).serialize();
+            KAJONA.admin.forms.submittedEl = null;
+            ajax.loadUrlToElement('#moduleOutput', strUrlToLoad, data, false, 'POST');
 
+        } else {
+            ajax.loadUrlToElement('#moduleOutput', strUrlToLoad);
+
+        }
 
 
     });

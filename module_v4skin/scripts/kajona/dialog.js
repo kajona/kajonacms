@@ -117,8 +117,11 @@ define(['jquery', 'bootstrap'], function ($, bootstrap) {
                 $('#' + this.containerId + '_content').html('<iframe src="' + this.iframeURL + '" width="100%" height="'+(intHeight)+'" name="' + this.iframeId + '" id="' + this.iframeId + '" class="seamless" seamless></iframe>');
                 this.iframeURL = null;
 
+                var id = this.iframeId;
                 $("#"+this.iframeId).on('load', function() {
                     $("#folderviewDialog_loading").css('display', 'none');
+                    $('#'+id).contents().find("body").addClass('dialogBody')
+
                 });
             }
 
