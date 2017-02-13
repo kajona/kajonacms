@@ -25,6 +25,7 @@ class InstallerSamplecontentFlow implements SamplecontentInstallerInterface
 
     public function install()
     {
+        /*
         $objFlow = FlowConfig::getByModelClass(NewsNews::class);
 
         $objStepA = new FlowStatus();
@@ -62,6 +63,7 @@ class InstallerSamplecontentFlow implements SamplecontentInstallerInterface
         $objStepTransition = new FlowTransition();
         $objStepTransition->setStrTargetStatus($objStepD->getSystemid());
         $objStepC->addTransition($objStepTransition);
+        */
     }
 
     public function setObjDb($objDb)
