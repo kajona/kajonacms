@@ -51,6 +51,14 @@ class FlowTransition extends Model implements ModelInterface, AdminListableInter
     /**
      * @return FlowStatus
      */
+    public function getParentStatus()
+    {
+        return Objectfactory::getInstance()->getObject($this->getPrevId());
+    }
+
+    /**
+     * @return FlowStatus
+     */
     public function getTargetStatus()
     {
         return Objectfactory::getInstance()->getObject($this->strTargetStatus);
