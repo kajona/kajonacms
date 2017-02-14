@@ -34,6 +34,7 @@ class SystemJSTreeNode implements JsonSerializable
 
     const STR_NODE_AATTR = "a_attr";
     const STR_NODE_AATTR_HREF = "href";
+    const STR_NODE_AATTR_ONCLICK = "onclick";
 
     const STR_NODE_LIATTR = "li_attr";
 
