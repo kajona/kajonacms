@@ -564,6 +564,14 @@ class DbSqlite3 extends DbBase
     }
 
     /**
+     * @inheritdoc
+     */
+    public function handlesDumpCompression()
+    {
+        return false;
+    }
+
+    /**
      * Creates an db-dump usind the given filename. the filename is relative to _realpath_
      * The dump must include, and ONLY include the pass tables
      *
@@ -572,12 +580,14 @@ class DbSqlite3 extends DbBase
      *
      * @return bool Indicates, if the dump worked or not
      */
-    public function dbExport($strFilename, $arrTables)
+    public function dbExport(&$strFilename, $arrTables)
     {
         // FIXME: Only export relevant tables.
         $objFilesystem = new Filesystem();
         return $objFilesystem->fileCopy($this->strDbFile, $strFilename);
     }
+
+
 
     /**
      * Imports the given db-dump file to the database. The filename ist relative to _realpath_

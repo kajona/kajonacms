@@ -800,7 +800,7 @@ class Database
         }
 
         $bitDump = $this->objDbDriver->dbExport($strTargetFilename, $arrTablesFinal);
-        if ($bitDump == true) {
+        if ($bitDump == true && !$this->objDbDriver->handlesDumpCompression()) {
             $objGzip = new Gzip();
             try {
                 if (!$objGzip->compressFile($strTargetFilename, true)) {
@@ -833,7 +833,7 @@ class Database
 
         //gz file?
         $bitGzip = false;
-        if (substr($strFilename, -3) == ".gz") {
+        if (!$this->objDbDriver->handlesDumpCompression() && substr($strFilename, -3) == ".gz") {
             $bitGzip = true;
             //try to decompress
             $objGzip = new Gzip();
