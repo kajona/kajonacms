@@ -45,6 +45,7 @@ use Kajona\System\System\ResponseObject;
 use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemChangelog;
+use Kajona\System\System\SystemChangelogHelper;
 use Kajona\System\System\SystemChangelogRestorer;
 use Kajona\System\System\SystemCommon;
 use Kajona\System\System\SysteminfoInterface;
@@ -944,7 +945,11 @@ JS;
             $strOldValue = $objOneEntry->getStrOldValue();
             $strNewValue = $objOneEntry->getStrNewValue();
 
-            if ($objTarget != null) {
+            //render some properties directly
+            if (in_array($objOneEntry->getStrProperty(), array("rightView", "rightEdit", "rightDelete", "rightRight", "rightRight1", "rightRight2", "rightRight3", "rightRight4", "rightRight5", "rightChangelog", "strPrevId", "strOwner"))) {
+                $strOldValue = SystemChangelogHelper::getStrValueForObjects($strOldValue);
+                $strNewValue = SystemChangelogHelper::getStrValueForObjects($strNewValue);
+            } elseif ($objTarget != null) {
                 $strOldValue = $objTarget->renderVersionValue($objOneEntry->getStrProperty(), $strOldValue);
                 $strNewValue = $objTarget->renderVersionValue($objOneEntry->getStrProperty(), $strNewValue);
             }

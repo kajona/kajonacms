@@ -151,6 +151,7 @@ class RightAdmin extends AdminController implements AdminInterface
                 $arrSingleGroup = array();
                 $arrTemplateRow["group"] = $objSingleGroup->getStrName();
                 $arrSingleGroup["group_id"] = $objSingleGroup->getIntShortId();
+                $arrSingleGroup["group_systemid"] = $objSingleGroup->getSystemid();
 
                 //hide the superglobal admin-row from non-members
                 if ($objSingleGroup->getSystemid() == SystemSetting::getConfigValue("_admins_group_id_") && !in_array(SystemSetting::getConfigValue("_admins_group_id_"), $this->objSession->getGroupIdsAsArray())) {
@@ -159,15 +160,15 @@ class RightAdmin extends AdminController implements AdminInterface
 
 
                 //Building Checkboxes
-                $arrTemplateRow["box0"] = "<input title=\"".$arrTitles[0]."\" rel=\"tooltip\" type=\"checkbox\" name=\"1,".$arrSingleGroup["group_id"]."\" id=\"1,".$arrSingleGroup["group_id"]."\" value=\"1\" ".(in_array($arrSingleGroup["group_id"], $arrRights["view"]) ? " checked=\"checked\" " : "")." />";
-                $arrTemplateRow["box1"] = "<input title=\"".$arrTitles[1]."\" rel=\"tooltip\" type=\"checkbox\" name=\"2,".$arrSingleGroup["group_id"]."\" id=\"2,".$arrSingleGroup["group_id"]."\" value=\"1\" ".(in_array($arrSingleGroup["group_id"], $arrRights["edit"]) ? " checked=\"checked\" " : "")." />";
-                $arrTemplateRow["box2"] = "<input title=\"".$arrTitles[2]."\" rel=\"tooltip\" type=\"checkbox\" name=\"3,".$arrSingleGroup["group_id"]."\" id=\"3,".$arrSingleGroup["group_id"]."\" value=\"1\" ".(in_array($arrSingleGroup["group_id"], $arrRights["delete"]) ? " checked=\"checked\" " : "")." />";
-                $arrTemplateRow["box3"] = "<input title=\"".$arrTitles[3]."\" rel=\"tooltip\" type=\"checkbox\" name=\"4,".$arrSingleGroup["group_id"]."\" id=\"4,".$arrSingleGroup["group_id"]."\" value=\"1\" ".(in_array($arrSingleGroup["group_id"], $arrRights["right"]) ? " checked=\"checked\" " : "")." />";
+                $arrTemplateRow["box0"] = "<input title=\"".$arrTitles[0]."\" rel=\"tooltip\" type=\"checkbox\" name=\"1,".$arrSingleGroup["group_id"]."\" id=\"1,".$arrSingleGroup["group_id"]."\" value=\"1\" ".(in_array($arrSingleGroup["group_systemid"], $arrRights["view"]) ? " checked=\"checked\" " : "")." />";
+                $arrTemplateRow["box1"] = "<input title=\"".$arrTitles[1]."\" rel=\"tooltip\" type=\"checkbox\" name=\"2,".$arrSingleGroup["group_id"]."\" id=\"2,".$arrSingleGroup["group_id"]."\" value=\"1\" ".(in_array($arrSingleGroup["group_systemid"], $arrRights["edit"]) ? " checked=\"checked\" " : "")." />";
+                $arrTemplateRow["box2"] = "<input title=\"".$arrTitles[2]."\" rel=\"tooltip\" type=\"checkbox\" name=\"3,".$arrSingleGroup["group_id"]."\" id=\"3,".$arrSingleGroup["group_id"]."\" value=\"1\" ".(in_array($arrSingleGroup["group_systemid"], $arrRights["delete"]) ? " checked=\"checked\" " : "")." />";
+                $arrTemplateRow["box3"] = "<input title=\"".$arrTitles[3]."\" rel=\"tooltip\" type=\"checkbox\" name=\"4,".$arrSingleGroup["group_id"]."\" id=\"4,".$arrSingleGroup["group_id"]."\" value=\"1\" ".(in_array($arrSingleGroup["group_systemid"], $arrRights["right"]) ? " checked=\"checked\" " : "")." />";
 
                 //loop the module specific permissions
                 for ($intI = 1; $intI <= 5; $intI++) {
                     if ($arrTemplateTotal["title".($intI + 3)] != "") {
-                        $arrTemplateRow["box".($intI + 3)] = "<input title=\"".$arrTitles[$intI + 3]."\" rel=\"tooltip\" type=\"checkbox\" name=\"".($intI + 4).",".$arrSingleGroup["group_id"]."\" id=\"".($intI + 4).",".$arrSingleGroup["group_id"]."\" value=\"1\" ".(in_array($arrSingleGroup["group_id"], $arrRights["right".$intI]) ? " checked=\"checked\" " : "")." />";
+                        $arrTemplateRow["box".($intI + 3)] = "<input title=\"".$arrTitles[$intI + 3]."\" rel=\"tooltip\" type=\"checkbox\" name=\"".($intI + 4).",".$arrSingleGroup["group_id"]."\" id=\"".($intI + 4).",".$arrSingleGroup["group_id"]."\" value=\"1\" ".(in_array($arrSingleGroup["group_systemid"], $arrRights["right".$intI]) ? " checked=\"checked\" " : "")." />";
                     } else {
                         $arrTemplateRow["box".($intI + 3)] = "<input type=\"hidden\" name=\"".($intI + 4).",".$arrSingleGroup["group_id"]."\" id=\"".($intI + 4).",".$arrSingleGroup["group_id"]."\" value=\"1\" />";
                     }
@@ -175,7 +176,7 @@ class RightAdmin extends AdminController implements AdminInterface
 
 
                 if (SystemSetting::getConfigValue("_system_changehistory_enabled_") == "true") {
-                    $arrTemplateRow["box9"] = "<input title=\"".$arrTitles[9]."\" rel=\"tooltip\" type=\"checkbox\" name=\"10,".$arrSingleGroup["group_id"]."\" id=\"10,".$arrSingleGroup["group_id"]."\" value=\"1\" ".(in_array($arrSingleGroup["group_id"], $arrRights["changelog"]) ? " checked=\"checked\" " : "")." />";
+                    $arrTemplateRow["box9"] = "<input title=\"".$arrTitles[9]."\" rel=\"tooltip\" type=\"checkbox\" name=\"10,".$arrSingleGroup["group_id"]."\" id=\"10,".$arrSingleGroup["group_id"]."\" value=\"1\" ".(in_array($arrSingleGroup["group_systemid"], $arrRights["changelog"]) ? " checked=\"checked\" " : "")." />";
                 }
 
 
@@ -254,7 +255,7 @@ class RightAdmin extends AdminController implements AdminInterface
 
                     foreach ($arrRightsPerAction as $strOneGroupId) {
                         //place hidden field
-                        $strReturn .= $this->objToolkit->formInputHidden("inherit,".$intRightCounter.",".$strOneGroupId, "1");
+                        $strReturn .= $this->objToolkit->formInputHidden("inherit,".$intRightCounter.",".UserGroup::getShortIdForGroupId($strOneGroupId), "1");
                     }
                 }
             }
