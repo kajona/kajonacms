@@ -148,6 +148,7 @@ class AdminskinImageresolver implements AdminskinImageresolverInterface {
         "icon_pageLocked"                  => "<span class='kj-icon fa-stack'><i class='fa fa-file-o'></i><i class='fa fa-lock fa-stack-1x kj-stack' style='color: red'></i></span>",
         "icon_page_alias"                  => "<span class='kj-icon fa-stack'><i class='fa fa-file-o'></i><i class='fa fa-chevron-right fa-stack-1x kj-stack'></i></span>",
         "icon_phar"                        => "<i class='kj-icon fa fa-file-archive-o'></i>",
+        "icon_powerpoint"                  => "<i class='kj-icon fa fa-file-powerpoint-o'></i>",
         "icon_progressbar"                 => "<i class='kj-icon fa fa-spinner icon-spin'></i>",
         "icon_question"                    => "<i class='kj-icon fa fa-question-circle'></i>",
         "icon_reply"                       => "<i class='kj-icon fa fa-reply'></i>",
