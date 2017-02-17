@@ -226,7 +226,7 @@ class FlowAdmin extends AdminEvensimpler implements AdminInterface
      */
     public function actionListStep()
     {
-        $this->setStrCurObjectTypeName('step');
+        $this->setStrCurObjectTypeName('Step');
         $this->setCurObjectClassName(FlowStatus::class);
 
         $objFlow = $this->objFactory->getObject($this->getParam("systemid"));
@@ -243,18 +243,100 @@ class FlowAdmin extends AdminEvensimpler implements AdminInterface
 
         $strHtml = "<div class='row'>";
         $strHtml .= "<div class='col-md-6'>" . $strList . "</div>";
-        $strHtml .= "<div class='col-md-6'><div id='flow-graph' class='mermaid' style='color:#fff;'>" . $strGraph . "</div></div>";
+        $strHtml .= "<div class='col-md-6'>" . $strGraph . "</div>";
         $strHtml .= "</div>";
 
-        $strHtml .= <<<HTML
-<script type="text/javascript">
-    require(['mermaid', 'loader'], function(mermaid, loader){
-        loader.loadFile(["/core/module_flow/scripts/mermaid/mermaid.forest.css"], function(){
-            mermaid.init(undefined, $("#flow-graph"));
-        });
-    });
-</script>
-HTML;
+        return $strHtml;
+    }
+
+    /**
+     * @return string
+     * @permissions view
+     */
+    public function actionListTransition()
+    {
+        $this->setStrCurObjectTypeName('Transition');
+        $this->setCurObjectClassName(FlowTransition::class);
+
+        /** @var FlowStatus $objStatus */
+        $objStatus = $this->objFactory->getObject($this->getParam("systemid"));
+
+        /* Create list */
+        $objFilter = null;
+        $objArraySectionIterator = new ArraySectionIterator(FlowTransition::getObjectCountFiltered($objFilter, $this->getSystemid()));
+        $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+        $objArraySectionIterator->setArraySection(FlowTransition::getObjectListFiltered($objFilter, $this->getSystemid(), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+
+        /* Render list and filter */
+        $strList = $this->renderList($objArraySectionIterator, true, "list".$this->getStrCurObjectTypeName());
+        $strGraph = FlowGraphWriter::write($objStatus->getFlowConfig(), $objStatus);
+
+        $strHtml = "<div class='row'>";
+        $strHtml .= "<div class='col-md-6'>" . $strList . "</div>";
+        $strHtml .= "<div class='col-md-6'>" . $strGraph . "</div>";
+        $strHtml .= "</div>";
+
+        return $strHtml;
+    }
+
+    /**
+     * @return string
+     * @permissions view
+     */
+    public function actionListTransitionAction()
+    {
+        $this->setStrCurObjectTypeName('TransitionAction');
+        $this->setCurObjectClassName(FlowActionAbstract::class);
+
+        /** @var FlowTransition $objTransition */
+        $objTransition = $this->objFactory->getObject($this->getParam("systemid"));
+
+        /* Create list */
+        $objFilter = null;
+        $objArraySectionIterator = new ArraySectionIterator(FlowActionAbstract::getObjectCountFiltered($objFilter, $this->getSystemid()));
+        $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+        $objArraySectionIterator->setArraySection(FlowActionAbstract::getObjectListFiltered($objFilter, $this->getSystemid(), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+
+        /* Render list and filter */
+        $strList = $this->objToolkit->warningBox($this->getLang("flow_transition_action_list", [$objTransition->getParentStatus()->getStrName(), $objTransition->getTargetStatus()->getStrName()]), "alert-info");
+        $strList .= $this->renderList($objArraySectionIterator, true, "list".$this->getStrCurObjectTypeName());
+        $strGraph = FlowGraphWriter::write($objTransition->getParentStatus()->getFlowConfig(), $objTransition);
+
+        $strHtml = "<div class='row'>";
+        $strHtml .= "<div class='col-md-6'>" . $strList . "</div>";
+        $strHtml .= "<div class='col-md-6'>" . $strGraph . "</div>";
+        $strHtml .= "</div>";
+
+        return $strHtml;
+    }
+
+    /**
+     * @return string
+     * @permissions view
+     */
+    public function actionListTransitionCondition()
+    {
+        $this->setStrCurObjectTypeName('TransitionCondition');
+        $this->setCurObjectClassName(FlowConditionAbstract::class);
+
+        /** @var FlowTransition $objTransition */
+        $objTransition = $this->objFactory->getObject($this->getParam("systemid"));
+
+        /* Create list */
+        $objFilter = null;
+        $objArraySectionIterator = new ArraySectionIterator(FlowConditionAbstract::getObjectCountFiltered($objFilter, $this->getSystemid()));
+        $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+        $objArraySectionIterator->setArraySection(FlowConditionAbstract::getObjectListFiltered($objFilter, $this->getSystemid(), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+
+        /* Render list and filter */
+        $strList = $this->objToolkit->warningBox($this->getLang("flow_transition_condition_list", [$objTransition->getParentStatus()->getStrName(), $objTransition->getTargetStatus()->getStrName()]), "alert-info");
+        $strList .= $this->renderList($objArraySectionIterator, true, "list".$this->getStrCurObjectTypeName());
+        $strGraph = FlowGraphWriter::write($objTransition->getParentStatus()->getFlowConfig(), $objTransition);
+
+        $strHtml = "<div class='row'>";
+        $strHtml .= "<div class='col-md-6'>" . $strList . "</div>";
+        $strHtml .= "<div class='col-md-6'>" . $strGraph . "</div>";
+        $strHtml .= "</div>";
 
         return $strHtml;
     }

@@ -360,12 +360,10 @@ div.mermaidTooltip {
 .node polygon {
   fill: #eee;
   stroke: #999;
-  stroke-width: 2px;
 }
 
 .edgePath .path {
   stroke: black;
-  stroke-width: 1.5px;
 }
 
 .mermaid {

@@ -42,3 +42,6 @@ $lang["delete_transition_question"]   = "Möchten Sie den Übergang &quot;<b>%%e
 $lang["delete_transition_action_question"]   = "Möchten Sie die Aktion &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $lang["delete_transition_condition_question"]   = "Möchten Sie die Bedingung &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 
+$lang["flow_transition_action_list"]   = "Die folgenden Aktionen sind zu dem Statusübergang (<b>{0}</b> nach <b>{1}</b>) zugeordnet.";
+$lang["flow_transition_condition_list"]   = "Die folgenden Bedingungen sind zu dem Statusübergang (<b>{0}</b> nach <b>{1}</b>) zugeordnet.";
+
