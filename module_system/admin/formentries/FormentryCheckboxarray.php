@@ -89,7 +89,7 @@ class FormentryCheckboxarray extends FormentryBase implements FormentryPrintable
                 if (is_object($strSingleValue)) {
                     $arrTargetValues[] = $strSingleValue->getSystemid();
                 } //POST vals
-                elseif ($strSingleValue == "checked" || $strSingleValue == "on") {//on = from generic list
+                elseif (!empty($strSingleValue)) {//on = from generic list
                     $arrTargetValues[] = $strKey;
                 }
             }

@@ -158,16 +158,16 @@ class Rights
             $objLog = new SystemChangelog();
             $arrChanges = array(
                 array("property" => "rightInherit", "oldvalue" => $arrCurrPermissions[self::$STR_RIGHT_INHERIT], "newvalue" => $arrRights[self::$STR_RIGHT_INHERIT]),
-                array("property" => "rightView", "oldvalue" => $arrCurrPermissions[self::$STR_RIGHT_VIEW], "newvalue" => $arrRights[self::$STR_RIGHT_VIEW]),
-                array("property" => "rightEdit", "oldvalue" => $arrCurrPermissions[self::$STR_RIGHT_EDIT], "newvalue" => $arrRights[self::$STR_RIGHT_EDIT]),
-                array("property" => "rightDelete", "oldvalue" => $arrCurrPermissions[self::$STR_RIGHT_DELETE], "newvalue" => $arrRights[self::$STR_RIGHT_DELETE]),
-                array("property" => "rightRight", "oldvalue" => $arrCurrPermissions[self::$STR_RIGHT_RIGHT], "newvalue" => $arrRights[self::$STR_RIGHT_RIGHT]),
-                array("property" => "rightRight1", "oldvalue" => $arrCurrPermissions[self::$STR_RIGHT_RIGHT1], "newvalue" => $arrRights[self::$STR_RIGHT_RIGHT1]),
-                array("property" => "rightRight2", "oldvalue" => $arrCurrPermissions[self::$STR_RIGHT_RIGHT2], "newvalue" => $arrRights[self::$STR_RIGHT_RIGHT2]),
-                array("property" => "rightRight3", "oldvalue" => $arrCurrPermissions[self::$STR_RIGHT_RIGHT3], "newvalue" => $arrRights[self::$STR_RIGHT_RIGHT3]),
-                array("property" => "rightRight4", "oldvalue" => $arrCurrPermissions[self::$STR_RIGHT_RIGHT4], "newvalue" => $arrRights[self::$STR_RIGHT_RIGHT4]),
-                array("property" => "rightRight5", "oldvalue" => $arrCurrPermissions[self::$STR_RIGHT_RIGHT5], "newvalue" => $arrRights[self::$STR_RIGHT_RIGHT5]),
-                array("property" => "rightChangelog", "oldvalue" => $arrCurrPermissions[self::$STR_RIGHT_CHANGELOG], "newvalue" => $arrRights[self::$STR_RIGHT_CHANGELOG])
+                array("property" => "rightView", "oldvalue" => $this->convertStringToSystemIdString($arrCurrPermissions[self::$STR_RIGHT_VIEW]), "newvalue" => $this->convertStringToSystemIdString($arrRights[self::$STR_RIGHT_VIEW])),
+                array("property" => "rightEdit", "oldvalue" => $this->convertStringToSystemIdString($arrCurrPermissions[self::$STR_RIGHT_EDIT]), "newvalue" => $this->convertStringToSystemIdString($arrRights[self::$STR_RIGHT_EDIT])),
+                array("property" => "rightDelete", "oldvalue" => $this->convertStringToSystemIdString($arrCurrPermissions[self::$STR_RIGHT_DELETE]), "newvalue" => $this->convertStringToSystemIdString($arrRights[self::$STR_RIGHT_DELETE])),
+                array("property" => "rightRight", "oldvalue" => $this->convertStringToSystemIdString($arrCurrPermissions[self::$STR_RIGHT_RIGHT]), "newvalue" => $this->convertStringToSystemIdString($arrRights[self::$STR_RIGHT_RIGHT])),
+                array("property" => "rightRight1", "oldvalue" => $this->convertStringToSystemIdString($arrCurrPermissions[self::$STR_RIGHT_RIGHT1]), "newvalue" => $this->convertStringToSystemIdString($arrRights[self::$STR_RIGHT_RIGHT1])),
+                array("property" => "rightRight2", "oldvalue" => $this->convertStringToSystemIdString($arrCurrPermissions[self::$STR_RIGHT_RIGHT2]), "newvalue" => $this->convertStringToSystemIdString($arrRights[self::$STR_RIGHT_RIGHT2])),
+                array("property" => "rightRight3", "oldvalue" => $this->convertStringToSystemIdString($arrCurrPermissions[self::$STR_RIGHT_RIGHT3]), "newvalue" => $this->convertStringToSystemIdString($arrRights[self::$STR_RIGHT_RIGHT3])),
+                array("property" => "rightRight4", "oldvalue" => $this->convertStringToSystemIdString($arrCurrPermissions[self::$STR_RIGHT_RIGHT4]), "newvalue" => $this->convertStringToSystemIdString($arrRights[self::$STR_RIGHT_RIGHT4])),
+                array("property" => "rightRight5", "oldvalue" => $this->convertStringToSystemIdString($arrCurrPermissions[self::$STR_RIGHT_RIGHT5]), "newvalue" => $this->convertStringToSystemIdString($arrRights[self::$STR_RIGHT_RIGHT5])),
+                array("property" => "rightChangelog", "oldvalue" => $this->convertStringToSystemIdString($arrCurrPermissions[self::$STR_RIGHT_CHANGELOG]), "newvalue" => $this->convertStringToSystemIdString($arrRights[self::$STR_RIGHT_CHANGELOG]))
             );
             $objLog->processChanges($objInstance, "editPermissions", $arrChanges);
         }
@@ -186,6 +186,28 @@ class Rights
         CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_PERMISSIONSCHANGED, array($strSystemid, $arrRights));
 
         return $bitSave;
+    }
+
+    /**
+     * Internal helper to convert a id based string to a systemid based on
+     * @param $strEntry
+     * @return string
+     */
+    private function convertStringToSystemIdString($strEntry): string
+    {
+        if (empty($strEntry)) {
+            return "";
+        }
+        $arrReturn = array();
+        foreach (explode(",", trim($strEntry, ",")) as $strOneEntry) {
+            if (is_numeric($strOneEntry)) {
+                $arrReturn[] = UserGroup::getGroupIdForShortId((int)$strOneEntry);
+            } elseif (validateSystemid($strOneEntry)) {
+                $arrReturn = $strOneEntry;
+            }
+        }
+
+        return implode(",", $arrReturn);
     }
 
     /**

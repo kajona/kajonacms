@@ -374,12 +374,12 @@ class AdminFormgenerator
             $strButtons .= $objToolkit->formInputSubmit(Lang::getInstance()->getLang("commons_reset", "system"), "reset", "", "cancelbutton", true, false);
         }
 
-        if ($intButtonConfig & self::BIT_BUTTON_CONTINUE) {
-            $strButtons .= $objToolkit->formInputSubmit(Lang::getInstance()->getLang("commons_continue", "system"), "continuebtn", "", "", true, false);
-        }
-
         if ($intButtonConfig & self::BIT_BUTTON_BACK) {
             $strButtons .= $objToolkit->formInputSubmit(Lang::getInstance()->getLang("commons_back", "system"), "backbtn", "", "", true, false);
+        }
+
+        if ($intButtonConfig & self::BIT_BUTTON_CONTINUE) {
+            $strButtons .= $objToolkit->formInputSubmit(Lang::getInstance()->getLang("commons_continue", "system"), "continuebtn", "", "", true, false);
         }
 
         if ($intButtonConfig & self::BIT_BUTTON_SAVENEXT) {

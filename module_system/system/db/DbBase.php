@@ -26,6 +26,28 @@ abstract class DbBase implements DbDriverInterface
      */
     protected $intAffectedRows = 0;
 
+
+    /**
+     * Detects if the current installation runs on win or unix
+     * @return bool
+     */
+    protected function isWinOs()
+    {
+        return strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
+    }
+
+    /**
+     * Default implementation to detect if a driver handles compression.
+     * By default, db-drivers us a piped gzip / gunzip command when creating / restoring dumps on unix.
+     * If running on windows, the Database class handles the compression / decompression.
+     *
+     * @return bool
+     */
+    public function handlesDumpCompression()
+    {
+        return !$this->isWinOs();
+    }
+
     /**
      * Renames a table
      *
