@@ -95,25 +95,5 @@ class OrmObjectlistRestriction
         $this->strTargetClass = $strTargetClass;
     }
 
-    /**
-     *  Generates an ORDER By Statement
-     *
-     * @param $arrOrderByRestrictions
-     *
-     * @return string
-     */
-    public static function getOrderByRestrictionsAsString($arrOrderByRestrictions)
-    {
-        $strOrderBy = "";
-        $arrOrderByStr = array();
-        foreach ($arrOrderByRestrictions as $objOrderBy) {
-            $arrOrderByStr[] = $objOrderBy->getStrOrderBy();
-        }
-        if (count($arrOrderByStr) > 0) {
-            $strOrderBy .= " ORDER BY ".implode(", ", $arrOrderByStr);
-        }
 
-        return $strOrderBy;
-
-    }
 }

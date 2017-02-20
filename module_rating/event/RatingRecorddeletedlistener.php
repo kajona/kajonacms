@@ -10,6 +10,7 @@ namespace Kajona\Rating\Event;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\CoreEventdispatcher;
 use Kajona\System\System\GenericeventListenerInterface;
+use Kajona\System\System\OrmComparatorEnum;
 use Kajona\System\System\OrmObjectlist;
 use Kajona\System\System\OrmPropertyCondition;
 use Kajona\System\System\SystemEventidentifier;
@@ -47,7 +48,7 @@ class RatingRecorddeletedlistener implements GenericeventListenerInterface {
 
         //if another record was deleted, remove the ratings alltogether
         $objOrmList = new OrmObjectlist();
-        $objOrmList->addWhereRestriction(new OrmPropertyCondition("strRatingSystemid", \Kajona\System\System\OrmComparatorEnum::Equal(), $strSystemid));
+        $objOrmList->addWhereRestriction(new OrmPropertyCondition("strRatingSystemid", OrmComparatorEnum::Equal(), $strSystemid));
         $arrRatings = $objOrmList->getObjectList("Kajona\\Rating\\System\\RatingRate");
 
         foreach($arrRatings as $objRating) {
