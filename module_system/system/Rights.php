@@ -137,11 +137,13 @@ class Rights
     /**
      * Writes rights to the database.
      * Wrapper to the recursive function Rights::setRightsRecursive($arrRights, $strSystemid)
+     * Make sure to pass short-ids only! And please think about using the official api "addGroupToRight"
      *
      * @param mixed $arrRights
      * @param string $strSystemid
      *
      * @see setRightsRecursive($arrRights, $strSystemid)
+     * @internal
      * @throws Exception
      * @return bool
      */
