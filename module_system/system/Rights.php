@@ -105,6 +105,8 @@ class Rights
     private function writeSingleRecord(string $strSystemid, array $arrRights): bool
     {
 
+        $arrOldPermissions = $this->getPlainRightRow($strSystemid);
+
         //Splitting up the rights
         $arrParams = array();
         $arrParams[] = (int)$arrRights[self::$STR_RIGHT_INHERIT];
@@ -128,6 +130,9 @@ class Rights
             //Flush the cache so later lookups will match the new rights
             $this->objDb->flushQueryCache();
             $this->flushRightsCache();
+
+            CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_PERMISSIONSCHANGED, array($strSystemid, $arrRights, $arrOldPermissions));
+
             return true;
         } else {
             return false;
@@ -185,8 +190,6 @@ class Rights
             throw new Exception("saving rights of record ".$strSystemid." failed", Exception::$level_ERROR);
         }
         
-        CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_PERMISSIONSCHANGED, array($strSystemid, $arrRights));
-
         return $bitSave;
     }
 
@@ -210,6 +213,33 @@ class Rights
         }
 
         return implode(",", $arrReturn);
+    }
+
+    /**
+     * Converts a systemid based permissions set to a short id based one
+     *
+     * @param array $arrPermissions
+     * @return array
+     */
+    public function convertSystemidArrayToShortIdString(array $arrPermissions): array
+    {
+        foreach ($arrPermissions as $strPermission => $arrGroups) {
+            if ($strPermission == self::$STR_RIGHT_INHERIT) {
+                continue;
+            }
+
+            $arrConverted = array();
+            foreach ($arrGroups as $strOneSystemid) {
+                if (empty($strOneSystemid)) {
+                    continue;
+                }
+                $arrConverted[] = UserGroup::getShortIdForGroupId($strOneSystemid);
+            }
+
+            $arrPermissions[$strPermission] = implode(",", $arrConverted);
+        }
+
+        return $arrPermissions;
     }
 
     /**

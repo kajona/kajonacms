@@ -124,10 +124,10 @@ interface SystemEventidentifier {
 
     /**
      * Invoked if the permissions of a record have been changed.
-     * Triggered only by the "root" node of the change cascade.
      *
      * @param string $strSystemid
-     * @param array $arrPermissions
+     * @param array $arrNewPermissions
+     * @param array $arrOldPermissions
      *
      * @since 5.1
      */
