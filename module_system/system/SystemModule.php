@@ -118,7 +118,7 @@ class SystemModule extends Model implements ModelInterface, AdminListableInterfa
                              ON system_id = system_date_id
                           WHERE system_id = right_id
                             AND system_id = module_id
-                       ORDER BY system_sort ASC, system_comment ASC   ";
+                       ORDER BY system_sort ASC";
 
             $arrRows = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), null, null, $bitCache);
             OrmRowcache::addArrayOfInitRows($arrRows);
@@ -321,7 +321,7 @@ class SystemModule extends Model implements ModelInterface, AdminListableInterfa
 		                AND system_status = 1
 		                AND module_id = system_id
                             ".$strAspectFilter."
-		              ORDER BY system_sort ASC, system_comment ASC";
+		              ORDER BY system_sort ASC";
         return Carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
     }
 

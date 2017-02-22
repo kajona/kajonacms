@@ -113,7 +113,7 @@ function printSingleLevel($strStartId, &$arrGlobalNodes)
         echo "  ";
     }
 
-    echo $objCommon->getStrRecordClass()." / ".$objCommon->getRecordComment()." / ".$objCommon->getSystemid()."\n";
+    echo $objCommon->getStrRecordClass()." / ".$objCommon->getSystemid()."\n";
 
     echo "   state: ".$strStatus." module nr: ".$arrRecord["system_module_nr"]." sort: ".$arrRecord["system_sort"]."\n";
 

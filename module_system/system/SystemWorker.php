@@ -28,7 +28,7 @@ class SystemWorker
      */
     public function checkFirstLevelNodeConsistency()
     {
-        $strQuery = "SELECT system_id, system_comment
+        $strQuery = "SELECT system_id
                        FROM "._dbprefix_."system
                        LEFT JOIN "._dbprefix_."system_module
                         ON (system_id = module_id)
@@ -53,7 +53,7 @@ class SystemWorker
         $arrReturn = array();
 
         //fetch all records
-        $strQuery = "SELECT system_id, system_prev_id, system_comment
+        $strQuery = "SELECT system_id, system_prev_id
                        FROM "._dbprefix_."system
                       WHERE system_id != '0'";
         $arrRecords = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), null, null, false);
@@ -65,7 +65,7 @@ class SystemWorker
                           WHERE system_id = ?";
             $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($arrOneRecord["system_prev_id"]));
             if ($arrRow["number"] == "0") {
-                $arrReturn[$arrOneRecord["system_id"]] = $arrOneRecord["system_comment"];
+                $arrReturn[$arrOneRecord["system_id"]] = $arrOneRecord["system_id"];
             }
         }
         return $arrReturn;
@@ -79,7 +79,7 @@ class SystemWorker
      */
     public function chekRightSystemRelations()
     {
-        $strQuery = "SELECT right_id, system_comment
+        $strQuery = "SELECT right_id
                        FROM "._dbprefix_."system_right
                        LEFT JOIN "._dbprefix_."system
                         ON (right_id = system_id)

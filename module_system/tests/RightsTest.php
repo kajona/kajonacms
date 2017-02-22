@@ -345,7 +345,7 @@ class RightsTest extends Testbase
 
         $objCommon = new SystemAspect($strRootNode);
         //var_dump($objCommon->getSystemRecord());
-        echo $objCommon->getRecordComment() . " / (v: " . $this->objRights->rightView($strRootNode, $this->strUserId) . " e: " . $this->objRights->rightEdit($strRootNode, $this->strUserId) . ") /  " . $objCommon->getSystemid() . "\n";
+        echo " / (v: " . $this->objRights->rightView($strRootNode, $this->strUserId) . " e: " . $this->objRights->rightEdit($strRootNode, $this->strUserId) . ") /  " . $objCommon->getSystemid() . "\n";
 
         //var_dump($objCommon->getChildNodesAsIdArray());
         foreach ($objCommon->getChildNodesAsIdArray() as $strOneId)
