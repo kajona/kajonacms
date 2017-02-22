@@ -1072,7 +1072,7 @@ abstract class Root
             $strQuery = "INSERT INTO "._dbprefix_."system
                      ( system_id, system_prev_id, system_module_nr, system_owner, system_create_date, system_lm_user,
                        system_lm_time, system_status, system_sort, system_class, system_deleted) VALUES
-                     (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                     (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             //Send the query to the db
             $this->objDB->_pQuery(
