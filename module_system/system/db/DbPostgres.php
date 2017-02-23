@@ -196,7 +196,7 @@ class DbPostgres extends DbBase
 
         $arrReturn = array();
         foreach ($arrTemp as $arrOneRow) {
-            if (StringUtil::indexOf($arrOneRow["name"], _dbprefix_) !== false) {
+            if (empty(_dbprefix_) || StringUtil::indexOf($arrOneRow["name"], _dbprefix_) !== false) {
                 $arrReturn[] = $arrOneRow;
             }
         }
