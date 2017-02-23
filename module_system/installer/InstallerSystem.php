@@ -620,6 +620,11 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
             $strReturn .= $this->update_621_622();
         }
 
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "6.2.2") {
+            $strReturn .= $this->update_622_623();
+        }
+
         return $strReturn."\n\n";
     }
 
@@ -926,6 +931,53 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "6.2.2");
+        return $strReturn;
+    }
+
+    private function update_622_623()
+    {
+        $strReturn = "Updating 6.2.2 to 6.2.3...\n";
+
+        $strReturn .= "Adding permisson columns to system table";
+        $this->objDB->addColumn("system", "right_inherit", DbDatatypes::STR_TYPE_INT);
+        $this->objDB->addColumn("system", "right_view", DbDatatypes::STR_TYPE_TEXT);
+        $this->objDB->addColumn("system", "right_edit", DbDatatypes::STR_TYPE_TEXT);
+        $this->objDB->addColumn("system", "right_delete", DbDatatypes::STR_TYPE_TEXT);
+        $this->objDB->addColumn("system", "right_right", DbDatatypes::STR_TYPE_TEXT);
+        $this->objDB->addColumn("system", "right_right1", DbDatatypes::STR_TYPE_TEXT);
+        $this->objDB->addColumn("system", "right_right2", DbDatatypes::STR_TYPE_TEXT);
+        $this->objDB->addColumn("system", "right_right3", DbDatatypes::STR_TYPE_TEXT);
+        $this->objDB->addColumn("system", "right_right4", DbDatatypes::STR_TYPE_TEXT);
+        $this->objDB->addColumn("system", "right_right5", DbDatatypes::STR_TYPE_TEXT);
+        $this->objDB->addColumn("system", "right_changelog", DbDatatypes::STR_TYPE_TEXT);
+
+
+        $strReturn .= "Moving data...\n";
+
+        $strQuery = "UPDATE "._dbprefix_."system AS s SET 
+                s.right_inherit = r.right_inherit, 
+                s.right_view = r.right_view, 
+                right_edit = r.right_edit, 
+                right_delete = r.right_delete, 
+                right_right = r.right_right, 
+                right_right1 = r.right_right1, 
+                right_right2 = r.right_right2, 
+                right_right3 = r.right_right3,
+                right_right4 = r.right_right4, 
+                right_right5 = r.right_right5, 
+                right_changelog = r.right_changelog
+                FROM (
+                    SELECT right_inherit, right_view, right_edit, right_delete, right_right, right_right1, right_right2, right_right3, right_right4, right_right5, right_changelog FROM system_right
+                ) AS r WHERE s.system_id = r.right_id ";
+        $this->objDB->_pQuery($strQuery, array());
+
+
+        $strReturn .= "Dropping old permissions table...\n";
+        $this->objDB->_pQuery("DROP TABLE "._dbprefix_."system_right", array());
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "6.2.3");
         return $strReturn;
     }
 
