@@ -954,9 +954,9 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
         $strReturn .= "Moving data...\n";
 
-        $strQuery = "UPDATE "._dbprefix_."system AS s SET 
-                s.right_inherit = r.right_inherit, 
-                s.right_view = r.right_view, 
+        $strQuery = "UPDATE "._dbprefix_."system SET 
+                right_inherit = r.right_inherit, 
+                right_view = r.right_view, 
                 right_edit = r.right_edit, 
                 right_delete = r.right_delete, 
                 right_right = r.right_right, 
@@ -967,8 +967,8 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
                 right_right5 = r.right_right5, 
                 right_changelog = r.right_changelog
                 FROM (
-                    SELECT right_inherit, right_view, right_edit, right_delete, right_right, right_right1, right_right2, right_right3, right_right4, right_right5, right_changelog FROM system_right
-                ) AS r WHERE s.system_id = r.right_id ";
+                    SELECT right_id, right_inherit, right_view, right_edit, right_delete, right_right, right_right1, right_right2, right_right3, right_right4, right_right5, right_changelog FROM "._dbprefix_."system_right
+                ) AS r WHERE system_id = r.right_id ";
         $this->objDB->_pQuery($strQuery, array());
 
 
