@@ -76,17 +76,11 @@ class SystemWorker
      * Returns an array of corrupted records
      *
      * @return array
+     * @deprecated
      */
     public function chekRightSystemRelations()
     {
-        $strQuery = "SELECT right_id, system_comment
-                       FROM "._dbprefix_."system_right
-                       LEFT JOIN "._dbprefix_."system
-                        ON (right_id = system_id)
-                       WHERE system_id IS NULL ";
-        $arrReturn = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
-
-        return $arrReturn;
+        return array();
     }
 
     /**

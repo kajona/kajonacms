@@ -288,14 +288,12 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
         if ($strFilter != "") {
             $strQuery = "SELECT *
 							FROM "._dbprefix_."news,
-							      "._dbprefix_."system_right,
 							      "._dbprefix_."news_member,
 							      "._dbprefix_."system
 						LEFT JOIN "._dbprefix_."system_date
 						       ON system_id = system_date_id
 							WHERE system_id = news_id
 							  AND news_id = newsmem_news
-							  AND system_id = right_id
 							  ".$strWhere."
 							  AND newsmem_category = ?
 							ORDER BY system_date_start DESC";
@@ -303,12 +301,10 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
         } else {
             $strQuery = "SELECT *
 							FROM "._dbprefix_."news,
-							      "._dbprefix_."system_right,
 							      "._dbprefix_."system
 					    LEFT JOIN "._dbprefix_."system_date
 						       ON system_id = system_date_id
 							WHERE system_id = news_id
-							  AND system_id = right_id
 							  ".$strWhere."
 							ORDER BY system_date_start DESC";
         }
@@ -349,26 +345,22 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
         if ($strFilter != "") {
             $strQuery = "SELECT COUNT(*)
 							FROM "._dbprefix_."news,
-							      "._dbprefix_."system_right,
 							      "._dbprefix_."news_member,
 							      "._dbprefix_."system
 						LEFT JOIN "._dbprefix_."system_date
 						       ON system_id = system_date_id
 							WHERE system_id = news_id
 							  AND news_id = newsmem_news
-							  AND system_id = right_id
 							  ".$strWhere."
 							  AND newsmem_category = ?";
             $arrParams[] = $strFilter;
         } else {
             $strQuery = "SELECT COUNT(*)
 							FROM "._dbprefix_."news,
-							      "._dbprefix_."system_right,
 							      "._dbprefix_."system
 					    LEFT JOIN "._dbprefix_."system_date
 						       ON system_id = system_date_id
 							WHERE system_id = news_id
-							  AND system_id = right_id
 							  ".$strWhere;
         }
 
@@ -432,13 +424,11 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
             $strQuery = "SELECT *
                             FROM "._dbprefix_."news,
                                  "._dbprefix_."news_member,
-                                 "._dbprefix_."system_right,
                                  "._dbprefix_."system
                        LEFT JOIN "._dbprefix_."system_date
                               ON system_id = system_date_id
                             WHERE system_id = news_id
                               AND news_id = newsmem_news
-                              AND system_id = right_id
                               AND newsmem_category = ?
                               AND system_status = 1
                               AND (system_date_start IS NULL or(system_date_start < ? OR system_date_start = 0))
@@ -455,12 +445,10 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
         } else {
             $strQuery = "SELECT *
                             FROM "._dbprefix_."news,
-                                 "._dbprefix_."system_right,
                                  "._dbprefix_."system
                         LEFT JOIN "._dbprefix_."system_date
                                ON system_id = system_date_id
                             WHERE system_id = news_id
-                              AND system_id = right_id
                               AND system_status = 1
                               AND (system_date_start IS NULL or(system_date_start < ? OR system_date_start = 0))
                                 ".$strTime.$strWhere."

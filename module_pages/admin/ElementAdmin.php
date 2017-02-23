@@ -440,13 +440,11 @@ abstract class ElementAdmin extends AdminController implements SearchPortalobjec
     					 FROM ".$strTargetTable.",
     					 	  "._dbprefix_."element,
     					 	  "._dbprefix_."page_element,
-    					 	  "._dbprefix_."system_right,
     					 	  "._dbprefix_."system
     					 LEFT JOIN "._dbprefix_."system_date
     					    ON (system_id = system_date_id)
     					 WHERE element_name = page_element_ph_element
     					   AND page_element_id = content_id
-    					   AND system_id = right_id
     					   AND system_id = content_id
     					   ".$objORM->getDeletedWhereRestriction()."
     					   AND system_id = ? ";
@@ -455,13 +453,11 @@ abstract class ElementAdmin extends AdminController implements SearchPortalobjec
             $strQuery = "SELECT *
     					 FROM "._dbprefix_."element,
     					 	  "._dbprefix_."page_element,
-    					 	  "._dbprefix_."system_right,
     					 	  "._dbprefix_."system
     					 LEFT JOIN "._dbprefix_."system_date
     					    ON (system_id = system_date_id)
     					 WHERE element_name = page_element_ph_element
     					   AND page_element_id = system_id
-    					   AND system_id = right_id
     					   ".$objORM->getDeletedWhereRestriction()."
     					   AND system_id = ? ";
 

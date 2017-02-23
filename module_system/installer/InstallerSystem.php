@@ -74,14 +74,6 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $arrFields["system_comment"] = array("char254", true);
         $arrFields["system_deleted"] = array("int", true);
 
-        if(!$this->objDB->createTable("system", $arrFields, array("system_id"), array("system_prev_id", "system_module_nr", "system_sort", "system_owner", "system_create_date", "system_status", "system_lm_time", "system_lock_time", "system_deleted")))
-            $strReturn .= "An error occurred! ...\n";
-
-        //Rights table ----------------------------------------------------------------------------------
-        $strReturn .= "Installing table system_right...\n";
-
-        $arrFields = array();
-        $arrFields["right_id"] = array("char20", false);
         $arrFields["right_inherit"] = array("int", true);
         $arrFields["right_view"] = array("text", true);
         $arrFields["right_edit"] = array("text", true);
@@ -94,8 +86,28 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $arrFields["right_right5"] = array("text", true);
         $arrFields["right_changelog"] = array("text", true);
 
-        if(!$this->objDB->createTable("system_right", $arrFields, array("right_id")))
+        if(!$this->objDB->createTable("system", $arrFields, array("system_id"), array("system_prev_id", "system_module_nr", "system_sort", "system_owner", "system_create_date", "system_status", "system_lm_time", "system_lock_time", "system_deleted")))
             $strReturn .= "An error occurred! ...\n";
+
+        //Rights table ----------------------------------------------------------------------------------
+//        $strReturn .= "Installing table system_right...\n";
+//
+//        $arrFields = array();
+//        $arrFields["right_id"] = array("char20", false);
+//        $arrFields["right_inherit"] = array("int", true);
+//        $arrFields["right_view"] = array("text", true);
+//        $arrFields["right_edit"] = array("text", true);
+//        $arrFields["right_delete"] = array("text", true);
+//        $arrFields["right_right"] = array("text", true);
+//        $arrFields["right_right1"] = array("text", true);
+//        $arrFields["right_right2"] = array("text", true);
+//        $arrFields["right_right3"] = array("text", true);
+//        $arrFields["right_right4"] = array("text", true);
+//        $arrFields["right_right5"] = array("text", true);
+//        $arrFields["right_changelog"] = array("text", true);
+//
+//        if(!$this->objDB->createTable("system_right", $arrFields, array("right_id")))
+//            $strReturn .= "An error occurred! ...\n";
 
         // Modul table ----------------------------------------------------------------------------------
         $strReturn .= "Installing table system_module...\n";
@@ -340,31 +352,26 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $this->registerConstant("_guests_group_id_", $strGuestID, SystemSetting::$int_TYPE_STRING, _user_modul_id_);
         $this->registerConstant("_admins_group_id_", $strAdminID, SystemSetting::$int_TYPE_STRING, _user_modul_id_);
 
-        //Create an root-record for the tree
-        //So, lets generate the record
-        $strQuery = "INSERT INTO "._dbprefix_."system
-                     ( system_id, system_prev_id, system_module_nr, system_create_date, system_lm_time, system_status, system_sort, system_class) VALUES
-                     (?, ?, ?, ?, ?, ?, ?, ?)";
-
-        //Send the query to the db
-        $this->objDB->_pQuery(
-            $strQuery,
-            array(0, 0, _system_modul_id_, Date::getCurrentTimestamp(), time(), 1, 1, SystemCommon::class)
-        );
-
-
         //BUT: We have to modify the right-record of the root node, too
         $strGroupsAll = ",".$intGuestShortId.",".$intAdminShortid.",";
         $strGroupsAdmin = ",".$intAdminShortid.",";
 
-        $strQuery = "INSERT INTO "._dbprefix_."system_right
-            (right_id, right_inherit, right_view, right_edit, right_delete, right_right, right_right1, right_right2, right_right3, right_right4, right_right5, right_changelog) VALUES
-            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        //Create an root-record for the tree
+        //So, lets generate the record
+        $strQuery = "INSERT INTO "._dbprefix_."system
+                     ( system_id, system_prev_id, system_module_nr, system_create_date, system_lm_time, system_status, system_sort, system_class,
+                        right_inherit, right_view, right_edit, right_delete, right_right, right_right1, right_right2, right_right3, right_right4, right_right5, right_changelog
+                     ) VALUES
+                     (?, ?, ?, ?, ?, ?, ?, ?,
+                     ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
+        //Send the query to the db
         $this->objDB->_pQuery(
             $strQuery,
-            array(0, 0, $strGroupsAll, $strGroupsAdmin, $strGroupsAdmin, $strGroupsAdmin, $strGroupsAdmin, $strGroupsAdmin, $strGroupsAdmin, $strGroupsAdmin, $strGroupsAdmin, $strGroupsAdmin)
+            array(0, 0, _system_modul_id_, Date::getCurrentTimestamp(), time(), 1, 1, SystemCommon::class,
+                0, $strGroupsAll, $strGroupsAdmin, $strGroupsAdmin, $strGroupsAdmin, $strGroupsAdmin, $strGroupsAdmin, $strGroupsAdmin, $strGroupsAdmin, $strGroupsAdmin, $strGroupsAdmin)
         );
+
         $this->objDB->flushQueryCache();
 
         $strReturn .= "Modified root-rights....\n";

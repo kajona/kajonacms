@@ -1094,8 +1094,8 @@ abstract class Root
             //So, lets generate the record
             $strQuery = "INSERT INTO "._dbprefix_."system
                      ( system_id, system_prev_id, system_module_nr, system_owner, system_create_date, system_lm_user,
-                       system_lm_time, system_status, system_comment, system_sort, system_class, system_deleted) VALUES
-                     (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                       system_lm_time, system_status, system_comment, system_sort, system_class, system_deleted, right_inherit) VALUES
+                     (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             //Send the query to the db
             $this->objDB->_pQuery(
@@ -1112,13 +1112,13 @@ abstract class Root
                     $strComment,
                     $this->getNextSortValue($strPrevId),
                     $this->getStrRecordClass(),
-                    $this->getIntRecordDeleted()
+                    $this->getIntRecordDeleted(),
+                    1
                 )
             );
         }
 
         //we need a Rights-Record
-        $this->objDB->_pQuery("INSERT INTO "._dbprefix_."system_right (right_id, right_inherit) VALUES (?, 1)", array($strSystemId));
         //update rights to inherit
         Carrier::getInstance()->getObjRights()->setInherited(true, $strSystemId);
 
@@ -1130,7 +1130,6 @@ abstract class Root
         $this->intOldRecordStatus = -1;
 
         return $strSystemId;
-
     }
 
     /**
@@ -1495,8 +1494,6 @@ abstract class Root
             $strSystemid = $this->getSystemid();
         }
         $strQuery = "SELECT * FROM "._dbprefix_."system
-                         LEFT JOIN "._dbprefix_."system_right
-                              ON system_id = right_id
                          LEFT JOIN "._dbprefix_."system_date
                               ON system_id = system_date_id
                              WHERE system_id = ?";
@@ -1540,11 +1537,6 @@ abstract class Root
         $strQuery = "DELETE FROM "._dbprefix_."system WHERE system_id = ?";
         $bitResult = $bitResult && $this->objDB->_pQuery($strQuery, array($strSystemid));
 
-        if ($bitRight) {
-            $strQuery = "DELETE FROM "._dbprefix_."system_right WHERE right_id = ?";
-            $bitResult = $bitResult && $this->objDB->_pQuery($strQuery, array($strSystemid));
-        }
-
         if ($bitDate) {
             $strQuery = "DELETE FROM "._dbprefix_."system_date WHERE system_date_id = ?";
             $bitResult = $bitResult && $this->objDB->_pQuery($strQuery, array($strSystemid));
@@ -1571,13 +1563,13 @@ abstract class Root
      * Deletes a record from the rights-table
      *
      * @param string $strSystemid
-     *
      * @return bool
+     * @throws Exception
+     * @deprecated
      */
     public function deleteRight($strSystemid)
     {
-        $strQuery = "DELETE FROM "._dbprefix_."system_right WHERE right_id = ?";
-        return $this->objDB->_pQuery($strQuery, array($strSystemid));
+        throw new Exception("Callig deleteRight is no longer supported", Exception::$level_ERROR);
     }
 
     /**
@@ -2228,7 +2220,7 @@ abstract class Root
      * triggering another query to the database.
      * On high-performance systems or large object-nets, this could reduce the amount of database-queries
      * fired drastically.
-     * For best performance, include the matching row of the tables system, system_date and system_rights
+     * For best performance, include the matching row of the tables system, system_date
      *
      * @param array $arrInitRow
      *
