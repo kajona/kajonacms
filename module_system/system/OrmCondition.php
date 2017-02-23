@@ -25,15 +25,15 @@ class OrmCondition extends OrmObjectlistRestriction implements OrmConditionInter
     /**
      *  Generates an ORDER By Statement
      *
-     * @param OrmObjectlistOrderby[] $arrOrderByRestrictions
+     * @param OrmObjectlistOrderby[] $arrOrderBy
      *
      * @return string
      */
-    public static function getOrderByRestrictionsAsString($arrOrderByRestrictions)
+    public static function getOrderByRestrictionsAsString($arrOrderBy)
     {
         $strOrderBy = "";
         $arrOrderByStr = array();
-        foreach ($arrOrderByRestrictions as $objOrderBy) {
+        foreach ($arrOrderBy as $objOrderBy) {
             $arrOrderByStr[] = $objOrderBy->getStrOrderBy();
         }
         if (count($arrOrderByStr) > 0) {

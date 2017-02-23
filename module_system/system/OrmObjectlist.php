@@ -297,11 +297,11 @@ class OrmObjectlist extends OrmBase
     /**
      * Add a where restriction to the current queries
      *
-     * @param OrmObjectlistRestriction $objRestriction
+     * @param OrmConditionInterface $objRestriction
      *
      * @return void
      */
-    public function addWhereRestriction(OrmObjectlistRestriction $objRestriction)
+    public function addWhereRestriction(OrmConditionInterface $objRestriction)
     {
         $this->arrWhereRestrictions[] = $objRestriction;
     }
