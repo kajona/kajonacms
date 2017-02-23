@@ -89,25 +89,6 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         if(!$this->objDB->createTable("system", $arrFields, array("system_id"), array("system_prev_id", "system_module_nr", "system_sort", "system_owner", "system_create_date", "system_status", "system_lm_time", "system_lock_time", "system_deleted")))
             $strReturn .= "An error occurred! ...\n";
 
-        //Rights table ----------------------------------------------------------------------------------
-//        $strReturn .= "Installing table system_right...\n";
-//
-//        $arrFields = array();
-//        $arrFields["right_id"] = array("char20", false);
-//        $arrFields["right_inherit"] = array("int", true);
-//        $arrFields["right_view"] = array("text", true);
-//        $arrFields["right_edit"] = array("text", true);
-//        $arrFields["right_delete"] = array("text", true);
-//        $arrFields["right_right"] = array("text", true);
-//        $arrFields["right_right1"] = array("text", true);
-//        $arrFields["right_right2"] = array("text", true);
-//        $arrFields["right_right3"] = array("text", true);
-//        $arrFields["right_right4"] = array("text", true);
-//        $arrFields["right_right5"] = array("text", true);
-//        $arrFields["right_changelog"] = array("text", true);
-//
-//        if(!$this->objDB->createTable("system_right", $arrFields, array("right_id")))
-//            $strReturn .= "An error occurred! ...\n";
 
         // Modul table ----------------------------------------------------------------------------------
         $strReturn .= "Installing table system_module...\n";
@@ -970,6 +951,8 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
                     SELECT right_id, right_inherit, right_view, right_edit, right_delete, right_right, right_right1, right_right2, right_right3, right_right4, right_right5, right_changelog FROM "._dbprefix_."system_right
                 ) AS r WHERE system_id = r.right_id ";
         $this->objDB->_pQuery($strQuery, array());
+
+        Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBQUERIES | Carrier::INT_CACHE_TYPE_DBSTATEMENTS);
 
 
         $strReturn .= "Dropping old permissions table...\n";
