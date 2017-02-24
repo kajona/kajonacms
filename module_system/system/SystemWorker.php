@@ -72,18 +72,6 @@ class SystemWorker
     }
 
     /**
-     * Checks, if all right-records have a corresponding system-record
-     * Returns an array of corrupted records
-     *
-     * @return array
-     * @deprecated
-     */
-    public function chekRightSystemRelations()
-    {
-        return array();
-    }
-
-    /**
      * Checks, if all date-records have a corresponding system-record
      * Returns an array of corrupted records
      *
