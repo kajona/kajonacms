@@ -42,8 +42,10 @@ class OrmPermissionCondition extends OrmCondition
             $this->arrUserGroupIds = Carrier::getInstance()->getObjSession()->getGroupIdsAsArray();
         }
 
-        if ($this->strColumn == null) {
+        if ($strColumn == null) {
             $this->strColumn = "right_".$strPermission;
+        } else {
+            $this->strColumn = $strColumn;
         }
     }
 
