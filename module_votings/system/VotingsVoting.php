@@ -16,7 +16,6 @@ use Kajona\System\System\Model;
 use Kajona\System\System\ModelInterface;
 use Kajona\System\System\OrmComparatorEnum;
 use Kajona\System\System\OrmObjectlist;
-use Kajona\System\System\OrmObjectlistSystemstatusRestriction;
 use Kajona\System\System\OrmSystemstatusCondition;
 use Kajona\System\System\SearchResultobjectInterface;
 
@@ -146,7 +145,7 @@ class VotingsVoting extends Model implements ModelInterface, AdminListableInterf
 
         $objOrm = new OrmObjectlist();
         if($bitOnlyActive) {
-            $objOrm->addWhereRestriction(new OrmObjectlistSystemstatusRestriction(OrmComparatorEnum::NotEqual(), 0));
+            $objOrm->addWhereRestriction(new OrmSystemstatusCondition(OrmComparatorEnum::NotEqual(), 0));
         }
         return $objOrm->getObjectCount(__CLASS__);
     }

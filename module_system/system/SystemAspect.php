@@ -142,7 +142,7 @@ class SystemAspect extends Model implements ModelInterface, AdminListableInterfa
     public static function getActiveObjectList()
     {
         $objOrm = new OrmObjectlist();
-        $objOrm->addWhereRestriction(new OrmObjectlistSystemstatusRestriction(OrmComparatorEnum::NotEqual(), 0));
+        $objOrm->addWhereRestriction(new OrmSystemstatusCondition(OrmComparatorEnum::NotEqual(), 0));
         return $objOrm->getObjectList(__CLASS__, "");
     }
 
@@ -155,7 +155,7 @@ class SystemAspect extends Model implements ModelInterface, AdminListableInterfa
     public static function getActiveObjectCount()
     {
         $objOrm = new OrmObjectlist();
-        $objOrm->addWhereRestriction(new OrmObjectlistSystemstatusRestriction(OrmComparatorEnum::NotEqual(), 0));
+        $objOrm->addWhereRestriction(new OrmSystemstatusCondition(OrmComparatorEnum::NotEqual(), 0));
         return $objOrm->getObjectCount(__CLASS__);
     }
 

@@ -13,7 +13,7 @@ use Kajona\System\System\OrmComparatorEnum;
 use Kajona\System\System\OrmCondition;
 use Kajona\System\System\OrmObjectlist;
 use Kajona\System\System\OrmObjectlistOrderby;
-use Kajona\System\System\OrmObjectlistSystemstatusRestriction;
+use Kajona\System\System\OrmSystemstatusCondition;
 use Kajona\System\System\SystemChangelog;
 use Kajona\System\System\VersionableInterface;
 
@@ -245,7 +245,7 @@ class EventmanagerEvent extends \Kajona\System\System\Model implements ModelInte
         }
 
         if ($bitOnlyActive) {
-            $objORM->addWhereRestriction(new OrmObjectlistSystemstatusRestriction(OrmComparatorEnum::Equal(), 1));
+            $objORM->addWhereRestriction(new OrmSystemstatusCondition(OrmComparatorEnum::Equal(), 1));
         }
 
         $objORM->addOrderBy(new OrmObjectlistOrderby("system_date_start ".($intOrder == "1" ? " ASC " : " DESC ")));
