@@ -297,7 +297,7 @@ abstract class AdminController extends AbstractController
      *
      * @return string
      */
-    protected function getQuickHelp()
+    public function getQuickHelp()
     {
         $strReturn = "";
 

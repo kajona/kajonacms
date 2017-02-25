@@ -1436,14 +1436,8 @@ The language switch surrounds the buttons
 
 <quickhelp>
     <script type="text/javascript">
-        require(['jquery', 'bootstrap'], function() {
-            $('#quickhelp').popover({
-                title: '%%title%%',
-                content: '%%text%%',
-                placement: 'bottom',
-                trigger: 'hover',
-                html: true
-            }).css("cursor", "help").show();
+        require(['quickhelp', 'bootstrap'], function(quickhelp) {
+            quickhelp.setQuickhelp('%%title%%', '%%text%%');
         });
     </script>
 </quickhelp>
@@ -1761,6 +1755,7 @@ It containes a list of aspects and provides the possibility to switch the differ
 -- BACKEND NAVIGATION -----------------------------------------------------------------------------------
 
 <sitemap_wrapper>
+                  <div class="nav-header">Kajona V5</div>
         %%level%%
 </sitemap_wrapper>
 

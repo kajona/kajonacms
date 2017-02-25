@@ -93,7 +93,7 @@ class PagesContentAdmin extends AdminSimple implements AdminInterface
      *
      * @return string
      */
-    protected function getQuickHelp()
+    public function getQuickHelp()
     {
         $strReturn = "";
         $strText = "";

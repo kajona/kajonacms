@@ -1,6 +1,6 @@
 
-require(['jquery', 'jquery-ui', 'jquery-touchPunch', 'bootstrap', 'v4skin', 'loader', 'dialog', 'folderview', 'lists', 'dialogHelper', 'ajax', 'contentToolbar', 'tooltip', 'breadcrumb', 'moduleNavigation'],
-    function(jquery, jqueryui, touch, bootstrap, v4skin, loader, Dialog, folderview, lists, dialogHelper, ajax, contentToolbar, tooltip, breadcrumb, moduleNavigation) {
+require(['jquery', 'jquery-ui', 'jquery-touchPunch', 'bootstrap', 'v4skin', 'loader', 'dialog', 'folderview', 'lists', 'dialogHelper', 'ajax', 'contentToolbar', 'tooltip', 'breadcrumb', 'moduleNavigation', 'quickhelp'],
+    function(jquery, jqueryui, touch, bootstrap, v4skin, loader, Dialog, folderview, lists, dialogHelper, ajax, contentToolbar, tooltip, breadcrumb, moduleNavigation, quickhelp) {
 
     //backwards compatibility
     if (typeof KAJONA == "undefined") {
@@ -84,6 +84,7 @@ require(['jquery', 'jquery-ui', 'jquery-touchPunch', 'bootstrap', 'v4skin', 'loa
 
         contentToolbar.resetBar();
         breadcrumb.resetBar();
+        quickhelp.resetQuickhelp();
         tooltip.removeTooltip($('*[rel=tooltip]'));
         moduleNavigation.setModuleActive(arrSections[0]);
 

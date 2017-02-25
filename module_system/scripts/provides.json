@@ -28,6 +28,7 @@
     "messaging": "kajona/messaging",
     "moduleNavigation": "kajona/moduleNavigation",
     "permissions": "kajona/permissions",
+    "quickhelp": "kajona/quickhelp",
     "statusDisplay": "kajona/statusDisplay",
     "switchLanguage": "kajona/switchLanguage",
     "systemTask": "kajona/systemTask",

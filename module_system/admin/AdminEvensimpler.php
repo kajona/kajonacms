@@ -519,7 +519,7 @@ abstract class AdminEvensimpler extends AdminSimple
      *
      * @return string
      */
-    protected function getQuickHelp()
+    public function getQuickHelp()
     {
         $strOldAction = $this->getAction();
         $this->setAction($this->strOriginalAction);

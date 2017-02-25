@@ -79,16 +79,15 @@
         <div class="col-md-2 hidden-print mainnavi-container sidebar-offcanvas" id="sidebar">
             <div class="sidebar-nav">
                 <div class="panel-group" id="moduleNavigation">
-                    <div class="nav-header">Kajona V5</div>
-                    %%moduleSitemap%%
+
+                    <!--% %moduleSitemap% %-->
                 </div>
             </div>
-                    <!--<div id="navcontainer"></div>-->
-                    <!--<script type="text/javascript">-->
-                       <!--require(['ajax'], function(ajax) {-->
-                            <!--ajax.loadUrlToElement("#navcontainer", '/xml.php?admin=1&module=v4skin&action=getBackendNavi');-->
-                        <!--});-->
-                    <!--</script>-->
+            <script type="text/javascript">
+              require(['ajax'], function(ajax) {
+                    ajax.loadUrlToElement("#moduleNavigation", '/xml.php?admin=1&module=v4skin&action=getBackendNavi');
+              });
+                </script>
 
         </div>
 

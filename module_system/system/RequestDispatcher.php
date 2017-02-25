@@ -206,6 +206,7 @@ class RequestDispatcher
                                 if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::INDEX())) {
                                     if ($strReturn != "") {
                                         $strReturn .= $objHelper->actionGetPathNavigation($objConcreteModule);
+                                        $strReturn .= $objHelper->actionGetQuickHelp($objConcreteModule);
                                     }
                                 }
 

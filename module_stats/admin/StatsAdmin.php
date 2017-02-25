@@ -299,7 +299,7 @@ class StatsAdmin extends AdminController implements AdminInterface
         return parent::getOutputActionTitle();
     }
 
-    protected function getQuickHelp()
+    public function getQuickHelp()
     {
         $strOldAction = $this->getAction();
         $this->setAction($this->getParam("action"));
