@@ -42,7 +42,7 @@ class SkinAdminController extends AdminEvensimpler implements AdminInterface
 
         //move to separate getters
         $arrTemplate["path_home"] = AdminHelper::getAdminPathNaviHome();
-        $arrTemplate["moduleSitemap"] = $this->objToolkit->getAdminSitemap($this->getArrModule("modul"));
+        $arrTemplate["moduleSitemap"] = $this->objToolkit->getAdminSitemap();
 
         if (SystemAspect::getActiveObjectCount() > 1) {
             $arrTemplate["aspectChooser"] = $this->objToolkit->getAspectChooser($this->getArrModule("modul"), $this->getAction(), $this->getSystemid());
@@ -94,7 +94,7 @@ class SkinAdminController extends AdminEvensimpler implements AdminInterface
      */
     protected function actionGetBackendNavi()
     {
-        return $this->objToolkit->getAdminSitemap($this->getArrModule("modul"));
+        return $this->objToolkit->getAdminSitemap();
     }
 
     /**

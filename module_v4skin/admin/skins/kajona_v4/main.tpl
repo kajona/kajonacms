@@ -80,16 +80,16 @@
             <div class="sidebar-nav">
                 <div class="panel-group" id="moduleNavigation">
                     <div class="nav-header">Kajona V5</div>
-
-                    <div id="navcontainer"></div>
-                    <script type="text/javascript">
-                       require(['ajax'], function(ajax) {
-                            ajax.loadUrlToElement("#navcontainer", '/xml.php?admin=1&module=v4skin&action=getBackendNavi');
-                        });
-                    </script>
-                    <!--%%moduleSitemap%%-->
+                    %%moduleSitemap%%
                 </div>
             </div>
+                    <!--<div id="navcontainer"></div>-->
+                    <!--<script type="text/javascript">-->
+                       <!--require(['ajax'], function(ajax) {-->
+                            <!--ajax.loadUrlToElement("#navcontainer", '/xml.php?admin=1&module=v4skin&action=getBackendNavi');-->
+                        <!--});-->
+                    <!--</script>-->
+
         </div>
 
         <!-- CONTENT CONTAINER -->

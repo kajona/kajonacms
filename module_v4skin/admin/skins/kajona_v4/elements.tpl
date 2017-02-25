@@ -1765,29 +1765,22 @@ It containes a list of aspects and provides the possibility to switch the differ
 </sitemap_wrapper>
 
 <sitemap_combined_entry_header>
-    <a data-toggle="collapse" data-parent="#moduleNavigation" href="#menu_%%systemid%%" rel="tooltip" title="%%moduleName%%">
+    <a data-toggle="collapse" data-parent="#moduleNavigation" href="#menu_%%systemid%%" rel="tooltip" title="%%moduleName%%" data-kajona-module="%%moduleTitle%%">
         <i class="fa %%faicon%%"></i>
     </a>
 </sitemap_combined_entry_header>
 
 <sitemap_combined_entry_body>
-    <div id="menu_%%systemid%%" class="panel-collapse collapse">
+    <div id="menu_%%systemid%%" class="panel-collapse collapse" data-kajona-module="%%moduleTitle%%">
         <div class="panel-body">
             <ul>%%actions%%</ul>
         </div>
     </div>
 </sitemap_combined_entry_body>
 
-<sitemap_combined_entry_body_active>
-    <div id="menu_%%systemid%%" class="panel-collapse collapge in">
-        <div class="panel-body">
-            <ul>%%actions%%</ul>
-        </div>
-    </div>
-</sitemap_combined_entry_body_active>
 
 <sitemap_combined_entry_wrapper>
-    <div class="panel panel-default">
+    <div class="panel panel-default panel-combined">
         <div class="panel-heading">
             <span class="linkcontainer ">
                 %%combined_header%%
@@ -1797,27 +1790,15 @@ It containes a list of aspects and provides the possibility to switch the differ
     </div>
 </sitemap_combined_entry_wrapper>
 
-<sitemap_combined_entry_wrapper_active>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <span class="linkcontainer active">
-                %%combined_header%%
-            </span>
-        </div>
-        %%combined_body%%
-    </div>
-</sitemap_combined_entry_wrapper_active>
-
-
 
 <sitemap_module_wrapper>
     <div class="panel panel-default">
         <div class="panel-heading">
-            <a data-toggle="collapse" data-parent="#moduleNavigation" href="#menu_%%systemid%%">
+            <a data-toggle="collapse" data-parent="#moduleNavigation" href="#menu_%%systemid%%" data-kajona-module="%%moduleTitle%%" >
                 %%moduleName%%
             </a>
         </div>
-        <div id="menu_%%systemid%%" class="panel-collapse collapse">
+        <div id="menu_%%systemid%%" class="panel-collapse collapse" data-kajona-module="%%moduleTitle%%">
             <div class="panel-body">
                 <ul>%%actions%%</ul>
             </div>
@@ -1825,20 +1806,6 @@ It containes a list of aspects and provides the possibility to switch the differ
     </div>
 </sitemap_module_wrapper>
 
-<sitemap_module_wrapper_active>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <a class="active" data-toggle="collapse" data-parent="#moduleNavigation" href="#menu_%%systemid%%">
-                %%moduleName%%
-            </a>
-        </div>
-        <div id="menu_%%systemid%%" class="panel-collapse collapse in">
-            <div class="panel-body">
-                <ul>%%actions%%</ul>
-            </div>
-        </div>
-    </div>
-</sitemap_module_wrapper_active>
 
 <sitemap_action_entry>
     <li>%%action%%</li>

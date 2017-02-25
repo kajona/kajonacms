@@ -1906,17 +1906,11 @@ HTML;
     /**
      * The v4 way of generating a backend-navigation.
      *
-     * @param string $strCurrentModule
-     *
      * @return string
      */
-    public function getAdminSitemap($strCurrentModule = "")
+    public function getAdminSitemap()
     {
         $strModules = "";
-
-        if ($strCurrentModule == "elemente") {
-            $strCurrentModule = "pages";
-        }
 
         $arrModules = SystemModule::getModulesInNaviAsArray(SystemAspect::getCurrentAspectId());
 
@@ -1968,35 +1962,19 @@ HTML;
 
             if (array_key_exists($objOneInstance->getStrName(), $arrCombined)) {
                 $arrModuleLevel["faicon"] = $arrCombined[$objOneInstance->getStrName()];
-
-                $strBodySection = "sitemap_combined_entry_body";
-                if ($strCurrentModule == $objOneInstance->getStrName()) {
-                    $strBodySection = "sitemap_combined_entry_body_active";
-                }
-
                 $strCombinedHeader .= $this->objTemplate->fillTemplateFile($arrModuleLevel, "/elements.tpl", "sitemap_combined_entry_header");
-                $strCombinedBody .= $this->objTemplate->fillTemplateFile($arrModuleLevel, "/elements.tpl", $strBodySection);
+                $strCombinedBody .= $this->objTemplate->fillTemplateFile($arrModuleLevel, "/elements.tpl", "sitemap_combined_entry_body");
             } else {
-
-                if ($strCurrentModule == $objOneInstance->getStrName()) {
-                    $strModules .= $this->objTemplate->fillTemplateFile($arrModuleLevel, "/elements.tpl", "sitemap_module_wrapper_active");
-                } else {
-                    $strModules .= $this->objTemplate->fillTemplateFile($arrModuleLevel, "/elements.tpl", "sitemap_module_wrapper");
-                }
+                $strModules .= $this->objTemplate->fillTemplateFile($arrModuleLevel, "/elements.tpl", "sitemap_module_wrapper");
             }
         }
 
 
         if ($strCombinedHeader != "") {
-            $strSection = "sitemap_combined_entry_wrapper";
-            if (array_key_exists($strCurrentModule, $arrCombined)) {
-                $strSection = "sitemap_combined_entry_wrapper_active";
-            }
-
             $strModules = $this->objTemplate->fillTemplateFile(
                 array("combined_header" => $strCombinedHeader, "combined_body" => $strCombinedBody),
                 "/elements.tpl",
-                $strSection
+                "sitemap_combined_entry_wrapper"
             ).$strModules;
         }
 

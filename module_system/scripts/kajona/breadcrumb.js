@@ -5,7 +5,7 @@
  *
  * @module breadcrumb
  */
-define(['jquery'], function ($) {
+define('breadcrumb', ['jquery'], function ($) {
 
     var $objBreadcrumb = $("div.pathNaviContainer ul.breadcrumb");
 

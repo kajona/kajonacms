@@ -1,6 +1,6 @@
 
-require(['jquery', 'jquery-ui', 'jquery-touchPunch', 'bootstrap', 'v4skin', 'loader', 'dialog', 'folderview', 'lists', 'dialogHelper', 'ajax', 'contentToolbar', 'tooltip', 'breadcrumb'],
-    function(jquery, jqueryui, touch, bootstrap, v4skin, loader, Dialog, folderview, lists, dialogHelper, ajax, contentToolbar, tooltip, breadcrumb) {
+require(['jquery', 'jquery-ui', 'jquery-touchPunch', 'bootstrap', 'v4skin', 'loader', 'dialog', 'folderview', 'lists', 'dialogHelper', 'ajax', 'contentToolbar', 'tooltip', 'breadcrumb', 'moduleNavigation'],
+    function(jquery, jqueryui, touch, bootstrap, v4skin, loader, Dialog, folderview, lists, dialogHelper, ajax, contentToolbar, tooltip, breadcrumb, moduleNavigation) {
 
     //backwards compatibility
     if (typeof KAJONA == "undefined") {
@@ -85,6 +85,7 @@ require(['jquery', 'jquery-ui', 'jquery-touchPunch', 'bootstrap', 'v4skin', 'loa
         contentToolbar.resetBar();
         breadcrumb.resetBar();
         tooltip.removeTooltip($('*[rel=tooltip]'));
+        moduleNavigation.setModuleActive(arrSections[0]);
 
         //split between post and get
         if(KAJONA.admin.forms.submittedEl != null) {

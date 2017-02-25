@@ -26,6 +26,7 @@
     "lists": "kajona/lists",
     "loader": "kajona/loader",
     "messaging": "kajona/messaging",
+    "moduleNavigation": "kajona/moduleNavigation",
     "permissions": "kajona/permissions",
     "statusDisplay": "kajona/statusDisplay",
     "switchLanguage": "kajona/switchLanguage",

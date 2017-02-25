@@ -5,7 +5,7 @@
  *
  * @module contentToolbar
  */
-define(['jquery'], function ($) {
+define('contentToolbar', ['jquery'], function ($) {
 
     var $objToolbarContainer = $(".contentToolbar");
     var $objToolbarList = $(".contentToolbar ul");
