@@ -115,7 +115,7 @@ class SystemPwchangehistory extends Model implements ModelInterface, AdminListab
     public static function getHistoryByUser($strTargetUser)
     {
         $objORM = new OrmObjectlist();
-        $objORM->addWhereRestriction(new OrmObjectlistPropertyRestriction("strTargetUser", OrmComparatorEnum::Equal(), $strTargetUser));
+        $objORM->addWhereRestriction(new OrmPropertyCondition("strTargetUser", OrmComparatorEnum::Equal(), $strTargetUser));
         $objORM->addOrderBy(new OrmObjectlistOrderby("history_changedate DESC"));
 
         return $objORM->getObjectList(get_called_class(), "", 0, 10);

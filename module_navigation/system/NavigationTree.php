@@ -13,7 +13,7 @@ use Kajona\System\System\Model;
 use Kajona\System\System\ModelInterface;
 use Kajona\System\System\OrmComparatorEnum;
 use Kajona\System\System\OrmObjectlist;
-use Kajona\System\System\OrmObjectlistPropertyRestriction;
+use Kajona\System\System\OrmPropertyCondition;
 use Kajona\System\System\SystemModule;
 
 /**
@@ -121,7 +121,7 @@ class NavigationTree extends Model implements ModelInterface, AdminListableInter
     public static function getNavigationByName($strName)
     {
         $objOrm = new OrmObjectlist();
-        $objOrm->addWhereRestriction(new OrmObjectlistPropertyRestriction("strName", OrmComparatorEnum::Equal(), $strName));
+        $objOrm->addWhereRestriction(new OrmPropertyCondition("strName", OrmComparatorEnum::Equal(), $strName));
         $arrRows = $objOrm->getObjectList("Kajona\\Navigation\\System\\NavigationTree", SystemModule::getModuleIdByNr(_navigation_modul_id_));
         if (count($arrRows) == 1) {
             return $arrRows[0];

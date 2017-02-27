@@ -16,6 +16,7 @@ use Kajona\System\Admin\Formentries\FormentryDatetime;
 use Kajona\System\Admin\Formentries\FormentryDropdown;
 use Kajona\System\Admin\Formentries\FormentryObjectlist;
 use Kajona\System\Admin\Formentries\FormentryObjecttags;
+use Kajona\System\Admin\Formentries\FormentryYesno;
 
 /**
  * Class which provides a default render implementation for the VersionableInterface. The implementation looks at the
@@ -130,8 +131,23 @@ class SystemChangelogRenderer
             case "rightDelete":
                 return $arrRights[2];
 
-            case "rightRight1":
+            case "rightRight":
                 return $arrRights[3];
+
+            case "rightRight1":
+                return $arrRights[4];
+
+            case "rightRight2":
+                return $arrRights[5];
+
+            case "rightRight3":
+                return $arrRights[6];
+
+            case "rightRight4":
+                return $arrRights[7];
+
+            case "rightRight5":
+                return $arrRights[8];
 
             case "rightChangelog":
                 return $arrRights[9];
@@ -177,7 +193,12 @@ class SystemChangelogRenderer
             case "rightView":
             case "rightEdit":
             case "rightDelete":
+            case "rightRight":
             case "rightRight1":
+            case "rightRight2":
+            case "rightRight3":
+            case "rightRight4":
+            case "rightRight5":
             case "rightChangelog":
             case "strPrevId":
             case "strOwner":
@@ -187,6 +208,9 @@ class SystemChangelogRenderer
             case "objEndDate":
             case "objSpecialDate":
                 return FormentryDate::class;
+
+            case "intRecordDeleted":
+                return FormentryYesno::class;
 
             default:
                 return null;
@@ -233,6 +257,19 @@ class SystemChangelogRenderer
             case "prozess":
             case "oe":
                 return SystemChangelogHelper::getStrValueForObjects($strValue);
+                break;
+
+            case FormentryYesno::class:
+                $arrDDValues = array(
+                    0 => Carrier::getInstance()->getObjLang()->getLang("commons_no", "system"),
+                    1 => Carrier::getInstance()->getObjLang()->getLang("commons_yes", "system"),
+                );
+                if (!empty($arrDDValues) && array_key_exists($strValue, $arrDDValues)) {
+                    return $arrDDValues[$strValue];
+                } else {
+                    return $strValue;
+                }
+
                 break;
 
             default:

@@ -122,9 +122,9 @@ $lang["commons_from"] = "From";
 $lang["commons_to"] = "To";
 
 $lang["commons_record_status"] = "Status";
-$lang["commons_record_deleted"] = "Deleted";
-$lang["commons_record_prev"] = "Parent";
-$lang["commons_record_owner"] = "Owner";
+$lang["commons_record_deleted"] = "Record Deleted";
+$lang["commons_record_prev"] = "Parent object";
+$lang["commons_record_owner"] = "Record creator";
 $lang["commons_record_startdate"] = "Start date";
 $lang["commons_record_enddate"] = "End date";
 $lang["commons_record_specialdate"] = "Special date";

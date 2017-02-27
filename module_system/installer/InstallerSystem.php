@@ -915,7 +915,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
             $this->objDB->_pQuery($strQuery, array(IdGenerator::generateNextId(UserGroup::INT_SHORTID_IDENTIFIER), $arrOneRow["group_id"]));
         }
 
-        $strReturn .= $this->migrateUserData();
+        $strReturn .= $this->migrateUserData(2500);
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "6.2.2");

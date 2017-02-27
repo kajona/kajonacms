@@ -7,14 +7,13 @@
 namespace Kajona\Packagemanager\Event;
 
 use Kajona\Packagemanager\System\PackagemanagerTemplate;
-use Kajona\System\System\Cache;
 use Kajona\System\System\CacheManager;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\CoreEventdispatcher;
 use Kajona\System\System\GenericeventListenerInterface;
 use Kajona\System\System\OrmComparatorEnum;
 use Kajona\System\System\OrmObjectlist;
-use Kajona\System\System\OrmObjectlistSystemstatusRestriction;
+use Kajona\System\System\OrmSystemstatusCondition;
 use Kajona\System\System\ServiceProvider;
 use Kajona\System\System\SystemEventidentifier;
 use Kajona\System\System\SystemSetting;
@@ -48,7 +47,7 @@ class PackagemanagerRecordupdatedlistener implements GenericeventListenerInterfa
             if ($objRecord->getIntRecordStatus() == 1) {
 
                 $objOrm = new OrmObjectlist();
-                $objOrm->addWhereRestriction(new OrmObjectlistSystemstatusRestriction(OrmComparatorEnum::Equal(), 1));
+                $objOrm->addWhereRestriction(new OrmSystemstatusCondition(OrmComparatorEnum::Equal(), 1));
                 $arrPacks = $objOrm->getObjectList("Kajona\\Packagemanager\\System\\PackagemanagerTemplate");
 
                 foreach ($arrPacks as $objPack) {

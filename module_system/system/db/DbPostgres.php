@@ -196,7 +196,7 @@ class DbPostgres extends DbBase
 
         $arrReturn = array();
         foreach ($arrTemp as $arrOneRow) {
-            if (StringUtil::indexOf($arrOneRow["name"], _dbprefix_) !== false) {
+            if (empty(_dbprefix_) || StringUtil::indexOf($arrOneRow["name"], _dbprefix_) !== false) {
                 $arrReturn[] = $arrOneRow;
             }
         }
@@ -426,18 +426,23 @@ class DbPostgres extends DbBase
      *
      * @return bool
      */
-    public function dbExport($strFilename, $arrTables)
+    public function dbExport(&$strFilename, $arrTables)
     {
         $strFilename = _realpath_.$strFilename;
         $strTables = "-t ".implode(" -t ", $arrTables);
 
-        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+        if ($this->isWinOs()) {
             $strCommand = "SET \"PGPASSWORD=".$this->objCfg->getStrPass()."\" && ";
         } else {
             $strCommand = "PGPASSWORD=\"".$this->objCfg->getStrPass()."\" ";
         }
 
-        $strCommand .= $this->strDumpBin." --clean --no-owner -h".$this->objCfg->getStrHost()." -U".$this->objCfg->getStrUsername()." -p".$this->objCfg->getIntPort()." ".$strTables." ".$this->objCfg->getStrDbName()." > \"".$strFilename."\"";
+        if ($this->handlesDumpCompression()) {
+            $strFilename .= ".gz";
+            $strCommand .= $this->strDumpBin." --clean --no-owner -h".$this->objCfg->getStrHost()." -U".$this->objCfg->getStrUsername()." -p".$this->objCfg->getIntPort()." ".$strTables." ".$this->objCfg->getStrDbName()." | gzip > \"".$strFilename."\"";
+        } else {
+            $strCommand .= $this->strDumpBin." --clean --no-owner -h".$this->objCfg->getStrHost()." -U".$this->objCfg->getStrUsername()." -p".$this->objCfg->getIntPort()." ".$strTables." ".$this->objCfg->getStrDbName()." > \"".$strFilename."\"";
+        }
         //Now do a systemfork
         $intTemp = "";
         $strResult = system($strCommand, $intTemp);
@@ -456,13 +461,18 @@ class DbPostgres extends DbBase
     {
         $strFilename = _realpath_.$strFilename;
 
-        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+        if ($this->isWinOs()) {
             $strCommand = "SET \"PGPASSWORD=".$this->objCfg->getStrPass()."\" && ";
         } else {
             $strCommand = "PGPASSWORD=\"".$this->objCfg->getStrPass()."\" ";
         }
 
-        $strCommand .= $this->strRestoreBin." -q -h".$this->objCfg->getStrHost()." -U".$this->objCfg->getStrUsername()." -p".$this->objCfg->getIntPort()." ".$this->objCfg->getStrDbName()." < \"".$strFilename."\"";
+        if ($this->handlesDumpCompression() && StringUtil::endsWith($strFilename, ".gz")) {
+            $strCommand .= " gunzip -c \"".$strFilename."\" | ".$this->strRestoreBin." -q -h".$this->objCfg->getStrHost()." -U".$this->objCfg->getStrUsername()." -p".$this->objCfg->getIntPort()." ".$this->objCfg->getStrDbName()."";
+        } else {
+            $strCommand .= $this->strRestoreBin." -q -h".$this->objCfg->getStrHost()." -U".$this->objCfg->getStrUsername()." -p".$this->objCfg->getIntPort()." ".$this->objCfg->getStrDbName()." < \"".$strFilename."\"";
+        }
+
         $intTemp = "";
         $strResult = system($strCommand, $intTemp);
         Logger::getInstance(Logger::DBLOG)->addLogRow($this->strRestoreBin." exited with code ".$intTemp, Logger::$levelInfo);

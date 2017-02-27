@@ -22,6 +22,28 @@ class OrmCondition extends OrmObjectlistRestriction implements OrmConditionInter
     const STR_CONDITION_AND = "AND";
     const STR_CONDITION_OR = "OR";
 
+    /**
+     *  Generates an ORDER By Statement
+     *
+     * @param OrmObjectlistOrderby[] $arrOrderByRestrictions
+     *
+     * @return string
+     */
+    public static function getOrderByRestrictionsAsString($arrOrderByRestrictions)
+    {
+        $strOrderBy = "";
+        $arrOrderByStr = array();
+        foreach ($arrOrderByRestrictions as $objOrderBy) {
+            $arrOrderByStr[] = $objOrderBy->getStrOrderBy();
+        }
+        if (count($arrOrderByStr) > 0) {
+            $strOrderBy .= " ORDER BY " . implode(", ", $arrOrderByStr);
+        }
+
+        return $strOrderBy;
+
+    }
+
 
     /**
      * @param string $strWhere

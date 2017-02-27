@@ -18,7 +18,7 @@ use Kajona\System\System\Objectfactory;
 use Kajona\System\System\OrmComparatorEnum;
 use Kajona\System\System\OrmObjectlist;
 use Kajona\System\System\OrmObjectlistOrderby;
-use Kajona\System\System\OrmObjectlistPropertyRestriction;
+use Kajona\System\System\OrmPropertyCondition;
 use Kajona\System\System\SearchResultobjectInterface;
 use Kajona\System\System\SystemSetting;
 
@@ -171,7 +171,7 @@ class TagsTag extends Model implements ModelInterface, AdminListableInterface, S
      */
     public static function getTagByName($strName) {
         $objORM = new OrmObjectlist();
-        $objORM->addWhereRestriction(new OrmObjectlistPropertyRestriction("strName", OrmComparatorEnum::Like(), trim($strName)));
+        $objORM->addWhereRestriction(new OrmPropertyCondition("strName", OrmComparatorEnum::Like(), trim($strName)));
         return $objORM->getSingleObject(get_called_class());
     }
 
@@ -183,7 +183,7 @@ class TagsTag extends Model implements ModelInterface, AdminListableInterface, S
      */
     public static function getTagsByFilter($strFilter) {
         $objORM = new OrmObjectlist();
-        $objORM->addWhereRestriction(new OrmObjectlistPropertyRestriction("strName", OrmComparatorEnum::Like(), trim($strFilter."%")));
+        $objORM->addWhereRestriction(new OrmPropertyCondition("strName", OrmComparatorEnum::Like(), trim($strFilter."%")));
         $objORM->addOrderBy(new OrmObjectlistOrderby("tags_tag_name ASC"));
         return $objORM->getObjectList(get_called_class());
     }

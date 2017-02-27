@@ -248,12 +248,12 @@ interface DbDriverInterface
      * Creates an db-dump usind the given filename. the filename is relative to _realpath_
      * The dump must include, and ONLY include the pass tables
      *
-     * @param string $strFilename
+     * @param string &$strFilename passed by reference so that the driver is able to update the filename, e.g. in order to add a .gz suffix
      * @param array $arrTables
      *
      * @return bool Indicates, if the dump worked or not
      */
-    public function dbExport($strFilename, $arrTables);
+    public function dbExport(&$strFilename, $arrTables);
 
     /**
      * Imports the given db-dump file to the database. The filename ist relative to _realpath_
@@ -329,6 +329,16 @@ interface DbDriverInterface
      * @return int
      */
     public function getIntAffectedRows();
+
+
+    /**
+     * Default implementation to detect if a driver handles compression.
+     * By default, db-drivers us a piped gzip / gunzip command when creating / restoring dumps on unix.
+     * If running on windows, the Database class handles the compression / decompression.
+     *
+     * @return bool
+     */
+    public function handlesDumpCompression();
 }
 
 

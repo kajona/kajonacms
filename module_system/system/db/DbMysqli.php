@@ -12,6 +12,7 @@ use Kajona\System\System\DbConnectionParams;
 use Kajona\System\System\DbDatatypes;
 use Kajona\System\System\Exception;
 use Kajona\System\System\Logger;
+use Kajona\System\System\StringUtil;
 use mysqli;
 use mysqli_stmt;
 
@@ -459,7 +460,7 @@ class DbMysqli extends DbBase
      *
      * @return bool
      */
-    public function dbExport($strFilename, $arrTables)
+    public function dbExport(&$strFilename, $arrTables)
     {
         $strFilename = _realpath_.$strFilename;
         $strTables = implode(" ", $arrTables);
@@ -469,7 +470,12 @@ class DbMysqli extends DbBase
             $strParamPass = " -p\"".$this->objCfg->getStrPass()."\"";
         }
 
-        $strCommand = $this->strDumpBin." -h".$this->objCfg->getStrHost()." -u".$this->objCfg->getStrUsername().$strParamPass." -P".$this->objCfg->getIntPort()." ".$this->objCfg->getStrDbName()." ".$strTables." > \"".$strFilename."\"";
+        if ($this->handlesDumpCompression()) {
+            $strFilename .= ".gz";
+            $strCommand = $this->strDumpBin." -h".$this->objCfg->getStrHost()." -u".$this->objCfg->getStrUsername().$strParamPass." -P".$this->objCfg->getIntPort()." ".$this->objCfg->getStrDbName()." ".$strTables." | gzip > \"".$strFilename."\"";
+        } else {
+            $strCommand = $this->strDumpBin." -h".$this->objCfg->getStrHost()." -u".$this->objCfg->getStrUsername().$strParamPass." -P".$this->objCfg->getIntPort()." ".$this->objCfg->getStrDbName()." ".$strTables." > \"".$strFilename."\"";
+        }
         //Now do a systemfork
         $intTemp = "";
         system($strCommand, $intTemp);
@@ -498,7 +504,11 @@ class DbMysqli extends DbBase
             $strParamPass = " -p\"".$this->objCfg->getStrPass()."\"";
         }
 
-        $strCommand = $this->strRestoreBin." -h".$this->objCfg->getStrHost()." -u".$this->objCfg->getStrUsername().$strParamPass." -P".$this->objCfg->getIntPort()." ".$this->objCfg->getStrDbName()." < \"".$strFilename."\"";
+        if ($this->handlesDumpCompression() && StringUtil::endsWith($strFilename, ".gz")) {
+            $strCommand = " gunzip -c \"".$strFilename."\" | ".$this->strRestoreBin." -h".$this->objCfg->getStrHost()." -u".$this->objCfg->getStrUsername().$strParamPass." -P".$this->objCfg->getIntPort()." ".$this->objCfg->getStrDbName()."";
+        } else {
+            $strCommand = $this->strRestoreBin." -h".$this->objCfg->getStrHost()." -u".$this->objCfg->getStrUsername().$strParamPass." -P".$this->objCfg->getIntPort()." ".$this->objCfg->getStrDbName()." < \"".$strFilename."\"";
+        }
         $intTemp = "";
         system($strCommand, $intTemp);
         if ($intTemp == 0) {
