@@ -37,6 +37,10 @@ class RedirectException extends Exception
     public function __construct($strModule, $strAction, array $arrParams)
     {
         parent::__construct(null, null);
+
+        $this->strModule = $strModule;
+        $this->strAction = $strAction;
+        $this->arrParams = $arrParams;
     }
 
     /**
