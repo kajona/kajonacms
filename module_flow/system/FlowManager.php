@@ -52,6 +52,25 @@ class FlowManager
     }
 
     /**
+     * Returns the initial int status of an model
+     *
+     * @param Model $objObject
+     * @return int
+     */
+    public function getInitialStatusForModel(Model $objObject)
+    {
+        $objFlow = $this->getFlowForModel($objObject);
+        if ($objFlow instanceof FlowConfig) {
+            $arrStatus = $objFlow->getArrStatus();
+            $objStatus = reset($arrStatus);
+            if ($objStatus instanceof FlowStatus) {
+                return $objStatus->getIntIndex();
+            }
+        }
+        return 0;
+    }
+
+    /**
      * Returns all available status transition for the current step
      *
      * @param Model $objObject
