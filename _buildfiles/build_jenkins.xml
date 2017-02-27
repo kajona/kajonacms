@@ -151,13 +151,6 @@
 
     <!-- executes javascript protractor tests -->
     <target name="protractorSetup" depends="installNpmBuildDependencies">
-        <exec dir="${basedir}${jsPath}" executable="${path.node}" failonerror="on">
-            <arg line="./node_modules/protractor/bin/webdriver-manager update"/>
-        </exec>
-        <exec dir="${basedir}${jsPath}" executable="${path.node}" spawn="true">
-            <arg line="./node_modules/protractor/bin/webdriver-manager start"/>
-        </exec>
-
         <!-- deletes all files from the tmp folder -->
         <antcall target="setupPackageFolders" />
 
@@ -174,10 +167,7 @@
             </fileset>
         </copy>
 
-        <!-- copy selenium config -->
-        <copy file="${basedir}/setupSeleniumConfig.php" tofile="${basedir}${tempPath}/setupSeleniumConfig.php" />
-
-        <!-- copy selenium config -->
+        <!-- Extract phar files -->
         <copy file="${basedir}/extractPhar.php" tofile="${basedir}${tempPath}/extractPhar.php" />
 
         <!-- remove modules which are not included in the package config -->
@@ -186,39 +176,24 @@
         </exec>
 
         <antcall target="buildPackageHelperSelenium" />
-    </target>
 
-    <target name="startWebServer">
-        <!-- stop internal webserver, needed here in case the prio build was unsuccessful -->
-        <antcall target="stopWebServer" />
-
-        <!-- start internal webserver -->
+        <!-- Modify .htaccess file-->
+        <echo>Modify .htaccess file</echo>
         <exec dir="${basedir}" executable="${path.php}" spawn="true">
-            <!--param1=server root path, param2 = sevver IP, param3=Server Port, param4=path to file server pid file, param5=filename where pid of the server is stored-->
-            <arg line="start_phpserver.php ${basedir}${tempPath} 127.0.0.1 8080 ${user.home}/ kajona_server_pid_file.lock"/>
+            <arg line="modify_htaccess.php ${basedir}${tempPath}/"/><!--param1=server root path-->
         </exec>
-    </target>
 
-    <target name="stopWebServer">
-        <!-- stop internal webserver -->
-        <exec dir="${basedir}" executable="${path.php}">
-            <!--param1=path to file server pid file, param2=filename where pid of the server is stored in order to kill the process-->
-            <arg line="stop_phpserver.php ${user.home}/ kajona_server_pid_file.lock"/>
-        </exec>
     </target>
 
     <target name="protractorExecute" depends="installNpmBuildDependencies">
 
+        <!-- Start webdriver-->
         <exec dir="${basedir}${jsPath}" executable="${path.node}" failonerror="on">
             <arg line="./node_modules/protractor/bin/webdriver-manager update"/>
         </exec>
         <exec dir="${basedir}${jsPath}" executable="${path.node}" spawn="true">
             <arg line="./node_modules/protractor/bin/webdriver-manager start"/>
         </exec>
-
-        <!-- start internal webserver -->
-        <echo>Starting PHP Webserver</echo>
-        <antcall target="startWebServer" />
 
         <!-- wait so that the selenium and webserver are ready -->
         <sleep seconds="4" />
@@ -229,9 +204,11 @@
             <arg line="./node_modules/protractor/bin/protractor e2e/conf.js"/>
         </exec>
 
-        <!-- start internal webserver -->
-        <echo>Stopping PHP Webserver</echo>
-        <antcall target="stopWebServer" />
+        <!-- Stop webdriver-->
+        <exec dir="${basedir}${jsPath}" executable="${path.node}" spawn="true">
+            <arg line="./node_modules/protractor/bin/webdriver-manager shutdown"/>
+        </exec>
+
     </target>
 
     <target name="protractor" depends="protractorSetup">
@@ -267,9 +244,9 @@
         <mkdir  dir="${basedir}${buildPath}/api"/>
         <mkdir  dir="${basedir}${buildPath}/logs"/>
         <mkdir  dir="${basedir}${buildPath}/coverage"/>
-        <!--<mkdir  dir="${basedir}${buildPath}/code-browser"/>-->
+        <mkdir  dir="${basedir}${buildPath}/code-browser"/>
         <mkdir  dir="${basedir}${buildPath}/pdepend"/>
-        <!--<mkdir  dir="${basedir}${buildPath}/phpdox"/>-->
+        <mkdir  dir="${basedir}${buildPath}/phpdox"/>
         <mkdir  dir="${basedir}${buildPath}/composerbuild"/>
 
     </target>
