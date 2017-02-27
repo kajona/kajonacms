@@ -29,7 +29,7 @@ class OrmCondition extends OrmObjectlistRestriction implements OrmConditionInter
      *
      * @return string
      */
-    public static function getOrderByRestrictionsAsString($arrOrderBy)
+    public static function getOrderByRestrictionsAsString(array $arrOrderBy)
     {
         $strOrderBy = "";
         $arrOrderByStr = array();
