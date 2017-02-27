@@ -32,7 +32,6 @@ class FlowStatus extends Model implements ModelInterface, AdminListableInterface
      * @tableColumnDatatype char254
      * @fieldType Kajona\System\Admin\Formentries\FormentryText
      * @fieldMandatory
-     * @listOrder ASC
      */
     protected $strName;
 
