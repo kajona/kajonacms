@@ -67,6 +67,16 @@ require(["jquery", "ajax"], function($, ajax){
     {
         $objObject = $this->objFactory->getObject($this->getSystemid());
         if ($objObject instanceof Model) {
+            // at first we need to validate whether the object is valid
+            $objForm = $this->getAdminForm($objObject);
+            if (!$objForm->validateForm()) {
+                // @TODO this is a problem we need a generic solution to redirect the user to the fitting edit page if
+                // the model is invalid. This is maybe not always the editAction. Also the user should directly see the
+                // form errors thus we need also a general flag to directly validate the form
+                $this->adminReload(Link::getLinkAdminHref($objObject->getArrModule("modul"), "edit", "systemid={$objObject->getStrSystemid()}&validateform=true"));
+                return "";
+            }
+
             $strTransitionId = $this->getParam("transition_id");
             $objFlow = $this->objFlowManager->getFlowForModel($objObject);
             $objTransition = Objectfactory::getInstance()->getObject($strTransitionId);
@@ -122,7 +132,7 @@ require(["jquery", "ajax"], function($, ajax){
      * Renders the status menu
      *
      * @return string
-     * @permissions edit
+     * @permissions view
      * @responseType html
      */
     protected function actionShowStatusMenu()
