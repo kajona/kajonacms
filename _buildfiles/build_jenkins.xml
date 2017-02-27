@@ -244,9 +244,9 @@
         <mkdir  dir="${basedir}${buildPath}/api"/>
         <mkdir  dir="${basedir}${buildPath}/logs"/>
         <mkdir  dir="${basedir}${buildPath}/coverage"/>
-        <mkdir  dir="${basedir}${buildPath}/code-browser"/>
+        <!--<mkdir  dir="${basedir}${buildPath}/code-browser"/>-->
         <mkdir  dir="${basedir}${buildPath}/pdepend"/>
-        <mkdir  dir="${basedir}${buildPath}/phpdox"/>
+        <!--<mkdir  dir="${basedir}${buildPath}/phpdox"/>-->
         <mkdir  dir="${basedir}${buildPath}/composerbuild"/>
 
     </target>
