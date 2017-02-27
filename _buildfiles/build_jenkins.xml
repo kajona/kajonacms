@@ -178,10 +178,9 @@
         <antcall target="buildPackageHelperSelenium" />
 
         <!-- Modify .htaccess file-->
-        <echo>Modify .htaccess file</echo>
-        <exec dir="${basedir}" executable="${path.php}" spawn="true">
-            <arg line="modify_htaccess.php ${basedir}${tempPath}/"/><!--param1=server root path-->
-        </exec>
+        <echo file="${basedir}${tempPath}/.htaccess" append="true">
+            Allow from all
+        </echo>
 
     </target>
 
