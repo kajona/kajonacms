@@ -1,64 +1,63 @@
 
-# Statustransition
+# Flow
 
-The statustransition module helps to build status flows for a model. I.e. the most
-basic use case is that a model has the following status flow:
+Through the flow module it is possible to dynamically change the status flow of a model.
+By default most models have the following status flow:
 
 ![status_flow]
 
-The idea of this module is to have one status handler which contains all informations
-about the status flow. Through the status handler we can move the model to the next
-state and get a list of available status transitions. So we have one handler object
-which can have multiple status options. I.e. to describe the above flow we could use
-the following config:
+The flow module provides a UI so that the user can adjust the flow according to their needs.
 
-```php
-$objHandler = new CustomStatustransitionHandler();
+## Implementation
 
-$objHandler->addStatus(new StatustransitionStatus(Model::INT_STATUS_OPEN, "enum_container_status_0", "icon_flag_red"))
-    ->addTransition(new StatustransitionTransition(Model::INT_STATUS_IN_REVIEW, Model::STR_STATUS_KEY_OPEN_TO_REVIEW, "enum_container_status_transition_".Model::STR_STATUS_KEY_OPEN_TO_REVIEW, array(
-        //objects implements StatustransitionActionInterface
-    ), function (Model $objModel) {
-        // right check whether the user is allowed to execute the transition
-        return true;
-    }, array(
-        //objects implements StatustransitionConditionInterface
-    )));
+### Controller
 
-$objHandler->addStatus(new WorkflowStatus(Model::INT_STATUS_IN_REVIEW, "enum_container_status_2", "icon_flag_yellow"))
-    ->addTransition(new WorkflowTransition(Model::INT_STATUS_OPEN, Model::STR_STATUS_KEY_REVIEW_TO_OPEN, "enum_container_status_transition_".Model::STR_STATUS_KEY_REVIEW_TO_OPEN, array(
-        //objects implements StatustransitionActionInterface
-    ), function (Model $objModel) {
-        // right check whether the user is allowed to execute the transition
-        return true;
-    }))
-    ->addTransition(new WorkflowTransition(Model::INT_STATUS_RELEASED, Model::STR_STATUS_KEY_REVIEW_TO_RELEASED, "enum_container_status_transition_".Model::STR_STATUS_KEY_REVIEW_TO_RELEASED, array(
-        //objects implements StatustransitionActionInterface
-    ), function (Model $objModel) {
-        // right check whether the user is allowed to execute the transition
-        return true;
-    }, array(
-        //objects implements StatustransitionConditionInterface
-    )));
+The controller needs to use the controller trait which provides the `renderStatusAction` and 
+`actionSetStatus` method.
 
-$objHandler->addStatus(new WorkflowStatus(Model::INT_STATUS_RELEASED, "enum_container_status_1", "icon_flag_green"));
+```
+use FlowControllerTrait;
 ```
 
-In most cases you want to register the handler as a service in the ServiceProvider. Then you
-can simply use the handler in the controller through the `@inject` annotation.
+Note you should not work with hard coded status ints in your code since the index might change.
+Instead the code should be extracted to custom actions or conditions which can be attached to a
+flow transition.
 
-The provided `StatustransitionActionInterface` objects are executed if a transition happens.
-A status transition is always triggered by a user interaction and not by an automatic event.
-The `StatustransitionConditionInterface` objects can validate whether the model has all
-required parameters to go into the next state.
+### Handler
+
+Each module must have a handler class. A basic handler class could look like:
+
+```
+<?php
+
+class ModuleStatustransitionHandler extends FlowHandlerAbstract
+{
+    public function getTitle()
+    {
+        return "Module name";
+    }
+
+    public function getTargetClass()
+    {
+        return ModuleModel::class;
+    }
+
+    public function getAvailableActions()
+    {
+        return [
+        ];
+    }
+
+    public function getAvailableConditions()
+    {
+        return [
+        ];
+    }
+}
+```
+
+If the handler class exists you might want to call the `flow_handler_sync` debug script which creates
+a flow config for this handler. After this you should see the entry at the UI where you can configure
+the flow.
 
 [status_flow]: ./status_flow.png
-
-## Database
-
-It is also possible to create a status transition workflow through the UI. To use such a workflow
-in your module you simply have to implement the following steps:
-
-* The model has to implement the `StatustransitionFlowChoiceInterface` interface
-* The controller needs to use the `StatustransitionControllerTrait` trait
-
