@@ -16,6 +16,8 @@ use Kajona\System\System\Model;
 class FlowManager
 {
     /**
+     * Internal cache
+     *
      * @var array
      */
     private $arrFlows;
@@ -26,6 +28,27 @@ class FlowManager
     public function __construct()
     {
         $this->arrFlows = [];
+    }
+
+    /**
+     * Returns an associative array<status index => status name>
+     *
+     * @param Model $objObject
+     * @return array
+     */
+    public function getPossibleStatusForModel(Model $objObject)
+    {
+        $objFlow = $this->getFlowForModel($objObject);
+        if ($objFlow instanceof FlowConfig) {
+            $arrStatus = $objFlow->getArrStatus();
+            $arrResult = [];
+            foreach ($arrStatus as $objStatus) {
+                $arrResult[$objStatus->getIntIndex()] = $objStatus->getStrDisplayName();
+            }
+            return $arrResult;
+        } else {
+            return [];
+        }
     }
 
     /**
