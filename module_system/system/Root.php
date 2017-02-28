@@ -1569,7 +1569,7 @@ abstract class Root
      */
     public function deleteRight($strSystemid)
     {
-        throw new Exception("Callig deleteRight is no longer supported", Exception::$level_ERROR);
+        throw new Exception("Calling deleteRight is no longer supported", Exception::$level_ERROR);
     }
 
     /**
