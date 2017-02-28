@@ -896,6 +896,8 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $strReturn .= "Removing system_comment column...\n";
         $this->objDB->removeColumn("system", "system_comment");
 
+        Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBQUERIES | Carrier::INT_CACHE_TYPE_DBSTATEMENTS);
+
         $strReturn .= "Registering the id generator\n";
         // install idgenerator table
         $objSchemamanager = new OrmSchemamanager();

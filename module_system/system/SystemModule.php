@@ -115,7 +115,7 @@ class SystemModule extends Model implements ModelInterface, AdminListableInterfa
                                 "._dbprefix_."system
                       LEFT JOIN "._dbprefix_."system_date
                              ON system_id = system_date_id
-                            AND system_id = module_id
+                          WHERE system_id = module_id
                        ORDER BY system_sort ASC";
 
             $arrRows = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), null, null, $bitCache);
