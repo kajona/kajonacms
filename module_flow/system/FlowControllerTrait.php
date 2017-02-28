@@ -107,6 +107,15 @@ require(["jquery", "ajax"], function($, ajax){
                 }
 
                 $objHandler = $objFlow->getHandler();
+
+                // validate form
+                /*
+                $objForm = $this->getAdminForm($objObject);
+                if (!$objForm->validateForm()) {
+                    throw new \RuntimeException("Validation failed");
+                }
+                */
+
                 $bitReturn = $objHandler->handleStatusTransition($objObject, $objTransition);
 
                 if ($bitReturn) {
@@ -129,23 +138,52 @@ require(["jquery", "ajax"], function($, ajax){
     {
         Xml::setBitSuppressXmlHeader(true);
 
-        $objListEntry = Objectfactory::getInstance()->getObject($this->getSystemid());
+        $objObject = Objectfactory::getInstance()->getObject($this->getSystemid());
 
-        if ($objListEntry->getIntRecordDeleted() == 1) {
+        if ($objObject->getIntRecordDeleted() == 1) {
             return "";
         }
 
-        $arrTransitions = $this->objFlowManager->getPossibleTransitionsForModel($objListEntry);
+        $strClass = $objObject->getSystemid() . "-errors";
+        $arrTransitions = $this->objFlowManager->getPossibleTransitionsForModel($objObject);
+        $objFlow = $this->objFlowManager->getFlowForModel($objObject);
         if (!empty($arrTransitions)) {
             $arrMenu = array();
             foreach ($arrTransitions as $objTransition) {
                 /** @var FlowTransition $objTransition */
                 $objTargetStatus = $objTransition->getTargetStatus();
 
-                $arrMenu[] = array(
-                    "name" => AdminskinHelper::getAdminImage($objTargetStatus->getStrIcon()) . " " . $objTargetStatus->getStrDisplayName(),
-                    "link" => Link::getLinkAdminHref($this->getArrModule("modul"), "setStatus", "&systemid=" . $objListEntry->getStrSystemid() . "&transition_id=" . $objTransition->getSystemid()),
-                );
+                // validation
+                $objTmpObject = clone $objObject;
+                $objForm = clone $this->getAdminForm($objTmpObject);
+                $arrErrors = $objFlow->getHandler()->validateForm($objForm, $objTmpObject, $objTransition);
+
+                $strValidation = "";
+                if (!empty($arrErrors)) {
+                    $strTooltip = "<ul>";
+                    foreach ($arrErrors as $strField => $arrError) {
+                        foreach ($arrError as $strError) {
+                            if (!empty($strError)) {
+                                $strError = htmlspecialchars($strError);
+                                $strTooltip.= "<li>{$strError}</li>";
+                            }
+                        }
+                    }
+                    $strTooltip.= "</ul>";
+                    $strValidation.= '<i class="kj-icon fa fa-exclamation-triangle pull-right ' . $strClass . '" style="color:#ee0000" data-validation-errors="' . $strTooltip . '"></i>';
+                }
+
+                if (!empty($strValidation)) {
+                    $arrMenu[] = array(
+                        "name" => AdminskinHelper::getAdminImage($objTargetStatus->getStrIcon()) . " " . $objTargetStatus->getStrDisplayName() . $strValidation,
+                        "link" => "#",
+                    );
+                } else {
+                    $arrMenu[] = array(
+                        "name" => AdminskinHelper::getAdminImage($objTargetStatus->getStrIcon()) . " " . $objTargetStatus->getStrDisplayName(),
+                        "link" => Link::getLinkAdminHref($this->getArrModule("modul"), "setStatus", "&systemid=" . $objObject->getStrSystemid() . "&transition_id=" . $objTransition->getSystemid()),
+                    );
+                }
             }
 
             if (!empty($arrMenu)) {
@@ -154,7 +192,21 @@ require(["jquery", "ajax"], function($, ajax){
                 // hack to remove the div around the ul since the div is already in the html
                 preg_match("#<ul>(.*)</ul>#ims", $strHtml, $arrMatches);
 
-                return $arrMatches[0];
+                // js to init the tooltip for validation errors
+                $strJs = <<<HTML
+<script type='text/javascript'>
+    require(['jquery', 'dialogHelper'], function($, dialogHelper){
+        $('.{$strClass}').parent().on('click', function(){
+            var errors = $(this).find('.{$strClass}').data('validation-errors');
+            dialogHelper.showConfirmationDialog("Errors", errors, "Bearbeiten", function(){
+                
+            });
+        });
+    });
+</script>
+HTML;
+
+                return $arrMatches[0] . $strJs;
             }
         }
 
