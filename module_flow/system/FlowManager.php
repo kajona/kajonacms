@@ -5,6 +5,8 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+declare(strict_types=1);
+
 namespace Kajona\Flow\System;
 
 use Kajona\System\System\Model;
@@ -36,7 +38,7 @@ class FlowManager
      * @param Model $objObject
      * @return array
      */
-    public function getPossibleStatusForModel(Model $objObject)
+    public function getPossibleStatusForModel(Model $objObject) : array
     {
         $objFlow = $this->getFlowForModel($objObject);
         if ($objFlow instanceof FlowConfig) {
@@ -52,31 +54,60 @@ class FlowManager
     }
 
     /**
-     * Returns the initial int status of an model
+     * Returns the start status of this flow. In case their are multiple start status we select the first in the list
      *
-     * @param Model $objObject
-     * @return int
+     * @param FlowConfig $objFlow
+     * @return int|false
      */
-    public function getInitialStatusForModel(Model $objObject)
+    public function getStartStatusForModel(Model $objObject)
     {
         $objFlow = $this->getFlowForModel($objObject);
         if ($objFlow instanceof FlowConfig) {
-            $arrStatus = $objFlow->getArrStatus();
-            $objStatus = reset($arrStatus);
-            if ($objStatus instanceof FlowStatus) {
-                return $objStatus->getIntIndex();
+            $arrMatrix = $this->getDependencyMatrix($objFlow);
+            $arrStartStatus = [];
+            foreach ($arrMatrix as $intStatus => $arrTargets) {
+                if (!$this->hasStatusWhichDependsOn($arrMatrix, $intStatus)) {
+                    $arrStartStatus[] = $intStatus;
+                }
             }
+
+            return reset($arrStartStatus);
+        } else {
+            return false;
         }
-        return 0;
     }
 
     /**
-     * Returns all available status transition for the current step
+     * Returns the end status of this flow. In case their are multiple end status we select the first in the list
+     *
+     * @param FlowConfig $objFlow
+     * @return int|false
+     */
+    public function getEndStatusForModel(Model $objObject)
+    {
+        $objFlow = $this->getFlowForModel($objObject);
+        if ($objFlow instanceof FlowConfig) {
+            $arrMatrix = $this->getDependencyMatrix($objFlow);
+            $arrEndStatus = [];
+            foreach ($arrMatrix as $intStatus => $arrTargets) {
+                if (empty($arrTargets)) {
+                    $arrEndStatus[] = $intStatus;
+                }
+            }
+
+            return reset($arrEndStatus);
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Returns all available status transition for the model
      *
      * @param Model $objObject
      * @return FlowTransition[]
      */
-    public function getPossibleTransitionsForModel(Model $objObject)
+    public function getPossibleTransitionsForModel(Model $objObject) : array
     {
         $objStep = $this->getCurrentStepForModel($objObject);
         if ($objStep instanceof FlowStatus) {
@@ -112,7 +143,7 @@ class FlowManager
      * Returns the next transition which can be used if we want to automatically set the next status for the object
      *
      * @param Model $objObject
-     * @return FlowTransition
+     * @return FlowTransition|false
      */
     public function getNextTransitionForModel(Model $objObject)
     {
@@ -151,5 +182,43 @@ class FlowManager
             }
         }
         return $this->arrFlows[$strClass];
+    }
+
+    /**
+     * @param FlowConfig $objFlow
+     * @return array
+     */
+    private function getDependencyMatrix(FlowConfig $objFlow) : array
+    {
+        $arrStatus = $objFlow->getArrStatus();
+        $arrMatrix = [];
+        foreach ($arrStatus as $objStatus) {
+            $arrTransitions = $objStatus->getArrTransitions();
+            $arrTargets = [];
+            foreach ($arrTransitions as $objTransition) {
+                $arrTargets[] = $objTransition->getTargetStatus()->getIntIndex();
+            }
+            $arrMatrix[$objStatus->getIntIndex()] = $arrTargets;
+        }
+
+        return $arrMatrix;
+    }
+
+    /**
+     * Check whether the status is a target from another status
+     *
+     * @param array $arrMatrix
+     * @param int $intTargetStatus
+     * @return bool
+     */
+    private function hasStatusWhichDependsOn($arrMatrix, $intTargetStatus) : bool
+    {
+        foreach ($arrMatrix as $intStatus => $arrTargets) {
+            if (in_array($intTargetStatus, $arrTargets)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
