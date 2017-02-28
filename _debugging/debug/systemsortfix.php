@@ -54,7 +54,7 @@ function validateSingleLevelSort($strParentId)
                          WHERE system_prev_id=? AND system_id != '0'
                            AND system_module_nr IN (?, ?)
                            AND system_deleted != 1
-                         ORDER BY system_sort ASC, system_comment ASC";
+                         ORDER BY system_sort ASC";
 
         $arrNodesRaw = \Kajona\System\System\Carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strParentId, 10, 14));
         $arrNodes = array();
@@ -75,7 +75,7 @@ function validateSingleLevelSort($strParentId)
             echo "<div>".$strCurLevel."</div>";
         }
 
-        $strCurLevel = $objCurNode->getSystemid()." - ".$objCurNode->getIntSort()." - ".$objCurNode->getStrRecordClass()." - ".$objCurNode->getStrRecordComment();
+        $strCurLevel = $objCurNode->getSystemid()." - ".$objCurNode->getIntSort()." - ".$objCurNode->getStrRecordClass();
 
 
         if ($objCurNode->getIntSort() != -1 && ++$intExpected != $objCurNode->getIntSort()) {

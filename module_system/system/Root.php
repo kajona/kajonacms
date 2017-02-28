@@ -177,14 +177,6 @@ abstract class Root
     private $intRecordDeleted = 0;
 
     /**
-     * Human readable comment describing the current record
-     *
-     * @var string
-     * @tableColumn system.system_comment
-     */
-    private $strRecordComment = "";
-
-    /**
      * Holds the current objects' class
      *
      * @var string
@@ -361,7 +353,6 @@ abstract class Root
                 $this->strLockId = $arrRow["system_lock_id"];
                 $this->intLockTime = $arrRow["system_lock_time"];
                 $this->intRecordStatus = $arrRow["system_status"];
-                $this->strRecordComment = $arrRow["system_comment"];
                 $this->longCreateDate = $arrRow["system_create_date"];
                 if (isset($arrRow["system_class"])) {
                     $this->strRecordClass = $arrRow["system_class"];
@@ -673,7 +664,7 @@ abstract class Root
             //create the new systemrecord
             //store date-bit temporary
             $bitDates = $this->bitDatesChanges;
-            $this->createSystemRecord($strPrevId, $this->getStrDisplayName());
+            $this->createSystemRecord($strPrevId);
             $this->bitDatesChanges = $bitDates;
 
             if (validateSystemid($this->getStrSystemid())) {
@@ -721,9 +712,6 @@ abstract class Root
             }
         }
 
-        //new comment?
-        $this->setStrRecordComment($this->getStrDisplayName());
-
         //Keep old and new status here, status changed event is being fired after record is completely updated (so after updateStateToDb())
         $intOldStatus = $this->intOldRecordStatus;
         $intNewStatus = $this->intRecordStatus;
@@ -745,13 +733,13 @@ abstract class Root
             $this->objDB->transactionCommit();
             //unlock the record
             $this->getLockManager()->unlockRecord();
-            Logger::getInstance()->addLogRow("updateObjectToDb() succeeded for systemid ".$this->getSystemid()." (".$this->getRecordComment().")", Logger::$levelInfo);
+            Logger::getInstance()->addLogRow("updateObjectToDb() succeeded for systemid ".$this->getSystemid(), Logger::$levelInfo);
 
             //call the recordUpdated-Listeners
             CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_RECORDUPDATED, array($this, $bitRecordCreated));
         } else {
             $this->objDB->transactionRollback();
-            Logger::getInstance()->addLogRow("updateObjectToDb() failed for systemid ".$this->getSystemid()." (".$this->getRecordComment().")", Logger::$levelWarning);
+            Logger::getInstance()->addLogRow("updateObjectToDb() failed for systemid ".$this->getSystemid(), Logger::$levelWarning);
         }
 
 
@@ -933,7 +921,6 @@ abstract class Root
                             system_lock_id = ?,
                             system_lock_time = ?,
                             system_status = ?,
-                            system_comment = ?,
                             system_class = ?,
                             system_create_date = ?
                       WHERE system_id = ? ";
@@ -950,7 +937,6 @@ abstract class Root
                     $this->getStrLockId(),
                     (int)$this->getIntLockTime(),
                     (int)$this->getIntRecordStatus(),
-                    StringUtil::truncate($this->getStrRecordComment(), 240),
                     $this->getStrRecordClass(),
                     $this->getLongCreateDate(),
                     $this->getSystemid()
@@ -967,7 +953,6 @@ abstract class Root
                             system_lock_id = ?,
                             system_lock_time = ?,
                             system_status = ?,
-                            system_comment = ?,
                             system_class = ?,
                             system_create_date = ?,
                             system_deleted = ?
@@ -985,7 +970,6 @@ abstract class Root
                     $this->getStrLockId(),
                     (int)$this->getIntLockTime(),
                     (int)$this->getIntRecordStatus(),
-                    StringUtil::truncate($this->getStrRecordComment(), 240),
                     $this->getStrRecordClass(),
                     $this->getLongCreateDate(),
                     $this->getIntRecordDeleted(),
@@ -1045,15 +1029,12 @@ abstract class Root
      * Returns the systemID used for this record
      *
      * @param string $strPrevId Previous ID in the tree-structure
-     * @param string $strComment Comment to identify the record
      *
      * @return string The ID used/generated
      */
-    private function createSystemRecord($strPrevId, $strComment)
+    private function createSystemRecord($strPrevId)
     {
-
         $strSystemId = generateSystemid();
-
         $this->setStrSystemid($strSystemId);
 
         //Correct prevID
@@ -1063,14 +1044,34 @@ abstract class Root
 
         $this->setStrPrevId($strPrevId);
 
-        $strComment = StringUtil::truncate(strip_tags($strComment), 240);
-
-
         if (SystemModule::getModuleByName("system") != null && version_compare(SystemModule::getModuleByName("system")->getStrVersion(), "4.7.5", "lt")) {
             //So, lets generate the record
             $strQuery = "INSERT INTO "._dbprefix_."system
                      ( system_id, system_prev_id, system_module_nr, system_owner, system_create_date, system_lm_user,
-                       system_lm_time, system_status, system_comment, system_sort, system_class) VALUES
+                       system_lm_time, system_status, system_sort, system_class) VALUES
+                     (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            //Send the query to the db
+            $this->objDB->_pQuery(
+                $strQuery,
+                array(
+                    $strSystemId,
+                    $strPrevId,
+                    $this->getIntModuleNr(),
+                    $this->objSession->getUserID(),
+                    Date::getCurrentTimestamp(),
+                    $this->objSession->getUserID(),
+                    time(),
+                    (int)$this->getIntRecordStatus(),
+                    $this->getNextSortValue($strPrevId),
+                    $this->getStrRecordClass()
+                )
+            );
+        } else {
+            //So, lets generate the record
+            $strQuery = "INSERT INTO "._dbprefix_."system
+                     ( system_id, system_prev_id, system_module_nr, system_owner, system_create_date, system_lm_user,
+                       system_lm_time, system_status, system_sort, system_class, system_deleted) VALUES
                      (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             //Send the query to the db
@@ -1085,31 +1086,6 @@ abstract class Root
                     $this->objSession->getUserID(),
                     time(),
                     (int)$this->getIntRecordStatus(),
-                    $strComment,
-                    $this->getNextSortValue($strPrevId),
-                    $this->getStrRecordClass()
-                )
-            );
-        } else {
-            //So, lets generate the record
-            $strQuery = "INSERT INTO "._dbprefix_."system
-                     ( system_id, system_prev_id, system_module_nr, system_owner, system_create_date, system_lm_user,
-                       system_lm_time, system_status, system_comment, system_sort, system_class, system_deleted, right_inherit) VALUES
-                     (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-            //Send the query to the db
-            $this->objDB->_pQuery(
-                $strQuery,
-                array(
-                    $strSystemId,
-                    $strPrevId,
-                    $this->getIntModuleNr(),
-                    $this->objSession->getUserID(),
-                    Date::getCurrentTimestamp(),
-                    $this->objSession->getUserID(),
-                    time(),
-                    (int)$this->getIntRecordStatus(),
-                    $strComment,
                     $this->getNextSortValue($strPrevId),
                     $this->getStrRecordClass(),
                     $this->getIntRecordDeleted(),
@@ -1122,7 +1098,7 @@ abstract class Root
         //update rights to inherit
         Carrier::getInstance()->getObjRights()->setInherited(true, $strSystemId);
 
-        Logger::getInstance()->addLogRow("new system-record created: ".$strSystemId." (".$strComment.")", Logger::$levelInfo);
+        Logger::getInstance()->addLogRow("new system-record created: ".$strSystemId." (".get_class($this).")", Logger::$levelInfo);
         $this->objDB->flushQueryCache();
         $this->internalInit();
         //reset the old values since we're having a new record
@@ -2083,45 +2059,6 @@ abstract class Root
     public function setIntRecordStatus($intRecordStatus)
     {
         $this->intRecordStatus = $intRecordStatus;
-    }
-
-    /**
-     * Gets comment saved with the record
-     *
-     * @param string $strSystemid
-     *
-     * @throws Exception
-     * @return string
-     */
-    public function getRecordComment($strSystemid = "")
-    {
-        if ($strSystemid != "") {
-            throw new Exception("unsupported param @ ".__METHOD__, Exception::$level_FATALERROR);
-        }
-
-        return $this->getStrRecordComment();
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getStrRecordComment()
-    {
-        return $this->strRecordComment;
-    }
-
-    /**
-     * @param string $strRecordComment
-     *
-     * @return void
-     */
-    public function setStrRecordComment($strRecordComment)
-    {
-        if (StringUtil::length($strRecordComment) > 254) {
-            $strRecordComment = StringUtil::truncate($strRecordComment, 250);
-        }
-        $this->strRecordComment = $strRecordComment;
     }
 
     /**

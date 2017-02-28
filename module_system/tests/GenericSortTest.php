@@ -27,7 +27,7 @@ class SortTest extends Testbase
             $arrAspects[] = $objAspect;
         }
 
-        $strQuery = "SELECT system_id, system_sort, system_comment FROM "._dbprefix_."system WHERE system_prev_id = ? ORDER BY system_sort ASC";
+        $strQuery = "SELECT system_id, system_sort FROM "._dbprefix_."system WHERE system_prev_id = ? ORDER BY system_sort ASC";
         $arrRows = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array($objRootAspect->getSystemid()), null, null, false);
 
         for($intI = 0; $intI < 5; $intI++) {

@@ -71,7 +71,6 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $arrFields["system_lock_time"] = array("int", true);
         $arrFields["system_status"] = array("int", true);
         $arrFields["system_class"] = array("char254", true);
-        $arrFields["system_comment"] = array("char254", true);
         $arrFields["system_deleted"] = array("int", true);
 
         $arrFields["right_inherit"] = array("int", true);
@@ -892,6 +891,10 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
     private function update_621_622()
     {
         $strReturn = "Updating 6.2.1 to 6.2.2...\n";
+
+
+        $strReturn .= "Removing system_comment column...\n";
+        $this->objDB->removeColumn("system", "system_comment");
 
         $strReturn .= "Registering the id generator\n";
         // install idgenerator table
