@@ -5,8 +5,10 @@ const SeleniumUtil = requireHelper('/util/SeleniumUtil.js');
 describe('installation', function() {
 
     it('test installation', function() {
+        let intTimeout = 60000 * 10;
+
         // wait max 5 minutes for the installation
-        browser.manage().timeouts().pageLoadTimeout(60000 * 8);
+        browser.manage().timeouts().pageLoadTimeout(intTimeout);
 
         SeleniumUtil.gotToUrl('installer.php');
 
@@ -40,15 +42,9 @@ describe('installation', function() {
             return webDriver.getCurrentUrl().then(function(url) {
                 return /finish/.test(url);
             });
-        }, 60000 * 8);
+        }, intTimeout);
 
         // now we must have a success message
         expect(webDriver.findElement(By.css('.alert-success')).getText()).toMatch('Herzlichen Glückwunsch!');
     });
-
-    it('test setupSeleniumConfig.php', function() {
-        // this is required so that our installation sets all needed settings i.e. turn nice urls / ssl off etc.
-        SeleniumUtil.gotToUrl("setupSeleniumConfig.php");
-    });
-
 });
