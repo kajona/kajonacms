@@ -20,8 +20,6 @@ class SystemTest extends Testbase
         //nr of records currently
         $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM " . _dbprefix_ . "system", array(), 0, false);
         $intNrSystemRecords = $arrRow["COUNT(*)"];
-        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM " . _dbprefix_ . "system_right", array(), 0, false);
-        $intNrRightsRecords = $arrRow["COUNT(*)"];
         $objAspect = new SystemAspect();
         $arrSysRecords = array();
         for ($intI = 0; $intI <= 100; $intI++) {
@@ -31,8 +29,6 @@ class SystemTest extends Testbase
 
             $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM " . _dbprefix_ . "system", array(), 0, false);
             $this->assertEquals($arrRow["COUNT(*)"], $intI + $intNrSystemRecords + 1, __FILE__ . " checkCreateSysRecordsWithRights");
-            $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM " . _dbprefix_ . "system_right", array(), 0, false);
-            $this->assertEquals($arrRow["COUNT(*)"], $intNrRightsRecords + $intI + 1, __FILE__ . " checkCreateSysRecordsWithRights");
         }
 
 
@@ -42,8 +38,6 @@ class SystemTest extends Testbase
         }
         $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM " . _dbprefix_ . "system", array(), 0, false);
         $this->assertEquals($arrRow["COUNT(*)"], $intNrSystemRecords, __FILE__ . " checkDeleteSysRecordsWithRights");
-        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM " . _dbprefix_ . "system_right", array(), 0, false);
-        $this->assertEquals($arrRow["COUNT(*)"], $intNrRightsRecords, __FILE__ . " checkDeleteSysRecordsWithRights");
 
     }
 
@@ -91,7 +85,6 @@ class SystemTest extends Testbase
         $arrSysRecords = array();
         $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM " . _dbprefix_ . "system", array(), 0, false);
         $intNrSystemRecords = $arrRow["COUNT(*)"];
-        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM " . _dbprefix_ . "system_right", array(), 0, false);
         //base-id
         $objAspect = new SystemAspect();
         $objAspect->updateObjectToDb();

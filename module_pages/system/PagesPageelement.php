@@ -147,14 +147,12 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
             $strQuery = "SELECT *
                              FROM "._dbprefix_."page_element,
                                   "._dbprefix_."element,
-                                  "._dbprefix_."system_right,
                                   "._dbprefix_."system
                               LEFT JOIN "._dbprefix_."system_date
                                 ON (system_id = system_date_id)
                              WHERE system_id= ?
                                AND page_element_ph_element = element_name
                                AND system_id = page_element_id
-                               AND system_id = right_id
                              ORDER BY page_element_ph_placeholder ASC,
                                     system_sort ASC";
             $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
@@ -403,7 +401,6 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
             $strQuery = "SELECT *
                        FROM "._dbprefix_."page_element,
                             "._dbprefix_."element,
-                            "._dbprefix_."system_right AS el_right,
                             "._dbprefix_."system as el_system
                   LEFT JOIN "._dbprefix_."system_date AS el_date
                          ON (el_system.system_id = el_date.system_date_id)
@@ -412,8 +409,6 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
                        ".$objORM->getDeletedWhereRestriction()."
                         AND el_system.system_prev_id= ?
                         AND el_system.system_id = page_element_id
-                        AND el_system.system_id = el_right.right_id
-
                         AND page_element_ph_element = element_name
                         AND page_element_ph_language = ?
                   ORDER BY page_element_ph_placeholder ASC,
@@ -427,7 +422,6 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
             $strQuery = "SELECT *
                        FROM "._dbprefix_."page_element,
                             "._dbprefix_."element,
-                            "._dbprefix_."system_right AS el_right,
                             "._dbprefix_."system as el_system
                   LEFT JOIN "._dbprefix_."system_date AS el_date
                          ON (el_system.system_id = el_date.system_date_id)
@@ -449,8 +443,6 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
                       )
 
                         AND el_system.system_id = page_element_id
-                        AND el_system.system_id = el_right.right_id
-
                         AND page_element_ph_element = element_name
                         AND page_element_ph_language = ?
                         ORDER BY page_element_ph_placeholder ASC,
@@ -488,12 +480,10 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
         $strQuery = "SELECT *
 						 FROM "._dbprefix_."page_element,
 						      "._dbprefix_."element,
-						      "._dbprefix_."system_right,
 						      "._dbprefix_."system
 					 LEFT JOIN "._dbprefix_."system_date
                             ON system_id = system_date_id
 						 WHERE system_prev_id=?
-						   AND system_id = right_id
 						   AND page_element_ph_element = element_name
 						   AND system_id = page_element_id
 						   ".$objORM->getDeletedWhereRestriction()."
@@ -541,13 +531,11 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
         $strQuery = "SELECT *
                          FROM "._dbprefix_."page_element,
                               "._dbprefix_."element,
-                              "._dbprefix_."system_right,
                               "._dbprefix_."system
                      LEFT JOIN "._dbprefix_."system_date
                             ON (system_id = system_date_id)
                          WHERE system_prev_id= ?
                            AND page_element_ph_element = element_name
-                           AND system_id = right_id
                            AND system_id = page_element_id
                            AND page_element_ph_language = ?
                            AND page_element_ph_placeholder = ?

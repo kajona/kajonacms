@@ -72,24 +72,6 @@ class SystemWorker
     }
 
     /**
-     * Checks, if all right-records have a corresponding system-record
-     * Returns an array of corrupted records
-     *
-     * @return array
-     */
-    public function chekRightSystemRelations()
-    {
-        $strQuery = "SELECT right_id, system_comment
-                       FROM "._dbprefix_."system_right
-                       LEFT JOIN "._dbprefix_."system
-                        ON (right_id = system_id)
-                       WHERE system_id IS NULL ";
-        $arrReturn = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
-
-        return $arrReturn;
-    }
-
-    /**
      * Checks, if all date-records have a corresponding system-record
      * Returns an array of corrupted records
      *

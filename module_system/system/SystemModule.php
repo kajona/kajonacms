@@ -111,13 +111,11 @@ class SystemModule extends Model implements ModelInterface, AdminListableInterfa
 
         if ((count(self::$arrModuleData) == 0 || !$bitCache) && count(Carrier::getInstance()->getObjDB()->getTables()) > 0) {
             $strQuery = "SELECT *
-                           FROM "._dbprefix_."system_right,
-                                "._dbprefix_."system_module,
+                           FROM "._dbprefix_."system_module,
                                 "._dbprefix_."system
                       LEFT JOIN "._dbprefix_."system_date
                              ON system_id = system_date_id
-                          WHERE system_id = right_id
-                            AND system_id = module_id
+                          WHERE system_id = module_id
                        ORDER BY system_sort ASC, system_comment ASC   ";
 
             $arrRows = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), null, null, $bitCache);
