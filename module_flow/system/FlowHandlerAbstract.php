@@ -7,6 +7,7 @@
 
 namespace Kajona\Flow\System;
 
+use Kajona\System\Admin\AdminFormgenerator;
 use Kajona\System\System\Database;
 use Kajona\System\System\Logger;
 use Kajona\System\System\Model;
@@ -23,9 +24,17 @@ use Kajona\System\System\Model;
 abstract class FlowHandlerAbstract implements FlowHandlerInterface
 {
     /**
-     * @var FlowConfig
+     * @var FlowManager
      */
-    private $objFlow;
+    protected $objFlowManager;
+
+    /**
+     * @param FlowManager $objFlowManager
+     */
+    public function __construct(FlowManager $objFlowManager)
+    {
+        $this->objFlowManager = $objFlowManager;
+    }
 
     /**
      * Handles a status transition
@@ -79,21 +88,14 @@ abstract class FlowHandlerAbstract implements FlowHandlerInterface
     }
 
     /**
-     * Returns the fitting status for the provided status
-     *
-     * @param integer $intOldStatus
-     * @return FlowStatus|null
+     * @param AdminFormgenerator $objForm
+     * @param Model $objObject
+     * @param FlowTransition $objTransition
+     * @return array
      */
-    public function getStatus($intOldStatus)
+    public function validateForm(AdminFormgenerator $objForm, Model $objObject, FlowTransition $objTransition)
     {
-        $arrStatus = FlowStatus::getObjectListFiltered(null, $this->objFlow->getSystemid());
-        foreach ($arrStatus as $objStatus) {
-            /** @var FlowStatus $objStatus */
-            if ($objStatus->getIntStatus() == $intOldStatus) {
-                return $objStatus;
-            }
-        }
-        return null;
+        return [];
     }
 
     /**

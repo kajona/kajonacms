@@ -7,6 +7,7 @@
 
 namespace Kajona\Flow\System;
 
+use Kajona\System\Admin\AdminFormgenerator;
 use Kajona\System\System\GenericPluginInterface;
 use Kajona\System\System\Model;
 
@@ -52,4 +53,12 @@ interface FlowHandlerInterface extends GenericPluginInterface
      * @throws \Kajona\System\System\Exception
      */
     public function handleStatusTransition(Model $objObject, FlowTransition $objTransition);
+
+    /**
+     * @param AdminFormgenerator $objForm
+     * @param Model $objModel
+     * @param FlowTransition $objTransition
+     * @return array
+     */
+    public function validateForm(AdminFormgenerator $objForm, Model $objObject, FlowTransition $objTransition);
 }
