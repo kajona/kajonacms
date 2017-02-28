@@ -914,6 +914,13 @@ JS;
             return $strReturn;
         }
 
+        /** @var VersionableInterface $objObject */
+        $objObject = Objectfactory::getInstance()->getObject($strSystemid);
+
+        if (!$objObject instanceof VersionableInterface) {
+            return $this->objToolkit->warningBox($this->getLang("generic_changelog_not_versionable"));
+        }
+
         $strReturn = "";
         //showing a list using the pageview
         $objArraySectionIterator = new ArraySectionIterator(SystemChangelog::getLogEntriesCount($strSystemid));
@@ -979,7 +986,7 @@ JS;
             $arrToolbar[] = Link::getLinkAdmin($this->getArrModule("modul"), "genericChangelogExportExcel", "&systemid=".$strSystemid, AdminskinHelper::getAdminImage("icon_excel")." ".$this->getLang("change_export_excel"), "", "", false);
         }
 
-        $arrToolbar[] = Link::getLinkAdmin($this->getArrModule("modul"), "changelogDiff", "&systemid=".$strSystemid."&folderview=1", AdminskinHelper::getAdminImage("icon_aspect")." ".$this->getLang("change_diff"), "", "", false);
+        $arrToolbar[] = Link::getLinkAdmin($this->getArrModule("modul"), "changelogDiff", "&systemid=".$strSystemid."&bitBlockFolderview=".$this->getParam("bitBlockFolderview"), AdminskinHelper::getAdminImage("icon_aspect")." ".$this->getLang("change_diff"), "", "", false);
 
         $strReturn .= $this->objToolkit->getContentToolbar($arrToolbar);
 
@@ -999,9 +1006,18 @@ JS;
      */
     protected function actionChangelogDiff()
     {
+
+        if ($this->getParam("bitBlockFolderview") == "") {
+            $this->setArrModuleEntry("template", "/folderview.tpl");
+        }
+
         $strSystemId = $this->getSystemid();
         /** @var VersionableInterface $objObject */
         $objObject = Objectfactory::getInstance()->getObject($strSystemId);
+
+        if (!$objObject instanceof VersionableInterface) {
+            return $this->objToolkit->warningBox($this->getLang("generic_changelog_not_versionable"));
+        }
 
         $objNow = new Date();
         $objNow->setEndOfDay();
@@ -1024,7 +1040,7 @@ JS;
 
         $strReturn = "";
         $strReturn .= $this->objToolkit->getContentToolbar(array(
-            Link::getLinkAdmin($this->getArrModule("modul"), "genericChangelog", "&systemid=".$objObject->getStrSystemid()."&folderview=1", AdminskinHelper::getAdminImage("icon_history")." ".$this->getLang("commons_edit_history"), "", "", false),
+            Link::getLinkAdmin($this->getArrModule("modul"), "genericChangelog", "&systemid=".$objObject->getStrSystemid()."&bitBlockFolderview=".$this->getParam("bitBlockFolderview"), AdminskinHelper::getAdminImage("icon_history")." ".$this->getLang("commons_edit_history"), "", "", false),
         ));
 
         $arrTemplate = array(
