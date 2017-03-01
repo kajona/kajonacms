@@ -158,12 +158,12 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
      * @param int $intStatus
      * @return FlowStatus|null
      */
-    public function getStepForStatus($intStatus)
+    public function getStatusByIndex($intStatus)
     {
         $arrStatus = $this->getArrStatus();
         foreach ($arrStatus as $objStatus) {
             /** @var FlowStatus $objStatus */
-            if ($objStatus->getIntStatus() == $intStatus) {
+            if ($objStatus->getIntIndex() == $intStatus) {
                 return $objStatus;
             }
         }
@@ -280,9 +280,7 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
         $arrDbHandler = [];
         foreach ($arrResult as $objFlow) {
             /** @var FlowConfig $objFlow */
-            if ($objFlow->getIntRecordStatus() === 1) {
-                $arrDbHandler[$objFlow->getStrHandlerClass()] = $objFlow;
-            }
+            $arrDbHandler[$objFlow->getStrHandlerClass()] = $objFlow;
         }
 
         $arrFileHandler = self::getAvailableHandler();
@@ -293,6 +291,7 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
                 $objFlow->setStrName($objHandler->getTitle());
                 $objFlow->setStrTargetClass($objHandler->getTargetClass());
                 $objFlow->setStrHandlerClass($strClass);
+                $objFlow->setIntRecordStatus(0);
                 $objFlow->updateObjectToDb();
 
                 // we create automatically the start and end status

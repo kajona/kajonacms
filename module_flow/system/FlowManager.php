@@ -116,7 +116,7 @@ class FlowManager
     {
         $objFlow = $this->getFlowForModel($objObject);
         if ($objFlow instanceof FlowConfig) {
-            return $objFlow->getStepForStatus($objObject->getIntRecordStatus());
+            return $objFlow->getStatusByIndex($objObject->getIntRecordStatus());
         }
         return null;
     }

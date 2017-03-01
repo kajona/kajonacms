@@ -10,6 +10,7 @@
 namespace Kajona\Flow\Admin;
 
 use Kajona\System\Admin\AdminFormgenerator;
+use Kajona\System\System\Link;
 
 /**
  * Formgenerator for a flow entry
@@ -26,5 +27,14 @@ class FlowStatusFormgenerator extends AdminFormgenerator
     public function generateFieldsFromObject()
     {
         parent::generateFieldsFromObject();
+
+        $this->getField("viewgroups")
+            ->setStrSource(Link::getLinkAdminXml("user", "getUserByFilter", "&user=false&group=true"));
+
+        $this->getField("editgroups")
+            ->setStrSource(Link::getLinkAdminXml("user", "getUserByFilter", "&user=false&group=true"));
+
+        $this->getField("deletegroups")
+            ->setStrSource(Link::getLinkAdminXml("user", "getUserByFilter", "&user=false&group=true"));
     }
 }
