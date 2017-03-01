@@ -86,6 +86,8 @@ class FlowAdmin extends AdminEvensimpler implements AdminInterface
             return "";
         } elseif ($objListEntry instanceof FlowStatus) {
             return "";
+        } elseif ($objListEntry instanceof FlowTransition) {
+            return "";
         } elseif ($objListEntry instanceof FlowActionAbstract) {
             return "";
         } elseif ($objListEntry instanceof FlowConditionAbstract) {
@@ -101,6 +103,8 @@ class FlowAdmin extends AdminEvensimpler implements AdminInterface
             return "";
         } elseif ($objListEntry instanceof FlowStatus) {
             return "";
+        } elseif ($objListEntry instanceof FlowTransition) {
+            return "";
         } elseif ($objListEntry instanceof FlowActionAbstract) {
             return "";
         } elseif ($objListEntry instanceof FlowConditionAbstract) {
@@ -113,8 +117,14 @@ class FlowAdmin extends AdminEvensimpler implements AdminInterface
     public function renderStatusAction(Model $objListEntry, $strAltActive = "", $strAltInactive = "")
     {
         if ($objListEntry instanceof FlowConfig) {
-            return "";
+            return $this->objToolkit->listStatusButton($objListEntry, true, $strAltActive, $strAltInactive);
         } elseif ($objListEntry instanceof FlowStatus) {
+            return "";
+        } elseif ($objListEntry instanceof FlowTransition) {
+            return "";
+        } elseif ($objListEntry instanceof FlowActionAbstract) {
+            return "";
+        } elseif ($objListEntry instanceof FlowConditionAbstract) {
             return "";
         }
 
@@ -124,8 +134,9 @@ class FlowAdmin extends AdminEvensimpler implements AdminInterface
     public function renderCopyAction(Model $objListEntry)
     {
         if ($objListEntry instanceof FlowConfig) {
-            return "";
         } elseif ($objListEntry instanceof FlowStatus) {
+            return "";
+        } elseif ($objListEntry instanceof FlowTransition && $objListEntry->getParentStatus()->getFlowConfig()->getIntRecordStatus() === 1) {
             return "";
         } elseif ($objListEntry instanceof FlowActionAbstract) {
             return "";
@@ -140,6 +151,14 @@ class FlowAdmin extends AdminEvensimpler implements AdminInterface
     {
         if ($objListEntry instanceof FlowConfig) {
             return "";
+        } elseif ($objListEntry instanceof FlowStatus && $objListEntry->getFlowConfig()->getIntRecordStatus() === 1) {
+            return "";
+        } elseif ($objListEntry instanceof FlowTransition && $objListEntry->getParentStatus()->getFlowConfig()->getIntRecordStatus() === 1) {
+            return "";
+        } elseif ($objListEntry instanceof FlowActionAbstract && $objListEntry->getTransition()->getParentStatus()->getFlowConfig()->getIntRecordStatus() === 1) {
+            return "";
+        } elseif ($objListEntry instanceof FlowConditionAbstract && $objListEntry->getTransition()->getParentStatus()->getFlowConfig()->getIntRecordStatus() === 1) {
+            return "";
         }
 
         return parent::renderEditAction($objListEntry, $bitDialog);
@@ -148,6 +167,14 @@ class FlowAdmin extends AdminEvensimpler implements AdminInterface
     protected function renderDeleteAction(ModelInterface $objListEntry)
     {
         if ($objListEntry instanceof FlowConfig) {
+            return "";
+        } elseif ($objListEntry instanceof FlowStatus && $objListEntry->getFlowConfig()->getIntRecordStatus() === 1) {
+            return "";
+        } elseif ($objListEntry instanceof FlowTransition && $objListEntry->getParentStatus()->getFlowConfig()->getIntRecordStatus() === 1) {
+            return "";
+        } elseif ($objListEntry instanceof FlowActionAbstract && $objListEntry->getTransition()->getParentStatus()->getFlowConfig()->getIntRecordStatus() === 1) {
+            return "";
+        } elseif ($objListEntry instanceof FlowConditionAbstract && $objListEntry->getTransition()->getParentStatus()->getFlowConfig()->getIntRecordStatus() === 1) {
             return "";
         }
 
@@ -175,8 +202,14 @@ class FlowAdmin extends AdminEvensimpler implements AdminInterface
     {
         $strAction = parent::getNewEntryAction($strListIdentifier, $bitDialog);
         $strSystemId = $this->getParam("systemid");
+        $objFlow = $this->getFlowFromSystemId($strSystemId);
 
-        if ($strListIdentifier == "liststep") {
+        // if the flow is release we cant add new entries
+        if ($objFlow !== null && $objFlow->getIntRecordStatus() === 1) {
+            return [];
+        }
+
+        if ($strListIdentifier == "listStep") {
             return $this->objToolkit->listButton(
                 Link::getLinkAdmin(
                     $this->getArrModule("modul"), "newStep", "&systemid=".$strSystemId,
@@ -187,9 +220,7 @@ class FlowAdmin extends AdminEvensimpler implements AdminInterface
             return "";
         } elseif ($strListIdentifier == "listTransitionAction") {
             $arrLinks = array();
-            $objFlow = $this->getFlowFromSystemId($strSystemId);
             $arrActions = $objFlow->getHandler()->getAvailableActions();
-
             foreach ($arrActions as $strActionClass) {
                 $objAction = new $strActionClass();
                 $arrLinks[] = $this->objToolkit->listButton(
@@ -202,9 +233,7 @@ class FlowAdmin extends AdminEvensimpler implements AdminInterface
             return $arrLinks;
         } elseif ($strListIdentifier == "listTransitionCondition") {
             $arrLinks = array();
-            $objFlow = $this->getFlowFromSystemId($strSystemId);
             $arrActions = $objFlow->getHandler()->getAvailableConditions();
-
             foreach ($arrActions as $strConditionClass) {
                 $objCondition = new $strConditionClass();
                 $arrLinks[] = $this->objToolkit->listButton(
@@ -473,6 +502,10 @@ class FlowAdmin extends AdminEvensimpler implements AdminInterface
      */
     private function getFlowFromSystemId($strSystemId)
     {
+        if (!validateSystemid($strSystemId)) {
+            return null;
+        }
+
         $objFlow = null;
         $objObject = Objectfactory::getInstance()->getObject($strSystemId);
         $arrSystemIds = $objObject->getPathArray();
