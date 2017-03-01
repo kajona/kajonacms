@@ -157,7 +157,8 @@ require(["jquery", "ajax"], function($, ajax){
                 $arrErrors = $objFlow->getHandler()->validateStatusTransition($objObject, $objTransition);
                 $strValidation = "";
                 if (!empty($arrErrors)) {
-                    $strTooltip = "<ul>";
+                    $strTooltip = "<div class='alert alert-danger'>";
+                    $strTooltip.= "<ul>";
                     foreach ($arrErrors as $strField => $arrError) {
                         foreach ($arrError as $strError) {
                             if (!empty($strError)) {
@@ -167,6 +168,7 @@ require(["jquery", "ajax"], function($, ajax){
                         }
                     }
                     $strTooltip.= "</ul>";
+                    $strTooltip.= "</div>";
                     $strValidation.= '<i class="kj-icon fa fa-exclamation-triangle pull-right ' . $strClass . '" style="color:#ee0000" data-validation-errors="' . $strTooltip . '"></i>';
                 }
 
@@ -190,13 +192,14 @@ require(["jquery", "ajax"], function($, ajax){
                 preg_match("#<ul>(.*)</ul>#ims", $strHtml, $arrMatches);
 
                 // js to init the tooltip for validation errors
+                $strTitle = json_encode($objObject->getStrDisplayName());
                 $strJs = <<<HTML
 <script type='text/javascript'>
     require(['jquery', 'dialogHelper'], function($, dialogHelper){
         $('.{$strClass}').parent().on('click', function(){
             var errors = $(this).find('.{$strClass}').data('validation-errors');
-            dialogHelper.showConfirmationDialog("Errors", errors, "Bearbeiten", function(){
-                
+            dialogHelper.showConfirmationDialog({$strTitle}, errors, "OK", function(){
+                $('#jsDialog_1').modal('hide');
             });
         });
     });
