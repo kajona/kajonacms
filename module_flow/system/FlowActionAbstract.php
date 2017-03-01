@@ -10,6 +10,7 @@ namespace Kajona\Flow\System;
 use Kajona\System\System\AdminListableInterface;
 use Kajona\System\System\Model;
 use Kajona\System\System\ModelInterface;
+use Kajona\System\System\Objectfactory;
 
 /**
  * FlowActionAbstract
@@ -98,5 +99,13 @@ abstract class FlowActionAbstract extends Model implements ModelInterface, Admin
     public function getStrLongDescription()
     {
         return "";
+    }
+
+    /**
+     * @return FlowTransition
+     */
+    public function getTransition()
+    {
+        return Objectfactory::getInstance()->getObject($this->getPrevId());
     }
 }

@@ -94,4 +94,12 @@ abstract class FlowConditionAbstract extends Model implements ModelInterface, Ad
     {
         return "";
     }
+
+    /**
+     * @return FlowTransition
+     */
+    public function getTransition()
+    {
+        return Objectfactory::getInstance()->getObject($this->getPrevId());
+    }
 }
