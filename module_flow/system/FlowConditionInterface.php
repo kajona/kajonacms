@@ -32,14 +32,13 @@ interface FlowConditionInterface
     public function getDescription();
 
     /**
-     * Validates whether it is allowed to make a statustransition
+     * Validates whether it is allowed to make a status transition
      *
-     * @param integer $intOldStatus
-     * @param integer $intNewStatus
      * @param Model $objObject
+     * @param FlowTransition $objTransition
      * @return boolean
      */
-    public function validateCondition($intOldStatus, $intNewStatus, Model $objObject);
+    public function validateCondition(Model $objObject, FlowTransition $objTransition);
 
     /**
      * @param AdminFormgenerator $objForm

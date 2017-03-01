@@ -63,18 +63,23 @@ class FlowManager
     {
         $objStep = $this->getCurrentStepForModel($objObject);
         if ($objStep instanceof FlowStatus) {
-            $intOldStatus = $objObject->getIntRecordStatus();
+            $objHandler = $objStep->getFlowConfig()->getHandler();
             $arrTransitions = $objStep->getArrTransitions();
             $arrResult = [];
 
             // filter out transitions where the condition is not valid
             foreach ($arrTransitions as $objTransition) {
-                $intNewStatus = $objTransition->getTargetStatus()->getIntStatus();
                 $arrConditions = $objTransition->getArrConditions();
-
                 $bitValid = true;
                 foreach ($arrConditions as $objCondition) {
-                    $bitValid = $objCondition->validateCondition($intOldStatus, $intNewStatus, $objObject);
+                    // check whether all assigned conditions are valid
+                    $bitValid = $objCondition->validateCondition($objObject, $objTransition);
+                    if ($bitValid === false) {
+                        break;
+                    }
+
+                    // ask the handler whether this transition is visible
+                    $bitValid = $objHandler->isTransitionVisible($objObject, $objTransition);
                     if ($bitValid === false) {
                         break;
                     }

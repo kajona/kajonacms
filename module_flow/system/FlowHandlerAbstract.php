@@ -44,24 +44,29 @@ abstract class FlowHandlerAbstract implements FlowHandlerInterface
      * @return boolean - true if transition is executed, false if not
      * @throws \Kajona\System\System\Exception
      */
-    public function handleStatusTransition(Model $objObject, FlowTransition $objTransition)
+    public function handleStatusTransition(Model $objObject, FlowTransition $objTransition) : bool
     {
         try {
             Database::getInstance()->transactionBegin();
 
-            $intOldStatus = $objObject->getIntRecordStatus();
             $intNewStatus = $objTransition->getTargetStatus()->getIntStatus();
 
             if ($intNewStatus != $objObject->getIntRecordStatus()) {
-                // validate handler conditions
-                $bitReturn = $this->validateStatusTransition($intOldStatus, $intNewStatus, $objObject, $objTransition);
-                if ($bitReturn === false) {
-                    throw new \RuntimeException("Condition not fulfilled");
+                // check whether there are validation errors
+                $arrErrors = $this->validateStatusTransition($objObject, $objTransition);
+                if (count($arrErrors) > 0) {
+                    throw new \RuntimeException("There are validation errors for this status transition");
                 }
 
-                // validate transition conditions
-                $bitReturn = $this->validateConditions($intOldStatus, $intNewStatus, $objObject, $objTransition);
-                if ($bitReturn === false) {
+                // check whether the transition is visible
+                $bitReturn = $this->isTransitionVisible($objObject, $objTransition);
+                if (!$bitReturn) {
+                    throw new \RuntimeException("Transition is not visible");
+                }
+
+                // check whether all assigned conditions are fulfilled
+                $bitReturn = $this->validateConditions($objObject, $objTransition);
+                if (!$bitReturn) {
                     throw new \RuntimeException("Condition not fulfilled");
                 }
 
@@ -70,10 +75,10 @@ abstract class FlowHandlerAbstract implements FlowHandlerInterface
                 $objObject->updateObjectToDb();
 
                 // execute handler actions
-                $this->executeStatusTransition($intOldStatus, $intNewStatus, $objObject, $objTransition);
+                $this->executeStatusTransition($objObject, $objTransition);
 
                 // execute transition actions
-                $this->executeActions($intOldStatus, $intNewStatus, $objObject, $objTransition);
+                $this->executeActions($objObject, $objTransition);
             }
 
             Database::getInstance()->transactionCommit();
@@ -88,26 +93,24 @@ abstract class FlowHandlerAbstract implements FlowHandlerInterface
     }
 
     /**
-     * @param AdminFormgenerator $objForm
      * @param Model $objObject
      * @param FlowTransition $objTransition
      * @return array
      */
-    public function validateForm(AdminFormgenerator $objForm, Model $objObject, FlowTransition $objTransition)
+    public function validateStatusTransition(Model $objObject, FlowTransition $objTransition) : array
     {
         return [];
     }
 
     /**
-     * Callback method which can be overridden by a handler to validate whether a status transition is possible
+     * Callback method which can be overridden by a handler to validate whether a status transition is possible. The
+     * transition is not listed in the status drop down if this method returns false
      *
-     * @param int $intOldStatus
-     * @param int $intNewStatus
-     * @param Model $objModel
+     * @param Model $objObject
      * @param FlowTransition $objTransition
      * @return bool
      */
-    protected function validateStatusTransition($intOldStatus, $intNewStatus, Model $objModel, FlowTransition $objTransition)
+    public function isTransitionVisible(Model $objObject, FlowTransition $objTransition) : bool
     {
         return true;
     }
@@ -115,30 +118,26 @@ abstract class FlowHandlerAbstract implements FlowHandlerInterface
     /**
      * Callback method which can be overridden by a handler to execute additional actions on a status transition
      *
-     * @param int $intOldStatus
-     * @param int $intNewStatus
-     * @param Model $objModel
+     * @param Model $objObject
      * @param FlowTransition $objTransition
      */
-    protected function executeStatusTransition($intOldStatus, $intNewStatus, Model $objModel, FlowTransition $objTransition)
+    protected function executeStatusTransition(Model $objObject, FlowTransition $objTransition)
     {
     }
 
     /**
-     * @param int $intOldStatus
-     * @param int $intNewStatus
-     * @param Model $objModel
+     * @param Model $objObject
      * @param FlowTransition $objTransition
      * @return boolean
      */
-    private function validateConditions($intOldStatus, $intNewStatus, Model $objModel, FlowTransition $objTransition)
+    private function validateConditions(Model $objObject, FlowTransition $objTransition)
     {
         $bitResult = true;
         $arrConditions = $objTransition->getArrConditions();
         if (!empty($arrConditions)) {
             foreach ($arrConditions as $objCondition) {
                 if ($objCondition instanceof FlowConditionInterface) {
-                    $bitResult = $bitResult && $objCondition->validateCondition($intOldStatus, $intNewStatus, $objModel);
+                    $bitResult = $bitResult && $objCondition->validateCondition($objObject, $objTransition);
                     if ($bitResult === false) {
                         break;
                     }
@@ -150,18 +149,16 @@ abstract class FlowHandlerAbstract implements FlowHandlerInterface
     }
 
     /**
-     * @param integer $intOldStatus
-     * @param integer $intNewStatus
-     * @param Model $objModel
+     * @param Model $objObject
      * @param FlowTransition $objTransition
      */
-    private function executeActions($intOldStatus, $intNewStatus, Model $objModel, FlowTransition $objTransition)
+    private function executeActions(Model $objObject, FlowTransition $objTransition)
     {
         $arrActions = $objTransition->getArrActions();
         if (!empty($arrActions)) {
             foreach ($arrActions as $objAction) {
                 if ($objAction instanceof FlowActionInterface) {
-                    $objAction->executeAction($intOldStatus, $intNewStatus, $objModel);
+                    $objAction->executeAction($objObject, $objTransition);
                 }
             }
         }

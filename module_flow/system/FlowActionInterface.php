@@ -33,12 +33,11 @@ interface FlowActionInterface
     /**
      * Is called on a status change
      *
-     * @param integer $intOldStatus
-     * @param integer $intNewStatus
      * @param Model $objObject
+     * @param FlowTransition $objTransition
      * @return void
      */
-    public function executeAction($intOldStatus, $intNewStatus, Model $objObject);
+    public function executeAction(Model $objObject, FlowTransition $objTransition);
 
     /**
      * @param AdminFormgenerator $objForm
