@@ -105,4 +105,23 @@ class FlowTransition extends Model implements ModelInterface, AdminListableInter
     {
         return "";
     }
+
+    /**
+     * Checks whether the transition moves the status forward or backwards in the flow
+     *
+     * @TODO: this is maybe not the best solution since this depends on the sorting of the status list
+     */
+    public function isForwarding()
+    {
+        $objParentStatus = $this->getParentStatus();
+        $arrStatus = $objParentStatus->getFlowConfig()->getArrStatus();
+        $arrStatus = array_map(function(FlowStatus $objStatus){
+            return $objStatus->getIntIndex();
+        }, $arrStatus);
+
+        $intCurrentIndex = $objParentStatus->getIntIndex();
+        $intFutureIndex = $this->getTargetStatus()->getIntIndex();
+
+        return array_search($intFutureIndex, $arrStatus) > array_search($intCurrentIndex, $arrStatus);
+    }
 }
