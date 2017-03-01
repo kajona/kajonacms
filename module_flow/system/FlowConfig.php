@@ -9,6 +9,7 @@ namespace Kajona\Flow\System;
 
 use Kajona\System\System\AdminListableInterface;
 use Kajona\System\System\Carrier;
+use Kajona\System\System\Lang;
 use Kajona\System\System\Model;
 use Kajona\System\System\ModelInterface;
 use Kajona\System\System\Pluginmanager;
@@ -134,7 +135,7 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
 
     public function getStrLongDescription()
     {
-        return "";
+        return Lang::getInstance()->getLang("list_flow_long_description", "flow", [dateToString($this->getObjCreateDate())]);
     }
 
     /**
@@ -182,21 +183,12 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
         return $this->objHandler;
     }
 
-    public function validateFlow()
+    private function validateFlow()
     {
         $arrStatus = $this->getArrStatus();
 
         if (count($arrStatus) < 2) {
             throw new \InvalidArgumentException("Flow must have at least two status");
-        }
-
-        // check start and end status must be 0 and 1
-        if ($arrStatus[0]->getIntIndex() !== 0) {
-            throw new \InvalidArgumentException("Start status must have the index 0");
-        }
-
-        if ($arrStatus[count($arrStatus) - 1]->getIntIndex() !== 1) {
-            throw new \InvalidArgumentException("End status must have the index 1");
         }
 
         // check whether there is a flow between the start and end status
@@ -207,6 +199,7 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
         }
 
         // we have nodes which are not connected to the flow
+        $arrVisited = array_unique($arrVisited);
         if (count($arrVisited) != $arrStatus) {
             throw new \InvalidArgumentException("Inconsistent status flow");
         }
@@ -264,6 +257,21 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
     }
 
     /**
+     * @param string $strNewPrevid
+     * @param bool $bitChangeTitle
+     * @param bool $bitCopyChilds
+     */
+    public function copyObject($strNewPrevid = "", $bitChangeTitle = true, $bitCopyChilds = true)
+    {
+        $bitReturn = parent::copyObject($strNewPrevid, $bitChangeTitle, $bitCopyChilds);
+
+        $this->setIntRecordStatus(0);
+        $this->updateObjectToDb();
+
+        return $bitReturn;
+    }
+
+    /**
      * Reads all available handler from the file system and syncs them with the database
      */
     public static function syncHandler()
@@ -272,7 +280,9 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
         $arrDbHandler = [];
         foreach ($arrResult as $objFlow) {
             /** @var FlowConfig $objFlow */
-            $arrDbHandler[$objFlow->getStrHandlerClass()] = $objFlow;
+            if ($objFlow->getIntRecordStatus() === 1) {
+                $arrDbHandler[$objFlow->getStrHandlerClass()] = $objFlow;
+            }
         }
 
         $arrFileHandler = self::getAvailableHandler();
@@ -336,7 +346,7 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
         $arrResult = self::getObjectListFiltered();
         foreach ($arrResult as $objHandler) {
             /** @var FlowConfig $objHandler */
-            if ($objHandler->getStrTargetClass() == $strClass) {
+            if ($objHandler->getIntRecordStatus() === 1 && $objHandler->getStrTargetClass() == $strClass) {
                 return $objHandler;
             }
         }
