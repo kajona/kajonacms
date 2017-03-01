@@ -263,7 +263,33 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
      */
     public function copyObject($strNewPrevid = "", $bitChangeTitle = true, $bitCopyChilds = true)
     {
+        $arrSystemIdName = [];
+        $arrStatus = $this->getArrStatus();
+        foreach ($arrStatus as $objStatus) {
+            $arrSystemIdName[$objStatus->getSystemid()] = $objStatus->getStrName();
+        }
+
         $bitReturn = parent::copyObject($strNewPrevid, $bitChangeTitle, $bitCopyChilds);
+
+        $this->arrStatus = null;
+
+        $arrNameSystemId = [];
+        $arrStatus = $this->getArrStatus();
+        foreach ($arrStatus as $objStatus) {
+            $arrNameSystemId[$objStatus->getStrName()] = $objStatus->getSystemid();
+        }
+
+        // fix the target status systemids of the transitions
+        $arrStatus = $this->getArrStatus();
+        foreach ($arrStatus as $objStatus) {
+            $arrTransitions = $objStatus->getArrTransitions();
+            foreach ($arrTransitions as $objTransition) {
+                $strName = $arrSystemIdName[$objTransition->getStrTargetStatus()];
+                $strNewSystemId = $arrNameSystemId[$strName];
+                $objTransition->setStrTargetStatus($strNewSystemId);
+                $objTransition->updateObjectToDb();
+            }
+        }
 
         $this->setIntRecordStatus(0);
         $this->updateObjectToDb();
