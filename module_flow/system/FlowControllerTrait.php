@@ -154,10 +154,7 @@ require(["jquery", "ajax"], function($, ajax){
                 $objTargetStatus = $objTransition->getTargetStatus();
 
                 // validation
-                $objTmpObject = clone $objObject;
-                $objForm = clone $this->getAdminForm($objTmpObject);
-                $arrErrors = $objFlow->getHandler()->validateForm($objForm, $objTmpObject, $objTransition);
-
+                $arrErrors = $objFlow->getHandler()->validateStatusTransition($objObject, $objTransition);
                 $strValidation = "";
                 if (!empty($arrErrors)) {
                     $strTooltip = "<ul>";
