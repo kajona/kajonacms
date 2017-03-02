@@ -102,7 +102,7 @@ class Rights
      *
      * @return bool
      */
-    private function writeSingleRecord(string $strSystemid, array $arrRights): bool
+    private function writeSingleRecord(string $strSystemid, array $arrRights, string $strRecordClass): bool
     {
 
         $arrOldPermissions = $this->getPlainRightRow($strSystemid);
@@ -131,7 +131,7 @@ class Rights
             $this->objDb->flushQueryCache();
             $this->flushRightsCache();
 
-            CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_PERMISSIONSCHANGED, array($strSystemid, $arrRights, $arrOldPermissions));
+            CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_PERMISSIONSCHANGED, array($strSystemid, $arrRights, $arrOldPermissions, $strRecordClass));
 
             return true;
         } else {
@@ -179,7 +179,7 @@ class Rights
             $objLog->processChanges($objInstance, "editPermissions", $arrChanges);
         }
 
-        $bitSave = $this->setRightsRecursive($arrRights, $strSystemid);
+        $bitSave = $this->setRightsRecursive($arrRights, $strSystemid, $objInstance->getStrRecordClass());
 
         if ($bitSave) {
             $this->objDb->transactionCommit();
@@ -251,7 +251,7 @@ class Rights
      *
      * @return bool
      */
-    private function setRightsRecursive(array $arrRights, string $strSystemid): bool
+    private function setRightsRecursive(array $arrRights, string $strSystemid, string $strRecordClass): bool
     {
         $bitReturn = true;
         $this->flushRightsCache();
@@ -273,7 +273,7 @@ class Rights
             $arrRights[self::$STR_RIGHT_INHERIT] = 1;
         }
 
-        $bitReturn = $bitReturn && $this->writeSingleRecord($strSystemid, $arrRights);
+        $bitReturn = $bitReturn && $this->writeSingleRecord($strSystemid, $arrRights, $strRecordClass);
 
         //load all child records in order to update them, too.
         $arrChilds = $this->getChildNodes($strSystemid);
@@ -285,7 +285,7 @@ class Rights
                 if ($arrChildRights[self::$STR_RIGHT_INHERIT] == 1) {
                     $arrChildRights = $arrRights;
                     $arrChildRights[self::$STR_RIGHT_INHERIT] = 1;
-                    $bitReturn = $bitReturn && $this->setRightsRecursive($arrChildRights, $strOneChildId);
+                    $bitReturn = $bitReturn && $this->setRightsRecursive($arrChildRights, $strOneChildId, $strRecordClass);
                 }
             }
         }

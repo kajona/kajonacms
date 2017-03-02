@@ -170,7 +170,8 @@ The relevant object and the name of the changed property are passed, too.<br />R
         			<td>Arguments</td>
         			<td>string $strSystemid&nbsp;<br />
         			array $arrNewPermissions&nbsp;<br />
-                    array $arrOldPermissions&nbsp;</td>
+                    array $arrOldPermissions&nbsp;<br />
+                    string $strRecordClass&nbsp;</td>
         		</tr>
         		<tr>
         			<td>Description</td>
