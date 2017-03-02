@@ -9,26 +9,18 @@ namespace Kajona\Flow\Admin\Formentries;
 use Kajona\Flow\System\FlowManager;
 use Kajona\Flow\System\ServiceProvider;
 use Kajona\System\Admin\Formentries\FormentryDropdown;
+use Kajona\System\Admin\Formentries\FormentryToggleButtonbar;
 use Kajona\System\System\Carrier;
+use Kajona\System\System\Reflection;
 
 /**
  * @author christoph.kappestein@gmail.de
  * @since 5.2
  * @package module_flow
  */
-class FormentryStatus extends FormentryDropdown
+class FormentryStatus extends FormentryToggleButtonbar
 {
-    /**
-     * @var FlowManager
-     */
-    protected $objFlowManager;
-
-    public function __construct($strFormName, $strSourceProperty, $objSourceObject = null)
-    {
-        parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
-
-        $this->objFlowManager = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_MANAGER);
-    }
+    const STR_MODEL_ANNOTATION = "@fieldModelClass";
 
     /**
      * Overwritten in order to load key-value pairs declared by annotations
@@ -37,8 +29,25 @@ class FormentryStatus extends FormentryDropdown
     {
         parent::updateValue();
 
-        if ($this->getObjSourceObject() != null && $this->getStrSourceProperty() != "") {
-            $this->setArrKeyValues($this->objFlowManager->getPossibleStatusForModel($this->getObjSourceObject()));
+        $objSourceObject = $this->getObjSourceObject();
+        if ($objSourceObject !== null) {
+            /** @var FlowManager $objFlowManager */
+            $objFlowManager = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_MANAGER);
+
+            // try to find the matching source property
+            $strSourceProperty = $this->getCurrentProperty(self::STR_MODEL_ANNOTATION);
+            if ($strSourceProperty == null) {
+                return;
+            }
+
+            // get model class
+            $objReflection = new Reflection($objSourceObject);
+            $strModelClass = $objReflection->getAnnotationValueForProperty($strSourceProperty, self::STR_MODEL_ANNOTATION);
+            if (empty($strModelClass)) {
+                $strModelClass = get_class($objSourceObject);
+            }
+
+            $this->setArrKeyValues($objFlowManager->getPossibleStatusForClass($strModelClass));
         }
     }
 }
