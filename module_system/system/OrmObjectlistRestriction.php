@@ -18,7 +18,7 @@ namespace Kajona\System\System;
  *
  * @deprecated
  */
-class OrmObjectlistRestriction
+class OrmObjectlistRestriction implements OrmConditionInterface
 {
 
     private $strWhere = "";

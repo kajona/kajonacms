@@ -42,15 +42,6 @@ class DeletedRecordsFilter extends FilterBase
     private $strClass;
 
     /**
-     * @var string
-     * @tableColumn system.system_comment
-     * @fieldType Kajona\System\Admin\Formentries\FormentryText
-     *
-     * @filterCompareOperator LIKE
-     */
-    private $strComment;
-
-    /**
      * @var int
      * @tableColumn system.system_deleted
      */
@@ -142,22 +133,6 @@ class DeletedRecordsFilter extends FilterBase
     public function setStrClass($strClass)
     {
         $this->strClass = $strClass;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStrComment()
-    {
-        return $this->strComment;
-    }
-
-    /**
-     * @param string $strComment
-     */
-    public function setStrComment($strComment)
-    {
-        $this->strComment = $strComment;
     }
 
     /**

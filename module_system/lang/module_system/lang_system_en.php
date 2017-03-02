@@ -229,8 +229,6 @@ $lang["systemtask_dbconsistency_date_ok"] = "All date-records have a correspondi
 $lang["systemtask_dbconsistency_firstlevel_error"] = "Not all first-level-nodes belong to a module";
 $lang["systemtask_dbconsistency_firstlevel_ok"] = "All first-level-nodes belong to a module";
 $lang["systemtask_dbconsistency_name"]   = "Check database consistency";
-$lang["systemtask_dbconsistency_right_error"] = "The following right-records are erroneous (missing system-record)";
-$lang["systemtask_dbconsistency_right_ok"] = "All right-records have a corresponding system-record";
 $lang["systemtask_dbexport_error"]       = "Error dumping the database. Please see the logfile for more information.";
 $lang["systemtask_dbexport_exclude_intro"] = "If activated both tables, the stats and the cache will be excluded from the dump.";
 $lang["systemtask_dbexport_excludetitle"] = "Exclude tables";
@@ -310,6 +308,7 @@ $lang["systemtask_permissions_groupid"]     = "Relevant group";
 $lang["systemtask_permissions_finished"]     = "Finished execution";
 $lang["systemtask_permissions_name"]     = "Set permissions recursively";
 $lang["generic_changelog_no_systemid"]  = "Calling this action is only possible with a valid systemid. Please enter the systemid to be investigated.";
+$lang["generic_changelog_not_versionable"]  = "The record to be investigated is not versionable";
 $lang["generic_record_locked"]  = "This record cannot be edited because it was locked by the user '{0}'.";
 
 $lang["changelog_tooltipUnit"]       = "change";
