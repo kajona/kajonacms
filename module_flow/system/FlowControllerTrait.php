@@ -35,7 +35,7 @@ trait FlowControllerTrait
 
         $objCurrentStatus = $this->objFlowManager->getCurrentStepForModel($objListEntry);
         if ($objCurrentStatus === null) {
-            return "";
+            return parent::renderStatusAction($objListEntry, $strAltActive, $strAltInactive);
         }
 
         $strIcon = AdminskinHelper::getAdminImage($objCurrentStatus->getStrIcon(), $objCurrentStatus->getStrDisplayName());
