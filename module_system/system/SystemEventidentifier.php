@@ -128,6 +128,7 @@ interface SystemEventidentifier {
      * @param string $strSystemid
      * @param array $arrNewPermissions
      * @param array $arrOldPermissions
+     * @param string $strRecordClass
      *
      * @since 5.1
      */
