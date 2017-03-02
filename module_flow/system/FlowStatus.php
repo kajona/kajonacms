@@ -75,6 +75,13 @@ class FlowStatus extends Model implements ModelInterface, AdminListableInterface
     protected $arrDeleteGroups;
 
     /**
+     * @var UserGroup[]
+     * @objectList flow_status2right (source="status_system_id", target="usergroup_system_id", type={"Kajona\\System\\System\\UserGroup"})
+     * @fieldType Kajona\System\Admin\Formentries\FormentryObjecttags
+     */
+    protected $arrRightGroups;
+
+    /**
      * @return string
      */
     public function getStrName()
@@ -196,6 +203,22 @@ class FlowStatus extends Model implements ModelInterface, AdminListableInterface
     public function setArrDeleteGroups($arrDeleteGroups)
     {
         $this->arrDeleteGroups = $arrDeleteGroups;
+    }
+
+    /**
+     * @return UserGroup[]
+     */
+    public function getArrRightGroups()
+    {
+        return $this->arrRightGroups;
+    }
+
+    /**
+     * @param UserGroup[] $arrRightGroups
+     */
+    public function setArrRightGroups($arrRightGroups)
+    {
+        $this->arrRightGroups = $arrRightGroups;
     }
 
     /**
