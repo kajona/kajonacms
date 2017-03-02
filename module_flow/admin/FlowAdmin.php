@@ -30,7 +30,7 @@ use Kajona\System\System\Objectfactory;
  *
  * @author christoph.kappestein@gmail.com
  *
- * @objectListFlow Kajona\Flow\System\FlowConfig
+ * @objectList Kajona\Flow\System\FlowConfig
  *
  * @objectListStep Kajona\Flow\System\FlowStatus
  * @objectNewStep Kajona\Flow\System\FlowStatus
@@ -60,7 +60,7 @@ class FlowAdmin extends AdminEvensimpler implements AdminInterface
     public function getOutputModuleNavi()
     {
         $arrReturn = array();
-        $arrReturn[] = array("view", Link::getLinkAdmin($this->getArrModule("modul"), "listFlow", "", $this->getLang("list_flow"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("view", Link::getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("list_flow"), "", "", true, "adminnavi"));
         return $arrReturn;
     }
 
