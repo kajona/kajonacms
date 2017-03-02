@@ -40,7 +40,16 @@ class FlowManager
      */
     public function getPossibleStatusForModel(Model $objObject) : array
     {
-        $objFlow = $this->getFlowForModel($objObject);
+        return $this->getPossibleStatusForClass(get_class($objObject));
+    }
+
+    /**
+     * @param string $objObject
+     * @return array
+     */
+    public function getPossibleStatusForClass(string $objObject) : array
+    {
+        $objFlow = $this->getFlowForClass($objObject);
         if ($objFlow instanceof FlowConfig) {
             $arrStatus = $objFlow->getArrStatus();
             $arrResult = [];
@@ -122,14 +131,24 @@ class FlowManager
     }
 
     /**
-     * Returns the status transition handler for this object or null if no handler was attached
+     * Returns the flow config for this model or null
      *
      * @param Model $objObject
      * @return FlowConfig|null
      */
     public function getFlowForModel(Model $objObject)
     {
-        $strClass = get_class($objObject);
+        return $this->getFlowForClass(get_class($objObject));
+    }
+
+    /**
+     * Returns the flow config for the given class
+     *
+     * @param string $strClass
+     * @return FlowConfig|null
+     */
+    public function getFlowForClass(string $strClass)
+    {
         if (!isset($this->arrFlows[$strClass])) {
             $objFlow = FlowConfig::getByModelClass($strClass);
             if ($objFlow instanceof FlowConfig) {
