@@ -192,18 +192,34 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
     {
         // get the current active flow
         $objConfig = FlowConfig::getByModelClass($this->getStrTargetClass());
+        if ($objConfig instanceof FlowConfig) {
+            if ($intRecordStatus == 1) {
+                if ($objConfig->getSystemid() == $this->getSystemid()) {
+                    // if this is the same object no problem
+                } else {
+                    // if this is another object we check whether there was not index removed which is used
+                    $arrCurrentStatus = $this->getStatusIndexMap($objConfig->getArrStatus());
+                    $arrNewStatus = $this->getStatusIndexMap($this->getArrStatus());
 
-        if ($objConfig->getSystemid() == $this->getSystemid()) {
-            // if this is the same object no problem
-        } else {
-            // if this is another object we check whether there was not index removed which is used
-            $arrCurrentStatus = $this->getStatusIndexMap($objConfig->getArrStatus());
-            $arrNewStatus = $this->getStatusIndexMap($this->getArrStatus());
+                    $arrDiff = array_diff_key($arrCurrentStatus, $arrNewStatus);
+                    if (!empty($arrDiff)) {
+                        foreach ($arrDiff as $objStatus) {
+                            $objStatus->assertNoRecordsAreAssignedToThisStatus();
+                        }
+                    }
+                }
+            } else {
+                if ($objConfig->getSystemid() == $this->getSystemid()) {
+                    // we can not deactivate this flow if there are records which are assigned to a status other then 1
+                    // or 0
+                    $arrCurrentStatus = $this->getStatusIndexMap($this->getArrStatus());
 
-            $arrDiff = array_diff_key($arrCurrentStatus, $arrNewStatus);
-            if (!empty($arrDiff)) {
-                foreach ($arrDiff as $objStatus) {
-                    $objStatus->assertNoRecordsAreAssignedToThisStatus();
+                    $arrDiff = array_diff_key($arrCurrentStatus, [0, 1]);
+                    if (!empty($arrDiff)) {
+                        foreach ($arrDiff as $objStatus) {
+                            $objStatus->assertNoRecordsAreAssignedToThisStatus();
+                        }
+                    }
                 }
             }
         }
