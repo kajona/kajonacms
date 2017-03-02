@@ -138,13 +138,11 @@ class WorkflowsHandler extends \Kajona\System\System\Model implements \Kajona\Sy
     {
         $strQuery = "SELECT * FROM
                             "._dbprefix_."workflows_handler,
-                            "._dbprefix_."system_right,
                             "._dbprefix_."system
                    LEFT JOIN "._dbprefix_."system_date
                             ON system_id = system_date_id
                       WHERE system_id = workflows_handler_id
-                        AND workflows_handler_class = ?
-                        AND system_id = right_id";
+                        AND workflows_handler_class = ?";
 
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strClass));
         OrmRowcache::addSingleInitRow($arrRow);

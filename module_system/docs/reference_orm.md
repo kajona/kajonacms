@@ -429,16 +429,14 @@ This is always possible, and in rare scenarios even required:
 	
 ###Adding rows to the cache
 
-Sometimes useful, e.g. if you trigger a complex query and want to initialize objects afterwards. As soon as your query contains all rows of the objects’ target-table, the system-table and the system_rights-table, you may add those rows:
+Sometimes useful, e.g. if you trigger a complex query and want to initialize objects afterwards. As soon as your query contains all rows of the objects’ target-table and the system-table, you may add those rows:
  
 
 	$strQuery = "SELECT *
 	FROM " . _dbprefix_ . "faqs,
 	" . _dbprefix_ . "faqs_member,
-	" . _dbprefix_ . "system_right,
 	" . _dbprefix_ . "system
 	WHERE system_id = faqs_id
-	AND system_id = right_id
 	AND faqs_id = faqsmem_faq
 	AND faqsmem_category = ?
 	ORDER BY faqs_question ASC";

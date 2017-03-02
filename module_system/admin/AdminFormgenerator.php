@@ -346,8 +346,12 @@ class AdminFormgenerator
         $strButtons = "";
 
         //Check if class property is set
-        if($this->intButtonConfig !== null) {
+        if ($this->intButtonConfig !== null) {
             $intButtonConfig = $this->intButtonConfig;
+        }
+
+        if ($intButtonConfig & self::BIT_BUTTON_BACK) {
+            $strButtons .= $objToolkit->formInputSubmit(Lang::getInstance()->getLang("commons_back", "system"), "backbtn", "", "", true, false);
         }
 
         if ($intButtonConfig & self::BIT_BUTTON_SUBMIT) {
@@ -372,10 +376,6 @@ class AdminFormgenerator
 
         if ($intButtonConfig & self::BIT_BUTTON_RESET) {
             $strButtons .= $objToolkit->formInputSubmit(Lang::getInstance()->getLang("commons_reset", "system"), "reset", "", "cancelbutton", true, false);
-        }
-
-        if ($intButtonConfig & self::BIT_BUTTON_BACK) {
-            $strButtons .= $objToolkit->formInputSubmit(Lang::getInstance()->getLang("commons_back", "system"), "backbtn", "", "", true, false);
         }
 
         if ($intButtonConfig & self::BIT_BUTTON_CONTINUE) {

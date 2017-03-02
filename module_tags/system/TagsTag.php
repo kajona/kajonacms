@@ -283,7 +283,7 @@ class TagsTag extends Model implements ModelInterface, AdminListableInterface, S
                         AND system.system_id = member.tags_systemid
                         ".$objORM->getDeletedWhereRestriction()."
                         AND (tags_tag_private IS NULL OR tags_tag_private != 1 OR (tags_owner IS NULL OR tags_owner = '' OR tags_owner = ?))
-                   ORDER BY system_comment ASC";
+                   ORDER BY system.system_id ASC";
 
         $arrRecords = $this->objDB->getPArray($strQuery, array($this->getSystemid(), $this->objSession->getUserID()), $intStart, $intEnd);
 

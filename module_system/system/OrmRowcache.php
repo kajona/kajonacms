@@ -45,7 +45,7 @@ class OrmRowcache extends OrmBase {
      * This avoids additional queries to init a single object afterwards.
      * On high-performance systems or large object-nets, this could reduce the amount of database-queries
      * fired drastically.
-     * For best performance, include the matching row of the tables system, system_date and system_rights.
+     * For best performance, include the matching row of the tables system and system_date.
      * Use the class-filter if you want to make sure the cached row matches a single target-class. This makes sense
      * if you query tables of an inheritance-structure (and not all tables may be in the cache-row resultset).
      *
@@ -65,7 +65,7 @@ class OrmRowcache extends OrmBase {
      * This avoids additional queries to init a single object afterwards.
      * On high-performance systems or large object-nets, this could reduce the amount of database-queries
      * fired drastically.
-     * For best performance, include the matching row of the tables system, system_date and system_rights.
+     * For best performance, include the matching row of the tables system and system_date.
      * Use the class-filter if you want to make sure the cached row matches a single target-class. This makes sense
      * if you query tables of an inheritance-structure (and not all tables may be in the cache-row resultset).
      *

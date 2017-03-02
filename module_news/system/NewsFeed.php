@@ -204,13 +204,11 @@ class NewsFeed extends Model implements ModelInterface, AdminListableInterface
             $strQuery = "SELECT *
 							FROM  "._dbprefix_."news,
 							      "._dbprefix_."news_member,
-							      "._dbprefix_."system_right,
 							      "._dbprefix_."system
 					    LEFT JOIN "._dbprefix_."system_date
 					           ON system_id = system_date_id
 							WHERE system_id = news_id
 							  AND news_id = newsmem_news
-							  AND system_id = right_id
 							  AND system_status = 1
 							  AND (system_date_special IS NULL OR (system_date_special > ? OR system_date_special = 0))
 							  AND (system_date_start IS NULL or(system_date_start < ? OR system_date_start = 0))
@@ -222,13 +220,11 @@ class NewsFeed extends Model implements ModelInterface, AdminListableInterface
         } else {
             $strQuery = "SELECT *
 							FROM "._dbprefix_."news,
-							      "._dbprefix_."system_right,
 							      "._dbprefix_."system
 						LEFT JOIN "._dbprefix_."system_date
 					           ON system_id = system_date_id
 							WHERE system_id = news_id
 							  AND system_status = 1
-							  AND system_id = right_id
 							  AND (system_date_special IS NULL OR (system_date_special > ? OR system_date_special = 0))
 							  AND (system_date_start IS NULL or(system_date_start < ? OR system_date_start = 0))
 							  AND (system_date_end IS NULL or (system_date_end > ? OR system_date_end = 0))
