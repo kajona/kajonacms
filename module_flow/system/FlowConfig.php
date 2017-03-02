@@ -60,6 +60,11 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
      */
     private $objFlowManager;
 
+    /**
+     * @var boolean
+     */
+    private $bitValidateConsistency = true;
+
     public function __construct($strSystemid = "")
     {
         parent::__construct($strSystemid);
@@ -183,12 +188,22 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
         return $this->objHandler;
     }
 
+    public function updateObjectToDb($strPrevId = false)
+    {
+        if ($this->bitValidateConsistency) {
+            $this->validateStatus($this->getIntRecordStatus());
+        }
+
+        return parent::updateObjectToDb($strPrevId);
+    }
+
     /**
      * If someone wants to set a flow to active we must validate whether we can use this flow on the current data
+     * and whether we have another flow which fulfills the requirements of the previous flow
      *
      * @param int $intRecordStatus
      */
-    public function setIntRecordStatus($intRecordStatus)
+    private function validateStatus($intRecordStatus)
     {
         // get the current active flow
         $objConfig = FlowConfig::getByModelClass($this->getStrTargetClass());
@@ -223,8 +238,6 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
                 }
             }
         }
-
-        parent::setIntRecordStatus($intRecordStatus);
     }
 
     /**
@@ -253,6 +266,8 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
             $arrSystemIdName[$objStatus->getSystemid()] = $objStatus->getStrName();
         }
 
+        $this->setIntRecordStatus(0);
+
         $bitReturn = parent::copyObject($strNewPrevid, $bitChangeTitle, $bitCopyChilds);
 
         $this->arrStatus = null;
@@ -275,10 +290,23 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
             }
         }
 
-        $this->setIntRecordStatus(0);
-        $this->updateObjectToDb();
-
         return $bitReturn;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getBitValidateConsistency(): bool
+    {
+        return $this->bitValidateConsistency;
+    }
+
+    /**
+     * @param bool $bitValidateConsistency
+     */
+    public function setBitValidateConsistency(bool $bitValidateConsistency)
+    {
+        $this->bitValidateConsistency = $bitValidateConsistency;
     }
 
     /**

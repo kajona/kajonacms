@@ -34,10 +34,12 @@ class FlowConfigStatusChange implements GenericeventListenerInterface
 
         if ($objObject instanceof FlowConfig && $intNewStatus === 1) {
             // set all other handler which have the same target class to 0
+            /** @var FlowConfig[] $arrConfig */
             $arrConfig = FlowConfig::getObjectListFiltered();
             foreach ($arrConfig as $objConfig) {
                 if ($objConfig->getStrTargetClass() == $objObject->getStrTargetClass() && $objConfig->getSystemid() != $objObject->getSystemid() && $objConfig->getIntRecordStatus() == 1) {
                     $objConfig->setIntRecordStatus(0);
+                    $objConfig->setBitValidateConsistency(false);
                     $objConfig->updateObjectToDb();
                 }
             }
