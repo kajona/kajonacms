@@ -183,77 +183,45 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
         return $this->objHandler;
     }
 
-    private function validateFlow()
-    {
-        $arrStatus = $this->getArrStatus();
-
-        if (count($arrStatus) < 2) {
-            throw new \InvalidArgumentException("Flow must have at least two status");
-        }
-
-        // check whether there is a flow between the start and end status
-        $arrMatrix = $this->getDependencyMatrix();
-        $arrVisited = [];
-        if (!$this->findWayThroughFlow($arrMatrix, 0, 1, $arrVisited)) {
-            throw new \InvalidArgumentException("Inconsistent status flow");
-        }
-
-        // we have nodes which are not connected to the flow
-        $arrVisited = array_unique($arrVisited);
-        if (count($arrVisited) != $arrStatus) {
-            throw new \InvalidArgumentException("Inconsistent status flow");
-        }
-    }
-
     /**
-     * Recursive method to determine whether all status entries are connected
+     * If someone wants to set a flow to active we must validate whether we can use this flow on the current data
      *
-     * @param array $arrMatrix
-     * @param int $intFromStatus
-     * @param int $intToStatus
-     * @param array $arrVisited
-     * @return bool
+     * @param int $intRecordStatus
      */
-    private function findWayThroughFlow(array $arrMatrix, $intFromStatus, $intToStatus, array &$arrVisited) : bool
+    public function setIntRecordStatus($intRecordStatus)
     {
-        if ($intFromStatus === $intToStatus) {
-            return true;
-        }
+        // get the current active flow
+        $objConfig = FlowConfig::getByModelClass($this->getStrTargetClass());
 
-        if (in_array($intFromStatus, $arrVisited)) {
-            return false;
-        }
+        if ($objConfig->getSystemid() == $this->getSystemid()) {
+            // if this is the same object no problem
+        } else {
+            // if this is another object we check whether there was not index removed which is used
+            $arrCurrentStatus = $this->getStatusIndexMap($objConfig->getArrStatus());
+            $arrNewStatus = $this->getStatusIndexMap($this->getArrStatus());
 
-        if (isset($arrMatrix[$intFromStatus])) {
-            $arrVisited[] = $intFromStatus;
-
-            foreach ($arrMatrix[$intFromStatus] as $intStatus) {
-                if ($this->findWayThroughFlow($arrMatrix, $intStatus, $intToStatus, $arrVisited)) {
-                    return true;
+            $arrDiff = array_diff_key($arrCurrentStatus, $arrNewStatus);
+            if (!empty($arrDiff)) {
+                foreach ($arrDiff as $intKey) {
+                    $arrCurrentStatus[$intKey]->assertNoRecordsAreAssignedToThisStatus();
                 }
             }
         }
 
-        return false;
+        parent::setIntRecordStatus($intRecordStatus);
     }
 
     /**
-     * @return array
+     * @param $arrStatus
+     * @return FlowStatus[]
      */
-    private function getDependencyMatrix() : array
+    private function getStatusIndexMap($arrStatus)
     {
-        $arrStatus = $this->getArrStatus();
-        $arrMatrix = [];
+        $arrResult = [];
         foreach ($arrStatus as $objStatus) {
-            $arrTransitions = $objStatus->getArrTransitions();
-            $arrTargets = [];
-            foreach ($arrTransitions as $objTransition) {
-                $arrTargets[] = $objTransition->getTargetStatus()->getIntIndex();
-            }
-            $arrMatrix[$objStatus->getIntIndex()] = $arrTargets;
+            $arrResult[$objStatus->getIntIndex()] = $objStatus;
         }
-
-        return $arrMatrix;
+        return $arrResult;
     }
 
     /**
