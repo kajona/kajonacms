@@ -18,9 +18,9 @@ use Kajona\System\System\UserGroup;
 trait FlowModelTrait
 {
     /**
-     * Method which should be called in the updateObjectToDb to change the user groups according to the current status
+     * Method which calculates the rights depending on the status of the model
      */
-    protected function calcPermissions()
+    public function calcPermissions()
     {
         $objConfig = FlowConfig::getByModelClass(get_class($this));
         if ($objConfig instanceof FlowConfig) {
@@ -29,10 +29,10 @@ trait FlowModelTrait
                 $objRights = Carrier::getInstance()->getObjRights();
                 $arrSelfPermission = [];
                 $arrSelfPermission[Rights::$STR_RIGHT_INHERIT] = 0;
-                $arrSelfPermission[Rights::$STR_RIGHT_VIEW] = $this->getShortIdArrayFromUserGroups($objStatus->getArrViewGroups());
-                $arrSelfPermission[Rights::$STR_RIGHT_EDIT] = $this->getShortIdArrayFromUserGroups($objStatus->getArrEditGroups());
-                $arrSelfPermission[Rights::$STR_RIGHT_DELETE] = $this->getShortIdArrayFromUserGroups($objStatus->getArrDeleteGroups());
-                $arrSelfPermission[Rights::$STR_RIGHT_RIGHT] = $this->getShortIdArrayFromUserGroups($objStatus->getArrRightGroups());
+                $arrSelfPermission[Rights::$STR_RIGHT_VIEW] = $this->buildPermissionRow($objStatus->getArrViewGroups());
+                $arrSelfPermission[Rights::$STR_RIGHT_EDIT] = $this->buildPermissionRow($objStatus->getArrEditGroups());
+                $arrSelfPermission[Rights::$STR_RIGHT_DELETE] = $this->buildPermissionRow($objStatus->getArrDeleteGroups());
+                $arrSelfPermission[Rights::$STR_RIGHT_RIGHT] = $this->buildPermissionRow($objStatus->getArrRightGroups());
                 $arrSelfPermission[Rights::$STR_RIGHT_RIGHT1] = "";
                 $arrSelfPermission[Rights::$STR_RIGHT_RIGHT2] = "";
                 $arrSelfPermission[Rights::$STR_RIGHT_RIGHT3] = "";
@@ -45,18 +45,33 @@ trait FlowModelTrait
         }
     }
 
-    private function getShortIdArrayFromUserGroups($arrData)
+    protected function buildPermissionRow($arrGroups) : string
     {
-        if (empty($arrData)) {
-            return "";
+        return implode(",", $this->convertPermissionToShortIds($this->getPermissionGroupIds($arrGroups)));
+    }
+
+    protected function getPermissionGroupIds($arrGroups) : array
+    {
+        if (empty($arrGroups)) {
+            return [];
         }
 
         $arrResult = [];
-        foreach ($arrData as $objObject) {
+        foreach ($arrGroups as $objObject) {
             if ($objObject instanceof UserGroup) {
-                $arrResult[] = UserGroup::getShortIdForGroupId($objObject->getSystemid());
+                $arrResult[] = $objObject->getSystemid();
+            } elseif (is_string($objObject) && validateSystemid($objObject)) {
+                $arrResult[] = $objObject;
             }
         }
-        return implode(",", $arrResult);
+
+        return $arrResult;
+    }
+
+    protected function convertPermissionToShortIds(array $arrGroups) : array
+    {
+        return array_map(function($strSystemId) {
+            return UserGroup::getShortIdForGroupId($strSystemId);
+        }, $arrGroups);
     }
 }
