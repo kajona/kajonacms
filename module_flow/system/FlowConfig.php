@@ -202,8 +202,8 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
 
             $arrDiff = array_diff_key($arrCurrentStatus, $arrNewStatus);
             if (!empty($arrDiff)) {
-                foreach ($arrDiff as $intKey) {
-                    $arrCurrentStatus[$intKey]->assertNoRecordsAreAssignedToThisStatus();
+                foreach ($arrDiff as $objStatus) {
+                    $objStatus->assertNoRecordsAreAssignedToThisStatus();
                 }
             }
         }
