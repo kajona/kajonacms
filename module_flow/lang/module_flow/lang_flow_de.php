@@ -19,9 +19,11 @@ $lang["action_transition_condition"] = "Bedingungen";
 
 $lang["form_flow_name"]         = "Name";
 $lang["form_flow_icon"]         = "Icon";
-$lang["form_flow_viewgroups"]   = "Gruppen-Ansehen";
-$lang["form_flow_editgroups"]   = "Gruppen-Bearbeiten";
-$lang["form_flow_deletegroups"] = "Gruppen-Löschen";
+$lang["form_flow_headline_groups"] = "Gruppen Konfiguration";
+$lang["form_flow_viewgroups"]   = "Ansehen";
+$lang["form_flow_editgroups"]   = "Bearbeiten";
+$lang["form_flow_deletegroups"] = "Löschen";
+$lang["form_flow_rightgroups"]  = "Rechte";
 $lang["form_flow_usergroup"]    = "Benutzergruppe";
 $lang["form_flow_transitions"]  = "Übergänge";
 

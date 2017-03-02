@@ -10,6 +10,7 @@
 namespace Kajona\Flow\Admin;
 
 use Kajona\System\Admin\AdminFormgenerator;
+use Kajona\System\Admin\Formentries\FormentryHeadline;
 use Kajona\System\System\Link;
 
 /**
@@ -28,13 +29,17 @@ class FlowStatusFormgenerator extends AdminFormgenerator
     {
         parent::generateFieldsFromObject();
 
+        $this->addField(new FormentryHeadline("headline_group"))
+            ->setStrValue($this->getLang("form_flow_headline_groups"));
+        $this->setFieldToPosition("headline_group", 3);
+
         $this->getField("viewgroups")
             ->setStrSource(Link::getLinkAdminXml("user", "getUserByFilter", "&user=false&group=true"));
-
         $this->getField("editgroups")
             ->setStrSource(Link::getLinkAdminXml("user", "getUserByFilter", "&user=false&group=true"));
-
         $this->getField("deletegroups")
+            ->setStrSource(Link::getLinkAdminXml("user", "getUserByFilter", "&user=false&group=true"));
+        $this->getField("rightgroups")
             ->setStrSource(Link::getLinkAdminXml("user", "getUserByFilter", "&user=false&group=true"));
     }
 }
