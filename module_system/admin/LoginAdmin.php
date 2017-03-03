@@ -87,7 +87,7 @@ class LoginAdmin extends AdminController implements AdminInterface
             //Loading a small login-form
             $arrTemplate = array();
             $strForm = "";
-            $strForm .= $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "adminLogin", "", true, false));
+            $strForm .= $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "adminLogin", "", true, false), "", "", "");
             $strForm .= $this->objToolkit->formInputText("name", $this->getLang("login_loginUser", "user"), "", "input-large");
             $strForm .= $this->objToolkit->formInputPassword("passwort", $this->getLang("login_loginPass", "user"), "", "input-large");
             $strForm .= $this->objToolkit->formInputSubmit($this->getLang("login_loginButton", "user"));

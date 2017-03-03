@@ -132,7 +132,7 @@ class AdminFormgenerator
         $this->strFormname = $strFormname;
         $this->objSourceobject = $objSourceobject;
 
-        $this->strOnSubmit = "$(this).on('submit', function() { return false; }); KAJONA.admin.forms.submittedEl = this; $(window).off('unload'); require('forms').animateSubmit(this); if(this.action == document.location) { routie.reload(); } else { routie(this.action.substr(this.action.indexOf('#'))); } return false;";
+        $this->strOnSubmit = "require('forms').defaultOnSubmit(this);";
         $this->objLang = Lang::getInstance();
     }
 

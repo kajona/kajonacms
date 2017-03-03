@@ -176,7 +176,7 @@ class RequestDispatcher
                         $strUrl = StringUtil::replace(_webpath_."/index.php?admin=1", "", $strUrl);
 
                         $strReturn = "<script type='text/javascript'>
-                            routie('{$strUrl}');
+                            require('router').loadUrl('{$strUrl}');
                         </script>";
 
 
@@ -220,7 +220,7 @@ class RequestDispatcher
 
                                     $strRoutieRedirect = StringUtil::replace(_webpath_."/index.php?admin=1", "", $strUrl);
                                     $strReturn = "<script type='text/javascript'>
-                                        routie('{$strRoutieRedirect}');
+                                        require('router').loadUrl('{$strRoutieRedirect}');
                                     </script>";
 
                                 }

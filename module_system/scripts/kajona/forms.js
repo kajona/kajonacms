@@ -215,6 +215,45 @@ define('forms', ['jquery', 'tooltip'], function ($, tooltip) {
         }
     };
 
+    forms.defaultOnSubmit = function (objForm) {
+        $(objForm).on('submit', function() {
+            return false;
+        });
+        KAJONA.admin.forms.submittedEl = objForm;
+        $(window).off('unload');
+
+        this.animateSubmit(objForm);
+
+
+        var $btn = $(document.activeElement);
+        if (
+            /* there is an activeElement at all */
+            $btn.length &&
+
+            /* it's a child of the form */
+            $(objForm).has($btn) &&
+
+            /* it's really a submit element */
+            $btn.is('button[type="submit"], input[type="submit"], input[type="image"]') &&
+
+            /* it has a "name" attribute */
+            $btn.is('[name]')
+            ) {
+                //nae, value
+                $(objForm).append($('<input>').attr('name', $btn.attr('name')).attr('value', $btn.val()));
+                /* access $btn.attr("name") and $btn.val() for data */
+        }
+
+
+        if(objForm.action == document.location) {
+            routie.reload();
+        } else {
+            routie(objForm.action.substr(objForm.action.indexOf('#')));
+        }
+
+        return false;
+    };
+
 
     return forms;
 
