@@ -218,8 +218,6 @@ $lang["systemtask_dbconsistency_date_ok"] = "Alle Datum-Records haben einen zuge
 $lang["systemtask_dbconsistency_firstlevel_error"] = "Nicht alle Knoten auf erster Ebene gehören zu einem Modul";
 $lang["systemtask_dbconsistency_firstlevel_ok"] = "Alle Knoten auf erster Ebene gehören zu einem Modul";
 $lang["systemtask_dbconsistency_name"]   = "Datenbankkonsistenz überprüfen";
-$lang["systemtask_dbconsistency_right_error"] = "Folgende Rechte-Records sind fehlerhaft (fehlender System-Record)";
-$lang["systemtask_dbconsistency_right_ok"] = "Alle Rechte-Records haben einen zugehörigen System-Record";
 $lang["systemtask_dbexport_error"]       = "Fehler beim Sichern der Datenbank. Weitere Informationen finden Sie im Logfile.";
 $lang["systemtask_dbexport_exclude_intro"] = "Wenn aktiviert werden aus der Sicherung sowohl die Tabelle der Statistiken als auch die Tabelle des Caches ausgenommen.";
 $lang["systemtask_dbexport_excludetitle"] = "Tabellen ausschließen";
@@ -303,6 +301,7 @@ $lang["systemtask_permissions_groupid"]     = "Relevante Gruppe";
 $lang["systemtask_permissions_finished"]     = "Ausführung abgeschlossen";
 $lang["systemtask_permissions_name"]     = "Rechte rekursiv setzen";
 $lang["generic_changelog_no_systemid"]  = "Diese Aktion kann nur mit einer gültigen Systemid aufgerufen werden. Bitte eine entsprechende Systemid angeben.";
+$lang["generic_changelog_not_versionable"]  = "Der Datensatz steht nicht unter Versionierung";
 $lang["generic_record_locked"]  = "Dieser Datensatz wurde von dem Benutzer '{0}' gesperrt und kann daher nicht bearbeitet werden.";
 
 $lang["changelog_tooltipUnit"]       = "Änderung";

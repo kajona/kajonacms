@@ -120,8 +120,8 @@ class Rights
         $arrParams[] = ",". trim($arrRights[self::$STR_RIGHT_CHANGELOG], ",").",";
         $arrParams[] = $strSystemid;
 
-        $strQuery = "UPDATE "._dbprefix_."system_right
-            SET right_inherit=?, right_view=?, right_edit=?, right_delete=?, right_right=?, right_right1=?, right_right2=?, right_right3=?, right_right4=?, right_right5=?, right_changelog=? WHERE right_id=?";
+        $strQuery = "UPDATE "._dbprefix_."system
+            SET right_inherit=?, right_view=?, right_edit=?, right_delete=?, right_right=?, right_right1=?, right_right2=?, right_right3=?, right_right4=?, right_right5=?, right_changelog=? WHERE system_id=?";
 
 
         if ($this->objDb->_pQuery($strQuery, $arrParams)) {
@@ -331,20 +331,18 @@ class Rights
     private function getPlainRightRow(string $strSystemid): array
     {
 
-        if (OrmRowcache::getCachedInitRow($strSystemid) != null && array_key_exists("right_id", OrmRowcache::getCachedInitRow($strSystemid))) {
+        if (OrmRowcache::getCachedInitRow($strSystemid) != null) {
             $arrRow = OrmRowcache::getCachedInitRow($strSystemid);
         } else {
             $strQuery = "SELECT *
-                            FROM "._dbprefix_."system,
-                                 "._dbprefix_."system_right
-                            WHERE system_id = ?
-                                AND right_id = system_id ";
+                            FROM "._dbprefix_."system
+                            WHERE system_id = ?";
 
             $arrRow = $this->objDb->getPRow($strQuery, array($strSystemid));
         }
 
         $arrRights = array();
-        if (isset($arrRow["right_id"])) {
+        if (isset($arrRow["system_id"])) {
             $arrRights[self::$STR_RIGHT_VIEW] = $arrRow["right_view"];
             $arrRights[self::$STR_RIGHT_EDIT] = $arrRow["right_edit"];
             $arrRights[self::$STR_RIGHT_DELETE] = $arrRow["right_delete"];

@@ -190,12 +190,10 @@ class FaqsFaq extends \Kajona\System\System\Model implements \Kajona\System\Syst
             $strQuery = "SELECT *
 							FROM " . _dbprefix_ . "faqs,
 							     " . _dbprefix_ . "faqs_member,
-							     " . _dbprefix_ . "system_right,
 							     " . _dbprefix_ . "system
 					   LEFT JOIN " . _dbprefix_ . "system_date
                                ON system_id = system_date_id
 							WHERE system_id = faqs_id
-							  AND system_id = right_id
 							  AND faqs_id = faqsmem_faq
 							  AND faqsmem_category = ?
 							  " . $objORM->getDeletedWhereRestriction() . "
@@ -263,26 +261,22 @@ class FaqsFaq extends \Kajona\System\System\Model implements \Kajona\System\Syst
         if ($strCat == 1) {
             $strQuery = "SELECT *
     						FROM " . _dbprefix_ . "faqs,
-    		                     " . _dbprefix_ . "system_right,
     		                     " . _dbprefix_ . "system
     		             LEFT JOIN " . _dbprefix_ . "system_date
                                ON system_id = system_date_id
     		                WHERE system_id = faqs_id
     		                  AND system_status = 1
     		                  " . $objORM->getDeletedWhereRestriction() . "
-    		                  AND system_id = right_id
     						ORDER BY faqs_question ASC";
         } else {
             $strQuery = "SELECT *
     						FROM " . _dbprefix_ . "faqs,
     						     " . _dbprefix_ . "faqs_member,
-    		                     " . _dbprefix_ . "system_right,
     		                     " . _dbprefix_ . "system
     		           LEFT JOIN " . _dbprefix_ . "system_date
                                ON system_id = system_date_id
     		                WHERE system_id = faqs_id
     		                  AND faqs_id = faqsmem_faq
-    		                  AND system_id = right_id
     		                  AND faqsmem_category = ?
     		                  AND system_status = 1
     		                  " . $objORM->getDeletedWhereRestriction() . "
