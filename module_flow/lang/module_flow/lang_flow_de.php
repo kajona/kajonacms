@@ -10,6 +10,8 @@ $lang["modul_titel_transition_condition"] = "Bedingungen";
 
 $lang["list_flow"]              = "Einstellungen";
 $lang["list_flow_long_description"] = "Erstellt am: {0}";
+$lang["list_flow_no_status"] = "Kein Status vorhanden";
+$lang["list_flow_no_right"] = "Keine Berechtigung";
 
 $lang["action_steps"]           = "Workflow-Schritte";
 $lang["action_transitions"]     = "Übergänge";

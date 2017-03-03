@@ -39,6 +39,11 @@ trait FlowControllerTrait
         }
 
         $strIcon = AdminskinHelper::getAdminImage($objCurrentStatus->getStrIcon(), $objCurrentStatus->getStrDisplayName());
+
+        if (!$objListEntry->rightEdit()) {
+            return $strIcon;
+        }
+
         $strMenuId = "status-menu-" . generateSystemid();
         $strDropdownId = "status-dropdown-" . generateSystemid();
         $strReturn = $this->objToolkit->listButton(
@@ -144,6 +149,10 @@ require(["jquery", "ajax"], function($, ajax){
             return "";
         }
 
+        if (!$objObject->rightEdit()) {
+            return "<ul><li class='dropdown-header'>" . $this->getLang("list_flow_no_right", "flow") . "</li></ul>";
+        }
+
         $strClass = $objObject->getSystemid() . "-errors";
         $arrTransitions = $this->objFlowManager->getPossibleTransitionsForModel($objObject);
         $objFlow = $this->objFlowManager->getFlowForModel($objObject);
@@ -210,6 +219,6 @@ HTML;
             }
         }
 
-        return "<ul><li class='dropdown-header'>No status available</li></ul>";
+        return "<ul><li class='dropdown-header'>" . $this->getLang("list_flow_no_status", "flow") . "</li></ul>";
     }
 }
