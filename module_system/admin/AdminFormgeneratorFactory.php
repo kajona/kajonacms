@@ -21,8 +21,8 @@ use Kajona\System\System\Reflection;
  * @since  4.8
  * @module module_system
  */
-class AdminFormgeneratorFactory {
-
+class AdminFormgeneratorFactory
+{
     const STR_FORMGENERATOR_ANNOTATION = "@formGenerator";
 
     /**
@@ -34,43 +34,56 @@ class AdminFormgeneratorFactory {
 
     /**
      * Returns the fitting form generator for the model. The result is cached so that the a model returns always the
-     * same instance
+     * same instance for a specific object
      *
      * @param ModelInterface $objInstance
      * @return AdminFormgenerator
      * @throws Exception
      */
-    public static function createByModel(ModelInterface $objInstance) {
+    public static function createByModel(ModelInterface $objInstance)
+    {
         // check whether the form was already generated
         $objForm = self::getFormForModel($objInstance);
-        if($objForm !== null) {
+        if ($objForm !== null) {
             return $objForm;
         }
 
+        $objForm = self::newFormGenerator($objInstance);
+
+        return self::$arrForms[self::getKeyByModel($objInstance)] = $objForm;
+    }
+
+    /**
+     * Creates a form generator instance. This should only be used in some special cases where you dont want that the
+     * form is cached. So this method returns always a new form generator instance.
+     *
+     * @param ModelInterface $objInstance
+     * @return AdminFormgenerator|null
+     * @throws Exception
+     * @internal
+     */
+    public static function newFormGenerator(ModelInterface $objInstance)
+    {
         // check whether a specific form generator class was specified per annotation
         $objReflection = new Reflection($objInstance);
         $arrValues = $objReflection->getAnnotationValuesFromClass(self::STR_FORMGENERATOR_ANNOTATION);
 
-        if(!empty($arrValues)) {
+        if (!empty($arrValues)) {
             $strClass = current($arrValues);
-            if(class_exists($strClass)) {
+            if (class_exists($strClass)) {
                 $objForm = new $strClass($objInstance->getArrModule("module"), $objInstance);
-            }
-            else {
+            } else {
                 throw new Exception("Provided form generator class does not exist", Exception::$level_ERROR);
             }
-        }
-        else {
+        } else {
             $objForm = new AdminFormgenerator($objInstance->getArrModule("module"), $objInstance);
         }
 
         // check whether we have an correct instance
-        if($objForm instanceof AdminFormgenerator) {
+        if ($objForm instanceof AdminFormgenerator) {
             $objForm->generateFieldsFromObject();
-
-            return self::$arrForms[self::getKeyByModel($objInstance)] = $objForm;
-        }
-        else {
+            return $objForm;
+        } else {
             throw new Exception("Provided form generator must be an instance of AdminFormgenerator", Exception::$level_ERROR);
         }
     }
@@ -80,7 +93,8 @@ class AdminFormgeneratorFactory {
      *
      * @return boolean
      */
-    public static function hasModel(ModelInterface $objInstance) {
+    public static function hasModel(ModelInterface $objInstance)
+    {
         return self::getFormForModel($objInstance) !== null;
     }
 
@@ -90,7 +104,8 @@ class AdminFormgeneratorFactory {
      * @param ModelInterface $objInstance
      * @return AdminFormgenerator|null
      */
-    public static function getFormForModel(ModelInterface $objInstance) {
+    public static function getFormForModel(ModelInterface $objInstance)
+    {
         $strKey = self::getKeyByModel($objInstance);
         return isset(self::$arrForms[$strKey]) ? self::$arrForms[$strKey] : null;
     }
@@ -101,7 +116,8 @@ class AdminFormgeneratorFactory {
      * @param ModelInterface $objInstance
      * @return string
      */
-    public static function getKeyByModel(ModelInterface $objInstance) {
+    public static function getKeyByModel(ModelInterface $objInstance)
+    {
         return get_class($objInstance) . $objInstance->getSystemid();
     }
 }
