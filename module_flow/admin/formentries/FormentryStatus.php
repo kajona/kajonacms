@@ -20,6 +20,10 @@ use Kajona\System\System\Reflection;
  */
 class FormentryStatus extends FormentryToggleButtonbar
 {
+    /**
+     * This annotation can be used to specify a concrete model class in case the formentry is used in a filter.
+     * Otherwise the class of the source object is used
+     */
     const STR_MODEL_ANNOTATION = "@fieldModelClass";
 
     /**
