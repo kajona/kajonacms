@@ -58,7 +58,7 @@ class FlowStatus extends Model implements ModelInterface, AdminListableInterface
      * @objectList flow_status2view (source="status_system_id", target="usergroup_system_id", type={"Kajona\\System\\System\\UserGroup"})
      * @fieldType Kajona\System\Admin\Formentries\FormentryObjecttags
      */
-    protected $arrViewGroups;
+    //protected $arrViewGroups;
 
     /**
      * @var UserGroup[]
@@ -72,14 +72,14 @@ class FlowStatus extends Model implements ModelInterface, AdminListableInterface
      * @objectList flow_status2delete (source="status_system_id", target="usergroup_system_id", type={"Kajona\\System\\System\\UserGroup"})
      * @fieldType Kajona\System\Admin\Formentries\FormentryObjecttags
      */
-    protected $arrDeleteGroups;
+    //protected $arrDeleteGroups;
 
     /**
      * @var UserGroup[]
      * @objectList flow_status2right (source="status_system_id", target="usergroup_system_id", type={"Kajona\\System\\System\\UserGroup"})
      * @fieldType Kajona\System\Admin\Formentries\FormentryObjecttags
      */
-    protected $arrRightGroups;
+    //protected $arrRightGroups;
 
     /**
      * @return string
