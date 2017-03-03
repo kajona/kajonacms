@@ -283,4 +283,39 @@ class FlowStatus extends Model implements ModelInterface, AdminListableInterface
             throw new \RuntimeException("There are already " . $intCount . " records assigned to the status " . $intStatus);
         }
     }
+
+    /**
+     * Removes all transitions of this status and sets the new transitions according to the provided status array
+     *
+     * @param FlowStatus[]
+     */
+    public function setTargets(array $arrStatus)
+    {
+        try {
+            Database::getInstance()->transactionBegin();
+
+            // remove all existing transitions
+            $arrTransition = $this->getArrTransitions();
+            foreach ($arrTransition as $objTransition) {
+                $objTransition->deleteObject();
+            }
+
+            // set new transitions
+            foreach ($arrStatus as $objStatus) {
+                if ($objStatus instanceof FlowStatus) {
+                    $objTransition = new FlowTransition();
+                    $objTransition->setStrTargetStatus($objStatus->getSystemid());
+                    $objTransition->updateObjectToDb($this->getSystemid());
+                } else {
+                    throw new \InvalidArgumentException("Provided value is no FlowStatus object");
+                }
+            }
+
+            Database::getInstance()->transactionCommit();
+            return true;
+        } catch (\Exception $e) {
+            Database::getInstance()->transactionRollback();
+            return false;
+        }
+    }
 }
