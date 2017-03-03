@@ -202,13 +202,13 @@ class CommonSortmanager implements SortmanagerInterface
         }
 
         //Load all elements on the same level, so at first get the prev id
-        $strQuery = "SELECT system_id, system_sort, system_comment
+        $strQuery = "SELECT system_id, system_sort
                          FROM "._dbprefix_."system
                          WHERE system_prev_id=? AND system_id != '0'
                            AND system_deleted = 0
                            AND system_sort > -1
                          ".$strWhere."
-                         ORDER BY system_sort ASC, system_comment ASC";
+                         ORDER BY system_sort ASC";
 
         //No caching here to allow multiple shiftings per request
         $arrElements = $this->objDB->getPArray($strQuery, $arrParams, null, null, false);

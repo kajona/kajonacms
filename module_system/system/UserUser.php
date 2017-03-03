@@ -205,7 +205,7 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
         $strDbPrefix = _dbprefix_;
 
         $strQuery = "SELECT user_tbl.user_id
-                      FROM {$strDbPrefix}system, {$strDbPrefix}user AS user_tbl
+                      FROM {$strDbPrefix}system, ".Carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_."user")." AS user_tbl
                       LEFT JOIN {$strDbPrefix}user_kajona AS user_kajona ON user_tbl.user_id = user_kajona.user_id
                       WHERE
                           (user_tbl.user_username LIKE ? OR user_kajona.user_forename LIKE ? OR user_kajona.user_name LIKE ?)

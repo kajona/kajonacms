@@ -328,7 +328,7 @@ class DbPostgres extends DbBase
         }
 
         //build the mysql code
-        $strQuery .= "CREATE TABLE ".$strName." ( \n";
+        $strQuery .= "CREATE TABLE ".$this->encloseTableName($strName)." ( \n";
 
         //loop the fields
         foreach ($arrFields as $strFieldName => $arrColumnSettings) {
@@ -362,9 +362,9 @@ class DbPostgres extends DbBase
         if ($bitCreate && count($arrIndices) > 0) {
             foreach ($arrIndices as $strOneIndex) {
                 if (is_array($strOneIndex)) {
-                    $strQuery = "CREATE INDEX ix_".generateSystemid()." ON ".$strName." ( ".implode(", ", $strOneIndex).") ";
+                    $strQuery = "CREATE INDEX ix_".generateSystemid()." ON ".$this->encloseTableName($strName)." ( ".implode(", ", $strOneIndex).") ";
                 } else {
-                    $strQuery = "CREATE INDEX ix_".generateSystemid()." ON ".$strName." ( ".$strOneIndex.") ";
+                    $strQuery = "CREATE INDEX ix_".generateSystemid()." ON ".$this->encloseTableName($strName)." ( ".$strOneIndex.") ";
                 }
                 $bitCreate = $bitCreate && $this->_pQuery($strQuery, array());
             }
@@ -478,6 +478,12 @@ class DbPostgres extends DbBase
         Logger::getInstance(Logger::DBLOG)->addLogRow($this->strRestoreBin." exited with code ".$intTemp, Logger::$levelInfo);
         return $intTemp == 0;
     }
+
+    public function encloseTableName($strTable)
+    {
+        return "\"{$strTable}\"";
+    }
+
 
     /**
      * @param string $strValue

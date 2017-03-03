@@ -90,11 +90,11 @@ Formally, a blocks-element is created using a kajona-blocks tag:
 	
 Containing a kajona-block:	
 
-	<kajona-block kajona-name="block name"> [markup, placeholder] </kajona-blocks>
+	<kajona-block kajona-name="block name"> [markup, placeholder] </kajona-block>
 
 So, if the template is used for a new page, the page-admin has to following options: 
-* To create a headline block within the headline block
-* To create on or more of the block elements within the page intro block
+* To create a headline block within the headline blocks
+* To create one or more of the block elements within the page intro blocks
 
 Possible usages of the structure could be:
 

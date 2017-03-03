@@ -290,19 +290,19 @@ class RightsTest extends Testbase
         //fill caches
         SystemAspect::getObjectListFiltered();
 
-        $arrRow = Carrier::getInstance()->getObjDB()->getPRow("SELECT * FROM " . _dbprefix_ . "system_right WHERE right_id = ?", array($objAspect->getSystemid()), 0, false);
+        $arrRow = Carrier::getInstance()->getObjDB()->getPRow("SELECT * FROM " . _dbprefix_ . "system WHERE system_id = ?", array($objAspect->getSystemid()), 0, false);
         $this->assertTrue(!in_array($strGroupShortId, explode(",", $arrRow["right_view"])));
         $this->assertTrue(!Carrier::getInstance()->getObjRights()->checkPermissionForGroup($strGroupId, Rights::$STR_RIGHT_VIEW, $objAspect->getSystemid()));
 
         Carrier::getInstance()->getObjRights()->addGroupToRight($strGroupId, $objAspect->getSystemid(), Rights::$STR_RIGHT_VIEW);
 
-        $arrRow = Carrier::getInstance()->getObjDB()->getPRow("SELECT * FROM " . _dbprefix_ . "system_right WHERE right_id = ?", array($objAspect->getSystemid()), 0, false);
+        $arrRow = Carrier::getInstance()->getObjDB()->getPRow("SELECT * FROM " . _dbprefix_ . "system WHERE system_id = ?", array($objAspect->getSystemid()), 0, false);
         $this->assertTrue(in_array($strGroupShortId, explode(",", $arrRow["right_view"])));
         $this->assertTrue(Carrier::getInstance()->getObjRights()->checkPermissionForGroup($strGroupId, Rights::$STR_RIGHT_VIEW, $objAspect->getSystemid()));
 
         SystemAspect::getObjectListFiltered();
 
-        $arrRow = Carrier::getInstance()->getObjDB()->getPRow("SELECT * FROM " . _dbprefix_ . "system_right WHERE right_id = ?", array($objAspect->getSystemid()), 0, false);
+        $arrRow = Carrier::getInstance()->getObjDB()->getPRow("SELECT * FROM " . _dbprefix_ . "system WHERE system_id = ?", array($objAspect->getSystemid()), 0, false);
         $this->assertTrue(in_array($strGroupShortId, explode(",", $arrRow["right_view"])));
         $this->assertTrue(Carrier::getInstance()->getObjRights()->checkPermissionForGroup($strGroupId, Rights::$STR_RIGHT_VIEW, $objAspect->getSystemid()));
 
@@ -345,7 +345,7 @@ class RightsTest extends Testbase
 
         $objCommon = new SystemAspect($strRootNode);
         //var_dump($objCommon->getSystemRecord());
-        echo $objCommon->getRecordComment() . " / (v: " . $this->objRights->rightView($strRootNode, $this->strUserId) . " e: " . $this->objRights->rightEdit($strRootNode, $this->strUserId) . ") /  " . $objCommon->getSystemid() . "\n";
+        echo " / (v: " . $this->objRights->rightView($strRootNode, $this->strUserId) . " e: " . $this->objRights->rightEdit($strRootNode, $this->strUserId) . ") /  " . $objCommon->getSystemid() . "\n";
 
         //var_dump($objCommon->getChildNodesAsIdArray());
         foreach ($objCommon->getChildNodesAsIdArray() as $strOneId)

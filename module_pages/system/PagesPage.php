@@ -279,14 +279,12 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
     {
         $objORM = new OrmObjectlist();
         $strQuery = "SELECT *
-                          FROM "._dbprefix_."system_right,
-                               "._dbprefix_."page,
+                          FROM "._dbprefix_."page,
                                "._dbprefix_."page_properties,
                        ".$this->objDB->encloseTableName(_dbprefix_."system")."
                      LEFT JOIN "._dbprefix_."system_date
                             ON system_id = system_date_id
-                         WHERE system_id = right_id
-                           AND system_id = page_id
+                         WHERE system_id = page_id
                            AND page_id = pageproperties_id
                            AND system_id = ?
                            ".$objORM->getDeletedWhereRestriction()."
@@ -296,13 +294,11 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
 
         if (!isset($arrRow["page_id"]) || $arrRow["page_id"] == null) {
             $strQuery = "SELECT *
-                          FROM "._dbprefix_."system_right,
-                               "._dbprefix_."page,
+                          FROM "._dbprefix_."page,
                    ".$this->objDB->encloseTableName(_dbprefix_."system")."
                      LEFT JOIN "._dbprefix_."system_date
                             ON system_id = system_date_id
-                         WHERE system_id = right_id
-                           AND system_id = page_id
+                         WHERE system_id = page_id
                            ".$objORM->getDeletedWhereRestriction()."
                            AND system_id = ? ";
 
