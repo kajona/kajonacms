@@ -33,13 +33,9 @@ class FlowStatusFormgenerator extends AdminFormgenerator
             ->setStrValue($this->getLang("form_flow_headline_groups"));
         $this->setFieldToPosition("headline_group", 3);
 
-        $this->getField("viewgroups")
-            ->setStrSource(Link::getLinkAdminXml("user", "getUserByFilter", "&user=false&group=true"));
-        $this->getField("editgroups")
-            ->setStrSource(Link::getLinkAdminXml("user", "getUserByFilter", "&user=false&group=true"));
-        $this->getField("deletegroups")
-            ->setStrSource(Link::getLinkAdminXml("user", "getUserByFilter", "&user=false&group=true"));
-        $this->getField("rightgroups")
-            ->setStrSource(Link::getLinkAdminXml("user", "getUserByFilter", "&user=false&group=true"));
+        //$this->getField("viewgroups")->setStrSource(Link::getLinkAdminXml("user", "getUserByFilter", "&user=false&group=true"));
+        $this->getField("editgroups")->setStrSource(Link::getLinkAdminXml("user", "getUserByFilter", "&user=false&group=true"));
+        //$this->getField("deletegroups")->setStrSource(Link::getLinkAdminXml("user", "getUserByFilter", "&user=false&group=true"));
+        //$this->getField("rightgroups")->setStrSource(Link::getLinkAdminXml("user", "getUserByFilter", "&user=false&group=true"));
     }
 }
