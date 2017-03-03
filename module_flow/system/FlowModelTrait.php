@@ -27,18 +27,10 @@ trait FlowModelTrait
             $objStatus = $objConfig->getStatusByIndex($this->getIntRecordStatus());
             if ($objStatus instanceof FlowStatus) {
                 $objRights = Carrier::getInstance()->getObjRights();
-                $arrSelfPermission = [];
+
+                $arrSelfPermission = $objRights->getArrayRights($this->getSystemid());
                 $arrSelfPermission[Rights::$STR_RIGHT_INHERIT] = 0;
-                $arrSelfPermission[Rights::$STR_RIGHT_VIEW] = $this->buildPermissionRow($objStatus->getArrViewGroups());
                 $arrSelfPermission[Rights::$STR_RIGHT_EDIT] = $this->buildPermissionRow($objStatus->getArrEditGroups());
-                $arrSelfPermission[Rights::$STR_RIGHT_DELETE] = $this->buildPermissionRow($objStatus->getArrDeleteGroups());
-                $arrSelfPermission[Rights::$STR_RIGHT_RIGHT] = $this->buildPermissionRow($objStatus->getArrRightGroups());
-                $arrSelfPermission[Rights::$STR_RIGHT_RIGHT1] = "";
-                $arrSelfPermission[Rights::$STR_RIGHT_RIGHT2] = "";
-                $arrSelfPermission[Rights::$STR_RIGHT_RIGHT3] = "";
-                $arrSelfPermission[Rights::$STR_RIGHT_RIGHT4] = "";
-                $arrSelfPermission[Rights::$STR_RIGHT_RIGHT5] = "";
-                $arrSelfPermission[Rights::$STR_RIGHT_CHANGELOG] = "";
 
                 $objRights->setRights($arrSelfPermission, $this->getSystemid());
             }
