@@ -123,6 +123,12 @@ class Rights
         $strQuery = "UPDATE "._dbprefix_."system
             SET right_inherit=?, right_view=?, right_edit=?, right_delete=?, right_right=?, right_right1=?, right_right2=?, right_right3=?, right_right4=?, right_right5=?, right_changelog=? WHERE system_id=?";
 
+        if (SystemModule::getModuleByName("system") !== null && version_compare(SystemModule::getModuleByName("system")->getStrVersion(), "6.2.3", "<")) {
+            $strQuery = "UPDATE "._dbprefix_."system_right
+            SET right_inherit=?, right_view=?, right_edit=?, right_delete=?, right_right=?, right_right1=?, right_right2=?, right_right3=?, right_right4=?, right_right5=?, right_changelog=? WHERE right_id=?";
+
+        }
+
 
         if ($this->objDb->_pQuery($strQuery, $arrParams)) {
             //Flush the cache so later lookups will match the new rights
@@ -340,6 +346,17 @@ class Rights
 
             $arrRow = $this->objDb->getPRow($strQuery, array($strSystemid));
         }
+
+
+        if (SystemModule::getModuleByName("system") !== null && version_compare(SystemModule::getModuleByName("system")->getStrVersion(), "6.2.3", "<") && !isset($arrRow["right_view"])) {
+            $strQuery = "SELECT *
+                            FROM "._dbprefix_."system_right, "._dbprefix_."system
+                            WHERE right_id = ? AND system_id = right_id";
+
+            $arrRow = $this->objDb->getPRow($strQuery, array($strSystemid));
+
+        }
+
 
         $arrRights = array();
         if (isset($arrRow["system_id"])) {

@@ -1068,30 +1068,63 @@ abstract class Root
                 )
             );
         } else {
-            //So, lets generate the record
-            $strQuery = "INSERT INTO "._dbprefix_."system
+
+            if (SystemModule::getModuleByName("system") != null && version_compare(SystemModule::getModuleByName("system")->getStrVersion(), "6.2.3", "<")) {
+                //So, lets generate the record
+                $strQuery = "INSERT INTO "._dbprefix_."system
+                     ( system_id, system_prev_id, system_module_nr, system_owner, system_create_date, system_lm_user,
+                       system_lm_time, system_status, system_sort, system_class, system_deleted) VALUES
+                     (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+                //Send the query to the db
+                $this->objDB->_pQuery(
+                    $strQuery,
+                    array(
+                        $strSystemId,
+                        $strPrevId,
+                        $this->getIntModuleNr(),
+                        $this->objSession->getUserID(),
+                        Date::getCurrentTimestamp(),
+                        $this->objSession->getUserID(),
+                        time(),
+                        (int)$this->getIntRecordStatus(),
+                        $this->getNextSortValue($strPrevId),
+                        $this->getStrRecordClass(),
+                        $this->getIntRecordDeleted()
+
+                    )
+                );
+
+                //we need a Rights-Record
+                $this->objDB->_pQuery("INSERT INTO "._dbprefix_."system_right (right_id, right_inherit) VALUES (?, 1)", array($strSystemId));
+
+            } else {
+
+                //So, lets generate the record
+                $strQuery = "INSERT INTO "._dbprefix_."system
                      ( system_id, system_prev_id, system_module_nr, system_owner, system_create_date, system_lm_user,
                        system_lm_time, system_status, system_sort, system_class, system_deleted, right_inherit) VALUES
                      (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-            //Send the query to the db
-            $this->objDB->_pQuery(
-                $strQuery,
-                array(
-                    $strSystemId,
-                    $strPrevId,
-                    $this->getIntModuleNr(),
-                    $this->objSession->getUserID(),
-                    Date::getCurrentTimestamp(),
-                    $this->objSession->getUserID(),
-                    time(),
-                    (int)$this->getIntRecordStatus(),
-                    $this->getNextSortValue($strPrevId),
-                    $this->getStrRecordClass(),
-                    $this->getIntRecordDeleted(),
-                    1
-                )
-            );
+                //Send the query to the db
+                $this->objDB->_pQuery(
+                    $strQuery,
+                    [
+                        $strSystemId,
+                        $strPrevId,
+                        $this->getIntModuleNr(),
+                        $this->objSession->getUserID(),
+                        Date::getCurrentTimestamp(),
+                        $this->objSession->getUserID(),
+                        time(),
+                        (int)$this->getIntRecordStatus(),
+                        $this->getNextSortValue($strPrevId),
+                        $this->getStrRecordClass(),
+                        $this->getIntRecordDeleted(),
+                        1
+                    ]
+                );
+            }
         }
 
         //we need a Rights-Record
