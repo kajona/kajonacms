@@ -719,7 +719,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
 
         $strReturn .= "Updating users and groups\n";
-        $arrRightsRow = Rights::getInstance()->getArrayRights(SystemModule::getModuleIdByNr(_user_modul_id_));
+        $arrRightsRow = $this->objDB->getPRow("SELECT * FROM "._dbprefix_."system_right WHERE right_id = ?", array(SystemModule::getModuleIdByNr(_user_modul_id_)));
 
         foreach($this->objDB->getPArray("SELECT * FROM "._dbprefix_."user", array()) as $arrOneRow) {
             //fire two inserts
