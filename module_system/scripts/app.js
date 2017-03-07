@@ -22,6 +22,7 @@ require(['router', 'jquery', 'jquery-ui', 'jquery-touchPunch', 'bootstrap', 'v4s
 
     $ = jquery;
 
+    //register the global router
     router.init();
 
     // BC layer
@@ -33,7 +34,6 @@ require(['router', 'jquery', 'jquery-ui', 'jquery-touchPunch', 'bootstrap', 'v4s
 
     KAJONA.admin.forms.submittedEl = null;
 
-    //register the global router
 
 
 

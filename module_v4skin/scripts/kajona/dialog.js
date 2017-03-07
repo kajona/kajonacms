@@ -21,7 +21,7 @@ define(['jquery', 'bootstrap'], function ($, bootstrap) {
             this.bitLarge = bitLarge
         };
 
-        this.setContent = function (strContent, strConfirmButton, strLinkHref) {
+        this.setContent = function (strContent, strConfirmButton, strLinkHref, blockHide) {
 
             if (intDialogType == 1) {
                 this.unbindEvents();
@@ -39,7 +39,9 @@ define(['jquery', 'bootstrap'], function ($, bootstrap) {
                     $confirmButton.click(function() {
                         var objReturn = strLinkHref();
 
-                        self.hide();
+                        if(!blockHide) {
+                            self.hide();
+                        }
 
                         if(bitUnbind) {
                             $confirmButton.unbind();
@@ -54,7 +56,10 @@ define(['jquery', 'bootstrap'], function ($, bootstrap) {
                 else {
                     $confirmButton.click(function() {
                         window.location = strLinkHref;
-                        self.hide();
+
+                        if(!blockHide) {
+                            self.hide();
+                        }
 
                         if(bitUnbind) {
                             $confirmButton.unbind();

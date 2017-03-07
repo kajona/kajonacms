@@ -72,7 +72,7 @@ define('lists', ['jquery', 'lang'], function ($, lang) {
             curConfirm = curConfirm.replace('%title%', strTitle);
 
             jsDialog_1.setTitle(this.strDialogTitle);
-            jsDialog_1.setContent(curConfirm, this.strDialogStart,  'javascript:require(\'lists\').executeActions();');
+            jsDialog_1.setContent(curConfirm, this.strDialogStart,  'javascript:require(\'lists\').executeActions();', true);
             jsDialog_1.init();
 
             //reset pending list on hide
@@ -131,7 +131,8 @@ define('lists', ['jquery', 'lang'], function ($, lang) {
                 $('.progress > .progress-bar').html('100%');
 
                 if (!this.bitRenderInfo) {
-                    document.location.reload();
+                    require('router').reload();
+                    jsDialog_1.hide();
                 }
                 else {
                     $('#jsDialog_1_cancelButton').css('display', 'none');

@@ -97,6 +97,10 @@ define("router", ['jquery', 'contentToolbar', 'tooltip', 'breadcrumb', 'moduleNa
 
         },
 
+        reload : function() {
+            routie.reload();
+        },
+
         init : function() {
             initRouter();
         }
