@@ -184,9 +184,9 @@ class LoginAdmin extends AdminController implements AdminInterface
     {
         $arrTemplate = array();
         $arrTemplate["name"] = $this->objSession->getUsername();
-        $arrTemplate["profile"] = Link::getLinkAdminHref("user", "edit", "userid=".$this->objSession->getUserID(), false, true);
-        $arrTemplate["logout"] = Link::getLinkAdminHref($this->getArrModule("modul"), "adminLogout");
-        $arrTemplate["dashboard"] = Link::getLinkAdminHref("dashboard", "", "", false, true);
+        $arrTemplate["profile"] = Link::getLinkAdminHref("user", "edit", "userid=".$this->objSession->getUserID(), false);
+        $arrTemplate["logout"] = Link::getLinkAdminHref($this->getArrModule("modul"), "adminLogout", "", true, false);
+        $arrTemplate["dashboard"] = Link::getLinkAdminHref("dashboard", "", "", false);
         $arrTemplate["statusTitle"] = $this->getLang("login_statusTitle", "user");
         $arrTemplate["profileTitle"] = $this->getLang("login_profileTitle", "user");
         $arrTemplate["logoutTitle"] = $this->getLang("login_logoutTitle", "user");
@@ -246,7 +246,7 @@ class LoginAdmin extends AdminController implements AdminInterface
     protected function actionAdminlogout()
     {
         $this->objSession->logout();
-        ResponseObject::getInstance()->setStrRedirectUrl(Link::getLinkAdminHref("login"));
+        ResponseObject::getInstance()->setStrRedirectUrl(Link::getLinkAdminHref("login", "", "", true, false));
     }
 
 
