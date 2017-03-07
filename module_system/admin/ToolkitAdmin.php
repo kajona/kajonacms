@@ -845,12 +845,11 @@ class ToolkitAdmin extends Toolkit
      */
     public function formInputTagEditor($strName, $strTitle = "", array $arrValues = array(), $strOnChange = null)
     {
-
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["values"] = json_encode(array_values($arrValues));
-        $arrTemplate["onChange"] = empty($strOnChange) ? "function(){}" : (string)$strOnChange;
+        $arrTemplate["onChange"] = empty($strOnChange) ? "function(field, editor, tags){ $(field).attr('name', $(field).data('name')); $(field).val(tags.join(',')); }" : (string)$strOnChange;
 
         return $this->objTemplate->fillTemplateFile($arrTemplate, "/elements.tpl", "input_tageditor", true);
     }
