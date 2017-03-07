@@ -221,7 +221,7 @@ class LoginAdmin extends AdminController implements AdminInterface
 
             return true;
         } else {
-            ResponseObject::getInstance()->setStrRedirectUrl(Link::getLinkAdminHref("login", "login", "&loginerror=1"));
+            ResponseObject::getInstance()->setStrRedirectUrl(Link::getLinkAdminHref("login", "login", "&loginerror=1", true, false));
             return false;
         }
     }
