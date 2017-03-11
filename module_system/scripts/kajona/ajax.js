@@ -80,7 +80,7 @@ define('ajax', ['jquery', 'statusDisplay', 'workingIndicator', 'tooltip'], funct
         },
 
 
-        genericAjaxCall : function(module, action, systemid, objCallback) {
+        genericAjaxCall : function(module, action, systemid, objCallback, objDoneCallback, objErrorCallback) {
             var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module='+module+'&action='+action;
             var data;
             if(systemid) {
@@ -99,7 +99,15 @@ define('ajax', ['jquery', 'statusDisplay', 'workingIndicator', 'tooltip'], funct
                 function(response) {
                     workingIndicator.stop();
                 }
-            );
+            ).error(function() {
+                if(objErrorCallback) {
+                    objErrorCallback();
+                }
+            }).done(function() {
+                if(objDoneCallback) {
+                    objDoneCallback();
+                }
+            });
 
         },
 

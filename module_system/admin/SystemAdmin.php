@@ -1472,6 +1472,43 @@ JS;
         return $strReturn;
     }
 
+    /**
+     * Updates a single property of an obejct. used by the js-insite-editor.
+     * @permissions edit
+     * @return string
+     */
+    protected function actionUpdateObjectProperty()
+    {
+        //get the object to update
+        $objObject = Objectfactory::getInstance()->getObject($this->getSystemid());
+        if ($objObject->rightEdit()) {
+            //any other object - try to find the matching property and write the value
+            if ($this->getParam("property") == "") {
+                ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_BADREQUEST);
+                return "<message><error>missing property param</error></message>";
+            }
+
+            $objReflection = new Reflection($objObject);
+            $strSetter = $objReflection->getSetter($this->getParam("property"));
+            if ($strSetter == null) {
+                ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_BADREQUEST);
+                return "<message><error>setter not found</error></message>";
+            }
+
+            $objObject->{$strSetter}($this->getParam("value"));
+            if ($objObject->updateObjectToDb()) {
+                $strReturn = "<message><success>object update succeeded</success></message>";
+            } else {
+                $strReturn = "<message><error>object update failed</error></message>";
+            }
+
+        } else {
+            ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
+            $strReturn = "<message><error>".$this->getLang("ds_gesperrt").".".$this->getLang("commons_error_permissions")."</error></message>";
+        }
+        return $strReturn;
+    }
+
 
     /**
      * Deletes are record identified by its systemid
