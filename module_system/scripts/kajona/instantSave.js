@@ -27,9 +27,7 @@ define(['jquery', 'ajax'], function ($, ajax) {
                 }, 5000)
             },
             function() {
-                $editable.addClass('peFailed');
                 objStatusIndicator.addClass('peFailed');
-
                 window.setTimeout(function () {
                     objStatusIndicator.hide();
                 }, 5000)
@@ -52,14 +50,12 @@ define(['jquery', 'ajax'], function ($, ajax) {
         var objSourceElement = $objSourceElement;
 
         this.showProgress = function () {
-
             objDiv = $('<div>').addClass('peProgressIndicator peSaving');
             $('body').append(objDiv);
-            objDiv.css('left', objSourceElement.offset().left+objSourceElement.width()).css('top', objSourceElement.offset().top);
+            objDiv.css('left', objSourceElement.offset().left+objSourceElement.width()+10).css('top', objSourceElement.offset().top);
         };
 
         this.addClass = function(strClass) {
-
             objDiv.addClass(strClass);
         };
 
@@ -71,12 +67,17 @@ define(['jquery', 'ajax'], function ($, ajax) {
     };
 
     scanElements = function() {
-        $('[data-kajona-instantsave]').each(function(key, value) {
+        console.log('starting init');
+        $('[data-kajona-instantsave][data-kajona-instantsave != ""]').each(function(key, value) {
+            console.log('added element '+$(this).data('kajona-instantsave'));
             $(this).on('change', saveChangeHandler);
         });
+        console.log('finished init');
     };
 
     return {
-
+        init : function() {
+            scanElements();
+        }
     };
 });

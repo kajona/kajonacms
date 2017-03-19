@@ -410,7 +410,7 @@ Regular Text-Field
     <div class="form-group">
         <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
         <div class="col-sm-6 %%class%%">
-            <input type="text" id="%%name%%" name="%%name%%" value="%%value%%" class="form-control" %%readonly%%>
+            <input type="text" id="%%name%%" name="%%name%%" value="%%value%%" class="form-control" %%readonly%% data-kajona-instantsave="%%instantEditor%%">
         </div>
         <div class="col-sm-2 form-opener">
             %%opener%%

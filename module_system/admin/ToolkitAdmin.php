@@ -279,7 +279,7 @@ class ToolkitAdmin extends Toolkit
      *
      * @return string
      */
-    public function formInputText($strName, $strTitle = "", $strValue = "", $strClass = "", $strOpener = "", $bitReadonly = false)
+    public function formInputText($strName, $strTitle = "", $strValue = "", $strClass = "", $strOpener = "", $bitReadonly = false, $strInstantEditor = "")
     {
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
@@ -287,6 +287,7 @@ class ToolkitAdmin extends Toolkit
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["class"] = $strClass;
         $arrTemplate["opener"] = $strOpener;
+        $arrTemplate["instantEditor"] = $strInstantEditor;
         $arrTemplate["readonly"] = ($bitReadonly ? "readonly=\"readonly\"" : "");
 
         return $this->objTemplate->fillTemplateFile($arrTemplate, "/elements.tpl", "input_text");

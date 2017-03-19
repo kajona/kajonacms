@@ -394,7 +394,7 @@ class SystemAdmin extends AdminEvensimpler implements AdminInterface
                 } elseif ($objOneSetting->getIntType() == 3) {
                     $strRows .= $this->objToolkit->formInputPageSelector("set[".$objOneSetting->getSystemid()."]", $this->getLang($objOneSetting->getStrName(), $objCurrentModule->getStrName()), $objOneSetting->getStrValue());
                 } else {
-                    $strRows .= $this->objToolkit->formInputText("set[".$objOneSetting->getSystemid()."]", $this->getLang($objOneSetting->getStrName(), $objCurrentModule->getStrName()), $objOneSetting->getStrValue());
+                    $strRows .= $this->objToolkit->formInputText("set[".$objOneSetting->getSystemid()."]", $this->getLang($objOneSetting->getStrName(), $objCurrentModule->getStrName()), $objOneSetting->getStrValue(), "", "", false, $objOneSetting->getSystemid()."#strValue");
                 }
             }
             //Build a form to return -> include the last module
@@ -407,6 +407,8 @@ class SystemAdmin extends AdminEvensimpler implements AdminInterface
             $arrTabs[$this->getLang("modul_titel", $objCurrentModule->getStrName())] = $strTabContent;
 
             $strReturn .= $this->objToolkit->getTabbedContent($arrTabs);
+
+            $strReturn .= "<script type='text/javascript'>require(['instantSave'], function(is) {is.init()});</script>";
         } else {
             //Seems we have to update a few records
             $arrSettings = $this->getAllParams();
