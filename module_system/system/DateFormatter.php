@@ -18,6 +18,9 @@ namespace Kajona\System\System;
 class DateFormatter
 {
     /**
+     * Formats the date object according to the standard PHP date format
+     *
+     * @see http://php.net/manual/en/function.date.php
      * @param string $strFormat
      * @param Date $objDate
      * @return false|string
@@ -28,6 +31,9 @@ class DateFormatter
     }
 
     /**
+     * Returns a format depending on the language of the logged in user. The string contains
+     * the year, month, day, hour, minutes and seconds
+     *
      * @param Date $objDate
      * @return string
      */
@@ -37,6 +43,9 @@ class DateFormatter
     }
 
     /**
+     * Returns a format depending on the language of the logged in user. The string contains
+     * the year, month and day
+     *
      * @param Date $objDate
      * @return string
      */
@@ -46,6 +55,8 @@ class DateFormatter
     }
 
     /**
+     * Returns the month name in the language of the logged in user. I.e. Januar
+     *
      * @param Date $objDate
      * @return string
      */
@@ -59,6 +70,8 @@ class DateFormatter
     }
 
     /**
+     * Returns the month short name in the language of the logged in user. I.e. Jan
+     *
      * @param Date $objDate
      * @return string
      */
@@ -71,6 +84,8 @@ class DateFormatter
     }
 
     /**
+     * Returns the weekday name in the language of the logged in user. I.e. Mo
+     *
      * @param Date $objDate
      * @return string
      */
@@ -84,6 +99,8 @@ class DateFormatter
     }
 
     /**
+     * Returns the short weekday name in the language of the logged in user. I.e. M
+     *
      * @param Date $objDate
      * @return string
      */
