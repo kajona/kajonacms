@@ -34,10 +34,10 @@ class DateTest extends Testbase
     public function testDateParams()
     {
         $objDate = new Date(0);
-        $this->assertEquals($objDate->getLongTimestamp(), 00000000000000);
+        $this->assertEquals($objDate->getLongTimestamp(), "00010101000000");
 
         $objDate = new Date("0");
-        $this->assertEquals($objDate->getLongTimestamp(), 00000000000000);
+        $this->assertEquals($objDate->getLongTimestamp(), "00010101000000");
 
         $objDate = new Date("");
         $this->assertTrue($objDate->getLongTimestamp() > 0);
@@ -57,10 +57,10 @@ class DateTest extends Testbase
         $this->assertEquals($objDate2->getLongTimestamp(), $objDate->getLongTimestamp());
 
         $objDate = new Date(12345678);
-        $this->assertEquals($objDate->getLongTimestamp(), 19700523222118);
+        $this->assertEquals($objDate->getLongTimestamp(), 19700523212118);
 
         $objDate = new Date("12345678");
-        $this->assertEquals($objDate->getLongTimestamp(), 19700523222118);
+        $this->assertEquals($objDate->getLongTimestamp(), 19700523212118);
 
         $objDate = new Date("12345678");
         $objDate2 = new Date($objDate);

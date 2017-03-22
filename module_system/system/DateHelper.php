@@ -283,8 +283,7 @@ class DateHelper
     public function calcDateRelativeFormatString(Date $objDate, $strRelativeFormatString)
     {
         $objNewDate = clone $objDate;
-        $strNewDate = date($this->strParseFormat, strtotime($strRelativeFormatString, $objNewDate->getTimeInOldStyle()));
-        $objNewDate->setLongTimestamp($strNewDate);
+        $objNewDate->setTimestamp(strtotime($strRelativeFormatString, $objNewDate->getTimestamp()));
 
         return $objNewDate;
     }

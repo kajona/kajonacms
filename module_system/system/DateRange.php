@@ -91,15 +91,15 @@ class DateRange
 
         if ($objInterval->equals(DatePeriodEnum::WEEK())) {
             $objTmpStartDate->setBeginningOfDay();
-            $intCurrentWeek = date('W', $objTmpStartDate->getTimeInOldStyle());
-            while ($intCurrentWeek == date('W', $objTmpStartDate->getTimeInOldStyle())) {
+            $intCurrentWeek = $objTmpStartDate->format("W");
+            while ($intCurrentWeek == $objTmpStartDate->format("W")) {
                 $objTmpStartDate->setPreviousDay();
             }
             $objTmpStartDate->setNextDay();
 
             $objTmpEndDate->setEndOfDay();
-            $intCurrentWeek = date('W', $objTmpEndDate->getTimeInOldStyle());
-            while ($intCurrentWeek == date('W', $objTmpEndDate->getTimeInOldStyle())) {
+            $intCurrentWeek = $objTmpEndDate->format("W");
+            while ($intCurrentWeek == $objTmpEndDate->format("W")) {
                 $objTmpEndDate->setNextDay();
             }
             $objTmpEndDate->setPreviousDay();
