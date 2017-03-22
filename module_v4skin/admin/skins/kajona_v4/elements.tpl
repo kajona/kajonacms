@@ -778,11 +778,14 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
     </div>
     <script type="text/javascript">
         require(["jquery", "jquerytageditor"], function($){
+            var onChange = %%onChange%%;
             $("#%%name%%").tagEditor({
                 initialTags: %%values%%,
                 forceLowercase: false,
-                onChange: %%onChange%%
+                onChange: onChange
             });
+
+            onChange("#%%name%%", $("#%%name%%").tagEditor('getTags')[0].editor, %%values%%);
         });
     </script>
 </input_tageditor>
