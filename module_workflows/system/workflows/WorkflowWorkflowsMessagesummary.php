@@ -117,7 +117,7 @@ class WorkflowWorkflowsMessagesummary implements WorkflowsHandlerInterface
                     $arrUnreadMessages[] = $objOneMessage;
                 }
 
-                if ($objOneMessage->getBitRead() == 0 && $objOneMessage->getObjMessageProvider() instanceof MessageproviderSummary) {
+                if ($objOneMessage->getObjMessageProvider() instanceof MessageproviderSummary) {
                     $objOneMessage->deleteObjectFromDatabase();
                 }
             }
