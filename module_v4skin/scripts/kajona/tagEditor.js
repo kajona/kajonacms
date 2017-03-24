@@ -7,7 +7,7 @@
 /**
  * @module tagEditor
  */
-define(["jquery", "jquerytageditor", "v4skin", "workingIndicator"], function($, tagEditor, v4skin, workingIndicator) {
+define(["jquery", "jquerytageditor", "v4skin", "workingIndicator", "forms"], function($, tagEditor, v4skin, workingIndicator, forms) {
 
 
     return /** @alias module:tagEditor */ {
@@ -106,6 +106,12 @@ define(["jquery", "jquerytageditor", "v4skin", "workingIndicator"], function($, 
             });
             $objInput.parent().find('ul.tag-editor').after("<span class='form-control-feedback loading-feedback' style='right: 15px;'><i class='fa fa-keyboard-o'></i></span>");
 
+            forms.addMandatoryRenderingCallback(function() {
+                if($objInput.hasClass('mandatoryFormElement')) {
+                    $objInput.parent().find('ul.tag-editor').addClass('mandatoryFormElement');
+                }
+            });
+
             //hightlight current input
             $('#tageditor_'+strElementId+' .tag-editor').on("click", function () {
                 $('#tageditor_'+strElementId).find('ul.tag-editor').addClass("active");
@@ -128,9 +134,7 @@ define(["jquery", "jquerytageditor", "v4skin", "workingIndicator"], function($, 
                 }
             });
 
-            if($objInput.hasClass('mandatoryFormElement')) {
-                $objInput.parent().find('ul.tag-editor').addClass('mandatoryFormElement');
-            }
+
         }
     };
 
