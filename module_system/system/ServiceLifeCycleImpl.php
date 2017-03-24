@@ -3,13 +3,13 @@
 namespace Kajona\System\System;
 
 /**
- * ServiceDomainImpl
+ * ServiceLifeCycleImpl
  *
  * @package Kajona\System\System
  * @author christoph.kappestein@gmail.com
- * @since 5.2
+ * @since 6.2
  */
-class ServiceDomainImpl implements ServiceDomainInterface
+class ServiceLifeCycleImpl implements ServiceLifeCycleInterface
 {
     /**
      * @inheritdoc

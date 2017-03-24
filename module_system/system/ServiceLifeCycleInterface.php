@@ -3,15 +3,15 @@
 namespace Kajona\System\System;
 
 /**
- * ServiceDomainInterface
+ * ServiceLifeCycleInterface
  *
  * @package Kajona\System\System
  * @author christoph.kappestein@gmail.com
- * @since 5.2
+ * @since 6.2
  */
-interface ServiceDomainInterface
+interface ServiceLifeCycleInterface
 {
-    const STR_SERVICE_ANNOTATION = '@domainService';
+    const STR_SERVICE_ANNOTATION = '@lifeCycleService';
 
     /**
      * Persists all fields of the record to the database and executes additional business logic i.e. sending a message

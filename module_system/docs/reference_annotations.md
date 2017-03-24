@@ -10,7 +10,7 @@ Annotation         |Context    |Introduced in     |Description
 |@autoTestable actions	|Class	|4.2|	Comma-separated list of action-commands to be called in a unit-test during builds.
 |@blockEscaping	|Property	|4.0	|If given, the OR-mapper skips the escaping of special chars for the value of the property right before passing the value to the database.
 |@blockFromAutosave	|Class	|4.6	|If a class is marked with this annotation, the generalModel unit-tests skips this class. This means, the test won't try to save and delete the object automatically. May be useful if the marked class only works in combination with other classes or hierarchy elements.
-|@domainService	|Class	|5.2	|A name of a service which is used to handle models. This provides an additional layer to contain business logic like i.e. sending a message if a record has changed.
+|@lifeCycleService	|Class	|6.2	|A name of a service which is used to handle models. This provides an additional layer to contain business logic like i.e. sending a message if a record has changed.
 |@elementContentTtitle	|Property	|4.3|	Allowed for element-admin-classes. The value of the property marked with this annotation is used as a list-title, so when rendering the list of page-elements in the backend.
 |@filterCompareOperator operator |Property	|5.0|	Only to be used for properties in classes which are derived from FilterBase. Possible values are: EQ, GT, LT, GE, LE, NE, LIKE 
 |@fieldDDValues key -> value	|Property	|4.3|	Only to be used in combination with '@fieldType Kajona\System\Admin\Formentries\FormentryDropdown', lists the key-value-pairs of options. Syntax: [ index => langKey ],[ index => langKey]. Example: @fieldDDValues [0 => commons_no],[1 => commons_yes]

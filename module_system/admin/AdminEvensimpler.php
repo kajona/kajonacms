@@ -419,7 +419,7 @@ abstract class AdminEvensimpler extends AdminSimple
                 $objForm->updateSourceObject();
                 $objRecord = $objForm->getObjSourceobject();
 
-                $this->objDomainFactory->factory(get_class($objRecord))->update($objRecord);
+                $this->objLifeCycleFactory->factory(get_class($objRecord))->update($objRecord);
 
                 $this->setSystemid($objRecord->getStrSystemid());
 

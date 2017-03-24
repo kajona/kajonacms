@@ -5,13 +5,13 @@ namespace Kajona\System\System;
 use Pimple\Container;
 
 /**
- * ServiceDomainFactory
+ * ServiceLifeCycleFactory
  *
  * @package Kajona\System\System
  * @author christoph.kappestein@gmail.com
- * @since 5.2
+ * @since 6.2
  */
-class ServiceDomainFactory
+class ServiceLifeCycleFactory
 {
     /**
      * @var Container
@@ -32,13 +32,13 @@ class ServiceDomainFactory
     public function factory($strClass)
     {
         $objReflection = new Reflection($strClass);
-        $arrValues = $objReflection->getAnnotationValuesFromClass(ServiceDomainInterface::STR_SERVICE_ANNOTATION);
+        $arrValues = $objReflection->getAnnotationValuesFromClass(ServiceLifeCycleInterface::STR_SERVICE_ANNOTATION);
         $strServiceName = reset($arrValues);
 
         if ($this->objContainer->offsetExists($strServiceName)) {
             return $this->objContainer->offsetGet($strServiceName);
         } else {
-            return new ServiceDomainImpl();
+            return $this->objContainer->offsetGet(ServiceProvider::STR_LIFE_CYCLE_DEFAULT);
         }
     }
 }
