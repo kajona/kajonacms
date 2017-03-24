@@ -13,6 +13,8 @@ define('forms', ['jquery', 'tooltip'], function ($, tooltip) {
     /** @exports forms */
     var forms = {};
 
+    var arrOnMandatoryRendering = [];
+
     /**
      * Hides a field in the form
      *
@@ -165,31 +167,17 @@ define('forms', ['jquery', 'tooltip'], function ($, tooltip) {
         for(var i=0; i<arrFields.length; i++) {
             var arrElement = arrFields[i];
             if(arrElement.length == 2) {
-                if(arrElement[1] == 'date' || arrElement[1] == '\Kajona\System\System\Date_validator') {
-
-                    var $objElementDay = $("#"+arrElement[0]+"_day");
-                    if($objElementDay) {
-                        $objElementDay.addClass("mandatoryFormElement");
-                    }
-
-                    var $objElementMonth = $("#"+arrElement[0]+"_month");
-                    if($objElementMonth) {
-                        $objElementMonth.addClass("mandatoryFormElement");
-                    }
-
-                    var $objElementYear = $("#"+arrElement[0]+"_year");
-                    if($objElementYear) {
-                        $objElementYear.addClass("mandatoryFormElement");
-                    }
-                }
-
                 var $objElement = $("#" + arrElement[0]);
                 if($objElement)
                     $objElement.addClass("mandatoryFormElement");
-
             }
-
         }
+
+        for(var i=0; i<arrOnMandatoryRendering.length; i++) {
+            arrOnMandatoryRendering[i]();
+        }
+
+        arrOnMandatoryRendering = [];
     };
 
     forms.renderMissingMandatoryFields = function(arrFields) {
@@ -213,6 +201,15 @@ define('forms', ['jquery', 'tooltip'], function ($, tooltip) {
                 tooltip.initTooltip();
             });
         }
+    };
+
+    /**
+     * Adds a callback invoked as soon as the rendering of mandatory elements finished.
+     * Usefull to adjust some classes or other content afterwards
+     * @param objFn
+     */
+    forms.addMandatoryRenderingCallback = function(objFn) {
+        arrOnMandatoryRendering.push(objFn);
     };
 
 
