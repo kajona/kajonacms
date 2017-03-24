@@ -148,9 +148,16 @@
         </exec>
     </target>
 
+    <target name="installNpmGuiBuildDependencies" >
+        <echo>Execute npm</echo>
+        <exec dir="${basedir}${jsPath}/guideps" executable="${path.npm}" failonerror="on">
+            <arg line=" install"/>
+        </exec>
+    </target>
+
 
     <!-- executes javascript protractor tests -->
-    <target name="protractorSetup" depends="installNpmBuildDependencies">
+    <target name="protractorSetup" depends="installNpmBuildDependencies,installNpmGuiBuildDependencies">
         <!-- deletes all files from the tmp folder -->
         <antcall target="setupPackageFolders" />
 
