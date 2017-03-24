@@ -419,7 +419,7 @@ abstract class AdminEvensimpler extends AdminSimple
                 $objForm->updateSourceObject();
                 $objRecord = $objForm->getObjSourceobject();
 
-                $this->persistModel($objRecord, $strSystemId);
+                $this->objDomainFactory->factory(get_class($objRecord))->update($objRecord);
 
                 $this->setSystemid($objRecord->getStrSystemid());
 
@@ -439,19 +439,6 @@ abstract class AdminEvensimpler extends AdminSimple
 
 
         return $this->getLang("commons_error_permissions");
-    }
-
-    /**
-     * Method which persists the record to the database
-     *
-     * @param Model $objModel
-     * @param boolean $strPrevId
-     *
-     * @throws Exception
-     */
-    protected function persistModel(Model $objModel, $strPrevId = false)
-    {
-        $objModel->updateObjectToDb($strPrevId);
     }
 
     /**

@@ -29,6 +29,7 @@ class ServiceProvider implements ServiceProviderInterface
     const STR_OBJECT_BUILDER = "system_object_builder";
     const STR_LOGGER = "system_logger";
     const STR_CACHE_MANAGER = "system_cache_manager";
+    const STR_DOMAIN_FACTORY = "system_domain_factory";
 
 
     public function register(Container $objContainer)
@@ -102,6 +103,10 @@ class ServiceProvider implements ServiceProviderInterface
 
         $objContainer[self::STR_CACHE_MANAGER] = function ($c) {
             return new CacheManager();
+        };
+
+        $objContainer[self::STR_DOMAIN_FACTORY] = function ($c) {
+            return new ServiceDomainFactory($c);
         };
     }
 }
