@@ -18,6 +18,7 @@
             <directory suffix=".php">buildproject/</directory>
             <exclude>
                 <directory suffix=".php">buildproject/*/*/vendor</directory>
+                <file>buildproject/*/*.php</file>
             </exclude>
         </whitelist>
 
