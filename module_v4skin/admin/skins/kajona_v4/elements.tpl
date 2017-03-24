@@ -278,7 +278,7 @@ Dropdown
     <div class="form-group">
         <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
         <div class="col-sm-6">
-            <select data-placeholder="%%dataplaceholder%%" name="%%name%%" id="%%name%%" class="form-control %%class%%" %%disabled%% %%addons%%>%%options%%</select>
+            <select data-placeholder="%%dataplaceholder%%" name="%%name%%" id="%%name%%" class="form-control %%class%%" %%disabled%% %%addons%% data-kajona-instantsave="%%instantEditor%%" >%%options%%</select>
         </div>
         <div class="col-sm-2 form-opener">
             %%opener%%
@@ -914,7 +914,7 @@ have a surrounding div with class "ac_container" and a div with id "%%name%%_con
         <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
 
         <div class="col-sm-6">
-            <input type="text" id="%%name%%" name="%%name%%" value="%%value%%" class="form-control %%class%%" %%readonly%%>
+            <input type="text" id="%%name%%" name="%%name%%" value="%%value%%" class="form-control %%class%%" %%readonly%% data-kajona-instantsave="%%instantEditor%%" >
         </div>
         <div class="col-sm-2 form-opener">
             %%opener%%

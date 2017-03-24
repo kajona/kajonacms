@@ -349,76 +349,61 @@ class SystemAdmin extends AdminEvensimpler implements AdminInterface
     protected function actionSystemSettings()
     {
         $strReturn = "";
-        //Check for needed rights
-        if ($this->getParam("save") != "true") {
-            //Create a warning before doing s.th.
-            $strReturn .= $this->objToolkit->warningBox($this->getLang("warnung_settings"));
+        //Create a warning before doing s.th.
+        $strReturn .= $this->objToolkit->warningBox($this->getLang("warnung_settings"));
 
-            $arrTabs = array();
+        $arrTabs = array();
 
-            $arrSettings = SystemSetting::getAllConfigValues();
-            /** @var SystemModule $objCurrentModule */
-            $objCurrentModule = null;
-            $strRows = "";
-            foreach ($arrSettings as $objOneSetting) {
-                if ($objCurrentModule === null || $objCurrentModule->getIntNr() != $objOneSetting->getIntModule()) {
-                    $objTemp = $this->getModuleDataID($objOneSetting->getIntModule(), true);
-                    if ($objTemp !== null) {
-                        //In the first loop, ignore the output
-                        if ($objCurrentModule !== null) {
-                            //Build a form to return
-                            $strTabContent = $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "systemSettings"));
-                            $strTabContent .= $strRows;
-                            $strTabContent .= $this->objToolkit->formInputHidden("save", "true");
-                            $strTabContent .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
-                            $strTabContent .= $this->objToolkit->formClose();
-                            $arrTabs[$this->getLang("modul_titel", $objCurrentModule->getStrName())] = $strTabContent;
-                        }
-                        $strRows = "";
-                        $objCurrentModule = $objTemp;
+        $arrSettings = SystemSetting::getObjectListFiltered();
+        /** @var SystemModule $objCurrentModule */
+        $objCurrentModule = null;
+        $strRows = "";
+        foreach ($arrSettings as $objOneSetting) {
+            if ($objCurrentModule === null || $objCurrentModule->getIntNr() != $objOneSetting->getIntModule()) {
+                $objTemp = $this->getModuleDataID($objOneSetting->getIntModule(), true);
+                if ($objTemp !== null) {
+                    //In the first loop, ignore the output
+                    if ($objCurrentModule !== null) {
+                        //Build a form to return
+                        $strTabContent = $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "systemSettings"));
+                        $strTabContent .= $strRows;
+                        $strTabContent .= $this->objToolkit->formClose();
+                        $arrTabs[$this->getLang("modul_titel", $objCurrentModule->getStrName())] = $strTabContent;
                     }
-                }
-                //Build the rows
-                //Print a help-text?
-                $strHelper = $this->getLang($objOneSetting->getStrName()."hint", $objCurrentModule->getStrName());
-                if ($strHelper != "!".$objOneSetting->getStrName()."hint!") {
-                    $strRows .= $this->objToolkit->formTextRow($strHelper);
-                }
-
-                //The input element itself
-                if ($objOneSetting->getIntType() == 0) {
-                    $arrDD = array();
-                    $arrDD["true"] = $this->getLang("commons_yes");
-                    $arrDD["false"] = $this->getLang("commons_no");
-                    $strRows .= $this->objToolkit->formInputDropdown("set[".$objOneSetting->getSystemid()."]", $arrDD, $this->getLang($objOneSetting->getStrName(), $objCurrentModule->getStrName()), $objOneSetting->getStrValue());
-                } elseif ($objOneSetting->getIntType() == 3) {
-                    $strRows .= $this->objToolkit->formInputPageSelector("set[".$objOneSetting->getSystemid()."]", $this->getLang($objOneSetting->getStrName(), $objCurrentModule->getStrName()), $objOneSetting->getStrValue());
-                } else {
-                    $strRows .= $this->objToolkit->formInputText("set[".$objOneSetting->getSystemid()."]", $this->getLang($objOneSetting->getStrName(), $objCurrentModule->getStrName()), $objOneSetting->getStrValue(), "", "", false, $objOneSetting->getSystemid()."#strValue");
+                    $strRows = "";
+                    $objCurrentModule = $objTemp;
                 }
             }
-            //Build a form to return -> include the last module
-            $strTabContent = $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "systemSettings"));
-            $strTabContent .= $strRows;
-            $strTabContent .= $this->objToolkit->formInputHidden("save", "true");
-            $strTabContent .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
-            $strTabContent .= $this->objToolkit->formClose();
-
-            $arrTabs[$this->getLang("modul_titel", $objCurrentModule->getStrName())] = $strTabContent;
-
-            $strReturn .= $this->objToolkit->getTabbedContent($arrTabs);
-
-            $strReturn .= "<script type='text/javascript'>require(['instantSave'], function(is) {is.init()});</script>";
-        } else {
-            //Seems we have to update a few records
-            $arrSettings = $this->getAllParams();
-            foreach ($arrSettings["set"] as $strKey => $strValue) {
-                $objSetting = new SystemSetting($strKey);
-                $objSetting->setStrValue($strValue);
-                $objSetting->updateObjectToDb();
+            //Build the rows
+            //Print a help-text?
+            $strHelper = $this->getLang($objOneSetting->getStrName()."hint", $objCurrentModule->getStrName());
+            if ($strHelper != "!".$objOneSetting->getStrName()."hint!") {
+                $strRows .= $this->objToolkit->formTextRow($strHelper);
             }
-            $strReturn .= $this->objToolkit->warningBox($this->getLang("settings_updated"));
+
+            //The input element itself
+            if ($objOneSetting->getIntType() == 0) {
+                $arrDD = array();
+                $arrDD["true"] = $this->getLang("commons_yes");
+                $arrDD["false"] = $this->getLang("commons_no");
+                $strRows .= $this->objToolkit->formInputDropdown("set[".$objOneSetting->getSystemid()."]", $arrDD, $this->getLang($objOneSetting->getStrName(), $objCurrentModule->getStrName()), $objOneSetting->getStrValue(), "", true, "", "", "", $objOneSetting->getSystemid()."#strValue");
+            } elseif ($objOneSetting->getIntType() == 3) {
+                $strRows .= $this->objToolkit->formInputPageSelector("set[".$objOneSetting->getSystemid()."]", $this->getLang($objOneSetting->getStrName(), $objCurrentModule->getStrName()), $objOneSetting->getStrValue(), "", false, true, "", $objOneSetting->getSystemid()."#strValue");
+            } else {
+                $strRows .= $this->objToolkit->formInputText("set[".$objOneSetting->getSystemid()."]", $this->getLang($objOneSetting->getStrName(), $objCurrentModule->getStrName()), $objOneSetting->getStrValue(), "", "", false, $objOneSetting->getSystemid()."#strValue");
+            }
         }
+        //Build a form to return -> include the last module
+        $strTabContent = $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "systemSettings"));
+        $strTabContent .= $strRows;
+        $strTabContent .= $this->objToolkit->formClose();
+
+        $arrTabs[$this->getLang("modul_titel", $objCurrentModule->getStrName())] = $strTabContent;
+
+        $strReturn .= $this->objToolkit->getTabbedContent($arrTabs);
+
+        $strReturn .= "<script type='text/javascript'>require(['instantSave'], function(is) {is.init()});</script>";
+
 
         return $strReturn;
     }
