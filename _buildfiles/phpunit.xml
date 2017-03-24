@@ -13,6 +13,15 @@
     </testsuites>
 
     <filter>
+
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">buildproject/</directory>
+            <exclude>
+                <directory suffix=".php">buildproject/*/*/vendor</directory>
+            </exclude>
+        </whitelist>
+
+
         <blacklist>
             <directory suffix=".php">buildproject/*/*/vendor</directory>
         </blacklist>
