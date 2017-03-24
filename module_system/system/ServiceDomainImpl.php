@@ -51,7 +51,7 @@ class ServiceDomainImpl implements ServiceDomainInterface
         $bitReturn = $objModel->copyObject($strNewPrevid ?: "", $bitChangeTitle, $bitCopyChilds);
 
         if (!$bitReturn) {
-            throw new Exception("error creating a copy of object ".strip_tags($objModel->getStrDisplayName()), Exception::$level_ERROR);
+            throw new Exception("Error creating a copy of object ".strip_tags($objModel->getStrDisplayName()), Exception::$level_ERROR);
         }
 
         return $objModel;
