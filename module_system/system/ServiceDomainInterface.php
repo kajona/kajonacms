@@ -18,6 +18,7 @@ interface ServiceDomainInterface
      * or create a rating
      *
      * @param Root $objModel
+     * @param bool $strPrevId
      */
     public function update(Root $objModel, $strPrevId = false);
 
@@ -40,6 +41,9 @@ interface ServiceDomainInterface
      * Creates a copy of the record and all of its child nodes. Returns the new created record
      *
      * @param Root $objModel
+     * @param bool $strNewPrevid
+     * @param bool $bitChangeTitle
+     * @param bool $bitCopyChilds
      * @return Root
      */
     public function copy(Root $objModel, $strNewPrevid = false, $bitChangeTitle = true, $bitCopyChilds = true);
