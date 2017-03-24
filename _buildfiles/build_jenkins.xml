@@ -531,7 +531,7 @@
 
     <target name="phploc" description="Measure project size using PHPLOC">
         <exec executable="${path.phploc}">
-            <arg line=" --exclude= */vendor/* --exclude ${basedir}${projectPath}/core/module_ezcchart/vendor --exclude ${basedir}${projectPath}/core/module_pchart/vendor --exclude ${basedir}${projectPath}/core/module_pdf/vendor --exclude ${basedir}${projectPath}/core/module_phpexcel/vendor --exclude ${basedir}${projectPath}/core/module_qrcode/vendor --exclude ${basedir}${projectPath}/core/module_system/vendor   "/>
+            <arg line=" --exclude */vendor/* ${basedir}${projectPath}/core/module_ezcchart/vendor ${basedir}${projectPath}/core/module_pchart/vendor ${basedir}${projectPath}/core/module_pdf/vendor ${basedir}${projectPath}/core/module_phpexcel/vendor ${basedir}${projectPath}/core/module_qrcode/vendor ${basedir}${projectPath}/core/module_system/vendor   "/>
             <arg value="--log-csv" />
             <arg value="${basedir}${buildPath}/logs/phploc.csv" />
             <arg path="${basedir}${projectPath}" />
