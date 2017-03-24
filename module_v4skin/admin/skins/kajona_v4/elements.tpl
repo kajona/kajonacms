@@ -794,95 +794,14 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
     <div class="form-group">
         <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
 
-        <div class="col-sm-6 inputText inputTagEditor">
-            <input type="text" id="%%name%%" data-name="%%name%%" style="display:none" />
+        <div class="col-sm-6 inputText inputTagEditor" id="tageditor_%%name%%">
+            <input type="text" id="%%name%%" data-name="%%name%%" style="display:none" class="form-control" />
             <div id="%%name%%-list">%%data%%</div>
         </div>
     </div>
     <script type="text/javascript">
-        require(["jquery", "jquerytageditor", "v4skin"], function($, tagEditor, v4skin){
-            var objConfig = new v4skin.defaultAutoComplete();
-
-            objConfig.search = function(event, ui) {
-                if (event.target.value.length < 2) {
-                    event.stopPropagation();
-                    return false;
-                }
-                $(this).closest('ul.tag-editor').parent().find('.loading-feedback').html('<i class="fa fa-spinner fa-spin"></i>');
-            };
-            objConfig.response = function(event, ui) {
-                $(this).closest('ul.tag-editor').parent().find('.loading-feedback').html('');
-            };
-            objConfig.select = function(event, ui) {
-                var found = false;
-                $("#%%name%%-list").find('input').each(function(){
-                    if ($(this).val() == ui.item.systemid) {
-                        found = true;
-                    }
-                });
-                if (!found) {
-                    $("#%%name%%-list").append('<input type="hidden" name="%%name%%_id[]" value="' + ui.item.systemid + '" data-title="' + ui.item.title + '" />');
-                }
-            };
-            objConfig.create = function(event, ui) {
-                $(this).data('ui-autocomplete')._renderItem = function(ul, item){
-                    return $('<li></li>')
-                        .data('ui-autocomplete-item', item)
-                        .append('<div class=\'ui-autocomplete-item\'>' + item.icon + item.title + '</div>')
-                        .appendTo(ul);
-                };
-            };
-
-            objConfig.source = function(request, response) {
-                $.ajax({
-                    url: '%%source%%',
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        filter: request.term
-                    },
-                    success: function(resp) {
-                        if (resp) {
-                            // replace commas
-                            for (var i = 0; i < resp.length; i++) {
-                                resp[i].title = resp[i].title.replace(/\,/g, '');
-                                resp[i].value = resp[i].value.replace(/\,/g, '');
-                            }
-                        }
-                        response.call(this, resp);
-                    }
-                });
-            };
-
-            var $objInput = $("#%%name%%");
-            $objInput.tagEditor({
-                initialTags: %%values%%,
-                forceLowercase: false,
-                autocomplete: objConfig,
-                beforeTagSave: function(field, editor, tags, tag, val){
-                    var found = false;
-                    $("#%%name%%-list").find('input').each(function(){
-                        if ($(this).data('title') == val) {
-                            found = true;
-                        }
-                    });
-                    if (!found) {
-                        return false;
-                    }
-                },
-                beforeTagDelete: function(field, editor, tags, val){
-                    $("#%%name%%-list").find('input').each(function(){
-                        if ($(this).data('title') == val) {
-                            $(this).remove();
-                        }
-                    });
-                }
-            });
-            $objInput.parent().find('ul.tag-editor').after("<span class='form-control-feedback loading-feedback' style='right: 15px;'><i class='fa fa-keyboard-o'></i></span>");
-
-            if($objInput.hasClass('mandatoryFormElement')) {
-                $objInput.parent().find('ul.tag-editor').addClass('mandatoryFormElement');
-            }
+        require(["tagEditor"], function(tagEditor) {
+            tagEditor.init('%%name%%', '%%source%%', %%values%%, %%onChange%%);
         });
     </script>
 </input_objecttags>
