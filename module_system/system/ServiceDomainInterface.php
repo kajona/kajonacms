@@ -2,10 +2,6 @@
 
 namespace Kajona\System\System;
 
-use Kajona\System\Portal\ToolkitPortal;
-use Pimple\Container;
-use Pimple\ServiceProviderInterface;
-
 /**
  * ServiceDomainInterface
  *
