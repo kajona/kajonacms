@@ -18,7 +18,10 @@
             <directory suffix=".php">buildproject/</directory>
             <exclude>
                 <directory suffix=".php">buildproject/*/*/vendor</directory>
-                <file>buildproject/*/*.php</file>
+                <file>buildproject/core/setupproject.php</file>
+                <file>buildproject/core_agp/setupproject.php</file>
+                <file>buildproject/core/generate_phar.php</file>
+                <file>buildproject/core/V4toV5Migration.php</file>
             </exclude>
         </whitelist>
 
