@@ -1059,6 +1059,21 @@ footer {
             }
         }
 
+        ul.tag-editor {
+            min-height: @input-height-base;
+
+            li {
+                margin-top: 2px;
+            }
+
+            &.active {
+                @color-rgba: rgba(red(@kajona-brand-color), green(@kajona-brand-color), blue(@kajona-brand-color), .6);
+                border-color: @kajona-brand-color;
+                outline: 0;
+                .box-shadow(~"inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px @{color-rgba}");
+            }
+        }
+
 
         .inputContainer {
             min-height: @input-height-base;
@@ -1067,6 +1082,10 @@ footer {
 
             .admintable {
                 background-color: @white;
+            }
+
+            .checkbox, .radio {
+                padding: 4px;
             }
         }
 
@@ -1203,6 +1222,22 @@ footer {
 
         td.border-top, th.border-top {
             border-top: 1px solid @gray-dark;
+        }
+
+        td.width-20, th.width-20 {
+            width:20%;
+        }
+
+        td.width-40, th.width-40 {
+            width:40%;
+        }
+
+        td.width-60, th.width-60 {
+            width:60%;
+        }
+
+        td.width-80, th.width-80 {
+            width:80%;
         }
 
         td.border-bottom, th.border-bottom {

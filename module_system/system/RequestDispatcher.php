@@ -195,47 +195,44 @@ class RequestDispatcher
 
                     }
 
-
+                    $objConcreteModule = $objModuleRequested->getAdminInstanceOfConcreteModule();
 
                     if (Carrier::getInstance()->getParam("blockAction") != "1") {
-                        if (!empty($strModule)) {
-                            $objConcreteModule = $objModuleRequested->getAdminInstanceOfConcreteModule();
-                            try {
-                                //process e.g. in case of post requests
-                                $strReturn = $objConcreteModule->action();
-                                if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::INDEX())) {
-                                    if ($strReturn != "") {
-                                        $strReturn .= $objHelper->actionGetPathNavigation($objConcreteModule);
-                                        $strReturn .= $objHelper->actionGetQuickHelp($objConcreteModule);
-                                    }
+                        try {
+                            $strReturn = $objConcreteModule->action();
+
+                            if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::INDEX())) {
+                                if ($strReturn != "") {
+                                    $strReturn .= $objHelper->actionGetPathNavigation($objConcreteModule);
+                                    $strReturn .= $objHelper->actionGetQuickHelp($objConcreteModule);
                                 }
+                            }
+                        } catch (ActionNotFoundException $objEx) {
+                            $strReturn = $objEx->getMessage();
+                        } catch (RedirectException $objEx) {
+                            ResponseObject::getInstance()->setStrRedirectUrl($objEx->getHref());
+                            $strReturn = "";
+                        }
 
-                                //if we resulted in a redirect, rewrite it to a js based on and force the redirect on "root" level
-                                //TODO: this currently kills the folderview param
-                                if (ResponseObject::getInstance()->getStrRedirectUrl() != "") {
-                                    //TODO: move following to external helper
-                                    $strUrl = ResponseObject::getInstance()->getStrRedirectUrl();
-                                    ResponseObject::getInstance()->setStrRedirectUrl("");
+                        //if we resulted in a redirect, rewrite it to a js based on and force the redirect on "root" level
+                        //TODO: this currently kills the folderview param
+                        if (ResponseObject::getInstance()->getStrRedirectUrl() != "") {
+                            //TODO: move following to external helper
+                            $strUrl = ResponseObject::getInstance()->getStrRedirectUrl();
+                            ResponseObject::getInstance()->setStrRedirectUrl("");
 
 
-                                    $strRoutieRedirect = StringUtil::replace(_webpath_."/index.php?admin=1", "", $strUrl);
-                                    $strReturn = "<script type='text/javascript'>
+                            $strRoutieRedirect = StringUtil::replace(_webpath_."/index.php?admin=1", "", $strUrl);
+                            $strReturn = "<script type='text/javascript'>
                                         require('router').loadUrl('{$strRoutieRedirect}');
                                     </script>";
 
-                                }
-
-
-                            } catch (ActionNotFoundException $objEx) {
-                                $strReturn = $objEx->getMessage();
-                            }
                         }
 
                         if (ResponseObject::getInstance()->getObjEntrypoint()->equals(RequestEntrypointEnum::INDEX()) && empty(Carrier::getInstance()->getParam("contentFill"))) {
                             $objHelper = new SkinAdminController();
                             $strReturn = $objHelper->actionGenerateMainTemplate($strReturn);
                         }
-
                     }
 
                     //React, if admin was opened by the portaleditor
