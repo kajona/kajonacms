@@ -31,6 +31,13 @@ interface ServiceLifeCycleInterface
     public function delete(Root $objModel);
 
     /**
+     * Deletes a record actually from the database
+     *
+     * @param Root $objModel
+     */
+    public function deleteObjectFromDatabase(Root $objModel);
+
+    /**
      * Restores a previously deleted record
      *
      * @param Root $objModel

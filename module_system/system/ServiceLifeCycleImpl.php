@@ -47,6 +47,18 @@ class ServiceLifeCycleImpl implements ServiceLifeCycleInterface
     /**
      * @inheritdoc
      */
+    public function deleteObjectFromDatabase(Root $objModel)
+    {
+        $bitReturn = $objModel->deleteObjectFromDatabase();
+
+        if (!$bitReturn) {
+            throw new Exception("Error deleting object ".strip_tags($objModel->getStrDisplayName()), Exception::$level_ERROR);
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function restore(Root $objModel)
     {
         $bitReturn = $objModel->restoreObject();
