@@ -132,7 +132,7 @@ class AdminFormgenerator
         $this->strFormname = $strFormname;
         $this->objSourceobject = $objSourceobject;
 
-        $this->strOnSubmit = "require('forms').defaultOnSubmit(this);";
+        $this->strOnSubmit = "require('forms').defaultOnSubmit(this);return false;";
         $this->objLang = Lang::getInstance();
     }
 

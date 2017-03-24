@@ -1116,7 +1116,7 @@ class ToolkitAdmin extends Toolkit
     public function formHeader($strAction, $strName = "", $strEncoding = "", $strOnSubmit = null, $strMethod = "POST")
     {
 
-        $strOnSubmit = $strOnSubmit ?? "require('forms').defaultOnSubmit(this);";
+        $strOnSubmit = $strOnSubmit ?? "require('forms').defaultOnSubmit(this);return false;";
 
         $arrTemplate = array();
         $arrTemplate["name"] = ($strName != "" ? $strName : "form".generateSystemid());
