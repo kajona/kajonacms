@@ -79,8 +79,18 @@ define('ajax', ['jquery', 'statusDisplay', 'workingIndicator', 'tooltip'], funct
             }
         },
 
-
-        genericAjaxCall : function(module, action, systemid, objCallback, objDoneCallback, objErrorCallback) {
+        /**
+         * General helper to fire an ajax request against the backend
+         *
+         * @param module
+         * @param action
+         * @param systemid
+         * @param objCallback
+         * @param objDoneCallback
+         * @param objErrorCallback
+         * @param strMethod default is POST
+         */
+        genericAjaxCall : function(module, action, systemid, objCallback, objDoneCallback, objErrorCallback, strMethod) {
             var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module='+module+'&action='+action;
             var data;
             if(systemid) {
@@ -89,14 +99,14 @@ define('ajax', ['jquery', 'statusDisplay', 'workingIndicator', 'tooltip'], funct
 
             workingIndicator.start();
             $.ajax({
-                type: 'POST',
+                type: strMethod ? strMethod : 'POST',
                 url: postTarget,
                 data: data,
                 error: objCallback,
                 success: objCallback,
                 dataType: 'text'
             }).always(
-                function(response) {
+                function() {
                     workingIndicator.stop();
                 }
             ).error(function() {
