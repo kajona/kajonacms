@@ -89,6 +89,6 @@ CKEDITOR.editorConfig = function(config) {
     config.entities_latin = false;
     config.autoParagraph = false;
     config.enterMode = CKEDITOR.ENTER_BR;
-    config.width = '640';
-    config.height = '250';
+    config.width = 620;
+    config.height = 250;
 };
