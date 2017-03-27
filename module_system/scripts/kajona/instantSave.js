@@ -67,12 +67,9 @@ define(['jquery', 'ajax'], function ($, ajax) {
     };
 
     scanElements = function() {
-        console.log('starting init');
         $('[data-kajona-instantsave][data-kajona-instantsave != ""]').each(function(key, value) {
-            console.log('added element '+$(this).data('kajona-instantsave'));
             $(this).on('change', saveChangeHandler);
         });
-        console.log('finished init');
     };
 
     return {
