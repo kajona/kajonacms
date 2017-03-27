@@ -60,8 +60,8 @@ class FormentryObjecttags extends FormentryTageditor
         if ($this->getBitReadonly()) {
             $strReturn .= $objToolkit->formInputObjectList($this->getStrEntryName(), $this->getStrLabel(), $this->arrKeyValues, "", $this->getBitReadonly());
         } else {
-            $strReturn .= $objToolkit->formInputObjectTags($this->getStrEntryName(), $this->getStrLabel(), $this->strSource, $this->arrKeyValues,
-                $this->strOnChangeCallback);
+            $strReturn .= $objToolkit->formInputObjectTags($this->getStrEntryName(), $this->getStrLabel(), $this->strSource, $this->arrKeyValues, $this->strOnChangeCallback);
+            $strReturn .= $objToolkit->formInputHidden($this->getStrEntryName()."_prescheck", "1");
         }
 
         return $strReturn;
@@ -78,6 +78,8 @@ class FormentryObjecttags extends FormentryTageditor
         $arrParams = Carrier::getAllParams();
         if (isset($arrParams[$this->getStrEntryName() . "_id"])) {
             $this->setStrValue($arrParams[$this->getStrEntryName() . "_id"]);
+        } elseif (isset($arrParams[$this->getStrEntryName()."_prescheck"])) {
+            $this->setStrValue(array());
         } else {
             $this->setStrValue($this->getValueFromObject());
         }

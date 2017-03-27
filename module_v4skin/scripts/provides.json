@@ -15,8 +15,9 @@
 
     "dialog": "kajona/dialog",
     "dialogHelper": "kajona/dialogHelper",
-    "v4skin": "kajona/v4skin",
-    "listSortable" : "kajona/listSortable"
+    "listSortable" : "kajona/listSortable",
+    "tagEditor" : "kajona/tagEditor",
+    "v4skin": "kajona/v4skin"
   },
   "shim": {
     "bootstrap" : {
