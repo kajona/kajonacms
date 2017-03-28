@@ -75,7 +75,7 @@ CKEDITOR.editorConfig = function(config) {
             ['Bold','Italic','Underline','Strike','Subscript','Superscript'],
             ['NumberedList','BulletedList','-','Outdent','Indent'],
             ['Link','Unlink'],
-            ['Image','Table']
+            ['Table']
         ];
 
     config.toolbar_pe_lite =
