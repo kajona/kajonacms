@@ -281,6 +281,36 @@ define(['jquery'], function ($) {
         }
     };
 
+
+    /**
+     * decodes html entites, call it just like
+     * util decodeHTMLEntities(strText)
+     *
+     * Taken from stackoverflow
+     * @see http://stackoverflow.com/a/9609450
+     * @see http://stackoverflow.com/questions/5796718/html-entity-decode/9609450#9609450
+     *
+     */
+    util.decodeHtmlEntities = (function() {
+        // this prevents any overhead from creating the object each time
+        var element = document.createElement('div');
+
+        function decodeHTMLEntities (strText) {
+            if(strText && typeof strText === 'string') {
+                // strip script/html tags
+                strText = strText.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '');
+                strText = strText.replace(/<\/?\w(?:[^"'>]|"[^"]*"|'[^']*')*>/gmi, '');
+                element.innerHTML = strText;
+                strText = element.textContent;
+                element.textContent = '';
+            }
+
+            return strText;
+        }
+
+        return decodeHTMLEntities;
+    })();
+
     return util;
 
 });
