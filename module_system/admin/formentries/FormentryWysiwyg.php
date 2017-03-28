@@ -85,4 +85,21 @@ class FormentryWysiwyg extends FormentryBase implements FormentryPrintableInterf
         return $this->getStrValue();
     }
 
+    /**
+     * @return string
+     */
+    public function getStrToolbarset()
+    {
+        return $this->strToolbarset;
+    }
+
+    /**
+     * @param string $strToolbarset
+     */
+    public function setStrToolbarset($strToolbarset)
+    {
+        $this->strToolbarset = $strToolbarset;
+
+        return $this;
+    }
 }

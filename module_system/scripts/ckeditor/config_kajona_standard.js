@@ -83,6 +83,13 @@ CKEDITOR.editorConfig = function(config) {
             ['Undo','Redo']
         ];
 
+    config.toolbar_minimaltext_backend =
+        [
+            ['Undo','Redo','-','RemoveFormat'],
+            ['Bold','Italic','Underline'],
+            ['NumberedList','BulletedList','-','Image']
+        ];
+
     //disable the conversion of special chars into html entities
     config.entities = false;
     config.entities_greek = false;
