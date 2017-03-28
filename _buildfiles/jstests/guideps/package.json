@@ -1,0 +1,11 @@
+{
+  "name": "kajonagui",
+  "version": "0.1.0",
+  "description": "Open Source Content Management Framework",
+  "main": "Gruntfile.js",
+  "license": "LGPL-2.1",
+  "dependencies": {
+    "protractor": "^4.0.13",
+    "protractor-screenshoter-plugin": "0.3.2"
+  }
+}

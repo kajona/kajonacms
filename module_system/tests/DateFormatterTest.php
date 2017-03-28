@@ -39,6 +39,11 @@ class DateFormatterTest extends Testbase
 
         $objDate = new Date(20170320000000);
 
+        // skip if its a german format
+        if (Lang::getInstance()->getLang("dateStyleLong", "system") == "d.m.Y H:i:s") {
+            return;
+        }
+
         $this->assertEquals("03/20/2017 00:00:00", DateFormatter::toLongFormat($objDate));
     }
 
@@ -56,6 +61,11 @@ class DateFormatterTest extends Testbase
         Lang::getInstance()->setStrTextLanguage("en");
 
         $objDate = new Date(20170320000000);
+
+        // skip if its a german format
+        if (Lang::getInstance()->getLang("dateStyleShort", "system") == "d.m.Y") {
+            return;
+        }
 
         $this->assertEquals("03/20/2017", DateFormatter::toShortFormat($objDate));
     }
