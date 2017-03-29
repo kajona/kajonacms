@@ -195,10 +195,10 @@
 
         <!-- Start webdriver-->
         <exec dir="${basedir}${jsPath}" executable="${path.node}" failonerror="on">
-            <arg line="./node_modules/protractor/bin/webdriver-manager update"/>
+            <arg line="./guideps/node_modules/protractor/bin/webdriver-manager update"/>
         </exec>
         <exec dir="${basedir}${jsPath}" executable="${path.node}" spawn="true">
-            <arg line="./node_modules/protractor/bin/webdriver-manager start"/>
+            <arg line="./guideps/node_modules/protractor/bin/webdriver-manager start"/>
         </exec>
 
         <!-- wait so that the selenium and webserver are ready -->
@@ -207,12 +207,12 @@
         <!-- run selenium tests -->
         <echo> Run selenium tests </echo>
         <exec dir="${basedir}${jsPath}" executable="${path.node}" failonerror="on">
-            <arg line="./node_modules/protractor/bin/protractor e2e/conf.js"/>
+            <arg line="./guideps/node_modules/protractor/bin/protractor e2e/conf.js"/>
         </exec>
 
         <!-- Stop webdriver-->
         <exec dir="${basedir}${jsPath}" executable="${path.node}" spawn="true">
-            <arg line="./node_modules/protractor/bin/webdriver-manager shutdown"/>
+            <arg line="./guideps/node_modules/protractor/bin/webdriver-manager shutdown"/>
         </exec>
 
     </target>
