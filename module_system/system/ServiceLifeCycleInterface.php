@@ -4,7 +4,7 @@ namespace Kajona\System\System;
 
 /**
  * The life cycle class can contain complex business logic which is executed i.e. on update. Each model class can
- * contain a `@lifeCycleService` annotation which provides a service name to the depending life cycle service. The
+ * contain a @lifeCycleService annotation which provides a service name to the depending life cycle service. The
  * controller knows through this annotation which service should be used. There is also a default implementation
  * ServiceLifeCycleImpl which is used if no service was specified.
  *
