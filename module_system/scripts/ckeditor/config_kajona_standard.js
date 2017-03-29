@@ -83,7 +83,7 @@ CKEDITOR.editorConfig = function(config) {
             ['Undo','Redo']
         ];
 
-    config.toolbar_minimaltext_backend =
+    config.toolbar_minimal_nosource =
         [
             ['Undo','Redo','-','RemoveFormat'],
             ['Bold','Italic','Underline'],
