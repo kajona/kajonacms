@@ -3,7 +3,15 @@
 namespace Kajona\System\System;
 
 /**
- * ServiceLifeCycleInterface
+ * The life cycle class can contain complex business logic which is executed i.e. on update. Each model class can
+ * contain a `@lifeCycleService` annotation which provides a service name to the depending life cycle service. The
+ * controller knows through this annotation which service should be used. There is also a default implementation
+ * ServiceLifeCycleImpl which is used if no service was specified.
+ *
+ * You should execute these operations always on the life cycle service and not on the model directly. It is recommended
+ * to develop a life cycle service in a stateless way so that multiple calls to an update method with different models
+ * always result in the same behaviour. If you need to execute extra logic which is by default not needed i.e. calculate
+ * a score you should add a specific update method i.e. `updateWithCalculation`.
  *
  * @package Kajona\System\System
  * @author christoph.kappestein@gmail.com
