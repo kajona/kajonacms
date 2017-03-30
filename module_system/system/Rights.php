@@ -218,6 +218,34 @@ class Rights
         return implode(",", $arrReturn);
     }
 
+
+    /**
+     * Converts a systemid based permissions set to a short id based one
+     *
+     * @param array $arrPermissions
+     * @return array
+     */
+    public function convertSystemidArrayToShortIdString(array $arrPermissions): array
+    {
+        foreach ($arrPermissions as $strPermission => $arrGroups) {
+            if ($strPermission == self::$STR_RIGHT_INHERIT) {
+                continue;
+            }
+
+            $arrConverted = array();
+            foreach ($arrGroups as $strOneSystemid) {
+                if (empty($strOneSystemid)) {
+                    continue;
+                }
+                $arrConverted[] = UserGroup::getShortIdForGroupId($strOneSystemid);
+            }
+
+            $arrPermissions[$strPermission] = implode(",", $arrConverted);
+        }
+
+        return $arrPermissions;
+    }
+
     /**
      * Set the rights of the passed systemrecord.
      * Writes the rights down to all records inheriting from the current one.
