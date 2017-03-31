@@ -216,17 +216,18 @@ class UserSourcefactory
      *
      * @param UserUser $objLeightweightUser
      *
-     * @throws Exception
+     * @param bool $bitIgnoreDeletedFlag
      * @return UsersourcesUserInterface
+     * @throws Exception
      */
-    public function getSourceUser(UserUser $objLeightweightUser)
+    public function getSourceUser(UserUser $objLeightweightUser, $bitIgnoreDeletedFlag = false)
     {
-        if ($objLeightweightUser->getIntRecordDeleted() == 1) {
+        if (!$bitIgnoreDeletedFlag && $objLeightweightUser->getIntRecordDeleted() == 1) {
             throw new Exception("User was deleted, source user no longer available", Exception::$level_ERROR);
         }
 
         $objSubsystem = $this->getUsersource($objLeightweightUser->getStrSubsystem());
-        $objPlainUser = $objSubsystem->getUserById($objLeightweightUser->getSystemid());
+        $objPlainUser = $objSubsystem->getUserById($objLeightweightUser->getSystemid(), $bitIgnoreDeletedFlag);
         return $objPlainUser;
     }
 

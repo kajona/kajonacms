@@ -292,7 +292,10 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
         }
 
         Logger::getInstance(Logger::USERSOURCES)->addLogRow("deleted user with id ".$this->getSystemid()." (".$this->getStrUsername()." / ".$this->getStrName().",".$this->getStrForename().")", Logger::$levelWarning);
-        $this->getObjSourceUser()->deleteUser();
+        $objUsersources = new UserSourcefactory();
+        $objSourceUser = $objUsersources->getSourceUser($this, true);
+        $objSourceUser->deleteUser();
+
         return parent::deleteObjectFromDatabase();
     }
 
