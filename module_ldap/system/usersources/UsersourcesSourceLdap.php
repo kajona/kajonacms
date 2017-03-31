@@ -315,8 +315,6 @@ class UsersourcesSourceLdap implements UsersourcesUsersourceInterface
             @ini_set("max_execution_time", "500");
         }
 
-        $objLdap = Ldap::getInstance();
-
         //fill all groups - loads new members
         $arrGroups = $this->getAllGroupIds();
 
@@ -337,7 +335,7 @@ class UsersourcesSourceLdap implements UsersourcesUsersourceInterface
             $objSourceUser = $objUser->getObjSourceUser();
             $arrUserDetails = false;
             try {
-                $arrUserDetails = $objLdap->getUserdetailsByName($objUser->getStrUsername());
+                $arrUserDetails = Ldap::getInstance($objSourceUser->getIntCfg())->getUserdetailsByName($objUser->getStrUsername());
                 if ($arrUserDetails != false && isset($arrUserDetails[0])) {
                     $arrUserDetails = $arrUserDetails[0];
                 }
@@ -359,7 +357,6 @@ class UsersourcesSourceLdap implements UsersourcesUsersourceInterface
         }
 
         return true;
-
     }
 
 }
