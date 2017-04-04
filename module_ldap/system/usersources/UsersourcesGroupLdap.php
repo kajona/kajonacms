@@ -162,9 +162,6 @@ class UsersourcesGroupLdap extends \Kajona\System\System\Model implements \Kajon
             $objUser = null;
             $strUsername = null;
             if ($arrUserDetails !== false && count($arrUserDetails) > 0) {
-                if(!isset($arrUserDetails["username"])) {
-                    $intI = 1;
-                }
                 $strUsername = $arrUserDetails["username"];
                 $objUser = $objSource->getUserByUsername($strUsername);
             }
