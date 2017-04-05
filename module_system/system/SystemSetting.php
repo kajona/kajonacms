@@ -17,10 +17,10 @@ namespace Kajona\System\System;
  *
  * @module system
  * @moduleId _system_modul_id_
+ * @targetTable system_config.system_config_id
  *
  * @blockFromAutosave
  *
- * @todo make settings "real" objects, so with a systemid
  */
 class SystemSetting extends Model implements ModelInterface, VersionableInterface
 {
@@ -70,31 +70,39 @@ class SystemSetting extends Model implements ModelInterface, VersionableInterfac
     const STR_CACHE_NAME = "SystemSetting_CACHE";
 
     /**
+     * @var int
+     * @tableColumn system_config.system_config_module
+     * @tableColumnDatatype int
+     * @listOrder
+     */
+    private $intModule = 0;
+
+    /**
      * @var string
      * @versionable
+     * @tableColumn system_config.system_config_name
+     * @tableColumnDatatype char254
+     * @listOrder
      */
     private $strName = "";
 
     /**
      * @var string
      * @versionable
+     * @tableColumn system_config.system_config_value
+     * @tableColumnDatatype char254
      */
     private $strValue = "";
+
+    /**
+     * @var int
+     * @tableColumn system_config.system_config_type
+     * @tableColumnDatatype int
+     */
     private $intType = 0;
-    private $intModule = 0;
-
-    private $strOldValue = "";
 
 
-    private function initRowCache()
-    {
-        $strQuery = "SELECT * FROM "._dbprefix_."system_config";
-        $arrRows = $this->objDB->getPArray($strQuery, array());
-        foreach ($arrRows as $arrSingleRow) {
-            $arrSingleRow["system_id"] = $arrSingleRow["system_config_id"];
-            OrmRowcache::addSingleInitRow($arrSingleRow);
-        }
-    }
+
 
 
     /**
@@ -104,20 +112,7 @@ class SystemSetting extends Model implements ModelInterface, VersionableInterfac
      */
     protected function initObjectInternal()
     {
-        $arrRow = OrmRowcache::getCachedInitRow($this->getSystemid());
-        if ($arrRow === null) {
-            $this->initRowCache();
-            $arrRow = OrmRowcache::getCachedInitRow($this->getSystemid());
-        }
-
-        $this->setArrInitRow(array("system_id" => ""));
-
-        $this->setStrName($arrRow["system_config_name"]);
-        $this->setStrValue($arrRow["system_config_value"]);
-        $this->setIntType($arrRow["system_config_type"]);
-        $this->setIntModule($arrRow["system_config_module"]);
-
-        $this->strOldValue = $this->strValue;
+        parent::initObjectInternal();
 
         $this->specialConfigInits();
     }
@@ -135,21 +130,6 @@ class SystemSetting extends Model implements ModelInterface, VersionableInterfac
         }
     }
 
-    /**
-     * Deletes the current object from the system
-     *
-     * @return bool
-     */
-    public function deleteObject()
-    {
-        return true;
-    }
-
-    public function deleteObjectFromDatabase()
-    {
-        $strQuery = "DELETE FROM "._dbprefix_."system_config WHERE system_config_id = ?";
-        return Carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($this->getSystemid()));
-    }
 
 
     /**
@@ -160,18 +140,6 @@ class SystemSetting extends Model implements ModelInterface, VersionableInterfac
     public function getStrDisplayName()
     {
         return $this->getStrName();
-    }
-
-    /**
-     * Called whenever a update-request was fired.
-     * Use this method to synchronize yourselves with the database.
-     * Use only updates, inserts are not required to be implemented.
-     *
-     * @return bool
-     */
-    protected function updateStateToDb()
-    {
-        return true;
     }
 
 
@@ -186,52 +154,17 @@ class SystemSetting extends Model implements ModelInterface, VersionableInterfac
     public function updateObjectToDb($strPrevId = false)
     {
 
-        $objChangelog = new SystemChangelog();
-        $objChangelog->createLogEntry($this, SystemChangelog::$STR_ACTION_EDIT);
-
-        self::$arrInstanceCache = null;
         self::$arrValueMap = null;
+        self::$arrInstanceCache = null;
 
         /** @var CacheManager $objCacheManager */
         $objCacheManager = Carrier::getInstance()->getContainer()->offsetGet("system_cache_manager");
         $objCacheManager->removeValue(self::STR_CACHE_NAME);
 
-        if (!SystemSetting::checkConfigExisting($this->getStrName())) {
-            Logger::getInstance()->addLogRow("new constant ".$this->getStrName()." with value ".$this->getStrValue(), Logger::$levelInfo);
-
-            $strQuery = "INSERT INTO "._dbprefix_."system_config
-                        (system_config_id, system_config_name, system_config_value, system_config_type, system_config_module) VALUES
-                        (?, ?, ?, ?, ?)";
-            return $this->objDB->_pQuery($strQuery, array(generateSystemid(), $this->getStrName(), $this->getStrValue(), (int)$this->getIntType(), (int)$this->getIntModule()));
-        } else {
-            Logger::getInstance()->addLogRow("updated constant ".$this->getStrName()." to value ".$this->getStrValue(), Logger::$levelInfo);
-
-            $strQuery = "UPDATE "._dbprefix_."system_config
-                        SET system_config_value = ?
-                      WHERE system_config_name = ?";
-            return $this->objDB->_pQuery($strQuery, array($this->getStrValue(), $this->getStrName()));
-        }
+        return parent::updateObjectToDb($strPrevId);
     }
 
 
-    /**
-     * Renames a constant in the database.
-     *
-     * @param string $strNewName
-     *
-     * @return bool
-     */
-    public function renameConstant($strNewName)
-    {
-        Logger::getInstance()->addLogRow("renamed constant ".$this->getStrName()." to ".$strNewName, Logger::$levelInfo);
-
-        $strQuery = "UPDATE "._dbprefix_."system_config
-                    SET system_config_name = ? WHERE system_config_name = ?";
-
-        $bitReturn = $this->objDB->_pQuery($strQuery, array($strNewName, $this->getStrName()));
-        $this->strName = $strNewName;
-        return $bitReturn;
-    }
 
     /**
      * Fetches all Configs from the database
@@ -242,21 +175,15 @@ class SystemSetting extends Model implements ModelInterface, VersionableInterfac
     public static function getAllConfigValues()
     {
         if (self::$arrInstanceCache == null) {
-            SystemChangelog::$bitChangelogEnabled = false;
             if (count(Database::getInstance()->getTables()) == 0) {
                 return array();
             }
 
-            $strQuery = "SELECT * FROM "._dbprefix_."system_config ORDER BY system_config_module ASC, system_config_name DESC";
-            $arrIds = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), null, null, false);
-            foreach ($arrIds as $arrOneId) {
-                $arrOneId["system_id"] = $arrOneId["system_config_id"];
-                OrmRowcache::addSingleInitRow($arrOneId);
-                self::$arrInstanceCache[$arrOneId["system_config_name"]] = new SystemSetting($arrOneId["system_config_id"]);
-                self::$arrValueMap[$arrOneId["system_config_name"]] = $arrOneId["system_config_value"];
+            /** @var SystemSetting $objOneSetting */
+            foreach (static::getObjectListFiltered() as $objOneSetting) {
+                self::$arrInstanceCache[$objOneSetting->getStrName()] = $objOneSetting;
+                self::$arrValueMap[$objOneSetting->getStrName()] = $objOneSetting->getStrValue();
             }
-
-            SystemChangelog::$bitChangelogEnabled = null;
         }
 
         if (self::$arrInstanceCache == null) {
@@ -302,23 +229,7 @@ class SystemSetting extends Model implements ModelInterface, VersionableInterfac
             return $arrSettings[$strName];
         }
         return null;
-
     }
-
-    /**
-     * Checks, if a config-value is already existing
-     *
-     * @param string $strName
-     *
-     * @return boolean
-     */
-    public static function checkConfigExisting($strName)
-    {
-        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system_config WHERE system_config_name = ?";
-        $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
-        return $arrRow["COUNT(*)"] == 1;
-    }
-
 
     /**
      * Returns the value of a config or null if the config does not exist.

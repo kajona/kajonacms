@@ -21,6 +21,7 @@
     "desktopNotification": "kajona/desktopNotification",
     "folderview": "kajona/folderview",
     "forms": "kajona/forms",
+    "instantSave": "kajona/instantSave",
     "lang": "kajona/lang",
     "lists": "kajona/lists",
     "loader": "kajona/loader",
