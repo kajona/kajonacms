@@ -215,10 +215,6 @@ abstract class InstallerBase extends Root implements InstallerInterface {
      */
 	public function registerConstant($strName, $strValue, $intType, $intModule) {
 
-		//register to current runtime env?
-		if(!defined($strName))
-			define($strName, $strValue);
-
 	    if(SystemSetting::getConfigByName($strName) === null) {
     	    $objConstant = new SystemSetting();
     	    $objConstant->setStrName($strName);

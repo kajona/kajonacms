@@ -153,6 +153,7 @@ class SystemSetting extends Model implements ModelInterface, VersionableInterfac
      */
     public function updateObjectToDb($strPrevId = false)
     {
+        $bitReturn = parent::updateObjectToDb($strPrevId);
 
         self::$arrValueMap = null;
         self::$arrInstanceCache = null;
@@ -161,7 +162,7 @@ class SystemSetting extends Model implements ModelInterface, VersionableInterfac
         $objCacheManager = Carrier::getInstance()->getContainer()->offsetGet("system_cache_manager");
         $objCacheManager->removeValue(self::STR_CACHE_NAME);
 
-        return parent::updateObjectToDb($strPrevId);
+        return $bitReturn;
     }
 
 
