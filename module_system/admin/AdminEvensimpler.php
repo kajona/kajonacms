@@ -253,6 +253,11 @@ abstract class AdminEvensimpler extends AdminSimple
             $objForm = $this->getAdminForm($objInstance);
             $objForm->addField(new FormentryHidden("", "mode"))->setStrValue("edit");
 
+            $bitValidate = $this->getParam("validate") === "true";
+            if ($bitValidate) {
+                $objForm->validateForm();
+            }
+
             return $objForm->renderForm(Link::getLinkAdminHref($this->getArrModule("modul"), "save".$this->getStrCurObjectTypeName()));
         }
         else {
