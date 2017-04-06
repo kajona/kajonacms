@@ -142,9 +142,10 @@ class UsersourcesSourceKajona implements UsersourcesUsersourceInterface
      *
      * @param string $strId
      *
+     * @param bool $bitIgnoreDeletedFlag
      * @return UsersourcesUserInterface or null
      */
-    public function getUserById($strId)
+    public function getUserById($strId, $bitIgnoreDeletedFlag = false)
     {
 
         if (isset(self::$arrUserCache[$strId])) {
