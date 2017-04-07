@@ -9,6 +9,8 @@
 
 namespace Kajona\System\System;
 
+use Monolog\Handler\RotatingFileHandler;
+use Psr\Log\LoggerInterface;
 
 /**
  * The Logger provides a small and fast logging-engine to generate a debug logfile.
@@ -16,10 +18,10 @@ namespace Kajona\System\System;
  *
  * @package module_system
  * @author sidler@mulchprod.de
+ * @author christoph.kappestein@gmail.com
  */
-final class Logger
+final class Logger implements LoggerInterface
 {
-
     const SYSTEMLOG = "systemlog.log";
     const DBLOG = "dblayer.log";
     const USERSOURCES = "usersources.log";
@@ -35,6 +37,7 @@ final class Logger
      *
      * @var int
      * @static
+     * @deprecated
      */
     public static $levelError = 1;
 
@@ -43,6 +46,7 @@ final class Logger
      *
      * @var int
      * @static
+     * @deprecated
      */
     public static $levelWarning = 2;
 
@@ -51,9 +55,9 @@ final class Logger
      *
      * @var int
      * @static
+     * @deprecated
      */
     public static $levelInfo = 3;
-
 
     /**
      * Array of logger-instances
@@ -69,31 +73,43 @@ final class Logger
      */
     private $strFilename = "";
 
+    /**
+     * @var int
+     */
     private $intLogLevel = 0;
+
+    /**
+     * @var \Monolog\Logger
+     */
+    private $objLogger;
 
     /**
      * Doing nothing but being private
      *
-     * @param $strLogfile
+     * @param string $strLogfile
      */
     private function __construct($strLogfile)
     {
-        $this->strFilename = $strLogfile;
-
         $arrOverwriteLevel = Carrier::getInstance()->getObjConfig()->getDebug("debuglogging_overwrite");
         if (isset($arrOverwriteLevel[$strLogfile])) {
-            $this->intLogLevel = $arrOverwriteLevel[$strLogfile];
+            $intLogLevel = $arrOverwriteLevel[$strLogfile];
+        } else {
+            $intLogLevel = Carrier::getInstance()->getObjConfig()->getDebug("debuglogging");
         }
-        else {
-            $this->intLogLevel = Carrier::getInstance()->getObjConfig()->getDebug("debuglogging");
-        }
+
+        $this->strFilename = $strLogfile;
+        $this->intLogLevel = $intLogLevel;
+
+        $objFileHandler = new RotatingFileHandler(_realpath_."project/log/".$strLogfile, 0, $this->toMonologLevel($intLogLevel));
+
+        $this->objLogger = new \Monolog\Logger($strLogfile);
+        $this->objLogger->pushHandler($objFileHandler);
     }
 
     /**
      * returns the current instance of this class
      *
      * @param string $strLogfile
-     *
      * @return Logger
      */
     public static function getInstance($strLogfile = "")
@@ -107,7 +123,78 @@ final class Logger
         }
 
         return self::$arrInstances[$strLogfile];
+    }
 
+    /**
+     * @inheritdoc
+     */
+    public function emergency($message, array $context = array())
+    {
+        $this->objLogger->emergency($message, $context);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function alert($message, array $context = array())
+    {
+        $this->objLogger->alert($message, $context);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function critical($message, array $context = array())
+    {
+        $this->objLogger->critical($message, $context);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function error($message, array $context = array())
+    {
+        $this->objLogger->error($message, $context);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function warning($message, array $context = array())
+    {
+        $this->objLogger->warning($message, $context);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function notice($message, array $context = array())
+    {
+        $this->objLogger->notice($message, $context);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function info($message, array $context = array())
+    {
+        $this->objLogger->info($message, $context);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function debug($message, array $context = array())
+    {
+        $this->objLogger->debug($message, $context);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function log($level, $message, array $context = array())
+    {
+        $this->objLogger->log($level, $message, $context);
     }
 
     /**
@@ -117,79 +204,24 @@ final class Logger
      * @param string $strMessage
      * @param int $intLevel
      * @param bool $bitSkipSessionData
-     *
      * @return void
+     * @deprecated
      */
     public function addLogRow($strMessage, $intLevel, $bitSkipSessionData = false)
     {
-
-        //check, if there someting to write
-        if ($this->intLogLevel == 0) {
-            return;
-        }
-        //errors in level >=1
-        if ($intLevel == self::$levelError && $this->intLogLevel < 1) {
-            return;
-        }
-        //warnings in level >=2
-        if ($intLevel == self::$levelWarning && $this->intLogLevel < 2) {
-            return;
-        }
-        //infos in level >=3
-        if ($intLevel == self::$levelInfo && $this->intLogLevel < 3) {
-            return;
-        }
-
-        //a log row has the following scheme:
-        // YYYY-MM-DD HH:MM:SS LEVEL USERID (USERNAME) MESSAGE
-        $strDate = strftime("%Y-%m-%d %H:%M:%S", time());
-        $strLevel = "";
-        if ($intLevel == self::$levelError) {
-            $strLevel = "ERROR";
-        }
-        elseif ($intLevel == self::$levelInfo) {
-            $strLevel = "INFO";
-        }
-        elseif ($intLevel == self::$levelWarning) {
-            $strLevel = "WARNING";
-        }
-
-        $strSessid = "";
-        if (!$bitSkipSessionData && Carrier::getInstance()->getObjSession()->getBitLazyLoaded()) {
-            $strSessid = Carrier::getInstance()->getObjSession()->getInternalSessionId();
-            $strSessid .= " (".Carrier::getInstance()->getObjSession()->getUsername().")";
-        }
-
-        $strMessage = StringUtil::replace(array("\r", "\n"), array(" ", " "), $strMessage);
-
-        $strFileInfo = "";
-        $arrStack = debug_backtrace();
-
-        if (isset($arrStack[1]) && isset($arrStack[1]["file"])) {
-            $strFileInfo = basename($arrStack[1]["file"]).":".$arrStack[1]["function"].":".$arrStack[1]["line"];
-        }
-
-        $strText = $strDate." ".$strLevel." ".$strSessid." ".$strFileInfo." ".$strMessage."\r\n";
-
-        $handle = @fopen(_realpath_."project/log/".$this->strFilename, "a");
-        @fwrite($handle, $strText);
-        @fclose($handle);
+        $this->objLogger->log($this->toMonologLevel($intLevel), $strMessage);
     }
 
     /**
      * Returns the complete log-file as one string
      *
      * @return string
+     * @deprecated
      */
     public function getLogFileContent()
     {
-        $objFile = new Filesystem();
-        if (!is_file(_realpath_."project/log/".$this->strFilename)) {
-            return "";
-        }
-
-        $objFile->openFilePointer("/project/log/".$this->strFilename, "r");
-        return $objFile->readLastLinesFromFile(25);
+        // @TODO this cant work anymore since the filename is handled by monolog
+        return "";
     }
 
 
@@ -197,18 +229,19 @@ final class Logger
      * Returns the complete log-file as one string
      *
      * @return string
+     * @deprecated
      */
     public function getPhpLogFileContent()
     {
-        $objFile = new Filesystem();
-        $objFile->openFilePointer("/project/log/php.log", "r");
-        return $objFile->readLastLinesFromFile(25);
+        // @TODO this cant work anymore since the filename is handled by monolog
+        return "";
     }
 
     /**
      * Sets the loggers logging-level aka. the granularity
      *
      * @param $intLogLevel
+     * @deprecated
      */
     public function setIntLogLevel($intLogLevel)
     {
@@ -217,11 +250,29 @@ final class Logger
 
     /**
      * @return int
+     * @deprecated
      */
     public function getIntLogLevel()
     {
         return $this->intLogLevel;
     }
+
+    /**
+     * @param int $intLevel
+     * @return int
+     */
+    private function toMonologLevel($intLevel)
+    {
+        if ($intLevel == self::$levelError) {
+            return \Monolog\Logger::ERROR;
+        } elseif ($intLevel == self::$levelWarning) {
+            return \Monolog\Logger::WARNING;
+        } elseif ($intLevel == self::$levelInfo) {
+            return \Monolog\Logger::INFO;
+        } elseif ($intLevel >= 4) {
+            return \Monolog\Logger::DEBUG;
+        } else {
+            return \Monolog\Logger::ERROR;
+        }
+    }
 }
-
-
