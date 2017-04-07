@@ -222,7 +222,7 @@ define(['jquery', 'bootstrap', 'jquery-ui', 'workingIndicator', 'tooltip', 'stat
                     }
                 }
 
-                //Formentry must have at least 2 charackters to trigger search.
+                //Formentry must have at least 2 characters to trigger search.
                 if(event.target.value.length < 2) {
                     event.stopPropagation();
                     return false;
@@ -247,6 +247,7 @@ define(['jquery', 'bootstrap', 'jquery-ui', 'workingIndicator', 'tooltip', 'stat
                     if($('#'+$objCur.attr('id')+'_id')) {
                         $( '#'+$objCur.attr('id')+'_id' ).val( ui.item.systemid);
                     }
+                    $objCur.trigger('change');
                 }
             };
 

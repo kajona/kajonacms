@@ -161,7 +161,7 @@ class UsersourcesGroupLdap extends \Kajona\System\System\Model implements \Kajon
 
             $objUser = null;
             $strUsername = null;
-            if ($arrUserDetails !== false) {
+            if ($arrUserDetails !== false && count($arrUserDetails) > 0) {
                 $strUsername = $arrUserDetails["username"];
                 $objUser = $objSource->getUserByUsername($strUsername);
             }
@@ -170,7 +170,7 @@ class UsersourcesGroupLdap extends \Kajona\System\System\Model implements \Kajon
             //check if the user exists in the kajona-database
             if ($objUser != null) {
                 $arrReturn[] = $objUser->getSystemid();
-            } else {
+            } elseif ($arrUserDetails !== false && count($arrUserDetails) > 0) {
                 //import the user into the system transparently
                 $objUser = new UserUser();
                 $objUser->setStrUsername($arrUserDetails["username"]);
