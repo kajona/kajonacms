@@ -15,21 +15,75 @@ use Pimple\ServiceProviderInterface;
  */
 class ServiceProvider implements ServiceProviderInterface
 {
+    /**
+     * @see \Kajona\System\System\Database
+     */
     const STR_DB = "system_db";
-    const STR_RIGHTS = "system_rights";
-    const STR_CONFIG = "system_config";
-    const STR_SESSION = "system_session";
-    const STR_ADMINTOOLKIT = "system_admintoolkit";
-    const STR_PORTALTOOLKIT = "system_portaltoolkit";
-    const STR_RESOURCE_LOADER = "system_resource_loader";
-    const STR_CLASS_LOADER = "system_class_loader";
-    const STR_TEMPLATE = "system_template";
-    const STR_LANG = "system_lang";
-    const STR_OBJECT_FACTORY = "system_object_factory";
-    const STR_OBJECT_BUILDER = "system_object_builder";
-    const STR_LOGGER = "system_logger";
-    const STR_CACHE_MANAGER = "system_cache_manager";
 
+    /**
+     * @see \Kajona\System\System\Rights
+     */
+    const STR_RIGHTS = "system_rights";
+
+    /**
+     * @see \Kajona\System\System\Config
+     */
+    const STR_CONFIG = "system_config";
+
+    /**
+     * @see \Kajona\System\System\Session
+     */
+    const STR_SESSION = "system_session";
+
+    /**
+     * @see \Kajona\System\Admin\ToolkitAdmin
+     */
+    const STR_ADMINTOOLKIT = "system_admintoolkit";
+
+    /**
+     * @see \Kajona\System\Portal\ToolkitPortal
+     */
+    const STR_PORTALTOOLKIT = "system_portaltoolkit";
+
+    /**
+     * @see \Kajona\System\System\Resourceloader
+     */
+    const STR_RESOURCE_LOADER = "system_resource_loader";
+
+    /**
+     * @see \Kajona\System\System\Classloader
+     */
+    const STR_CLASS_LOADER = "system_class_loader";
+
+    /**
+     * @see \Kajona\System\System\Template
+     */
+    const STR_TEMPLATE = "system_template";
+
+    /**
+     * @see \Kajona\System\System\Lang
+     */
+    const STR_LANG = "system_lang";
+
+    /**
+     * @see \Kajona\System\System\Objectfactory
+     */
+    const STR_OBJECT_FACTORY = "system_object_factory";
+
+    /**
+     * @see \Kajona\System\System\ObjectBuilder
+     */
+    const STR_OBJECT_BUILDER = "system_object_builder";
+
+    /**
+     * @see \Psr\Log\LoggerInterface
+     */
+    const STR_LOGGER = "system_logger";
+
+    /**
+     * @see \Kajona\System\System\CacheManager
+     */
+    const STR_CACHE_MANAGER = "system_cache_manager";
 
     public function register(Container $objContainer)
     {
