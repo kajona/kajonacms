@@ -1029,7 +1029,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
                 $objSingleMember = Objectfactory::getInstance()->getObject($strSingleMemberId);
 
                 $strAction = "";
-                if ($objUsersources->getUsersource($objGroup->getStrSubsystem())->getMembersEditable() && $bitRenderEdit) {
+                if ($objSingleMember->rightDelete() && $objUsersources->getUsersource($objGroup->getStrSubsystem())->getMembersEditable() && $bitRenderEdit) {
                     $strAction .= $this->objToolkit->listDeleteButton(
                         $objSingleMember->getStrUsername()." (".$objSingleMember->getStrForename()." ".$objSingleMember->getStrName().")",
                         $this->getLang("mitglied_loeschen_frage"),
