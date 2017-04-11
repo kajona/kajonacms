@@ -10,6 +10,7 @@
 namespace Kajona\System\System;
 
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 
 /**
  * The Logger provides a small and fast logging-engine to generate a debug logfile.
@@ -183,7 +184,15 @@ final class Logger implements LoggerInterface
      */
     public function log($level, $message, array $context = array())
     {
-        $this->addLogRow($message, self::$levelInfo);
+        if ($level == LogLevel::WARNING) {
+            $intLevel = self::$levelWarning;
+        } elseif ($level == LogLevel::ERROR) {
+            $intLevel = self::$levelError;
+        } else {
+            $intLevel = self::$levelInfo;
+        }
+
+        $this->addLogRow($message, $intLevel);
     }
 
     /**
