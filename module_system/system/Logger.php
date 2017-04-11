@@ -120,7 +120,7 @@ final class Logger implements LoggerInterface
      */
     public function emergency($message, array $context = array())
     {
-        $this->addLogRow($message, self::$levelError);
+        $this->log(LogLevel::EMERGENCY, $message, $context);
     }
 
     /**
@@ -128,7 +128,7 @@ final class Logger implements LoggerInterface
      */
     public function alert($message, array $context = array())
     {
-        $this->addLogRow($message, self::$levelError);
+        $this->log(LogLevel::ALERT, $message, $context);
     }
 
     /**
@@ -136,7 +136,7 @@ final class Logger implements LoggerInterface
      */
     public function critical($message, array $context = array())
     {
-        $this->addLogRow($message, self::$levelError);
+        $this->log(LogLevel::CRITICAL, $message, $context);
     }
 
     /**
@@ -144,7 +144,7 @@ final class Logger implements LoggerInterface
      */
     public function error($message, array $context = array())
     {
-        $this->addLogRow($message, self::$levelError);
+        $this->log(LogLevel::ERROR, $message, $context);
     }
 
     /**
@@ -152,7 +152,7 @@ final class Logger implements LoggerInterface
      */
     public function warning($message, array $context = array())
     {
-        $this->addLogRow($message, self::$levelWarning);
+        $this->log(LogLevel::WARNING, $message, $context);
     }
 
     /**
@@ -160,7 +160,7 @@ final class Logger implements LoggerInterface
      */
     public function notice($message, array $context = array())
     {
-        $this->addLogRow($message, self::$levelWarning);
+        $this->log(LogLevel::NOTICE, $message, $context);
     }
 
     /**
@@ -168,7 +168,7 @@ final class Logger implements LoggerInterface
      */
     public function info($message, array $context = array())
     {
-        $this->addLogRow($message, self::$levelInfo);
+        $this->log(LogLevel::INFO, $message, $context);
     }
 
     /**
@@ -176,7 +176,7 @@ final class Logger implements LoggerInterface
      */
     public function debug($message, array $context = array())
     {
-        $this->addLogRow($message, self::$levelInfo);
+        $this->log(LogLevel::DEBUG, $message, $context);
     }
 
     /**
@@ -184,15 +184,15 @@ final class Logger implements LoggerInterface
      */
     public function log($level, $message, array $context = array())
     {
-        if ($level == LogLevel::WARNING) {
-            $intLevel = self::$levelWarning;
-        } elseif ($level == LogLevel::ERROR) {
+        if ($level == LogLevel::EMERGENCY || $level == LogLevel::ALERT || $level == LogLevel::CRITICAL || $level == LogLevel::ERROR) {
             $intLevel = self::$levelError;
+        } elseif ($level == LogLevel::WARNING || $level == LogLevel::NOTICE) {
+            $intLevel = self::$levelWarning;
         } else {
             $intLevel = self::$levelInfo;
         }
 
-        $this->addLogRow($message, $intLevel);
+        $this->addLogRow($message, $intLevel, true);
     }
 
     /**
