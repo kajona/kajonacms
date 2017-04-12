@@ -9,6 +9,8 @@
 
 namespace Kajona\System\System;
 
+use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 
 /**
  * The Logger provides a small and fast logging-engine to generate a debug logfile.
@@ -16,10 +18,10 @@ namespace Kajona\System\System;
  *
  * @package module_system
  * @author sidler@mulchprod.de
+ * @author christoph.kappestein@gmail.com
  */
-final class Logger
+final class Logger implements LoggerInterface
 {
-
     const SYSTEMLOG = "systemlog.log";
     const DBLOG = "dblayer.log";
     const USERSOURCES = "usersources.log";
@@ -35,6 +37,7 @@ final class Logger
      *
      * @var int
      * @static
+     * @deprecated
      */
     public static $levelError = 1;
 
@@ -43,6 +46,7 @@ final class Logger
      *
      * @var int
      * @static
+     * @deprecated
      */
     public static $levelWarning = 2;
 
@@ -51,9 +55,9 @@ final class Logger
      *
      * @var int
      * @static
+     * @deprecated
      */
     public static $levelInfo = 3;
-
 
     /**
      * Array of logger-instances
@@ -69,6 +73,9 @@ final class Logger
      */
     private $strFilename = "";
 
+    /**
+     * @var int
+     */
     private $intLogLevel = 0;
 
     /**
@@ -93,7 +100,6 @@ final class Logger
      * returns the current instance of this class
      *
      * @param string $strLogfile
-     *
      * @return Logger
      */
     public static function getInstance($strLogfile = "")
@@ -107,7 +113,86 @@ final class Logger
         }
 
         return self::$arrInstances[$strLogfile];
+    }
 
+    /**
+     * @inheritdoc
+     */
+    public function emergency($strMessage, array $arrContext = array())
+    {
+        $this->log(LogLevel::EMERGENCY, $strMessage, $arrContext);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function alert($strMessage, array $arrContext = array())
+    {
+        $this->log(LogLevel::ALERT, $strMessage, $arrContext);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function critical($strMessage, array $arrContext = array())
+    {
+        $this->log(LogLevel::CRITICAL, $strMessage, $arrContext);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function error($strMessage, array $arrContext = array())
+    {
+        $this->log(LogLevel::ERROR, $strMessage, $arrContext);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function warning($strMessage, array $arrContext = array())
+    {
+        $this->log(LogLevel::WARNING, $strMessage, $arrContext);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function notice($strMessage, array $arrContext = array())
+    {
+        $this->log(LogLevel::NOTICE, $strMessage, $arrContext);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function info($strMessage, array $arrContext = array())
+    {
+        $this->log(LogLevel::INFO, $strMessage, $arrContext);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function debug($strMessage, array $arrContext = array())
+    {
+        $this->log(LogLevel::DEBUG, $strMessage, $arrContext);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function log($strLevel, $strMessage, array $arrContext = array())
+    {
+        if ($strLevel == LogLevel::EMERGENCY || $strLevel == LogLevel::ALERT || $strLevel == LogLevel::CRITICAL || $strLevel == LogLevel::ERROR) {
+            $intLevel = self::$levelError;
+        } elseif ($strLevel == LogLevel::WARNING || $strLevel == LogLevel::NOTICE) {
+            $intLevel = self::$levelWarning;
+        } else {
+            $intLevel = self::$levelInfo;
+        }
+
+        $this->addLogRow($strMessage, $intLevel, true);
     }
 
     /**
@@ -117,12 +202,11 @@ final class Logger
      * @param string $strMessage
      * @param int $intLevel
      * @param bool $bitSkipSessionData
-     *
      * @return void
+     * @deprecated
      */
     public function addLogRow($strMessage, $intLevel, $bitSkipSessionData = false)
     {
-
         //check, if there someting to write
         if ($this->intLogLevel == 0) {
             return;
@@ -180,6 +264,7 @@ final class Logger
      * Returns the complete log-file as one string
      *
      * @return string
+     * @deprecated
      */
     public function getLogFileContent()
     {
@@ -197,6 +282,7 @@ final class Logger
      * Returns the complete log-file as one string
      *
      * @return string
+     * @deprecated
      */
     public function getPhpLogFileContent()
     {
@@ -209,6 +295,7 @@ final class Logger
      * Sets the loggers logging-level aka. the granularity
      *
      * @param $intLogLevel
+     * @deprecated
      */
     public function setIntLogLevel($intLogLevel)
     {
@@ -217,6 +304,7 @@ final class Logger
 
     /**
      * @return int
+     * @deprecated
      */
     public function getIntLogLevel()
     {
