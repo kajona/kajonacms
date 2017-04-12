@@ -96,12 +96,12 @@ class Database
         if ($this->intNumberOfOpenTransactions != 0) {
             //something bad happened. rollback, plz
             $this->objDbDriver->transactionRollback();
-            Logger::getInstance(Logger::DBLOG)->addLogRow("Rolled back open transactions on deletion of current instance of Db!", Logger::$levelWarning);
+            Logger::getInstance(Logger::DBLOG)->warning("Rolled back open transactions on deletion of current instance of Db!");
         }
 
 
         if ($this->objDbDriver !== null && $this->bitConnected) {
-            Logger::getInstance(Logger::DBLOG)->addLogRow("closing database-connection", Logger::$levelInfo);
+            Logger::getInstance(Logger::DBLOG)->info("closing database-connection");
             $this->objDbDriver->dbclose();
         }
 
@@ -131,7 +131,7 @@ class Database
     {
         if ($this->objDbDriver !== null) {
             try {
-                Logger::getInstance(Logger::DBLOG)->addLogRow("creating database-connection using driver ".get_class($this->objDbDriver), Logger::$levelInfo);
+                Logger::getInstance(Logger::DBLOG)->info("creating database-connection using driver ".get_class($this->objDbDriver));
                 $objCfg = Config::getInstance("module_system", "config.php");
                 $this->objDbDriver->dbconnect(new DbConnectionParams($objCfg->getConfig("dbhost"), $objCfg->getConfig("dbusername"), $objCfg->getConfig("dbpassword"), $objCfg->getConfig("dbname"), $objCfg->getConfig("dbport")));
             } catch (Exception $objException) {
@@ -230,7 +230,7 @@ class Database
         $strQuery = $this->processQuery($strQuery);
 
         if (_dblog_) {
-            Logger::getInstance(Logger::QUERIES)->addLogRow("\r\n".$strQuery."\r\n params: ".implode(", ", $arrParams), Logger::$levelInfo, true);
+            Logger::getInstance(Logger::QUERIES)->info("\r\n".$strQuery."\r\n params: ".implode(", ", $arrParams));
         }
 
         //Increasing the counter
@@ -310,7 +310,7 @@ class Database
      */
     public function getArray($strQuery, $bitCache = true)
     {
-        Logger::getInstance(Logger::DBLOG)->addLogRow("deprecated getArray call: ".$strQuery, Logger::$levelWarning);
+        Logger::getInstance(Logger::DBLOG)->warning("deprecated getArray call: ".$strQuery);
         return $this->getPArray($strQuery, array(), null, null, $bitCache);
     }
 
@@ -361,7 +361,7 @@ class Database
         $arrReturn = array();
 
         if (_dblog_) {
-            Logger::getInstance(Logger::QUERIES)->addLogRow("\r\n".$strQuery."\r\n params: ".implode(", ", $arrParams), Logger::$levelInfo, true);
+            Logger::getInstance(Logger::QUERIES)->info("\r\n".$strQuery."\r\n params: ".implode(", ", $arrParams));
         }
 
         if ($this->objDbDriver != null) {
@@ -398,7 +398,7 @@ class Database
      */
     public function getArraySection($strQuery, $intStart, $intEnd, $bitCache = true)
     {
-        Logger::getInstance(Logger::DBLOG)->addLogRow("deprecated getArraySection call: ".$strQuery, Logger::$levelWarning);
+        Logger::getInstance(Logger::DBLOG)->warning("deprecated getArraySection call: ".$strQuery);
         return $this->getPArray($strQuery, array(), $intStart, $intEnd, $bitCache);
     }
 
@@ -420,7 +420,7 @@ class Database
      */
     public function getPArraySection($strQuery, $arrParams, $intStart, $intEnd, $bitCache = true)
     {
-        Logger::getInstance(Logger::DBLOG)->addLogRow("deprecated getPArraySection call: ".$strQuery, Logger::$levelWarning);
+        Logger::getInstance(Logger::DBLOG)->warning("deprecated getPArraySection call: ".$strQuery);
         return $this->getPArray($strQuery, $arrParams, $intStart, $intEnd, $bitCache);
     }
 
@@ -469,7 +469,7 @@ class Database
             }
         }
         //send a warning to the logger
-        Logger::getInstance(Logger::DBLOG)->addLogRow($strErrorCode, Logger::$levelWarning, true);
+        Logger::getInstance(Logger::DBLOG)->warning($strErrorCode);
 
         if (Config::getInstance()->getDebug("debuglevel") > 0) {
             throw new Exception($strErrorCode, Exception::$level_ERROR);
@@ -778,7 +778,7 @@ class Database
         while (count($arrFiles) >= SystemSetting::getConfigValue("_system_dbdump_amount_")) {
             $strFile = array_shift($arrFiles);
             if (!$objFilesystem->fileDelete(_projectpath_."/dbdumps/".$strFile)) {
-                Logger::getInstance(Logger::DBLOG)->addLogRow("Error deleting old db-dumps", Logger::$levelWarning);
+                Logger::getInstance(Logger::DBLOG)->warning("Error deleting old db-dumps");
                 return false;
             }
             $arrFiles = $objFilesystem->getFilelist(_projectpath_."/dbdumps/", array(".sql", ".gz"));
@@ -804,16 +804,16 @@ class Database
             $objGzip = new Gzip();
             try {
                 if (!$objGzip->compressFile($strTargetFilename, true)) {
-                    Logger::getInstance(Logger::DBLOG)->addLogRow("Failed to compress (gzip) the file ".basename($strTargetFilename)."", Logger::$levelWarning);
+                    Logger::getInstance(Logger::DBLOG)->warning("Failed to compress (gzip) the file ".basename($strTargetFilename)."");
                 }
             } catch (Exception $objExc) {
                 $objExc->processException();
             }
         }
         if ($bitDump) {
-            Logger::getInstance(Logger::DBLOG)->addLogRow("DB-Dump ".basename($strTargetFilename)." created", Logger::$levelInfo);
+            Logger::getInstance(Logger::DBLOG)->info("DB-Dump ".basename($strTargetFilename)." created");
         } else {
-            Logger::getInstance(Logger::DBLOG)->addLogRow("Error creating ".basename($strTargetFilename), Logger::$levelError);
+            Logger::getInstance(Logger::DBLOG)->error("Error creating ".basename($strTargetFilename));
         }
         return $bitDump;
     }
@@ -841,7 +841,7 @@ class Database
                 if ($objGzip->decompressFile(_projectpath_."/dbdumps/".$strFilename)) {
                     $strFilename = substr($strFilename, 0, strlen($strFilename) - 3);
                 } else {
-                    Logger::getInstance(Logger::DBLOG)->addLogRow("Failed to decompress (gzip) the file ".basename($strFilename)."", Logger::$levelWarning);
+                    Logger::getInstance(Logger::DBLOG)->warning("Failed to decompress (gzip) the file ".basename($strFilename)."");
                     return false;
                 }
             } catch (Exception $objExc) {
@@ -857,9 +857,9 @@ class Database
             $objFilesystem->fileDelete(_projectpath_."/dbdumps/".$strFilename);
         }
         if ($bitImport) {
-            Logger::getInstance(Logger::DBLOG)->addLogRow("DB-DUMP ".$strFilename." was restored", Logger::$levelWarning);
+            Logger::getInstance(Logger::DBLOG)->warning("DB-DUMP ".$strFilename." was restored");
         } else {
-            Logger::getInstance(Logger::DBLOG)->addLogRow("Error restoring DB-DUMP ".$strFilename, Logger::$levelError);
+            Logger::getInstance(Logger::DBLOG)->error("Error restoring DB-DUMP ".$strFilename);
         }
         return $bitImport;
     }

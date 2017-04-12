@@ -57,7 +57,7 @@ abstract class InstallerBase extends Root implements InstallerInterface {
         $objModule = SystemModule::getModuleByName($this->objMetadata->getStrTitle());
 
         if($objModule === null) {
-            Logger::getInstance(Logger::PACKAGEMANAGEMENT)->addLogRow("triggering installation of ".$this->objMetadata->getStrTitle(), Logger::$levelInfo);
+            Logger::getInstance(Logger::PACKAGEMANAGEMENT)->info("triggering installation of ".$this->objMetadata->getStrTitle());
             $strReturn .= $this->install();
         }
         else {
@@ -65,7 +65,7 @@ abstract class InstallerBase extends Root implements InstallerInterface {
             $strVersionAvailable = $this->objMetadata->getStrVersion();
 
             if(version_compare($strVersionAvailable, $strVersionInstalled, ">")) {
-                Logger::getInstance(Logger::PACKAGEMANAGEMENT)->addLogRow("triggering update of ".$this->objMetadata->getStrTitle(), Logger::$levelInfo);
+                Logger::getInstance(Logger::PACKAGEMANAGEMENT)->info("triggering update of ".$this->objMetadata->getStrTitle());
                 $strReturn .= $this->update();
             }
         }
@@ -108,7 +108,7 @@ abstract class InstallerBase extends Root implements InstallerInterface {
         $objModule->setArrModuleEntry("moduleId", $intModuleNr);
         $objModule->updateObjectToDb($strPrevId);
 
-		Logger::getInstance()->addLogRow("New module registered: ".$objModule->getSystemid(). "(".$strName.")", Logger::$levelInfo);
+		Logger::getInstance()->info("New module registered: ".$objModule->getSystemid(). "(".$strName.")");
 
 		//flush db-cache afterwards
         Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBQUERIES | Carrier::INT_CACHE_TYPE_DBTABLES | Carrier::INT_CACHE_TYPE_MODULES | Carrier::INT_CACHE_TYPE_ORMCACHE | Carrier::INT_CACHE_TYPE_OBJECTFACTORY);
@@ -133,7 +133,7 @@ abstract class InstallerBase extends Root implements InstallerInterface {
             $bitReturn = $objModule->updateObjectToDb();
         }
 
-	    Logger::getInstance()->addLogRow("module ".$strModuleName." updated to ".$strVersion, Logger::$levelInfo);
+	    Logger::getInstance()->info("module ".$strModuleName." updated to ".$strVersion);
         Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBQUERIES | Carrier::INT_CACHE_TYPE_MODULES);
         return $bitReturn;
 	}
@@ -152,7 +152,7 @@ abstract class InstallerBase extends Root implements InstallerInterface {
                 $objElement->setStrVersion($strVersion);
                 $objElement->updateObjectToDb();
 
-                Logger::getInstance()->addLogRow("element ".$strElementName." updated to ".$strVersion, Logger::$levelInfo);
+                Logger::getInstance()->info("element ".$strElementName." updated to ".$strVersion);
             }
             $this->objDB->flushQueryCache();
         }

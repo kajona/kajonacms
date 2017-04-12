@@ -33,19 +33,19 @@ class WorkflowsController
     {
         $arrWorkflows = WorkflowsWorkflow::getWorkflowsByType(WorkflowsWorkflow::$INT_STATE_NEW, false);
 
-        Logger::getInstance(self::STR_LOGFILE)->addLogRow("scheduling workflows, count: ".count($arrWorkflows), Logger::$levelInfo);
+        Logger::getInstance(self::STR_LOGFILE)->info("scheduling workflows, count: ".count($arrWorkflows));
 
         foreach ($arrWorkflows as $objOneWorkflow) {
 
             if ($objOneWorkflow->getIntRecordStatus() == 0) {
-                Logger::getInstance(self::STR_LOGFILE)->addLogRow("workflow ".$objOneWorkflow->getSystemid()." is inactive, can't be scheduled", Logger::$levelWarning);
+                Logger::getInstance(self::STR_LOGFILE)->warning("workflow ".$objOneWorkflow->getSystemid()." is inactive, can't be scheduled");
                 continue;
             }
 
             //lock the workflow
             $objLockmanager = $objOneWorkflow->getLockManager();
             if ($objLockmanager->isLocked()) {
-                Logger::getInstance(self::STR_LOGFILE)->addLogRow("workflow ".$objOneWorkflow->getSystemid()." is locked, can't be scheduled", Logger::$levelWarning);
+                Logger::getInstance(self::STR_LOGFILE)->warning("workflow ".$objOneWorkflow->getSystemid()." is locked, can't be scheduled");
                 continue;
             }
 
@@ -57,13 +57,13 @@ class WorkflowsController
             $objHandler = $objOneWorkflow->getObjWorkflowHandler();
 
             //trigger the workflow
-            Logger::getInstance(self::STR_LOGFILE)->addLogRow("scheduling workflow ".$objOneWorkflow->getSystemid(), Logger::$levelInfo);
+            Logger::getInstance(self::STR_LOGFILE)->info("scheduling workflow ".$objOneWorkflow->getSystemid());
             if ($objOneWorkflow->getObjTriggerdate() == null) {
                 $objOneWorkflow->setObjTriggerdate(new \Kajona\System\System\Date());
             }
             $objHandler->schedule();
 
-            Logger::getInstance(self::STR_LOGFILE)->addLogRow(" scheduling finished, new state: scheduled", Logger::$levelInfo);
+            Logger::getInstance(self::STR_LOGFILE)->info(" scheduling finished, new state: scheduled");
             $objOneWorkflow->setIntState(WorkflowsWorkflow::$INT_STATE_SCHEDULED);
 
             //init happened before
@@ -74,7 +74,7 @@ class WorkflowsController
 
         }
 
-        Logger::getInstance(self::STR_LOGFILE)->addLogRow("scheduling workflows finished", Logger::$levelInfo);
+        Logger::getInstance(self::STR_LOGFILE)->info("scheduling workflows finished");
     }
 
 
@@ -85,7 +85,7 @@ class WorkflowsController
     {
         $arrWorkflows = WorkflowsWorkflow::getWorkflowsByType(WorkflowsWorkflow::$INT_STATE_SCHEDULED);
 
-        Logger::getInstance(self::STR_LOGFILE)->addLogRow("running workflows, count: ".count($arrWorkflows), Logger::$levelInfo);
+        Logger::getInstance(self::STR_LOGFILE)->info("running workflows, count: ".count($arrWorkflows));
 
 
         if (!defined("_workflow_is_running_")) {
@@ -95,14 +95,14 @@ class WorkflowsController
         foreach ($arrWorkflows as $objOneWorkflow) {
 
             if ($objOneWorkflow->getIntRecordStatus() == 0) {
-                Logger::getInstance(self::STR_LOGFILE)->addLogRow("workflow ".$objOneWorkflow->getSystemid()." is inactive, can't be executed", Logger::$levelWarning);
+                Logger::getInstance(self::STR_LOGFILE)->warning("workflow ".$objOneWorkflow->getSystemid()." is inactive, can't be executed");
                 continue;
             }
 
             //lock the workflow
             $objLockmanager = $objOneWorkflow->getLockManager();
             if ($objLockmanager->isLocked()) {
-                Logger::getInstance(self::STR_LOGFILE)->addLogRow("workflow ".$objOneWorkflow->getSystemid()." is locked, can't be executed", Logger::$levelWarning);
+                Logger::getInstance(self::STR_LOGFILE)->warning("workflow ".$objOneWorkflow->getSystemid()." is locked, can't be executed");
                 continue;
             }
 
@@ -110,7 +110,7 @@ class WorkflowsController
             //so skip if the wf-state is either no longer scheduled or the nr of executions differ
             $arrRow = Carrier::getInstance()->getObjDB()->getPRow("SELECT * FROM "._dbprefix_."workflows WHERE workflows_id = ?", array($objOneWorkflow->getSystemid()), 0, false);
             if($arrRow["workflows_state"] != WorkflowsWorkflow::$INT_STATE_SCHEDULED || $arrRow["workflows_runs"] != $objOneWorkflow->getIntRuns()) {
-                Logger::getInstance(self::STR_LOGFILE)->addLogRow("skipping workflow ".$objOneWorkflow->getSystemid().", seems it was executed in the meantime", Logger::$levelInfo);
+                Logger::getInstance(self::STR_LOGFILE)->info("skipping workflow ".$objOneWorkflow->getSystemid().", seems it was executed in the meantime");
                 continue;
             }
 
@@ -123,17 +123,17 @@ class WorkflowsController
             $objHandler = $objOneWorkflow->getObjWorkflowHandler();
 
             //trigger the workflow
-            Logger::getInstance(self::STR_LOGFILE)->addLogRow("executing workflow ".$objOneWorkflow->getSystemid(), Logger::$levelInfo);
+            Logger::getInstance(self::STR_LOGFILE)->info("executing workflow ".$objOneWorkflow->getSystemid());
             if ($objHandler->execute()) {
                 //handler executed successfully. shift to state 'executed'
                 $objOneWorkflow->setIntState(WorkflowsWorkflow::$INT_STATE_EXECUTED);
-                Logger::getInstance(self::STR_LOGFILE)->addLogRow(" execution finished, new state: executed", Logger::$levelInfo);
+                Logger::getInstance(self::STR_LOGFILE)->info(" execution finished, new state: executed");
             }
             else {
                 //handler failed to execute. reschedule.
                 $objHandler->schedule();
                 $objOneWorkflow->setIntState(WorkflowsWorkflow::$INT_STATE_SCHEDULED);
-                Logger::getInstance(self::STR_LOGFILE)->addLogRow(" execution finished, new state: scheduled", Logger::$levelInfo);
+                Logger::getInstance(self::STR_LOGFILE)->info(" execution finished, new state: scheduled");
             }
 
             $objOneWorkflow->setIntRuns($objOneWorkflow->getIntRuns() + 1);
@@ -143,7 +143,7 @@ class WorkflowsController
 
         }
 
-        Logger::getInstance(self::STR_LOGFILE)->addLogRow("running workflows finished", Logger::$levelInfo);
+        Logger::getInstance(self::STR_LOGFILE)->info("running workflows finished");
     }
 
     /**
@@ -167,17 +167,17 @@ class WorkflowsController
         }
 
         //trigger the workflow
-        Logger::getInstance(self::STR_LOGFILE)->addLogRow("executing workflow ".$objOneWorkflow->getSystemid(), Logger::$levelInfo);
+        Logger::getInstance(self::STR_LOGFILE)->info("executing workflow ".$objOneWorkflow->getSystemid());
         if ($objHandler->execute()) {
             //handler executed successfully. shift to state 'executed'
             $objOneWorkflow->setIntState(WorkflowsWorkflow::$INT_STATE_EXECUTED);
-            Logger::getInstance(self::STR_LOGFILE)->addLogRow(" execution finished, new state: executed", Logger::$levelInfo);
+            Logger::getInstance(self::STR_LOGFILE)->info(" execution finished, new state: executed");
         }
         else {
             //handler failed to execute. reschedule.
             $objHandler->schedule();
             $objOneWorkflow->setIntState(WorkflowsWorkflow::$INT_STATE_SCHEDULED);
-            Logger::getInstance(self::STR_LOGFILE)->addLogRow(" execution finished, new state: scheduled", Logger::$levelInfo);
+            Logger::getInstance(self::STR_LOGFILE)->info(" execution finished, new state: scheduled");
         }
 
         $objOneWorkflow->setIntRuns($objOneWorkflow->getIntRuns() + 1);

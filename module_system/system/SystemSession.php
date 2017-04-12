@@ -119,7 +119,7 @@ class SystemSession extends Model implements ModelInterface
                 $this->setSystemid($this->strDbSystemid);
             }
 
-            Logger::getInstance()->addLogRow("new session ".$this->getSystemid(), Logger::$levelInfo);
+            Logger::getInstance()->info("new session ".$this->getSystemid());
 
             //insert in session table
             $strQuery = "INSERT INTO "._dbprefix_."session
@@ -146,7 +146,7 @@ class SystemSession extends Model implements ModelInterface
             );
 
         } else {
-            Logger::getInstance()->addLogRow("updated session ".$this->getSystemid(), Logger::$levelInfo);
+            Logger::getInstance()->info("updated session ".$this->getSystemid());
             $strQuery = "UPDATE "._dbprefix_."session SET
                           session_phpid = ?,
                           session_userid = ?,
@@ -191,7 +191,7 @@ class SystemSession extends Model implements ModelInterface
      */
     public function deleteObjectFromDatabase()
     {
-        Logger::getInstance()->addLogRow("deleted session ".$this->getSystemid(), Logger::$levelInfo);
+        Logger::getInstance()->info("deleted session ".$this->getSystemid());
         //start with the module-table
         $strQuery = "DELETE FROM "._dbprefix_."session WHERE session_id = ?";
         return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));

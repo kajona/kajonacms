@@ -480,9 +480,9 @@ class DbMysqli extends DbBase
         $intTemp = "";
         system($strCommand, $intTemp);
         if ($intTemp == 0) {
-            Logger::getInstance(Logger::DBLOG)->addLogRow($this->strDumpBin." exited with code ".$intTemp, Logger::$levelInfo);
+            Logger::getInstance(Logger::DBLOG)->info($this->strDumpBin." exited with code ".$intTemp);
         } else {
-            Logger::getInstance(Logger::DBLOG)->addLogRow($this->strDumpBin." exited with code ".$intTemp, Logger::$levelWarning);
+            Logger::getInstance(Logger::DBLOG)->warning($this->strDumpBin." exited with code ".$intTemp);
         }
 
         return $intTemp == 0;
@@ -512,9 +512,9 @@ class DbMysqli extends DbBase
         $intTemp = "";
         system($strCommand, $intTemp);
         if ($intTemp == 0) {
-            Logger::getInstance(Logger::DBLOG)->addLogRow($this->strDumpBin." exited with code ".$intTemp, Logger::$levelInfo);
+            Logger::getInstance(Logger::DBLOG)->info($this->strDumpBin." exited with code ".$intTemp);
         } else {
-            Logger::getInstance(Logger::DBLOG)->addLogRow($this->strDumpBin." exited with code ".$intTemp, Logger::$levelWarning);
+            Logger::getInstance(Logger::DBLOG)->warning($this->strDumpBin." exited with code ".$intTemp);
         }
         return $intTemp == 0;
     }

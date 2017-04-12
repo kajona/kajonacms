@@ -65,7 +65,7 @@ class PagesPackagemanagerUpdatedListener implements GenericeventListenerInterfac
 
             } elseif ($objHandler instanceof PackagemanagerPackagemanagerModule) {
                 $objFilesystem = new Filesystem();
-                Logger::getInstance(Logger::PAGES)->addLogRow("updating default template from /".$objHandler->getObjMetadata()->getStrPath(), Logger::$levelInfo);
+                Logger::getInstance(Logger::PAGES)->info("updating default template from /".$objHandler->getObjMetadata()->getStrPath());
                 if (is_dir(_realpath_.$objHandler->getObjMetadata()->getStrPath()."/templates/default/js")) {
                     $objFilesystem->folderCopyRecursive($objHandler->getObjMetadata()->getStrPath()."/templates/default/js", "/templates/default/js", true);
                 }

@@ -467,7 +467,7 @@ final class Session
 
 
         if ($bitReturn === false) {
-            Logger::getInstance()->addLogRow("Unsuccessful login attempt by user ".$strName, Logger::$levelInfo);
+            Logger::getInstance()->info("Unsuccessful login attempt by user ".$strName);
             UserLog::generateLog(0, $strName);
         }
 
@@ -537,7 +537,7 @@ final class Session
             $objUser->updateObjectToDb();
 
             //Drop a line to the logger
-            Logger::getInstance()->addLogRow("User: ".$objUser->getStrUsername()." successfully logged in, login provider: ".$objUser->getStrSubsystem(), Logger::$levelInfo);
+            Logger::getInstance()->info("User: ".$objUser->getStrUsername()." successfully logged in, login provider: ".$objUser->getStrSubsystem());
             UserLog::generateLog();
 
             //right now we have the time to do a few cleanups...
@@ -563,7 +563,7 @@ final class Session
      */
     public function logout()
     {
-        Logger::getInstance()->addLogRow("User: ".$this->getUsername()." successfully logged out", Logger::$levelInfo);
+        Logger::getInstance()->info("User: ".$this->getUsername()." successfully logged out");
         UserLog::registerLogout();
 
         CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_USERLOGOUT, array($this->getUserID()));

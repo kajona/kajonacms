@@ -38,7 +38,7 @@ class PharModuleExtractor
 
             //mark revision indexed
             BootstrapCache::getInstance()->addCacheRow(BootstrapCache::CACHE_PHARSUMS, $strModule, $arrIndexMap[$strModule]);
-            Logger::getInstance($this->strLogName)->addLogRow("extracting phar ".$strPath."\n", Logger::$levelInfo);
+            Logger::getInstance($this->strLogName)->info("extracting phar ".$strPath);
 
             $objPharModule = new PharModule($strPath);
 

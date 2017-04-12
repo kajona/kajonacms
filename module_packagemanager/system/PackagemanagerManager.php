@@ -186,7 +186,7 @@ class PackagemanagerManager
     {
         $strTargetFolder = generateSystemid();
 
-        Logger::getInstance(Logger::PACKAGEMANAGEMENT)->addLogRow("extracting package ".$strPackagePath." to "._projectpath_."/temp/".$strTargetFolder, Logger::$levelInfo);
+        Logger::getInstance(Logger::PACKAGEMANAGEMENT)->info("extracting package ".$strPackagePath." to "._projectpath_."/temp/".$strTargetFolder);
 
         $objZip = new Zip();
         $objZip->extractArchive($strPackagePath, _projectpath_."/temp/".$strTargetFolder);
@@ -349,9 +349,7 @@ class PackagemanagerManager
 
         if ($strLatestVersion !== null) {
             if ($strLatestVersion != null && version_compare($strLatestVersion, $objPackage->getObjMetadata()->getStrVersion(), ">")) {
-                Logger::getInstance(Logger::PACKAGEMANAGEMENT)->addLogRow(
-                    "found update for package ".$objPackage->getObjMetadata()->getStrTitle().", installed: ".$objPackage->getObjMetadata()->getStrVersion()." available: ".$strLatestVersion, Logger::$levelInfo
-                );
+                Logger::getInstance(Logger::PACKAGEMANAGEMENT)->info("found update for package ".$objPackage->getObjMetadata()->getStrTitle().", installed: ".$objPackage->getObjMetadata()->getStrVersion()." available: ".$strLatestVersion);
 
                 $this->sendUpdateAvailableMessage($objPackage, $strLatestVersion);
 

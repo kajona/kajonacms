@@ -232,7 +232,7 @@ class UsersourcesSourceKajona implements UsersourcesUsersourceInterface
     public static function encryptPassword($strPassword, $strSalt = "", $bitMD5Encryption = false)
     {
         if ($bitMD5Encryption) {
-            Logger::getInstance(Logger::USERSOURCES)->addLogRow("usage of old md5-encrypted password!", Logger::$levelWarning);
+            Logger::getInstance(Logger::USERSOURCES)->warning("usage of old md5-encrypted password!");
             return md5($strPassword);
         }
 
