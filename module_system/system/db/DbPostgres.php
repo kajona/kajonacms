@@ -504,12 +504,11 @@ class DbPostgres extends DbBase
      */
     private function processQuery($strQuery)
     {
-        $intCount = 1;
-        while (StringUtil::indexOf($strQuery, "?") !== false) {
-            $intPos = StringUtil::indexOf($strQuery, "?");
-            $strQuery = substr($strQuery, 0, $intPos)."$".$intCount++.substr($strQuery, $intPos + 1);
-        }
-
+        $strQuery = preg_replace_callback('/\?/', function($strValue){
+            static $intI = 0;
+            $intI++;
+            return '$' . $intI;
+        }, $strQuery);
 
         $strQuery = StringUtil::replace(" LIKE ", " ILIKE ", $strQuery, true, true);
 
