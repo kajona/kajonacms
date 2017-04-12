@@ -182,11 +182,11 @@ final class Logger implements LoggerInterface
     /**
      * @inheritdoc
      */
-    public function log($intLevel, $strMessage, array $arrContext = array())
+    public function log($strLevel, $strMessage, array $arrContext = array())
     {
-        if ($intLevel == LogLevel::EMERGENCY || $intLevel == LogLevel::ALERT || $intLevel == LogLevel::CRITICAL || $intLevel == LogLevel::ERROR) {
+        if ($strLevel == LogLevel::EMERGENCY || $strLevel == LogLevel::ALERT || $strLevel == LogLevel::CRITICAL || $strLevel == LogLevel::ERROR) {
             $intLevel = self::$levelError;
-        } elseif ($intLevel == LogLevel::WARNING || $intLevel == LogLevel::NOTICE) {
+        } elseif ($strLevel == LogLevel::WARNING || $strLevel == LogLevel::NOTICE) {
             $intLevel = self::$levelWarning;
         } else {
             $intLevel = self::$levelInfo;
