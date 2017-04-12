@@ -118,71 +118,71 @@ final class Logger implements LoggerInterface
     /**
      * @inheritdoc
      */
-    public function emergency($message, array $context = array())
+    public function emergency($strMessage, array $arrContext = array())
     {
-        $this->log(LogLevel::EMERGENCY, $message, $context);
+        $this->log(LogLevel::EMERGENCY, $strMessage, $arrContext);
     }
 
     /**
      * @inheritdoc
      */
-    public function alert($message, array $context = array())
+    public function alert($strMessage, array $arrContext = array())
     {
-        $this->log(LogLevel::ALERT, $message, $context);
+        $this->log(LogLevel::ALERT, $strMessage, $arrContext);
     }
 
     /**
      * @inheritdoc
      */
-    public function critical($message, array $context = array())
+    public function critical($strMessage, array $arrContext = array())
     {
-        $this->log(LogLevel::CRITICAL, $message, $context);
+        $this->log(LogLevel::CRITICAL, $strMessage, $arrContext);
     }
 
     /**
      * @inheritdoc
      */
-    public function error($message, array $context = array())
+    public function error($strMessage, array $arrContext = array())
     {
-        $this->log(LogLevel::ERROR, $message, $context);
+        $this->log(LogLevel::ERROR, $strMessage, $arrContext);
     }
 
     /**
      * @inheritdoc
      */
-    public function warning($message, array $context = array())
+    public function warning($strMessage, array $arrContext = array())
     {
-        $this->log(LogLevel::WARNING, $message, $context);
+        $this->log(LogLevel::WARNING, $strMessage, $arrContext);
     }
 
     /**
      * @inheritdoc
      */
-    public function notice($message, array $context = array())
+    public function notice($strMessage, array $arrContext = array())
     {
-        $this->log(LogLevel::NOTICE, $message, $context);
+        $this->log(LogLevel::NOTICE, $strMessage, $arrContext);
     }
 
     /**
      * @inheritdoc
      */
-    public function info($message, array $context = array())
+    public function info($strMessage, array $arrContext = array())
     {
-        $this->log(LogLevel::INFO, $message, $context);
+        $this->log(LogLevel::INFO, $strMessage, $arrContext);
     }
 
     /**
      * @inheritdoc
      */
-    public function debug($message, array $context = array())
+    public function debug($strMessage, array $arrContext = array())
     {
-        $this->log(LogLevel::DEBUG, $message, $context);
+        $this->log(LogLevel::DEBUG, $strMessage, $arrContext);
     }
 
     /**
      * @inheritdoc
      */
-    public function log($level, $message, array $context = array())
+    public function log($level, $strMessage, array $arrContext = array())
     {
         if ($level == LogLevel::EMERGENCY || $level == LogLevel::ALERT || $level == LogLevel::CRITICAL || $level == LogLevel::ERROR) {
             $intLevel = self::$levelError;
@@ -192,7 +192,7 @@ final class Logger implements LoggerInterface
             $intLevel = self::$levelInfo;
         }
 
-        $this->addLogRow($message, $intLevel, true);
+        $this->addLogRow($strMessage, $intLevel, true);
     }
 
     /**
