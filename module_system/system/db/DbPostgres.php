@@ -502,7 +502,7 @@ class DbPostgres extends DbBase
      *
      * @return string
      */
-    private function processQuery($strQuery)
+    protected function processQuery($strQuery)
     {
         $strQuery = preg_replace_callback('/\?/', function($strValue){
             static $intI = 0;
