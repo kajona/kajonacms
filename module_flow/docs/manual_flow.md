@@ -60,4 +60,14 @@ If the handler class exists you might want to call the `flow_handler_sync` debug
 a flow config for this handler. After this you should see the entry at the UI where you can configure
 the flow.
 
+### Rights
+
+It is possible to specify an edit group per status. If the model transitions into this status it
+could get the configured user group from the status and change the rights accordingly. This has 
+the advantage that the model does not need to overwrite the right* classes which results in better 
+performance and it is also possible to check the rights through a SQL query. The model is responsible 
+to handle the group rights. The `FlowModelTrait` provides a default `calcPermissions` method implementation 
+which can be called inside the `updateStatetToDB` method.
+
+
 [status_flow]: ./status_flow.png
