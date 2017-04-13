@@ -6,13 +6,14 @@ use Kajona\System\System\Carrier;
 use Kajona\System\System\Filesystem;
 use Kajona\System\System\Logger;
 use Kajona\System\System\StringUtil;
+use Psr\Log\LogLevel;
 
 class LoggerTest extends Testbase
 {
 
     public function testLogger()
     {
-        
+
         $objLogger = Logger::getInstance("test.log");
 
         $objLogger->setIntLogLevel(Logger::$levelError);
@@ -54,7 +55,6 @@ class LoggerTest extends Testbase
 
     public function testCustomLogLevel()
     {
-
         Carrier::getInstance()->getObjConfig()->setDebug('debuglogging_overwrite', array('test_logger_custom.log' => 1));
 
         $objLogger = Logger::getInstance('test_logger_custom.log');
@@ -72,5 +72,21 @@ class LoggerTest extends Testbase
         $this->assertTrue(StringUtil::indexOf($objLogger->getLogFileContent(), 'test log row 1', false) !== false);
     }
 
+    public function testPsr()
+    {
+        $objLogger = Logger::getInstance('test_logger_psr.log');
+
+        $objLogger->emergency('foo');
+        $objLogger->alert('foo');
+        $objLogger->critical('foo');
+        $objLogger->error('foo');
+        $objLogger->warning('foo');
+        $objLogger->notice('foo');
+        $objLogger->info('foo');
+        $objLogger->debug('foo');
+        $objLogger->log(LogLevel::INFO, 'foo');
+
+        $this->assertFileExists(_realpath_ . _projectpath_ . "/log/test_logger_psr.log");
+    }
 }
 

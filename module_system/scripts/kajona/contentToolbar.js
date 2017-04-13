@@ -8,7 +8,7 @@
 define(['jquery'], function ($) {
 
     var $objToolbarContainer = $(".contentToolbar");
-    var $objToolbarList = $(".contentToolbar ul");
+    var $objToolbarList = $(".contentToolbar ul:first");
 
     return /** @alias module:contentToolbar */ {
 

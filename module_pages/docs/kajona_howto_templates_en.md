@@ -41,11 +41,11 @@ This is folder containing all public images relevant for the layout.
 
 
 ##Create a new template set
-Login at the backend, chose the aspect “management” from the dropdown at the upper right corner. Select the link “installed templates” at the section “packagemanagement”. The system will show you a list of template-packs currently available and installed.
+Login at the backend, chose the aspect “Adminstration” from the dropdown at the upper right corner. At the section “Packagemanagement” select the link “Template manager” (you will see the list of installed templates).
 
 By using the buttons at the end of the list you may add new template-packs. Either by uploading them to your Kajona installation, or by creating them from scratch.
 Select the button “create a new template-pack” and a list of all modules and elements available at your system is shown. All those elements are available in the default-template pack. Start by giving your template a title, e.g. “mynewtemplate” and activate all modules and elements you want to redesign. If you skip a module or element, the specific template won't be overwritten and will be loaded from the default-pack as a kind of fallback.
-Select a least “module_pages”. This is the main element in order to layout your website. The module should be selected by default.
+Select at least “module_pages”. This is the main element in order to layout your website. The module should be selected by default.
 
 As soon as you click “save”, a new folder “mynewtemplate” or named according to the title you've provided will appear in the filesystem:
 
@@ -117,14 +117,14 @@ In addition there is the placeholder `%%kajona_head%%` which contains some JavaS
 
 
 ##Modify the template to your needs
-So as you now know the basic about placeholders in templates, just edit the demo template like you want and save it.
+So as you now know the basic about placeholders in templates, just edit the demo template (standard.tpl) like you want and save it.
 Besides simple changes to the html-structure you want to change the css-styles in nearly every case. We recommend to use the default bootstrap.css file in order to get started and modify the file to your need. Therefore, you have to copy the default file to your template, so from /templates/default/css. In this folder you'll find two files, bootstrap.css and bootstrap.min.css. The contents are the same, but the bootstrap.min.css was minified in order to boost the loading of the website. Use the bootstrap.css as a template:
 
 1. Modify the default styles
 Copy the file `/templates/default/css/bootstrap.css` to your template pack: `/templates/mynewtemplate/css/bootstrap.css`. Open the file and change it according to your needs. To make use of the file, you have to update the link to the css file in your templates' header section:
 ```
 	<!-- Template specific stylesheets: CSS and fonts -->
-	<link rel="stylesheet" href="_webpath_/mytemplatename/default/css/bootstrap.css?_system_browser_cachebuster_" type="text/css"/>
+	<link rel="stylesheet" href="_webpath_/templates/mytemplatename/css/bootstrap.css?_system_browser_cachebuster_" type="text/css"/>
 ``` 
 
 
@@ -133,15 +133,15 @@ Create a new css-file at `/templates/mynewtemplate/css` , e.g. `mystyles.css`.
 Add the file to the list of style sheets in your template. Add it as the last sheet in order to overwrite the default styles without touching them.
 ```
 	<!-- Template specific stylesheets: CSS and fonts -->
-	<link rel="stylesheet" href="_webpath_/default/default/css/bootstrap.css?_system_browser_cachebuster_" type="text/css"/>
-	<link rel="stylesheet" href="_webpath_/default/mynewtemplate/css/mystyles.css?_system_browser_cachebuster_" type="text/css"/>
+	<link rel="stylesheet" href="_webpath_/templates/default/css/bootstrap.css?_system_browser_cachebuster_" type="text/css"/>
+	<link rel="stylesheet" href="_webpath_/templates/mynewtemplate/css/mystyles.css?_system_browser_cachebuster_" type="text/css"/>
 ```
 
 3. Use only your own style sheets
 Create a new css file and add it to your template, replacing all other linked css-files. This is the most flexible way but the most expensive one, too.
 
 
-Now go into the administration and activate your new template. Chose the list of “installed template” from the “packagemanagement” and set your template active.
+Now go into the administration and activate your new template. From the “Packagemanagement” chose the “Template manager” (you will see the list of installed templates) and set your template active.
 
 
 

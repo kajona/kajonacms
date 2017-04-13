@@ -1,5 +1,3 @@
-var ScreenShotReporter = require('protractor-screenshot-reporter');
-
 exports.config = {
     seleniumAddress: 'http://localhost:4444/wd/hub',
     baseUrl: 'https://localhost',//set dynamically in onPrepare
@@ -18,10 +16,11 @@ exports.config = {
     jasmineNodeOpts: {
         defaultTimeoutInterval: 480000 // 8 minutes
     },
-    plugins: [{
-        package: 'protractor-console-plugin',
-        failOnWarning: false,
-        failOnError: true
+    plugins: [
+    {
+        package: 'protractor-screenshoter-plugin',
+        screenshotPath: '../build/screenshots',
+        clearFoldersBeforeTest: true
     }],
     onPrepare: function () {
 
@@ -43,21 +42,9 @@ exports.config = {
         const strProjectName = path.basename(strPathToProject);//determine project folder name
         browser.baseUrl = browser.baseUrl + "/" + strProjectName + "/core/_buildfiles/temp/kajona";
 
-        /** jasmine screenshot reporter */
-        jasmine.getEnv().addReporter(new ScreenShotReporter({
-            baseDirectory: '../build/screenshots',
-            pathBuilder: function (spec, descriptions, results, capabilities) {
-                var fileName = descriptions.reverse().join("_");
-                var name = '';
-                for (var i = 0; i < fileName.length; i++) {
-                    if (fileName.charAt(i).match(/^[A-z0-9_]$/)) {
-                        name += fileName.charAt(i);
-                    } else if (fileName.charAt(i) == ' ') {
-                        name += '_';
-                    }
-                }
-                return name;
-            }
-        }));
+        // returning the promise makes protractor wait for the reporter config before executing tests
+        return global.browser.getProcessedConfig().then(function (config) {
+            //it is ok to be empty
+        });
     }
 };

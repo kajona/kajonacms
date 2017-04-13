@@ -7,12 +7,12 @@
   ],
   "require": {
     "phpunit/phpunit": "5.7.*",
-    "squizlabs/php_codesniffer": "1.5.*",
-    "pdepend/pdepend": "2.*",
-    "phpmd/phpmd": "2.*",
-    "phploc/phploc": "2.*",
+    "squizlabs/php_codesniffer": "2.8.*",
+    "pdepend/pdepend": "2.5.*",
+    "phpmd/phpmd": "2.6.*",
+    "phploc/phploc": "3.*",
     "mayflower/php-codebrowser": "~1.1",
-    "sebastian/phpcpd": "2.*",
-    "theseer/phpdox" : "0.8.*"
+    "sebastian/phpcpd": "3.*",
+    "theseer/phpdox" : "0.9.*"
   }
 }

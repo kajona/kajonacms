@@ -168,8 +168,10 @@ class RequestDispatcher
                             $strReturn = $objConcreteModule->getModuleOutput();
                         } catch (ActionNotFoundException $objEx) {
                             $strReturn = $objConcreteModule->getModuleOutput();
+                        } catch (RedirectException $objEx) {
+                            ResponseObject::getInstance()->setStrRedirectUrl($objEx->getHref());
+                            $strReturn = "";
                         }
-
                     }
 
                     //React, if admin was opened by the portaleditor

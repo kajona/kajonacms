@@ -8,7 +8,6 @@
 
 namespace Kajona\System\System;
 
-
 /**
  * A common base class for AdminController and PortalController.
  * Use one of both to create admin-/portal-views.
@@ -23,6 +22,7 @@ abstract class AbstractController
 
     const STR_MODULE_ANNOTATION = "@module";
     const STR_MODULEID_ANNOTATION = "@moduleId";
+    const STR_PERMISSION_ANNOTATION = "@permissions";
 
     /**
      * May be used at an action method to define the return type.
@@ -219,7 +219,7 @@ abstract class AbstractController
 
 
 
-        $strPermissions = $objReflection->getMethodAnnotationValue($strMethodName, "@permissions");
+        $strPermissions = $objReflection->getMethodAnnotationValue($strMethodName, self::STR_PERMISSION_ANNOTATION);
         if ($strPermissions !== false) {
             //fetch the object to validate, either the module or a directly referenced object
             if (validateSystemid($this->getSystemid()) && $this->objFactory->getObject($this->getSystemid()) != null) {
@@ -496,6 +496,4 @@ abstract class AbstractController
         $objCache = Carrier::getInstance()->getContainer()->offsetGet(ServiceProvider::STR_CACHE_MANAGER);
         $objCache->flushCache();
     }
-
-
 }

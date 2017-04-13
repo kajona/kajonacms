@@ -83,12 +83,19 @@ CKEDITOR.editorConfig = function(config) {
             ['Undo','Redo']
         ];
 
+    config.toolbar_minimal_nosource =
+        [
+            ['Undo','Redo','-','RemoveFormat'],
+            ['Bold','Italic','Underline'],
+            ['NumberedList','BulletedList','-','Image']
+        ];
+
     //disable the conversion of special chars into html entities
     config.entities = false;
     config.entities_greek = false;
     config.entities_latin = false;
     config.autoParagraph = false;
     config.enterMode = CKEDITOR.ENTER_BR;
-    config.width = '640';
-    config.height = '250';
+    config.width = 620;
+    config.height = 250;
 };

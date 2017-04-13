@@ -277,9 +277,10 @@ class ToolkitAdmin extends Toolkit
      * @param string $strOpener
      * @param bool $bitReadonly
      *
+     * @param string $strInstantEditor
      * @return string
      */
-    public function formInputText($strName, $strTitle = "", $strValue = "", $strClass = "", $strOpener = "", $bitReadonly = false)
+    public function formInputText($strName, $strTitle = "", $strValue = "", $strClass = "", $strOpener = "", $bitReadonly = false, $strInstantEditor = "")
     {
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
@@ -287,6 +288,7 @@ class ToolkitAdmin extends Toolkit
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["class"] = $strClass;
         $arrTemplate["opener"] = $strOpener;
+        $arrTemplate["instantEditor"] = $strInstantEditor;
         $arrTemplate["readonly"] = ($bitReadonly ? "readonly=\"readonly\"" : "");
 
         return $this->objTemplate->fillTemplateFile($arrTemplate, "/elements.tpl", "input_text");
@@ -306,20 +308,21 @@ class ToolkitAdmin extends Toolkit
      * @throws Exception
      * @return string
      */
-    public function formInputPageSelector($strName, $strTitle = "", $strValue = "", $strClass = "", $bitElements = true, $bitRenderOpener = true, $strAddonAction = "")
+    public function formInputPageSelector($strName, $strTitle = "", $strValue = "", $strClass = "", $bitElements = true, $bitRenderOpener = true, $strAddonAction = "", $strInstantEditor = "")
     {
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
         $arrTemplate["value"] = htmlspecialchars($strValue, ENT_QUOTES, "UTF-8", false);
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["class"] = $strClass;
+        $arrTemplate["instantEditor"] = $strInstantEditor;
 
         $arrTemplate["opener"] = "";
         if ($bitRenderOpener) {
             $arrTemplate["opener"] .= getLinkAdminDialog(
                 "pages",
                 "pagesFolderBrowser",
-                "&pages=1&form_element=".$strName.(!$bitElements ? "&elements=false" : ""),
+                "&pages=1&form_element=".StringUtil::replace(array("[", "]"), array("\\\[", "\\\]"), $strName).(!$bitElements ? "&elements=false" : ""),
                 Carrier::getInstance()->getObjLang()->getLang("select_page", "pages"),
                 Carrier::getInstance()->getObjLang()->getLang("select_page", "pages"),
                 "icon_externalBrowser",
@@ -748,7 +751,7 @@ class ToolkitAdmin extends Toolkit
      * @return string
      * @throws Exception
      */
-    public function formInputDropdown($strName, array $arrKeyValues, $strTitle = "", $strKeySelected = "", $strClass = "", $bitEnabled = true, $strAddons = "", $strDataPlaceholder = "", $strOpener = "")
+    public function formInputDropdown($strName, array $arrKeyValues, $strTitle = "", $strKeySelected = "", $strClass = "", $bitEnabled = true, $strAddons = "", $strDataPlaceholder = "", $strOpener = "", $strInstantEditor = "")
     {
         $strOptions = "";
         foreach (array("", 0, "\"\"") as $strOneKeyToCheck) {
@@ -788,7 +791,8 @@ class ToolkitAdmin extends Toolkit
         $arrTemplate["options"] = $strOptions;
         $arrTemplate["addons"] = $strAddons;
         $arrTemplate["opener"] = $strOpener;
-        $arrTemplate["dataplaceholder"] = $strDataPlaceholder != "" ? $strDataPlaceholder : Carrier::getInstance()->getObjLang()->getLang("commons_dropdown_dataplaceholder", "system");
+        $arrTemplate["instantEditor"] = $strInstantEditor;
+        $arrTemplate["dataplaceholder"] = $strDataPlaceholder != "" ? $strDataPlaceholder : Carrier::getInstance()->getObjLang()->getLang("commons_dropdown_dataplaceholder", "system"); //TODO noch benötigt?
 
 
         return $this->objTemplate->fillTemplateFile($arrTemplate, "/elements.tpl", "input_dropdown", true);
@@ -845,12 +849,11 @@ class ToolkitAdmin extends Toolkit
      */
     public function formInputTagEditor($strName, $strTitle = "", array $arrValues = array(), $strOnChange = null)
     {
-
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["values"] = json_encode(array_values($arrValues));
-        $arrTemplate["onChange"] = empty($strOnChange) ? "function(){}" : (string)$strOnChange;
+        $arrTemplate["onChange"] = empty($strOnChange) ? "function(field, editor, tags){ $(field).attr('name', $(field).data('name')); $(field).val(tags.join(',')); }" : (string)$strOnChange;
 
         return $this->objTemplate->fillTemplateFile($arrTemplate, "/elements.tpl", "input_tageditor", true);
     }

@@ -29,35 +29,31 @@ You only have to follow a few steps in order to build a Kajona project out of th
 * Create a folder named ```core``` within the folder created before, e.g. ```kajona/core```
 * Clone the Git-repo inside the core-folder: Change to the new directory and use the following command:
 ```git clone https://github.com/kajona/kajonacms.git .```
-
-* The folder ```kajona/core``` should now be filled with a structure similar to:
-
-	```
- /_debugging
- /module_system
- /module_pages
- /module_samplecontent
- /module_system
- /module_tags
- .htaccess
- bootstrap.php
- setupproject.php
+* The folder ```kajona/core``` should now be filled with a structure similar to: 
 ```
-
+    /_debugging
+    /module_system
+    /module_pages
+    /module_samplecontent
+    /module_system
+    /module_tags
+    .htaccess
+    bootstrap.php
+    setupproject.php
+```
 * Open the file ```kajona/core/setupproject.php``` using the webbrowser of your choice (btw, you could run this script on the command line, too)
 * After a few log-outputs, your ```kajona``` folder is now setup like a real Kajona project, so there should be a structure similar to
-
-	```
- /core (as created manually)
- /files
- /project
- /templates
- .htaccess
- debug.php
- image.php
- index.php
- installer.php
- xml.php
+```
+    /core (as created manually)
+    /files
+    /project
+    /templates
+    .htaccess
+    debug.php
+    image.php
+    index.php
+    installer.php
+    xml.php
 ```
 
 > Have a look at the end of the results: If you see some red lines (composer messages) the setupproject could NOT run the composer commands successfully! Please run the commands manually from the command line or a terminal window.
