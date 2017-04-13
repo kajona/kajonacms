@@ -209,7 +209,9 @@ class FlowAdmin extends AdminEvensimpler implements AdminInterface
             return [];
         }
 
-        if ($strListIdentifier == "listStep") {
+        if ($strListIdentifier == "list") {
+            return [];
+        } elseif ($strListIdentifier == "listStep") {
             return $this->objToolkit->listButton(
                 Link::getLinkAdmin(
                     $this->getArrModule("modul"), "newStep", "&systemid=".$strSystemId,
@@ -217,7 +219,7 @@ class FlowAdmin extends AdminEvensimpler implements AdminInterface
                 )
             );
         } elseif ($strListIdentifier == "listFlow") {
-            return "";
+            return [];
         } elseif ($strListIdentifier == "listTransitionAction") {
             $arrLinks = array();
             $arrActions = $objFlow->getHandler()->getAvailableActions();
