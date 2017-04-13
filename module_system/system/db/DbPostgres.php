@@ -446,7 +446,7 @@ class DbPostgres extends DbBase
         //Now do a systemfork
         $intTemp = "";
         $strResult = system($strCommand, $intTemp);
-        Logger::getInstance(Logger::DBLOG)->addLogRow($this->strDumpBin." exited with code ".$intTemp, Logger::$levelInfo);
+        Logger::getInstance(Logger::DBLOG)->info($this->strDumpBin." exited with code ".$intTemp);
         return $intTemp == 0;
     }
 
@@ -475,7 +475,7 @@ class DbPostgres extends DbBase
 
         $intTemp = "";
         $strResult = system($strCommand, $intTemp);
-        Logger::getInstance(Logger::DBLOG)->addLogRow($this->strRestoreBin." exited with code ".$intTemp, Logger::$levelInfo);
+        Logger::getInstance(Logger::DBLOG)->info($this->strRestoreBin." exited with code ".$intTemp);
         return $intTemp == 0;
     }
 

@@ -77,7 +77,7 @@ class UsersourcesGroupKajona extends Model implements ModelInterface, Usersource
     {
         //mode-splitting
         if ($this->getSystemid() == "") {
-            Logger::getInstance(Logger::USERSOURCES)->addLogRow("saved new kajona group ".$this->getStrSystemid(), Logger::$levelInfo);
+            Logger::getInstance(Logger::USERSOURCES)->info("saved new kajona group ".$this->getStrSystemid());
             $strGrId = generateSystemid();
             $this->setSystemid($strGrId);
             $strQuery = "INSERT INTO "._dbprefix_."user_group_kajona
@@ -86,7 +86,7 @@ class UsersourcesGroupKajona extends Model implements ModelInterface, Usersource
             return $this->objDB->_pQuery($strQuery, array($strGrId, $this->getStrDesc()));
         }
         else {
-            Logger::getInstance(Logger::USERSOURCES)->addLogRow("updated kajona group ".$this->getSystemid(), Logger::$levelInfo);
+            Logger::getInstance(Logger::USERSOURCES)->info("updated kajona group ".$this->getSystemid());
             $strQuery = "UPDATE "._dbprefix_."user_group_kajona
                             SET group_desc=?
                           WHERE group_id=?";
@@ -174,7 +174,7 @@ class UsersourcesGroupKajona extends Model implements ModelInterface, Usersource
      */
     public function deleteGroup()
     {
-        Logger::getInstance(Logger::USERSOURCES)->addLogRow("deleted kajona group with id ".$this->getSystemid(), Logger::$levelInfo);
+        Logger::getInstance(Logger::USERSOURCES)->info("deleted kajona group with id ".$this->getSystemid());
         $this->deleteAllUsersFromCurrentGroup();
         $strQuery = "DELETE FROM "._dbprefix_."user_group_kajona WHERE group_id=?";
         CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_RECORDDELETED, array($this->getSystemid(), get_class($this)));

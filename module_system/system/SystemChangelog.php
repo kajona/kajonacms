@@ -395,11 +395,7 @@ class SystemChangelog
                 $strProperty = $arrChangeSet["property"];
 
 
-                Logger::getInstance()->addLogRow(
-                    "change in class ".get_class($objSourceModel)."@".$strAction." systemid: ".$objSourceModel->getSystemid()." property: ".$strProperty." old value: "
-                    .StringUtil::truncate($strOldvalue, 60)." new value: ".StringUtil::truncate($strNewvalue, 60),
-                    Logger::$levelInfo
-                );
+                Logger::getInstance()->info("change in class ".get_class($objSourceModel)."@".$strAction." systemid: ".$objSourceModel->getSystemid()." property: ".$strProperty." old value: ".StringUtil::truncate($strOldvalue, 60)." new value: ".StringUtil::truncate($strNewvalue, 60));
 
                 $arrValues = array(
                     generateSystemid(),
@@ -723,7 +719,7 @@ class SystemChangelog
     public static function changeValueForInterval($strSystemid, $strAction, $strProperty, $strPrevid, $strClass, $strUser, $strNewValue, Date $objStartDate, Date $objEndDate)
     {
 
-        Logger::getInstance()->addLogRow("changed time-based history-entry: ".$strSystemid."/".$strProperty." to ".$strNewValue." from ".$objStartDate." until ".$objEndDate, Logger::$levelWarning);
+        Logger::getInstance()->warning("changed time-based history-entry: ".$strSystemid."/".$strProperty." to ".$strNewValue." from ".$objStartDate." until ".$objEndDate);
 
         $strQuery = "SELECT *
                        FROM "._dbprefix_.self::getTableForClass($strClass)."

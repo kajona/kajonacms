@@ -78,7 +78,7 @@ class LanguagesLanguageset extends Model implements ModelInterface {
             $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
         }
 
-        Logger::getInstance()->addLogRow("updating languageset " . $this->getSystemid(), Logger::$levelInfo);
+        Logger::getInstance()->info("updating languageset " . $this->getSystemid());
 
         $arrValues = array();
         foreach($this->arrLanguageSet as $strLanguage => $strSystemid) {

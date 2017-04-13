@@ -184,10 +184,10 @@ class Rights
 
         if ($bitSave) {
             $this->objDb->transactionCommit();
-            Logger::getInstance()->addLogRow("saving rights of record ".$strSystemid." succeeded", Logger::$levelInfo);
+            Logger::getInstance()->info("saving rights of record ".$strSystemid." succeeded");
         } else {
             $this->objDb->transactionRollback();
-            Logger::getInstance()->addLogRow("saving rights of record ".$strSystemid." failed", Logger::$levelError);
+            Logger::getInstance()->error("saving rights of record ".$strSystemid." failed");
             throw new Exception("saving rights of record ".$strSystemid." failed", Exception::$level_ERROR);
         }
         

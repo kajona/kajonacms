@@ -153,7 +153,7 @@ class Exception extends \Exception
 
         //Handle  errors.
         $strLogMessage = basename($this->getFile()).":".$this->getLine()." -- ".$this->getMessage();
-        Logger::getInstance()->addLogRow($strLogMessage, Logger::$levelError);
+        Logger::getInstance()->error($strLogMessage);
 
         //fatal errors are displayed in every case
         if ($this->intDebuglevel >= 1 || $this->intErrorlevel == Exception::$level_FATALERROR) {

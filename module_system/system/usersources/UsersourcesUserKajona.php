@@ -199,7 +199,7 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
 
                         ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-            Logger::getInstance(Logger::USERSOURCES)->addLogRow("new kajona user: ".$this->getStrEmail(), Logger::$levelInfo);
+            Logger::getInstance(Logger::USERSOURCES)->info("new kajona user: ".$this->getStrEmail());
 
             return $this->objDB->_pQuery($strQuery, array(
                 $this->getStrSpecialConfig(),
@@ -244,7 +244,7 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
 
             }
 
-            Logger::getInstance(Logger::USERSOURCES)->addLogRow("updated user ".$this->getStrEmail(), Logger::$levelInfo);
+            Logger::getInstance(Logger::USERSOURCES)->info("updated user ".$this->getStrEmail());
 
             return $this->objDB->_pQuery($strQuery, $arrParams, array(false));
         }
@@ -270,7 +270,7 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
      */
     public function deleteUser()
     {
-        Logger::getInstance(Logger::USERSOURCES)->addLogRow("deleted user with id ".$this->getSystemid(), Logger::$levelInfo);
+        Logger::getInstance(Logger::USERSOURCES)->info("deleted user with id ".$this->getSystemid());
         $this->deleteAllUserMemberships();
         $strQuery = "DELETE FROM "._dbprefix_."user_kajona WHERE user_id=?";
         //call other models that may be interested

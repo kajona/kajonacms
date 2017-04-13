@@ -180,7 +180,7 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
      */
     protected function onInsertToDb()
     {
-        Logger::getInstance(Logger::USERSOURCES)->addLogRow("new user for subsystem ".$this->getStrSubsystem()." / ".$this->getStrUsername(), Logger::$levelInfo);
+        Logger::getInstance(Logger::USERSOURCES)->info("new user for subsystem ".$this->getStrSubsystem()." / ".$this->getStrUsername());
         $objSources = new UserSourcefactory();
         $objProvider = $objSources->getUsersource($this->getStrSubsystem());
         $objTargetUser = $objProvider->getNewUser();
@@ -291,7 +291,7 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
             throw new Exception("You can't delete yourself", Exception::$level_FATALERROR);
         }
 
-        Logger::getInstance(Logger::USERSOURCES)->addLogRow("deleted user with id ".$this->getSystemid()." (".$this->getStrUsername()." / ".$this->getStrName().",".$this->getStrForename().")", Logger::$levelWarning);
+        Logger::getInstance(Logger::USERSOURCES)->warning("deleted user with id ".$this->getSystemid()." (".$this->getStrUsername()." / ".$this->getStrName().",".$this->getStrForename().")");
         $objUsersources = new UserSourcefactory();
         $objSourceUser = $objUsersources->getSourceUser($this, true);
         $objSourceUser->deleteUser();

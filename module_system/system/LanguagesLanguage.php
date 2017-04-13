@@ -218,11 +218,11 @@ class LanguagesLanguage extends Model implements ModelInterface, AdminListableIn
 
         if($bitCommit) {
             $this->objDB->transactionCommit();
-            Logger::getInstance()->addLogRow("moved contents from ".$strSourceLanguage." to ".$this->getStrName()." successfully", Logger::$levelInfo);
+            Logger::getInstance()->info("moved contents from ".$strSourceLanguage." to ".$this->getStrName()." successfully");
         }
         else {
             $this->objDB->transactionRollback();
-            Logger::getInstance()->addLogRow("moved contents from ".$strSourceLanguage." to ".$this->getStrName()." failed", Logger::$levelError);
+            Logger::getInstance()->error("moved contents from ".$strSourceLanguage." to ".$this->getStrName()." failed");
         }
 
         return $bitCommit;

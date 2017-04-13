@@ -1579,7 +1579,7 @@ JS;
             foreach ($arrFiles as $objTask) {
                 //instantiate the current task
                 if ($objTask->getStrInternalTaskname() == $this->getParam("task")) {
-                    Logger::getInstance(Logger::ADMINTASKS)->addLogRow("executing task ".$objTask->getStrInternalTaskname(), Logger::$levelWarning);
+                    Logger::getInstance(Logger::ADMINTASKS)->warning("executing task ".$objTask->getStrInternalTaskname());
 
                     //let the work begin...
                     $strTempOutput = trim($objTask->executeTask());
