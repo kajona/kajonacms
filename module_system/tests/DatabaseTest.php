@@ -3,6 +3,7 @@
 namespace Kajona\System\Tests;
 
 use Kajona\System\System\Carrier;
+use Kajona\System\System\Db\DbPostgres;
 use Kajona\System\System\DbDatatypes;
 
 class DatabaseTest extends Testbase
@@ -374,6 +375,32 @@ SQL;
         // delete which affects no rows
         $objDB->_pQuery("DELETE FROM " . _dbprefix_ . "temp_autotest_temp WHERE temp_char20 = ?", array(generateSystemid()));
         $this->assertEquals(0, $objDB->getIntAffectedRows());
+    }
+
+    /**
+     * @dataProvider dataPostgresProcessQueryProvider
+     * @covers DbPostgres::processQuery()
+     */
+    public function testPostgresProcessQuery($strExpect, $strQuery)
+    {
+        $objDbPostgres = new DbPostgres();
+        $objReflection = new \ReflectionClass(DbPostgres::class);
+
+        $objMethod = $objReflection->getMethod("processQuery");
+
+        $objMethod->setAccessible(true);
+        $strActual = $objMethod->invoke($objDbPostgres, $strQuery);
+
+        $this->assertEquals($strExpect, $strActual);
+    }
+
+    public function dataPostgresProcessQueryProvider()
+    {
+        return [
+            ["UPDATE temp_autotest_temp SET temp_char20 = $1 WHERE temp_char20 = $2", "UPDATE temp_autotest_temp SET temp_char20 = ? WHERE temp_char20 = ?"],
+            ["INSERT INTO temp_autotest (temp_char10, temp_char20, temp_char100, temp_char254, temp_char500, temp_text) VALUES ($1, $2, $3, $4, $5, $6),\n($7, $8, $9, $10, $11, $12)", "INSERT INTO temp_autotest (temp_char10, temp_char20, temp_char100, temp_char254, temp_char500, temp_text) VALUES (?, ?, ?, ?, ?, ?),\n(?, ?, ?, ?, ?, ?)"],
+            ["SELECT * FROM temp_autotest WHERE temp_char10 = $1 AND temp_char20 = $2 AND temp_char100 = $3", "SELECT * FROM temp_autotest WHERE temp_char10 = ? AND temp_char20 = ? AND temp_char100 = ?"],
+        ];
     }
 }
 
