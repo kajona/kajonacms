@@ -55,31 +55,10 @@ class FlowStatus extends Model implements ModelInterface, AdminListableInterface
 
     /**
      * @var UserGroup[]
-     * @objectList flow_status2view (source="status_system_id", target="usergroup_system_id", type={"Kajona\\System\\System\\UserGroup"})
-     * @fieldType Kajona\System\Admin\Formentries\FormentryObjecttags
-     */
-    //protected $arrViewGroups;
-
-    /**
-     * @var UserGroup[]
      * @objectList flow_status2edit (source="status_system_id", target="usergroup_system_id", type={"Kajona\\System\\System\\UserGroup"})
      * @fieldType Kajona\System\Admin\Formentries\FormentryObjecttags
      */
     protected $arrEditGroups;
-
-    /**
-     * @var UserGroup[]
-     * @objectList flow_status2delete (source="status_system_id", target="usergroup_system_id", type={"Kajona\\System\\System\\UserGroup"})
-     * @fieldType Kajona\System\Admin\Formentries\FormentryObjecttags
-     */
-    //protected $arrDeleteGroups;
-
-    /**
-     * @var UserGroup[]
-     * @objectList flow_status2right (source="status_system_id", target="usergroup_system_id", type={"Kajona\\System\\System\\UserGroup"})
-     * @fieldType Kajona\System\Admin\Formentries\FormentryObjecttags
-     */
-    //protected $arrRightGroups;
 
     /**
      * @return string
@@ -160,22 +139,6 @@ class FlowStatus extends Model implements ModelInterface, AdminListableInterface
     /**
      * @return UserGroup[]
      */
-    public function getArrViewGroups()
-    {
-        return $this->arrViewGroups;
-    }
-
-    /**
-     * @param UserGroup[] $arrViewGroups
-     */
-    public function setArrViewGroups($arrViewGroups)
-    {
-        $this->arrViewGroups = $arrViewGroups;
-    }
-
-    /**
-     * @return UserGroup[]
-     */
     public function getArrEditGroups()
     {
         return $this->arrEditGroups;
@@ -187,38 +150,6 @@ class FlowStatus extends Model implements ModelInterface, AdminListableInterface
     public function setArrEditGroups($arrEditGroups)
     {
         $this->arrEditGroups = $arrEditGroups;
-    }
-
-    /**
-     * @return UserGroup[]
-     */
-    public function getArrDeleteGroups()
-    {
-        return $this->arrDeleteGroups;
-    }
-
-    /**
-     * @param UserGroup[] $arrDeleteGroups
-     */
-    public function setArrDeleteGroups($arrDeleteGroups)
-    {
-        $this->arrDeleteGroups = $arrDeleteGroups;
-    }
-
-    /**
-     * @return UserGroup[]
-     */
-    public function getArrRightGroups()
-    {
-        return $this->arrRightGroups;
-    }
-
-    /**
-     * @param UserGroup[] $arrRightGroups
-     */
-    public function setArrRightGroups($arrRightGroups)
-    {
-        $this->arrRightGroups = $arrRightGroups;
     }
 
     /**
