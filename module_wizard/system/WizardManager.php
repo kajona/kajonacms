@@ -13,6 +13,7 @@ use Kajona\System\Admin\ToolkitAdmin;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Database;
 use Kajona\System\System\Exception;
+use Kajona\System\System\ModelInterface;
 use Kajona\System\System\Root;
 use Kajona\System\System\Session;
 
@@ -134,8 +135,7 @@ class WizardManager
                 $objPage->onSave($objInstance, $objForm);
 
                 // save in session
-                $arrData = AdminModelserializer::serialize($objInstance, AdminModelserializer::STR_ANNOTATION_SERIALIZABLE);
-                $this->objSession->setSession(self::getSessionKey($this->strNamespace, $objPage), $arrData);
+                self::setSessionModel($this->strNamespace, $objInstance);
 
                 // if we are at the last step we call each page to persist the entries
                 if ($strStep == $this->getLastStep()) {
@@ -302,6 +302,18 @@ class WizardManager
         } else {
             return null;
         }
+    }
+
+    /**
+     * @param string $strNamespace
+     * @param ModelInterface $objModel
+     */
+    public static function setSessionModel($strNamespace, ModelInterface $objModel)
+    {
+        $strSessionKey = self::getSessionKey($strNamespace, get_class($objModel));
+        $arrData = AdminModelserializer::serialize($objModel, AdminModelserializer::STR_ANNOTATION_SERIALIZABLE);
+
+        Session::getInstance()->setSession($strSessionKey, $arrData);
     }
 
     /**
