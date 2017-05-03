@@ -76,7 +76,7 @@ class PackagemanagerPackagemanagerPharmodule extends PackagemanagerPackagemanage
             throw new Exception("current package ".$strSource." is not a phar.", Exception::$level_ERROR);
         }
 
-        Logger::getInstance(Logger::PACKAGEMANAGEMENT)->addLogRow("moving ".$strSource." to ".$this->getStrTargetPath(), Logger::$levelInfo);
+        Logger::getInstance(Logger::PACKAGEMANAGEMENT)->info("moving ".$strSource." to ".$this->getStrTargetPath());
 
         $objFilesystem = new Filesystem();
         //set a chmod before copying the files - at least try to
@@ -132,7 +132,7 @@ class PackagemanagerPackagemanagerPharmodule extends PackagemanagerPackagemanage
                 continue;
             }
 
-            Logger::getInstance(Logger::PACKAGEMANAGEMENT)->addLogRow("triggering updateOrInstall() on installer ".get_class($objInstance).", all requirements given", Logger::$levelInfo);
+            Logger::getInstance(Logger::PACKAGEMANAGEMENT)->info("triggering updateOrInstall() on installer ".get_class($objInstance).", all requirements given");
             //trigger update or install
             $strReturn .= $objInstance->installOrUpdate();
         }

@@ -41,7 +41,7 @@ class ScriptletHelper
 
             if ($objScriptlet != null && ($intContext == null || ($intContext & $objScriptlet->getProcessingContext()))) {
                 $strContent = $objScriptlet->processContent($strContent);
-                Logger::getInstance("scriptlets.log")->addLogRow("processing call to ".$strOneScriptlet.", filter: ".$intContext, Logger::$levelInfo);
+                Logger::getInstance("scriptlets.log")->info("processing call to ".$strOneScriptlet.", filter: ".$intContext);
             }
 
         }

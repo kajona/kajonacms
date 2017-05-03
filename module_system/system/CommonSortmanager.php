@@ -179,7 +179,7 @@ class CommonSortmanager implements SortmanagerInterface
      */
     public function setAbsolutePosition($intNewPosition, $arrRestrictionModules = false)
     {
-        Logger::getInstance()->addLogRow("move ".$this->objSource->getSystemid()." to new pos ".$intNewPosition, Logger::$levelInfo);
+        Logger::getInstance()->info("move ".$this->objSource->getSystemid()." to new pos ".$intNewPosition);
         $this->objDB->flushQueryCache();
 
         //validate if object is sortable

@@ -68,7 +68,7 @@ class CoreEventdispatcher
             $this->arrRegisteredListeners[$strEventIdentifier] = array();
         }
 
-        Logger::getInstance(Logger::EVENTS)->addLogRow("registering listener for type ".$strEventIdentifier.", instance of ".get_class($objListener), Logger::$levelInfo);
+        Logger::getInstance(Logger::EVENTS)->info("registering listener for type ".$strEventIdentifier.", instance of ".get_class($objListener));
         $this->arrRegisteredListeners[$strEventIdentifier][] = $objListener;
     }
 
@@ -125,7 +125,7 @@ class CoreEventdispatcher
 
         foreach ($this->arrRegisteredListeners[$strEventIdentifier] as $intKey => $objOneListener) {
             if ($objListener === $objOneListener) {
-                Logger::getInstance(Logger::EVENTS)->addLogRow("removing listener for type ".$strEventIdentifier.", instance of ".get_class($objOneListener), Logger::$levelInfo);
+                Logger::getInstance(Logger::EVENTS)->info("removing listener for type ".$strEventIdentifier.", instance of ".get_class($objOneListener));
                 unset($this->arrRegisteredListeners[$strEventIdentifier][$intKey]);
                 return true;
             }
@@ -171,7 +171,7 @@ class CoreEventdispatcher
 
         /** @var $objOneListener GenericeventListenerInterface */
         foreach ($this->arrRegisteredListeners[$strEventIdentifier] as $objOneListener) {
-            Logger::getInstance(Logger::EVENTS)->addLogRow("propagating event of type ".$strEventIdentifier." to instance of ".get_class($objOneListener), Logger::$levelInfo);
+            Logger::getInstance(Logger::EVENTS)->info("propagating event of type ".$strEventIdentifier." to instance of ".get_class($objOneListener));
             $bitReturn = $objOneListener->handleEvent($strEventIdentifier, $arrArguments) && $bitReturn;
         }
 

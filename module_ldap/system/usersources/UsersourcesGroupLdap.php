@@ -83,7 +83,7 @@ class UsersourcesGroupLdap extends \Kajona\System\System\Model implements \Kajon
     {
         //mode-splitting
         if ($this->getSystemid() == "") {
-            Logger::getInstance(Logger::USERSOURCES)->addLogRow("saved new ldap group " . $this->getStrSystemid(), Logger::$levelInfo);
+            Logger::getInstance(Logger::USERSOURCES)->info("saved new ldap group " . $this->getStrSystemid());
             $strGrId = generateSystemid();
             $this->setSystemid($strGrId);
             $strQuery = "INSERT INTO " . _dbprefix_ . "user_group_ldap
@@ -91,7 +91,7 @@ class UsersourcesGroupLdap extends \Kajona\System\System\Model implements \Kajon
                           (?, ?, ?)";
             return $this->objDB->_pQuery($strQuery, array($strGrId, $this->getStrDn(), $this->getIntCfg()), array(true, false));
         } else {
-            Logger::getInstance(Logger::USERSOURCES)->addLogRow("updated ldap group " . $this->getSystemid(), Logger::$levelInfo);
+            Logger::getInstance(Logger::USERSOURCES)->info("updated ldap group " . $this->getSystemid());
             $strQuery = "UPDATE " . _dbprefix_ . "user_group_ldap
                             SET group_ldap_dn=?, group_ldap_cfg=?
                           WHERE group_ldap_id=?";
@@ -218,7 +218,7 @@ class UsersourcesGroupLdap extends \Kajona\System\System\Model implements \Kajon
      */
     public function deleteGroup()
     {
-        Logger::getInstance()->addLogRow("deleted ldap group with id " . $this->getSystemid(), Logger::$levelInfo);
+        Logger::getInstance()->info("deleted ldap group with id " . $this->getSystemid());
         $strQuery = "DELETE FROM " . _dbprefix_ . "user_group_ldap WHERE group_ldap_id=?";
         CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_RECORDDELETED, array($this->getSystemid(), get_class($this)));
         return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));

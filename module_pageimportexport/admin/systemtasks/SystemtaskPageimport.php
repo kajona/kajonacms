@@ -136,7 +136,7 @@ class SystemtaskPageimport extends SystemtaskBase implements AdminSystemtaskInte
         $strSuffix = StringUtil::toLowerCase(StringUtil::substring($arrFile["name"], StringUtil::lastIndexOf($arrFile["name"], ".")));
         if ($strSuffix == ".xml") {
             if ($objFilesystem->copyUpload($strTarget, $arrFile["tmp_name"])) {
-                Logger::getInstance()->addLogRow("uploaded file ".$strTarget, Logger::$levelInfo);
+                Logger::getInstance()->info("uploaded file ".$strTarget);
             }
             else {
                 $strError = "upload";

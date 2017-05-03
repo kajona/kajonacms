@@ -108,7 +108,7 @@ class UsersourcesUserLdap extends \Kajona\System\System\Model implements \Kajona
 
                         ) VALUES (?,?,?,?,?,?)";
 
-            Logger::getInstance(Logger::USERSOURCES)->addLogRow("new ldap user: " . $this->getStrDN(), Logger::$levelInfo);
+            Logger::getInstance(Logger::USERSOURCES)->info("new ldap user: " . $this->getStrDN());
 
             return $this->objDB->_pQuery($strQuery, array(
                 $strUserid,
@@ -127,7 +127,7 @@ class UsersourcesUserLdap extends \Kajona\System\System\Model implements \Kajona
             );
 
 
-            Logger::getInstance(Logger::USERSOURCES)->addLogRow("updated user " . $this->getStrDN(), Logger::$levelInfo);
+            Logger::getInstance(Logger::USERSOURCES)->info("updated user " . $this->getStrDN());
 
             return $this->objDB->_pQuery($strQuery, $arrParams);
         }
@@ -152,7 +152,7 @@ class UsersourcesUserLdap extends \Kajona\System\System\Model implements \Kajona
      */
     public function deleteUser()
     {
-        Logger::getInstance()->addLogRow("deleted ldap user with dn " . $this->getStrDN(), Logger::$levelInfo);
+        Logger::getInstance()->info("deleted ldap user with dn " . $this->getStrDN());
         $strQuery = "DELETE FROM " . _dbprefix_ . "user_ldap WHERE user_ldap_id=?";
         //call other models that may be interested
         $bitDelete = $this->objDB->_pQuery($strQuery, array($this->getSystemid()));

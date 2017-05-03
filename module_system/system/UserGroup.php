@@ -116,7 +116,7 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface
      */
     protected function onInsertToDb()
     {
-        Logger::getInstance(Logger::USERSOURCES)->addLogRow("saved new group subsystem ".$this->getStrSubsystem()." / ".$this->getStrSystemid(), Logger::$levelInfo);
+        Logger::getInstance(Logger::USERSOURCES)->info("saved new group subsystem ".$this->getStrSubsystem()." / ".$this->getStrSystemid());
         //create the new instance on the remote-system
         $objSources = new UserSourcefactory();
         $objProvider = $objSources->getUsersource($this->getStrSubsystem());
@@ -191,7 +191,7 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface
      */
     public function deleteObjectFromDatabase()
     {
-        Logger::getInstance(Logger::USERSOURCES)->addLogRow("deleted group with id ".$this->getSystemid()." (".$this->getStrName().")", Logger::$levelWarning);
+        Logger::getInstance(Logger::USERSOURCES)->warning("deleted group with id ".$this->getSystemid()." (".$this->getStrName().")");
         //Delete related group
         $this->getObjSourceGroup()->deleteGroup();
         return parent::deleteObjectFromDatabase();

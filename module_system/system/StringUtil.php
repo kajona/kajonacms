@@ -24,13 +24,12 @@ class StringUtil
     public static function indexOf($strHaystack, $strNeedle, $bitCaseSensitive = true)
     {
         if (_mbstringloaded_) {
-            if($bitCaseSensitive) {
+            if ($bitCaseSensitive) {
                 return mb_strpos($strHaystack, $strNeedle);
             }
             return mb_stripos($strHaystack, $strNeedle);
-        }
-        else {
-            if($bitCaseSensitive) {
+        } else {
+            if ($bitCaseSensitive) {
                 return strpos($strHaystack, $strNeedle);
             }
             return stripos($strHaystack, $strNeedle);
@@ -50,13 +49,12 @@ class StringUtil
     public static function lastIndexOf($strHaystack, $strNeedle, $bitCaseSensitive = true)
     {
         if (_mbstringloaded_) {
-            if($bitCaseSensitive) {
+            if ($bitCaseSensitive) {
                 return mb_strrpos($strHaystack, $strNeedle);
             }
             return mb_strripos($strHaystack, $strNeedle);
-        }
-        else {
-            if($bitCaseSensitive) {
+        } else {
+            if ($bitCaseSensitive) {
                 return strrpos($strHaystack, $strNeedle);
             }
             return strripos($strHaystack, $strNeedle);
@@ -74,8 +72,7 @@ class StringUtil
     {
         if (_mbstringloaded_) {
             return mb_strlen($strString);
-        }
-        else {
+        } else {
             return strlen($strString);
         }
     }
@@ -90,8 +87,7 @@ class StringUtil
     {
         if (_mbstringloaded_) {
             return mb_strtolower($strString);
-        }
-        else {
+        } else {
             return strtolower($strString);
         }
     }
@@ -106,8 +102,7 @@ class StringUtil
     {
         if (_mbstringloaded_) {
             return mb_strtoupper($strString);
-        }
-        else {
+        } else {
             return strtoupper($strString);
         }
     }
@@ -117,25 +112,22 @@ class StringUtil
      *
      * @param $strString
      * @param $intBeginIndex
-     * @param null $intEndIndex
+     * @param null $intLength
      * @return string
      */
-    public static function substring($strString, $intBeginIndex, $intEndIndex = null)
+    public static function substring($strString, $intBeginIndex, $intLength = null)
     {
         if (_mbstringloaded_) {
-            if ($intEndIndex === null) {
+            if ($intLength === null) {
                 return mb_substr($strString, $intBeginIndex);
+            } else {
+                return mb_substr($strString, $intBeginIndex, $intLength);
             }
-            else {
-                return mb_substr($strString, $intBeginIndex, $intEndIndex);
-            }
-        }
-        else {
-            if ($intEndIndex === null) {
+        } else {
+            if ($intLength === null) {
                 return substr($strString, $intBeginIndex);
-            }
-            else {
-                return substr($strString, $intBeginIndex, $intEndIndex);
+            } else {
+                return substr($strString, $intBeginIndex, $intLength);
             }
         }
     }
@@ -164,8 +156,7 @@ class StringUtil
     {
         if ($intLength > 0 && self::length($strString) > $intLength) {
             return trim(self::substring($strString, 0, $intLength)).$strAdd;
-        }
-        else {
+        } else {
             return $strString;
         }
     }
@@ -186,16 +177,14 @@ class StringUtil
     {
         if ($bitUnicodesafe) {
             if (!is_array($mixedSearch)) {
-                $mixedSearch = '!'.preg_quote($mixedSearch, '!').'!u'.($bitCaseSensitive ? '': 'i');
-            }
-            else {
+                $mixedSearch = '!'.preg_quote($mixedSearch, '!').'!u'.($bitCaseSensitive ? '' : 'i');
+            } else {
                 foreach ($mixedSearch as $strKey => $strValue) {
-                    $mixedSearch[$strKey] = '!'.preg_quote($strValue).'!u'.($bitCaseSensitive ? '': 'i');
+                    $mixedSearch[$strKey] = '!'.preg_quote($strValue).'!u'.($bitCaseSensitive ? '' : 'i');
                 }
             }
             return preg_replace($mixedSearch, $mixedReplace, $strSubject);
-        }
-        else {
+        } else {
             return $bitCaseSensitive ? str_replace($mixedSearch, $mixedReplace, $strSubject) : str_ireplace($mixedSearch, $mixedReplace, $strSubject);
         }
     }
@@ -209,10 +198,10 @@ class StringUtil
      */
     public static function toInt($strString)
     {
-        if(is_string($strString) && $strString !== "") {
+        if (is_string($strString) && $strString !== "") {
             return intval($strString);
         }
-        if(is_numeric($strString)) {
+        if (is_numeric($strString)) {
             return intval($strString);
         }
 
@@ -232,10 +221,9 @@ class StringUtil
      */
     public static function toArray($strString, $strDelimiter = ",")
     {
-        if(is_array($strString)) {
+        if (is_array($strString)) {
             return $strString;
-        }
-        elseif(is_string($strString) && $strString !== "" && !empty($strDelimiter)) {
+        } elseif (is_string($strString) && $strString !== "" && !empty($strDelimiter)) {
             return explode($strDelimiter, $strString);
         }
 
@@ -250,13 +238,11 @@ class StringUtil
      */
     public static function toDate($strString)
     {
-        if($strString instanceof Date) {
+        if ($strString instanceof Date) {
             return $strString;
-        }
-        elseif($strString == "") {
+        } elseif ($strString == "") {
             return null;
-        }
-        else {
+        } else {
             return new Date($strString);
         }
     }
@@ -269,7 +255,8 @@ class StringUtil
      * @param $strSearch
      * @return bool
      */
-    public static function startsWith($strString, $strSearch) {
+    public static function startsWith($strString, $strSearch)
+    {
         $intLengthSearch = self::length($strSearch);
         $strStart = self::substring($strString, 0, $intLengthSearch);
 
@@ -284,7 +271,8 @@ class StringUtil
      * @param $strSearch
      * @return bool
      */
-    public static function endsWith($strString, $strSearch) {
+    public static function endsWith($strString, $strSearch)
+    {
         $intLengthSearch = self::length($strSearch);
         $strStart = self::substring($strString, $intLengthSearch * -1);
 
@@ -299,11 +287,11 @@ class StringUtil
      * @param $strPattern
      * @return int| FALSE on error or if no matches are found
      */
-    public static function matches($strString, $strPattern) {
+    public static function matches($strString, $strPattern)
+    {
         if (_mbstringloaded_) {
             return mb_ereg($strPattern, $strString);
-        }
-        else {
+        } else {
             return preg_match("/".$strPattern."/", $strString);
         }
     }
@@ -316,7 +304,7 @@ class StringUtil
      */
     public static function jsSafeString($strString)
     {
-        $strJson = json_encode((string) $strString);
+        $strJson = json_encode((string)$strString);
         $strJson = trim($strJson, '"');
         $strJson = addcslashes($strJson, "'");
 
