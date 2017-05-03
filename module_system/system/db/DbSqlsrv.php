@@ -316,11 +316,11 @@ class DbSqlsrv extends DbBase
         }
 
         //build the oracle code
-        $strQuery .= "CREATE TABLE ".$strName." ( \n";
+        $strQuery .= "CREATE TABLE ".$this->encloseTableName($strName)." ( \n";
 
         //loop the fields
         foreach ($arrFields as $strFieldName => $arrColumnSettings) {
-            $strQuery .= " ".$strFieldName." ";
+            $strQuery .= " ".$this->encloseColumnName($strFieldName)." ";
 
             $strQuery .= $this->getDatatype($arrColumnSettings[0]);
 
@@ -464,6 +464,31 @@ class DbSqlsrv extends DbBase
         $intLength = $intEnd - $intStart + 1;
 
         return $strQuery." OFFSET {$intStart} ROWS FETCH NEXT {$intLength} ROWS ONLY";
+    }
+
+    /**
+     * Allows the db-driver to add database-specific surrounding to column-names.
+     * E.g. needed by the mysql-drivers
+     *
+     * @param string $strColumn
+     *
+     * @return string
+     */
+    public function encloseColumnName($strColumn)
+    {
+        return '"'.$strColumn.'"';
+    }
+
+    /**
+     * Allows the db-driver to add database-specific surrounding to table-names.
+     *
+     * @param string $strTable
+     *
+     * @return string
+     */
+    public function encloseTableName($strTable)
+    {
+        return '"'.$strTable.'"';
     }
 }
 
