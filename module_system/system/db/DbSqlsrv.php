@@ -421,17 +421,8 @@ class DbSqlsrv extends DbBase
      */
     public function dbExport(&$strFilename, $arrTables)
     {
-
-        $strFilename = _realpath_.$strFilename;
-        $strTables = implode(",", $arrTables);
-
-        $strCommand = $this->strDumpBin." ".$this->objCfg->getStrUsername()."/".$this->objCfg->getStrPass()." CONSISTENT=n TABLES=".$strTables." FILE='".$strFilename."'";
-        Logger::getInstance(Logger::DBLOG)->info("dump command: ".$strCommand);
-        //Now do a systemfork
-        $intTemp = "";
-        system($strCommand, $intTemp);
-        Logger::getInstance(Logger::DBLOG)->info($this->strDumpBin." exited with code ".$intTemp);
-        return $intTemp == 0;
+        // @TODO implement
+        return false;
     }
 
     /**
@@ -443,13 +434,8 @@ class DbSqlsrv extends DbBase
      */
     public function dbImport($strFilename)
     {
-
-        $strFilename = _realpath_.$strFilename;
-        $strCommand = $this->strRestoreBin." ".$this->objCfg->getStrUsername()."/".$this->objCfg->getStrPass()." FILE='".$strFilename."'";
-        $intTemp = "";
-        system($strCommand, $intTemp);
-        Logger::getInstance(Logger::DBLOG)->info($this->strRestoreBin." exited with code ".$intTemp);
-        return $intTemp == 0;
+        // @TODO implement
+        return false;
     }
 
     /**
@@ -475,11 +461,7 @@ class DbSqlsrv extends DbBase
     {
         $intLength = $intEnd - $intStart + 1;
 
-        if (strpos($strQuery, "ORDER BY") === false) {
-            return $strQuery." ORDER BY 1 OFFSET {$intStart} ROWS FETCH NEXT {$intLength} ROWS ONLY";
-        } else {
-            return $strQuery." OFFSET {$intStart} ROWS FETCH NEXT {$intLength} ROWS ONLY";
-        }
+        return $strQuery." OFFSET {$intStart} ROWS FETCH NEXT {$intLength} ROWS ONLY";
     }
 }
 
