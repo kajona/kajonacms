@@ -71,10 +71,10 @@ class PackageserverLog extends \Kajona\System\System\Model implements \Kajona\Sy
      */
     public function getLogDataCount()
     {
-        $strQuery = "SELECT COUNT(*)
+        $strQuery = "SELECT COUNT(*) AS cnt
 					  FROM "._dbprefix_."packageserver_log";
         $arrTemp = $this->objDB->getPRow($strQuery, array());
-        return $arrTemp["COUNT(*)"];
+        return $arrTemp["cnt"];
 
     }
 

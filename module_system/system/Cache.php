@@ -444,10 +444,10 @@ class Cache
     public static function getAllCacheEntriesCount()
     {
         //search in the database to find a matching entry
-        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."cache";
+        $strQuery = "SELECT COUNT(*) AS cnt FROM "._dbprefix_."cache";
 
         $arrCaches = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
-        return $arrCaches["COUNT(*)"];
+        return $arrCaches["cnt"];
     }
 
     public function increaseCacheEntryHits()

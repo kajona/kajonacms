@@ -160,11 +160,11 @@ class UsersourcesGroupKajona extends Model implements ModelInterface, Usersource
      */
     public function getNumberOfMembers()
     {
-        $strQuery = "SELECT COUNT(*)
+        $strQuery = "SELECT COUNT(*) AS cnt
                        FROM "._dbprefix_."user_kajona_members
 					   WHERE group_member_group_kajona_id= ?";
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getSystemid()));
-        return $arrRow["COUNT(*)"];
+        return $arrRow["cnt"];
     }
 
     /**

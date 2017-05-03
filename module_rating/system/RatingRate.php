@@ -132,17 +132,17 @@ class RatingRate extends \Kajona\System\System\Model implements \Kajona\System\S
 
         //sql-check - only if user is not a guest
         $arrRow = array();
-        $arrRow["COUNT(*)"] = 0;
+        $arrRow["cnt"] = 0;
 
         if ($this->objSession->getUserID() != "") {
-            $strQuery = "SELECT COUNT(*) FROM ".$this->objDB->encloseTableName(_dbprefix_."rating_history")."
+            $strQuery = "SELECT COUNT(*) AS cnt FROM ".$this->objDB->encloseTableName(_dbprefix_."rating_history")."
 	    	               WHERE rating_history_rating = ?
 	    	                 AND rating_history_user = ?";
 
             $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid(), $this->objSession->getUserID()));
         }
 
-        if ($arrRow["COUNT(*)"] == 0) {
+        if ($arrRow["cnt"] == 0) {
             //cookie available?
             $objCookie = new Cookie();
             if ($objCookie->getCookie(RatingRate::RATING_COOKIE) != "") {

@@ -103,7 +103,7 @@ class UserLog
      */
     public function getLoginLogsCount(Date $objStartDate = null, Date $objEndDate = null)
     {
-        $strQuery = "SELECT COUNT(*)
+        $strQuery = "SELECT COUNT(*) AS cnt
 						FROM "._dbprefix_."user_log as log";
 
         $arrParams = array();
@@ -115,7 +115,7 @@ class UserLog
 
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
 
-        return $arrRow["COUNT(*)"];
+        return $arrRow["cnt"];
     }
 
 }

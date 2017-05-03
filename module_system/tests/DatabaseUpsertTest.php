@@ -225,8 +225,8 @@ class DatabaseUpsertTest extends Testbase
     private function runInsertAndUpdate($intId, $intId2, $intInt, $strText)
     {
         $objDb = Carrier::getInstance()->getObjDB();
-        $arrRow = $objDb->getPRow("SELECT COUNT(*) FROM "._dbprefix_."temp_upserttest3 WHERE temp_id = ? AND temp_id2 = ?", array($intId, $intId2), 0, false);
-        if($arrRow["COUNT(*)"] == "0") {
+        $arrRow = $objDb->getPRow("SELECT COUNT(*) AS cnt FROM "._dbprefix_."temp_upserttest3 WHERE temp_id = ? AND temp_id2 = ?", array($intId, $intId2), 0, false);
+        if($arrRow["cnt"] == "0") {
             $strQuery = "INSERT INTO "._dbprefix_."temp_upserttest3 (temp_id, temp_id2, temp_int, temp_text) VALUES (?, ?, ?, ?)";
             $objDb->_pQuery($strQuery, array($intId, $intId2, $intInt, $strText));
         }

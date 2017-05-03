@@ -205,7 +205,7 @@ class SearchCommons extends \Kajona\System\System\Model implements \Kajona\Syste
         $arrParameters = array();
         $objSearchQuery->getCountQuery($strQuery, $arrParameters);
         $arrSearchResult = $this->objDB->getPRow($strQuery, $arrParameters);
-        return $arrSearchResult["COUNT(*)"];
+        return $arrSearchResult["cnt"];
     }
 
     /**

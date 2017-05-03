@@ -229,7 +229,7 @@ class FaqsFaq extends \Kajona\System\System\Model implements \Kajona\System\Syst
         if ($strFilter != "") {
             $objORM = new OrmObjectlist();
 
-            $strQuery = "SELECT COUNT(*)
+            $strQuery = "SELECT COUNT(*) AS cnt
 							FROM " . _dbprefix_ . "faqs,
 							     " . _dbprefix_ . "system,
 							     " . _dbprefix_ . "faqs_member
@@ -238,7 +238,7 @@ class FaqsFaq extends \Kajona\System\System\Model implements \Kajona\System\Syst
 							  " . $objORM->getDeletedWhereRestriction() . "
 							  AND faqsmem_category = ?";
             $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strFilter));
-            return $arrRow["COUNT(*)"];
+            return $arrRow["cnt"];
         } else {
             return parent::getObjectCountFiltered($objFilter);
         }

@@ -66,10 +66,10 @@ class MediamanagerLogbook extends \Kajona\System\System\Model implements \Kajona
      */
     public function getLogbookDataCount()
     {
-        $strQuery = "SELECT COUNT(*)
+        $strQuery = "SELECT COUNT(*) AS cnt
 					  FROM "._dbprefix_."mediamanager_dllog";
         $arrTemp = $this->objDB->getPRow($strQuery, array());
-        return $arrTemp["COUNT(*)"];
+        return $arrTemp["cnt"];
 
     }
 

@@ -143,14 +143,14 @@ class StatsReportPackageserverqueries implements AdminStatsreportsInterface
     {
         $objStart = new Date($this->intDateStart);
         $objEnd = new Date($this->intDateEnd);
-        $strQuery = "SELECT COUNT(*)
+        $strQuery = "SELECT COUNT(*) AS cnt
 						FROM "._dbprefix_."packageserver_log
 						WHERE log_date > ?
 						  AND log_date <= ?";
 
         $arrRow = $this->objDB->getPRow($strQuery, array($objStart->getLongTimestamp(), $objEnd->getLongTimestamp()));
 
-        return $arrRow["COUNT(*)"];
+        return $arrRow["cnt"];
     }
 
     /**

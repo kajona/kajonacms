@@ -251,7 +251,7 @@ class TagsTag extends Model implements ModelInterface, AdminListableInterface, S
      */
     public function getIntAssignments() {
         $objORM = new OrmObjectlist();
-        $strQuery = "SELECT COUNT(*)
+        $strQuery = "SELECT COUNT(*) AS cnt
                        FROM "._dbprefix_."tags_member as member,
                             "._dbprefix_."tags_tag as tag,
                             "._dbprefix_."system as system
@@ -262,7 +262,7 @@ class TagsTag extends Model implements ModelInterface, AdminListableInterface, S
                         AND (tags_tag_private IS NULL OR tags_tag_private != 1 OR (tags_owner IS NULL OR tags_owner = '' OR tags_owner = ?)) ";
 
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid(), $this->objSession->getUserID()));
-        return $arrRow["COUNT(*)"];
+        return $arrRow["cnt"];
     }
 
     /**
@@ -317,14 +317,14 @@ class TagsTag extends Model implements ModelInterface, AdminListableInterface, S
         }
 
         //check if not already set
-        $strQuery = "SELECT COUNT(*)
+        $strQuery = "SELECT COUNT(*) AS cnt
                        FROM "._dbprefix_."tags_member
                       WHERE tags_systemid= ?
                         AND tags_tagid = ?
                         AND tags_attribute = ?
                         ".$strPrivate;
         $arrRow = $this->objDB->getPRow($strQuery, $arrParams, 0, false);
-        if($arrRow["COUNT(*)"] != 0)
+        if($arrRow["cnt"] != 0)
             return true;
 
         $strQuery = "INSERT INTO "._dbprefix_."tags_member
@@ -388,10 +388,10 @@ class TagsTag extends Model implements ModelInterface, AdminListableInterface, S
         $strPrefix = $this->getStrName()."_";
         $intCount = 1;
 
-        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."tags_tag WHERE tags_tag_name = ?";
+        $strQuery = "SELECT COUNT(*) AS cnt FROM "._dbprefix_."tags_tag WHERE tags_tag_name = ?";
         $arrRow = $this->objDB->getPRow($strQuery, array($strPrefix.$intCount));
 
-        while($arrRow["COUNT(*)"] > 0) {
+        while($arrRow["cnt"] > 0) {
             $arrRow = $this->objDB->getPRow($strQuery, array($strPrefix.++$intCount));
         }
 

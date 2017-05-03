@@ -255,10 +255,10 @@ class SystemSession extends Model implements ModelInterface
      */
     public static function getNumberOfActiveSessions()
     {
-        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."session WHERE session_releasetime > ?";
+        $strQuery = "SELECT COUNT(*) AS cnt FROM "._dbprefix_."session WHERE session_releasetime > ?";
 
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array(time()));
-        return $arrRow["COUNT(*)"];
+        return $arrRow["cnt"];
     }
 
 

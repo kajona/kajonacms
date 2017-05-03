@@ -235,7 +235,7 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
     {
         $strDbPrefix = _dbprefix_;
 
-        $strQuery = "SELECT COUNT(*)
+        $strQuery = "SELECT COUNT(*) AS cnt
                       FROM {$strDbPrefix}system, {$strDbPrefix}user AS user_tbl 
                       LEFT JOIN {$strDbPrefix}user_kajona AS user_kajona ON user_tbl.user_id = user_kajona.user_id
                       WHERE
@@ -246,7 +246,7 @@ class UserUser extends Model implements ModelInterface, AdminListableInterface
         $arrParams = array("%".$strUsernameFilter."%", "%".$strUsernameFilter."%", "%".$strUsernameFilter."%");
 
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
-        return $arrRow["COUNT(*)"];
+        return $arrRow["cnt"];
     }
 
 

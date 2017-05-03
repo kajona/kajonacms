@@ -580,7 +580,7 @@ class SystemChangelog
         $arrParams = array();
 
         if (validateSystemid($strSystemidFilter)) {
-            $strQuery = "SELECT COUNT(*)
+            $strQuery = "SELECT COUNT(*) AS cnt
                            FROM "._dbprefix_.self::getTableForClass(Objectfactory::getInstance()->getClassNameForId($strSystemidFilter))."
                           WHERE change_systemid = ? ";
 
@@ -591,7 +591,7 @@ class SystemChangelog
         }
 
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
-        return $arrRow["COUNT(*)"];
+        return $arrRow["cnt"];
     }
 
 

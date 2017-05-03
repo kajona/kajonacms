@@ -1015,12 +1015,12 @@ abstract class Root
 
         //determine the correct new sort-id - append by default
         if (SystemModule::getModuleByName("system") != null && version_compare(SystemModule::getModuleByName("system")->getStrVersion(), "4.7.5", "lt")) {
-            $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ? AND system_id != '0' AND system_sort > -1";
+            $strQuery = "SELECT COUNT(*) AS cnt FROM "._dbprefix_."system WHERE system_prev_id = ? AND system_id != '0' AND system_sort > -1";
         } else {
-            $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ? AND system_id != '0' AND system_deleted = 0 AND system_sort > -1";
+            $strQuery = "SELECT COUNT(*) AS cnt FROM "._dbprefix_."system WHERE system_prev_id = ? AND system_id != '0' AND system_deleted = 0 AND system_sort > -1";
         }
         $arrRow = $this->objDB->getPRow($strQuery, array($strPrevId), 0, false);
-        $intSiblings = $arrRow["COUNT(*)"];
+        $intSiblings = $arrRow["cnt"];
         return (int)($intSiblings + 1);
     }
 
@@ -1166,8 +1166,8 @@ abstract class Root
             $intSpecial = $this->objSpecialDate->getLongTimestamp();
         }
 
-        $arrRow = $this->objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system_date WHERE system_date_id = ?", array($this->getSystemid()));
-        if ($arrRow["COUNT(*)"] == 0) {
+        $arrRow = $this->objDB->getPRow("SELECT COUNT(*) AS cnt FROM "._dbprefix_."system_date WHERE system_date_id = ?", array($this->getSystemid()));
+        if ($arrRow["cnt"] == 0) {
             //insert
             $strQuery = "INSERT INTO "._dbprefix_."system_date
                       (system_date_id, system_date_start, system_date_end, system_date_special) VALUES
@@ -1388,13 +1388,13 @@ abstract class Root
             $strSystemid = $this->getSystemid();
         }
 
-        $strQuery = "SELECT COUNT(*)
+        $strQuery = "SELECT COUNT(*) AS cnt
                      FROM "._dbprefix_."system as sys1,
                           "._dbprefix_."system as sys2
                      WHERE sys1.system_id=?
                        AND sys2.system_prev_id = sys1.system_prev_id";
         $arrRow = $this->objDB->getPRow($strQuery, array($strSystemid), 0, $bitUseCache);
-        return $arrRow["COUNT(*)"];
+        return $arrRow["cnt"];
 
     }
 

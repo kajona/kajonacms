@@ -359,13 +359,13 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
         $this->updatePath();
 
         //fix the initial sort-id
-        $strQuery = "SELECT COUNT(*)
+        $strQuery = "SELECT COUNT(*) AS cnt
                        FROM "._dbprefix_."system
                       WHERE system_prev_id = ?
                         AND (system_module_nr = ? OR system_module_nr = ?)";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getPrevId(), _pages_modul_id_, _pages_folder_id_));
 
-        $this->setIntSort($arrRow["COUNT(*)"]);
+        $this->setIntSort($arrRow["cnt"]);
 
         return true;
     }
@@ -394,13 +394,13 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
 
         //and the properties record
         //properties for this language already existing?
-        $strCountQuery = "SELECT COUNT(*)
+        $strCountQuery = "SELECT COUNT(*) AS cnt
                           FROM "._dbprefix_."page_properties
 		                 WHERE pageproperties_id= ?
 		                   AND pageproperties_language= ?";
         $arrCountRow = $this->objDB->getPRow($strCountQuery, array($this->getSystemid(), $this->getStrLanguage()), 0, false);
 
-        if ((int)$arrCountRow["COUNT(*)"] >= 1) {
+        if ((int)$arrCountRow["cnt"] >= 1) {
             //Already existing, updating properties
             $strQuery2 = "UPDATE  "._dbprefix_."page_properties
     					SET pageproperties_description=?,
@@ -556,14 +556,14 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
     {
         $objORM = new OrmObjectlist();
         //Check, if there are any Elements on this page
-        $strQuery = "SELECT COUNT(*)
+        $strQuery = "SELECT COUNT(*) AS cnt
 						 FROM "._dbprefix_."system as system
 						  WHERE system_prev_id=?
 							AND system_lock_id != ?
 							".$objORM->getDeletedWhereRestriction()."
 							AND system_lock_id != ? ";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid(), $this->objSession->getUserID(), "0"));
-        return $arrRow["COUNT(*)"];
+        return $arrRow["cnt"];
     }
 
     /**
@@ -588,13 +588,13 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
 
         foreach ($arrPropIds as $arrOneId) {
             $strId = $arrOneId["pageproperties_id"];
-            $strCountQuery = "SELECT COUNT(*)
+            $strCountQuery = "SELECT COUNT(*) AS cnt
                                 FROM "._dbprefix_."page_properties
                                WHERE pageproperties_language = ?
                                  AND pageproperties_id = ? ";
             $arrCount = Carrier::getInstance()->getObjDB()->getPRow($strCountQuery, array($strTargetLanguage, $strId));
 
-            if ((int)$arrCount["COUNT(*)"] == 0) {
+            if ((int)$arrCount["cnt"] == 0) {
                 $strUpdate = "UPDATE "._dbprefix_."page_properties
                               SET pageproperties_language = ?
                               WHERE pageproperties_id = ? ";
@@ -639,9 +639,9 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
 
             //insert or update - the properties for the current language should aready be in place
             $this->objDB->flushQueryCache();
-            $arrCount = $this->objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."page_properties WHERE pageproperties_id = ? AND pageproperties_language = ? ", array($this->getSystemid(), $arrOneProperty["pageproperties_language"]));
+            $arrCount = $this->objDB->getPRow("SELECT COUNT(*) AS cnt FROM "._dbprefix_."page_properties WHERE pageproperties_id = ? AND pageproperties_language = ? ", array($this->getSystemid(), $arrOneProperty["pageproperties_language"]));
 
-            if ($arrCount["COUNT(*)"] == 0) {
+            if ($arrCount["cnt"] == 0) {
 
                 $strQuery = "INSERT INTO "._dbprefix_."page_properties
                 (pageproperties_browsername,
