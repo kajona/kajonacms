@@ -7,11 +7,9 @@
 
 namespace Kajona\System\System\Db;
 
-use Kajona\System\System\Database;
 use Kajona\System\System\DbConnectionParams;
 use Kajona\System\System\DbDatatypes;
 use Kajona\System\System\Exception;
-use Kajona\System\System\Logger;
 use Kajona\System\System\StringUtil;
 
 /**
@@ -23,15 +21,19 @@ use Kajona\System\System\StringUtil;
  */
 class DbSqlsrv extends DbBase
 {
+    /**
+     * @var resource
+     */
+    private $linkDB;
 
-    private $linkDB; //DB-Link
-    /** @var DbConnectionParams  */
-    private $objCfg = null;
+    /**
+     * @var DbConnectionParams
+     */
+    private $objCfg;
 
-    private $strDumpBin = "exp"; // Binary to dump db (if not in path, add the path here)
-    // /usr/lib/oracle/xe/app/oracle/product/10.2.0/server/bin/
-    private $strRestoreBin = "imp"; //Binary to restore db (if not in path, add the path here)
-
+    /**
+     * @var bool
+     */
     private $bitTxOpen = false;
 
     /**
