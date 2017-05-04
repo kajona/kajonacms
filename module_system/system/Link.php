@@ -68,7 +68,7 @@ class Link
         }
 
         if (is_array($strLinkContent)) {
-            $arrAttr = array_merge($arrAttr, $strLinkContent);
+            $arrAttr = array_merge($strLinkContent, $arrAttr);
         }
 
         $arrParts = [];
@@ -83,7 +83,7 @@ class Link
         }
 
         if (is_string($strLinkContent)) {
-            $arrParts[] = $strLinkContent;
+            array_unshift($arrParts, $strLinkContent);
         }
 
         return "<a " . implode(" ", $arrParts) . ">" . $strText . "</a>";
