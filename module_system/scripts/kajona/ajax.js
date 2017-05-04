@@ -51,23 +51,27 @@ define('ajax', ['jquery', 'statusDisplay', 'workingIndicator', 'tooltip'], funct
         },
 
         getDataObjectFromString: function(strData, bitFirstIsSystemid) {
-            //strip other params, backwards compatibility
-            var arrElements = strData.split("&");
-            var data = { };
+            if (typeof strData === "string") {
+                //strip other params, backwards compatibility
+                var arrElements = strData.split("&");
+                var data = { };
 
-            if(bitFirstIsSystemid)
-                data["systemid"] = arrElements[0];
+                if(bitFirstIsSystemid)
+                    data["systemid"] = arrElements[0];
 
-            //first one is the systemid
-            if(arrElements.length > 1) {
-                $.each(arrElements, function(index, strValue) {
-                    if(!bitFirstIsSystemid || index > 0) {
-                        var arrSingleParams = strValue.split("=");
-                        data[arrSingleParams[0]] = arrSingleParams[1];
-                    }
-                });
+                //first one is the systemid
+                if(arrElements.length > 1) {
+                    $.each(arrElements, function(index, strValue) {
+                        if(!bitFirstIsSystemid || index > 0) {
+                            var arrSingleParams = strValue.split("=");
+                            data[arrSingleParams[0]] = arrSingleParams[1];
+                        }
+                    });
+                }
+                return data;
+            } else {
+                return strData;
             }
-            return data;
         },
 
         regularCallback: function(data, status, jqXHR) {
