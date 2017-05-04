@@ -7,6 +7,7 @@ use Kajona\System\Portal\PortalInterface;
 use Kajona\System\System\AdminskinHelper;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Classloader;
+use Kajona\System\System\RedirectException;
 use Kajona\System\System\Reflection;
 use Kajona\System\System\Resourceloader;
 use Kajona\System\System\StringUtil;
@@ -83,7 +84,11 @@ class GeneralActionTest extends Testbase
             foreach (explode(",", $strValue) as $strOneMethod) {
                 //echo "found method " . get_class($objViewInstance) . "@" . $strOneMethod . " marked as class-based @autoTestable, preparing call\n";
                 //echo "   calling via action() method\n";
-                $objViewInstance->action($strOneMethod);
+                try {
+                    $objViewInstance->action($strOneMethod);
+                } catch (RedirectException $e) {
+                    // redirect exceptions are allowed
+                }
             }
         }
 
