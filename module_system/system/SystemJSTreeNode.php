@@ -141,6 +141,19 @@ class SystemJSTreeNode implements JsonSerializable
     }
 
     /**
+     * @param SystemJSTreeNode $objNode
+     */
+    public function addChild(SystemJSTreeNode $objNode)
+    {
+        if (!is_array($this->arrChildren)) {
+            $this->arrChildren = [];
+        }
+
+        $this->arrChildren[] = $objNode;
+        return $this;
+    }
+
+    /**
      * @return array|null
      */
     public function getArrData()
@@ -162,6 +175,15 @@ class SystemJSTreeNode implements JsonSerializable
         }
         $this->arrData[$strAttributeName] = $strAttributeValue;
         return $this;
+    }
+
+    /**
+     * @param string $strAttributeName
+     * @return mixed
+     */
+    public function getDataAttr($strAttributeName)
+    {
+        return isset($this->arrData[$strAttributeName]) ? $this->arrData[$strAttributeName] : null;
     }
 
     /**
