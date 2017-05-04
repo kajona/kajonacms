@@ -24,9 +24,8 @@ class Link
 
 
     /**
-     * Generates a link using the content passed.
-     * The param $strLinkContent should contain all contents of the a-tag.
-     * The system renders <a $strLinkContent title... class...>($strText|$strImage)</a>
+     * Generates a link using the content passed. The content is either a string or an associative array.
+     * If its an array the values are escaped. Returns a link in the format: <a [name]=[value]>[text]</a>
      *
      * @param string|array $strLinkContent
      * @param string $strText
