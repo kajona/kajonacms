@@ -101,7 +101,11 @@ class GeneralActionTest extends Testbase
 
                 if (StringUtil::substring($objOneMethod->getName(), 0, 6) == "action" && $objReflection->hasMethod("action")) {
                     //echo "   calling via action() method\n";
-                    $objViewInstance->action(StringUtil::substring($objOneMethod->getName(), 6));
+                    try {
+                        $objViewInstance->action(StringUtil::substring($objOneMethod->getName(), 6));
+                    } catch (RedirectException $e) {
+                        // redirect exceptions are allowed
+                    }
                 } else {
                     //echo "   direct call";
                     $objOneMethod->invoke($objViewInstance);
