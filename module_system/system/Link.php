@@ -28,7 +28,7 @@ class Link
      * The param $strLinkContent should contain all contents of the a-tag.
      * The system renders <a $strLinkContent title... class...>($strText|$strImage)</a>
      *
-     * @param string $strLinkContent
+     * @param string|array $strLinkContent
      * @param string $strText
      * @param string $strAlt
      * @param string $strImage
@@ -41,26 +41,53 @@ class Link
      */
     public static function getLinkAdminManual($strLinkContent, $strText, $strAlt = "", $strImage = "", $strImageId = "", $strLinkId = "", $bitTooltip = true, $strCss = "")
     {
-        $strLink = "";
+        $arrAttr = [];
 
-        if ($strImage != "") {
-            if (!$bitTooltip) {
-                $strLink = "<a ".$strLinkContent."  title=\"".$strAlt."\" ".($strLinkId != "" ? "id=\"".$strLinkId."\"" : "")." >".AdminskinHelper::getAdminImage($strImage, $strAlt, true, $strImageId)."</a>";
-            }
-            else {
-                $strLink = "<a ".$strLinkContent."  title=\"".$strAlt."\" rel=\"tooltip\" ".($strLinkId != "" ? "id=\"".$strLinkId."\"" : "")." >".AdminskinHelper::getAdminImage($strImage, $strAlt, true, $strImageId)."</a>";
-            }
-        }
-        else if ($strText != "") {
+        if (!empty($strImage)) {
+            $strText = AdminskinHelper::getAdminImage($strImage, $strAlt, true, $strImageId);
+        } elseif (!empty($strText)) {
             if ($bitTooltip && (trim($strAlt) == "" || $strAlt == $strText)) {
                 $bitTooltip = false;
                 $strAlt = $strText;
             }
-
-            $strLink = "<a ".$strLinkContent." title=\"".$strAlt."\" ".($strCss != "" ? " class=\"".$strCss."\"" : "")." ".($bitTooltip != "" ? " rel=\"tooltip\"" : "")." ".($strLinkId != "" ? "id=\"".$strLinkId."\"" : "")." >".$strText."</a>";
         }
 
-        return $strLink;
+        if (!empty($strAlt)) {
+            $arrAttr["title"] = $strAlt;
+        }
+
+        if (!empty($strLinkId)) {
+            $arrAttr["id"] = $strLinkId;
+        }
+
+        if ($bitTooltip) {
+            $arrAttr["rel"] = "tooltip";
+        }
+
+        if (!empty($strCss)) {
+            $arrAttr["class"] = $strCss;
+        }
+
+        if (is_array($strLinkContent)) {
+            $arrAttr = array_merge($arrAttr, $strLinkContent);
+        }
+
+        $arrParts = [];
+        foreach ($arrAttr as $strAttrName => $strAttrValue) {
+            if (!empty($strAttrValue)) {
+                if (is_scalar($strAttrValue)) {
+                    $arrParts[] = $strAttrName . "=\"" . htmlspecialchars($strAttrValue) . "\"";
+                } else {
+                    throw new \InvalidArgumentException("Array must contain only scalar values");
+                }
+            }
+        }
+
+        if (is_string($strLinkContent)) {
+            $arrParts[] = $strLinkContent;
+        }
+
+        return "<a " . implode(" ", $arrParts) . ">" . $strText . "</a>";
     }
 
     /**

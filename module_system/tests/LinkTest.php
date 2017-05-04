@@ -13,6 +13,31 @@ class LinkTest extends Testbase
     const STR_HASH_ENC = "%23";//  urlencode("#")
 
     /**
+     * @dataProvider dataProviderGetLinkAdminManual
+     */
+    public function testGetLinkAdminManual($strLinkContent, $strText, $strAlt, $strImage, $strImageId, $strLinkId, $bitTooltip, $strCss, $strExpect)
+    {
+        $this->assertEquals($strExpect, Link::getLinkAdminManual($strLinkContent, $strText, $strAlt, $strImage, $strImageId, $strLinkId, $bitTooltip, $strCss));
+    }
+
+    public function dataProviderGetLinkAdminManual()
+    {
+        return [
+            ['', '', '', '', '', '', '', '', '<a ></a>'],
+            ['href="#"', '', '', '', '', '', '', '', '<a href="#"></a>'],
+            [['href' => '#'], '', '', '', '', '', '', '', '<a href="#"></a>'],
+            ['href="#"', "delete", "", "", "", "", false, '', '<a href="#">delete</a>'],
+            ['href="http://google.de"', "", "map", "icon_earth", "", "", false, '', '<a title="map" href="http://google.de"><i class=\'kj-icon fa fa-globe \'></i></a>'],
+            ['href="http://google.de"', "foo", "bar", "icon_earth", '51dd2d9590af5cbef57a', 'f432779590af5de42038', false, 'class', '<a title="bar" id="f432779590af5de42038" class="class" href="http://google.de"><i class=\'kj-icon fa fa-globe \'></i></a>'],
+            ['href="http://google.de"', "foo", "bar", "", '51dd2d9590af5cbef57a', 'f432779590af5de42038', false, 'class', '<a title="bar" id="f432779590af5de42038" class="class" href="http://google.de">foo</a>'],
+            [['title' => 'bar'], '', 'foo', '', '', '', '', '', '<a title="bar"></a>'], # array values override the provided arguments
+            [['title' => 'foo"bar'], '', 'foo', '', '', '', '', '', '<a title="foo&quot;bar"></a>'], # array values are automatically encoded
+            [['title' => 'foo<bar'], '', 'foo', '', '', '', '', '', '<a title="foo&lt;bar"></a>'],
+            [['title' => 'foo\'bar'], '', 'foo', '', '', '', '', '', '<a title="foo\'bar"></a>'],
+        ];
+    }
+
+    /**
      *  Test conversion of an array to param url string
      *
      * @dataProvider dataProviderSanitizeUrlParams
