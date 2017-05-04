@@ -182,7 +182,7 @@ class FlowStatus extends Model implements ModelInterface, AdminListableInterface
     {
         // set index if we create a new record
         if (!validateSystemid($this->getSystemid())) {
-            $this->intIndex = IdGenerator::generateNextId($this->getPrevId()) - 1;
+            $this->intIndex = IdGenerator::generateNextId($strPrevId) - 1;
         }
 
         return parent::updateObjectToDb($strPrevId);
