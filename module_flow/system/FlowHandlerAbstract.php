@@ -11,6 +11,7 @@ use Kajona\System\Admin\AdminFormgenerator;
 use Kajona\System\System\Database;
 use Kajona\System\System\Logger;
 use Kajona\System\System\Model;
+use Kajona\System\System\RedirectException;
 
 /**
  * The status handler contains all informations about the status flow. Through the status handler we can move the model
@@ -74,14 +75,18 @@ abstract class FlowHandlerAbstract implements FlowHandlerInterface
                 $objObject->setIntRecordStatus($intNewStatus);
                 $objObject->updateObjectToDb();
 
-                // execute handler actions
-                $this->executeStatusTransition($objObject, $objTransition);
-
                 // execute transition actions
                 $this->executeActions($objObject, $objTransition);
+
+                // execute handler actions
+                $this->executeStatusTransition($objObject, $objTransition);
             }
 
             Database::getInstance()->transactionCommit();
+        } catch (RedirectException $e) {
+            Database::getInstance()->transactionCommit();
+
+            throw $e;
         } catch (\Exception $e) {
             Database::getInstance()->transactionRollback();
 
