@@ -16,7 +16,7 @@ use Kajona\System\System\Objectfactory;
  * FlowActionAbstract
  *
  * @author christoph.kappestein@artemeon.de
- * @targetTable flow_step_transition_action.action_id
+ * @targetTable flow_trans_action.action_id
  * @module flow
  * @moduleId _flow_module_id_
  * @formGenerator Kajona\Flow\Admin\FlowActionFormgenerator
@@ -25,7 +25,7 @@ abstract class FlowActionAbstract extends Model implements ModelInterface, Admin
 {
     /**
      * @var string
-     * @tableColumn flow_step_transition_action.action_params
+     * @tableColumn flow_trans_action.action_params
      * @tableColumnDatatype text
      * @blockEscaping
      */
