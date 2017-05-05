@@ -32,7 +32,11 @@ class PermissionsAnnotationTest extends \PHPUnit_Framework_TestCase
 
         $arrFilesFrontend = Resourceloader::getInstance()->getFolderContent("/portal", [".php"], true, null,
             function (&$strOneFile, $strPath) {
-                $strOneFile = Classloader::getInstance()->getInstanceFromFilename($strPath, AbstractController::class, null, [], true);
+                if (in_array($strOneFile, ["global_includes.php"])) {
+                    $strOneFile = null;
+                } else {
+                    $strOneFile = Classloader::getInstance()->getInstanceFromFilename($strPath, AbstractController::class, null, [], true);
+                }
             }
         );
 
