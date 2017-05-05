@@ -68,7 +68,7 @@ class Link
         }
 
         if (is_array($strLinkContent)) {
-            $arrAttr = array_merge($strLinkContent, $arrAttr);
+            $arrAttr = array_merge($arrAttr, $strLinkContent);
         }
 
         $arrParts = [];
