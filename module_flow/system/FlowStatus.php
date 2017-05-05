@@ -204,14 +204,18 @@ class FlowStatus extends Model implements ModelInterface, AdminListableInterface
 
     public function assertNoRecordsAreAssignedToThisStatus()
     {
-        $dbPrefix = _dbprefix_;
-        $strTargetClass = $this->getFlowConfig()->getStrTargetClass();
-        $intStatus = $this->getIntStatus();
-        $arrRow = Database::getInstance()->getPRow("SELECT COUNT(*) AS cnt FROM {$dbPrefix}system WHERE system_class = ? AND system_status = ?", [$strTargetClass, $intStatus]);
-        $intCount = isset($arrRow["cnt"]) ? (int) $arrRow["cnt"] : 0;
+        $objFlow = $this->getFlowConfig();
+        if ($objFlow instanceof FlowConfig) {
+            $strTargetClass = $objFlow->getStrTargetClass();
+            $intStatus = $this->getIntStatus();
 
-        if ($intCount > 0) {
-            throw new \RuntimeException("There are already " . $intCount . " records assigned to the status " . $intStatus);
+            $dbPrefix = _dbprefix_;
+            $arrRow = Database::getInstance()->getPRow("SELECT COUNT(*) AS cnt FROM {$dbPrefix}system WHERE system_class = ? AND system_status = ?", [$strTargetClass, $intStatus]);
+            $intCount = isset($arrRow["cnt"]) ? (int) $arrRow["cnt"] : 0;
+
+            if ($intCount > 0) {
+                throw new \RuntimeException("There are already " . $intCount . " records assigned to the status " . $intStatus);
+            }
         }
     }
 
