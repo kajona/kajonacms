@@ -1,0 +1,6 @@
+{
+  "paths": {
+    "mermaid": "mermaid/mermaid.min",
+    "flow": "kajona/flow"
+  }
+}
