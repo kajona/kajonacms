@@ -85,7 +85,7 @@ class FlowTransition extends Model implements ModelInterface, AdminListableInter
      */
     public function getStrIcon()
     {
-        return $this->getTargetStatus()->getStrIcon();
+        return $this->getTargetStatus() ? $this->getTargetStatus()->getStrIcon() : null;
     }
 
     /**
@@ -93,7 +93,7 @@ class FlowTransition extends Model implements ModelInterface, AdminListableInter
      */
     public function getStrDisplayName()
     {
-        return $this->getTargetStatus()->getStrName();
+        return $this->getTargetStatus() ? $this->getTargetStatus()->getStrName() : null;
     }
 
     public function getStrAdditionalInfo()
