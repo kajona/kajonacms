@@ -205,8 +205,14 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
      */
     private function validateStatus($intRecordStatus)
     {
+        // in case we have no target class we cant validate the status
+        $strTargetClass = $this->getStrTargetClass();
+        if (empty($strTargetClass)) {
+            return;
+        }
+
         // get the current active flow
-        $objConfig = FlowConfig::getByModelClass($this->getStrTargetClass());
+        $objConfig = FlowConfig::getByModelClass($strTargetClass);
         if ($objConfig instanceof FlowConfig) {
             if ($intRecordStatus == 1) {
                 if ($objConfig->getSystemid() == $this->getSystemid()) {
