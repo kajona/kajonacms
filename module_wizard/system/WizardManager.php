@@ -289,6 +289,8 @@ class WizardManager
     }
 
     /**
+     * Returns the session model of a specific wizard page. Can be used to read the model outside of the wizard
+     *
      * @param string $strNamespace
      * @param string|WizardPageInterface $strModelClass
      * @return \Kajona\System\System\ModelInterface|null
@@ -305,6 +307,8 @@ class WizardManager
     }
 
     /**
+     * Sets the session model of a specific wizard page. Can be used to change the model outside of the wizard
+     *
      * @param string $strNamespace
      * @param ModelInterface $objModel
      */
