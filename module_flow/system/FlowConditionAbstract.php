@@ -15,7 +15,7 @@ use Kajona\System\System\ModelInterface;
  * FlowConditionAbstract
  *
  * @author christoph.kappestein@artemeon.de
- * @targetTable flow_step_transition_condition.condition_id
+ * @targetTable flow_trans_condition.condition_id
  * @module flow
  * @moduleId _flow_module_id_
  * @formGenerator Kajona\Flow\Admin\FlowConditionFormgenerator
@@ -24,7 +24,7 @@ abstract class FlowConditionAbstract extends Model implements ModelInterface, Ad
 {
     /**
      * @var string
-     * @tableColumn flow_step_transition_condition.condition_params
+     * @tableColumn flow_trans_condition.condition_params
      * @tableColumnDatatype text
      * @blockEscaping
      */
