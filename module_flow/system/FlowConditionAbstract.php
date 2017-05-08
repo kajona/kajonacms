@@ -10,6 +10,7 @@ namespace Kajona\Flow\System;
 use Kajona\System\System\AdminListableInterface;
 use Kajona\System\System\Model;
 use Kajona\System\System\ModelInterface;
+use Kajona\System\System\Objectfactory;
 
 /**
  * FlowConditionAbstract
