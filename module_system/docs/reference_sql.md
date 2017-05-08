@@ -10,4 +10,6 @@ postgres, oracle, mssql.
   the actual table name should not exceed 20 characters.
 * Mssql: When using aggregate functions you must specify an alias otherwise the result 
   of the function is placed in the result array as empty key
+* Mssql: Spalten vom Typ `text` können nicht sortiert werden. Ein Workaround ist: 
+  `ORDER BY CAST(TEXT_COLUMN as VARCHAR(100))`
 
