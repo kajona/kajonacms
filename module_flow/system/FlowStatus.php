@@ -137,6 +137,21 @@ class FlowStatus extends Model implements ModelInterface, AdminListableInterface
     }
 
     /**
+     * @param int $intTargetIndex
+     * @return FlowTransition|null
+     */
+    public function getTransitionByTargetIndex($intTargetIndex)
+    {
+        $arrTransitions = $this->getArrTransitions();
+        foreach ($arrTransitions as $objTransition) {
+            if ($objTransition->getTargetStatus()->getIntIndex() == $intTargetIndex) {
+                return $objTransition;
+            }
+        }
+        return null;
+    }
+
+    /**
      * @return UserGroup[]
      */
     public function getArrEditGroups()
