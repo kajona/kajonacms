@@ -135,7 +135,7 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
 
     public function getStrAdditionalInfo()
     {
-        return $this->getStrTargetClass();
+        return $this->getHandler()->getTitle();
     }
 
     public function getStrLongDescription()
