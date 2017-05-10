@@ -57,14 +57,14 @@ interface FlowHandlerInterface extends GenericPluginInterface
     public function handleStatusTransition(Model $objObject, FlowTransition $objTransition) : bool;
 
     /**
-     * Validates whether the model contains valid data to be transitioned to the next step. Returns an array of error
-     * messages
+     * Validates whether the model contains valid data to be transitioned to the next step. Returns a
+     * FlowConditionResult object
      *
      * @param Model $objModel
      * @param FlowTransition $objTransition
-     * @return array
+     * @return FlowConditionResult
      */
-    public function validateStatusTransition(Model $objObject, FlowTransition $objTransition) : array;
+    public function validateStatusTransition(Model $objObject, FlowTransition $objTransition) : FlowConditionResult;
 
     /**
      * Returns whether a transition is visible in the menu. In the end the transition is only visible in the menu if:

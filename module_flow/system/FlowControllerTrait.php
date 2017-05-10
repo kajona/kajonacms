@@ -163,17 +163,16 @@ require(["jquery", "ajax"], function($, ajax){
                 $objTargetStatus = $objTransition->getTargetStatus();
 
                 // validation
-                $arrErrors = $objFlow->getHandler()->validateStatusTransition($objObject, $objTransition);
+                $objResult = $objFlow->getHandler()->validateStatusTransition($objObject, $objTransition);
+
                 $strValidation = "";
-                if (!empty($arrErrors)) {
+                if (!$objResult->isValid()) {
                     $strTooltip = "<div class='alert alert-danger'>";
                     $strTooltip.= "<ul>";
-                    foreach ($arrErrors as $strField => $arrError) {
-                        foreach ($arrError as $strError) {
-                            if (!empty($strError)) {
-                                $strError = htmlspecialchars($strError);
-                                $strTooltip.= "<li>{$strError}</li>";
-                            }
+                    foreach ($objResult->getErrors() as $strError) {
+                        if (!empty($strError)) {
+                            $strError = htmlspecialchars($strError);
+                            $strTooltip.= "<li>{$strError}</li>";
                         }
                     }
                     $strTooltip.= "</ul>";

@@ -54,21 +54,15 @@ abstract class FlowHandlerAbstract implements FlowHandlerInterface
 
             if ($intNewStatus != $objObject->getIntRecordStatus()) {
                 // check whether there are validation errors
-                $arrErrors = $this->validateStatusTransition($objObject, $objTransition);
-                if (count($arrErrors) > 0) {
-                    throw new \RuntimeException("There are validation errors for this status transition");
+                $objResult = $this->validateStatusTransition($objObject, $objTransition);
+                if (!$objResult->isValid()) {
+                    throw new \RuntimeException("There are condition errors for this status transition");
                 }
 
                 // check whether the transition is visible
                 $bitReturn = $this->isTransitionVisible($objObject, $objTransition);
                 if (!$bitReturn) {
                     throw new \RuntimeException("Transition is not visible");
-                }
-
-                // check whether all assigned conditions are fulfilled
-                $bitReturn = $this->validateConditions($objObject, $objTransition);
-                if (!$bitReturn) {
-                    throw new \RuntimeException("Condition not fulfilled");
                 }
 
                 // persist the new status
@@ -100,11 +94,23 @@ abstract class FlowHandlerAbstract implements FlowHandlerInterface
     /**
      * @param Model $objObject
      * @param FlowTransition $objTransition
-     * @return array
+     * @return FlowConditionResult
      */
-    public function validateStatusTransition(Model $objObject, FlowTransition $objTransition) : array
+    public function validateStatusTransition(Model $objObject, FlowTransition $objTransition) : FlowConditionResult
     {
-        return [];
+        $objResult = new FlowConditionResult();
+
+        // validate all assigned conditions
+        $arrConditions = $objTransition->getArrConditions();
+        if (!empty($arrConditions)) {
+            foreach ($arrConditions as $objCondition) {
+                if ($objCondition instanceof FlowConditionInterface) {
+                    $objResult->merge($objCondition->validateCondition($objObject, $objTransition));
+                }
+            }
+        }
+
+        return $objResult;
     }
 
     /**
@@ -128,29 +134,6 @@ abstract class FlowHandlerAbstract implements FlowHandlerInterface
      */
     protected function executeStatusTransition(Model $objObject, FlowTransition $objTransition)
     {
-    }
-
-    /**
-     * @param Model $objObject
-     * @param FlowTransition $objTransition
-     * @return boolean
-     */
-    private function validateConditions(Model $objObject, FlowTransition $objTransition)
-    {
-        $bitResult = true;
-        $arrConditions = $objTransition->getArrConditions();
-        if (!empty($arrConditions)) {
-            foreach ($arrConditions as $objCondition) {
-                if ($objCondition instanceof FlowConditionInterface) {
-                    $bitResult = $bitResult && $objCondition->validateCondition($objObject, $objTransition);
-                    if ($bitResult === false) {
-                        break;
-                    }
-                }
-            }
-        }
-
-        return $bitResult;
     }
 
     /**

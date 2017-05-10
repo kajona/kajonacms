@@ -36,7 +36,7 @@ interface FlowConditionInterface
      *
      * @param Model $objObject
      * @param FlowTransition $objTransition
-     * @return boolean
+     * @return FlowConditionResult
      */
     public function validateCondition(Model $objObject, FlowTransition $objTransition);
 
