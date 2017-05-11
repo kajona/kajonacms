@@ -179,7 +179,7 @@ require(["jquery", "ajax"], function($, ajax){
                         }
                         $strTooltip.= "</ul>";
                         $strTooltip.= "</div>";
-                        $strValidation.= '<i class="kj-icon fa fa-exclamation-triangle pull-right ' . $strClass . '" style="color:#ee0000" data-validation-errors="' . $strTooltip . '"></i>';
+                        $strValidation.= '<span class="' . $strClass . '" data-validation-errors="' . $strTooltip . '"></span>';
                     } else {
                         // in case the result is not valid and we have no error message we skip the menu entry
                         continue;
@@ -188,7 +188,7 @@ require(["jquery", "ajax"], function($, ajax){
 
                 if (!empty($strValidation)) {
                     $arrMenu[] = array(
-                        "name" => AdminskinHelper::getAdminImage($objTargetStatus->getStrIcon()) . " " . $objTargetStatus->getStrDisplayName() . $strValidation,
+                        "name" => AdminskinHelper::getAdminImage($objTargetStatus->getStrIcon() . "_disabled") . " " . $objTargetStatus->getStrDisplayName() . $strValidation,
                         "link" => "#",
                     );
                 } else {
