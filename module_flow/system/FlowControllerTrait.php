@@ -171,7 +171,7 @@ require(["jquery", "ajax"], function($, ajax){
                     if (!empty($arrErrors)) {
                         $strTooltip = "<div class='alert alert-danger'>";
                         $strTooltip.= "<ul>";
-                        foreach ($objResult->getErrors() as $strError) {
+                        foreach ($arrErrors as $strError) {
                             if (!empty($strError)) {
                                 $strError = htmlspecialchars($strError);
                                 $strTooltip.= "<li>{$strError}</li>";
