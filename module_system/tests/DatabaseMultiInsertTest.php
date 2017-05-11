@@ -65,8 +65,8 @@ class DatabaseMultiInsertTest extends Testbase
 
         $this->assertTrue($objDB->multiInsert("temp_autotest", array_keys($arrFields), $arrValues));
 
-        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM " . _dbprefix_ . "temp_autotest", array());
-        $this->assertEquals($arrRow["COUNT(*)"], 50);
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) AS cnt FROM " . _dbprefix_ . "temp_autotest", array());
+        $this->assertEquals($arrRow["cnt"], 50);
 
         for ($intI = 1; $intI <= 50; $intI++) {
             $arrRow = $objDB->getPRow("SELECT * FROM " . _dbprefix_ . "temp_autotest WHERE temp_id = ?", array("id" . $intI));
@@ -87,8 +87,8 @@ class DatabaseMultiInsertTest extends Testbase
         $this->assertTrue($objDB->_pQuery($strQuery, array()), "testDataBase truncateTable");
         $objDB->flushQueryCache();
 
-        $strQuery = "SELECT COUNT(*) FROM " . _dbprefix_ . "temp_autotest";
-        $this->assertEquals(0, $objDB->getPRow($strQuery, array())["COUNT(*)"], "testDataBase countLimitReach");
+        $strQuery = "SELECT COUNT(*) AS cnt FROM " . _dbprefix_ . "temp_autotest";
+        $this->assertEquals(0, $objDB->getPRow($strQuery, array())["cnt"], "testDataBase countLimitReach");
 
         $objDB->flushQueryCache();
 
@@ -97,8 +97,8 @@ class DatabaseMultiInsertTest extends Testbase
             $arrValues[] = array(generateSystemid(), "text long " . $intI, "text " . $intI);
         }
         $this->assertTrue($objDB->multiInsert("temp_autotest", array("temp_id", "temp_char254", "temp_char100"), $arrValues));
-        $strQuery = "SELECT COUNT(*) FROM " . _dbprefix_ . "temp_autotest";
-        $this->assertEquals(1200, $objDB->getPRow($strQuery, array())["COUNT(*)"], "testDataBase countLimitReach");
+        $strQuery = "SELECT COUNT(*) AS cnt FROM " . _dbprefix_ . "temp_autotest";
+        $this->assertEquals(1200, $objDB->getPRow($strQuery, array())["cnt"], "testDataBase countLimitReach");
 
 
         $strQuery = "DROP TABLE " . _dbprefix_ . "temp_autotest";

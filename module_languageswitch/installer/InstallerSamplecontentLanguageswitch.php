@@ -37,8 +37,8 @@ class InstallerSamplecontentLanguageswitch implements SamplecontentInstallerInte
      */
     public function isInstalled()
     {
-        $arrRow = Carrier::getInstance()->getObjDB()->getPRow("SELECT COUNT(*) FROM "._dbprefix_."page_element WHERE page_element_ph_element = ?", array("languageswitch"));
-        return $arrRow["COUNT(*)"] > 0;
+        $arrRow = Carrier::getInstance()->getObjDB()->getPRow("SELECT COUNT(*) AS cnt FROM "._dbprefix_."page_element WHERE page_element_ph_element = ?", array("languageswitch"));
+        return $arrRow["cnt"] > 0;
     }
 
     /**

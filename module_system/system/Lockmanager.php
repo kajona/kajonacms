@@ -256,9 +256,9 @@ class Lockmanager
      */
     public static function getLockedRecordsCount()
     {
-        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_lock_time > ?";
+        $strQuery = "SELECT COUNT(*) AS cnt FROM "._dbprefix_."system WHERE system_lock_time > ?";
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array(time() - (int)SystemSetting::getConfigValue("_system_lock_maxtime_")));
-        return $arrRow["COUNT(*)"];
+        return $arrRow["cnt"];
     }
 
 }

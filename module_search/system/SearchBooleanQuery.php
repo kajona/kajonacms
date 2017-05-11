@@ -105,7 +105,7 @@ class SearchBooleanQuery implements SearchQueryInterface {
      * @return string
      */
     public function getCountQuery(&$strQuery, &$arrParameters) {
-        $strQuery .= "SELECT COUNT(*) FROM (SELECT search_ix_document_id, search_ix_system_id ";
+        $strQuery .= "SELECT COUNT(*) AS cnt FROM (SELECT search_ix_document_id, search_ix_system_id ";
         $this->internalBuildQuery($strQuery, $arrParameters);
         $strQuery .= " GROUP BY search_ix_document_id, search_ix_system_id) as cq";
     }

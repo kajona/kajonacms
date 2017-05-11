@@ -15,17 +15,18 @@ use Kajona\System\System\Validators\TextValidator;
 /**
  * @author sidler@mulchprod.de
  * @since 4.3
- * @package module_formgenerator
  */
-class FormentryWysiwyg extends FormentryBase implements FormentryPrintableInterface {
-    
+class FormentryWysiwyg extends FormentryBase implements FormentryPrintableInterface
+{
+
     protected $strToolbarset = "standard";
 
 
     const STR_CONFIG_ANNOTATION = "@wysiwygConfig";
 
 
-    public function __construct($strFormName, $strSourceProperty, $objSourceObject = null) {
+    public function __construct($strFormName, $strSourceProperty, $objSourceObject = null)
+    {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
 
         //set the default validator
@@ -38,8 +39,8 @@ class FormentryWysiwyg extends FormentryBase implements FormentryPrintableInterf
      *
      * @return string
      */
-    public function renderField() {
-
+    public function renderField()
+    {
 
         if ($this->getObjSourceObject() != null && $this->getStrSourceProperty() != "") {
             $objReflection = new Reflection($this->getObjSourceObject());
@@ -50,20 +51,21 @@ class FormentryWysiwyg extends FormentryBase implements FormentryPrintableInterf
                 $this->strToolbarset = $objReflection->getAnnotationValueForProperty($strSourceProperty, self::STR_CONFIG_ANNOTATION);
             }
         }
-        
-        
-        
+
+
         $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         $strReturn = "";
-        if($this->getStrHint() != null)
+        if ($this->getStrHint() != null) {
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
+        }
 
         $strReturn .= $objToolkit->formWysiwygEditor($this->getStrEntryName(), $this->getStrLabel(), $this->getStrValue(), $this->strToolbarset);
 
         return $strReturn;
     }
 
-    public function setValueToObject() {
+    public function setValueToObject()
+    {
         $strOldValue = $this->getStrValue();
         $this->setStrValue(processWysiwygHtmlContent($this->getStrValue()));
         $bitReturn = parent::setValueToObject();
@@ -72,17 +74,32 @@ class FormentryWysiwyg extends FormentryBase implements FormentryPrintableInterf
     }
 
 
-
-
-
     /**
      * Returns a textual representation of the formentries' value.
      * May contain html, but should be stripped down to text-only.
      *
      * @return string
      */
-    public function getValueAsText() {
+    public function getValueAsText()
+    {
         return $this->getStrValue();
     }
 
+    /**
+     * @return string
+     */
+    public function getStrToolbarset()
+    {
+        return $this->strToolbarset;
+    }
+
+    /**
+     * @param string $strToolbarset
+     * @return $this
+     */
+    public function setStrToolbarset($strToolbarset)
+    {
+        $this->strToolbarset = $strToolbarset;
+        return $this;
+    }
 }

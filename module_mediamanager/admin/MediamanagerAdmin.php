@@ -902,7 +902,7 @@ HTML;
             //folder already existing?
             if (!is_dir(_realpath_.$strPrevPath."/".$strFolder)) {
 
-                Logger::getInstance()->addLogRow("creating folder ".$strPrevPath."/".$strFolder, Logger::$levelInfo);
+                Logger::getInstance()->info("creating folder ".$strPrevPath."/".$strFolder);
 
                 $objFilesystem = new Filesystem();
                 if ($objFilesystem->folderCreate($strPrevPath."/".$strFolder)) {
@@ -1033,7 +1033,7 @@ HTML;
                         $strReturn .= "<message>".$this->getLang("xmlupload_success")."</message>";
                     }
 
-                    Logger::getInstance()->addLogRow("uploaded file ".$strTarget, Logger::$levelInfo);
+                    Logger::getInstance()->info("uploaded file ".$strTarget);
 
                     $objRepo->syncRepo();
                 } else {
@@ -1099,7 +1099,7 @@ HTML;
 
         $strReturn .= "<repo>".xmlSafeString(strip_tags($strResult))."</repo>";
 
-        Logger::getInstance()->addLogRow("synced gallery partially >".$this->getSystemid().": ".$strResult, Logger::$levelInfo);
+        Logger::getInstance()->info("synced gallery partially >".$this->getSystemid().": ".$strResult);
 
         return $strReturn;
     }
@@ -1129,7 +1129,7 @@ HTML;
         $strResult += $arrSyncs["insert"] + $arrSyncs["delete"];
         $strReturn .= "<repo>".xmlSafeString(strip_tags($strResult))."</repo>";
 
-        Logger::getInstance()->addLogRow("synced gallery partially >".$this->getSystemid().": ".$strResult, Logger::$levelInfo);
+        Logger::getInstance()->info("synced gallery partially >".$this->getSystemid().": ".$strResult);
 
         return $strReturn;
     }
@@ -1158,7 +1158,7 @@ HTML;
         $objImage->load($strFile);
         $objImage->addOperation(new ImageRotate($this->getParam("angle")));
         if ($objImage->save($strFile)) {
-            Logger::getInstance()->addLogRow("rotated file ".$strFile, Logger::$levelInfo);
+            Logger::getInstance()->info("rotated file ".$strFile);
             $strReturn .= "<message>".xmlSafeString($this->getLang("xml_rotate_success"))."</message>";
         } else {
             ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
@@ -1194,7 +1194,7 @@ HTML;
         $objImage->load($strFile);
         $objImage->addOperation(new ImageCrop($this->getParam("intX"), $this->getParam("intY"), $this->getParam("intWidth"), $this->getParam("intHeight")));
         if ($objImage->save($strFile)) {
-            Logger::getInstance()->addLogRow("cropped file ".$strFile, Logger::$levelInfo);
+            Logger::getInstance()->info("cropped file ".$strFile);
             $strReturn .= "<message>".xmlSafeString($this->getLang("xml_cropping_success"))."</message>";
         } else {
             ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);

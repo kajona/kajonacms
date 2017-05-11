@@ -92,14 +92,14 @@ class DeletedRecordsFilter extends FilterBase
     public static function getDeletedRecordsCount(DeletedRecordsFilter $objFilter)
     {
         $objFilter->setIntDeleted(1);
-        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system AS system WHERE ";
+        $strQuery = "SELECT COUNT(*) AS cnt FROM "._dbprefix_."system AS system WHERE ";
 
         $objCompound = new OrmCompositeCondition($objFilter->getOrmConditions());
         $strQuery .= $objCompound->getStrWhere();
         $arrParams = $objCompound->getArrParams();
 
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
-        return $arrRow["COUNT(*)"];
+        return $arrRow["cnt"];
     }
 
 

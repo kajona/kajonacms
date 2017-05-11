@@ -94,8 +94,8 @@ class OrmObjectassignmentsTest extends TestbaseObject
         $objTestobject->setArrObject1($arrAspects);
         $objTestobject->updateObjectToDb();
 
-        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
-        $this->assertEquals(3, $arrRow["COUNT(*)"]);
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) AS cnt FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
+        $this->assertEquals(3, $arrRow["cnt"]);
 
         //delete one aspect logically
         $arrAspects[1]->deleteObject();
@@ -106,8 +106,8 @@ class OrmObjectassignmentsTest extends TestbaseObject
         $objTestobject->setArrObject1(array($arrAspects[0], $arrAspects[2]));
         $objTestobject->updateObjectToDb();
 
-        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
-        $this->assertEquals(3, $arrRow["COUNT(*)"]);
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) AS cnt FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
+        $this->assertEquals(3, $arrRow["cnt"]);
     }
 
 
@@ -123,8 +123,8 @@ class OrmObjectassignmentsTest extends TestbaseObject
         $objTestobject->setArrObject1($arrAspects);
         $objTestobject->updateObjectToDb();
 
-        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
-        $this->assertEquals(3, $arrRow["COUNT(*)"]);
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) AS cnt FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
+        $this->assertEquals(3, $arrRow["cnt"]);
 
         //delete one aspect logically
         $arrAspects[1]->deleteObject();
@@ -135,8 +135,8 @@ class OrmObjectassignmentsTest extends TestbaseObject
         $objTestobject->setArrObject1(array($arrAspects[0], $arrAspects[1]));
         $objTestobject->updateObjectToDb();
 
-        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
-        $this->assertEquals(2, $arrRow["COUNT(*)"]);
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) AS cnt FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
+        $this->assertEquals(2, $arrRow["cnt"]);
     }
 
     public function testLogicalDeleteUpdateHandlingIncluded()
@@ -151,8 +151,8 @@ class OrmObjectassignmentsTest extends TestbaseObject
         $objTestobject->setArrObject1($arrAspects);
         $objTestobject->updateObjectToDb();
 
-        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
-        $this->assertEquals(3, $arrRow["COUNT(*)"]);
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) AS cnt FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
+        $this->assertEquals(3, $arrRow["cnt"]);
 
         //delete one aspect logically
         $arrAspects[1]->deleteObject();
@@ -163,8 +163,8 @@ class OrmObjectassignmentsTest extends TestbaseObject
         $this->assertEquals(count($objTestobject->getArrObject1()), 3);
         $objTestobject->updateObjectToDb();
 
-        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
-        $this->assertEquals(3, $arrRow["COUNT(*)"]);
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) AS cnt FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
+        $this->assertEquals(3, $arrRow["cnt"]);
     }
 
 
@@ -180,8 +180,8 @@ class OrmObjectassignmentsTest extends TestbaseObject
         $objTestobject->setArrObject1($arrAspects);
         $objTestobject->updateObjectToDb();
 
-        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
-        $this->assertEquals(3, $arrRow["COUNT(*)"]);
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) AS cnt FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
+        $this->assertEquals(3, $arrRow["cnt"]);
 
         //delete one aspect logically
         $arrAspects[1]->deleteObject();
@@ -223,8 +223,8 @@ class OrmObjectassignmentsTest extends TestbaseObject
         $objTestobject->setArrObject1($arrAspects);
         $objTestobject->updateObjectToDb();
 
-        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
-        $this->assertEquals(2, $arrRow["COUNT(*)"]);
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) AS cnt FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
+        $this->assertEquals(2, $arrRow["cnt"]);
 
         //change the assignments
         $objTestobject = $this->getObject("testobject");
@@ -232,16 +232,16 @@ class OrmObjectassignmentsTest extends TestbaseObject
         $objTestobject->setArrObject1($arrAspects);
         $objTestobject->updateObjectToDb();
 
-        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
-        $this->assertEquals(1, $arrRow["COUNT(*)"]);
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) AS cnt FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
+        $this->assertEquals(1, $arrRow["cnt"]);
 
         //change the assignments
         $objTestobject = $this->getObject("testobject");
         $objTestobject->setArrObject1(array());
         $objTestobject->updateObjectToDb();
 
-        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
-        $this->assertEquals(0, $arrRow["COUNT(*)"]);
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) AS cnt FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
+        $this->assertEquals(0, $arrRow["cnt"]);
 
         //change the assignments
         $objTestobject = $this->getObject("testobject");
@@ -249,8 +249,8 @@ class OrmObjectassignmentsTest extends TestbaseObject
         $objTestobject->setArrObject1($arrAspects);
         $objTestobject->updateObjectToDb();
 
-        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
-        $this->assertEquals(2, $arrRow["COUNT(*)"]);
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) AS cnt FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
+        $this->assertEquals(2, $arrRow["cnt"]);
 
     }
 
@@ -264,8 +264,8 @@ class OrmObjectassignmentsTest extends TestbaseObject
 
         $objTestobject->setArrObject1($arrAspects);
         $objTestobject->updateObjectToDb();
-        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
-        $this->assertEquals(2, $arrRow["COUNT(*)"]);
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) AS cnt FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
+        $this->assertEquals(2, $arrRow["cnt"]);
         $strOldSystemid = $objTestobject->getSystemid();
 
         $objTestobject = new OrmObjectlistTestclass($objTestobject->getSystemid());
@@ -273,8 +273,8 @@ class OrmObjectassignmentsTest extends TestbaseObject
         $objTestobject->copyObject();
 
         $this->assertNotEquals($strOldSystemid, $objTestobject->getSystemid());
-        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
-        $this->assertEquals(2, $arrRow["COUNT(*)"]);
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) AS cnt FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
+        $this->assertEquals(2, $arrRow["cnt"]);
 
         $objTestobject = new OrmObjectlistTestclass($objTestobject->getSystemid());
 
@@ -295,8 +295,8 @@ class OrmObjectassignmentsTest extends TestbaseObject
         $objTestobject->setArrObject1($arrAspects);
         $objTestobject->updateObjectToDb(SystemModule::getModuleByName("system")->getSystemid());
 
-        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
-        $this->assertEquals(2, $arrRow["COUNT(*)"]);
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) AS cnt FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
+        $this->assertEquals(2, $arrRow["cnt"]);
 
         $objTestobject->deleteObjectFromDatabase();
 
@@ -326,8 +326,8 @@ class OrmObjectassignmentsTest extends TestbaseObject
             $this->assertTrue(validateSystemid($objOneObject->getSystemid()));
         }
 
-        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
-        $this->assertEquals(3, $arrRow["COUNT(*)"]);
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) AS cnt FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
+        $this->assertEquals(3, $arrRow["cnt"]);
 
         //reload the object
         $objTestobject = Objectfactory::getInstance()->getObject($objTestobject->getStrSystemid(), true);
@@ -502,13 +502,13 @@ class OrmObjectassignmentsTest extends TestbaseObject
         $objTestobject->setArrObject1($arrAspects);
         $objTestobject->updateObjectToDb();
 
-        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
-        $this->assertEquals(2, $arrRow["COUNT(*)"]);
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) AS cnt FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
+        $this->assertEquals(2, $arrRow["cnt"]);
 
         $objTestobject->deleteObjectFromDatabase();
 
-        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()), 0, false);
-        $this->assertEquals(0, $arrRow["COUNT(*)"]);
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) AS cnt FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()), 0, false);
+        $this->assertEquals(0, $arrRow["cnt"]);
     }
 
 
@@ -522,8 +522,8 @@ class OrmObjectassignmentsTest extends TestbaseObject
         $objTestobject->setArrObject2($arrAspects);
         $objTestobject->updateObjectToDb();
 
-        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass2_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
-        $this->assertEquals(2, $arrRow["COUNT(*)"]);
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) AS cnt FROM "._dbprefix_."testclass2_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
+        $this->assertEquals(2, $arrRow["cnt"]);
 
         $objTestobject = new OrmObjectlistTestclass($objTestobject->getSystemid());
         $this->assertEquals(2, count($objTestobject->getArrObject2()));

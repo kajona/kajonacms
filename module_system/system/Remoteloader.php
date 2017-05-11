@@ -102,7 +102,7 @@ class Remoteloader
 
             //if the cache was succesfull, return
             if ($strReturn !== false) {
-                Logger::getInstance(Logger::REMOTELOADER)->addLogRow("remote request found in cache", Logger::$levelInfo);
+                Logger::getInstance(Logger::REMOTELOADER)->info("remote request found in cache");
                 return $strReturn;
             }
         }
@@ -110,25 +110,25 @@ class Remoteloader
         //second try: file_get_content
         if ($strReturn === false) {
             $strReturn = $this->connectByFileGetContents();
-            Logger::getInstance(Logger::REMOTELOADER)->addLogRow("loaded via filegetcontents: ".$strReturn, Logger::$levelInfo);
+            Logger::getInstance(Logger::REMOTELOADER)->info("loaded via filegetcontents: ".$strReturn);
         }
 
         //third try: curl
         if ($strReturn === false) {
             $strReturn = $this->connectViaCurl();
-            Logger::getInstance(Logger::REMOTELOADER)->addLogRow("loaded via curl: ".$strReturn, Logger::$levelInfo);
+            Logger::getInstance(Logger::REMOTELOADER)->info("loaded via curl: ".$strReturn);
         }
 
         //fourth try: fsockopen
         if ($strReturn === false) {
             $strReturn = $this->connectFSockOpen();
-            Logger::getInstance(Logger::REMOTELOADER)->addLogRow("loaded via fsockopen: ".$strReturn, Logger::$levelInfo);
+            Logger::getInstance(Logger::REMOTELOADER)->info("loaded via fsockopen: ".$strReturn);
         }
 
         //fifth try: sockets
         if ($strReturn === false) {
             $strReturn = $this->connectViaSocket();
-            Logger::getInstance(Logger::REMOTELOADER)->addLogRow("loaded via socket: ".$strReturn, Logger::$levelInfo);
+            Logger::getInstance(Logger::REMOTELOADER)->info("loaded via socket: ".$strReturn);
         }
 
 
@@ -146,17 +146,11 @@ class Remoteloader
 
         //throw a general error?
         if ($strReturn === false) {
-            Logger::getInstance(Logger::REMOTELOADER)->addLogRow(
-                "remoteloader failed. protocol: ".$this->strProtocolHeader." host: ".$this->strHost." port: ".$this->intPort." params: ".$this->strQueryParams,
-                Logger::$levelWarning
-            );
+            Logger::getInstance(Logger::REMOTELOADER)->warning("remoteloader failed. protocol: ".$this->strProtocolHeader." host: ".$this->strHost." port: ".$this->intPort." params: ".$this->strQueryParams);
             throw new Exception("Error loading the remote content", Exception::$level_ERROR);
         }
 
-        Logger::getInstance(Logger::REMOTELOADER)->addLogRow(
-            "new remote-request succeeded. protocol: ".$this->strProtocolHeader." host: ".$this->strHost." port: ".$this->intPort." params: ".$this->strQueryParams,
-            Logger::$levelInfo
-        );
+        Logger::getInstance(Logger::REMOTELOADER)->info("new remote-request succeeded. protocol: ".$this->strProtocolHeader." host: ".$this->strHost." port: ".$this->intPort." params: ".$this->strQueryParams);
 
         return $strReturn;
     }
@@ -261,7 +255,7 @@ class Remoteloader
 
             }
             catch (Exception $objException) {
-                Logger::getInstance(Logger::REMOTELOADER)->addLogRow("exception in socket: ".$objException->getMessage(), Logger::$levelInfo);
+                Logger::getInstance(Logger::REMOTELOADER)->info("exception in socket: ".$objException->getMessage());
                 //$objException->processException();
                 $strReturn = false;
             }
@@ -336,7 +330,7 @@ class Remoteloader
 
             }
             catch (Exception $objException) {
-                Logger::getInstance(Logger::REMOTELOADER)->addLogRow("exception in fsock: ".$objException->getMessage(), Logger::$levelInfo);
+                Logger::getInstance(Logger::REMOTELOADER)->info("exception in fsock: ".$objException->getMessage());
                 $strReturn = false;
             }
 

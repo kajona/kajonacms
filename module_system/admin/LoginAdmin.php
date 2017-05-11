@@ -160,7 +160,7 @@ class LoginAdmin extends AdminController implements AdminInterface
                     }
                     $objUser->setStrAuthcode("");
                     $objUser->updateObjectToDb();
-                    Logger::getInstance()->addLogRow("changed password of user ".$objUser->getStrUsername(), Logger::$levelInfo);
+                    Logger::getInstance()->info("changed password of user ".$objUser->getStrUsername());
 
                     $strReturn .= $this->getLang("login_change_success", "user");
                 } else {

@@ -99,38 +99,38 @@ function getPackageserverSystems($intStartDate, $intEndDate) {
 }
 
 function getPackageserverRequests($intStartDate, $intEndDate) {
-    $strQuery = "SELECT count(*)
+    $strQuery = "SELECT count(*) AS cnt
               FROM "._dbprefix_."packageserver_log
               WHERE log_date >= ?
                 AND log_date <= ?";
 
     $arrRow = \Kajona\System\System\Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($intStartDate, $intEndDate));
-    $intReturn = $arrRow["count(*)"];
+    $intReturn = $arrRow["cnt"];
 
     return $intReturn;
 }
 
 
 function getHits($intStartDate, $intEndDate) {
-    $strQuery = "SELECT count(*)
+    $strQuery = "SELECT count(*) AS cnt
                               FROM "._dbprefix_."stats_data
                               WHERE stats_date >= ?
                                 AND stats_date <= ?";
 
     $arrRow = \Kajona\System\System\Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($intStartDate, $intEndDate));
-    $intReturn = $arrRow["count(*)"];
+    $intReturn = $arrRow["cnt"];
 
     return $intReturn;
 }
 
 function getDownloads($intStartDate, $intEndDate) {
-    $strQuery = "SELECT count(*)
+    $strQuery = "SELECT count(*) AS cnt
                               FROM "._dbprefix_."mediamanager_dllog
                               WHERE downloads_log_date >= ?
                                 AND downloads_log_date <= ?";
 
     $arrRow = \Kajona\System\System\Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($intStartDate, $intEndDate));
-    $intReturn = $arrRow["count(*)"];
+    $intReturn = $arrRow["cnt"];
 
     return $intReturn;
 }

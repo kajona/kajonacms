@@ -64,12 +64,12 @@ class PagesFolder extends \Kajona\System\System\Model implements \Kajona\System\
     {
 
         //fix the initial sort-id
-        $strQuery = "SELECT COUNT(*)
+        $strQuery = "SELECT COUNT(*) AS cnt
                        FROM "._dbprefix_."system
                       WHERE system_prev_id = ?
                         AND (system_module_nr = ? OR system_module_nr = ?)";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getPrevId(), _pages_modul_id_, _pages_folder_id_));
-        $this->setIntSort($arrRow["COUNT(*)"]);
+        $this->setIntSort($arrRow["cnt"]);
 
         return parent::onInsertToDb();
     }
@@ -206,7 +206,7 @@ class PagesFolder extends \Kajona\System\System\Model implements \Kajona\System\
             $strFolderid = SystemModule::getModuleByName("pages")->getSystemid();
         }
         $objORM = new OrmObjectlist();
-        $strQuery = "SELECT COUNT(*)
+        $strQuery = "SELECT COUNT(*) AS cnt
 						FROM "._dbprefix_."system
 						WHERE system_prev_id=?
                          AND (system_module_nr = ? OR system_module_nr = ? )
@@ -214,7 +214,7 @@ class PagesFolder extends \Kajona\System\System\Model implements \Kajona\System\
 	                      ".($bitOnlyActive ? " AND system_status = 1 " : "");
 
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strFolderid, _pages_modul_id_, _pages_folder_id_));
-        return $arrRow["COUNT(*)"];
+        return $arrRow["cnt"];
     }
 
 

@@ -54,8 +54,8 @@ class DatabaseTxTest extends Testbase
         $this->assertTrue($objDB->_query($strQuery), "testTx insert");
 
         $objDB->transactionRollback();
-        $arrCount = $objDB->getPRow("SELECT COUNT(*) FROM " . _dbprefix_ . "temp_autotest", array());
-        $this->assertEquals($arrCount["COUNT(*)"], 1, "testTx rollback");
+        $arrCount = $objDB->getPRow("SELECT COUNT(*) AS cnt FROM " . _dbprefix_ . "temp_autotest", array());
+        $this->assertEquals($arrCount["cnt"], 1, "testTx rollback");
 
         $objDB->flushQueryCache();
 
@@ -63,8 +63,8 @@ class DatabaseTxTest extends Testbase
         $this->assertTrue($objDB->_query($strQuery), "testTx insert");
         $objDB->transactionCommit();
 
-        $arrCount = $objDB->getPRow("SELECT COUNT(*) FROM " . _dbprefix_ . "temp_autotest", array());
-        $this->assertEquals($arrCount["COUNT(*)"], 2, "testTx rollback");
+        $arrCount = $objDB->getPRow("SELECT COUNT(*) AS cnt FROM " . _dbprefix_ . "temp_autotest", array());
+        $this->assertEquals($arrCount["cnt"], 2, "testTx rollback");
 
         $objDB->flushQueryCache();
 

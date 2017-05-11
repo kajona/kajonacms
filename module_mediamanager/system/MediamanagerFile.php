@@ -362,7 +362,7 @@ class MediamanagerFile extends \Kajona\System\System\Model implements \Kajona\Sy
      */
     private function countOtherFilesWithSamePath()
     {
-        $strQuery = "SELECT COUNT(*)
+        $strQuery = "SELECT COUNT(*) AS cnt
                        FROM "._dbprefix_."system,
                             "._dbprefix_."mediamanager_file
                     WHERE system_id = file_id
@@ -371,7 +371,7 @@ class MediamanagerFile extends \Kajona\System\System\Model implements \Kajona\Sy
 
 
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getStrFilename(), $this->getSystemid()));
-        return $arrRow["COUNT(*)"];
+        return $arrRow["cnt"];
     }
 
     protected function updateStateToDb()
@@ -628,12 +628,12 @@ class MediamanagerFile extends \Kajona\System\System\Model implements \Kajona\Sy
     {
 
         $strPrevid = $this->getPrevId();
-        $arrRow = $this->objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."mediamanager_repo WHERE repo_id = ?", array($strPrevid));
-        while ($arrRow["COUNT(*)"] == 0 && $strPrevid != "" && $strPrevid != "0") {
+        $arrRow = $this->objDB->getPRow("SELECT COUNT(*) AS cnt FROM "._dbprefix_."mediamanager_repo WHERE repo_id = ?", array($strPrevid));
+        while ($arrRow["cnt"] == 0 && $strPrevid != "" && $strPrevid != "0") {
             /** @var MediamanagerFile $objFile */
             $objFile = Objectfactory::getInstance()->getObject($strPrevid);
             $strPrevid = $objFile->getPrevId();
-            $arrRow = $this->objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."mediamanager_repo WHERE repo_id = ?", array($strPrevid));
+            $arrRow = $this->objDB->getPRow("SELECT COUNT(*) AS cnt FROM "._dbprefix_."mediamanager_repo WHERE repo_id = ?", array($strPrevid));
         }
 
         return $strPrevid;

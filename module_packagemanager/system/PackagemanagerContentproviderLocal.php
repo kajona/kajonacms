@@ -90,7 +90,7 @@ class PackagemanagerContentproviderLocal implements PackagemanagerContentprovide
         $strSuffix = StringUtil::toLowerCase(StringUtil::substring($arrSource["name"], StringUtil::lastIndexOf($arrSource["name"], ".")));
         if (in_array($strSuffix, array(".phar"))) {
             if ($objFilesystem->copyUpload($strTarget, $arrSource["tmp_name"])) {
-                Logger::getInstance(Logger::PACKAGEMANAGEMENT)->addLogRow("uploaded package ".$arrSource["name"]." to ".$strTarget, Logger::$levelInfo);
+                Logger::getInstance(Logger::PACKAGEMANAGEMENT)->info("uploaded package ".$arrSource["name"]." to ".$strTarget);
                 Resourceloader::getInstance()->flushCache();
                 Classloader::getInstance()->flushCache();
                 Reflection::flushCache();
@@ -98,7 +98,7 @@ class PackagemanagerContentproviderLocal implements PackagemanagerContentprovide
                 return $strTarget;
             }
         }
-        Logger::getInstance(Logger::PACKAGEMANAGEMENT)->addLogRow("error in uploaded package ".$arrSource["name"]." either wrong format or not writeable target folder", Logger::$levelInfo);
+        Logger::getInstance(Logger::PACKAGEMANAGEMENT)->info("error in uploaded package ".$arrSource["name"]." either wrong format or not writeable target folder");
         @unlink($arrSource["tmp_name"]);
 
         return null;

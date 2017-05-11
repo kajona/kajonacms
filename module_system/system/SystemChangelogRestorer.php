@@ -26,19 +26,19 @@ class SystemChangelogRestorer extends SystemChangelog
      * @param VersionableInterface|Model $objObject
      * @param Date $objTimestamp
      * @param $strProperty
+     * @param bool $bitSoftRestore if set to true, values not found in the changelog keep their direct values, so they are not reset to null
      */
-    public function restoreProperty(VersionableInterface $objObject, Date $objTimestamp, $strProperty)
+    public function restoreProperty(VersionableInterface $objObject, Date $objTimestamp, $strProperty, $bitSoftRestore = false)
     {
-
-        //there are a few properties not to change
-        if ($strProperty == "intRecordStatus") {
-            return;
-        }
 
         //load the value from the changelog
         $strValue = $this->getValueForDate($objObject->getSystemid(), $strProperty, $objTimestamp);
 
         if ($strValue === false) {
+            if ($bitSoftRestore) {
+                return;
+            }
+
             $strValue = null;
         }
 
@@ -53,8 +53,13 @@ class SystemChangelogRestorer extends SystemChangelog
         //check if the target property was an object-list. if given, the string from the database should be transformed to an array instead.
         $arrObjectlistProperties = $objReflection->getPropertiesWithAnnotation(OrmBase::STR_ANNOTATION_OBJECTLIST);
 
-        if(in_array($strProperty, array_keys($arrObjectlistProperties))) {
-            $strValue = array_map(function($strValue) { return Objectfactory::getInstance()->getObject($strValue); }, explode(",", $strValue));
+        if (in_array($strProperty, array_keys($arrObjectlistProperties))) {
+            $strValue = array_map(
+                function ($strValue) {
+                    return Objectfactory::getInstance()->getObject($strValue);
+                },
+                explode(",", $strValue)
+            );
         }
 
         $strSetter = $objReflection->getSetter($strProperty);
@@ -63,7 +68,6 @@ class SystemChangelogRestorer extends SystemChangelog
         }
 
         $objObject->setSystemid($strSystemid);
-
     }
 
     /**
@@ -71,8 +75,9 @@ class SystemChangelogRestorer extends SystemChangelog
      *
      * @param VersionableInterface $objObject
      * @param Date $objTimestamp
+     * @param bool $bitSoftRestore if set to true, values not found in the changelog keep their direct values, so they are not reset to null
      */
-    public function restoreObject(VersionableInterface $objObject, Date $objTimestamp)
+    public function restoreObject(VersionableInterface $objObject, Date $objTimestamp, $bitSoftRestore = false)
     {
 
         $objReflection = new Reflection($objObject);
@@ -80,9 +85,7 @@ class SystemChangelogRestorer extends SystemChangelog
 
 
         foreach ($arrProperties as $strProperty => $strAnnotation) {
-
-            $this->restoreProperty($objObject, $objTimestamp, $strProperty);
-
+            $this->restoreProperty($objObject, $objTimestamp, $strProperty, $bitSoftRestore);
         }
     }
 

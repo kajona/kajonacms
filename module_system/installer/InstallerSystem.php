@@ -18,6 +18,7 @@ use Kajona\System\System\IdGenerator;
 use Kajona\System\System\InstallerBase;
 use Kajona\System\System\InstallerInterface;
 use Kajona\System\System\LanguagesLanguage;
+use Kajona\System\System\Logger;
 use Kajona\System\System\MessagingConfig;
 use Kajona\System\System\MessagingMessage;
 use Kajona\System\System\OrmBase;
@@ -108,17 +109,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
         // Config table ---------------------------------------------------------------------------------
         $strReturn .= "Installing table system_config...\n";
-
-        $arrFields = array();
-        $arrFields["system_config_id"] = array("char20", false);
-        $arrFields["system_config_name"] = array("char254", true);
-        $arrFields["system_config_value"] = array("char254", true);
-        $arrFields["system_config_type"] = array("int", true);
-        $arrFields["system_config_module"] = array("int", true);
-
-        if(!$this->objDB->createTable("system_config", $arrFields, array("system_config_id")))
-            $strReturn .= "An error occurred! ...\n";
-
+        $objManager->createTable(SystemSetting::class);
 
         // User table -----------------------------------------------------------------------------------
         $strReturn .= "Installing table user...\n";
@@ -605,6 +596,11 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
             $strReturn .= $this->update_622_623();
         }
 
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "6.2.3") {
+            $strReturn .= $this->update_623_624();
+        }
+
         return $strReturn."\n\n";
     }
 
@@ -924,7 +920,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
     {
         $strReturn = "Updating 6.2.2 to 6.2.3...\n";
 
-        $strReturn .= "Adding permisson columns to system table";
+        $strReturn .= "Adding permission columns to system table";
         $this->objDB->addColumn("system", "right_inherit", DbDatatypes::STR_TYPE_INT);
         $this->objDB->addColumn("system", "right_view", DbDatatypes::STR_TYPE_TEXT);
         $this->objDB->addColumn("system", "right_edit", DbDatatypes::STR_TYPE_TEXT);
@@ -940,21 +936,21 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
         $strReturn .= "Moving data...\n";
 
-        $strQuery = "UPDATE "._dbprefix_."system SET 
-                right_inherit = r.right_inherit, 
-                right_view = r.right_view, 
-                right_edit = r.right_edit, 
-                right_delete = r.right_delete, 
-                right_right = r.right_right, 
-                right_right1 = r.right_right1, 
-                right_right2 = r.right_right2, 
-                right_right3 = r.right_right3,
-                right_right4 = r.right_right4, 
-                right_right5 = r.right_right5, 
-                right_changelog = r.right_changelog
-                FROM (
-                    SELECT right_id, right_inherit, right_view, right_edit, right_delete, right_right, right_right1, right_right2, right_right3, right_right4, right_right5, right_changelog FROM "._dbprefix_."system_right
-                ) AS r WHERE system_id = r.right_id ";
+        $strQuery = " 
+         UPDATE "._dbprefix_."system as s
+     INNER JOIN "._dbprefix_."system_right as r ON s.system_id = r.right_id
+            SET s.right_inherit = r.right_inherit, 
+                s.right_view = r.right_view, 
+                s.right_edit = r.right_edit, 
+                s.right_delete = r.right_delete, 
+                s.right_right = r.right_right, 
+                s.right_right1 = r.right_right1, 
+                s.right_right2 = r.right_right2, 
+                s.right_right3 = r.right_right3,
+                s.right_right4 = r.right_right4, 
+                s.right_right5 = r.right_right5, 
+                s.right_changelog = r.right_changelog";
+
         $this->objDB->_pQuery($strQuery, array());
 
         Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBQUERIES | Carrier::INT_CACHE_TYPE_DBSTATEMENTS);
@@ -968,6 +964,47 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "6.2.3");
         return $strReturn;
     }
+
+    private function update_623_624()
+    {
+        $strReturn = "Updating 6.2.3 to 6.2.4...\n";
+        $strReturn .= "Shifting settings to 'real' objects\n";
+
+        $arrSystemModule = $this->objDB->getPRow("SELECT module_id FROM "._dbprefix_."system_module WHERE module_name = 'system'", []);
+
+        $strQuery = "SELECT system_config_id FROM "._dbprefix_."system_config";
+        foreach ($this->objDB->getPArray($strQuery, []) as $arrOneRow) {
+
+            if($this->objDB->getPRow("SELECT COUNT(*) as anz FROM "._dbprefix_."system WHERE system_id = ?", array($arrOneRow["system_config_id"]))["anz"] > 0) {
+                continue;
+            }
+
+            $strQuery = "INSERT INTO "._dbprefix_."system 
+                (system_id, system_prev_id, system_module_nr, system_sort, system_status, system_class, system_deleted, right_inherit) values 
+                (?, ?, ?, ?, ?, ?, ?, ?)";
+            $this->objDB->_pQuery($strQuery, [
+                $arrOneRow["system_config_id"],
+                $arrSystemModule["module_id"],
+                _system_modul_id_,
+                -1,
+                1,
+                SystemSetting::class,
+                0,
+                1
+            ]);
+        }
+
+        Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBQUERIES | Carrier::INT_CACHE_TYPE_DBSTATEMENTS | Carrier::INT_CACHE_TYPE_ORMCACHE | Carrier::INT_CACHE_TYPE_OBJECTFACTORY);
+
+        Rights::getInstance()->rebuildRightsStructure($arrSystemModule["module_id"]);
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "6.2.4");
+        return $strReturn;
+    }
+
+
 
     /**
      * Helper to migrate the system-id based permission table to an int based one
@@ -997,8 +1034,9 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
             $arrResultSet = $this->objDB->getPArray("SELECT * FROM "._dbprefix_."system_right ORDER BY right_id DESC", array());
         }
 
+        $strLoop = "";
         while (count($arrResultSet) > 0) {
-            $strRun .= "Fetching records ".$intStart." to ".($intEnd-1).PHP_EOL;
+            $strLoop = "Fetching records ".$intStart." to ".($intEnd-1).PHP_EOL;
             $arrInserts = array();
 
             foreach ($arrResultSet as $arrSingleRow) {
@@ -1026,7 +1064,7 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
             }
 
 
-            $strRun .= "Converted ".count($arrResultSet)." source rows ".PHP_EOL;
+            $strLoop .= "Converted ".count($arrResultSet)." source rows ".PHP_EOL;
 
             if ($bitEchodata) {
                echo $strRun;
@@ -1045,6 +1083,10 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
             }
 
             $this->objDB->flushQueryCache();
+
+
+            Logger::getInstance("usermigration.log")->warning($strRun);
+            $strRun .= $strLoop;
         }
 
         return $strRun;
