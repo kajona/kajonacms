@@ -240,7 +240,9 @@ class Ldap
      */
     public function isUserMemberOfGroup($strUserDN, $strGroupDN)
     {
-        $bitReturn = false;
+        if (empty($strUserDN) || empty($strGroupDN)) {
+            return false;
+        }
 
         //search the group itself
         $strQuery = $this->arrConfig["ldap_group_isUserMemberOf"];
