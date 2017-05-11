@@ -16,18 +16,24 @@ namespace Kajona\Flow\System;
 class FlowConditionResult
 {
     /**
+     * @var bool
+     */
+    protected $bitValid;
+
+    /**
      * @var array
      */
     protected $arrErrors;
 
-    public function __construct()
+    public function __construct($bitValid = null)
     {
+        $this->bitValid = $bitValid;
         $this->arrErrors = [];
     }
 
     public function isValid()
     {
-        return count($this->arrErrors) === 0;
+        return $this->bitValid === null ? count($this->arrErrors) === 0 : $this->bitValid;
     }
 
     public function addError(string $strError)
@@ -42,6 +48,7 @@ class FlowConditionResult
 
     public function merge(FlowConditionResult $objResult)
     {
+        $this->bitValid = $this->bitValid === null ? $objResult->isValid() : ($this->bitValid && $objResult->isValid());
         $this->arrErrors = array_merge($this->arrErrors, $objResult->getErrors());
     }
 }

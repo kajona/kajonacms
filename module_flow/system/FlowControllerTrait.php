@@ -167,17 +167,23 @@ require(["jquery", "ajax"], function($, ajax){
 
                 $strValidation = "";
                 if (!$objResult->isValid()) {
-                    $strTooltip = "<div class='alert alert-danger'>";
-                    $strTooltip.= "<ul>";
-                    foreach ($objResult->getErrors() as $strError) {
-                        if (!empty($strError)) {
-                            $strError = htmlspecialchars($strError);
-                            $strTooltip.= "<li>{$strError}</li>";
+                    $arrErrors = $objResult->getErrors();
+                    if (!empty($arrErrors)) {
+                        $strTooltip = "<div class='alert alert-danger'>";
+                        $strTooltip.= "<ul>";
+                        foreach ($objResult->getErrors() as $strError) {
+                            if (!empty($strError)) {
+                                $strError = htmlspecialchars($strError);
+                                $strTooltip.= "<li>{$strError}</li>";
+                            }
                         }
+                        $strTooltip.= "</ul>";
+                        $strTooltip.= "</div>";
+                        $strValidation.= '<i class="kj-icon fa fa-exclamation-triangle pull-right ' . $strClass . '" style="color:#ee0000" data-validation-errors="' . $strTooltip . '"></i>';
+                    } else {
+                        // in case the result is not valid and we have no error message we skip the menu entry
+                        continue;
                     }
-                    $strTooltip.= "</ul>";
-                    $strTooltip.= "</div>";
-                    $strValidation.= '<i class="kj-icon fa fa-exclamation-triangle pull-right ' . $strClass . '" style="color:#ee0000" data-validation-errors="' . $strTooltip . '"></i>';
                 }
 
                 if (!empty($strValidation)) {
