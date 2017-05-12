@@ -383,6 +383,34 @@ class Database
     }
 
     /**
+     * Method which returns a section of the query without loading the complete data into the memory. This can be used
+     * to query big result sets i.e. to run on installation update
+     *
+     * @param string $strQuery
+     * @param array $arrParams
+     * @param int $intChunkSize
+     * @return \Generator
+     */
+    public function getGenerator($strQuery, array $arrParams = [], $intChunkSize = 2048)
+    {
+        $intStart = 0;
+        $intEnd = $intChunkSize;
+
+        do {
+            $arrResult = $this->getPArray($strQuery, $arrParams, $intStart, $intEnd - 1);
+
+            if (!empty($arrResult)) {
+                yield $arrResult;
+            }
+
+            $intStart += $intChunkSize;
+            $intEnd += $intChunkSize;
+
+            $this->flushQueryCache();
+        } while (!empty($arrResult));
+    }
+
+    /**
      * Returns just a part of a recordset, defined by the start- and the end-rows,
      * defined by the params.
      * <b>Note:</b> Use array-like counters, so the first row is startRow 0 whereas
