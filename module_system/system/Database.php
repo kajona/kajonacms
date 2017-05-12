@@ -706,6 +706,10 @@ class Database
      */
     public function renameTable($strOldName, $strNewName)
     {
+        if (!$this->bitConnected) {
+            $this->dbconnect();
+        }
+
         $this->flushTablesCache();
         return $this->objDbDriver->renameTable(_dbprefix_.$strOldName, _dbprefix_.$strNewName);
     }
@@ -722,6 +726,9 @@ class Database
      */
     public function changeColumn($strTable, $strOldColumnName, $strNewColumnName, $strNewDatatype)
     {
+        if (!$this->bitConnected) {
+            $this->dbconnect();
+        }
         $this->flushTablesCache();
         return $this->objDbDriver->changeColumn(_dbprefix_.$strTable, $strOldColumnName, $strNewColumnName, $strNewDatatype);
     }
@@ -739,6 +746,10 @@ class Database
      */
     public function addColumn($strTable, $strColumn, $strDatatype, $bitNull = null, $strDefault = null)
     {
+        if (!$this->bitConnected) {
+            $this->dbconnect();
+        }
+
         $this->flushTablesCache();
         return $this->objDbDriver->addColumn(_dbprefix_.$strTable, $strColumn, $strDatatype, $bitNull, $strDefault);
     }
@@ -753,6 +764,10 @@ class Database
      */
     public function removeColumn($strTable, $strColumn)
     {
+        if (!$this->bitConnected) {
+            $this->dbconnect();
+        }
+
         $this->flushTablesCache();
         return $this->objDbDriver->removeColumn(_dbprefix_.$strTable, $strColumn);
     }
