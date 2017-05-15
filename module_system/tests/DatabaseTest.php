@@ -436,6 +436,7 @@ SQL;
             }
             $j++;
         }
+        $this->assertEquals(128, $i);
         $this->assertEquals(4, $j);
     }
 }
