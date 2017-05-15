@@ -426,6 +426,8 @@ SQL;
 
         $objGenerator = $objDb->getGenerator("SELECT * FROM " . $strTable, [], 32);
 
+        $this->assertInstanceOf(\Generator::class, $objGenerator);
+
         $i = 0;
         $j = 0;
         foreach ($objGenerator as $arrResult) {
