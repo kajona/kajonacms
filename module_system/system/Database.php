@@ -383,8 +383,8 @@ class Database
     }
 
     /**
-     * Method which returns a section of the query without loading the complete data into the memory. This can be used
-     * to query big result sets i.e. to run on installation update
+     * Returns a generator which can be used to iterate over a section of the query without loading the complete data
+     * into the memory. This can be used to query big result sets i.e. on installation update
      *
      * @param string $strQuery
      * @param array $arrParams
