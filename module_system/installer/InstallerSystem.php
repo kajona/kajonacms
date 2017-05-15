@@ -1022,23 +1022,8 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
             $arrIdToInt[$arrOneRow["group_id"]] = $arrOneRow["group_short_id"];
         }
 
-
-        $intStart = 0;
-        $intEnd = $intPagesize;
-
-        if($intPagesize !== null) {
-            $intStart = 0;
-            $intEnd = $intPagesize;
-            $arrResultSet = $this->objDB->getPArray("SELECT * FROM "._dbprefix_."system_right ORDER BY right_id DESC", array(), $intStart, $intEnd-1);
-        } else {
-            $arrResultSet = $this->objDB->getPArray("SELECT * FROM "._dbprefix_."system_right ORDER BY right_id DESC", array());
-        }
-
-        $strLoop = "";
-        while (count($arrResultSet) > 0) {
-            $strLoop = "Fetching records ".$intStart." to ".($intEnd-1).PHP_EOL;
-            $arrInserts = array();
-
+        $objGenerator = $this->objDB->getGenerator("SELECT * FROM "._dbprefix_."system_right ORDER BY right_id DESC", [], $intPagesize);
+        foreach ($objGenerator as $arrResultSet) {
             foreach ($arrResultSet as $arrSingleRow) {
                 $arrParams = array();
 
@@ -1063,29 +1048,14 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
                 $this->objDB->_pQuery($strQuery, $arrParams);
             }
 
-
-            $strLoop .= "Converted ".count($arrResultSet)." source rows ".PHP_EOL;
+            $strLoop = "Converted ".count($arrResultSet)." source rows ".PHP_EOL;
 
             if ($bitEchodata) {
-               echo $strRun;
+                echo $strLoop;
                 flush();
                 ob_flush();
-                $strRun = "";
             }
 
-            if($intPagesize !== null) {
-                $intStart += $intPagesize;
-                $intEnd += $intPagesize;
-                $arrResultSet = $this->objDB->getPArray("SELECT * FROM "._dbprefix_."system_right ORDER BY right_id DESC", [], $intStart, $intEnd - 1);
-            }
-            else {
-                $arrResultSet = array();
-            }
-
-            $this->objDB->flushQueryCache();
-
-
-            Logger::getInstance("usermigration.log")->warning($strRun);
             $strRun .= $strLoop;
         }
 
