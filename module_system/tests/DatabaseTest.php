@@ -419,7 +419,7 @@ SQL;
 
         // insert which affects onw row
         $arrData = [];
-        for ($i = 0; $i < 128; $i++) {
+        for ($i = 0; $i < 130; $i++) {
             $arrData[] = [generateSystemid(), "text" . $i];
         }
         $this->assertTrue($objDb->multiInsert("temp_autotest", array("temp_id", "temp_char20"), $arrData));
@@ -431,15 +431,15 @@ SQL;
         $i = 0;
         $j = 0;
         foreach ($objGenerator as $arrResult) {
-            $this->assertEquals(32, count($arrResult));
+            $this->assertEquals($j == 4 ? 2 : 32, count($arrResult));
             foreach ($arrResult as $arrRow) {
                 $this->assertEquals("text" . $i, $arrRow["temp_char20"]);
                 $i++;
             }
             $j++;
         }
-        $this->assertEquals(128, $i);
-        $this->assertEquals(4, $j);
+        $this->assertEquals(130, $i);
+        $this->assertEquals(5, $j);
     }
 }
 
