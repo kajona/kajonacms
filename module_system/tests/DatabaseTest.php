@@ -409,12 +409,14 @@ SQL;
         $objDb = Database::getInstance();
 
         // create table
-        $strTable = _dbprefix_ . "temp_autotest";
+        $strTable = _dbprefix_ . "temp_autotest_gen";
         $arrFields = array();
         $arrFields["temp_id"] = array("char20", false);
         $arrFields["temp_char20"] = array("char20", true);
 
-        $this->assertTrue($objDb->createTable("temp_autotest", $arrFields, array("temp_id")), "testDataBase createTable");
+        Carrier::getInstance()->getObjDB()->_pQuery("DROP TABLE " . $strTable, array());
+
+        $this->assertTrue($objDb->createTable("temp_autotest_gen", $arrFields, array("temp_id")), "testDataBase createTable");
         $this->flushDBCache();
 
         // insert which affects onw row
@@ -422,7 +424,7 @@ SQL;
         for ($i = 0; $i < 130; $i++) {
             $arrData[] = [generateSystemid(), "text" . $i];
         }
-        $this->assertTrue($objDb->multiInsert("temp_autotest", array("temp_id", "temp_char20"), $arrData));
+        $this->assertTrue($objDb->multiInsert("temp_autotest_gen", array("temp_id", "temp_char20"), $arrData));
 
         $objGenerator = $objDb->getGenerator("SELECT * FROM " . $strTable, [], 32);
 

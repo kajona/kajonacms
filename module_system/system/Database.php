@@ -400,15 +400,13 @@ class Database
             $arrResult = $this->getPArray($strQuery, $arrParams, $intStart, $intEnd - 1);
 
             if (!empty($arrResult)) {
-                try {
-                    yield $arrResult;
-                } finally {
-                    $this->flushQueryCache();
-                }
+                yield $arrResult;
             }
 
             $intStart += $intChunkSize;
             $intEnd += $intChunkSize;
+
+            $this->flushQueryCache();
         } while (!empty($arrResult));
     }
 
