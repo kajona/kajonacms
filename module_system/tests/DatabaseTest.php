@@ -414,7 +414,10 @@ SQL;
         $arrFields["temp_id"] = array("char20", false);
         $arrFields["temp_char20"] = array("char20", true);
 
-        Carrier::getInstance()->getObjDB()->_pQuery("DROP TABLE " . $strTable, array());
+        // drop table if exists
+        if (in_array($strTable, $objDb->getTables())) {
+            $objDb->_pQuery("DROP TABLE " . $strTable, []);
+        }
 
         $this->assertTrue($objDb->createTable("temp_autotest_gen", $arrFields, array("temp_id")), "testDataBase createTable");
         $this->flushDBCache();
