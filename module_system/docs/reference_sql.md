@@ -13,3 +13,8 @@ postgres, oracle, mssql.
 * Mssql: Spalten vom Typ `text` können nicht sortiert werden. Ein Workaround ist: 
   `ORDER BY CAST(TEXT_COLUMN as VARCHAR(100))`
 
+##Generators
+The Database-class support Generators to iterate over larget sets of data. Internally,
+the `getGenerator()` method uses a paged query, e.g. by adding a `LIMIT` expression.
+Therefore it's essential to pass a SQL statement including an `ORDER BY` definition, 
+otherwise it it's not guaranteed to have unique entries per iteration. 

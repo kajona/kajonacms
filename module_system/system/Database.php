@@ -384,7 +384,8 @@ class Database
 
     /**
      * Returns a generator which can be used to iterate over a section of the query without loading the complete data
-     * into the memory. This can be used to query big result sets i.e. on installation update
+     * into the memory. This can be used to query big result sets i.e. on installation update.
+     * Make sure to have an ORDER BY in the statement, otherwise the chunks may use duplicate entries depending on the RDBMS.
      *
      * @param string $strQuery
      * @param array $arrParams
