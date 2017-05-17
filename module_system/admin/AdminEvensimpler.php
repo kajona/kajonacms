@@ -273,7 +273,7 @@ abstract class AdminEvensimpler extends AdminSimple
      *
      * @return null|string
      */
-    private function getObjectFilterClass($strCurObjectTypeName)
+    protected function getObjectFilterClass($strCurObjectTypeName)
     {
 
         $objReflection = new Reflection($this);
