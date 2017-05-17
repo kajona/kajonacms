@@ -86,8 +86,8 @@
             <div class="row pathNaviContainer">
                 <div class="col-md-12">
                     %%path%%
+                    %%quickhelp%%
                 </div>
-                %%quickhelp%%
             </div>
 
 
