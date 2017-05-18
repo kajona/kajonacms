@@ -60,10 +60,6 @@
 //                            ajax.loadUrlToElement(".languageSwitchContainer", '/xml.php?admin=1&module=v4skin&action=getLanguageswitch');
 //                        });
                     </script>
-                    <span class="">%%aspectChooser%%</span>
-                    <a id="portaleditor" class="btn btn-default hidden-xs" href="_webpath_">
-                        Portal
-                    </a>
                 </div>
             </div>
         </div>
@@ -82,10 +78,11 @@
 
                     <!--% %moduleSitemap% %-->
                 </div>
+                <span class="">%%aspectChooser%%</span>
             </div>
             <script type="text/javascript">
-              require(['ajax'], function(ajax) {
-                    ajax.loadUrlToElement("#moduleNavigation", '/xml.php?admin=1&module=v4skin&action=getBackendNavi');
+              require(['moduleNavigation'], function(mNavi) {
+                    mNavi.loadNavigation();
               });
                 </script>
 

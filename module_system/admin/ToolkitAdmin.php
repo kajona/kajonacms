@@ -1942,11 +1942,11 @@ HTML;
      *
      * @return string
      */
-    public function getAdminSitemap()
+    public function getAdminSitemap($strAspectId)
     {
         $strModules = "";
 
-        $arrModules = SystemModule::getModulesInNaviAsArray(SystemAspect::getCurrentAspectId());
+        $arrModules = SystemModule::getModulesInNaviAsArray($strAspectId);
 
         /** @var $arrNaviInstances SystemModule[] */
         $arrNaviInstances = array();
@@ -2661,6 +2661,7 @@ HTML;
                 $arrSubtemplate = array();
                 //start on dashboard since the current module may not be visible in another aspect
                 $arrSubtemplate["value"] = getLinkAdminHref("dashboard", "", "&aspect=".$objSingleAspect->getSystemid());
+                $arrSubtemplate["value"] = $objSingleAspect->getSystemid();
                 $arrSubtemplate["name"] = $objSingleAspect->getStrDisplayName();
                 $arrSubtemplate["selected"] = $strCurrentId == $objSingleAspect->getSystemid() ? "selected=\"selected\"" : "";
 

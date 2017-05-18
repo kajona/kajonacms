@@ -99,7 +99,8 @@ class SkinAdminController extends AdminEvensimpler implements AdminInterface
      */
     protected function actionGetBackendNavi()
     {
-        return $this->objToolkit->getAdminSitemap();
+        $strAspectId = $this->getParam("aspect") ?: SystemAspect::getCurrentAspectId();
+        return $this->objToolkit->getAdminSitemap($strAspectId);
     }
 
     /**

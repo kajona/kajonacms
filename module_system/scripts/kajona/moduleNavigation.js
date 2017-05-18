@@ -4,7 +4,7 @@
  *
  * @module moduleNavigation
  */
-define('moduleNavigation', ['jquery'], function ($) {
+define('moduleNavigation', ['jquery', 'ajax'], function ($, ajax) {
 
     return /** @alias module:moduleNavigation */ {
 
@@ -20,6 +20,13 @@ define('moduleNavigation', ['jquery'], function ($) {
                 //default: not combined
                 $("a[data-kajona-module='" + strModule + "']").addClass('active');
             }
+        },
+
+        loadNavigation : function(strAspect) {
+            if (!strAspect) {
+                strAspect = "";
+            }
+            ajax.loadUrlToElement("#moduleNavigation", '/xml.php?admin=1&module=v4skin&action=getBackendNavi&aspect='+(strAspect ? strAspect : ""));
         }
 
     }

@@ -1542,7 +1542,7 @@ place ajaxScript before the closing input_tagselector-tag.
 The aspect chooser is shown in cases more than one aspect is defined in the system-module.
 It containes a list of aspects and provides the possibility to switch the different aspects.
 <aspect_chooser>
-    <select onchange="window.location.replace(this.value);">
+    <select onchange="require('moduleNavigation').loadNavigation(this.value);">
         %%options%%
     </select>
 </aspect_chooser>
