@@ -8,7 +8,7 @@
  *
  * @module forms
  */
-define('forms', ['jquery', 'tooltip'], function ($, tooltip) {
+define('forms', ['jquery', 'tooltip', 'router'], function ($, tooltip, router) {
 
     /** @exports forms */
     var forms = {};
@@ -227,11 +227,12 @@ define('forms', ['jquery', 'tooltip'], function ($, tooltip) {
             /* it has a "name" attribute */
             $btn.is('[name]')
             ) {
-                //nae, value
+                //name, value
                 $(objForm).append($('<input>').attr('name', $btn.attr('name')).attr('value', $btn.val()));
                 /* access $btn.attr("name") and $btn.val() for data */
         }
 
+        router.removeLoadCallback("form_unlock");
 
         if(objForm.action == document.location) {
             routie.reload();
@@ -241,6 +242,15 @@ define('forms', ['jquery', 'tooltip'], function ($, tooltip) {
 
         return false;
     };
+
+
+    forms.registerUnlockId = function (strId) {
+        router.registerLoadCallback("form_unlock", function() {
+            $.ajax({url: KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=unlockRecord&systemid='+strId});
+            router.removeLoadCallback("form_unlock");
+        });
+    };
+
 
     /**
      * Adds a callback invoked as soon as the rendering of mandatory elements finished.

@@ -415,9 +415,7 @@ class AdminFormgenerator
                 $this->objSourceobject->getLockManager()->lockRecord();
 
                 //register a new unlock-handler
-                $strReturn .= "<script type='text/javascript'>
-                        $(window).on('unload', function() { $.ajax({url: KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=unlockRecord&systemid=" . $this->objSourceobject->getSystemid() . "', async:false}) ; });
-                    </script>";
+                $strReturn .= "<script type='text/javascript'>require(['forms'], function(forms) {forms.registerUnlockId('{$this->objSourceobject->getSystemid()}')});</script>";
             }
         }
 

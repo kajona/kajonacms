@@ -10,6 +10,13 @@
  */
 define("router", ['jquery', 'contentToolbar', 'tooltip', 'breadcrumb', 'moduleNavigation', 'quickhelp', 'ajax'], function ($, contentToolbar, tooltip, breadcrumb, moduleNavigation, quickhelp, ajax) {
 
+    /**
+     * An array / list of callbacks to be fired as soon as a url is being loaded.
+     * There's no indication on whether loading finished or not.
+     * @type {{}}
+     */
+    var arrLoadCallbacks = {};
+
     var initRouter = function() {
 
         routie('*', function(url) {
@@ -55,18 +62,17 @@ define("router", ['jquery', 'contentToolbar', 'tooltip', 'breadcrumb', 'moduleNa
 
             strUrlToLoad += "&"+strParams;
 
-            if(isStackedDialog && strUrlToLoad.indexOf('folderview') == -1) {
-                strUrlToLoad += "&folderview=1";
-            }
+            // if(isStackedDialog && strUrlToLoad.indexOf('folderview') == -1) {
+            //     strUrlToLoad += "&folderview=1";
+            // }
 
             strUrlToLoad += "&contentFill=1";
             console.log('Loading url '+strUrlToLoad);
 
-            contentToolbar.resetBar();
-            breadcrumb.resetBar();
-            quickhelp.resetQuickhelp();
-            tooltip.removeTooltip($('*[rel=tooltip]'));
+            cleanPage();
             moduleNavigation.setModuleActive(arrSections[0]);
+
+            applyCallbacks();
 
             //split between post and get
             if(KAJONA.admin.forms.submittedEl != null) {
@@ -76,13 +82,28 @@ define("router", ['jquery', 'contentToolbar', 'tooltip', 'breadcrumb', 'moduleNa
 
             } else {
                 ajax.loadUrlToElement('#moduleOutput', strUrlToLoad);
-
             }
 
 
         });
     };
 
+
+    var cleanPage = function() {
+        contentToolbar.resetBar();
+        breadcrumb.resetBar();
+        quickhelp.resetQuickhelp();
+        tooltip.removeTooltip($('*[rel=tooltip]'));
+    };
+
+    var applyCallbacks = function() {
+        var key;
+        for(key in arrLoadCallbacks) {
+            if(typeof arrLoadCallbacks[key] === 'function') {
+                arrLoadCallbacks[key]();
+            }
+        }
+    };
 
 
     /** @alias module:router */
@@ -103,8 +124,25 @@ define("router", ['jquery', 'contentToolbar', 'tooltip', 'breadcrumb', 'moduleNa
 
         init : function() {
             initRouter();
-        }
+        },
 
+        /**
+         * Adds a new callback fired as soon as a new url-request is fired
+         * @param strName
+         * @param objCallback
+         */
+        registerLoadCallback : function (strName, objCallback) {
+            debugger;
+            arrLoadCallbacks[strName] = objCallback;
+        },
+
+        /**
+         * Removes a registered load-callback
+         * @param strName
+         */
+        removeLoadCallback : function (strName) {
+            delete arrLoadCallbacks[strName];
+        }
 
 
     };
