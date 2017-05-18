@@ -1560,7 +1560,7 @@ class ToolkitAdmin extends Toolkit
      * Renders a button triggering a confirmation dialog. Useful if the loading of the linked pages
      * should be confirmed by the user
      *
-     * @param $strText
+     * @param $strDialogContent
      * @param $strConfirmationLinkHref
      * @param $strButton
      * @param $strButtonTooltip
@@ -1570,18 +1570,13 @@ class ToolkitAdmin extends Toolkit
      * @return string
      *
      */
-    public function listConfirmationButton($strText, $strConfirmationLinkHref, $strButton, $strButtonTooltip, $strHeader = "", $strConfirmationButtonLabel = "")
+    public function listConfirmationButton($strDialogContent, $strConfirmationLinkHref, $strButton, $strButtonTooltip, $strHeader = "", $strConfirmationButtonLabel = "")
     {
         //get the reload-url
         $objHistory = new History();
         $strParam = "";
         if (StringUtil::indexOf($strConfirmationLinkHref, "javascript:") === false) {
             $strParam = "?reloadUrl='+encodeURIComponent(document.location.hash.substr(1))+'";
-//            if (StringUtil::substring($strConfirmationLinkHref, -4) == ".php" || StringUtil::substring($strConfirmationLinkHref, -5) == ".html") {
-//                $strParam = "?".$strParam;
-//            } else {
-//                $strParam = "&".$strParam;
-//            }
         }
 
         if ($strConfirmationButtonLabel == "") {
@@ -1590,13 +1585,46 @@ class ToolkitAdmin extends Toolkit
 
         //create the list-button and the js code to show the dialog
         $strButton = Link::getLinkAdminManual(
-            "href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('{$strHeader}'); jsDialog_1.setContent('{$strText}', '{$strConfirmationButtonLabel}',  '".$strConfirmationLinkHref.$strParam."'); jsDialog_1.init(); return false;\"",
+            "href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('{$strHeader}'); jsDialog_1.setContent('{$strDialogContent}', '{$strConfirmationButtonLabel}',  '".$strConfirmationLinkHref.$strParam."'); jsDialog_1.init(); return false;\"",
             "",
             $strButtonTooltip,
             $strButton
         );
 
         return $this->listButton($strButton);
+    }
+
+
+    /**
+     * Renders a button triggering a confirmation dialog. Useful if the loading of the linked pages
+     * should be confirmed by the user
+     *
+     * @param $strDialogContent
+     * @param $strConfirmationLinkHref
+     * @param $strLinkText
+     * @param string $strHeader
+     * @param string $strConfirmationButtonLabel
+     * @return string
+     * @internal param $strButton
+     */
+    public function confirmationLink($strDialogContent, $strConfirmationLinkHref, $strLinkText, $strHeader = "", $strConfirmationButtonLabel = "")
+    {
+        //get the reload-url
+        $objHistory = new History();
+        $strParam = "";
+        if (StringUtil::indexOf($strConfirmationLinkHref, "javascript:") === false) {
+            $strParam = "?reloadUrl='+encodeURIComponent(document.location.hash.substr(1))+'";
+        }
+
+        if ($strConfirmationButtonLabel == "") {
+            $strConfirmationButtonLabel = Carrier::getInstance()->getObjLang()->getLang("commons_ok", "system");
+        }
+
+        //create the list-button and the js code to show the dialog
+        return Link::getLinkAdminManual(
+            "href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('{$strHeader}'); jsDialog_1.setContent('{$strDialogContent}', '{$strConfirmationButtonLabel}',  '".$strConfirmationLinkHref.$strParam."'); jsDialog_1.init(); return false;\"",
+            $strLinkText
+        );
     }
     
     /**
