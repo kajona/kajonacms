@@ -59,23 +59,27 @@ define('ajax', ['jquery', 'statusDisplay', 'workingIndicator', 'tooltip'], funct
         },
 
         getDataObjectFromString: function(strData, bitFirstIsSystemid) {
-            //strip other params, backwards compatibility
-            var arrElements = strData.split("&");
-            var data = { };
+            if (typeof strData === "string") {
+                //strip other params, backwards compatibility
+                var arrElements = strData.split("&");
+                var data = { };
 
-            if(bitFirstIsSystemid)
-                data["systemid"] = arrElements[0];
+                if(bitFirstIsSystemid)
+                    data["systemid"] = arrElements[0];
 
-            //first one is the systemid
-            if(arrElements.length > 1) {
-                $.each(arrElements, function(index, strValue) {
-                    if(!bitFirstIsSystemid || index > 0) {
-                        var arrSingleParams = strValue.split("=");
-                        data[arrSingleParams[0]] = arrSingleParams[1];
-                    }
-                });
+                //first one is the systemid
+                if(arrElements.length > 1) {
+                    $.each(arrElements, function(index, strValue) {
+                        if(!bitFirstIsSystemid || index > 0) {
+                            var arrSingleParams = strValue.split("=");
+                            data[arrSingleParams[0]] = arrSingleParams[1];
+                        }
+                    });
+                }
+                return data;
+            } else {
+                return strData;
             }
-            return data;
         },
 
         regularCallback: function(data, status, jqXHR) {
@@ -87,8 +91,18 @@ define('ajax', ['jquery', 'statusDisplay', 'workingIndicator', 'tooltip'], funct
             }
         },
 
-
-        genericAjaxCall : function(module, action, systemid, objCallback) {
+        /**
+         * General helper to fire an ajax request against the backend
+         *
+         * @param module
+         * @param action
+         * @param systemid
+         * @param objCallback
+         * @param objDoneCallback
+         * @param objErrorCallback
+         * @param strMethod default is POST
+         */
+        genericAjaxCall : function(module, action, systemid, objCallback, objDoneCallback, objErrorCallback, strMethod) {
             var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module='+module+'&action='+action;
             var data;
             if(systemid) {
@@ -97,17 +111,25 @@ define('ajax', ['jquery', 'statusDisplay', 'workingIndicator', 'tooltip'], funct
 
             workingIndicator.start();
             $.ajax({
-                type: 'POST',
+                type: strMethod ? strMethod : 'POST',
                 url: postTarget,
                 data: data,
                 error: objCallback,
                 success: objCallback,
                 dataType: 'text'
             }).always(
-                function(response) {
+                function() {
                     workingIndicator.stop();
                 }
-            );
+            ).error(function() {
+                if(objErrorCallback) {
+                    objErrorCallback();
+                }
+            }).done(function() {
+                if(objDoneCallback) {
+                    objDoneCallback();
+                }
+            });
 
         },
 

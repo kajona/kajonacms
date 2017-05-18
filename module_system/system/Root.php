@@ -469,11 +469,11 @@ abstract class Root
         $bitReturn = $bitReturn && CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_RECORDRESTORED_LOGICALLY, array($this->getSystemid(), get_class($this), $this));
 
         if ($bitReturn) {
-            Logger::getInstance()->addLogRow("successfully restored record ".$this->getSystemid()." / ".$this->getStrDisplayName(), Logger::$levelInfo);
+            Logger::getInstance()->info("successfully restored record ".$this->getSystemid()." / ".$this->getStrDisplayName());
             $this->objDB->transactionCommit();
             return true;
         } else {
-            Logger::getInstance()->addLogRow("error restoring record ".$this->getSystemid()." / ".$this->getStrDisplayName(), Logger::$levelInfo);
+            Logger::getInstance()->info("error restoring record ".$this->getSystemid()." / ".$this->getStrDisplayName());
             $this->objDB->transactionRollback();
             return false;
         }
@@ -525,11 +525,11 @@ abstract class Root
         $bitReturn = $bitReturn && CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_RECORDDELETED_LOGICALLY, array($this->getSystemid(), get_class($this)));
 
         if ($bitReturn) {
-            Logger::getInstance()->addLogRow("successfully deleted record ".$this->getSystemid()." / ".$this->getStrDisplayName(), Logger::$levelInfo);
+            Logger::getInstance()->info("successfully deleted record ".$this->getSystemid()." / ".$this->getStrDisplayName());
             $this->objDB->transactionCommit();
             return true;
         } else {
-            Logger::getInstance()->addLogRow("error deleting record ".$this->getSystemid()." / ".$this->getStrDisplayName(), Logger::$levelInfo);
+            Logger::getInstance()->info("error deleting record ".$this->getSystemid()." / ".$this->getStrDisplayName());
             $this->objDB->transactionRollback();
             return false;
         }
@@ -584,12 +584,12 @@ abstract class Root
         $bitReturn = $bitReturn && CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_RECORDDELETED, array($this->getSystemid(), get_class($this)));
 
         if ($bitReturn) {
-            Logger::getInstance()->addLogRow("successfully deleted record ".$this->getSystemid()." / ".$this->getStrDisplayName(), Logger::$levelInfo);
+            Logger::getInstance()->info("successfully deleted record ".$this->getSystemid()." / ".$this->getStrDisplayName());
             $this->objDB->transactionCommit();
             $this->objDB->flushQueryCache();
             return true;
         } else {
-            Logger::getInstance()->addLogRow("error deleting record ".$this->getSystemid()." / ".$this->getStrDisplayName(), Logger::$levelInfo);
+            Logger::getInstance()->info("error deleting record ".$this->getSystemid()." / ".$this->getStrDisplayName());
             $this->objDB->transactionRollback();
             $this->objDB->flushQueryCache();
             return false;
@@ -733,13 +733,13 @@ abstract class Root
             $this->objDB->transactionCommit();
             //unlock the record
             $this->getLockManager()->unlockRecord();
-            Logger::getInstance()->addLogRow("updateObjectToDb() succeeded for systemid ".$this->getSystemid(), Logger::$levelInfo);
+            Logger::getInstance()->info("updateObjectToDb() succeeded for systemid ".$this->getSystemid());
 
             //call the recordUpdated-Listeners
             CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_RECORDUPDATED, array($this, $bitRecordCreated));
         } else {
             $this->objDB->transactionRollback();
-            Logger::getInstance()->addLogRow("updateObjectToDb() failed for systemid ".$this->getSystemid(), Logger::$levelWarning);
+            Logger::getInstance()->warning("updateObjectToDb() failed for systemid ".$this->getSystemid());
         }
 
 
@@ -908,7 +908,7 @@ abstract class Root
             return true;
         }
 
-        Logger::getInstance()->addLogRow("updated systemrecord ".$this->getStrSystemid()." data", Logger::$levelInfo);
+        Logger::getInstance()->info("updated systemrecord ".$this->getStrSystemid()." data");
 
         if (SystemModule::getModuleByName("system") != null && version_compare(SystemModule::getModuleByName("system")->getStrVersion(), "4.7.5", "lt")) {
             $strQuery = "UPDATE "._dbprefix_."system
@@ -1015,12 +1015,12 @@ abstract class Root
 
         //determine the correct new sort-id - append by default
         if (SystemModule::getModuleByName("system") != null && version_compare(SystemModule::getModuleByName("system")->getStrVersion(), "4.7.5", "lt")) {
-            $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ? AND system_id != '0' AND system_sort > -1";
+            $strQuery = "SELECT COUNT(*) AS cnt FROM "._dbprefix_."system WHERE system_prev_id = ? AND system_id != '0' AND system_sort > -1";
         } else {
-            $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ? AND system_id != '0' AND system_deleted = 0 AND system_sort > -1";
+            $strQuery = "SELECT COUNT(*) AS cnt FROM "._dbprefix_."system WHERE system_prev_id = ? AND system_id != '0' AND system_deleted = 0 AND system_sort > -1";
         }
         $arrRow = $this->objDB->getPRow($strQuery, array($strPrevId), 0, false);
-        $intSiblings = $arrRow["COUNT(*)"];
+        $intSiblings = $arrRow["cnt"];
         return (int)($intSiblings + 1);
     }
 
@@ -1131,7 +1131,7 @@ abstract class Root
         //update rights to inherit
         Carrier::getInstance()->getObjRights()->setInherited(true, $strSystemId);
 
-        Logger::getInstance()->addLogRow("new system-record created: ".$strSystemId." (".get_class($this).")", Logger::$levelInfo);
+        Logger::getInstance()->info("new system-record created: ".$strSystemId." (".get_class($this).")");
         $this->objDB->flushQueryCache();
         $this->internalInit();
         //reset the old values since we're having a new record
@@ -1166,8 +1166,8 @@ abstract class Root
             $intSpecial = $this->objSpecialDate->getLongTimestamp();
         }
 
-        $arrRow = $this->objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system_date WHERE system_date_id = ?", array($this->getSystemid()));
-        if ($arrRow["COUNT(*)"] == 0) {
+        $arrRow = $this->objDB->getPRow("SELECT COUNT(*) AS cnt FROM "._dbprefix_."system_date WHERE system_date_id = ?", array($this->getSystemid()));
+        if ($arrRow["cnt"] == 0) {
             //insert
             $strQuery = "INSERT INTO "._dbprefix_."system_date
                       (system_date_id, system_date_start, system_date_end, system_date_special) VALUES
@@ -1388,13 +1388,13 @@ abstract class Root
             $strSystemid = $this->getSystemid();
         }
 
-        $strQuery = "SELECT COUNT(*)
+        $strQuery = "SELECT COUNT(*) AS cnt
                      FROM "._dbprefix_."system as sys1,
                           "._dbprefix_."system as sys2
                      WHERE sys1.system_id=?
                        AND sys2.system_prev_id = sys1.system_prev_id";
         $arrRow = $this->objDB->getPRow($strQuery, array($strSystemid), 0, $bitUseCache);
-        return $arrRow["COUNT(*)"];
+        return $arrRow["cnt"];
 
     }
 
@@ -1555,10 +1555,10 @@ abstract class Root
         //end tx
         if ($bitResult) {
             $this->objDB->transactionCommit();
-            Logger::getInstance()->addLogRow("deleted system-record with id ".$strSystemid, Logger::$levelInfo);
+            Logger::getInstance()->info("deleted system-record with id ".$strSystemid);
         } else {
             $this->objDB->transactionRollback();
-            Logger::getInstance()->addLogRow("deletion of system-record with id ".$strSystemid." failed", Logger::$levelWarning);
+            Logger::getInstance()->warning("deletion of system-record with id ".$strSystemid." failed");
         }
 
         //flush the cache

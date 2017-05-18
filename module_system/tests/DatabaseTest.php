@@ -3,6 +3,8 @@
 namespace Kajona\System\Tests;
 
 use Kajona\System\System\Carrier;
+use Kajona\System\System\Database;
+use Kajona\System\System\Db\DbPostgres;
 use Kajona\System\System\DbDatatypes;
 
 class DatabaseTest extends Testbase
@@ -374,6 +376,78 @@ SQL;
         // delete which affects no rows
         $objDB->_pQuery("DELETE FROM " . _dbprefix_ . "temp_autotest_temp WHERE temp_char20 = ?", array(generateSystemid()));
         $this->assertEquals(0, $objDB->getIntAffectedRows());
+    }
+
+    /**
+     * @dataProvider dataPostgresProcessQueryProvider
+     * @covers DbPostgres::processQuery()
+     */
+    public function testPostgresProcessQuery($strExpect, $strQuery)
+    {
+        $objDbPostgres = new DbPostgres();
+        $objReflection = new \ReflectionClass(DbPostgres::class);
+
+        $objMethod = $objReflection->getMethod("processQuery");
+
+        $objMethod->setAccessible(true);
+        $strActual = $objMethod->invoke($objDbPostgres, $strQuery);
+
+        $this->assertEquals($strExpect, $strActual);
+    }
+
+    public function dataPostgresProcessQueryProvider()
+    {
+        return [
+            ["UPDATE temp_autotest_temp SET temp_char20 = $1 WHERE temp_char20 = $2", "UPDATE temp_autotest_temp SET temp_char20 = ? WHERE temp_char20 = ?"],
+            ["INSERT INTO temp_autotest (temp_char10, temp_char20, temp_char100, temp_char254, temp_char500, temp_text) VALUES ($1, $2, $3, $4, $5, $6),\n($7, $8, $9, $10, $11, $12)", "INSERT INTO temp_autotest (temp_char10, temp_char20, temp_char100, temp_char254, temp_char500, temp_text) VALUES (?, ?, ?, ?, ?, ?),\n(?, ?, ?, ?, ?, ?)"],
+            ["SELECT * FROM temp_autotest WHERE temp_char10 = $1 AND temp_char20 = $2 AND temp_char100 = $3", "SELECT * FROM temp_autotest WHERE temp_char10 = ? AND temp_char20 = ? AND temp_char100 = ?"],
+        ];
+    }
+
+    public function testGetGenerator()
+    {
+        $objDb = Database::getInstance();
+
+        // create table
+        $strTable = _dbprefix_ . "temp_autotest_gen";
+        $arrFields = array();
+        $arrFields["temp_id"] = array("char20", false);
+        $arrFields["temp_int"] = array("int", false);
+        $arrFields["temp_char20"] = array("char20", true);
+
+        // drop table if exists
+        if (in_array($strTable, $objDb->getTables())) {
+            $objDb->_pQuery("DROP TABLE " . $strTable, []);
+        }
+
+        $this->assertTrue($objDb->createTable("temp_autotest_gen", $arrFields, array("temp_id")), "testDataBase createTable");
+        $this->flushDBCache();
+
+        // insert which affects onw row
+        $arrData = [];
+        for ($intI = 0; $intI < 130; $intI++) {
+            $arrData[] = [generateSystemid(), $intI, "text" . $intI];
+        }
+        $this->assertTrue($objDb->multiInsert("temp_autotest_gen", array("temp_id", "temp_int", "temp_char20"), $arrData));
+
+        $objGenerator = $objDb->getGenerator("SELECT * FROM " . $strTable. " ORDER BY temp_int ASC", [], 32);
+
+        $this->assertInstanceOf(\Generator::class, $objGenerator);
+
+        $intI = 0;
+        $j = 0;
+        foreach ($objGenerator as $arrResult) {
+            $this->assertEquals($j == 4 ? 2 : 32, count($arrResult));
+            foreach ($arrResult as $arrRow) {
+                $this->assertEquals("text" . $intI, $arrRow["temp_char20"]);
+                $intI++;
+            }
+            $j++;
+        }
+        $this->assertEquals(130, $intI);
+        $this->assertEquals(5, $j);
+
+        $objDb->_pQuery("DROP TABLE " . $strTable, []);
     }
 }
 

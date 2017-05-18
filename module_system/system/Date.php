@@ -84,6 +84,15 @@ class Date
     }
 
     /**
+     * Returns the current Date objects as phps DateTime instance
+     * @return bool|DateTime
+     */
+    public function toDateTime()
+    {
+        return DateTime::createFromFormat($this->strParseFormat, $this->longTimestamp);
+    }
+
+    /**
      * Compares the current date against another date and evaluates, of both dates reference the same day.
      *
      * @param Date $objDateToCompare

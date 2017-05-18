@@ -75,7 +75,7 @@ class Ldap
             ldap_set_option($this->objCx, LDAP_OPT_REFERRALS, 0);
             ldap_set_option($this->objCx, LDAP_OPT_PROTOCOL_VERSION, 3);
 
-            Logger::getInstance(Logger::USERSOURCES)->addLogRow("new ldap-connection to " . $this->arrConfig["ldap_server"] . ":" . $this->arrConfig["ldap_port"], Logger::$levelInfo);
+            Logger::getInstance(Logger::USERSOURCES)->info("new ldap-connection to " . $this->arrConfig["ldap_server"] . ":" . $this->arrConfig["ldap_port"]);
 
             $this->internalBind();
         }
@@ -159,7 +159,7 @@ class Ldap
         if ($bitBind === false) {
             throw new Exception("ldap bind failed: " . ldap_errno($this->objCx) . " # " . ldap_error($this->objCx), Exception::$level_FATALERROR);
         } else {
-            Logger::getInstance(Logger::USERSOURCES)->addLogRow("ldap bind succeeded: " . $this->arrConfig["ldap_server"] . ":" . $this->arrConfig["ldap_port"], Logger::$levelInfo);
+            Logger::getInstance(Logger::USERSOURCES)->info("ldap bind succeeded: " . $this->arrConfig["ldap_server"] . ":" . $this->arrConfig["ldap_port"]);
         }
     }
 
@@ -180,7 +180,7 @@ class Ldap
         $objResult = @ldap_search($this->objCx, $strGroupDN, $this->arrConfig["ldap_group_filter"]);
 
         if ($objResult !== false) {
-            Logger::getInstance(Logger::USERSOURCES)->addLogRow("ldap-search found " . ldap_count_entries($this->objCx, $objResult) . " entries", Logger::$levelInfo);
+            Logger::getInstance(Logger::USERSOURCES)->info("ldap-search found " . ldap_count_entries($this->objCx, $objResult) . " entries");
 
             $arrResult = @ldap_first_entry($this->objCx, $objResult);
             while ($arrResult !== false) {
@@ -217,7 +217,7 @@ class Ldap
         $objResult = @ldap_search($this->objCx, $strGroupDN, $this->arrConfig["ldap_group_filter"]);
 
         if ($objResult !== false) {
-            Logger::getInstance(Logger::USERSOURCES)->addLogRow("ldap-search found " . ldap_count_entries($this->objCx, $objResult) . " entries", Logger::$levelInfo);
+            Logger::getInstance(Logger::USERSOURCES)->info("ldap-search found " . ldap_count_entries($this->objCx, $objResult) . " entries");
             $arrResult = @ldap_first_entry($this->objCx, $objResult);
             if ($arrResult !== false) {
                 $arrValues = @ldap_get_values($this->objCx, $arrResult, $this->arrConfig["ldap_group_attribute_member"]);
@@ -240,7 +240,9 @@ class Ldap
      */
     public function isUserMemberOfGroup($strUserDN, $strGroupDN)
     {
-        $bitReturn = false;
+        if (empty($strUserDN) || empty($strGroupDN)) {
+            return false;
+        }
 
         //search the group itself
         $strQuery = $this->arrConfig["ldap_group_isUserMemberOf"];
@@ -317,7 +319,7 @@ class Ldap
 
         if ($objResult !== false) {
             $arrReturn = array();
-            Logger::getInstance(Logger::USERSOURCES)->addLogRow("ldap-search found " . ldap_count_entries($this->objCx, $objResult) . " entries", Logger::$levelInfo);
+            Logger::getInstance(Logger::USERSOURCES)->info("ldap-search found " . ldap_count_entries($this->objCx, $objResult) . " entries");
 
             $arrResult = @ldap_first_entry($this->objCx, $objResult);
             while ($arrResult !== false) {
@@ -336,10 +338,7 @@ class Ldap
                 $arrResult = ldap_next_entry($this->objCx, $arrResult);
             }
         } else {
-            Logger::getInstance(Logger::USERSOURCES)->addLogRow(
-                "loading of user failed: " . ldap_errno($this->objCx) . " # " . ldap_error($this->objCx) . " \n Username: " . $strUsername . " Userfilter: " . $this->arrConfig["ldap_user_filter"],
-                Logger::$levelError
-            );
+            Logger::getInstance(Logger::USERSOURCES)->error("loading of user failed: " . ldap_errno($this->objCx) . " # " . ldap_error($this->objCx) . " \n Username: " . $strUsername . " Userfilter: " . $this->arrConfig["ldap_user_filter"]);
             throw new Exception("loading of user failed: " . ldap_errno($this->objCx) . " # " . ldap_error($this->objCx), Exception::$level_FATALERROR);
         }
 
@@ -370,7 +369,7 @@ class Ldap
         $objResult = @ldap_search($this->objCx, $this->arrConfig["ldap_user_base_dn"], $strUserFilter);
 
         if ($objResult !== false) {
-            Logger::getInstance(Logger::USERSOURCES)->addLogRow("ldap-search found " . ldap_count_entries($this->objCx, $objResult) . " entries", Logger::$levelInfo);
+            Logger::getInstance(Logger::USERSOURCES)->info("ldap-search found " . ldap_count_entries($this->objCx, $objResult) . " entries");
 
             $arrResult = @ldap_first_entry($this->objCx, $objResult);
             while ($arrResult !== false) {
@@ -390,10 +389,7 @@ class Ldap
                 $arrResult = ldap_next_entry($this->objCx, $arrResult);
             }
         } else {
-            Logger::getInstance(Logger::USERSOURCES)->addLogRow(
-                "loading of user failed: " . ldap_errno($this->objCx) . " # " . ldap_error($this->objCx) . " \n Userfilter: " . $strUserFilter . " Base DN: " . $this->arrConfig["ldap_user_base_dn"],
-                Logger::$levelError
-            );
+            Logger::getInstance(Logger::USERSOURCES)->error("loading of user failed: " . ldap_errno($this->objCx) . " # " . ldap_error($this->objCx) . " \n Userfilter: " . $strUserFilter . " Base DN: " . $this->arrConfig["ldap_user_base_dn"]);
 
             throw new Exception("loading of user failed: " . ldap_errno($this->objCx) . " # " . ldap_error($this->objCx), Exception::$level_FATALERROR);
         }

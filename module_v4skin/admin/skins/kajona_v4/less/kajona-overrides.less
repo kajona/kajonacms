@@ -1974,3 +1974,78 @@ body.login {
 .datepicker table tr td.highlighted {
     background: lighten(@kajona-brand-color, 40%);
 }
+
+
+
+/* instant editor */
+
+.peProgressIndicator {
+
+    position: absolute;
+    width: 1px;
+    height: 1px;
+
+    &.peSaving {
+        &:after,
+        &:before {
+            position: absolute;
+            right: -20px;
+            top: 0;
+            transition: all 1s;
+            font-family: fontawesome;
+        }
+
+        &:after {
+            animation: fa-spin 2s infinite linear;
+            font-size: @font-size-base + 10;
+            content: @fa-var-spinner;
+            color: @kajona-brand-color;
+        }
+
+        &:before {
+            padding: 8px 5px;
+            font-size: @font-size-base - 2;
+            content: @fa-var-check;
+            color: grey;
+        }
+    }
+
+    &.peSaved {
+        &:before {
+            color: @kajona-brand-color;
+        }
+        &:after {
+            opacity: 0;
+        }
+    }
+
+    &.peFailed {
+        &:after,
+        &:before {
+            color: red;
+        }
+        &:before {
+            font-size: @font-size-base;
+            padding: 8px 6px;
+            content: @fa-var-exclamation-circle;
+        }
+        &:after {
+            opacity: 0;
+        }
+
+        @keyframes shake {
+            from, to {
+                transform: translate3d(0, 0, 0);
+            }
+
+            10%, 30%, 50%, 70%, 90% {
+                transform: translate3d(-10px, 0, 0);
+            }
+
+            20%, 40%, 60%, 80% {
+                transform: translate3d(10px, 0, 0);
+            }
+        }
+        animation: shake 2s ease-in-out;
+    }
+}

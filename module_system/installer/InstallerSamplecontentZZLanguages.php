@@ -39,11 +39,11 @@ class InstallerSamplecontentZZLanguages implements SamplecontentInstallerInterfa
             return true;
         }
 
-        $strCountQuery = "SELECT COUNT(*)
+        $strCountQuery = "SELECT COUNT(*) AS cnt
                                 FROM "._dbprefix_."page_element
                                WHERE page_element_ph_language = ''";
         $arrCount = Carrier::getInstance()->getObjDB()->getPRow($strCountQuery, array());
-        return $arrCount["COUNT(*)"] == 0;
+        return $arrCount["cnt"] == 0;
     }
 
 

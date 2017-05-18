@@ -62,7 +62,7 @@ class OrmObjectlist extends OrmBase
     {
 
         //build the query
-        $strQuery = "SELECT COUNT(*)
+        $strQuery = "SELECT COUNT(*) AS cnt
                        ".$this->getQueryBase($strTargetClass)."
                        ".($strPrevid != "" && $strPrevid !== null ? " AND system_prev_id = ? " : "")."";
 
@@ -75,7 +75,7 @@ class OrmObjectlist extends OrmBase
         $this->processWhereRestrictions($strQuery, $arrParams, $strTargetClass);
 
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
-        return $arrRow["COUNT(*)"];
+        return $arrRow["cnt"];
 
     }
 

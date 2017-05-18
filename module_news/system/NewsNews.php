@@ -343,7 +343,7 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
         $strWhere .= $objOrm->getDeletedWhereRestriction();
 
         if ($strFilter != "") {
-            $strQuery = "SELECT COUNT(*)
+            $strQuery = "SELECT COUNT(*) AS cnt
 							FROM "._dbprefix_."news,
 							      "._dbprefix_."news_member,
 							      "._dbprefix_."system
@@ -355,7 +355,7 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
 							  AND newsmem_category = ?";
             $arrParams[] = $strFilter;
         } else {
-            $strQuery = "SELECT COUNT(*)
+            $strQuery = "SELECT COUNT(*) AS cnt
 							FROM "._dbprefix_."news,
 							      "._dbprefix_."system
 					    LEFT JOIN "._dbprefix_."system_date
@@ -365,7 +365,7 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
         }
 
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
-        return $arrRow["COUNT(*)"];
+        return $arrRow["cnt"];
     }
 
 

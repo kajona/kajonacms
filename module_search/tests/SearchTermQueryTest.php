@@ -133,7 +133,7 @@ class SearchTermQueryTest extends Testbase
         $arrParameters = array();
         $objSearchQuery->getCountQuery($strQuery, $arrParameters);
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParameters);
-        return $arrRow["COUNT(*)"];
+        return $arrRow["cnt"];
     }
 }
 

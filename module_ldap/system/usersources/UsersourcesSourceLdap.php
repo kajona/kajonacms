@@ -166,15 +166,20 @@ class UsersourcesSourceLdap implements UsersourcesUsersourceInterface
     }
 
     /**
-     * Loads the iser identified by the passed id
+     * Loads the user identified by the passed id
      *
      * @param string $strId
      *
+     * @param bool $bitIgnoreDeletedFlag
      * @return UsersourcesUserInterface or null
      */
-    public function getUserById($strId)
+    public function getUserById($strId, $bitIgnoreDeletedFlag = false)
     {
-        $strQuery = "SELECT user_id FROM " . _dbprefix_ . "user, "._dbprefix_."system WHERE user_id = system_id AND user_id = ? AND user_subsystem = 'ldap' AND (system_deleted = 0 OR system_deleted IS NULL)";
+        if ($bitIgnoreDeletedFlag) {
+            $strQuery = "SELECT user_id FROM " . _dbprefix_ . "user, "._dbprefix_."system WHERE user_id = system_id AND user_id = ? AND user_subsystem = 'ldap'";
+        } else {
+            $strQuery = "SELECT user_id FROM " . _dbprefix_ . "user, "._dbprefix_."system WHERE user_id = system_id AND user_id = ? AND user_subsystem = 'ldap' AND (system_deleted = 0 OR system_deleted IS NULL)";
+        }
 
         $arrIds = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strId));
         if (isset($arrIds["user_id"]) && validateSystemid($arrIds["user_id"])) {
@@ -315,8 +320,6 @@ class UsersourcesSourceLdap implements UsersourcesUsersourceInterface
             @ini_set("max_execution_time", "500");
         }
 
-        $objLdap = Ldap::getInstance();
-
         //fill all groups - loads new members
         $arrGroups = $this->getAllGroupIds();
 
@@ -337,7 +340,7 @@ class UsersourcesSourceLdap implements UsersourcesUsersourceInterface
             $objSourceUser = $objUser->getObjSourceUser();
             $arrUserDetails = false;
             try {
-                $arrUserDetails = $objLdap->getUserdetailsByName($objUser->getStrUsername());
+                $arrUserDetails = Ldap::getInstance($objSourceUser->getIntCfg())->getUserdetailsByName($objUser->getStrUsername());
                 if ($arrUserDetails != false && isset($arrUserDetails[0])) {
                     $arrUserDetails = $arrUserDetails[0];
                 }
@@ -354,12 +357,11 @@ class UsersourcesSourceLdap implements UsersourcesUsersourceInterface
             } else {
                 //user seems to be deleted, remove from system, too
                 $objUser->deleteObject();
-                Logger::getInstance("ldapsync.log")->addLogRow("Deleting user " . $strOneUserId . " / " . $objUser->getStrUsername() . " @ " . $objSourceUser->getStrDN(), Logger::$levelWarning);
+                Logger::getInstance("ldapsync.log")->warning("Deleting user " . $strOneUserId . " / " . $objUser->getStrUsername() . " @ " . $objSourceUser->getStrDN());
             }
         }
 
         return true;
-
     }
 
 }

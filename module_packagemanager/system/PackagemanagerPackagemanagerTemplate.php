@@ -83,7 +83,7 @@ class PackagemanagerPackagemanagerTemplate implements PackagemanagerPackagemanag
         if (\Kajona\System\System\PharModule::isPhar(_realpath_.$strSource)) {
             $objFilesystem = new Filesystem();
             $objFilesystem->chmod($this->getStrTargetPath(), 0777);
-            Logger::getInstance(Logger::PACKAGEMANAGEMENT)->addLogRow("extracting ".$strSource." to ".$this->getStrTargetPath(), Logger::$levelInfo);
+            Logger::getInstance(Logger::PACKAGEMANAGEMENT)->info("extracting ".$strSource." to ".$this->getStrTargetPath());
 
             $objPharModules = new PharModule($strSource);
             foreach($objPharModules->getContentMap() as $strFilename => $strPath) {
@@ -99,7 +99,7 @@ class PackagemanagerPackagemanagerTemplate implements PackagemanagerPackagemanag
             $objFilesystem = new Filesystem();
             $objFilesystem->chmod($this->getStrTargetPath(), 0777);
 
-            Logger::getInstance(Logger::PACKAGEMANAGEMENT)->addLogRow("moving ".$strSource." to ".$this->getStrTargetPath(), Logger::$levelInfo);
+            Logger::getInstance(Logger::PACKAGEMANAGEMENT)->info("moving ".$strSource." to ".$this->getStrTargetPath());
 
             $objFilesystem->folderCopyRecursive($strSource, $this->getStrTargetPath(), true);
             $objFilesystem->folderDeleteRecursive($strSource);

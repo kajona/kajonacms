@@ -18,8 +18,8 @@ class SystemTest extends Testbase
         //--- system kernel -------------------------------------------------------------------------------------
 
         //nr of records currently
-        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM " . _dbprefix_ . "system", array(), 0, false);
-        $intNrSystemRecords = $arrRow["COUNT(*)"];
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) AS cnt FROM " . _dbprefix_ . "system", array(), 0, false);
+        $intNrSystemRecords = $arrRow["cnt"];
         $objAspect = new SystemAspect();
         $arrSysRecords = array();
         for ($intI = 0; $intI <= 100; $intI++) {
@@ -27,8 +27,8 @@ class SystemTest extends Testbase
             $objAspect->updateObjectToDb();
             $arrSysRecords[] = $objAspect->getSystemid();
 
-            $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM " . _dbprefix_ . "system", array(), 0, false);
-            $this->assertEquals($arrRow["COUNT(*)"], $intI + $intNrSystemRecords + 1, __FILE__ . " checkCreateSysRecordsWithRights");
+            $arrRow = $objDB->getPRow("SELECT COUNT(*) AS cnt FROM " . _dbprefix_ . "system", array(), 0, false);
+            $this->assertEquals($arrRow["cnt"], $intI + $intNrSystemRecords + 1, __FILE__ . " checkCreateSysRecordsWithRights");
         }
 
 
@@ -36,8 +36,8 @@ class SystemTest extends Testbase
             $objAspect = new SystemAspect($strOneId);
             $objAspect->deleteObjectFromDatabase();
         }
-        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM " . _dbprefix_ . "system", array(), 0, false);
-        $this->assertEquals($arrRow["COUNT(*)"], $intNrSystemRecords, __FILE__ . " checkDeleteSysRecordsWithRights");
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) AS cnt FROM " . _dbprefix_ . "system", array(), 0, false);
+        $this->assertEquals($arrRow["cnt"], $intNrSystemRecords, __FILE__ . " checkDeleteSysRecordsWithRights");
 
     }
 
@@ -83,8 +83,8 @@ class SystemTest extends Testbase
         $objDB = Carrier::getInstance()->getObjDB();
         //nr of records currently
         $arrSysRecords = array();
-        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM " . _dbprefix_ . "system", array(), 0, false);
-        $intNrSystemRecords = $arrRow["COUNT(*)"];
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) AS cnt FROM " . _dbprefix_ . "system", array(), 0, false);
+        $intNrSystemRecords = $arrRow["cnt"];
         //base-id
         $objAspect = new SystemAspect();
         $objAspect->updateObjectToDb();
@@ -115,12 +115,12 @@ class SystemTest extends Testbase
         $intCount = $objAspect->getNumberOfSiblings($intSecOneId);
         $this->assertEquals($intCount, 22, __FILE__ . " checkNrOfSiblingsInTree");
         //check nr of childs
-        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM " . _dbprefix_ . "system WHERE system_prev_id = ?", array($intBaseId));
-        $this->assertEquals($arrRow["COUNT(*)"], 22, __FILE__ . " checkNrOfChildsInTree1");
-        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM " . _dbprefix_ . "system WHERE system_prev_id = ?", array($intSecOneId));
-        $this->assertEquals($arrRow["COUNT(*)"], 20, __FILE__ . " checkNrOfChildsInTree2");
-        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM " . _dbprefix_ . "system WHERE system_prev_id = ?", array($intSecTwoId));
-        $this->assertEquals($arrRow["COUNT(*)"], 20, __FILE__ . " checkNrOfChildsInTree3");
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) AS cnt FROM " . _dbprefix_ . "system WHERE system_prev_id = ?", array($intBaseId));
+        $this->assertEquals($arrRow["cnt"], 22, __FILE__ . " checkNrOfChildsInTree1");
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) AS cnt FROM " . _dbprefix_ . "system WHERE system_prev_id = ?", array($intSecOneId));
+        $this->assertEquals($arrRow["cnt"], 20, __FILE__ . " checkNrOfChildsInTree2");
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) AS cnt FROM " . _dbprefix_ . "system WHERE system_prev_id = ?", array($intSecTwoId));
+        $this->assertEquals($arrRow["cnt"], 20, __FILE__ . " checkNrOfChildsInTree3");
 
         //deleting all records
         foreach ($arrSysRecords as $strOneId) {

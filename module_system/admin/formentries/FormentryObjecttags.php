@@ -155,9 +155,13 @@ class FormentryObjecttags extends FormentryTageditor
 
 
         $arrObjects = $objSourceObject->{$strGetter}();
-        $arrNotObjects = array_values(array_filter((array)$arrObjects, function (Model $objObject) {
-            return !$objObject->rightView();
-        }));
+        if (!empty($arrObjects)) {
+            $arrNotObjects = array_values(array_filter((array)$arrObjects, function (Model $objObject) {
+                return !$objObject->rightView();
+            }));
+        } else {
+            $arrNotObjects = [];
+        }
 
         // merge objects
         $arrNewObjects = array_merge($this->toObjectArray(), $arrNotObjects);

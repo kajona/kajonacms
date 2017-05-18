@@ -187,7 +187,7 @@ class TagsFavorite extends Model implements ModelInterface, AdminListableInterfa
     public static function getNumberOfFavoritesForUser($strUserid) {
 
         $objORM = new OrmObjectlist();
-        $strQuery = "SELECT COUNT(*)
+        $strQuery = "SELECT COUNT(*) AS cnt
                        FROM "._dbprefix_."tags_favorite,
                             "._dbprefix_."tags_tag,
                             "._dbprefix_."system
@@ -198,7 +198,7 @@ class TagsFavorite extends Model implements ModelInterface, AdminListableInterfa
                   ";
 
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strUserid));
-        return $arrRow["COUNT(*)"];
+        return $arrRow["cnt"];
     }
 
     /**

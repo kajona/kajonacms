@@ -375,7 +375,7 @@ class Mail
 
             //send mail
             // in some cases, the optional param "-f test@kajona.de" may be added as mail()s' 5th param
-            Logger::getInstance()->addLogRow("sent mail to ".$strTo, Logger::$levelInfo);
+            Logger::getInstance()->info("sent mail to ".$strTo);
             $bitReturn = mail(
                 $strTo,
                 $this->encodeText($this->strSubject),

@@ -156,13 +156,13 @@ class StatsReportCommon implements AdminStatsreportsInterface
      */
     public function getHits()
     {
-        $strQuery = "SELECT COUNT(*)
+        $strQuery = "SELECT COUNT(*) AS cnt
 						FROM "._dbprefix_."stats_data
 						WHERE stats_date > ?
 						  AND stats_date <= ?";
 
         $arrRow = $this->objDB->getPRow($strQuery, array($this->intDateStart, $this->intDateEnd));
-        $intReturn = $arrRow["COUNT(*)"];
+        $intReturn = $arrRow["cnt"];
 
         return $intReturn;
     }
@@ -177,13 +177,13 @@ class StatsReportCommon implements AdminStatsreportsInterface
      */
     private function getHitsForOnePeriod($intStart, $intEnd)
     {
-        $strQuery = "SELECT COUNT(*)
+        $strQuery = "SELECT COUNT(*) AS cnt
 						FROM "._dbprefix_."stats_data
 						WHERE stats_date > ?
 								AND stats_date <= ?";
 
         $arrTemp = $this->objDB->getPRow($strQuery, array($intStart, $intEnd));
-        return $arrTemp["COUNT(*)"];
+        return $arrTemp["cnt"];
     }
 
     /**
@@ -249,7 +249,7 @@ class StatsReportCommon implements AdminStatsreportsInterface
      */
     public function getNumberOfCurrentUsers()
     {
-        $strQuery = "SELECT stats_ip, stats_browser, count(*)
+        $strQuery = "SELECT stats_ip, stats_browser, count(*) AS cnt
 					  FROM "._dbprefix_."stats_data
 					  WHERE stats_date > ?
 					  GROUP BY stats_ip, stats_browser";

@@ -148,9 +148,16 @@
         </exec>
     </target>
 
+    <target name="installNpmGuiBuildDependencies" >
+        <echo>Execute npm</echo>
+        <exec dir="${basedir}${jsPath}/guideps" executable="${path.npm}" failonerror="on">
+            <arg line=" install"/>
+        </exec>
+    </target>
+
 
     <!-- executes javascript protractor tests -->
-    <target name="protractorSetup" depends="installNpmBuildDependencies">
+    <target name="protractorSetup" depends="installNpmBuildDependencies,installNpmGuiBuildDependencies">
         <!-- deletes all files from the tmp folder -->
         <antcall target="setupPackageFolders" />
 
@@ -188,10 +195,10 @@
 
         <!-- Start webdriver-->
         <exec dir="${basedir}${jsPath}" executable="${path.node}" failonerror="on">
-            <arg line="./node_modules/protractor/bin/webdriver-manager update"/>
+            <arg line="./guideps/node_modules/protractor/bin/webdriver-manager update"/>
         </exec>
         <exec dir="${basedir}${jsPath}" executable="${path.node}" spawn="true">
-            <arg line="./node_modules/protractor/bin/webdriver-manager start"/>
+            <arg line="./guideps/node_modules/protractor/bin/webdriver-manager start"/>
         </exec>
 
         <!-- wait so that the selenium and webserver are ready -->
@@ -200,12 +207,12 @@
         <!-- run selenium tests -->
         <echo> Run selenium tests </echo>
         <exec dir="${basedir}${jsPath}" executable="${path.node}" failonerror="on">
-            <arg line="./node_modules/protractor/bin/protractor e2e/conf.js"/>
+            <arg line="./guideps/node_modules/protractor/bin/protractor e2e/conf.js"/>
         </exec>
 
         <!-- Stop webdriver-->
         <exec dir="${basedir}${jsPath}" executable="${path.node}" spawn="true">
-            <arg line="./node_modules/protractor/bin/webdriver-manager shutdown"/>
+            <arg line="./guideps/node_modules/protractor/bin/webdriver-manager shutdown"/>
         </exec>
 
     </target>
@@ -531,7 +538,7 @@
 
     <target name="phploc" description="Measure project size using PHPLOC">
         <exec executable="${path.phploc}">
-            <arg line=" --exclude= */vendor/* --exclude ${basedir}${projectPath}/core/module_ezcchart/vendor --exclude ${basedir}${projectPath}/core/module_pchart/vendor --exclude ${basedir}${projectPath}/core/module_pdf/vendor --exclude ${basedir}${projectPath}/core/module_phpexcel/vendor --exclude ${basedir}${projectPath}/core/module_qrcode/vendor --exclude ${basedir}${projectPath}/core/module_system/vendor   "/>
+            <arg line=" --exclude=vendor"/>
             <arg value="--log-csv" />
             <arg value="${basedir}${buildPath}/logs/phploc.csv" />
             <arg path="${basedir}${projectPath}" />
@@ -574,7 +581,7 @@
 
     <target name="phpcpd" description="Find duplicate code using PHPCPD">
         <exec executable="${path.phpcpd}">
-            <arg line=" --exclude= */vendor/* --exclude core/module_ezcchart/system/ezcomponents --exclude core/module_pchart/system/pchart --exclude tcpdf --exclude core/module_phpexcel/system/phpexcel --exclude core/module_qrcode/system/phpqrcode   "/>
+            <arg line=" --exclude=vendor "/>
             <arg value="--log-pmd" />
             <arg value="${basedir}${buildPath}/logs/pmd-cpd.xml" />
             <arg path="${basedir}${projectPath}" />

@@ -71,8 +71,8 @@ class SearchIndexwriter {
         if(!self::isIndexAvailable())
             return 0;
 
-        $arrRow = $this->objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."search_ix_document", array());
-        return $arrRow["COUNT(*)"];
+        $arrRow = $this->objDB->getPRow("SELECT COUNT(*) AS cnt FROM "._dbprefix_."search_ix_document", array());
+        return $arrRow["cnt"];
     }
 
     /**
@@ -83,8 +83,8 @@ class SearchIndexwriter {
         if(!self::isIndexAvailable())
             return 0;
 
-        $arrRow = $this->objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."search_ix_content", array());
-        return $arrRow["COUNT(*)"];
+        $arrRow = $this->objDB->getPRow("SELECT COUNT(*) AS cnt FROM "._dbprefix_."search_ix_content", array());
+        return $arrRow["cnt"];
     }
 
     /**
