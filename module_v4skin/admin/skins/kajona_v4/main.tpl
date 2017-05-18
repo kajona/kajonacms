@@ -73,12 +73,7 @@
 
         <!-- MODULE NAVIGATION -->
         <div class="col-md-2 hidden-print mainnavi-container sidebar-offcanvas" id="sidebar">
-            <div class="sidebar-nav">
-                <div class="panel-group" id="moduleNavigation">
-
-                    <!--% %moduleSitemap% %-->
-                </div>
-                <span class="">%%aspectChooser%%</span>
+            <div class="sidebar-nav" id="moduleNavigation">
             </div>
             <script type="text/javascript">
               require(['moduleNavigation'], function(mNavi) {

@@ -1643,7 +1643,7 @@ It containes a list of aspects and provides the possibility to switch the differ
 </contextmenu_wrapper>
 
 <contextmenu_entry>
-    <li ><a href="%%elementLink%%">%%elementName%%</a></li>
+    <li ><a href="%%elementLink%%" onclick="%%elementAction%%">%%elementName%%</a></li>
 </contextmenu_entry>
 
 <contextmenu_entry_full>
@@ -1677,18 +1677,29 @@ It containes a list of aspects and provides the possibility to switch the differ
 -- BACKEND NAVIGATION -----------------------------------------------------------------------------------
 
 <sitemap_wrapper>
-                  <div class="nav-header">Kajona V5</div>
-        %%level%%
+      <div class="nav-header">
+            %%aspectToggle%%
+            Kajona V5
+      </div>
+    %%level%%
 </sitemap_wrapper>
 
+
+<sitemap_aspect_wrapper>
+<div data-kajona-aspectid='%%aspectId%%' id="%%aspectId%%" class='%%class%% aspect-container panel-group'>
+%%aspectContent%%
+</div>
+
+</sitemap_aspect_wrapper>
+
 <sitemap_combined_entry_header>
-    <a data-toggle="collapse" data-parent="#moduleNavigation" href="#menu_%%systemid%%" rel="tooltip" title="%%moduleName%%" data-kajona-module="%%moduleTitle%%">
+    <a data-toggle="collapse" data-parent="#%%aspectId%%" href="#menu_%%systemid%%%%aspectId%%" rel="tooltip" title="%%moduleName%%" data-kajona-module="%%moduleTitle%%">
         <i class="fa %%faicon%%"></i>
     </a>
 </sitemap_combined_entry_header>
 
 <sitemap_combined_entry_body>
-    <div id="menu_%%systemid%%" class="panel-collapse collapse" data-kajona-module="%%moduleTitle%%">
+    <div id="menu_%%systemid%%%%aspectId%%" class="panel-collapse collapse" data-kajona-module="%%moduleTitle%%">
         <div class="panel-body">
             <ul>%%actions%%</ul>
         </div>
@@ -1711,11 +1722,11 @@ It containes a list of aspects and provides the possibility to switch the differ
 <sitemap_module_wrapper>
     <div class="panel panel-default">
         <div class="panel-heading">
-            <a data-toggle="collapse" data-parent="#moduleNavigation" href="#menu_%%systemid%%" data-kajona-module="%%moduleTitle%%" >
+            <a data-toggle="collapse" data-parent="#%%aspectId%%" href="#menu_%%systemid%%%%aspectId%%" data-kajona-module="%%moduleTitle%%" >
                 %%moduleName%%
             </a>
         </div>
-        <div id="menu_%%systemid%%" class="panel-collapse collapse" data-kajona-module="%%moduleTitle%%">
+        <div id="menu_%%systemid%%%%aspectId%%" class="panel-collapse collapse" data-kajona-module="%%moduleTitle%%">
             <div class="panel-body">
                 <ul>%%actions%%</ul>
             </div>

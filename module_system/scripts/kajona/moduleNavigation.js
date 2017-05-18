@@ -19,6 +19,12 @@ define('moduleNavigation', ['jquery', 'ajax'], function ($, ajax) {
             } else {
                 //default: not combined
                 $("a[data-kajona-module='" + strModule + "']").addClass('active');
+
+                //see if the aspect needs to be switched
+                var $objAspect = $('[data-kajona-module="'+strModule+'"]').closest('.aspect-container');
+                if($objAspect.hasClass('hidden')) {
+                    this.switchAspect($objAspect.data('kajona-aspectid'));
+                }
             }
         },
 
@@ -27,6 +33,12 @@ define('moduleNavigation', ['jquery', 'ajax'], function ($, ajax) {
                 strAspect = "";
             }
             ajax.loadUrlToElement("#moduleNavigation", '/xml.php?admin=1&module=v4skin&action=getBackendNavi&aspect='+(strAspect ? strAspect : ""));
+
+        },
+
+        switchAspect : function(strTargetId) {
+            $('.mainnavi-container .aspect-container').addClass("hidden");
+            $('.mainnavi-container .aspect-container[data-kajona-aspectid='+strTargetId+']').removeClass("hidden");
         }
 
     }

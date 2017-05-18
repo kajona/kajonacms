@@ -1942,79 +1942,106 @@ HTML;
      *
      * @return string
      */
-    public function getAdminSitemap($strAspectId)
+    public function getAdminSitemap()
     {
-        $strModules = "";
+        $strAllModules = "";
 
-        $arrModules = SystemModule::getModulesInNaviAsArray($strAspectId);
-
-        /** @var $arrNaviInstances SystemModule[] */
-        $arrNaviInstances = array();
-        foreach ($arrModules as $arrModule) {
-            $objModule = SystemModule::getModuleBySystemid($arrModule["module_id"]);
-            if ($objModule->rightView()) {
-                $arrNaviInstances[] = $objModule;
+        $arrToggleEntries = [];
+        foreach (SystemAspect::getActiveObjectList() as $objOneAspect) {
+            if (!$objOneAspect->rightView()) {
+                continue;
             }
-        }
 
+            $arrToggleEntries[] = ["name" => $objOneAspect->getStrDisplayName(), "onclick" => "require('moduleNavigation').switchAspect('{$objOneAspect->getSystemid()}'); return false;"];
 
-        $strCombinedHeader = "";
-        $strCombinedBody = "";
+            $arrModules = SystemModule::getModulesInNaviAsArray($objOneAspect->getSystemid());
 
-        $arrCombined = array(
-            "messaging" => "fa-envelope",
-            "dashboard" => "fa-home",
-            "tags" => "fa-tags",
-            "search" => "fa-search"
-        );
-
-
-        foreach ($arrNaviInstances as $objOneInstance) {
-            $arrActions = AdminHelper::getModuleActionNaviHelper($objOneInstance);
-
-            $strActions = "";
-            foreach ($arrActions as $strOneAction) {
-                if (trim($strOneAction) != "") {
-                    $arrActionEntries = array(
-                        "action" => $strOneAction
-                    );
-                    $strActions .= $this->objTemplate->fillTemplateFile($arrActionEntries, "/elements.tpl", "sitemap_action_entry");
-                } else {
-                    $strActions .= $this->objTemplate->fillTemplateFile(array(), "/elements.tpl", "sitemap_divider_entry");
+            /** @var $arrNaviInstances SystemModule[] */
+            $arrNaviInstances = [];
+            foreach ($arrModules as $arrModule) {
+                $objModule = SystemModule::getModuleBySystemid($arrModule["module_id"]);
+                if ($objModule->rightView()) {
+                    $arrNaviInstances[] = $objModule;
                 }
             }
 
-            $arrModuleLevel = array(
-                "module"      => Link::getLinkAdmin($objOneInstance->getStrName(), "", "", Carrier::getInstance()->getObjLang()->getLang("modul_titel", $objOneInstance->getStrName())),
-                "actions"     => $strActions,
-                "systemid"    => $objOneInstance->getSystemid(),
-                "moduleTitle" => $objOneInstance->getStrName(),
-                "moduleName"  => Carrier::getInstance()->getObjLang()->getLang("modul_titel", $objOneInstance->getStrName()),
-                "moduleHref"  => Link::getLinkAdminHref($objOneInstance->getStrName(), "")
+
+            $strCombinedHeader = "";
+            $strCombinedBody = "";
+
+            $arrCombined = [
+                "messaging" => "fa-envelope",
+                "dashboard" => "fa-home",
+                "tags"      => "fa-tags",
+                "search"    => "fa-search"
+            ];
+
+
+            $strModules = "";
+            foreach ($arrNaviInstances as $objOneInstance) {
+                $arrActions = AdminHelper::getModuleActionNaviHelper($objOneInstance);
+
+                $strActions = "";
+                foreach ($arrActions as $strOneAction) {
+                    if (trim($strOneAction) != "") {
+                        $arrActionEntries = [
+                            "action" => $strOneAction
+                        ];
+                        $strActions .= $this->objTemplate->fillTemplateFile($arrActionEntries, "/elements.tpl", "sitemap_action_entry");
+                    } else {
+                        $strActions .= $this->objTemplate->fillTemplateFile([], "/elements.tpl", "sitemap_divider_entry");
+                    }
+                }
+
+                $arrModuleLevel = [
+                    "module"      => Link::getLinkAdmin($objOneInstance->getStrName(), "", "", Carrier::getInstance()->getObjLang()->getLang("modul_titel", $objOneInstance->getStrName())),
+                    "actions"     => $strActions,
+                    "systemid"    => $objOneInstance->getSystemid(),
+                    "moduleTitle" => $objOneInstance->getStrName(),
+                    "moduleName"  => Carrier::getInstance()->getObjLang()->getLang("modul_titel", $objOneInstance->getStrName()),
+                    "moduleHref"  => Link::getLinkAdminHref($objOneInstance->getStrName(), ""),
+                    "aspectId"    => $objOneAspect->getSystemid()
+                ];
+
+
+                if (array_key_exists($objOneInstance->getStrName(), $arrCombined)) {
+                    $arrModuleLevel["faicon"] = $arrCombined[$objOneInstance->getStrName()];
+                    $strCombinedHeader .= $this->objTemplate->fillTemplateFile($arrModuleLevel, "/elements.tpl", "sitemap_combined_entry_header");
+                    $strCombinedBody .= $this->objTemplate->fillTemplateFile($arrModuleLevel, "/elements.tpl", "sitemap_combined_entry_body");
+                } else {
+                    $strModules .= $this->objTemplate->fillTemplateFile($arrModuleLevel, "/elements.tpl", "sitemap_module_wrapper");
+                }
+            }
+
+
+            if ($strCombinedHeader != "") {
+                $strModules = $this->objTemplate->fillTemplateFile(
+                    ["combined_header" => $strCombinedHeader, "combined_body" => $strCombinedBody],
+                    "/elements.tpl",
+                    "sitemap_combined_entry_wrapper"
+                ).$strModules;
+            }
+
+
+            $strAllModules .= $this->objTemplate->fillTemplateFile(
+                array("aspectContent" => $strModules, "aspectId" => $objOneAspect->getSystemid(), "class" => ($strAllModules == "" ? "" : "hidden")),
+                "/elements.tpl",
+                "sitemap_aspect_wrapper"
             );
 
 
-            if (array_key_exists($objOneInstance->getStrName(), $arrCombined)) {
-                $arrModuleLevel["faicon"] = $arrCombined[$objOneInstance->getStrName()];
-                $strCombinedHeader .= $this->objTemplate->fillTemplateFile($arrModuleLevel, "/elements.tpl", "sitemap_combined_entry_header");
-                $strCombinedBody .= $this->objTemplate->fillTemplateFile($arrModuleLevel, "/elements.tpl", "sitemap_combined_entry_body");
-            } else {
-                $strModules .= $this->objTemplate->fillTemplateFile($arrModuleLevel, "/elements.tpl", "sitemap_module_wrapper");
-            }
+        }
+
+        $strToggleDD = "";
+        if (!empty($arrToggleEntries)) {
+            $strToggle = $this->registerMenu("mainNav", $arrToggleEntries);
+            $strToggleDD =
+                "<span class='dropdown pull-left'><a href='#' data-toggle='dropdown' role='button'>".AdminskinHelper::getAdminImage("icon_submenu")."</a>{$strToggle}</span>"
+            ;
         }
 
 
-        if ($strCombinedHeader != "") {
-            $strModules = $this->objTemplate->fillTemplateFile(
-                array("combined_header" => $strCombinedHeader, "combined_body" => $strCombinedBody),
-                "/elements.tpl",
-                "sitemap_combined_entry_wrapper"
-            ).$strModules;
-        }
-
-
-
-        return $this->objTemplate->fillTemplateFile(array("level" => $strModules), "/elements.tpl", "sitemap_wrapper");
+        return $this->objTemplate->fillTemplateFile(array("level" => $strAllModules, "aspectToggle" => $strToggleDD), "/elements.tpl", "sitemap_wrapper");
     }
 
     // --- Path Navigation ----------------------------------------------------------------------------------
