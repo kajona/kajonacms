@@ -293,16 +293,21 @@ JS;
 
 
         //create the list-button and the js code to show the dialog
-        $strDeleteAllRead = Link::getLinkAdminManual(
-            "href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('".Carrier::getInstance()->getObjLang()->getLang("dialog_deleteHeader", "system")."'); jsDialog_1.setContent('".$this->getLang("delete_all_read_question")."', '".Carrier::getInstance()->getObjLang()->getLang("dialog_deleteButton", "system")."',  function() {jsDialog_3.init(); document.location.href= '".getLinkAdminHref($this->getArrModule("module"), "deleteAllRead")."';}); jsDialog_1.init(); return false;\"",
-            AdminskinHelper::getAdminImage("icon_delete").$this->getLang("action_delete_all_read")
+        $strDeleteAllRead = $this->objToolkit->confirmationLink(
+            $this->getLang("delete_all_read_question"),
+            getLinkAdminHref($this->getArrModule("module"), "deleteAllRead"),
+            AdminskinHelper::getAdminImage("icon_delete").$this->getLang("action_delete_all_read"),
+            $this->getLang("dialog_deleteHeader", "system"),
+            $this->getLang("dialog_deleteButton", "system")
         );
 
-        $strDeleteAll = Link::getLinkAdminManual(
-            "href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('".Carrier::getInstance()->getObjLang()->getLang("dialog_deleteHeader", "system")."'); jsDialog_1.setContent('".$this->getLang("delete_all_question")."', '".Carrier::getInstance()->getObjLang()->getLang("dialog_deleteButton", "system")."',  function() {jsDialog_3.init(); document.location.href= '".getLinkAdminHref($this->getArrModule("module"), "deleteAll")."';}); jsDialog_1.init(); return false;\"",
-            AdminskinHelper::getAdminImage("icon_delete").$this->getLang("action_delete_all")
+        $strDeleteAll = $this->objToolkit->confirmationLink(
+            $this->getLang("delete_all_question"),
+            getLinkAdminHref($this->getArrModule("module"), "deleteAll"),
+            AdminskinHelper::getAdminImage("icon_delete").$this->getLang("action_delete_all"),
+            $this->getLang("dialog_deleteHeader", "system"),
+            $this->getLang("dialog_deleteButton", "system")
         );
-
 
         $strReturn .= $this->objToolkit->getContentToolbar(array(
             getLinkAdmin($this->getArrModule("module"), "setAllRead", "", AdminskinHelper::getAdminImage("icon_mail").$this->getLang("action_set_all_read")),
