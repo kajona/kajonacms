@@ -871,6 +871,26 @@ A list of checkbox or radio input elements
             </div>
         </div>
     </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label"></label>
+        <div class="col-sm-6">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="checkAll_%%name%%" id="checkAll_%%name%%" %%readonly%%> [lang,commons_select_all,system]
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <script type='text/javascript'>
+require(["jquery"], function($) {
+$("input:checkbox[name='checkAll_%%name%%']").on('change', function() {
+    var checkBoxes = $("input:checkbox[name^='%%name%%']");
+    checkBoxes.prop('checked', $("input:checkbox[name='checkAll_%%name%%']").prop('checked'));
+});
+});
+    </script>
 </input_checkboxarray>
 
 <input_checkboxarray_checkbox>
