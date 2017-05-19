@@ -81,7 +81,7 @@ define("router", ['jquery', 'contentToolbar', 'tooltip', 'breadcrumb', 'moduleNa
                 ajax.loadUrlToElement('#moduleOutput', strUrlToLoad, data, false, 'POST');
 
             } else {
-                ajax.loadUrlToElement('#moduleOutput', strUrlToLoad);
+                ajax.loadUrlToElement('#moduleOutput', strUrlToLoad, null, true);
             }
 
 
@@ -90,8 +90,8 @@ define("router", ['jquery', 'contentToolbar', 'tooltip', 'breadcrumb', 'moduleNa
 
 
     var cleanPage = function() {
-        contentToolbar.resetBar();
-        breadcrumb.resetBar();
+        //contentToolbar.resetBar(); //TODO: aktuell in ToolkitAdmin und RequestDispatcher, muss aber in einen Callback bevor der content in das target div geschrieben wird
+        //breadcrumb.resetBar();
         quickhelp.resetQuickhelp();
         tooltip.removeTooltip($('*[rel=tooltip]'));
     };

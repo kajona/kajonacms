@@ -207,6 +207,7 @@ class RequestDispatcher
                                     if ($strReturn != "") {
                                         $strReturn .= $objHelper->actionGetPathNavigation($objConcreteModule);
                                         $strReturn .= $objHelper->actionGetQuickHelp($objConcreteModule);
+                                        $strReturn = "<script type=\"text/javascript\"> require(['contentToolbar'], function(contentToolbar) { contentToolbar.resetBar()}); </script>".$strReturn; //TODO: das muss hier raus, falsche stelle?
                                     }
                                 }
                             } catch (ActionNotFoundException $objEx) {
