@@ -228,6 +228,9 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
                         }
                     }
 
+                    // validate the status chain
+                    $this->validateStatusChain($objConfig);
+
                     // if this is another object we check whether there was not index removed which is used
                     $arrCurrentStatus = $this->getStatusIndexMap($objConfig->getArrStatus());
                     $arrNewStatus = $this->getStatusIndexMap($this->getArrStatus());
@@ -259,6 +262,39 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
     }
 
     /**
+     * Validates whether every step is connected through a transition
+     *
+     * @param FlowConfig $objConfig
+     */
+    private function validateStatusChain(FlowConfig $objConfig)
+    {
+        $arrMap = $this->getStatusIndexTransitions($objConfig->getArrStatus());
+        $arrVisited = [];
+
+        $this->walkStatusMap($arrMap, 0, $arrVisited);
+
+        foreach ($arrMap as $intStatus => $arrTargetStatus) {
+            if (!in_array($intStatus, $arrVisited)) {
+                throw new \RuntimeException("Status " . $intStatus . " is not used in a transition");
+            }
+        }
+    }
+
+    private function walkStatusMap($arrMap, $intStatus, array &$arrVisited)
+    {
+        if (in_array($intStatus, $arrVisited)) {
+            return;
+        }
+
+        $arrVisited[] = $intStatus;
+
+        $arrTransitions = $arrMap[$intStatus];
+        foreach ($arrTransitions as $intTargetStatus) {
+            $this->walkStatusMap($arrMap, $intTargetStatus, $arrVisited);
+        }
+    }
+
+    /**
      * @param $arrStatus
      * @return FlowStatus[]
      */
@@ -266,7 +302,26 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
     {
         $arrResult = [];
         foreach ($arrStatus as $objStatus) {
+            /** @var FlowStatus $objStatus */
             $arrResult[$objStatus->getIntIndex()] = $objStatus;
+        }
+        return $arrResult;
+    }
+
+    /**
+     * @param $arrStatus
+     * @return array
+     */
+    private function getStatusIndexTransitions($arrStatus)
+    {
+        $arrResult = [];
+        foreach ($arrStatus as $objStatus) {
+            /** @var FlowStatus $objStatus */
+            $arrTransitions = array_map(function(FlowTransition $objTransition){
+                return $objTransition->getTargetStatus()->getIntIndex();
+            }, $objStatus->getArrTransitions());
+
+            $arrResult[$objStatus->getIntIndex()] = $arrTransitions;
         }
         return $arrResult;
     }
