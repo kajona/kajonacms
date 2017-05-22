@@ -54,7 +54,7 @@ define('statusDisplay', ['jquery'], function ($) {
          * @param {String} strMessage
          */
         messageOK : function(strMessage) {
-            $("#"+this.idOfMessageBox).removeClass(this.classOfMessageBox).removeClass(this.classOfErrorBox).addClass(this.classOfMessageBox);
+            $("#"+this.idOfMessageBox).removeClass().addClass("alert alert-info");
             this.timeToFadeOut = this.timeToFadeOutMessage;
             this.startFadeIn(strMessage);
         },
@@ -65,7 +65,7 @@ define('statusDisplay', ['jquery'], function ($) {
          * @param {String} strMessage
          */
         messageError : function(strMessage) {
-            $("#"+this.idOfMessageBox).removeClass(this.classOfMessageBox).removeClass(this.classOfErrorBox).addClass(this.classOfErrorBox);
+            $("#"+this.idOfMessageBox).removeClass().addClass("alert alert-danger");
             this.timeToFadeOut = this.timeToFadeOutError;
             this.startFadeIn(strMessage);
         },
@@ -92,7 +92,9 @@ define('statusDisplay', ['jquery'], function ($) {
         fadeIn : function () {
             var me = this;
             $("#"+this.idOfMessageBox).animate({opacity: 0.8}, 1000, function() {
-                window.setTimeout(require('statusDisplay').startFadeOut(), me.timeToFadeOut);
+                window.setTimeout(function(){
+                    me.startFadeOut();
+                }, me.timeToFadeOut);
             });
         },
 

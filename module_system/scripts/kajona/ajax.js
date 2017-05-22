@@ -139,11 +139,12 @@ define('ajax', ['jquery', 'statusDisplay', 'workingIndicator', 'tooltip'], funct
         setSystemStatus : function(strSystemIdToSet, bitReload) {
             var me = this;
             var objCallback = function(data, status, jqXHR) {
-                if(status == 'success') {
+                if (status == 'success') {
                     statusDisplay.displayXMLMessage(data);
 
-                    if(bitReload !== null && bitReload === true)
+                    if (bitReload !== null && bitReload === true) {
                         location.reload();
+                    }
 
                     if (data.indexOf('<error>') == -1 && data.indexOf('<html>') == -1) {
                         var newStatus = $($.parseXML(data)).find("newstatus").text();
@@ -164,9 +165,11 @@ define('ajax', ['jquery', 'statusDisplay', 'workingIndicator', 'tooltip'], funct
 
                         tooltip.addTooltip($('#statusLink_' + strSystemIdToSet).find("[rel='tooltip']"));
                     }
+                } else {
+                    // in the error case the arguments are (jqXHR, status) so we need to get the responseText from the
+                    // xhr object
+                    statusDisplay.messageError(data.responseText);
                 }
-                else
-                    statusDisplay.messageError(data);
             };
 
             tooltip.removeTooltip($('#statusLink_' + strSystemIdToSet).find("[rel='tooltip']"));
