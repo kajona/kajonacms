@@ -218,6 +218,16 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
                 if ($objConfig->getSystemid() == $this->getSystemid()) {
                     // if this is the same object no problem
                 } else {
+                    // we must check that we have the 0 and 1 status
+                    $arrNeedStatus = [0, 1];
+                    foreach ($arrNeedStatus as $intStatus) {
+                        $objStatus = $objConfig->getStatusByIndex($intStatus);
+                        if ($objStatus instanceof FlowStatus) {
+                        } else {
+                            throw new \RuntimeException("It is required that the status " . $intStatus . " is available");
+                        }
+                    }
+
                     // if this is another object we check whether there was not index removed which is used
                     $arrCurrentStatus = $this->getStatusIndexMap($objConfig->getArrStatus());
                     $arrNewStatus = $this->getStatusIndexMap($this->getArrStatus());
@@ -225,6 +235,7 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
                     $arrDiff = array_diff_key($arrCurrentStatus, $arrNewStatus);
                     if (!empty($arrDiff)) {
                         foreach ($arrDiff as $objStatus) {
+                            /** @var FlowStatus $objStatus */
                             $objStatus->assertNoRecordsAreAssignedToThisStatus();
                         }
                     }
@@ -238,6 +249,7 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
                     $arrDiff = array_diff_key($arrCurrentStatus, [0, 1]);
                     if (!empty($arrDiff)) {
                         foreach ($arrDiff as $objStatus) {
+                            /** @var FlowStatus $objStatus */
                             $objStatus->assertNoRecordsAreAssignedToThisStatus();
                         }
                     }
