@@ -21,8 +21,6 @@ define('statusDisplay', ['jquery'], function ($) {
     return /** @alias module:statusDisplay */ {
         idOfMessageBox : "jsStatusBox",
         idOfContentBox : "jsStatusBoxContent",
-        classOfMessageBox : "jsStatusBoxMessage",
-        classOfErrorBox : "jsStatusBoxError",
         timeToFadeOutMessage : 3000,
         timeToFadeOutError   : 5000,
         timeToFadeOut : null,

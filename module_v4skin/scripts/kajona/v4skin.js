@@ -160,9 +160,6 @@ define(['jquery', 'bootstrap', 'jquery-ui', 'workingIndicator', 'tooltip', 'stat
     $('#content a[rel=popover]').popover();
     tooltip.initTooltip();
 
-    statusDisplay.classOfMessageBox = "alert alert-info";
-    statusDisplay.classOfErrorBox = "alert alert-error";
-
     kajonaScroll = null;
     $(window).scroll(function() {
         var scroll = $(this).scrollTop();
