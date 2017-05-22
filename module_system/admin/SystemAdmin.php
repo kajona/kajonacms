@@ -1453,7 +1453,7 @@ JS;
                 $strReturn .= "<message>".$objCommon->getStrDisplayName()." - ".$this->getLang("setStatusOk")."<newstatus>".$intNewStatus."</newstatus></message>";
                 $this->flushCompletePagesCache();
             } catch (\Exception $objE) {
-                ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_FORBIDDEN);
+                ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_INTERNAL_SERVER_ERROR);
                 $strReturn .= "<message><error>".xmlSafeString($objE->getMessage())."</error></message>";
             }
         } else {
