@@ -1447,10 +1447,15 @@ JS;
                 $intNewStatus = $objCommon->getIntRecordStatus() == 0 ? 1 : 0;
             }
 
-            $objCommon->setIntRecordStatus($intNewStatus);
-            $objCommon->updateObjectToDb();
-            $strReturn .= "<message>".$objCommon->getStrDisplayName()." - ".$this->getLang("setStatusOk")."<newstatus>".$intNewStatus."</newstatus></message>";
-            $this->flushCompletePagesCache();
+            try {
+                $objCommon->setIntRecordStatus($intNewStatus);
+                $objCommon->updateObjectToDb();
+                $strReturn .= "<message>".$objCommon->getStrDisplayName()." - ".$this->getLang("setStatusOk")."<newstatus>".$intNewStatus."</newstatus></message>";
+                $this->flushCompletePagesCache();
+            } catch (\Exception $objE) {
+                ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_FORBIDDEN);
+                $strReturn .= "<message><error>".xmlSafeString($objE->getMessage())."</error></message>";
+            }
         } else {
             ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_FORBIDDEN);
             $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
