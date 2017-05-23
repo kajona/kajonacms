@@ -52,6 +52,16 @@ In case a class implements an interface it is possible to use the `@inheritdoc` 
 description of the interface is also valid for this method. If the method has a special behaviour you should avoid the 
 `@inheritdoc` annotation and describe this behaviour in a separate php doc block.
 
+### Constants
+
+A constant name in a class consist usually of a group and value name. These values must be concatenated with an 
+underscore `[group]_[value]`. Constants must not have a type prefix. Example of good constant names are:
+
+```
+const STATE_VALID = 1;
+const STATE_OUTDATED = 2;
+```
+
 ## Namespaces
 
 The namespace must start with a vendor name which is in our case `Kajona`. The next part is the module name which is the
