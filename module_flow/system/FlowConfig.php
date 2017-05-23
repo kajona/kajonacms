@@ -304,6 +304,8 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
     }
 
     /**
+     * Returns an array where the key is the status and the value is the status object
+     *
      * @param $arrStatus
      * @return FlowStatus[]
      */
@@ -318,6 +320,8 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
     }
 
     /**
+     * Returns an array where the key is the status and the value is an array of possible target status
+     *
      * @param $arrStatus
      * @return array
      */
