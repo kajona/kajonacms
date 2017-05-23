@@ -32,10 +32,26 @@ The class `NewsAdminController` has the `News` prefix since `AdminController` is
 module has an `AdminController`. The class `LockManager` has no prefix because it is very unlikely that we have many 
 lock managers.
 
+Every class must have also a php block containing at least the `@package` and `@author` annotation. The doc block must 
+have also a general description of the class. In the following an example class doc block:
+
+```
+/**
+ * My class description
+ *
+ * @package module_foo
+ * @author foo.bar@kajona.de
+ */
+```
+
 ### Methods
 
 Like defined in PSR-2 method names must be in CamelCase with the first character as lowercase. If the method returns a
 boolean value it is recommended to use the is/has prefix to indicate the response type.
+
+In case a class implements an interface it is possible to use the `@inheritdoc` annotation to indicate that the 
+description of the interface is also valid for this method. If the method has a special behaviour you should avoid the 
+`@inheritdoc` annotation and describe this behaviour in a separate php doc block.
 
 ## Namespaces
 
