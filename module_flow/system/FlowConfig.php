@@ -219,19 +219,6 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
                 if ($objConfig->getSystemid() == $this->getSystemid()) {
                     // if this is the same object no problem
                 } else {
-                    // we must check that we have the 0 and 1 status
-                    $arrNeedStatus = [ArtemeonCommon::INT_STATUS_CAPTURED, ArtemeonCommon::INT_STATUS_RELEASED];
-                    foreach ($arrNeedStatus as $intStatus) {
-                        $objStatus = $objConfig->getStatusByIndex($intStatus);
-                        if ($objStatus instanceof FlowStatus) {
-                        } else {
-                            throw new \RuntimeException("It is required that the status " . $intStatus . " is available");
-                        }
-                    }
-
-                    // validate the status chain
-                    $this->validateStatusChain($objConfig);
-
                     // if this is another object we check whether there was not index removed which is used
                     $arrCurrentStatus = $this->getStatusIndexMap($objConfig->getArrStatus());
                     $arrNewStatus = $this->getStatusIndexMap($this->getArrStatus());
@@ -260,16 +247,31 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
                 }
             }
         }
+
+        if ($intRecordStatus == ArtemeonCommon::INT_STATUS_RELEASED) {
+            // we must check that we have the 0 and 1 status
+            $arrNeedStatus = [ArtemeonCommon::INT_STATUS_CAPTURED, ArtemeonCommon::INT_STATUS_RELEASED];
+            foreach ($arrNeedStatus as $intStatus) {
+                $objStatus = $this->getStatusByIndex($intStatus);
+                if ($objStatus instanceof FlowStatus) {
+                } else {
+                    throw new \RuntimeException("It is required that the status " . $intStatus . " is available");
+                }
+            }
+
+            // validate the status chain of this flow
+            $this->validateStatusChain();
+        }
     }
 
     /**
      * Validates whether every step is connected through a transition
      *
-     * @param FlowConfig $objConfig
+     * @throws \RuntimeException
      */
-    private function validateStatusChain(FlowConfig $objConfig)
+    private function validateStatusChain()
     {
-        $arrMap = $this->getStatusIndexTransitions($objConfig->getArrStatus());
+        $arrMap = $this->getStatusIndexTransitions($this->getArrStatus());
         $arrVisited = [];
 
         $this->walkStatusMap($arrMap, ArtemeonCommon::INT_STATUS_CAPTURED, $arrVisited);
