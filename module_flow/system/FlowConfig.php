@@ -299,7 +299,7 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
 
         $arrVisited[] = $intStatus;
 
-        $arrTransitions = $arrMap[$intStatus];
+        $arrTransitions = isset($arrMap[$intStatus]) ? $arrMap[$intStatus] : [];
         foreach ($arrTransitions as $intTargetStatus) {
             $this->walkStatusMap($arrMap, $intTargetStatus, $arrVisited);
         }
