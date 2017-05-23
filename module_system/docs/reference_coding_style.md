@@ -32,7 +32,7 @@ The class `NewsAdminController` has the `News` prefix since `AdminController` is
 module has an `AdminController`. The class `LockManager` has no prefix because it is very unlikely that we have many 
 lock managers.
 
-Every class must have also a php block containing at least the `@package` and `@author` annotation. The doc block must 
+Every class must have also a php block containing at least the `@author` annotation. The doc block must 
 have also a general description of the class. In the following an example class doc block:
 
 ```
