@@ -26,14 +26,14 @@ $lang["form_flow_viewgroups"]   = "View";
 $lang["form_flow_editgroups"]   = "Edit";
 $lang["form_flow_deletegroups"] = "Delete";
 $lang["form_flow_rightgroups"]  = "Rights";
-$lang["form_flow_usergroup"]    = "Usergroups";
+$lang["form_flow_usergroup"]    = "User groups";
 $lang["form_flow_transitions"]  = "Transitions";
 
 $lang["form_flow_targetstatus"] = "Target-Status";
 $lang["form_flow_actions"]      = "Actions";
 $lang["form_flow_conditions"]   = "Conditions";
 
-$lang["form_flow_config"]       = "Condiguration";
+$lang["form_flow_config"]       = "Configuration";
 
 $lang["flow_step_icon_0"]       = "icon_flag_black";
 $lang["flow_step_icon_1"]       = "icon_flag_blue";
