@@ -35,7 +35,7 @@
 
             <div class="panel panelDefault" id="loginContainer">
                 <div class="panel-header">
-                    <h3>Kajona V5</h3>
+                    <h3>Kajona V6</h3>
                 </div>
                 <div class="panel-body">
                     <!--[if lt IE 9]>

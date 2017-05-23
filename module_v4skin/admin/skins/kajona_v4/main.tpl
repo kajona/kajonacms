@@ -73,7 +73,7 @@
         <div class="col-md-2 hidden-print mainnavi-container sidebar-offcanvas" id="sidebar">
             <div class="sidebar-nav">
                 <div class="panel-group" id="moduleNavigation">
-                    <div class="nav-header">Kajona V5</div>
+                    <div class="nav-header">Kajona V6</div>
                     %%moduleSitemap%%
                 </div>
             </div>

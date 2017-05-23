@@ -33,7 +33,7 @@ $lang["_system_portal_disablepage_"]     = "Временна страница";
 $lang["_system_portal_disablepage_hint"] = "Тази страница се полазва ако портала е деактивиран.";
 $lang["_system_release_time_"]           = "Времетраене на сесия";
 $lang["_system_release_time_hint"]       = "След изтичането на времето сесията става невалидна";
-$lang["about_part1"]                     = "<h2>Kajona V5 - Система за контрол на съдържанието с отворен код</h2>Kajona V 5.1<br /><br /><a href=\"http://www.kajona.de\" target=\"_blank\">www.kajona.de</a><br /><a href=\"mailto:info@kajona.de\" target=\"_blank\">info@kajona.de</a><br /><br />За повече информация или предложения, моля посетете нашия уебсайт.<br />Допълнителна помощ може да намерите в нашия  <a href=\"http://board.kajona.de/\" target=\"_blank\">форум</a>.";
+$lang["about_part1"]                     = "<h2>Kajona V6 - Система за контрол на съдържанието с отворен код</h2>Kajona V 6.2<br /><br /><a href=\"http://www.kajona.de\" target=\"_blank\">www.kajona.de</a><br /><a href=\"mailto:info@kajona.de\" target=\"_blank\">info@kajona.de</a><br /><br />За повече информация или предложения, моля посетете нашия уебсайт.<br />Допълнителна помощ може да намерите в нашия  <a href=\"http://board.kajona.de/\" target=\"_blank\">форум</a>.";
 $lang["about_part2_header"]              = "<h2>Главни разработчици</h2>";
 $lang["about_part2a_header"]             = "<h2>Сътрудници / Разработчици</h2>";
 $lang["about_part2b_header"]             = "<h2>Преводи</h2>";

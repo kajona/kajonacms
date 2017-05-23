@@ -180,12 +180,12 @@ class NewsAdmin extends AdminEvensimpler implements AdminInterface
         /* News Filter and List */
 
         /** @var  NewsNewsFilter $objFilter */
-        $objFilter = NewsNewsFilter::getOrCreateFromSession();
-        $strFilterForm = $this->renderFilter($objFilter);
-        if ($strFilterForm === AdminFormgeneratorFilter::STR_FILTER_REDIRECT) {
-            return "";
-        }
-        $strReturn .= $strFilterForm;
+        $objFilter = null;// NewsNewsFilter::getOrCreateFromSession();
+//        $strFilterForm = $this->renderFilter($objFilter);
+//        if ($strFilterForm === AdminFormgeneratorFilter::STR_FILTER_REDIRECT) {
+//            return "";
+//        }
+//        $strReturn .= $strFilterForm;
 
         $objIterator = new ArraySectionIterator(NewsNews::getObjectCountFiltered($objFilter, $this->getParam("filterId")));
         $objIterator->setPageNumber($this->getParam("pv"));
