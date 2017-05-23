@@ -281,6 +281,14 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
         }
     }
 
+    /**
+     * Walks through all transitions and saves the visited status in the array $arrVisited. All status which are not
+     * in this array after traversing are not connected through a transition
+     *
+     * @param array $arrMap
+     * @param integer $intStatus
+     * @param array $arrVisited
+     */
     private function walkStatusMap($arrMap, $intStatus, array &$arrVisited)
     {
         if (in_array($intStatus, $arrVisited)) {
