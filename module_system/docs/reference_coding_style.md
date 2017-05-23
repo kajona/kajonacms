@@ -39,7 +39,6 @@ have also a general description of the class. In the following an example class 
 /**
  * My class description
  *
- * @package module_foo
  * @author foo.bar@kajona.de
  */
 ```
