@@ -7,6 +7,7 @@
 
 namespace Kajona\Flow\System;
 
+use AGP\Agp_Commons\System\ArtemeonCommon;
 use Kajona\System\System\AdminListableInterface;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Lang;
@@ -214,12 +215,12 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
         // get the current active flow
         $objConfig = FlowConfig::getByModelClass($strTargetClass);
         if ($objConfig instanceof FlowConfig) {
-            if ($intRecordStatus == 1) {
+            if ($intRecordStatus == ArtemeonCommon::INT_STATUS_RELEASED) {
                 if ($objConfig->getSystemid() == $this->getSystemid()) {
                     // if this is the same object no problem
                 } else {
                     // we must check that we have the 0 and 1 status
-                    $arrNeedStatus = [0, 1];
+                    $arrNeedStatus = [ArtemeonCommon::INT_STATUS_CAPTURED, ArtemeonCommon::INT_STATUS_RELEASED];
                     foreach ($arrNeedStatus as $intStatus) {
                         $objStatus = $objConfig->getStatusByIndex($intStatus);
                         if ($objStatus instanceof FlowStatus) {
@@ -249,7 +250,7 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
                     // or 0
                     $arrCurrentStatus = $this->getStatusIndexMap($this->getArrStatus());
 
-                    $arrDiff = array_diff_key($arrCurrentStatus, [0, 1]);
+                    $arrDiff = array_diff_key($arrCurrentStatus, [ArtemeonCommon::INT_STATUS_CAPTURED, ArtemeonCommon::INT_STATUS_RELEASED]);
                     if (!empty($arrDiff)) {
                         foreach ($arrDiff as $objStatus) {
                             /** @var FlowStatus $objStatus */
@@ -271,7 +272,7 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
         $arrMap = $this->getStatusIndexTransitions($objConfig->getArrStatus());
         $arrVisited = [];
 
-        $this->walkStatusMap($arrMap, 0, $arrVisited);
+        $this->walkStatusMap($arrMap, ArtemeonCommon::INT_STATUS_CAPTURED, $arrVisited);
 
         foreach ($arrMap as $intStatus => $arrTargetStatus) {
             if (!in_array($intStatus, $arrVisited)) {
