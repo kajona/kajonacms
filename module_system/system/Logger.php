@@ -192,7 +192,7 @@ final class Logger implements LoggerInterface
             $intLevel = self::$levelInfo;
         }
 
-        $this->addLogRow($strMessage, $intLevel, true);
+        $this->addLogRow($strMessage, $intLevel);
     }
 
     /**
@@ -201,11 +201,10 @@ final class Logger implements LoggerInterface
      *
      * @param string $strMessage
      * @param int $intLevel
-     * @param bool $bitSkipSessionData
      * @return void
      * @deprecated
      */
-    public function addLogRow($strMessage, $intLevel, $bitSkipSessionData = false)
+    public function addLogRow($strMessage, $intLevel)
     {
         //check, if there someting to write
         if ($this->intLogLevel == 0) {
@@ -238,12 +237,7 @@ final class Logger implements LoggerInterface
             $strLevel = "WARNING";
         }
 
-        $strSessid = "";
-        if (!$bitSkipSessionData && Carrier::getInstance()->getObjSession()->getBitLazyLoaded()) {
-            $strSessid = Carrier::getInstance()->getObjSession()->getInternalSessionId();
-            $strSessid .= " (".Carrier::getInstance()->getObjSession()->getUsername().")";
-        }
-
+        $strSessid = Carrier::getInstance()->getObjSession()->getUserID();
         $strMessage = StringUtil::replace(array("\r", "\n"), array(" ", " "), $strMessage);
 
         $strFileInfo = "";
