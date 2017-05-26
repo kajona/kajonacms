@@ -49,6 +49,7 @@ class Installer
     private $strBackwardLink = "";
 
     private $strVersion = "V 6.2";
+    private $strMinPhpVersion = "7.0";
 
     /**
      * Instance of template-engine
@@ -222,6 +223,15 @@ class Installer
         }
 
         $strReturn .= "<br />".$this->getLang("installer_phpcheck_intro2")."<ul class='list-group'>";
+
+        $strReturn .= "<li class='list-group-item'>".$this->getLang("installer_phpcheck_version")." ";
+        if (version_compare(phpversion(), $this->strMinPhpVersion, "<")) {
+            $strReturn .= "<span class=\"label label-danger label-as-badge\">&lt; ".$this->strMinPhpVersion."</span>";
+        }
+        else {
+            $strReturn .= "<span class=\"label label-success label-as-badge\">".phpversion()."</span>";
+        }
+        $strReturn .= "</li>";
 
         foreach ($arrFilesAndFolders as $strOneFile) {
             $strReturn .= "<li class='list-group-item'>".$this->getLang("installer_phpcheck_folder").$strOneFile." ";
