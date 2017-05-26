@@ -108,16 +108,16 @@ class Rights
         //Splitting up the rights
         $arrParams = array();
         $arrParams[] = (int)$arrRights[self::$STR_RIGHT_INHERIT];
-        $arrParams[] = ",". trim($arrRights[self::$STR_RIGHT_VIEW], ",").",";
-        $arrParams[] = ",". trim($arrRights[self::$STR_RIGHT_EDIT], ",").",";
-        $arrParams[] = ",". trim($arrRights[self::$STR_RIGHT_DELETE], ",").",";
-        $arrParams[] = ",". trim($arrRights[self::$STR_RIGHT_RIGHT], ",").",";
-        $arrParams[] = ",". trim($arrRights[self::$STR_RIGHT_RIGHT1], ",").",";
-        $arrParams[] = ",". trim($arrRights[self::$STR_RIGHT_RIGHT2], ",").",";
-        $arrParams[] = ",". trim($arrRights[self::$STR_RIGHT_RIGHT3], ",").",";
-        $arrParams[] = ",". trim($arrRights[self::$STR_RIGHT_RIGHT4], ",").",";
-        $arrParams[] = ",". trim($arrRights[self::$STR_RIGHT_RIGHT5], ",").",";
-        $arrParams[] = ",". trim($arrRights[self::$STR_RIGHT_CHANGELOG], ",").",";
+        $arrParams[] = ",". (!empty($arrRights[self::$STR_RIGHT_VIEW]) ? trim($arrRights[self::$STR_RIGHT_VIEW], ",") : "").",";
+        $arrParams[] = ",". (!empty($arrRights[self::$STR_RIGHT_EDIT]) ? trim($arrRights[self::$STR_RIGHT_EDIT], ",") : "").",";
+        $arrParams[] = ",". (!empty($arrRights[self::$STR_RIGHT_DELETE]) ? trim($arrRights[self::$STR_RIGHT_DELETE], ",") : "").",";
+        $arrParams[] = ",". (!empty($arrRights[self::$STR_RIGHT_RIGHT]) ? trim($arrRights[self::$STR_RIGHT_RIGHT], ",") : "").",";
+        $arrParams[] = ",". (!empty($arrRights[self::$STR_RIGHT_RIGHT1]) ? trim($arrRights[self::$STR_RIGHT_RIGHT1], ",") : "").",";
+        $arrParams[] = ",". (!empty($arrRights[self::$STR_RIGHT_RIGHT2]) ? trim($arrRights[self::$STR_RIGHT_RIGHT2], ",") : "").",";
+        $arrParams[] = ",". (!empty($arrRights[self::$STR_RIGHT_RIGHT3]) ? trim($arrRights[self::$STR_RIGHT_RIGHT3], ",") : "").",";
+        $arrParams[] = ",". (!empty($arrRights[self::$STR_RIGHT_RIGHT4]) ? trim($arrRights[self::$STR_RIGHT_RIGHT4], ",") : "").",";
+        $arrParams[] = ",". (!empty($arrRights[self::$STR_RIGHT_RIGHT5]) ? trim($arrRights[self::$STR_RIGHT_RIGHT5], ",") : "").",";
+        $arrParams[] = ",". (!empty($arrRights[self::$STR_RIGHT_CHANGELOG]) ? trim($arrRights[self::$STR_RIGHT_CHANGELOG], ",") : "").",";
         $arrParams[] = $strSystemid;
 
         $strQuery = "UPDATE "._dbprefix_."system
@@ -387,7 +387,7 @@ class Rights
 
 
         $arrRights = array();
-        if (isset($arrRow["system_id"])) {
+        if (isset($arrRow["system_id"]) && count($arrRow) >= 10) {
             $arrRights[self::$STR_RIGHT_VIEW] = $arrRow["right_view"];
             $arrRights[self::$STR_RIGHT_EDIT] = $arrRow["right_edit"];
             $arrRights[self::$STR_RIGHT_DELETE] = $arrRow["right_delete"];
