@@ -936,22 +936,32 @@ class InstallerSystem extends InstallerBase implements InstallerInterface {
 
         $strReturn .= "Moving data...\n";
 
-        $strQuery = " 
-         UPDATE "._dbprefix_."system as s
-     INNER JOIN "._dbprefix_."system_right as r ON s.system_id = r.right_id
-            SET s.right_inherit = r.right_inherit, 
-                s.right_view = r.right_view, 
-                s.right_edit = r.right_edit, 
-                s.right_delete = r.right_delete, 
-                s.right_right = r.right_right, 
-                s.right_right1 = r.right_right1, 
-                s.right_right2 = r.right_right2, 
-                s.right_right3 = r.right_right3,
-                s.right_right4 = r.right_right4, 
-                s.right_right5 = r.right_right5, 
-                s.right_changelog = r.right_changelog";
+        foreach ($this->objDB->getGenerator("SELECT * FROM "._dbprefix_."system_right ORDER BY right_id", []) as $arrResultSet) {
+            foreach ($arrResultSet as $arrRow) {
+                $strQuery = "UPDATE "._dbprefix_."system 
+                            SET right_inherit = ?, right_view = ?, right_edit = ?, right_delete = ?, right_right = ?, right_right1 = ?, 
+                                right_right2 = ?, right_right3 = ?, right_right4 = ?, right_right5 = ?, right_changelog = ? 
+                          WHERE system_id = ?";
 
-        $this->objDB->_pQuery($strQuery, array());
+                $this->objDB->_pQuery($strQuery,
+                    [
+                        $arrRow["right_inherit"],
+                        $arrRow["right_view"],
+                        $arrRow["right_edit"],
+                        $arrRow["right_delete"],
+                        $arrRow["right_right"],
+                        $arrRow["right_right1"],
+                        $arrRow["right_right2"],
+                        $arrRow["right_right3"],
+                        $arrRow["right_right4"],
+                        $arrRow["right_right5"],
+                        $arrRow["right_changelog"],
+                        $arrRow["right_id"]
+                    ]
+                );
+            }
+        }
+
 
         Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBQUERIES | Carrier::INT_CACHE_TYPE_DBSTATEMENTS);
 
