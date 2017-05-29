@@ -45,6 +45,8 @@ $lang["flow_step_icon_6"]       = "icon_flag_purple";
 $lang["flow_step_icon_7"]       = "icon_flag_red";
 $lang["flow_step_icon_8"]       = "icon_flag_yellow";
 
+$lang["flow_step_no_delete"] = "Dieser Status kann nicht gelöscht werden";
+
 $lang["delete_step_question"]   = "Möchten Sie den Schritt &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $lang["delete_transition_question"]   = "Möchten Sie den Übergang &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $lang["delete_transition_action_question"]   = "Möchten Sie die Aktion &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";

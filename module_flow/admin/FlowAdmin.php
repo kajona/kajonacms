@@ -172,7 +172,7 @@ class FlowAdmin extends AdminEvensimpler implements AdminInterface
             } else {
                 return "";
             }
-        } elseif (($objListEntry instanceof FlowStatus && $objListEntry->getFlowConfig()->getIntRecordStatus() === 1) || ($objListEntry->getIntIndex() == FlowConfig::STATUS_START || $objListEntry->getIntIndex() == FlowConfig::STATUS_END)) {
+        } elseif ($objListEntry instanceof FlowStatus && $objListEntry->getFlowConfig()->getIntRecordStatus() === 1) {
             return "";
         } elseif ($objListEntry instanceof FlowTransition && $objListEntry->getParentStatus()->getFlowConfig()->getIntRecordStatus() === 1) {
             return "";
@@ -180,6 +180,10 @@ class FlowAdmin extends AdminEvensimpler implements AdminInterface
             return "";
         } elseif ($objListEntry instanceof FlowConditionAbstract && $objListEntry->getTransition()->getParentStatus()->getFlowConfig()->getIntRecordStatus() === 1) {
             return "";
+        }
+
+        if ($objListEntry instanceof FlowStatus && ($objListEntry->getIntIndex() == FlowConfig::STATUS_START || $objListEntry->getIntIndex() == FlowConfig::STATUS_END)) {
+            return $this->objToolkit->listButton(AdminskinHelper::getAdminImage("icon_deleteDisabled", $this->getLang("flow_step_no_delete")));
         }
 
         return parent::renderDeleteAction($objListEntry);
