@@ -293,7 +293,7 @@
         <antcall target="buildPackageHelper" />
         <antcall target="modulePharHelper" />
 
-        <zip destfile="${basedir}${packagesPath}/kajona_v5_full_${DSTAMP}-${TSTAMP}.zip">
+        <zip destfile="${basedir}${packagesPath}/kajona_v6_full_${DSTAMP}-${TSTAMP}.zip">
             <fileset dir="${basedir}${tempPath}/../" />
         </zip>
     </target>
@@ -339,7 +339,7 @@
         <antcall target="buildPackageHelper" />
         <antcall target="modulePharHelper" />
 
-        <zip destfile="${basedir}${packagesPath}/kajona_v5_allinone_${DSTAMP}-${TSTAMP}.zip">
+        <zip destfile="${basedir}${packagesPath}/kajona_v6_allinone_${DSTAMP}-${TSTAMP}.zip">
             <fileset dir="${basedir}${tempPath}/../" />
         </zip>
     </target>

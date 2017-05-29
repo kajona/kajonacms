@@ -53,6 +53,7 @@ $lang["installer_phpcheck_intro"]        = "<b>Welcome</b><br /><br />";
 $lang["installer_phpcheck_intro2"]       = "<br />The installation of the system is spilt up into serveral steps: <br />Check of permissions, DB-configuration, credentials to access the administration and module-installation<br />Dependant on the modules choosen, the number of steps can vary.<br /><br />The permissions on some files and the availability <br />of needed php-modules are being checked:<br />";
 $lang["installer_phpcheck_lang"]         = "To load the installer using a different language, use one of the following links:<br /><br />";
 $lang["installer_phpcheck_module"]       = "PHP-module ";
+$lang["installer_phpcheck_version"]       = "PHP-version ";
 $lang["installer_prev"]                  = "< Previous step";
 $lang["installer_samplecontent"]         = "<b>Installation of the samplecontent</b><br /><br />The module 'samplecontent' creates a few standard pages and navigation entries.<br />According to the modules installed, additional contents will be created.<br /><br /><br />";
 $lang["installer_step_adminsettings"]    = "Admin access";

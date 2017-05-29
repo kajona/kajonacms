@@ -53,6 +53,7 @@ $lang["installer_phpcheck_intro"]        = "<b>Herzlich Willkommen</b><br /><br 
 $lang["installer_phpcheck_intro2"]       = "<br />Die Installation des Systems erfolgt in mehreren Schritten: <br />Rechtepüfung, DB-Konfiguration, Zugangsdaten zur Administration sowie Modulinstallation.<br />Je nach Modulauswahl kann die Anzahl dieser Schritte abweichen.<br /><br />Es werden die Schreibrechte einzelner Dateien und Verzeichnisse sowie<br />die Verfügbarkeit benötigter PHP-Module überprüft:<br />";
 $lang["installer_phpcheck_lang"]         = "Um den Installer in einer anderen Sprache zu laden, bitte einen der folgenden Links verwenden:<br /><br />";
 $lang["installer_phpcheck_module"]       = "PHP-Modul ";
+$lang["installer_phpcheck_version"]       = "PHP-Version ";
 $lang["installer_prev"]                  = "< Vorheriger Schritt";
 $lang["installer_samplecontent"]         = "<b>Installation der Beispielinhalte</b><br /><br />Das Modul Samplecontent erstellt einige Standard-Seiten und Navigationen.<br />Je nach installierten Modulen werden verschiedene Beispielinhalte installiert.<br /><br /><br />";
 $lang["installer_step_adminsettings"]    = "Administrationszugang";
