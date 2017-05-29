@@ -7,7 +7,6 @@
 
 namespace Kajona\Flow\System;
 
-use AGP\Agp_Commons\System\ArtemeonCommon;
 use Kajona\System\System\AdminListableInterface;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Lang;
@@ -25,6 +24,9 @@ use Kajona\System\System\Pluginmanager;
  */
 class FlowConfig extends Model implements ModelInterface, AdminListableInterface
 {
+    const STATUS_START = 0;
+    const STATUS_END = 1;
+
     /**
      * @var string
      * @tableColumn flow.flow_name
@@ -215,7 +217,7 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
         // get the current active flow
         $objConfig = FlowConfig::getByModelClass($strTargetClass);
         if ($objConfig instanceof FlowConfig) {
-            if ($intRecordStatus == ArtemeonCommon::INT_STATUS_RELEASED) {
+            if ($intRecordStatus == self::STATUS_END) {
                 if ($objConfig->getSystemid() == $this->getSystemid()) {
                     // if this is the same object no problem
                 } else {
@@ -237,7 +239,7 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
                     // or 0
                     $arrCurrentStatus = $this->getStatusIndexMap($this->getArrStatus());
 
-                    $arrDiff = array_diff_key($arrCurrentStatus, [ArtemeonCommon::INT_STATUS_CAPTURED, ArtemeonCommon::INT_STATUS_RELEASED]);
+                    $arrDiff = array_diff_key($arrCurrentStatus, [self::STATUS_START, self::STATUS_END]);
                     if (!empty($arrDiff)) {
                         foreach ($arrDiff as $objStatus) {
                             /** @var FlowStatus $objStatus */
@@ -248,9 +250,9 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
             }
         }
 
-        if ($intRecordStatus == ArtemeonCommon::INT_STATUS_RELEASED) {
+        if ($intRecordStatus == self::STATUS_END) {
             // we must check that we have the 0 and 1 status
-            $arrNeedStatus = [ArtemeonCommon::INT_STATUS_CAPTURED, ArtemeonCommon::INT_STATUS_RELEASED];
+            $arrNeedStatus = [self::STATUS_START, self::STATUS_END];
             foreach ($arrNeedStatus as $intStatus) {
                 $objStatus = $this->getStatusByIndex($intStatus);
                 if ($objStatus instanceof FlowStatus) {
@@ -274,7 +276,7 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
         $arrMap = $this->getStatusIndexTransitions($this->getArrStatus());
         $arrVisited = [];
 
-        $this->walkStatusMap($arrMap, ArtemeonCommon::INT_STATUS_CAPTURED, $arrVisited);
+        $this->walkStatusMap($arrMap, self::STATUS_START, $arrVisited);
 
         foreach ($arrMap as $intStatus => $arrTargetStatus) {
             if (!in_array($intStatus, $arrVisited)) {
