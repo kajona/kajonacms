@@ -205,14 +205,18 @@ class FlowStatus extends Model implements ModelInterface, AdminListableInterface
 
     public function deleteObject()
     {
-        $this->assertNoRecordsAreAssignedToThisStatus();
+        if ($this->getFlowConfig()->getIntRecordStatus() === 1) {
+            $this->assertNoRecordsAreAssignedToThisStatus();
+        }
 
         return parent::deleteObject();
     }
 
     public function deleteObjectFromDatabase()
     {
-        $this->assertNoRecordsAreAssignedToThisStatus();
+        if ($this->getFlowConfig()->getIntRecordStatus() === 1) {
+            $this->assertNoRecordsAreAssignedToThisStatus();
+        }
 
         return parent::deleteObjectFromDatabase();
     }

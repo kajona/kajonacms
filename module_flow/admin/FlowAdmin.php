@@ -167,7 +167,11 @@ class FlowAdmin extends AdminEvensimpler implements AdminInterface
     protected function renderDeleteAction(ModelInterface $objListEntry)
     {
         if ($objListEntry instanceof FlowConfig) {
-            return "";
+            if ($objListEntry->getIntRecordStatus() === 0) {
+                return parent::renderDeleteAction($objListEntry);
+            } else {
+                return "";
+            }
         } elseif ($objListEntry instanceof FlowStatus && $objListEntry->getFlowConfig()->getIntRecordStatus() === 1) {
             return "";
         } elseif ($objListEntry instanceof FlowTransition && $objListEntry->getParentStatus()->getFlowConfig()->getIntRecordStatus() === 1) {

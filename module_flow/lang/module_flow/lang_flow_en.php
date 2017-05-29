@@ -49,6 +49,7 @@ $lang["delete_step_question"]   = "Do you really want to delete the step &quot;<
 $lang["delete_transition_question"]   = "Do you really want to delete the transition &quot;<b>%%element_name%%</b>&quot;?";
 $lang["delete_transition_action_question"]   = "Do you really want to delete the action &quot;<b>%%element_name%%</b>&quot;?";
 $lang["delete_transition_condition_question"]   = "Do you really want to delete the condition &quot;<b>%%element_name%%</b>&quot;?";
+$lang["delete_question"]   = "Do you really want to delete the configuration &quot;<b>%%element_name%%</b>&quot;?";
 
 $lang["flow_transition_action_list"]   = "The following actions are assigned to the transition (<b>{0}</b> to <b>{1}</b>).";
 $lang["flow_transition_condition_list"]   = "The following conditions are assigned to the transition (<b>{0}</b> to <b>{1}</b>).";
