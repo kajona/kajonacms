@@ -30,7 +30,7 @@ class FlowConfig extends Model implements ModelInterface, AdminListableInterface
     /**
      * @var string
      * @tableColumn flow.flow_name
-     * @tableColumnDatatype char20
+     * @tableColumnDatatype char100
      */
     protected $strName;
 

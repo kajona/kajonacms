@@ -264,6 +264,7 @@ class FlowAdmin extends AdminEvensimpler implements AdminInterface
         $this->setStrCurObjectTypeName('Step');
         $this->setCurObjectClassName(FlowStatus::class);
 
+        /** @var FlowConfig $objFlow */
         $objFlow = $this->objFactory->getObject($this->getParam("systemid"));
 
         /* Create list */
@@ -273,7 +274,13 @@ class FlowAdmin extends AdminEvensimpler implements AdminInterface
         $objArraySectionIterator->setArraySection(FlowStatus::getObjectListFiltered($objFilter, $this->getSystemid(), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
         /* Render list and filter */
-        $strList = $this->renderList($objArraySectionIterator, true, "list".$this->getStrCurObjectTypeName());
+        $strList = "";
+        $strList.= $this->objToolkit->formHeader("#");
+        $strList.= $this->objToolkit->formInputText("set[".$objFlow->getSystemid()."]", $this->getLang("form_flow_name"), $objFlow->getStrName(), "", "", false, $objFlow->getSystemid()."#strName");
+        $strList.= $this->objToolkit->formClose();
+        $strList.= $this->renderList($objArraySectionIterator, true, "list".$this->getStrCurObjectTypeName());
+        $strList.= "<script type='text/javascript'>require(['instantSave'], function(is) {is.init()});</script>";
+
         $strGraph = FlowGraphWriter::write($objFlow);
 
         $strHtml = "<div class='row'>";
