@@ -52,7 +52,8 @@ class Link
         }
 
         if (!empty($strAlt)) {
-            $arrAttr["title"] = $strAlt;
+            // remove i.e. icon tags from the alt title
+            $arrAttr["title"] = strip_tags($strAlt);
         }
 
         if (!empty($strLinkId)) {
