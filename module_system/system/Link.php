@@ -47,7 +47,7 @@ class Link
         } elseif (!empty($strText)) {
             if ($bitTooltip && (trim($strAlt) == "" || $strAlt == $strText)) {
                 $bitTooltip = false;
-                $strAlt = $strText;
+                $strAlt = empty($strAlt) ? strip_tags($strText) : $strAlt;
             }
         }
 

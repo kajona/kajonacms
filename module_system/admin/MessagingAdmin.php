@@ -305,7 +305,7 @@ JS;
 
 
         $strReturn .= $this->objToolkit->getContentToolbar(array(
-            getLinkAdmin($this->getArrModule("module"), "setAllRead", "", AdminskinHelper::getAdminImage("icon_mail").$this->getLang("action_set_all_read")),
+            Link::getLinkAdmin($this->getArrModule("module"), "setAllRead", "", AdminskinHelper::getAdminImage("icon_mail").$this->getLang("action_set_all_read")),
             $strDeleteAllRead,
             $strDeleteAll
         ));
