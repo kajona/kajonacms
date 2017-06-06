@@ -137,11 +137,14 @@ class UsersourcesGroupKajona extends Model implements ModelInterface, Usersource
     {
         $strQuery = "SELECT k_user.user_id FROM "._dbprefix_."user_kajona as k_user,
                                          ".$this->objDB->encloseTableName(_dbprefix_."user")." as user2,
-									     "._dbprefix_."user_kajona_members
+									     "._dbprefix_."user_kajona_members,
+									     "._dbprefix_."system 
 								   WHERE group_member_group_kajona_id= ?
 								  	 AND k_user.user_id = group_member_user_kajona_id
                                      AND k_user.user_id = user2.user_id
-                                   ORDER BY user2.user_username ASC  ";
+                                     AND user2.user_id = system_id
+					                 AND system_deleted = 0
+                                ORDER BY user2.user_username ASC  ";
 
         $arrIds = $this->objDB->getPArray($strQuery, array($this->getSystemid()), $intStart, $intEnd);
 
@@ -161,8 +164,11 @@ class UsersourcesGroupKajona extends Model implements ModelInterface, Usersource
     public function getNumberOfMembers()
     {
         $strQuery = "SELECT COUNT(*) AS cnt
-                       FROM "._dbprefix_."user_kajona_members
-					   WHERE group_member_group_kajona_id= ?";
+                       FROM "._dbprefix_."user_kajona_members,
+                            "._dbprefix_."system 
+					   WHERE group_member_group_kajona_id= ?
+					     AND group_member_user_kajona_id = system_id
+					     AND system_deleted = 0";
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getSystemid()));
         return $arrRow["cnt"];
     }
