@@ -61,7 +61,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
     private $STR_GROUPFILTER_SESSION_KEY = "GROUPLIST_FILTER_SESSION_KEY";
 
     //languages, the admin area could display (texts)
-    protected $arrLanguages = array();
+    protected $arrLanguages = [];
 
     /**
      * Constructor
@@ -76,7 +76,6 @@ class UserAdmin extends AdminSimple implements AdminInterface
         if ($this->getAction() == "edit") {
             $this->setAction("editUser");
         }
-
     }
 
     /**
@@ -84,12 +83,12 @@ class UserAdmin extends AdminSimple implements AdminInterface
      */
     public function getOutputModuleNavi()
     {
-        $arrReturn = array();
-        $arrReturn[] = array("view", Link::getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("user_liste"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("", "");
-        $arrReturn[] = array("edit", Link::getLinkAdmin($this->getArrModule("modul"), "groupList", "", $this->getLang("gruppen_liste"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("", "");
-        $arrReturn[] = array("right1", Link::getLinkAdmin($this->getArrModule("modul"), "loginLog", "", $this->getLang("loginlog"), "", "", true, "adminnavi"));
+        $arrReturn = [];
+        $arrReturn[] = ["view", Link::getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("user_liste"), "", "", true, "adminnavi")];
+        $arrReturn[] = ["", ""];
+        $arrReturn[] = ["edit", Link::getLinkAdmin($this->getArrModule("modul"), "groupList", "", $this->getLang("gruppen_liste"), "", "", true, "adminnavi")];
+        $arrReturn[] = ["", ""];
+        $arrReturn[] = ["right1", Link::getLinkAdmin($this->getArrModule("modul"), "loginLog", "", $this->getLang("loginlog"), "", "", true, "adminnavi")];
         return $arrReturn;
     }
 
@@ -263,7 +262,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
     {
         $objUsersources = new UserSourcefactory();
 
-        $arrReturn = array();
+        $arrReturn = [];
         if ($objListEntry instanceof UserUser && $objListEntry->rightEdit() && $objUsersources->getUsersource($objListEntry->getStrSubsystem())->getMembersEditable()) {
             $arrReturn[] = $this->objToolkit->listButton(
                 Link::getLinkAdminDialog("user", "editMemberships", "&systemid=".$objListEntry->getSystemid()."&folderview=1", "", $this->getLang("user_zugehoerigkeit"), "icon_group", $this->getLang("user_memberships")." ".$objListEntry->getStrUsername())
@@ -380,10 +379,10 @@ class UserAdmin extends AdminSimple implements AdminInterface
         $objMail = new Mail();
         $objMail->addTo($objUser->getStrEmail());
         $objMail->setSubject($this->getLang("user_password_resend_subj"));
-        $objMail->setText($this->getLang("user_password_resend_body", array($strActivationLink)));
+        $objMail->setText($this->getLang("user_password_resend_body", [$strActivationLink]));
 
         if ($this->getParam("form_user_sendusername") != "") {
-            $objMail->setText($this->getLang("user_password_resend_body_username", array($objUser->getStrUsername(), $strActivationLink)));
+            $objMail->setText($this->getLang("user_password_resend_body_username", [$objUser->getStrUsername(), $strActivationLink]));
         }
 
         $objMail->sendMail();
@@ -429,7 +428,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
 
         //load a few default values
         //languages
-        $arrLang = array();
+        $arrLang = [];
         foreach ($this->arrLanguages as $strLanguage) {
             $arrLang[$strLanguage] = $this->getLang("lang_".$strLanguage);
         }
@@ -448,7 +447,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
             if ($this->getParam("usersource") == "" || $objUsersources->getUsersource($this->getParam("usersource")) == null) {
                 $arrSubsystems = $objUsersources->getArrUsersources();
 
-                $arrDD = array();
+                $arrDD = [];
                 foreach ($arrSubsystems as $strOneName) {
                     $objConcreteSubsystem = $objUsersources->getUsersource($strOneName);
                     if ($objConcreteSubsystem->getCreationOfUsersAllowed()) {
@@ -540,7 +539,6 @@ class UserAdmin extends AdminSimple implements AdminInterface
 
 
         return $strReturn;
-
     }
 
     /**
@@ -555,20 +553,20 @@ class UserAdmin extends AdminSimple implements AdminInterface
 
         //load a few default values
         //languages
-        $arrLang = array();
+        $arrLang = [];
         foreach ($this->arrLanguages as $strLanguage) {
             $arrLang[$strLanguage] = $this->getLang("lang_".$strLanguage);
         }
 
         //skins
         $arrSkinsTemp = AdminskinHelper::getListOfAdminskinsAvailable();
-        $arrSkins = array();
+        $arrSkins = [];
         foreach ($arrSkinsTemp as $strSkin) {
             $arrSkins[$strSkin] = $strSkin;
         }
 
         //possible start-modules
-        $arrModules = array();
+        $arrModules = [];
         foreach (SystemModule::getModulesInNaviAsArray() as $arrOneModule) {
             $objOneModule = SystemModule::getModuleByName($arrOneModule["module_name"]);
             if (!$objOneModule->rightView()) {
@@ -614,7 +612,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
 
             $objInheritUser = Objectfactory::getInstance()->getObject($strInheritPermissionsId);
             $objForm->addField(new FormentryPlaintext("inherit_hint"))
-                ->setStrValue($this->objToolkit->warningBox($this->getLang("user_copy_info", "", array($objInheritUser->getStrDisplayName())), "alert-info"));
+                ->setStrValue($this->objToolkit->warningBox($this->getLang("user_copy_info", "", [$objInheritUser->getStrDisplayName()]), "alert-info"));
 
             $objForm->setFieldToPosition("inherit_hint", 1);
         }
@@ -639,7 +637,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
             ->setStrLabel($this->getLang("user_startmodule"));
 
         $objForm->addField(new FormentryDropdown("user", "items_per_page"))
-            ->setArrKeyValues(array(10 => 10, 15 => 15, 25 => 25, 50 => 50))
+            ->setArrKeyValues([10 => 10, 15 => 15, 25 => 25, 50 => 50])
             ->setStrValue(($this->getParam("user_items_per_page") != "" ? $this->getParam("user_items_per_page") : null))
             ->setStrLabel($this->getLang("user_items_per_page"));
 
@@ -819,7 +817,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
 
 
         $objFilter = new UserGroupFilter();
-        if($this->objSession->getSession($this->STR_GROUPFILTER_SESSION_KEY) != "") {
+        if ($this->objSession->getSession($this->STR_GROUPFILTER_SESSION_KEY) != "") {
             $objFilter->setStrName($this->objSession->getSession($this->STR_GROUPFILTER_SESSION_KEY));
         }
 
@@ -856,11 +854,10 @@ class UserAdmin extends AdminSimple implements AdminInterface
         $objUsersources = new UserSourcefactory();
 
         if ($strMode == "new") {
-
             if ($this->getParam("usersource") == "" || $objUsersources->getUsersource($this->getParam("usersource")) == null) {
                 $arrSubsystems = $objUsersources->getArrUsersources();
 
-                $arrDD = array();
+                $arrDD = [];
                 foreach ($arrSubsystems as $strOneName) {
                     $objConcreteSubsystem = $objUsersources->getUsersource($strOneName);
                     if ($objConcreteSubsystem->getCreationOfGroupsAllowed()) {
@@ -903,7 +900,6 @@ class UserAdmin extends AdminSimple implements AdminInterface
             $objForm->addField(new FormentryHidden("", "mode"))->setStrValue("edit");
             return $objForm->renderForm(Link::getLinkAdminHref($this->getArrModule("modul"), "groupSave"));
         }
-
     }
 
 
@@ -983,7 +979,6 @@ class UserAdmin extends AdminSimple implements AdminInterface
 
         $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "groupList", "&peClose=1&blockAction=1"));
         return "";
-
     }
 
     private function isGroupEditable(UserGroup $objGroup)
@@ -1039,7 +1034,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
                 $strReturn .= $this->objToolkit->genericAdminList($objSingleMember->getSystemid(), $objSingleMember->getStrDisplayName(), getImageAdmin("icon_user"), $strAction);
             }
 
-            if($objUsersources->getUsersource($objGroup->getStrSubsystem())->getMembersEditable() && $bitRenderEdit) {
+            if ($objUsersources->getUsersource($objGroup->getStrSubsystem())->getMembersEditable() && $bitRenderEdit) {
                 $strNewAction = $this->objToolkit->listButton(Link::getLinkAdminDialog($this->getArrModule("modul"), "addUserToGroupForm", "&systemid=".$objGroup->getSystemid(), "", $this->getLang("group_add_user"), "icon_new", $this->getLang("group_add_user")));
                 $strReturn .= $this->objToolkit->genericAdminList("batchActionSwitch", "", "", $strNewAction);
             }
@@ -1196,7 +1191,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
             $strReturn .= $this->objToolkit->warningBox($this->getLang("form_user_hint_groups"));
         }
 
-        $arrRows = array();
+        $arrRows = [];
         foreach ($arrGroups as $strSingleGroup) {
             //to avoid privilege escalation, the admin-group has to be treated in a special manner
             //only render the group, if the current user is member of this group
@@ -1209,7 +1204,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
             $strCheckbox = StringUtil::substring($strCheckbox, StringUtil::indexOf($strCheckbox, "<input"));
             $strCheckbox = StringUtil::substring($strCheckbox, 0, StringUtil::indexOf($strCheckbox, ">") + 1);
 
-            $arrRows[] = array($strCheckbox, $objSingleGroup->getStrName());
+            $arrRows[] = [$strCheckbox, $objSingleGroup->getStrName()];
         }
 
         $strReturn .= <<<HTML
@@ -1217,7 +1212,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
 HTML;
 
 
-        $strReturn .= $this->objToolkit->dataTable(array(), $arrRows);
+        $strReturn .= $this->objToolkit->dataTable([], $arrRows);
 
         $strReturn .= "<script type=\"text/javascript\">
             require(['permissions'], function(permissions){
@@ -1346,9 +1341,9 @@ HTML;
         $objIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objIterator->setArraySection(UserLog::getLoginLogs($objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
-        $arrRows = array();
+        $arrRows = [];
         foreach ($objIterator as $arrLogRow) {
-            $arrSingleRow = array();
+            $arrSingleRow = [];
             $arrSingleRow[] = $arrLogRow["user_log_sessid"];
             $arrSingleRow[] = ($arrLogRow["user_username"] != "" ? $arrLogRow["user_username"] : $arrLogRow["user_log_userid"]);
             $arrSingleRow[] = dateToString(new Date($arrLogRow["user_log_date"]));
@@ -1371,7 +1366,7 @@ HTML;
         }
 
         //Building the surrounding table
-        $arrHeader = array();
+        $arrHeader = [];
         $arrHeader[] = $this->getLang("login_sessid");
         $arrHeader[] = $this->getLang("login_user");
         $arrHeader[] = $this->getLang("login_logindate");
@@ -1464,11 +1459,9 @@ HTML;
         $this->setArrModuleEntry("template", "/folderview.tpl");
         $strReturn = "";
         if ($this->getSystemid() == "") {
-
-
             $objFilter = new UserGroupFilter();
-            if(!Carrier::getInstance()->getObjSession()->isSuperAdmin()) {
-                $objFilter->setArrExcludedGroups(array(SystemSetting::getConfigValue("_admins_group_id_")));
+            if (!Carrier::getInstance()->getObjSession()->isSuperAdmin()) {
+                $objFilter->setArrExcludedGroups([SystemSetting::getConfigValue("_admins_group_id_")]);
             }
 
             //show groups
@@ -1514,7 +1507,6 @@ HTML;
     {
         $strReturn = "";
         if (SystemModule::getModuleByName("system")->rightEdit() && Carrier::getInstance()->getObjSession()->isSuperAdmin()) {
-
             //reset the aspect
             $strAddon = "";
             $objDefaultAspect = SystemAspect::getDefaultAspect();
@@ -1661,7 +1653,7 @@ HTML;
         $strCheckId = $this->getParam("checkid");
         $arrCheckIds = json_decode($strCheckId);
 
-        $arrUsers = array();
+        $arrUsers = [];
         $objSource = new UserSourcefactory();
 
         if ($this->getParam("user") == "true") {
@@ -1689,7 +1681,7 @@ HTML;
         });
 
 
-        $arrReturn = array();
+        $arrReturn = [];
         foreach ($arrUsers as $objOneElement) {
             if ($this->getParam("block") == "current" && $objOneElement->getSystemid() == $this->objSession->getUserID()) {
                 continue;
@@ -1698,7 +1690,8 @@ HTML;
             //if element is group and user is not superadmin
             if ($objOneElement instanceof UserGroup
                 && !Carrier::getInstance()->getObjSession()->isSuperAdmin()
-                && $objOneElement->getStrSystemid() === SystemSetting::getConfigValue("_admins_group_id_")) {
+                && $objOneElement->getStrSystemid() === SystemSetting::getConfigValue("_admins_group_id_")
+            ) {
                 continue;
             }
 
@@ -1714,7 +1707,7 @@ HTML;
 
 
             if ($bitUserHasRightView) {
-                $arrEntry = array();
+                $arrEntry = [];
 
                 if ($objOneElement instanceof UserUser) {
                     $arrEntry["title"] = $objOneElement->getStrDisplayName();
