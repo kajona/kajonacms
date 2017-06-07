@@ -25,6 +25,13 @@
     <!-- IMPORTANT! Include the kajona_head!! This injects jQuery, too-->
     %%kajona_head%%
 
+    <style type="text/css">
+        /* minor tweaks to the boostrap 4 vanilla styles */
+        /* fix the padding of navigational elements */
+        .nav-link {
+            padding: 0.1em;
+        }
+    </style>
 </head>
 <body>
 
