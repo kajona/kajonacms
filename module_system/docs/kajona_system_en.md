@@ -15,7 +15,7 @@ The portal is opened automatically when opening the installation-folder of Kajon
 
 
 ##Requirements
-Kajona is written in PHP and requires at least PHP version 5.6. Kajona requires the following PHP-modules to be available in order to run smoothly:
+Kajona is written in PHP and requires at least PHP version 7.0. Kajona requires the following PHP-modules to be available in order to run smoothly:
 
 * mbstring
 * gd-lib
@@ -33,7 +33,7 @@ In addition, one of the following databases is required:
 
 New databases may be connected by adding a new database-driver to the database-abstraction.
 
-PHP need to be installed along a webserver like Apache HTTPD, but every other webserver like IIS oder nginx is totally fine, too.
+PHP needs to be installed along a webserver like Apache HTTPD, but every other webserver like IIS oder nginx is totally fine, too.
 
 
 
