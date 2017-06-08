@@ -6,6 +6,7 @@ use Kajona\Jqplot\System\GraphJqplot;
 use Kajona\System\Admin\AdminHelper;
 use Kajona\System\System\GraphFactory;
 use Kajona\System\System\Resourceloader;
+use Kajona\System\System\StringUtil;
 use Kajona\System\System\SystemSetting;
 
 class ChartsJqPlot
@@ -23,8 +24,6 @@ class ChartsJqPlot
         //JS-Imports for minimal system setup
         echo "<script type=\"text/javascript\">KAJONA_WEBPATH = '"._webpath_."'; KAJONA_BROWSER_CACHEBUSTER = '".SystemSetting::getConfigValue("_system_browser_cachebuster_")."';</script>\n";
         echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.Resourceloader::getInstance()->getCorePathForModule("module_system")."/module_system/scripts/jquery/jquery.min.js\"></script>";
-        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.Resourceloader::getInstance()->getCorePathForModule("module_system")."/module_system/scripts/loader.js\"></script>";
-        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.Resourceloader::getInstance()->getCorePathForModule("module_system")."/module_system/scripts/kajona.js\"></script>";
         echo "<script type=\"text/javascript\">KAJONA_PHARMAP = ".json_encode(array_values(\Kajona\System\System\Classloader::getInstance()->getArrPharModules())).";</script>";
         echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.Resourceloader::getInstance()->getCorePathForModule("module_system")."/module_system/scripts/jqueryui/jquery-ui.custom.min.js\"></script>";
 
@@ -33,10 +32,12 @@ class ChartsJqPlot
         $objAdminHelper = new AdminHelper();
 
         echo "<script type=\"text/javascript\">
-          var require = ".$objAdminHelper->generateRequireJsConfig().";
-
+          var require = ".StringUtil::replace("_webpath_", _webpath_, $objAdminHelper->generateRequireJsConfig()).";
+        </script>";
+        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.Resourceloader::getInstance()->getCorePathForModule("module_system")."/module_system/scripts/requirejs/require.js\"></script>";
+        echo "<script type=\"text/javascript\">
+            require(['app'], function() {});
         </script>
-        <script data-main='core/module_system/scripts/app' src='"._webpath_.Resourceloader::getInstance()->getCorePathForModule("module_system")."/module_system/scripts/requirejs/require.js'></script>
 ";
 
 
