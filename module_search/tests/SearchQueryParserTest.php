@@ -15,6 +15,7 @@ class SearchQueryParserTest extends Testbase
     {
         $objParser = new SearchQueryParser();
 
+        $this->assertEquals("test", $objParser->safeReplaceCharacter("t-est", "-"));
         $this->assertEquals("-test", $objParser->safeReplaceCharacter("-test", "-"));
         $this->assertEquals("-test", $objParser->safeReplaceCharacter("-te-st", "-"));
         $this->assertEquals("test", $objParser->safeReplaceCharacter("test", "-"));
@@ -30,10 +31,9 @@ class SearchQueryParserTest extends Testbase
     }
 
 
-    public function testQueryParser()
+    public function testQueryParserMust()
     {
         $objParser = new SearchQueryParser();
-
         // Must
         $objQuery = $objParser->parseText("hello");
         /** @var $objQuery SearchTermQuery */
@@ -45,6 +45,11 @@ class SearchQueryParserTest extends Testbase
         $this->assertTrue($objQuery instanceof SearchTermQuery, "wrong query type");
         $this->assertEquals($objQuery->getObjTerm()->getStrText(), "glückwunsch");
 
+    }
+
+    public function testQueryParserMustMust()
+    {
+        $objParser = new SearchQueryParser();
 
         // Must - Must
         $objQuery = $objParser->parseText("hello world");
@@ -60,6 +65,12 @@ class SearchQueryParserTest extends Testbase
             $this->assertEquals($objQuery->getMustOccurs()[1]->getStrText(), "world");
         }
 
+
+    }
+
+    public function testQueryParserMustShould()
+    {
+        $objParser = new SearchQueryParser();
         // Must - Should
         $objQuery = $objParser->parseText("+hello world");
         $this->assertTrue($objQuery instanceof SearchBooleanQuery, "wrong query type");
@@ -73,6 +84,12 @@ class SearchQueryParserTest extends Testbase
             $this->assertEquals($objQuery->getShouldOccurs()[0]->getStrText(), "world");
         }
 
+    }
+
+    public function testQueryParserMustMustShould()
+    {
+
+        $objParser = new SearchQueryParser();
         // Must - Must - Should
         $objQuery = $objParser->parseText("+hello +world blub");
         $this->assertTrue($objQuery instanceof SearchBooleanQuery, "wrong query type");
@@ -87,6 +104,12 @@ class SearchQueryParserTest extends Testbase
             $this->assertEquals($objQuery->getShouldOccurs()[0]->getStrText(), "blub");
         }
 
+    }
+
+    public function testQueryParserMustMustMustNot()
+    {
+
+        $objParser = new SearchQueryParser();
         // Must - Must - MustNot
         $objQuery = $objParser->parseText("+hello +world -blub");
         $this->assertTrue($objQuery instanceof SearchBooleanQuery, "wrong query type");
@@ -100,6 +123,13 @@ class SearchQueryParserTest extends Testbase
             $this->assertEquals($objQuery->getMustOccurs()[1]->getStrText(), "world");
             $this->assertEquals($objQuery->getMustNotOccurs()[0]->getStrText(), "blub");
         }
+
+
+    }
+
+    public function testQueryParserMustMustNot()
+    {
+        $objParser = new SearchQueryParser();
 
         // Must - MustNot
         $objQuery = $objParser->parseText("hello -world");
