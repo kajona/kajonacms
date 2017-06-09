@@ -34,7 +34,7 @@ class SearchQueryParser {
         $intReplacements = 0;
         foreach($arrPositions as $intPos) {
             $intPos -= $intReplacements;
-            if($intPos > 1 && $strString[$intPos-1] != " ") {
+            if($intPos > 0 && $strString[$intPos-1] != " ") {
                 $strString = substr($strString, 0, $intPos).substr($strString, $intPos+1);
                 $intReplacements++;
             }

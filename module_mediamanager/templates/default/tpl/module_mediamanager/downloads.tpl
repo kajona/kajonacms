@@ -71,7 +71,7 @@
 <filedetail>
     <ol class="breadcrumb">%%pathnavigation%%</ol>
     <div class="row filedetail">
-        <div class="col-md-4"><span style="float: left;" data-kajona-editable="%%file_systemid%%#strName#plain">%%file_name%%</span></div>
+        <div class="col-md-4"><span class="pull-xs-left" data-kajona-editable="%%file_systemid%%#strName#plain">%%file_name%%</span></div>
         <div class="col-md-8"><div class="pull-xs-right">%%file_rating%%</div></div>
 
 
