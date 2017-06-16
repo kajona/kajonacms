@@ -25,7 +25,7 @@ class OrmInOrEmptyCondition extends OrmInCondition
     private $bitIncludeNullValues = false;
 
     /**
-     * OrmObjectlistInOrEmptyRestriction constructor.
+     * OrmInOrEmptyCondition constructor.
      *
      * @param string $strColumnName
      * @param array $arrParams

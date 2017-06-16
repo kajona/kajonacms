@@ -37,7 +37,7 @@ class OrmObjectlist extends OrmBase
 {
 
     /**
-     * @var OrmObjectlistRestriction[]
+     * @var OrmCondition[]
      */
     private $arrWhereRestrictions = array();
 

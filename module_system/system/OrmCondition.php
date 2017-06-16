@@ -17,10 +17,86 @@ namespace Kajona\System\System;
  * @author stefan.meyer1@yahoo.de
  * @since 5.0
  */
-class OrmCondition extends OrmObjectlistRestriction implements OrmConditionInterface
+class OrmCondition implements OrmConditionInterface
 {
+
     const STR_CONDITION_AND = "AND";
     const STR_CONDITION_OR = "OR";
+
+    private $strWhere = "";
+    protected $arrParams = array();
+
+    private $strTargetClass = "";
+
+    /**
+     * @param string $strWhere
+     * @param string|string[] $arrParams either a single value or an array of params
+     *
+     */
+    public function __construct($strWhere, $arrParams = array())
+    {
+
+        if (!is_array($arrParams)) {
+            $arrParams = array($arrParams);
+        }
+
+        $this->setArrParams($arrParams);
+        $this->setStrWhere($strWhere);
+    }
+
+
+    /**
+     * @param array $arrParams
+     *
+     * @return void
+     */
+    public function setArrParams($arrParams)
+    {
+        $this->arrParams = $arrParams;
+    }
+
+    /**
+     * @return array
+     */
+    public function getArrParams()
+    {
+        return $this->arrParams;
+    }
+
+    /**
+     * @param string $strWhere
+     *
+     * @return void
+     */
+    public function setStrWhere($strWhere)
+    {
+        $strWhere = StringUtil::trim($strWhere);
+        $this->strWhere = $strWhere;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrWhere()
+    {
+        return $this->strWhere;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrTargetClass()
+    {
+        return $this->strTargetClass;
+    }
+
+    /**
+     * @param string $strTargetClass
+     */
+    public function setStrTargetClass($strTargetClass)
+    {
+        $this->strTargetClass = $strTargetClass;
+    }
 
     /**
      *  Generates an ORDER By Statement
@@ -44,17 +120,6 @@ class OrmCondition extends OrmObjectlistRestriction implements OrmConditionInter
 
     }
 
-
-    /**
-     * @param string $strWhere
-     *
-     * @return void
-     */
-    public function setStrWhere($strWhere)
-    {
-        $strWhere = StringUtil::trim($strWhere);
-        parent::setStrWhere($strWhere);
-    }
 
     /**
      * Generic method to create an ORM restriction.
