@@ -126,16 +126,7 @@ class Resourceloader
 
         //third try: try to load the file from a given module
         foreach (Classloader::getInstance()->getArrModules() as $strCorePath => $strOneModule) {
-            if (is_dir(_realpath_.$strCorePath)) {
-                if (is_file(_realpath_.$strCorePath."/templates/default/tpl".$strTemplateName)) {
-                    $strFilename = _realpath_.$strCorePath."/templates/default/tpl".$strTemplateName;
-                    break;
-                }
-                if (is_file(_realpath_.$strCorePath.$strTemplateName)) {
-                    $strFilename = _realpath_.$strCorePath.$strTemplateName;
-                    break;
-                }
-            } elseif (PharModule::isPhar(_realpath_.$strCorePath)) {
+            if (PharModule::isPhar(_realpath_.$strCorePath)) {
                 $strAbsolutePath = PharModule::getPharStreamPath(_realpath_.$strCorePath, "/templates/default/tpl".$strTemplateName);
                 if (is_file($strAbsolutePath)) {
                     $strFilename = $strAbsolutePath;
@@ -145,6 +136,15 @@ class Resourceloader
                 $strAbsolutePath = PharModule::getPharStreamPath(_realpath_.$strCorePath, $strTemplateName);
                 if (is_file($strAbsolutePath)) {
                     $strFilename = $strAbsolutePath;
+                    break;
+                }
+            } elseif (is_dir(_realpath_.$strCorePath)) {
+                if (is_file(_realpath_.$strCorePath."/templates/default/tpl".$strTemplateName)) {
+                    $strFilename = _realpath_.$strCorePath."/templates/default/tpl".$strTemplateName;
+                    break;
+                }
+                if (is_file(_realpath_.$strCorePath.$strTemplateName)) {
+                    $strFilename = _realpath_.$strCorePath.$strTemplateName;
                     break;
                 }
             }
@@ -205,7 +205,19 @@ class Resourceloader
 
         //third try: try to load the file from given modules
         foreach (Classloader::getInstance()->getArrModules() as $strCorePath => $strOneModule) {
-            if (is_dir(_realpath_.$strCorePath."/templates/default/tpl".$strFolder)) {
+            if (PharModule::isPhar(_realpath_.$strCorePath)) {
+                $objPhar = new PharModule($strCorePath);
+                foreach($objPhar->getContentMap() as $strFilename => $strPharPath) {
+                    if (strpos($strFilename, "/templates/default/tpl".$strFolder) !== false) {
+                        if($bitPathAsKey) {
+                            $arrReturn[$strPharPath] = basename($strPharPath);
+                        }
+                        else {
+                            $arrReturn[] = basename($strPharPath);
+                        }
+                    }
+                }
+            } elseif (is_dir(_realpath_.$strCorePath."/templates/default/tpl".$strFolder)) {
                 $arrFiles = scandir(_realpath_.$strCorePath."/templates/default/tpl".$strFolder);
                 foreach ($arrFiles as $strOneFile) {
                     if (substr($strOneFile, -4) == ".tpl") {
@@ -218,20 +230,7 @@ class Resourceloader
                     }
                 }
             }
-            elseif (PharModule::isPhar(_realpath_.$strCorePath)) {
 
-                $objPhar = new PharModule($strCorePath);
-                foreach($objPhar->getContentMap() as $strFilename => $strPharPath) {
-                    if (strpos($strFilename, "/templates/default/tpl".$strFolder) !== false) {
-                        if($bitPathAsKey) {
-                            $arrReturn[$strPharPath] = basename($strPharPath);
-                        }
-                        else {
-                            $arrReturn[] = basename($strPharPath);
-                        }
-                    }
-                }
-            }
         }
 
 
