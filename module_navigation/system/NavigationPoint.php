@@ -287,7 +287,7 @@ class NavigationPoint extends Model implements ModelInterface, AdminListableInte
                 $arrElementsOnPage = array_filter($arrElementsOnPage, function($arrRow) {
                     return $arrRow["page_element_ph_placeholder"] != "blocks" && !StringUtil::startsWith($arrRow["page_element_ph_placeholder"], "master");
                 });
-                if ($objOneEntry->getIntType() == PagesPage::$INT_TYPE_ALIAS
+                if (($objOneEntry->getIntType() == PagesPage::$INT_TYPE_ALIAS && ($objOneEntry->getStrAlias() != "" && $objOneEntry->getStrName() != ""))
                     || ($objOneEntry->getStrTemplate() != "" && count($arrElementsOnPage) > 0)
                 ) {
 
