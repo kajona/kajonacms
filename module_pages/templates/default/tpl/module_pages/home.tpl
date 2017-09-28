@@ -66,7 +66,7 @@
 
                 <kajona-block kajona-name="Header and Text">
                     <h3>%%headline_plaintext%%</h3>
-                    <p>%%content_richtext%%</p>
+                    %%content_richtext%%
                 </kajona-block>
 
                 <kajona-block kajona-name="Two Columns Header and Text">
@@ -74,12 +74,12 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <h3>%%headlineleft_plaintext%%</h3>
-                            <p>%%contentleft_richtext%%</p>
+                            %%contentleft_richtext%%
                         </div>
 
                         <div class="col-sm-6">
                             <h3>%%headlineright_plaintext%%</h3>
-                            <p>%%contentright_richtext%%</p>
+                            %%contentright_richtext%%
                         </div>
                     </div>
 
@@ -91,7 +91,7 @@
                     <div class="row">
                         <div class="col-sm-9">
                             <h3>%%headlineleft_plaintext%%</h3>
-                            <p>%%contentleft_richtext%%</p>
+                            %%contentleft_richtext%%
                         </div>
 
                         <div class="col-sm-3">
@@ -107,12 +107,12 @@
                     <div class="row">
                         <div class="col-sm-4">
                             <h3>%%headlineleft_plaintext%%</h3>
-                            <p>%%contentleft_richtext%%</p>
+                            %%contentleft_richtext%%
                         </div>
 
                         <div class="col-sm-4">
                             <h3>%%headlinecenter_plaintext%%</h3>
-                            <p>%%contentcenter_richtext%%</p>
+                            %%contentcenter_richtext%%
                         </div>
 
                         <div class="col-sm-4">
@@ -124,7 +124,7 @@
 
 
                 <kajona-block kajona-name="Text Only">
-                    <p>%%content_richtext%%</p>
+                    %%content_richtext%%
                 </kajona-block>
 
             </kajona-blocks>
