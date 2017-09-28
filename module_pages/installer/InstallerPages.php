@@ -302,6 +302,15 @@ class InstallerPages extends InstallerBase implements InstallerInterface {
             }
         }
 
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "6.2") {
+            $strReturn .= "Updating to 6.2.1...\n";
+            $this->updateModuleVersion("", "6.2.1");
+            foreach(array("row", "paragraph", "image", "imagesrc", "gallery", "galleryRandom", "downloads", "blocks", "block", "date", "plaintext", "richtext", "link") as $strOneElement) {
+                $this->updateElementVersion($strOneElement, "6.2.1");
+            }
+        }
+
         return $strReturn."\n\n";
 	}
 
