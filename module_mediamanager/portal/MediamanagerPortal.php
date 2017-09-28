@@ -571,7 +571,7 @@ class MediamanagerPortal extends PortalController implements PortalInterface
         $objData = Objectfactory::getInstance()->getObject($this->getSystemid());
         $objGallery = new MediamanagerRepo($this->arrElementData["repo_id"]);
 
-        if ($objGallery->rightView() && $objData != null) {
+        if ($objGallery != null && $objGallery->rightView() && $objData != null) {
 
             $arrTemplate = array();
             //Name and link
