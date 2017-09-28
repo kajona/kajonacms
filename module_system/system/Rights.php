@@ -207,7 +207,7 @@ class Rights
             return "";
         }
         $arrReturn = array();
-        foreach (explode(",", trim($strEntry, ",")) as $strOneEntry) {
+        foreach (explode(",", trim("".$strEntry, ",")) as $strOneEntry) {
             if (is_numeric($strOneEntry)) {
                 $arrReturn[] = UserGroup::getGroupIdForShortId((int)$strOneEntry);
             } elseif (validateSystemid($strOneEntry)) {
