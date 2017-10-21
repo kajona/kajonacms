@@ -19,7 +19,6 @@
 
 <!-- available placeholders: strQuestion, strAnswer, strSystemid, faq_rating (if module rating is installed) -->
 <faq_faq>
-
     <div class="panel panel-default">
         <div class="panel-heading" role="tab" id="heading%%strSystemid%%">
             <span class="pull-right">%%faq_rating%%</span>
@@ -27,7 +26,7 @@
                 <span data-kajona-editable="%%strSystemid%%#strQuestion#plain">%%strQuestion%%</span>
             </h4>
         </div>
-        <div id="collapse%%strSystemid%%" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading%%strSystemid%%">
+        <div id="collapse%%strSystemid%%" class="" role="tabpanel" aria-labelledby="heading%%strSystemid%%">
             <span data-kajona-editable="%%strSystemid%%#strAnswer">%%strAnswer%%</span>
         </div>
     </div>

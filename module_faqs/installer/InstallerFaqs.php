@@ -206,6 +206,13 @@ class InstallerFaqs extends InstallerBase implements InstallerRemovableInterface
             $this->updateElementVersion("faqs", "6.2");
         }
 
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if ($arrModule["module_version"] == "6.2") {
+            $strReturn .= "Updating to 6.2.1...\n";
+            $this->updateModuleVersion("faqs", "6.2.1");
+            $this->updateElementVersion("faqs", "6.2.1");
+        }
+
         return $strReturn . "\n\n";
     }
 
