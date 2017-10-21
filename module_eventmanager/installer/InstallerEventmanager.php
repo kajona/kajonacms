@@ -179,6 +179,13 @@ class InstallerEventmanager extends InstallerBase implements InstallerRemovableI
             $this->updateElementVersion("eventmanager", "6.2");
         }
 
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "6.2") {
+            $strReturn .= "Updating to 6.2.1...\n";
+            $this->updateModuleVersion("eventmanager", "6.2.1");
+            $this->updateElementVersion("eventmanager", "6.2.1");
+        }
+
         return $strReturn."\n\n";
 	}
 

@@ -175,7 +175,7 @@ class EventmanagerParticipant extends \Kajona\System\System\Model implements \Ka
             $strName = $objUser->getStrDisplayName();
         }
         else
-            $strName = $this->getStrEmail() .( $this->getStrLastname() != "" || $this->getStrForename() != "" ? $this->getStrLastname().", ".$this->getStrForename() : "");
+            $strName = $this->getStrEmail() ." ".( $this->getStrLastname() != "" || $this->getStrForename() != "" ? $this->getStrLastname().", ".$this->getStrForename() : "");
 
         if($this->getIntParticipationStatus() == 2)
             $strName = "<span style='text-decoration: line-through'>{$strName}</span>";
