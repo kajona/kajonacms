@@ -1170,20 +1170,23 @@ footer {
 
     fieldset {
         margin-top: 5px;
+
         legend {
             font-size: @font-size-base+2;
         }
 
         &.blocks fieldset.block {
             padding: 10px;
-            margin: 10px 0;
+            margin: 10px 0 20px 0;
             border: 1px solid @gray-light;
             border-left-width: 5px;
 
             legend {
-                padding-right: 8px;
-                border: none;
+                padding: 2px 8px 2px 8px;
+                border: 1px solid @gray-light;
                 margin-bottom: auto;
+                background: @gray-lighter;
+
             }
         }
     }
