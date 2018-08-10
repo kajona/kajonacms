@@ -1,4 +1,7 @@
 Module ezChart
 
+V6.2.1 --------------------------------------------------------------------------------------------------
+BUG: fixed php 7.2 compatibility
+
 V4.7 ----------------------------------------------------------------------------------------------------
 NEW: module_ezcchart | horizonatal bar chart -> horizontal bar charts are now supported by ezcomponents

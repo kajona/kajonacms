@@ -5,7 +5,7 @@
     >
     <title>ezcchart</title>
     <description>ezComponents charting engine. Used to render charts on the server-side, generating an image. Makes use of the ezComponents library.</description>
-    <version>6.2</version>
+    <version>6.2.1</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>FALSE</providesInstaller>

@@ -1,5 +1,8 @@
 Module Installer
 
+V6.2.1 --------------------------------------------------------------------------------------------------
+BUG: fixed php 7.2 compatibility
+
 V4.7 ----------------------------------------------------------------------------------------------------
 NEW: module_installer | class_installer -> a "EVENT_SYSTEM_REQUEST_ENDPROCESSING" event is triggered for the installer, too
 

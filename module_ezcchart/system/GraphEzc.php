@@ -404,7 +404,7 @@ class GraphEzc implements GraphInterface
     {
 
         $objPalette = new EzchartGraphPaletteKajona();
-        if (count($this->arrSeriesColors) > 0) {
+        if (!empty($this->arrSeriesColors) && count($this->arrSeriesColors) > 0) {
             $objPalette->dataSetColor = $this->arrSeriesColors;
         }
 

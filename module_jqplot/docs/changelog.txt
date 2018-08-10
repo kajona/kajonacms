@@ -1,5 +1,8 @@
 Module JQPlot
 
+V6.2.1 --------------------------------------------------------------------------------------------------
+BUG: fixed php 7.2 compatibility
+
 V4.7 ----------------------------------------------------------------------------------------------------
 NEW: module_jqplot -> padding and margin of bars within barcharts are differently set depending on the number of series - if the chart contains only bar chart series -> padding=1, margin=4 - if the chart contains one or more stackedbar series and each sereis has exactly one series value -> padding=1, margin=4
 
